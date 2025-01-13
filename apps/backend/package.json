@@ -1,18 +1,20 @@
 {
   "name": "backend",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "prebuild": "rm -rf dist",
-    "build": "bun build src/index.ts --outdir dist --target bun --minify",
+    "dev": "bun run --hot src/index.tsx",
+    "build": "bun build src/index.tsx --outdir dist --target bun --minify",
     "start": "bun dist/index.js"
   },
   "dependencies": {
-    "hono": "^4.6.16"
+    "@hono/zod-openapi": "^0.18.3",
+    "@scalar/hono-api-reference": "^0.5.165",
+    "hono": "^4.6.16",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/bun": "latest"
   }
 }

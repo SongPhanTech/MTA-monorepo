@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:backend": "turbo run build --filter=backend",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "db:generate": "turbo run db:generate",
