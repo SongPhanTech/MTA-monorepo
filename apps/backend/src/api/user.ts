@@ -21,9 +21,7 @@ const getListUsers = createRoute({
 
 const getOneUser = createRoute({
   method: "get",
-  request: {
-    params: z.object({ id: z.string() }),
-  },
+  request: { params: z.object({ id: z.string() }) },
   path: "/:id",
   responses: {
     200: {

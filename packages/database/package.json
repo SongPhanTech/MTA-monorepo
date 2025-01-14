@@ -8,7 +8,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./zod": "./prisma/generated/zod/index.ts",
-    "./nestjs": "./src/nestjs/index.ts"
+    "./zod/models": "./prisma/generated/zod/models/index.ts",
+    "./hono": "./src/hono/index.ts"
   },
   "dependencies": {
     "@prisma/client": "latest",
@@ -20,7 +21,6 @@
     "@zenstackhq/server": "^2.10.2",
     "prisma": "latest",
     "prisma-dbml-generator": "^0.12.0",
-    "zenstack": "2.10.2",
-    "zod-prisma-types": "^3.2.1"
+    "zenstack": "2.10.2"
   }
 }

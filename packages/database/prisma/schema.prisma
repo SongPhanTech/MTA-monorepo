@@ -17,39 +17,23 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-generator zod {
-  provider                         = "pnpx zod-prisma-types"
-  useMultipleFiles                 = true
-  writeBarrelFiles                 = true
-  createInputTypes                 = false
-  createModelTypes                 = true
-  addInputTypeValidation           = true
-  addIncludeType                   = true
-  addSelectType                    = false
-  validateWhereUniqueInput         = false
-  createOptionalDefaultValuesTypes = true
-  createRelationValuesTypes        = true
-  createPartialTypes               = false
-  useDefaultValidators             = true
-  coerceDate                       = true
-  writeNullishInModelTypes         = true
-}
-
 model User {
-  id        String   @id() @default(cuid())
-  email     String   @unique()
+  id        String    @id() @default(cuid())
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  email     String    @unique()
   name      String?
   posts     Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
 }
 
 model Post {
-  id        String   @id() @default(cuid())
+  id        String    @id() @default(cuid())
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
   title     String
   content   String?
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id])
   authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
 }
