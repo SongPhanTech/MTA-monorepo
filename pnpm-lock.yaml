@@ -33,25 +33,25 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@types/bun':
         specifier: latest
         version: 1.1.16
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
 
   apps/web:
     dependencies:
       '@prisma/nextjs-monorepo-workaround-plugin':
         specifier: ^6.1.0
         version: 6.1.0
-      '@repo/ui':
+      '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       next:
@@ -64,15 +64,6 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^20
         version: 20.17.6
@@ -82,6 +73,15 @@ importers:
       '@types/react-dom':
         specifier: 18.3.0
         version: 18.3.0
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -194,12 +194,6 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.6)(typescript@5.5.4)))
     devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
       '@turbo/gen':
         specifier: ^1.12.4
         version: 1.13.4(@types/node@20.17.6)(typescript@5.5.4)
@@ -212,6 +206,12 @@ importers:
       '@types/react-dom':
         specifier: 18.3.1
         version: 18.3.1
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)

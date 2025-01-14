@@ -12,9 +12,9 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@repo/db": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
     "@types/bun": "latest"
   }
 }
