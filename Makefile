@@ -6,7 +6,7 @@ SERVER=swantech
 COMPOSE_CMD=docker compose up
 
 # TODO: update to prod database
-DATABASE_URL="postgresql://root:root@postgres.my-turborepo.orb.local:5432/mydb?schema=public"
+DATABASE_URL="postgresql://root:root@postgres.mta-monorepo.orb.local:5432/mta?schema=public"
 
 .PHONY: all build build-backend build-web push deploy release clean
 

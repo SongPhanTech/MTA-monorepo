@@ -39,6 +39,7 @@ app
     const data = await prisma.user.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      include: { posts: true },
     });
     const count = await prisma.user.count();
     return c.json({ page, limit, data, count }, 200);
