@@ -1,4 +1,4 @@
-import { PrismaClient } from "@repo/db";
+import { PrismaClient } from "@workspace/db";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { csrf } from "hono/csrf";
