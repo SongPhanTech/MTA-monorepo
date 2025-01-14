@@ -1,0 +1,7 @@
+{
+  "INDEX": "/",
+  "USER": "/user",
+  "LOGIN": "/login",
+  "HOME": "/home",
+  "USER_ID": "/user/[id]"
+}
