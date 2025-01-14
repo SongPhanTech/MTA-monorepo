@@ -19,10 +19,16 @@ generator dbml {
 
 plugin zod {
   provider = '@core/zod'
-  output = './prisma/generated/zod'
+  output = 'generated/zod'
   modelOnly = true // default is false
   compile = false // default is true
   // generateModels = ['User', 'Post']
+}
+
+plugin hooks {
+  provider = '@zenstackhq/tanstack-query'
+  target = 'react'
+  output = 'generated/hooks'
 }
 
 plugin openapi {
