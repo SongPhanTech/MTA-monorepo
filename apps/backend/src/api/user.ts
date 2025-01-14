@@ -21,9 +21,7 @@ const getListUsers = createRoute({
 
 const getOneUser = createRoute({
   method: "get",
-  request: {
-    params: z.object({ id: z.string() }),
-  },
+  request: { params: z.object({ id: z.string() }) },
   path: "/:id",
   responses: {
     200: {
@@ -39,6 +37,7 @@ app
     const data = await prisma.user.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      include: { posts: true },
     });
     const count = await prisma.user.count();
     return c.json({ page, limit, data, count }, 200);

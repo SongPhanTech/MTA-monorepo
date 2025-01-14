@@ -4,21 +4,23 @@
 
 Table User {
   id String [pk]
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   email String [unique, not null]
   name String
   posts Post [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
 }
 
 Table Post {
   id String [pk]
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   title String [not null]
   content String
   author User [not null]
   authorId String [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
 }
 
 Ref: Post.authorId > User.id
