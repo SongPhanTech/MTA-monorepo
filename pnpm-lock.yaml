@@ -51,6 +51,9 @@ importers:
       '@ant-design/cssinjs':
         specifier: ^1.22.1
         version: 1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/icons':
+        specifier: ^5.5.2
+        version: 5.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: ^1.0.2
         version: 1.0.2(@ant-design/cssinjs@1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.23.0(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -241,32 +244,32 @@ importers:
     dependencies:
       '@prisma/client':
         specifier: latest
-        version: 6.1.0(prisma@6.1.0)
+        version: 6.2.1(prisma@6.2.1)
       '@zenstackhq/runtime':
         specifier: 2.10.2
-        version: 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+        version: 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       zod:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
       '@zenstackhq/openapi':
         specifier: ^2.10.2
-        version: 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+        version: 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       '@zenstackhq/server':
         specifier: ^2.10.2
-        version: 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+        version: 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       prisma:
         specifier: latest
-        version: 6.1.0
+        version: 6.2.1
       prisma-dbml-generator:
         specifier: ^0.12.0
         version: 0.12.0
       zenstack:
         specifier: 2.10.2
-        version: 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))(prisma@6.1.0)
+        version: 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))(prisma@6.2.1)
       zod-prisma-types:
         specifier: ^3.2.1
-        version: 3.2.1(@prisma/client@6.1.0(prisma@6.1.0))(prisma@6.1.0)
+        version: 3.2.1(@prisma/client@6.2.1(prisma@6.2.1))(prisma@6.2.1)
 
   packages/eslint-config:
     devDependencies:
@@ -963,8 +966,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@prisma/client@6.1.0':
-    resolution: {integrity: sha512-AbQYc5+EJKm1Ydfq3KxwcGiy7wIbm4/QbjCKWWoNROtvy7d6a3gmAGkKjK0iUCzh+rHV8xDhD5Cge8ke/kiy5Q==}
+  '@prisma/client@6.2.1':
+    resolution: {integrity: sha512-msKY2iRLISN8t5X0Tj7hU0UWet1u0KuxSPHWuf3IRkB4J95mCvGpyQBfQ6ufcmvKNOMQSq90O2iUmJEN2e5fiA==}
     engines: {node: '>=18.18'}
     peerDependencies:
       prisma: '*'
@@ -978,8 +981,14 @@ packages:
   '@prisma/debug@6.1.0':
     resolution: {integrity: sha512-0himsvcM4DGBTtvXkd2Tggv6sl2JyUYLzEGXXleFY+7Kp6rZeSS3hiTW9mwtUlXrwYbJP6pwlVNB7jYElrjWUg==}
 
+  '@prisma/debug@6.2.1':
+    resolution: {integrity: sha512-0KItvt39CmQxWkEw6oW+RQMD6RZ43SJWgEUnzxN8VC9ixMysa7MzZCZf22LCK5DSooiLNf8vM3LHZm/I/Ni7bQ==}
+
   '@prisma/engines-version@6.1.0-21.11f085a2012c0f4778414c8db2651556ee0ef959':
     resolution: {integrity: sha512-PdJqmYM2Fd8K0weOOtQThWylwjsDlTig+8Pcg47/jszMuLL9iLIaygC3cjWJLda69siRW4STlCTMSgOjZzvKPQ==}
+
+  '@prisma/engines-version@6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69':
+    resolution: {integrity: sha512-7tw1qs/9GWSX6qbZs4He09TOTg1ff3gYsB3ubaVNN0Pp1zLm9NC5C5MZShtkz7TyQjx7blhpknB7HwEhlG+PrQ==}
 
   '@prisma/engines@5.0.0':
     resolution: {integrity: sha512-kyT/8fd0OpWmhAU5YnY7eP31brW1q1YrTGoblWrhQJDiN/1K+Z8S1kylcmtjqx5wsUGcP1HBWutayA/jtyt+sg==}
@@ -987,11 +996,17 @@ packages:
   '@prisma/engines@6.1.0':
     resolution: {integrity: sha512-GnYJbCiep3Vyr1P/415ReYrgJUjP79fBNc1wCo7NP6Eia0CzL2Ot9vK7Infczv3oK7JLrCcawOSAxFxNFsAERQ==}
 
+  '@prisma/engines@6.2.1':
+    resolution: {integrity: sha512-lTBNLJBCxVT9iP5I7Mn6GlwqAxTpS5qMERrhebkUhtXpGVkBNd/jHnNJBZQW4kGDCKaQg/r2vlJYkzOHnAb7ZQ==}
+
   '@prisma/fetch-engine@5.0.0':
     resolution: {integrity: sha512-eSzHTE0KcMvM5+O1++eaMuVf4D1zwWHdqjWr6D70skCg37q7RYsuty4GFnlWBuqC4aXwVf06EvIxiJ0SQIIeRw==}
 
   '@prisma/fetch-engine@6.1.0':
     resolution: {integrity: sha512-asdFi7TvPlEZ8CzSZ/+Du5wZ27q6OJbRSXh+S8ISZguu+S9KtS/gP7NeXceZyb1Jv1SM1S5YfiCv+STDsG6rrg==}
+
+  '@prisma/fetch-engine@6.2.1':
+    resolution: {integrity: sha512-OO7O9d6Mrx2F9i+Gu1LW+DGXXyUFkP7OE5aj9iBfA/2jjDXEJjqa9X0ZmM9NZNo8Uo7ql6zKm6yjDcbAcRrw1A==}
 
   '@prisma/generator-helper@5.0.0':
     resolution: {integrity: sha512-pufQ1mhoH6WzKNtzL79HZDoW4Ql3Lf8QEKVmBoW8e3Tdb50bxpYBYue5LBqp9vNW1xd1pgZO53cNiRfLX2d4Zg==}
@@ -1004,6 +1019,9 @@ packages:
 
   '@prisma/get-platform@6.1.0':
     resolution: {integrity: sha512-ia8bNjboBoHkmKGGaWtqtlgQOhCi7+f85aOkPJKgNwWvYrT6l78KgojLekE8zMhVk0R9lWcifV0Pf8l3/15V0Q==}
+
+  '@prisma/get-platform@6.2.1':
+    resolution: {integrity: sha512-zp53yvroPl5m5/gXYLz7tGCNG33bhG+JYCm74ohxOq1pPnrL47VQYFfF3RbTZ7TzGWCrR3EtoiYMywUBw7UK6Q==}
 
   '@prisma/internals@5.0.0':
     resolution: {integrity: sha512-VGWyFk6QlSBXT8z65Alq5F3o9E8IiTtaBoa3rmKkGpZjUk85kJy3jZz4xkRv53TaeghGE5rWfwkfak26KtY5yQ==}
@@ -2912,6 +2930,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -3953,8 +3972,8 @@ packages:
     resolution: {integrity: sha512-b5CqA9cCY5jmNJGjx8oUbPw3KSgVd+mu8711MSZIRY9dIF0Vlcs/Au6LR3S5guncydM7Zkh8iz8vC+c2CDj3Xw==}
     hasBin: true
 
-  prisma@6.1.0:
-    resolution: {integrity: sha512-aFI3Yi+ApUxkwCJJwyQSwpyzUX7YX3ihzuHNHOyv4GJg3X5tQsmRaJEnZ+ZyfHpMtnyahhmXVfbTZ+lS8ZtfKw==}
+  prisma@6.2.1:
+    resolution: {integrity: sha512-hhyM0H13pQleQ+br4CkzGizS5I0oInoeTw3JfLw1BRZduBSQxPILlJLwi+46wZzj9Je7ndyQEMGw/n5cN2fknA==}
     engines: {node: '>=18.18'}
     hasBin: true
 
@@ -5937,9 +5956,9 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@prisma/client@6.1.0(prisma@6.1.0)':
+  '@prisma/client@6.2.1(prisma@6.2.1)':
     optionalDependencies:
-      prisma: 6.1.0
+      prisma: 6.2.1
 
   '@prisma/debug@5.0.0':
     dependencies:
@@ -5951,7 +5970,11 @@ snapshots:
 
   '@prisma/debug@6.1.0': {}
 
+  '@prisma/debug@6.2.1': {}
+
   '@prisma/engines-version@6.1.0-21.11f085a2012c0f4778414c8db2651556ee0ef959': {}
+
+  '@prisma/engines-version@6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69': {}
 
   '@prisma/engines@5.0.0': {}
 
@@ -5961,6 +5984,13 @@ snapshots:
       '@prisma/engines-version': 6.1.0-21.11f085a2012c0f4778414c8db2651556ee0ef959
       '@prisma/fetch-engine': 6.1.0
       '@prisma/get-platform': 6.1.0
+
+  '@prisma/engines@6.2.1':
+    dependencies:
+      '@prisma/debug': 6.2.1
+      '@prisma/engines-version': 6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69
+      '@prisma/fetch-engine': 6.2.1
+      '@prisma/get-platform': 6.2.1
 
   '@prisma/fetch-engine@5.0.0':
     dependencies:
@@ -5990,6 +6020,12 @@ snapshots:
       '@prisma/debug': 6.1.0
       '@prisma/engines-version': 6.1.0-21.11f085a2012c0f4778414c8db2651556ee0ef959
       '@prisma/get-platform': 6.1.0
+
+  '@prisma/fetch-engine@6.2.1':
+    dependencies:
+      '@prisma/debug': 6.2.1
+      '@prisma/engines-version': 6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69
+      '@prisma/get-platform': 6.2.1
 
   '@prisma/generator-helper@5.0.0':
     dependencies:
@@ -6022,6 +6058,10 @@ snapshots:
   '@prisma/get-platform@6.1.0':
     dependencies:
       '@prisma/debug': 6.1.0
+
+  '@prisma/get-platform@6.2.1':
+    dependencies:
+      '@prisma/debug': 6.2.1
 
   '@prisma/internals@5.0.0':
     dependencies:
@@ -6712,10 +6752,10 @@ snapshots:
     dependencies:
       langium: 1.3.1
 
-  '@zenstackhq/openapi@2.10.2(@prisma/client@6.1.0(prisma@6.1.0))':
+  '@zenstackhq/openapi@2.10.2(@prisma/client@6.2.1(prisma@6.2.1))':
     dependencies:
-      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
-      '@zenstackhq/sdk': 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
+      '@zenstackhq/sdk': 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       change-case: 4.1.2
       lower-case-first: 2.0.2
       openapi-types: 12.1.3
@@ -6729,9 +6769,9 @@ snapshots:
     transitivePeerDependencies:
       - '@prisma/client'
 
-  '@zenstackhq/runtime@2.10.2(@prisma/client@6.1.0(prisma@6.1.0))':
+  '@zenstackhq/runtime@2.10.2(@prisma/client@6.2.1(prisma@6.2.1))':
     dependencies:
-      '@prisma/client': 6.1.0(prisma@6.1.0)
+      '@prisma/client': 6.2.1(prisma@6.2.1)
       bcryptjs: 2.4.3
       buffer: 6.0.3
       change-case: 4.1.2
@@ -6753,12 +6793,12 @@ snapshots:
       zod: 3.24.1
       zod-validation-error: 1.5.0(zod@3.24.1)
 
-  '@zenstackhq/sdk@2.10.2(@prisma/client@6.1.0(prisma@6.1.0))':
+  '@zenstackhq/sdk@2.10.2(@prisma/client@6.2.1(prisma@6.2.1))':
     dependencies:
       '@prisma/generator-helper': 6.1.0
       '@prisma/internals': 6.1.0
       '@zenstackhq/language': 2.10.2
-      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       langium: 1.3.1
       lower-case-first: 2.0.2
       semver: 7.6.3
@@ -6768,9 +6808,9 @@ snapshots:
     transitivePeerDependencies:
       - '@prisma/client'
 
-  '@zenstackhq/server@2.10.2(@prisma/client@6.1.0(prisma@6.1.0))':
+  '@zenstackhq/server@2.10.2(@prisma/client@6.2.1(prisma@6.2.1))':
     dependencies:
-      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+      '@zenstackhq/runtime': 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       change-case: 4.1.2
       decimal.js: 10.4.3
       lower-case-first: 2.0.2
@@ -9547,9 +9587,9 @@ snapshots:
       - encoding
       - supports-color
 
-  prisma@6.1.0:
+  prisma@6.2.1:
     dependencies:
-      '@prisma/engines': 6.1.0
+      '@prisma/engines': 6.2.1
     optionalDependencies:
       fsevents: 2.3.3
 
@@ -11184,12 +11224,12 @@ snapshots:
 
   zen-observable@0.8.15: {}
 
-  zenstack@2.10.2(@prisma/client@6.1.0(prisma@6.1.0))(prisma@6.1.0):
+  zenstack@2.10.2(@prisma/client@6.2.1(prisma@6.2.1))(prisma@6.2.1):
     dependencies:
       '@paralleldrive/cuid2': 2.2.2
       '@types/node': 20.17.6
       '@zenstackhq/language': 2.10.2
-      '@zenstackhq/sdk': 2.10.2(@prisma/client@6.1.0(prisma@6.1.0))
+      '@zenstackhq/sdk': 2.10.2(@prisma/client@6.2.1(prisma@6.2.1))
       async-exit-hook: 2.0.1
       change-case: 4.1.2
       colors: 1.4.0
@@ -11201,7 +11241,7 @@ snapshots:
       ora: 5.4.1
       pluralize: 8.0.0
       pretty-repl: 4.0.1
-      prisma: 6.1.0
+      prisma: 6.2.1
       semver: 7.6.3
       sleep-promise: 9.1.0
       strip-color: 0.1.0
@@ -11230,13 +11270,13 @@ snapshots:
       compress-commons: 4.1.2
       readable-stream: 3.6.2
 
-  zod-prisma-types@3.2.1(@prisma/client@6.1.0(prisma@6.1.0))(prisma@6.1.0):
+  zod-prisma-types@3.2.1(@prisma/client@6.2.1(prisma@6.2.1))(prisma@6.2.1):
     dependencies:
-      '@prisma/client': 6.1.0(prisma@6.1.0)
+      '@prisma/client': 6.2.1(prisma@6.2.1)
       '@prisma/generator-helper': 6.1.0
       code-block-writer: 12.0.0
       lodash: 4.17.21
-      prisma: 6.1.0
+      prisma: 6.2.1
       zod: 3.24.1
 
   zod-validation-error@1.5.0(zod@3.24.1):

@@ -1,0 +1,32 @@
+.sort-group {
+    display: inline-block;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+}
+
+.sort-group .sort-up {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    font-size: 15px;
+    cursor: pointer;
+    color: #999999a3;
+}
+
+.sort-group .sort-up:hover,
+.sort-group .sort-down:hover,
+.sort-group .sort-up.active,
+.sort-group .sort-down.active {
+    color: green;
+}
+
+.sort-group .sort-down {
+    position: absolute;
+    top: 9px;
+    right: 0;
+    font-size: 15px;
+    cursor: pointer;
+    color: #999999a3;
+}

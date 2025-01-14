@@ -1,40 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Phần mềm
+HỌC VIỆN KĨ THUẬT QUÂN SỰ - MTA
 
-## Getting Started
+### Công nghệ
+- [NextJs] Frontend
+- [NodeJs-20] Môi trường
+- [Antd] Thư viện UI
+- [Antd-icon] Thư viện icon
+- [Tailwind] framwork css
 
-First, run the development server:
+### Chạy dự án trên local
+- Clone dự án và cài đặt package
+- Đường dẫn folder làm việc: MTA-monorepo/apps/clients
+- Môi trường làm việc NodeJs 20
+```sh
+// Bước 1: clone code dự án
+git clone https://github.com/SongPhanTech/MTA-monorepo
+// Bước 2: Di chuyển vào thư mục làm việc
+cd MTA-monorepo
+// Bước 3: Cài đặt package thư mục gốc
+pnpm install
+// Bước 4: Biến .env
+Sao chép tệp `.env.example` sang `.env.local` và sửa đổi cấu hình trong tệp `.env.local` cho phù hợp với môi trường đang làm việc.
+// Bước 4: chạy ứng dụng
+pnpm dev --filter=client
+```
+- local app: http://localhost:3001
 
+### Sử dụng Docker (Nếu có)
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Start
+docker-compose up -d --build
+
+# Stop
+docker-compose stop
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Các lệnh
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+| Môi trường  | Lệnh          | Mô tả                           |
+| ----------- | ------------- | ------------------------------- |
+| Development | `pnpm build`  | Build source code               |
+| Development | `pnpm dev`    | Start the for local development |
+| Development | `pnpm format` | Format source codes             |
+| Development | `pnpm lint`   | Run ESLint                      |
+| Production  | `pnpm start`  | Start in production             |
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+### Cấu trúc thư mục
+```sh
+📦client
+ ┣ 📂.next
+ ┣ 📂generated
+ ┃ ┣ 📜assets.json
+ ┃ ┗ 📜router.json
+ ┣ 📂public
+ ┃ ┣ 📜favicon.ico
+ ┣ 📂scripts
+ ┃ ┣ 📜gen-assets.js
+ ┃ ┗ 📜gen-router-path.js
+ ┣ 📂src
+ ┃ ┣ 📂assets
+ ┃ ┃ ┗ 📂images
+ ┃ ┃ ┃ ┗ 📜logo_mta.png
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂charts
+ ┃ ┃ ┃ ┗ 📂Line
+ ┃ ┃ ┣ 📂commons
+ ┃ ┃ ┃ ┣ 📂card-dashboard
+ ┃ ┃ ┣ 📂icons
+ ┃ ┃ ┃ ┣ 📂delete
+ ┃ ┃ ┃ ┗ 📂edit
+ ┃ ┃ ┣ 📂layouts
+ ┃ ┃ ┃ ┣ 📂avatar-dropdown
+ ┃ ┃ ┃ ┗ 📂sider
+ ┃ ┃ ┗ 📂modal
+ ┃ ┣ 📂constants
+ ┃ ┃ ┣ 📂languages
+ ┃ ┃ ┃ ┣ 📜en.ts
+ ┃ ┃ ┃ ┗ 📜vi.ts
+ ┃ ┃ ┣ 📜assets.ts
+ ┃ ┃ ┣ 📜colors.ts
+ ┃ ┃ ┣ 📜constants.ts
+ ┃ ┃ ┣ 📜dialog-tags.ts
+ ┃ ┃ ┗ 📜page-path.ts
+ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜format-vnd.ts
+ ┃ ┣ 📂layouts
+ ┃ ┃ ┗ 📂default-layout
+ ┃ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂lib
+ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┣ 📂open-api
+ ┃ ┃ ┃ ┃ ┗ 📂hooks
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜appComponents.ts
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜appContext.ts
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜appFetcher.ts
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜appSchemas.ts
+ ┃ ┃ ┃ ┗ 📜index.ts
+ ┃ ┃ ┣ 📂casl
+ ┃ ┃ ┃ ┣ 📜ability.ts
+ ┃ ┃ ┃ ┣ 📜can.ts
+ ┃ ┃ ┃ ┗ 📜hooks.ts
+ ┃ ┃ ┣ 📂redux
+ ┃ ┃ ┃ ┣ 📂models
+ ┃ ┃ ┃ ┣ 📂stores
+ ┃ ┃ ┃ ┣ 📜hook.ts
+ ┃ ┃ ┃ ┗ 📜store.ts
+ ┃ ┃ ┗ 📜utils.ts
+ ┃ ┣ 📂mocks
+ ┃ ┣ 📂navigations
+ ┃ ┃ ┗ 📂sider
+ ┃ ┣ 📂pages
+ ┃ ┃ ┣ 📂home
+ ┃ ┃ ┣ 📂login
+ ┃ ┃ ┣ 📜index.tsx
+ ┃ ┃ ┣ 📜_app.tsx
+ ┃ ┃ ┗ 📜_document.tsx
+ ┃ ┗ 📂styles
+ ┃ ┃ ┣ 📂theme
+ ┃ ┃ ┃ ┣ 📜global-theme-custom.ts
+ ┃ ┃ ┗ 📜globals.css
+ ┣ 📜.env.example
+ ┣ 📜.gitignore
+ ┣ 📜.nvmrc
+ ┣ 📜biome.json
+ ┣ 📜develop.Dockerfile
+ ┣ 📜eslint.config.mjs
+ ┣ 📜next-env.d.ts
+ ┣ 📜next.config.ts
+ ┣ 📜package.json
+ ┣ 📜postcss.config.mjs
+ ┣ 📜product.Dockerfile
+ ┣ 📜README.md
+ ┣ 📜tailwind.config.ts
+ ┗ 📜tsconfig.json
+```

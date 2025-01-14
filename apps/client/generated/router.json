@@ -1,4 +1,5 @@
 {
   "INDEX": "/",
-  "HOME": "/home"
+  "HOME": "/home",
+  "LOGIN": "/login"
 }
