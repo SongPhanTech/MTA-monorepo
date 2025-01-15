@@ -1,10 +1,12 @@
 import DefaultLayout from '@layouts/default-layout'
 import React from 'react'
 
-function User() {
+export default function Page() {
   return (
-    <DefaultLayout>User</DefaultLayout>
+    <div>User</div>
   )
 }
 
-export default User
+Page.getLayout = function getLayout(page: React.ReactElement) {
+  return <DefaultLayout>{page}</DefaultLayout>
+}

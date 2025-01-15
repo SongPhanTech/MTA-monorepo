@@ -9,12 +9,14 @@ import { StoreProvider } from 'easy-peasy'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import LoadingBar from 'react-top-loading-bar'
 import dayjs from 'dayjs'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
+import { NextComponentType } from 'next'
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
+    const getLayout: (page: ReactNode) => ReactNode = (Component as NextComponentType & { getLayout?: (page: ReactNode) => ReactNode }).getLayout ?? ((page) => page);
     const [progress, setProgress] = useState(0)
     const [isClient, setIsClient] = useState(false)
     const router = useRouter()
@@ -62,7 +64,7 @@ function App({ Component, pageProps }: AppProps) {
             </Head>
             <ConfigProvider theme={lightThemeCustom}>
                 <QueryClientProvider client={queryClient}>
-                    <Component {...pageProps} />
+                    {getLayout(<Component {...pageProps} />)}
                     <ModalWrapper />
                 </QueryClientProvider>
             </ConfigProvider>
