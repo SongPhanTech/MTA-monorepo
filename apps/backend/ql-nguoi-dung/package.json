@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "@backend/ql-nguoi-dung",
   "scripts": {
     "dev": "bun run --hot src/index.tsx",
     "build": "bun build src/index.tsx --outdir dist --target bun --minify",
