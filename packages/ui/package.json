@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./globals.css": "./src/globals.css",
+    "./globals.css": "./src/assets/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./tailwind.config": "./tailwind.config.ts",
     "./lib/*": "./src/lib/*.ts",
@@ -12,7 +12,12 @@
       "./src/hooks/*.ts",
       "./src/hooks/*.tsx"
     ],
-    "./components/*": "./src/components/*.tsx"
+    ".": "./src/index.ts",
+    "./*": [
+      "./src/*.ts",
+      "./src/*.tsx",
+      "./src/*/index.ts"
+    ]
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -32,6 +37,9 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^1.22.1",
+		"@ant-design/icons": "^5.5.2",
+    "antd": "5.23.0",
     "@radix-ui/react-slot": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
