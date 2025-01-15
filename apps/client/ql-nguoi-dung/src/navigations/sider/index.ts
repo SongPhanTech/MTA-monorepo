@@ -22,6 +22,7 @@ export const navigations: MenuItem[] = [
         icon: UserOutlined,
         children: [
             { id: 'list', label: 'Danh sách', path: '/user/list' },
+            { id: 'profile', label: 'Hồ sơ', path: '/user/profile' },
         ],
     },
 ]
