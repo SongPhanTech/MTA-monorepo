@@ -1,15 +1,13 @@
 "use client";
-
-import { Button } from "@workspace/ui/components/ui/button";
 import { User } from "@workspace/db";
 
-export default function UserAction({ user }: { user: User }) {
+export default function UserAction({ user }: { user: User }):any {
   const action = (name: string) => {
     alert(`Hello ${name}`);
   };
   return (
     <>
-      <Button onClick={() => action(user.name || "Anonymous")}>Click me</Button>
+      <button onClick={() => action(user.name || "Anonymous")}>Click me</button>
     </>
   );
 }
