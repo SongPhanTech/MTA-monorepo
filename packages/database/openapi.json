@@ -31,7 +31,9 @@
           "createdAt",
           "updatedAt",
           "email",
+          "userName",
           "name",
+          "ssoId",
           "phone",
           "role"
         ]
@@ -117,8 +119,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -152,6 +167,7 @@
           "createdAt",
           "updatedAt",
           "email",
+          "userName",
           "name"
         ]
       },
@@ -369,6 +385,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -376,6 +402,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -445,8 +484,21 @@
           "email": {
             "$ref": "#/components/schemas/SortOrder"
           },
+          "userName": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
           "name": {
             "$ref": "#/components/schemas/SortOrder"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -563,6 +615,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -570,6 +632,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -708,6 +783,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -715,6 +800,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -1507,8 +1605,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -1536,6 +1647,7 @@
         },
         "required": [
           "email",
+          "userName",
           "name"
         ]
       },
@@ -1611,6 +1723,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -1618,6 +1740,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -1690,8 +1825,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -1716,6 +1864,7 @@
         },
         "required": [
           "email",
+          "userName",
           "name"
         ]
       },
@@ -1791,6 +1940,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -1798,6 +1957,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -5152,8 +5324,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -5178,6 +5363,7 @@
         },
         "required": [
           "email",
+          "userName",
           "name"
         ]
       },
@@ -5219,8 +5405,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -5245,6 +5444,7 @@
         },
         "required": [
           "email",
+          "userName",
           "name"
         ]
       },
@@ -5559,6 +5759,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -5566,6 +5776,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -6271,6 +6494,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -6278,6 +6511,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -6381,6 +6627,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -6388,6 +6644,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -6491,6 +6760,16 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "name": {
             "oneOf": [
               {
@@ -6498,6 +6777,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -7136,7 +7428,13 @@
           "email": {
             "type": "boolean"
           },
+          "userName": {
+            "type": "boolean"
+          },
           "name": {
+            "type": "boolean"
+          },
+          "ssoId": {
             "type": "boolean"
           },
           "phone": {
@@ -7284,7 +7582,13 @@
           "email": {
             "type": "boolean"
           },
+          "userName": {
+            "type": "boolean"
+          },
           "name": {
+            "type": "boolean"
+          },
+          "ssoId": {
             "type": "boolean"
           },
           "phone": {
@@ -7319,7 +7623,13 @@
           "email": {
             "type": "boolean"
           },
+          "userName": {
+            "type": "boolean"
+          },
           "name": {
+            "type": "boolean"
+          },
+          "ssoId": {
             "type": "boolean"
           },
           "phone": {
@@ -7351,7 +7661,13 @@
           "email": {
             "type": "boolean"
           },
+          "userName": {
+            "type": "boolean"
+          },
           "name": {
+            "type": "boolean"
+          },
+          "ssoId": {
             "type": "boolean"
           },
           "phone": {
@@ -7579,8 +7895,21 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
+          },
+          "ssoId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "phone": {
             "oneOf": [
@@ -7638,6 +7967,7 @@
           "createdAt",
           "updatedAt",
           "email",
+          "userName",
           "name"
         ]
       },
@@ -7884,7 +8214,13 @@
           "email": {
             "type": "integer"
           },
+          "userName": {
+            "type": "integer"
+          },
           "name": {
+            "type": "integer"
+          },
+          "ssoId": {
             "type": "integer"
           },
           "phone": {
@@ -7904,7 +8240,9 @@
           "createdAt",
           "updatedAt",
           "email",
+          "userName",
           "name",
+          "ssoId",
           "phone",
           "role",
           "_all"
@@ -7976,7 +8314,27 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
             "oneOf": [
               {
                 "type": "null"
@@ -8074,7 +8432,27 @@
               }
             ]
           },
+          "userName": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "ssoId": {
             "oneOf": [
               {
                 "type": "null"

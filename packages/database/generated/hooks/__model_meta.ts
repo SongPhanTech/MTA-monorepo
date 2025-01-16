@@ -33,9 +33,16 @@ const metadata = {
                 }, email: {
                     name: "email",
                     type: "String",
+                }, userName: {
+                    name: "userName",
+                    type: "String",
                 }, name: {
                     name: "name",
                     type: "String",
+                }, ssoId: {
+                    name: "ssoId",
+                    type: "String",
+                    isOptional: true,
                 }, phone: {
                     name: "phone",
                     type: "String",

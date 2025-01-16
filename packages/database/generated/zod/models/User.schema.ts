@@ -13,7 +13,9 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     email: z.string().email(),
+    userName: z.string(),
     name: z.string(),
+    ssoId: z.string().nullish(),
     phone: z.string().nullish(),
     role: z.string().nullish(),
 }
@@ -53,7 +55,9 @@ export const UserPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     email: z.string().email(),
+    userName: z.string(),
     name: z.string(),
+    ssoId: z.string().nullish(),
     phone: z.string().nullish(),
     role: z.string().nullish()
 }).partial().passthrough();

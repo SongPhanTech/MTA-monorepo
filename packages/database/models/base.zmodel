@@ -15,11 +15,13 @@ abstract model Base {
 }
 
 model User extends Base {
-  email  String  @unique @email
-  name   String
-  phone  String?
-  role   String?
-  groups Group[]
+  email    String  @unique @email
+  userName String
+  name     String
+  ssoId    String?
+  phone    String?
+  role     String?
+  groups   Group[]
 }
 
 model Group extends Base {
