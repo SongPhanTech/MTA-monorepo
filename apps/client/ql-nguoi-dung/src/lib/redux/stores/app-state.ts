@@ -2,7 +2,7 @@ import { AppState } from '@redux/models'
 import { action } from 'easy-peasy'
 
 const appState: AppState = {
-    clearAppState: action((state, payload) => {
+    clearAppState: action((state) => {
         state.isUpdateAbility = false
         state.isShowSpinner = false
         state.isShowSidebar = true

@@ -2,7 +2,12 @@ import useDisclosure from '@hooks/disclosure'
 import { Modal } from 'antd'
 
 const ConfirmModal = () => {
-    const { isOpen, onClose } = useDisclosure({
+    const {
+        isOpen,
+        onClose,
+        onOk,
+        payload: user_id,
+    } = useDisclosure({
         tag: ConfirmModal.name,
     })
 
@@ -13,8 +18,12 @@ const ConfirmModal = () => {
             title="Xác nhận"
             open={isOpen}
             className="w-[30vw]"
+            okText="Đồng ý"
+            cancelText="Hủy"
             onCancel={onLogout.bind(null, '1')}
-        ></Modal>
+        >
+            {user_id}
+        </Modal>
     )
 }
 

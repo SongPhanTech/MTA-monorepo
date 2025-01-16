@@ -1,13 +1,15 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import { useEffect, useMemo } from 'react'
 import * as modals from '@components/modal'
-interface DisclosureHook {
+interface DisclosureHook<O> {
     tag: string
     isOpen?: boolean
     onOpen?: () => void
     onClose?: () => void
     onToggle?: () => void
     onChange?: (isOpen: boolean) => void
+    onOk?: (output?: O) => void
+    onCancel?: () => void
 }
 
 /**
@@ -22,56 +24,82 @@ interface DisclosureHook {
  *      onClose: () => {
  *         resetForm()
  *      },
- *      tag: 'my-disclosure',
+ *      tag: ConfirmModal.name,
  * })
  * ```
  *
  */
 
-const useDisclosure = (disclosureHook: DisclosureHook) => {
+const useDisclosure = <I = any, O = any>(disclosureHook: DisclosureHook<O>) => {
     const tag = disclosureHook.tag
 
-    // isOpen là payload của tag đó, nếu tag đó không tồn tại thì isOpen = false
-    const isOpen = useStoreState((state) => state.dialog.modalTags[tag])
+    // inputState là payload của tag đó, nếu tag đó không tồn tại thì isOpen = false
+    const inputState = useStoreState(
+        (state) => state.dialog.modalTags[tag]?.input
+    )
+    const outputState = useStoreState(
+        (state) => state.dialog.modalTags[tag]?.output
+    )
     const clearDisclosureTag = useStoreActions(
         (actions) => actions.dialog.clearModalTag
     )
-    useEffect(() => {
-        isOpen ? onOpen(isOpen) : onClose()
-        return () => {
-            clearDisclosureTag(tag)
-        }
-    }, [isOpen])
 
     const onOpenAction = useStoreActions((actions) => actions.dialog.openModal)
+    const okAction = useStoreActions((actions) => actions.dialog.okModal)
     const onCloseAction = useStoreActions(
         (actions) => actions.dialog.closeModal
     )
     const onToggleAction = useStoreActions(
         (actions) => actions.dialog.toggleModal
     )
-    const onOpen = (payload?: any) => {
+    const onOpen = (input?: I) => {
         onOpenAction({
             tag,
-            payload,
+            input,
         })
-        disclosureHook && disclosureHook.onOpen && disclosureHook.onOpen()
+        disclosureHook?.onOpen?.()
     }
     const onClose = () => {
         onCloseAction(tag)
-        disclosureHook && disclosureHook.onClose && disclosureHook.onClose()
+        disclosureHook?.onClose?.()
     }
     const onToggle = () => {
         onToggleAction(tag)
-        disclosureHook && disclosureHook.onToggle && disclosureHook.onToggle()
+        disclosureHook?.onToggle?.()
+    }
+
+    useEffect(() => {
+        if (inputState) {
+            onOpen(inputState)
+        } else {
+            onClose()
+        }
+        return () => {
+            clearDisclosureTag(tag)
+        }
+    }, [inputState])
+
+    useEffect(() => {
+        if (outputState) {
+            onOk(outputState)
+        }
+    }, [outputState])
+
+    const onOk = (output?: O) => {
+        disclosureHook?.onOk?.(output)
+        okAction({
+            tag,
+            output,
+        })
     }
 
     return {
-        isOpen: !!isOpen,
-        payload: typeof isOpen == 'boolean' ? undefined : isOpen,
+        isOpen: !!inputState,
+        input: typeof inputState === 'boolean' ? undefined : inputState,
         onOpen,
         onClose,
         onToggle,
+        onOk,
     }
 }
 

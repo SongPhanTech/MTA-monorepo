@@ -1,8 +1,8 @@
+import menuAntdThemeCustom from '@styles/theme/menu-antd-theme-custom'
 import { ConfigProvider, Layout, Menu } from 'antd'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ReactNode, useState, useEffect } from 'react'
-import menuAntdThemeCustom from '@styles/theme/menu-antd-theme-custom'
+import { ReactNode, useState } from 'react'
 const { Sider } = Layout
 
 // Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
@@ -48,8 +48,8 @@ function getMenus(
         children?: any[]
     }[]
 ): MenuItem[] {
-    return menus.map((item) => {
-        return getItem({
+    return menus.map((item) =>
+        getItem({
             label: item.children ? (
                 item.label
             ) : (
@@ -70,9 +70,23 @@ function getMenus(
                   )
                 : undefined,
         })
-    })
+    )
 }
 
+const findOpenKeys = (menus: any[], currentPath: string): string[] => {
+    for (const item of menus) {
+        if (item.children) {
+            const childKeys = findOpenKeys(item.children, currentPath)
+            if (childKeys.length > 0) {
+                return [item.path || item.id, ...childKeys]
+            }
+        }
+        if (item.path === currentPath) {
+            return [item.path || item.id]
+        }
+    }
+    return []
+}
 // Component SiderDefaultLayout
 const SiderDefaultLayout = ({
     collapsed,
@@ -85,29 +99,9 @@ const SiderDefaultLayout = ({
     const pathname = usePathname()
 
     // State để quản lý các menu đang mở
-    const [openKeys, setOpenKeys] = useState<string[]>([])
-
-    // Xác định keys của menu cần mở dựa trên pathname
-    useEffect(() => {
-        const findOpenKeys = (menus: any[], currentPath: string): string[] => {
-            for (const item of menus) {
-                if (item.children) {
-                    const childKeys = findOpenKeys(item.children, currentPath)
-                    if (childKeys.length > 0) {
-                        return [item.path || item.id, ...childKeys]
-                    }
-                }
-                if (item.path === currentPath) {
-                    return [item.path || item.id]
-                }
-            }
-            return []
-        }
-
-        const keys = findOpenKeys(items, pathname)
-        setOpenKeys(keys)
-    }, [pathname, items])
-
+    const [openKeys, setOpenKeys] = useState<string[]>(
+        findOpenKeys(items, pathname)
+    )
     return (
         <Sider
             style={{

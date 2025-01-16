@@ -16,7 +16,12 @@ import lightThemeCustom from '@styles/theme/global-theme-custom'
 import { NextComponentType } from 'next'
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
-    const getLayout: (page: ReactNode) => ReactNode = (Component as NextComponentType & { getLayout?: (page: ReactNode) => ReactNode }).getLayout ?? ((page) => page);
+    const getLayout: (page: ReactNode) => ReactNode =
+        (
+            Component as NextComponentType & {
+                getLayout?: (page: ReactNode) => ReactNode
+            }
+        ).getLayout ?? ((page) => page)
     const [progress, setProgress] = useState(0)
     const [isClient, setIsClient] = useState(false)
     const router = useRouter()

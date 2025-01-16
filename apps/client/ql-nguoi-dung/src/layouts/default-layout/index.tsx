@@ -4,10 +4,14 @@ import SiderDefaultLayout from '@components/layouts/sider'
 import { navigations } from '@navigations/sider'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 const { Header, Content } = Layout
 
-const DefaultLayout: any = ({ children }: any) => {
+const DefaultLayout = ({
+    children,
+}: {
+    children: ReactNode
+}) => {
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&

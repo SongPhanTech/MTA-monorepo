@@ -1,15 +1,23 @@
 import { Action } from 'easy-peasy'
 
-type ModalTagPayload = {
+type ModalTagInput = {
     tag: string
-    payload?: any
+    input?: any
+}
+type ModalTagOutput = {
+    tag: string
+    output?: any
 }
 
 interface ModalTag {
     modalTags: {
-        [tag: string]: any
+        [tag: string]: {
+            input?: any
+            output?: any
+        }
     }
-    openModal: Action<ModalTag, ModalTagPayload>
+    okModal: Action<ModalTag, ModalTagOutput>
+    openModal: Action<ModalTag, ModalTagInput>
     closeModal: Action<ModalTag, string>
     toggleModal: Action<ModalTag, string>
     clearModalTag: Action<ModalTag, string>

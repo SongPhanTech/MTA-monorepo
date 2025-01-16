@@ -1,4 +1,3 @@
 import ConfirmModal from './confirm-dialog'
-export {
-    ConfirmModal,
-}
+import PutUserModal from './put-user'
+export { ConfirmModal, PutUserModal }

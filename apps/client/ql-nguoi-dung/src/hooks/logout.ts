@@ -7,7 +7,7 @@ const useLogout = () => {
         ability.update([])
         localStorage.clear()
         store.dispatch.appState.clearAppState()
-        if (window) window.location.href = ROUTER_PATH.AUTH_LOGIN
+        if (window) window.location.href = ROUTER_PATH.LOGIN
     }
 
     return { logout }

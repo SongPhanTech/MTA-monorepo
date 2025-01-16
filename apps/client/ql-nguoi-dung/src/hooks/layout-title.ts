@@ -6,7 +6,7 @@ const useLayoutTitle = () => {
     const menuList = useMenuList()
     return menuList
         .flatMap((menu) => (menu.children ? menu.children : menu))
-        .find((e) => e.path && pathname == e.path)
+        .find((e) => e.path && pathname === e.path)
         ?.label.toUpperCase()
 }
 
