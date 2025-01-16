@@ -39,11 +39,21 @@ const PutFormModal = <T extends PutModalFormType>({
             }}
             {...rest}
         >
-            <Col span={24} className="flex justify-end">
-                <Form.Item label="Chỉnh sửa" layout="horizontal" name="isEdit">
-                    <Switch id="isEdit" checked={isEdit} onChange={setIsEdit} />
-                </Form.Item>
-            </Col>
+			<div className="flex justify-end gap-2">
+				<label
+					className="cursor-pointer inline select-none gap-2"
+					htmlFor="isEdit"
+				>
+					{"Chỉnh sửa "}
+				</label>
+				<span className="flex gap-2 items-center">
+					<Switch
+						id="isEdit"
+						checked={isEdit}
+						onChange={setIsEdit}
+					/>
+				</span>
+			</div>
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Row gutter={16}>
                     {children}
