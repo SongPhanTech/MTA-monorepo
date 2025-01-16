@@ -1,5 +1,4 @@
 import DefaultLayout from '@layouts/default-layout'
-import React from 'react'
 
 export default function Page() {
     return <div>User Profile</div>

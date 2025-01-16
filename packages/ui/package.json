@@ -20,12 +20,12 @@
     ]
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "lint": "biome lint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
+    "@workspace/biome-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@turbo/gen": "^1.12.4",
     "@types/node": "^20.11.24",

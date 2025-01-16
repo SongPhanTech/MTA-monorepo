@@ -1,17 +1,13 @@
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import SiderDefaultLayout from '@components/layouts/sider'
-import { navigations } from '@navigations/sider'
+import NAVIGATION from '@workspace/router'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 const { Header, Content } = Layout
 
-const DefaultLayout = ({
-    children,
-}: {
-    children: ReactNode
-}) => {
+const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -55,7 +51,7 @@ const DefaultLayout = ({
                         </span>
                     </div>
                 }
-                items={navigations}
+                items={NAVIGATION.QL_NGUOI_DUNG}
                 onCollapse={handleCollapsed}
                 collapsed={collapsed}
                 theme={'light'}

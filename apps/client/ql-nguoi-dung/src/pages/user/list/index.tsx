@@ -1,10 +1,12 @@
 import { PutUserModal } from '@components/modal'
-import { PutUserFormType } from '@components/modal/put-user'
+import type { PutUserFormType } from '@components/modal/put-user'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
 import { Button } from 'antd'
-import React, { useCallback } from 'react'
+import { useRouter } from 'next/router'
+import { useCallback } from 'react'
 export default function Page() {
+    const router = useRouter()
     const { onOpen } = useDisclosure<string, PutUserFormType>({
         tag: PutUserModal.name,
         onOk: (output) => {

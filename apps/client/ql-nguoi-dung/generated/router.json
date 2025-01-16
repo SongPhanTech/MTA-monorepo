@@ -1,9 +1,0 @@
-{
-    "404": "/404",
-    "INDEX": "/",
-    "USER": "/user",
-    "LOGIN": "/login",
-    "HOME": "/home",
-    "USER_PROFILE": "/user/profile",
-    "USER_LIST": "/user/list"
-}

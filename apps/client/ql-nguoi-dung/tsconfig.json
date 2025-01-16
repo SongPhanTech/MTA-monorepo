@@ -28,7 +28,6 @@
             "@components/*": ["src/components/*"],
             "@constants/*": ["src/constants/*"],
             "@layouts/*": ["src/layouts/*"],
-            "@navigations/*": ["src/navigations/*"],
             "@pages/*": ["src/pages/*"],
             "@api/*": ["src/lib/api/*"],
             "@redux/*": ["src/lib/redux/*"],

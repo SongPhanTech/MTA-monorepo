@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@workspace/db": "workspace:*",
-    "@workspace/eslint-config": "workspace:*",
+    "@workspace/biome-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@types/bun": "latest"
   }

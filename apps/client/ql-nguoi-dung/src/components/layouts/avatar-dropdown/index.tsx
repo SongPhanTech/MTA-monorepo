@@ -3,6 +3,7 @@ import ROUTER_PATH from '@constants/page-path'
 import { Avatar, Dropdown, MenuProps } from 'antd'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import SignOut from './sign-out'
 
 const items: MenuProps['items'] = [
     {
@@ -11,11 +12,7 @@ const items: MenuProps['items'] = [
     },
     {
         key: 'DANG_XUAT',
-        label: (
-            <Link href={ROUTER_PATH.LOGIN} className="text-red-500">
-                Đăng xuất
-            </Link>
-        ),
+        label: <SignOut />,
     },
 ]
 const AvatarDropdown = () => {

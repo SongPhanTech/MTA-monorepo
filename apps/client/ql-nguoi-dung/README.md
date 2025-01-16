@@ -1,7 +1,9 @@
 # Phần mềm
+
 HỌC VIỆN KĨ THUẬT QUÂN SỰ - MTA
 
 ### Công nghệ
+
 - [NextJs] Frontend
 - [NodeJs-20] Môi trường
 - [Antd] Thư viện UI
@@ -9,9 +11,11 @@ HỌC VIỆN KĨ THUẬT QUÂN SỰ - MTA
 - [Tailwind] framwork css
 
 ### Chạy dự án trên local
+
 - Clone dự án và cài đặt package
 - Đường dẫn folder làm việc: MTA-monorepo/apps/clients
 - Môi trường làm việc NodeJs 20
+
 ```sh
 // Bước 1: clone code dự án
 git clone https://github.com/SongPhanTech/MTA-monorepo
@@ -24,9 +28,11 @@ Sao chép tệp `.env.example` sang `.env.local` và sửa đổi cấu hình tr
 // Bước 4: chạy ứng dụng
 pnpm dev --filter=client
 ```
+
 - local app: http://localhost:3001
 
 ### Sử dụng Docker (Nếu có)
+
 ```bash
 # Start
 docker-compose up -d --build
@@ -46,6 +52,7 @@ docker-compose stop
 | Production  | `pnpm start`  | Start in production             |
 
 ### Cấu trúc thư mục
+
 ```sh
 📦client
  ┣ 📂.next
@@ -107,8 +114,6 @@ docker-compose stop
  ┃ ┃ ┃ ┗ 📜store.ts
  ┃ ┃ ┗ 📜utils.ts
  ┃ ┣ 📂mocks
- ┃ ┣ 📂navigations
- ┃ ┃ ┗ 📂sider
  ┃ ┣ 📂pages
  ┃ ┃ ┣ 📂home
  ┃ ┃ ┣ 📂login
@@ -124,7 +129,6 @@ docker-compose stop
  ┣ 📜.nvmrc
  ┣ 📜biome.json
  ┣ 📜develop.Dockerfile
- ┣ 📜eslint.config.mjs
  ┣ 📜next-env.d.ts
  ┣ 📜next.config.ts
  ┣ 📜package.json

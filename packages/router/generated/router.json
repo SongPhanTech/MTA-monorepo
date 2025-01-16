@@ -1,0 +1,12 @@
+{
+    "WEB": {
+        "INDEX": "/"
+    },
+    "QL_NGUOI_DUNG": {
+        "INDEX": "/",
+        "USER": "/user",
+        "HOME": "/home",
+        "USER_LIST": "/user/list",
+        "USER_ID": "/user/[id]"
+    }
+}

@@ -1,6 +1,6 @@
-import { navigations } from '@navigations/sider'
+import NAVIGATION from '@workspace/router'
 const useMenuList = () => {
-    return navigations
+    return NAVIGATION.QL_NGUOI_DUNG
 }
 
 export { useMenuList }

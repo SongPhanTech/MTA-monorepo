@@ -8,13 +8,13 @@
 		"start": "next start",
 		"lint": "biome lint --write --verbose",
 		"format": "biome format --write --verbose",
-		"generate": "patch-package && pnpm generate:assets && pnpm generate:router",
+		"generate": "patch-package && pnpm generate:assets",
 		"generate:assets": "node scripts/gen-assets.js",
-		"generate:router": "node scripts/gen-router-path.js",
 		"generate:openapi": "openapi-codegen gen app",
 		"postinstall": "pnpm generate"
 	},
 	"dependencies": {
+		"@workspace/router": "workspace:*",
 		"@ant-design/cssinjs": "^1.22.1",
 		"@ant-design/icons": "^5.5.2",
 		"@ant-design/nextjs-registry": "^1.0.2",
@@ -39,9 +39,12 @@
 		"react-idle-timer": "^5.7.2",
 		"react-images-viewer": "^1.7.1",
 		"react-top-loading-bar": "^2.3.1",
-		"tailwind-merge": "^2.6.0"
+		"tailwind-merge": "^2.6.0",
+		"next-auth": "5.0.0-beta.25",
+		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@workspace/biome-config": "workspace:*",
 		"@biomejs/biome": "^1.9.4",
 		"@openapi-codegen/cli": "^2.0.2",
 		"@openapi-codegen/typescript": "^8.0.2",

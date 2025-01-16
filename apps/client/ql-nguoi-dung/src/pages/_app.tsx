@@ -14,6 +14,7 @@ import LoadingBar from 'react-top-loading-bar'
 import dayjs from 'dayjs'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
 import { NextComponentType } from 'next'
+import { SessionProvider } from 'next-auth/react'
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
@@ -57,23 +58,25 @@ function App({ Component, pageProps }: AppProps) {
     if (!isClient) return null
 
     return (
-        <StoreProvider store={store}>
-            <LoadingBar
-                color={colors.common.green}
-                waitingTime={400}
-                progress={progress}
-                onLoaderFinished={onRouteDone}
-            />
-            <Head>
-                <title>Học viện kỹ thuật quân sự</title>
-            </Head>
-            <ConfigProvider theme={lightThemeCustom}>
-                <QueryClientProvider client={queryClient}>
-                    {getLayout(<Component {...pageProps} />)}
-                    <ModalWrapper />
-                </QueryClientProvider>
-            </ConfigProvider>
-        </StoreProvider>
+        <SessionProvider session={pageProps.session}>
+            <StoreProvider store={store}>
+                <LoadingBar
+                    color={colors.common.green}
+                    waitingTime={400}
+                    progress={progress}
+                    onLoaderFinished={onRouteDone}
+                />
+                <Head>
+                    <title>Học viện kỹ thuật quân sự</title>
+                </Head>
+                <ConfigProvider theme={lightThemeCustom}>
+                    <QueryClientProvider client={queryClient}>
+                        {getLayout(<Component {...pageProps} />)}
+                        <ModalWrapper />
+                    </QueryClientProvider>
+                </ConfigProvider>
+            </StoreProvider>
+        </SessionProvider>
     )
 }
 
