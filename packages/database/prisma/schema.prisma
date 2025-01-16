@@ -18,22 +18,35 @@ generator dbml {
 }
 
 model User {
-  id        String    @id() @default(cuid())
-  deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  email     String    @unique()
-  name      String?
-  posts     Post[]
+  id          String    @id() @default(cuid())
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  email       String    @unique()
+  name        String
+  phone       String?
+  role        String?
+  groups      Group[]
 }
 
-model Post {
-  id        String    @id() @default(cuid())
-  deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  title     String
-  content   String?
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
+model Group {
+  id          String    @id() @default(cuid())
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  users       User[]
+  roles       Role[]
+}
+
+model Role {
+  id          String    @id() @default(cuid())
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  groups      Group[]
 }

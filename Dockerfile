@@ -10,7 +10,7 @@ FROM base AS pruner
 WORKDIR /app
 RUN pnpm add -g turbo
 COPY . .
-RUN turbo prune web --docker
+RUN turbo prune ${FILTER} --docker
 
 FROM base AS builder
 ARG FILTER

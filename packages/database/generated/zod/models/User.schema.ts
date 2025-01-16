@@ -8,15 +8,18 @@
 import { z } from 'zod';
 const baseSchema = z.object({
     id: z.string(),
+    description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
-    email: z.string(),
-    name: z.string().nullish(),
+    email: z.string().email(),
+    name: z.string(),
+    phone: z.string().nullish(),
+    role: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
-    posts: z.array(z.unknown()).optional(),
+    groups: z.array(z.unknown()).optional(),
 }
 );
 
@@ -45,11 +48,14 @@ export const UserPrismaCreateSchema = baseSchema.partial().passthrough();
  */
 export const UserPrismaUpdateSchema = z.object({
     id: z.string(),
+    description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
-    email: z.string(),
-    name: z.string().nullish()
+    email: z.string().email(),
+    name: z.string(),
+    phone: z.string().nullish(),
+    role: z.string().nullish()
 }).partial().passthrough();
 
 

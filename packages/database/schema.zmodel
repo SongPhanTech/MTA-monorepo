@@ -1,3 +1,5 @@
+import './models/base.zmodel'
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -47,25 +49,3 @@ plugin openapi {
     }
 }
 
-abstract model Base {
-  id        String    @id @default(cuid())
-  deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  // TODO: change this
-  @@allow('all', auth() != null)
-}
-
-model User extends Base {
-  email String  @unique
-  name  String?
-  posts Post[]
-}
-
-model Post extends Base {
-  title    String
-  content  String?
-  author   User    @relation(fields: [authorId], references: [id])
-  authorId String
-}

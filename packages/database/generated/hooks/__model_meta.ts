@@ -14,6 +14,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
                 }, deletedAt: {
                     name: "deletedAt",
                     type: "DateTime",
@@ -32,13 +36,21 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, phone: {
+                    name: "phone",
+                    type: "String",
                     isOptional: true,
-                }, posts: {
-                    name: "posts",
-                    type: "Post",
+                }, role: {
+                    name: "role",
+                    type: "String",
+                    isOptional: true,
+                }, groups: {
+                    name: "groups",
+                    type: "Group",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'author',
+                    backLink: 'users',
+                    isRelationOwner: true,
                 },
             }
             , uniqueConstraints: {
@@ -53,13 +65,17 @@ const metadata = {
             ,
         }
         ,
-        post: {
-            name: 'Post', fields: {
+        group: {
+            name: 'Group', fields: {
                 id: {
                     name: "id",
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
                 }, deletedAt: {
                     name: "deletedAt",
                     type: "DateTime",
@@ -72,25 +88,67 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }],
-                }, title: {
-                    name: "title",
+                }, name: {
+                    name: "name",
                     type: "String",
-                }, content: {
-                    name: "content",
-                    type: "String",
-                    isOptional: true,
-                }, author: {
-                    name: "author",
+                }, users: {
+                    name: "users",
                     type: "User",
                     isDataModel: true,
-                    backLink: 'posts',
+                    isArray: true,
+                    backLink: 'groups',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "authorId" },
-                }, authorId: {
-                    name: "authorId",
+                }, roles: {
+                    name: "roles",
+                    type: "Role",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'groups',
+                    isRelationOwner: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        role: {
+            name: 'Role', fields: {
+                id: {
+                    name: "id",
                     type: "String",
-                    isForeignKey: true,
-                    relationField: 'author',
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, groups: {
+                    name: "groups",
+                    type: "Group",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'roles',
+                    isRelationOwner: true,
                 },
             }
             , uniqueConstraints: {

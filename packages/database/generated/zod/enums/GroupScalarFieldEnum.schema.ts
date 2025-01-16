@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const PostScalarFieldEnumSchema = z.enum(["id", "deletedAt", "createdAt", "updatedAt", "title", "content", "authorId"])
+export const GroupScalarFieldEnumSchema = z.enum(["id", "description", "deletedAt", "createdAt", "updatedAt", "name"])

@@ -6,6 +6,8 @@
     "start": "bun dist/index.js"
   },
   "dependencies": {
+    "@asgardeo/auth-node": "^0.1.3",
+    "@hono/oidc-auth": "^1.4.0",
     "@hono/zod-openapi": "^0.18.3",
     "@scalar/hono-api-reference": "^0.5.165",
     "hono": "^4.6.16",

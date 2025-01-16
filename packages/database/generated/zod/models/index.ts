@@ -6,4 +6,5 @@
 // @ts-nocheck
 
 export * from './User.schema';
-export * from './Post.schema';
+export * from './Group.schema';
+export * from './Role.schema';
