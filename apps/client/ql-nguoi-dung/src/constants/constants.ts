@@ -1,3 +1,5 @@
+import { env } from '@/env'
+
 const LOCAL_STORAGE_KEYS = {}
 
 const DOMAIN_HOST = process.env.NEXT_PUBLIC_DOMAIN_HOST
@@ -7,7 +9,7 @@ const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
 const MAX_TEXTAREA_LENGTH = 1000
 
-const API_BASE_URL = process.env.BASE_URL || ''
+const API_BASE_URL = env.NEXT_PUBLIC_API_BASE_URL
 
 const SUGGESTION_CATEGORY = {
     USER: 'USER',

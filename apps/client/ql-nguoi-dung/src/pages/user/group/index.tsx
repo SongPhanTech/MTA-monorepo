@@ -2,10 +2,10 @@ import { PutUserModal } from '@components/modal'
 import type { PutUserFormType } from '@components/modal/put-user'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
-import { Button } from 'antd'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useFindManyUser } from '@workspace/db/hooks'
 export default function Page() {
+    const { data = [] } = useFindManyUser()
     const router = useRouter()
     const { onOpen } = useDisclosure<string, PutUserFormType>({
         tag: PutUserModal.name,
@@ -13,13 +13,11 @@ export default function Page() {
             console.log(output)
         },
     })
-    const onOpenModal = useCallback(() => {
-        onOpen()
-    }, [])
+
     return (
         <div>
             User list:
-            <Button onClick={onOpenModal}>Open modal</Button>
+            {JSON.stringify(data)}
         </div>
     )
 }

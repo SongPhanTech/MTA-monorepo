@@ -17,6 +17,7 @@ const Table = <T extends Record<string, any>>({
             className="mt-4"
             columns={columns.map((column) => ({
                 ...column,
+                key: column.key || (column as any).dataIndex,
             }))}
             bordered
             dataSource={data}

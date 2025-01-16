@@ -1,20 +1,22 @@
-import { queryClient } from '@api/index'
+import { fetchInstance, queryClient } from '@api/index'
 import ModalWrapper from '@components/modal/wrapper'
 import { colors } from '@constants/colors'
 import store from '@redux/store'
 import '@styles/globals.css'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
 import { ConfigProvider } from 'antd'
 import { StoreProvider } from 'easy-peasy'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import LoadingBar from 'react-top-loading-bar'
 import dayjs from 'dayjs'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
-import { NextComponentType } from 'next'
+import type { NextComponentType } from 'next'
 import { SessionProvider } from 'next-auth/react'
+import { API_BASE_URL } from '@constants/constants'
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
@@ -71,8 +73,15 @@ function App({ Component, pageProps }: AppProps) {
                 </Head>
                 <ConfigProvider theme={lightThemeCustom}>
                     <QueryClientProvider client={queryClient}>
-                        {getLayout(<Component {...pageProps} />)}
-                        <ModalWrapper />
+                        <ZenStackHooksProvider
+                            value={{
+                                endpoint: API_BASE_URL,
+                                fetch: fetchInstance,
+                            }}
+                        >
+                            {getLayout(<Component {...pageProps} />)}
+                            <ModalWrapper />
+                        </ZenStackHooksProvider>
                     </QueryClientProvider>
                 </ConfigProvider>
             </StoreProvider>

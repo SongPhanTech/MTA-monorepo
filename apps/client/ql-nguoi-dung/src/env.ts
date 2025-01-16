@@ -22,6 +22,7 @@ export const env = createEnv({
         NEXT_PUBLIC_AUTH_ASGARDEO_ISSUER: z.string().url(),
         NEXT_PUBLIC_AUTH_ASGARDEO_ID: z.string(),
         NEXT_PUBLIC_NEXTAUTH_URL: z.string().url(),
+        NEXT_PUBLIC_API_BASE_URL: z.string().url(),
     },
 
     /**
@@ -37,6 +38,7 @@ export const env = createEnv({
             process.env.NEXT_PUBLIC_AUTH_ASGARDEO_ISSUER,
         NEXT_PUBLIC_AUTH_ASGARDEO_ID: process.env.NEXT_PUBLIC_AUTH_ASGARDEO_ID,
         NEXT_PUBLIC_NEXTAUTH_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
+        NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

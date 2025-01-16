@@ -75,9 +75,15 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.64.1(react@18.3.1)
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
       '@workspace/router':
         specifier: workspace:*
         version: link:../../../packages/router
+      '@workspace/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
       antd:
         specifier: 5.23.1
         version: 5.23.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -303,9 +309,9 @@ importers:
       '@ant-design/icons':
         specifier: ^5.5.2
         version: 5.5.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@radix-ui/react-slot':
-        specifier: ^1.1.1
-        version: 1.1.1(@types/react@18.3.0)(react@19.0.0)
+      '@workspace/router':
+        specifier: workspace:*
+        version: link:../router
       antd:
         specifier: 5.23.0
         version: 5.23.0(date-fns@3.6.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -982,24 +988,6 @@ packages:
 
   '@prisma/schema-files-loader@6.2.1':
     resolution: {integrity: sha512-5ncSgSLPFWJWRXwX/eY+skqGU5tBLOyXJj6JCi//bsn9pwPGoZgOWr8XmsEFieTUaH2Tjzntbp8nyP6KdKgUQg==}
-
-  '@radix-ui/react-compose-refs@1.1.1':
-    resolution: {integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  '@radix-ui/react-slot@1.1.1':
-    resolution: {integrity: sha512-RApLLOcINYJA+dMVbOju7MYv1Mb2EBp2nH4HdDzXTSyaR5optlm6Otrz1euW3HbdOR8UmmFK06TD+A9frYWv+g==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@rc-component/async-validator@5.0.4':
     resolution: {integrity: sha512-qgGdcVIF604M9EqjNF0hbUTz42bz/RDtxWdWuU5EQe3hi7M8ob54B6B35rOsvX5eSvIHIzT9iH1R3n+hk3CGfg==}
@@ -5758,19 +5746,6 @@ snapshots:
     dependencies:
       '@prisma/prisma-schema-wasm': 6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69
       fs-extra: 11.1.1
-
-  '@radix-ui/react-compose-refs@1.1.1(@types/react@18.3.0)(react@19.0.0)':
-    dependencies:
-      react: 19.0.0
-    optionalDependencies:
-      '@types/react': 18.3.0
-
-  '@radix-ui/react-slot@1.1.1(@types/react@18.3.0)(react@19.0.0)':
-    dependencies:
-      '@radix-ui/react-compose-refs': 1.1.1(@types/react@18.3.0)(react@19.0.0)
-      react: 19.0.0
-    optionalDependencies:
-      '@types/react': 18.3.0
 
   '@rc-component/async-validator@5.0.4':
     dependencies:
