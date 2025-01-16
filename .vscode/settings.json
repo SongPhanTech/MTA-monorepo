@@ -1,3 +1,10 @@
 {
-  
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "cSpell.words": [
+    "SCIM"
+  ]
 }
