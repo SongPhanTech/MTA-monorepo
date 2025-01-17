@@ -1,8 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { PutUserModal } from '@components/modal'
+import { PutQuyenCoBanModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
@@ -19,7 +18,7 @@ export default function Page() {
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
-        tag: PutUserModal.name,
+        tag: PutQuyenCoBanModal.name,
     })
 
     const handleModal = () => {
@@ -36,7 +35,7 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button type="primary">Thêm mới</Button>
+                                <Button type="primary" onClick={handleModal}>Thêm mới</Button>
                             </Flex>
                         </Col>
                         {/* row filter */}
