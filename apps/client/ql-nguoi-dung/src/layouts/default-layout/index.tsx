@@ -5,6 +5,7 @@ import NAVIGATION from '@workspace/router'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
+import { SearchSystem } from '@workspace/ui'
 const { Header, Content } = Layout
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
@@ -51,7 +52,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                         </span>
                     </div>
                 }
-                items={NAVIGATION.QL_NGUOI_DUNG}
+                items={NAVIGATION.QL_NGUOI_DUNG.menus}
                 onCollapse={handleCollapsed}
                 collapsed={collapsed}
                 theme={'light'}
@@ -66,7 +67,10 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                     <span className="text-lg font-bold text-primary">
                         PHÂN HỆ QUẢN LÝ NGƯỜI DÙNG
                     </span>
-                    <AvatarDropdown />
+                    <div className="flex gap-2 items-center">
+                        <SearchSystem />
+                        <AvatarDropdown />
+                    </div>
                 </Header>
                 <Content className="flex flex-col gap-2 m-4 mt-1">
                     <div

@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
 import useDisclosure from '@hooks/disclosure'
-import { Col, Form, Input } from 'antd'
+import { Col, Form, Input, Switch } from 'antd'
 export type PutUserFormType = {
     username?: string
 } & PutModalFormType
@@ -18,6 +18,9 @@ const PutUserModal = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
+            title={
+                input?.username ? 'Chỉnh sửa tài khoản' : 'Thêm mới tài khoản'
+            }
         >
             <Col span={24}>
                 <FormItem

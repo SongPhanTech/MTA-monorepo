@@ -1,12 +1,14 @@
 {
-    "WEB": {
-        "INDEX": "/"
-    },
-    "QL_NGUOI_DUNG": {
-        "INDEX": "/",
-        "USER": "/user",
-        "HOME": "/home",
-        "USER_LIST": "/user/list",
-        "USER_ID": "/user/[id]"
-    }
+  "WEB": {
+    "INDEX": "/"
+  },
+  "QL_NGUOI_DUNG": {
+    "INDEX": "/",
+    "USER": "/user",
+    "HOME": "/home",
+    "USER_ROLE": "/user/role",
+    "USER_PERMISSION": "/user/permission",
+    "USER_GROUP": "/user/group",
+    "USER_ID": "/user/[id]"
+  }
 }

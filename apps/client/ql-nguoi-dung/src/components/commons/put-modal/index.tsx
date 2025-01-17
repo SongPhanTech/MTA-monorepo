@@ -8,6 +8,7 @@ import {
     FormInstance,
     Input,
     Row,
+    Switch,
 } from 'antd'
 import FormItem from '../form-item'
 
@@ -25,16 +26,34 @@ const PutFormModal = <T extends PutModalFormType>({
     children,
     ...rest
 }: ModalProps<T>) => {
+    const [isEdit, setIsEdit] = React.useState(false)
     return (
         <AntdModal
             okText="Lưu"
             cancelText="Hủy"
-            // className="w-[40vw]"
             width={800}
             maskClosable={false}
             onOk={form.submit}
+            okButtonProps={{
+                disabled: !isEdit,
+            }}
             {...rest}
         >
+			<div className="flex justify-end gap-2">
+				<label
+					className="cursor-pointer inline select-none gap-2"
+					htmlFor="isEdit"
+				>
+					{"Chỉnh sửa "}
+				</label>
+				<span className="flex gap-2 items-center">
+					<Switch
+						id="isEdit"
+						checked={isEdit}
+						onChange={setIsEdit}
+					/>
+				</span>
+			</div>
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Row gutter={16}>
                     {children}

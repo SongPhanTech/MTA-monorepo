@@ -1,4 +1,4 @@
-import { AppContext } from './appContext'
+import type { AppContext } from './appContext'
 import { fetchInstance } from '@api/index'
 import { API_BASE_URL } from '@constants/constants'
 import qs from 'qs'
@@ -21,6 +21,7 @@ export type AppFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {
 export async function appFetch<
     TData,
     TError,
+    // biome-ignore lint/complexity/noBannedTypes: <explanation>
     TBody extends {} | FormData | undefined | null,
     THeaders extends {},
     TQueryParams extends {},
@@ -56,6 +57,7 @@ export async function appFetch<
                 .toLowerCase()
                 .includes('multipart/form-data')
         ) {
+            // biome-ignore lint/performance/noDelete: <explanation>
             delete requestHeaders['Content-Type']
         }
 
@@ -92,12 +94,11 @@ export async function appFetch<
 
         if (response.headers.get('content-type')?.includes('json')) {
             return await response.json()
-        } else {
-            // if it is not a json response, assume it is a blob and cast it to TData
-            return (await response.blob()) as unknown as TData
         }
+        // if it is not a json response, assume it is a blob and cast it to TData
+        return (await response.blob()) as unknown as TData
     } catch (e) {
-        let errorObject: Error = {
+        const errorObject: Error = {
             name: 'unknown' as const,
             message:
                 e instanceof Error
