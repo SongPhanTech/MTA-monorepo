@@ -1,4 +1,3 @@
-import { $Enums } from '@prisma/client'
 import { useAbility } from './hooks'
 type CanProps = {
     children: React.ReactNode

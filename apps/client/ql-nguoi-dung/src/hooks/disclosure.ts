@@ -34,7 +34,7 @@ const useDisclosure = <I = any, O = any>(disclosureHook: DisclosureHook<O>) => {
     const tag = disclosureHook.tag
 
     // inputState là payload của tag đó, nếu tag đó không tồn tại thì isOpen = false
-    const inputState = useStoreState(
+    const inputState: I = useStoreState(
         (state) => state.dialog.modalTags[tag]?.input
     )
     const outputState = useStoreState(
@@ -108,7 +108,7 @@ const useModal = () => {
 
     const modalOpened = useMemo(() => {
         return Object.entries(modals)
-            .filter(([tag]) => isOpens[tag])
+            .filter(([tag]) => !!isOpens[tag]?.input)
             .map(([_, modal]) => modal)
     }, [isOpens])
 

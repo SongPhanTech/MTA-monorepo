@@ -2,10 +2,11 @@ import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutUserModal } from '@components/modal'
+import { PutNhomNguoiDungModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
+import { useCountGroup, useFindManyGroup } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -19,8 +20,13 @@ export default function Page() {
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
-        tag: PutUserModal.name,
+        tag: PutNhomNguoiDungModal.name,
     })
+    const { data = [] } = useFindManyGroup({
+        skip: (currentPage - 1) * numberOfPages,
+        take: numberOfPages,
+    })
+    const { data: count } = useCountGroup()
 
     const handleModal = () => {
         onOpen()
@@ -36,7 +42,9 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button type="primary">Thêm mới</Button>
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
                             </Flex>
                         </Col>
                         {/* row filter */}
@@ -115,32 +123,14 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={[
-                            {
-                                id: 1,
-                                groupName: 'Quản trị hệ thống',
-                                codeName: 'admin_group',
-                                membersCount: 10,
-                                createAt: '16-01-2025',
-                                status: 'Hoạt động',
-                            },
-                            {
-                                id: 3,
-                                groupName: 'Trợ lý',
-                                codeName: 'troi_ly',
-                                membersCount: 15,
-                                createAt: '16-01-2025',
-                                status: 'Ngưng hoạt động',
-                            },
-                            {
-                                id: 5,
-                                groupName: 'Chủ nhiệm khoa',
-                                codeName: 'chu_nhiem_khoa',
-                                membersCount: 5,
-                                createAt: '16-01-2025',
-                                status: 'Hoạt động',
-                            },
-                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                     />
                 </Col>
             </Row>
