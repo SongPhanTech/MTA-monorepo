@@ -6,6 +6,8 @@ import { PutUserModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
+import { formatDateReadable } from '@lib/utils'
+import { useCountUser, useFindManyUser } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -16,6 +18,11 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
+    const { data = [] } = useFindManyUser({
+        skip: (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+        take: DEFAULT_PAGINATE_SIZE,
+    })
+    const { data: count } = useCountUser()
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
@@ -68,27 +75,24 @@ export default function Page() {
                             {
                                 title: 'Họ và tên',
                                 dataIndex: 'name',
-                                align: 'left',
                             },
                             {
                                 title: 'Tên đăng nhập',
-                                dataIndex: 'username',
-                                width: 180
+                                dataIndex: 'userName',
                             },
                             {
                                 title: 'Email',
                                 dataIndex: 'email',
-                                width: 250
                             },
                             {
                                 title: 'Ngày tạo',
-                                dataIndex: 'contact',
-                                width: 150,
-                                align: 'center',
+                                dataIndex: 'createdAt',
+                                render: (_, { createdAt }) =>
+                                    formatDateReadable(createdAt),
                             },
                             {
                                 title: 'Trạng thái tài khoản',
-                                dataIndex: 'status',
+                                dataIndex: '',
                             },
                             {
                                 title: 'Thao tác',
@@ -116,48 +120,13 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={ [
-                            {
-                                id: 1,
-                                name: 'Nguyễn Văn A',
-                                username: 'nguyenvana',
-                                email: 'nguyenvana@example.com',
-                                contact: '2025-01-10',
-                                status: 'Hoạt động'
-                            },
-                            {
-                                id: 2,
-                                name: 'Trần Thị B',
-                                username: 'tranthib',
-                                email: 'tranthib@example.com',
-                                contact: '2025-01-11',
-                                status: 'Ngưng hoạt động'
-                            },
-                            {
-                                id: 3,
-                                name: 'Lê Văn C',
-                                username: 'levanc',
-                                email: 'levanc@example.com',
-                                contact: '2025-01-12',
-                                status: 'Hoạt động'
-                            },
-                            {
-                                id: 4,
-                                name: 'Phạm Thị D',
-                                username: 'phamthid',
-                                email: 'phamthid@example.com',
-                                contact: '2025-01-13',
-                                status: 'Khóa'
-                            },
-                            {
-                                id: 5,
-                                name: 'Hoàng Văn E',
-                                username: 'hoangvane',
-                                email: 'hoangvane@example.com',
-                                contact: '2025-01-14',
-                                status: 'Hoạt động'
-                            }
-                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: DEFAULT_PAGINATE_SIZE,
+                            total: count,
+                            onChange: setCurrentPage,
+                        }}
                     />
                 </Col>
             </Row>

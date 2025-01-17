@@ -1,21 +1,15 @@
 import { QueryClient } from '@tanstack/react-query'
-import { HttpStatusCode } from 'axios'
+import { getSession } from 'next-auth/react'
 const queryClient = new QueryClient()
-const AUTH_URL = ['auth/login', 'auth/logout', 'auth/refresh-token']
-const interceptorsResponse = async (status: number, url: string) => {
-    if (
-        (status === HttpStatusCode.Unauthorized ||
-            status === HttpStatusCode.Forbidden) &&
-        AUTH_URL.every((item) => !url.includes(item))
-    ) {
-        //TODO: Logout
-    }
-}
-
-const fetchInstance = (url: string, options?: RequestInit) => {
-    return fetch(url, options || {}).then(async (res) => {
-        await interceptorsResponse(res.status, res.url)
-        return res
+const fetchInstance = async (url: string, options?: RequestInit) => {
+    const session = await getSession()
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options?.headers,
+            Authorization: `Bearer ${session?.user?.access_token}`,
+            'Content-Type': 'application/json',
+        },
     })
 }
 export { fetchInstance, queryClient }

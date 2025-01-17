@@ -77,7 +77,7 @@ export default function Page() {
                             {
                                 title: 'Số thành viên',
                                 dataIndex: 'membersCount',
-                                width: 150
+                                width: 150,
                             },
                             {
                                 title: 'Ngày tạo',
@@ -115,14 +115,14 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={ [
+                        data={[
                             {
                                 id: 1,
                                 groupName: 'Quản trị hệ thống',
                                 codeName: 'admin_group',
                                 membersCount: 10,
                                 createAt: '16-01-2025',
-                                status: 'Hoạt động'
+                                status: 'Hoạt động',
                             },
                             {
                                 id: 3,
@@ -130,7 +130,7 @@ export default function Page() {
                                 codeName: 'troi_ly',
                                 membersCount: 15,
                                 createAt: '16-01-2025',
-                                status: 'Ngưng hoạt động'
+                                status: 'Ngưng hoạt động',
                             },
                             {
                                 id: 5,
@@ -138,8 +138,8 @@ export default function Page() {
                                 codeName: 'chu_nhiem_khoa',
                                 membersCount: 5,
                                 createAt: '16-01-2025',
-                                status: 'Hoạt động'
-                            }
+                                status: 'Hoạt động',
+                            },
                         ]}
                     />
                 </Col>

@@ -77,7 +77,7 @@ export default function Page() {
                             {
                                 title: 'Số quyền cơ bản',
                                 dataIndex: 'roleCount',
-                                width: 150
+                                width: 150,
                             },
                             {
                                 title: 'Ngày tạo',
@@ -121,36 +121,36 @@ export default function Page() {
                                 roleName: 'Quản lý điểm',
                                 roleCode: 'quan_ly_diem',
                                 roleCount: 10,
-                                createdAt: '16-01-2025'
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 2,
                                 roleName: 'Quản lý tải',
                                 roleCode: 'quan_ly_tai',
                                 roleCount: 8,
-                                createdAt: '16-01-2025'
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 3,
                                 roleName: 'Quản lý hệ thống',
                                 roleCode: 'quan_ly_he_thong',
                                 roleCount: 15,
-                                createdAt: '16-01-2025'
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 4,
                                 roleName: 'Quản lý danh mục dùng chung',
                                 roleCode: 'quan_ly_danh_muc_dung_chung',
                                 roleCount: 12,
-                                createdAt: '16-01-2025'
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 5,
                                 roleName: 'Quản lý nhân sự',
                                 roleCode: 'quan_ly_nhan_su',
                                 roleCount: 20,
-                                createdAt: '16-01-2025'
-                            }
+                                createdAt: '16-01-2025',
+                            },
                         ]}
                     />
                 </Col>

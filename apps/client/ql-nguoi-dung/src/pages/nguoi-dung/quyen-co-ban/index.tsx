@@ -114,22 +114,22 @@ export default function Page() {
                                 id: 1,
                                 permissionName: 'Thêm điểm',
                                 permissionCode: 'them_diem',
-                                subSystem: "Quản lý đào tạo",
-                                createdAt: '16-01-2025'
+                                subSystem: 'Quản lý đào tạo',
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 2,
                                 permissionName: 'Xóa điểm',
                                 permissionCode: 'xoa_diem',
-                                subSystem: "Quản lý đào tạo",
-                                createdAt: '16-01-2025'
+                                subSystem: 'Quản lý đào tạo',
+                                createdAt: '16-01-2025',
                             },
                             {
                                 id: 3,
                                 permissionName: 'Thêm người dùng',
                                 permissionCode: 'them_nguoi_dung',
-                                subSystem: "Quản lý người dùng",
-                                createdAt: '16-01-2025'
+                                subSystem: 'Quản lý người dùng',
+                                createdAt: '16-01-2025',
                             },
                         ]}
                     />
