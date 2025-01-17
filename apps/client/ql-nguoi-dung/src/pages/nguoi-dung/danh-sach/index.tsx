@@ -19,8 +19,8 @@ export default function Page() {
     const [searchText, setSearchText] = useState<string>('')
 
     const { data = [] } = useFindManyUser({
-        skip: (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-        take: DEFAULT_PAGINATE_SIZE,
+        skip: (currentPage - 1) * numberOfPages,
+        take: numberOfPages,
     })
     const { data: count } = useCountUser()
     const router = useRouter()
@@ -123,9 +123,10 @@ export default function Page() {
                         data={data}
                         pagination={{
                             current: currentPage,
-                            pageSize: DEFAULT_PAGINATE_SIZE,
+                            pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
                         }}
                     />
                 </Col>

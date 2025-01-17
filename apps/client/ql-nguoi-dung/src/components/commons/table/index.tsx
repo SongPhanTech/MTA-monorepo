@@ -4,7 +4,9 @@ import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 type TableProps<T> = {
     columns?: ColumnsType<T>
     data?: T[]
-    pagination?: TablePaginationConfig
+    pagination?: TablePaginationConfig & {
+        onShowSizeChange?: ((size: number) => void) | undefined
+    }
 }
 
 const Table = <T extends Record<string, any>>({
@@ -32,6 +34,9 @@ const Table = <T extends Record<string, any>>({
                     optionRender: (oriOption) => `${oriOption.value} / trang`,
                 },
                 ...pagination,
+                onShowSizeChange(current, size) {
+                    pagination?.onShowSizeChange?.(size)
+                },
             }}
         />
     )
