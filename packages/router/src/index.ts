@@ -29,29 +29,29 @@ const NAVIGATION: NavigationType = {
 				path: ROUTER_PATH.QL_NGUOI_DUNG.HOME,
 			},
 			{
-				id: "user",
+				id: "nguoi-dung",
 				label: "Người dùng",
 				icon: UserOutlined,
 				children: [
 					{
-						id: "list",
+						id: "danh-sach",
 						label: "Danh sách",
-						path: ROUTER_PATH.QL_NGUOI_DUNG.USER,
+						path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_DANH_SACH,
 					},
 					{
-						id: "group",
+						id: "nhom-nguoi-dung",
 						label: "Nhóm người dùng",
-						path: ROUTER_PATH.QL_NGUOI_DUNG.USER_GROUP,
+						path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_NHOM_NGUOI_DUNG,
 					},
 					{
-						id: "group",
+						id: "vai-tro",
 						label: "Vai trò",
-						path: ROUTER_PATH.QL_NGUOI_DUNG.USER_ROLE,
+						path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_VAI_TRO,
 					},
 					{
-						id: "group",
+						id: "quyen",
 						label: "Quyền cơ bản",
-						path: ROUTER_PATH.QL_NGUOI_DUNG.USER_PERMISSION,
+						path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_QUYEN_CO_BAN,
 					},
 				],
 			},

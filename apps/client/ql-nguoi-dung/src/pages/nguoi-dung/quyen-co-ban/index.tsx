@@ -28,7 +28,7 @@ export default function Page() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Danh sách tài khoản
+                Quyền cơ bản
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
@@ -66,29 +66,22 @@ export default function Page() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Họ và tên',
-                                dataIndex: 'name',
+                                title: 'Tên quyền cơ bản',
+                                dataIndex: 'permissionName',
+                            },
+                            {
+                                title: 'Mã quyền',
+                                dataIndex: 'permissionCode',
+                            },
+                            {
+                                title: 'Phân hệ',
+                                dataIndex: 'subSystem',
+                            },
+                            {
+                                title: 'Ngày tạo',
+                                dataIndex: 'createdAt',
+                                width: 150,
                                 align: 'center',
-                            },
-                            {
-                                title: 'Tên',
-                                dataIndex: 'name',
-                            },
-                            {
-                                title: 'Tóm tắt chức năng, nhiệm vụ',
-                                dataIndex: 'summaryTask',
-                            },
-                            {
-                                title: 'Thông tin liên lạc',
-                                dataIndex: 'contact',
-                            },
-                            {
-                                title: 'Chức danh lãnh đạo lực lượng',
-                                dataIndex: 'leaderPosition',
-                            },
-                            {
-                                title: 'Lịch sử tham gia các sự kiện',
-                                dataIndex: 'participationHistory',
                             },
                             {
                                 title: 'Thao tác',
@@ -97,7 +90,7 @@ export default function Page() {
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip
-                                            title="Xem chi tiết khung hồ sơ"
+                                            title="Xem chi tiết"
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
@@ -119,53 +112,24 @@ export default function Page() {
                         data={[
                             {
                                 id: 1,
-                                code: 'A001',
-                                name: 'Bánh mì',
-                                nature: 'Thực phẩm',
-                                origin: 'Việt Nam',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://i.ex-cdn.com/vntravellive.com/files/news/2023/05/15/luu-ngay-5-quan-banh-mi-ngon-nen-thu-tai-sai-gon-151953.jpg',
+                                permissionName: 'Thêm điểm',
+                                permissionCode: 'them_diem',
+                                subSystem: "Quản lý đào tạo",
+                                createdAt: '16-01-2025'
                             },
                             {
                                 id: 2,
-                                code: 'A002',
-                                name: 'Nước ép cam',
-                                nature: 'Đồ uống',
-                                origin: 'Việt Nam',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPBbpn-hdvOh9_DvcIF0P_8rb2ipc4EX2m2w&s',
+                                permissionName: 'Xóa điểm',
+                                permissionCode: 'xoa_diem',
+                                subSystem: "Quản lý đào tạo",
+                                createdAt: '16-01-2025'
                             },
                             {
                                 id: 3,
-                                code: 'A003',
-                                name: 'Trái cây tươi',
-                                nature: 'Thực phẩm',
-                                origin: 'Nhật Bản',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://tfruit.com.vn/wp-content/uploads/2019/09/hoa-qu%E1%BA%A3-s%E1%BA%A1ch.jpg',
-                            },
-                            {
-                                id: 4,
-                                code: 'A004',
-                                name: 'Cà phê hòa tan',
-                                nature: 'Đồ uống',
-                                origin: 'Brazil',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://cdn.tuoitre.vn/zoom/700_700/tto/i/s626/2016/05/05/untitled-22-1462437661.jpg',
-                            },
-                            {
-                                id: 5,
-                                code: 'A005',
-                                name: 'Sữa tươi',
-                                nature: 'Đồ uống',
-                                origin: 'Úc',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://thichsua.com/wp-content/uploads/2020/10/sua-tuoi-khong-duonh-co-tac-dung-gi.jpg',
+                                permissionName: 'Thêm người dùng',
+                                permissionCode: 'them_nguoi_dung',
+                                subSystem: "Quản lý người dùng",
+                                createdAt: '16-01-2025'
                             },
                         ]}
                     />
