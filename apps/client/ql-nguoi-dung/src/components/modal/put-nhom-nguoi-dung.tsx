@@ -85,7 +85,7 @@ const PutNhomNguoiDungModal = () => {
                         mode="multiple"
                         allowClear
                         placeholder="Chọn vai trò"
-                        options={users.map((role) => ({
+                        options={roles.map((role) => ({
                             label: role.name,
                             value: role.id,
                         }))}

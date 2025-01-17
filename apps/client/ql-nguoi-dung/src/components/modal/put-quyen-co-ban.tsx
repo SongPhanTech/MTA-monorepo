@@ -1,10 +1,10 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
+import PutFormModal, {
+    type PutModalFormType,
+} from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
-import {
-    useFindFirstGroup,
-} from '@workspace/db/hooks'
+import { useFindFirstGroup } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
 export type PutNhomNguoiDungFormType = {
@@ -28,16 +28,13 @@ const PutQuyenCoBanModal = () => {
         },
     })
 
-
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={
-                input ? 'Chỉnh sửa quyền cơ bản' : 'Thêm mới quyền cơ bản'
-            }
+            title={input ? 'Chỉnh sửa quyền cơ bản' : 'Thêm mới quyền cơ bản'}
         >
             <Col span={24}>
                 <FormItem
@@ -59,11 +56,11 @@ const PutQuyenCoBanModal = () => {
                     <Select
                         showSearch
                         options={[
-                            {value: 1, label: 'Quản lý người dùng'},
-                            {value: 2, label: 'Quản lý hệ thống'},
-                            {value: 3, label: 'Quản lý đào tạo'},
-                            {value: 4, label: 'Quản lý CSVC'},
-                            {value: 5, label: 'Quản lý thông tin điều hành'},
+                            { value: 1, label: 'Quản lý người dùng' },
+                            { value: 2, label: 'Quản lý hệ thống' },
+                            { value: 3, label: 'Quản lý đào tạo' },
+                            { value: 4, label: 'Quản lý CSVC' },
+                            { value: 5, label: 'Quản lý thông tin điều hành' },
                         ]}
                     />
                 </FormItem>

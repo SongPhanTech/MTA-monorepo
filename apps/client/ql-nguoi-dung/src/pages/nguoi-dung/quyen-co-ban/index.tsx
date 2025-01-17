@@ -35,7 +35,9 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button type="primary" onClick={handleModal}>Thêm mới</Button>
+                                <Button type="primary" onClick={handleModal}>
+                                    Thêm mới
+                                </Button>
                             </Flex>
                         </Col>
                         {/* row filter */}

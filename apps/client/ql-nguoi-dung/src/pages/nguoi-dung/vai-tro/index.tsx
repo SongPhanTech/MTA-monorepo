@@ -5,6 +5,7 @@ import { PutVaiTroModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
+import { useCountRole, useFindManyRole } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -20,6 +21,11 @@ export default function Page() {
     const { onOpen } = useDisclosure({
         tag: PutVaiTroModal.name,
     })
+    const { data = [] } = useFindManyRole({
+        skip: (currentPage - 1) * numberOfPages,
+        take: numberOfPages,
+    })
+    const { data: count } = useCountRole()
 
     const handleModal = () => {
         onOpen()
@@ -35,7 +41,9 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button type="primary" onClick={handleModal}>Thêm mới</Button>
+                                <Button type="primary" onClick={handleModal}>
+                                    Thêm mới
+                                </Button>
                             </Flex>
                         </Col>
                         {/* row filter */}
@@ -114,43 +122,14 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={[
-                            {
-                                id: 1,
-                                roleName: 'Quản lý điểm',
-                                roleCode: 'quan_ly_diem',
-                                roleCount: 10,
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 2,
-                                roleName: 'Quản lý tải',
-                                roleCode: 'quan_ly_tai',
-                                roleCount: 8,
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 3,
-                                roleName: 'Quản lý hệ thống',
-                                roleCode: 'quan_ly_he_thong',
-                                roleCount: 15,
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 4,
-                                roleName: 'Quản lý danh mục dùng chung',
-                                roleCode: 'quan_ly_danh_muc_dung_chung',
-                                roleCount: 12,
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 5,
-                                roleName: 'Quản lý nhân sự',
-                                roleCode: 'quan_ly_nhan_su',
-                                roleCount: 20,
-                                createdAt: '16-01-2025',
-                            },
-                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                     />
                 </Col>
             </Row>
