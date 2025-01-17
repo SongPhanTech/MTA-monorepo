@@ -68,27 +68,27 @@ export default function Page() {
                             {
                                 title: 'Họ và tên',
                                 dataIndex: 'name',
+                                align: 'left',
+                            },
+                            {
+                                title: 'Tên đăng nhập',
+                                dataIndex: 'username',
+                                width: 180
+                            },
+                            {
+                                title: 'Email',
+                                dataIndex: 'email',
+                                width: 250
+                            },
+                            {
+                                title: 'Ngày tạo',
+                                dataIndex: 'contact',
+                                width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'Tên',
-                                dataIndex: 'name',
-                            },
-                            {
-                                title: 'Tóm tắt chức năng, nhiệm vụ',
-                                dataIndex: 'summaryTask',
-                            },
-                            {
-                                title: 'Thông tin liên lạc',
-                                dataIndex: 'contact',
-                            },
-                            {
-                                title: 'Chức danh lãnh đạo lực lượng',
-                                dataIndex: 'leaderPosition',
-                            },
-                            {
-                                title: 'Lịch sử tham gia các sự kiện',
-                                dataIndex: 'participationHistory',
+                                title: 'Trạng thái tài khoản',
+                                dataIndex: 'status',
                             },
                             {
                                 title: 'Thao tác',
@@ -97,7 +97,7 @@ export default function Page() {
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip
-                                            title="Xem chi tiết khung hồ sơ"
+                                            title="Xem chi tiết"
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
@@ -116,57 +116,47 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={[
+                        data={ [
                             {
                                 id: 1,
-                                code: 'A001',
-                                name: 'Bánh mì',
-                                nature: 'Thực phẩm',
-                                origin: 'Việt Nam',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://i.ex-cdn.com/vntravellive.com/files/news/2023/05/15/luu-ngay-5-quan-banh-mi-ngon-nen-thu-tai-sai-gon-151953.jpg',
+                                name: 'Nguyễn Văn A',
+                                username: 'nguyenvana',
+                                email: 'nguyenvana@example.com',
+                                contact: '2025-01-10',
+                                status: 'Hoạt động'
                             },
                             {
                                 id: 2,
-                                code: 'A002',
-                                name: 'Nước ép cam',
-                                nature: 'Đồ uống',
-                                origin: 'Việt Nam',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPBbpn-hdvOh9_DvcIF0P_8rb2ipc4EX2m2w&s',
+                                name: 'Trần Thị B',
+                                username: 'tranthib',
+                                email: 'tranthib@example.com',
+                                contact: '2025-01-11',
+                                status: 'Ngưng hoạt động'
                             },
                             {
                                 id: 3,
-                                code: 'A003',
-                                name: 'Trái cây tươi',
-                                nature: 'Thực phẩm',
-                                origin: 'Nhật Bản',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://tfruit.com.vn/wp-content/uploads/2019/09/hoa-qu%E1%BA%A3-s%E1%BA%A1ch.jpg',
+                                name: 'Lê Văn C',
+                                username: 'levanc',
+                                email: 'levanc@example.com',
+                                contact: '2025-01-12',
+                                status: 'Hoạt động'
                             },
                             {
                                 id: 4,
-                                code: 'A004',
-                                name: 'Cà phê hòa tan',
-                                nature: 'Đồ uống',
-                                origin: 'Brazil',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://cdn.tuoitre.vn/zoom/700_700/tto/i/s626/2016/05/05/untitled-22-1462437661.jpg',
+                                name: 'Phạm Thị D',
+                                username: 'phamthid',
+                                email: 'phamthid@example.com',
+                                contact: '2025-01-13',
+                                status: 'Khóa'
                             },
                             {
                                 id: 5,
-                                code: 'A005',
-                                name: 'Sữa tươi',
-                                nature: 'Đồ uống',
-                                origin: 'Úc',
-                                processingInformation:
-                                    'Dùng kháng sinh + Oresol',
-                                image: 'https://thichsua.com/wp-content/uploads/2020/10/sua-tuoi-khong-duonh-co-tac-dung-gi.jpg',
-                            },
+                                name: 'Hoàng Văn E',
+                                username: 'hoangvane',
+                                email: 'hoangvane@example.com',
+                                contact: '2025-01-14',
+                                status: 'Hoạt động'
+                            }
                         ]}
                     />
                 </Col>
