@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@workspace/db": "workspace:*",
     "@workspace/biome-config": "workspace:*",
+    "@workspace/db": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }
 }

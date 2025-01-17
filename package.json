@@ -5,12 +5,13 @@
     "build": "turbo build",
     "build:backend": "turbo run build --filter=backend",
     "dev": "turbo dev",
-    "lint": "turbo lint",
+    "lint": "biome lint",
     "db:generate": "turbo run db:generate",
     "router:generate": "node ./scripts/gen-router-path.js",
     "format": "biome format --write --verbose"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "glob": "^11.0.0",
     "turbo": "^2.3.3",
     "typescript": "5.7.3"

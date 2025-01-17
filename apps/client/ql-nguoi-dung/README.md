@@ -29,7 +29,7 @@ Sao chép tệp `.env.example` sang `.env.local` và sửa đổi cấu hình tr
 pnpm dev --filter=client
 ```
 
-- local app: http://localhost:3001
+- local app: <http://localhost:3001>
 
 ### Sử dụng Docker (Nếu có)
 
@@ -48,7 +48,7 @@ docker-compose stop
 | Development | `pnpm build`  | Build source code               |
 | Development | `pnpm dev`    | Start the for local development |
 | Development | `pnpm format` | Format source codes             |
-| Development | `pnpm lint`   | Run ESLint                      |
+| Development | `pnpm lint`   | Run biome lint                  |
 | Production  | `pnpm start`  | Start in production             |
 
 ### Cấu trúc thư mục
