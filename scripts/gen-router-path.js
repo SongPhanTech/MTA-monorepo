@@ -11,6 +11,7 @@ const cleanPath = (path = '') => {
         .replaceAll('\\', ' ')
         .trim()
         .replaceAll(' ', '_')
+        .replaceAll('-', '_')
         .replaceAll('[', '')
         .replaceAll(']', '')
         .replace('.tsx', '')
@@ -23,8 +24,11 @@ const cleanRouter = (router = '') => {
     return r === '' ? '/' : r
 }
 
-const basePath = path.join('apps', 'client')
-glob(path.join(basePath, '*'), {}).then(async (subsystems) => {
+const basePath = './apps/client'
+glob(`${basePath}/*`, {
+    dotRelative: true,
+    posix: true,
+}).then(async (subsystems) => {
     for (const subsystem of subsystems) {
         const subsystemKey = subsystem
             .replace(`${basePath}/`, '')
@@ -32,14 +36,17 @@ glob(path.join(basePath, '*'), {}).then(async (subsystems) => {
             .replaceAll('-', '_')
         routerPath[subsystemKey] = {}
         const pages = await glob(
-            path.join(subsystem, 'src', 'pages', '**', '*.tsx'),
-            {}
+            `${subsystem}/src/pages/**/*.tsx`,
+            {
+                dotRelative: true,
+                posix: true,
+            }
         )
 
         for (const page of pages) {
             if (ignorePages.some((ignorePage) => page.includes(ignorePage)))
                 continue
-            const key = page.replace(path.join(subsystem, 'src', 'pages'), '')
+            const key = page.replace(`${subsystem}/src/pages`, '')
             routerPath[subsystemKey][cleanPath(key)] = cleanRouter(key)
             console.log(
                 'Processing:',
