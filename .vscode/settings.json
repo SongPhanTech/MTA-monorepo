@@ -1,9 +1,5 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
+  "editor.defaultFormatter": "biomejs.biome",
   "cSpell.words": [
     "SCIM"
   ]

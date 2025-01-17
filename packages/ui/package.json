@@ -20,7 +20,7 @@
     ]
   },
   "scripts": {
-    "lint": "biome lint . --max-warnings 0",
+    "lint": "biome lint .",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
