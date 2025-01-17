@@ -4,11 +4,11 @@
   },
   "QL_NGUOI_DUNG": {
     "INDEX": "/",
-    "USER": "/user",
     "HOME": "/home",
-    "USER_ROLE": "/user/role",
-    "USER_PERMISSION": "/user/permission",
-    "USER_GROUP": "/user/group",
-    "USER_ID": "/user/[id]"
+    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
+    "NGUOI_DUNG_VAI_TRO": "/nguoi-dung/vai-tro",
+    "NGUOI_DUNG_QUYEN_CO_BAN": "/nguoi-dung/quyen-co-ban",
+    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
+    "NGUOI_DUNG_DANH_SACH": "/nguoi-dung/danh-sach"
   }
 }
