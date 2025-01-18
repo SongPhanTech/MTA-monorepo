@@ -2,6 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutNguoiDungModal } from '@components/modal'
+import { PutUserFormType } from '@components/modal/put-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
 import DefaultLayout from '@layouts/default-layout'
@@ -24,8 +25,17 @@ export default function Page() {
     const { data: count } = useCountUser()
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen } = useDisclosure({
+    const onOk = (output?: PutUserFormType) => {
+        if(!output) return
+        try {
+        } catch (error) {
+            
+        }
+    }
+
+    const { onOpen } = useDisclosure<string, PutUserFormType>({
         tag: PutNguoiDungModal.name,
+        onOk,
     })
 
     const handleModal = () => {
