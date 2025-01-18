@@ -2,7 +2,7 @@ import type { AppContext } from './appContext'
 import { fetchInstance } from '@api/index'
 import { API_BASE_URL } from '@constants/constants'
 import qs from 'qs'
-const baseUrl = API_BASE_URL.replace('/api/model', '')
+const baseUrl = API_BASE_URL
 
 export type ErrorWrapper<TError> =
     | TError

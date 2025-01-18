@@ -75,7 +75,7 @@ function App({ Component, pageProps }: AppProps) {
                     <QueryClientProvider client={queryClient}>
                         <ZenStackHooksProvider
                             value={{
-                                endpoint: API_BASE_URL,
+                                endpoint: `${API_BASE_URL}/api/model`,
                                 fetch: fetchInstance,
                             }}
                         >
