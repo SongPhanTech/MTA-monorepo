@@ -1,5 +1,4 @@
-import menuAntdThemeCustom from '@styles/theme/menu-antd-theme-custom'
-import { ConfigProvider, Layout, Menu } from 'antd'
+import { Layout, Menu } from 'antd'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useState } from 'react'
@@ -122,9 +121,8 @@ const SiderDefaultLayout = ({
             <div className="flex items-center justify-center my-3">
                 {collapsed ? logo1 : logo2}
             </div>
-            <ConfigProvider theme={menuAntdThemeCustom}>
                 <Menu
-                    theme={theme}
+                    theme={"light"}
                     mode="inline"
                     selectedKeys={[pathname]}
                     openKeys={openKeys}
@@ -134,7 +132,6 @@ const SiderDefaultLayout = ({
                         background: 'transparent',
                     }}
                 />
-            </ConfigProvider>
         </Sider>
     )
 }
