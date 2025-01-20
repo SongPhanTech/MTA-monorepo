@@ -1,43 +1,97 @@
 import { EyeOutlined } from '@ant-design/icons'
+import { useCreateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutNguoiDungModal } from '@components/modal'
-import { PutUserFormType } from '@components/modal/put-nguoi-dung'
+import type { PutUserFormType } from '@components/modal/put-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import { useCountUser, useFindManyUser } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
+import {
+    useCountUser,
+    useFindManyUser,
+    useUpdateUser,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tooltip,
+} from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [] } = useFindManyUser({
+    const { data = [], refetch } = useFindManyUser({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
     })
     const { data: count } = useCountUser()
     const router = useRouter()
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const onOk = (output?: PutUserFormType) => {
-        if (!output) return
-        try {
-        } catch (error) {}
-    }
 
-    const { onOpen } = useDisclosure<string, PutUserFormType>({
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<string, PutUserFormType>({
         tag: PutNguoiDungModal.name,
         onOk,
     })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: fetchCreateUser } = useCreateUser()
+
+    async function onOk(output?: PutUserFormType) {
+        if (!output) return
+        try {
+            showSpinner()
+            await fetchCreateUser({
+                body: {
+                    email: String(output.email),
+                    password: output.password,
+                    userName: output.username,
+                    name: output.name,
+                    description: output.description,
+                    groupIds: [],
+                },
+            })
+            refetch()
+            onClose()
+        } catch (error) {
+            message.error(error?.message)
+        }
+        hideSpinner()
+    }
+
     const handleModal = () => {
         onOpen()
+    }
+    const { mutateAsync: updateUser } = useUpdateUser()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateUser({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error(error?.message)
+        }
     }
     return (
         <div>
@@ -120,9 +174,8 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
+                                                onConfirm: () =>
+                                                    handleDelete(id),
                                             }}
                                         />
                                     </Row>

@@ -1,14 +1,12 @@
 import React from 'react'
 import {
     Modal as AntdModal,
-    ModalProps as AntdModalProps,
-    Button,
+    type ModalProps as AntdModalProps,
     Col,
     Form,
-    FormInstance,
+    type FormInstance,
     Input,
     Row,
-    Switch,
 } from 'antd'
 import FormItem from '../form-item'
 
