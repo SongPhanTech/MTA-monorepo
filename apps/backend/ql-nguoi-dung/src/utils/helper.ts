@@ -1,3 +1,5 @@
+import { HTTPException } from 'hono/http-exception'
+
 export interface UserCreateRequest {
     schemas: string[]
     name: Name
@@ -98,11 +100,9 @@ export class SCIMClient {
 
         if (!response.ok) {
             const errorBody = await response.json().catch(() => null)
-            throw new Error(
-                `Request failed: ${response.status} ${response.statusText}${
-                    errorBody ? ` - ${JSON.stringify(errorBody)}` : ''
-                }`
-            )
+            throw new HTTPException(400, {
+                message: errorBody.detail || response.statusText,
+            })
         }
 
         if (response.status !== 204) {

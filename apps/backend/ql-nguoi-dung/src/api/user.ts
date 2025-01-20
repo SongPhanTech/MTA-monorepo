@@ -65,7 +65,7 @@ const updateUser = createRoute({
                         .merge(
                             z.object({
                                 password: z.string().optional(),
-                                groupIds: z.array(z.string()),
+                                groupIds: z.array(z.string()).optional(),
                             })
                         )
                         .openapi('UserUpdate'),
@@ -111,23 +111,30 @@ const getOneUser = createRoute({
 
 app.openapi(createUser, async (c) => {
     const { password, groupIds, ...rest } = c.req.valid('json')
-    const user = await client.createUser({
-        ...rest,
-        password,
-        schemas: [],
-        name: { givenName: rest.name, familyName: '' },
-        emails: [{ value: rest.email, primary: true, type: 'work' }],
-    })
-
-    const data = await prisma.user.create({
-        data: {
+    try {
+        const user = await client.createUser({
             ...rest,
-            ssoId: user.id,
-            groups: { connect: groupIds.map((id) => ({ id })) },
-        },
-    })
+            password,
+            schemas: [],
+            name: { givenName: rest.name, familyName: '' },
+            emails: [{ value: rest.email, primary: true, type: 'work' }],
+        })
 
-    return c.json(data, 201)
+        const data = await prisma.user.create({
+            data: {
+                ...rest,
+                ssoId: user.id,
+                groups: { connect: groupIds.map((id) => ({ id })) },
+            },
+        })
+
+        return c.json(data, 201)
+    } catch (error) {
+        if (error instanceof HTTPException) {
+            throw error
+        }
+        throw new HTTPException(400, { message: 'Create user failed' })
+    }
 })
 
     .openapi(updateUser, async (c) => {
@@ -149,7 +156,7 @@ app.openapi(createUser, async (c) => {
             where: { id },
             data: {
                 ...rest,
-                groups: { set: groupIds.map((id) => ({ id })) },
+                groups: { set: groupIds?.map((id) => ({ id })) },
             },
         })
         return c.json(data, 200)
