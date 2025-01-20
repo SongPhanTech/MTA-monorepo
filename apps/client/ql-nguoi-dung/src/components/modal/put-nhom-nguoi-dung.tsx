@@ -3,11 +3,9 @@ import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
 import {
-    useFindFirstGroup,
-    useFindFirstUser,
-    useFindManyGroup,
     useFindManyRole,
     useFindManyUser,
+    useFindUniqueGroup,
 } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
@@ -22,7 +20,7 @@ const PutNhomNguoiDungModal = () => {
         tag: PutNhomNguoiDungModal.name,
         onClose: form.resetFields,
     })
-    const { data: group } = useFindFirstGroup({
+    const { data: group } = useFindUniqueGroup({
         where: {
             id: input,
         },

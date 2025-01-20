@@ -4,7 +4,7 @@ import PutFormModal, {
 } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
-import { useFindFirstRole, useFindManyGroup } from '@workspace/db/hooks'
+import { useFindManyGroup, useFindUniqueRole } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
 export type PutVaiTroFormType = {
@@ -19,7 +19,7 @@ const PutVaiTroModal = () => {
         tag: PutVaiTroModal.name,
         onClose: form.resetFields,
     })
-    const { data: role } = useFindFirstRole({
+    const { data: role } = useFindUniqueRole({
         where: {
             id: input,
         },
@@ -48,7 +48,7 @@ const PutVaiTroModal = () => {
             onCancel={onClose}
             title={input ? 'Chỉnh sửa vai trò' : 'Thêm mới vai trò'}
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="name" label="Tên vai trò" required>
                     <Input />
                 </FormItem>

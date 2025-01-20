@@ -2,7 +2,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
-import { useFindFirstUser, useFindManyGroup } from '@workspace/db/hooks'
+import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
 export type PutUserFormType = {
@@ -18,7 +18,7 @@ const PutNguoiDungModal = () => {
         tag: PutNguoiDungModal.name,
         onClose: form.resetFields,
     })
-    const { data: user } = useFindFirstUser({
+    const { data: user } = useFindUniqueUser({
         where: {
             id: input,
         },

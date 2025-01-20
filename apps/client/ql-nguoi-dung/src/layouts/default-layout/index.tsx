@@ -47,7 +47,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                             alt="logo k01"
                             className="w-12 h-12 mb-2"
                         />
-                        <span className="text-base font-bold color text-white">
+                        <span className="text-base font-bold color text-primary">
                             HỌC VIỆN KỸ THUẬT QUÂN SỰ
                         </span>
                     </div>
