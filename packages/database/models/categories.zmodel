@@ -1,0 +1,29 @@
+import 'base'
+
+abstract model Category extends Base {
+  @@allow('create', auth().groups?[roles?[permissions?[name == Category && permissionType == CREATE && !disabled]]])
+  @@allow('update', auth().groups?[roles?[permissions?[name == Category && permissionType == CREATE && !disabled]]])
+  @@allow('delete', auth().groups?[roles?[permissions?[name == Category && permissionType == CREATE && !disabled]]])
+}
+
+model Province extends Category {
+  name     String     @unique
+
+  district District[]
+}
+
+model District extends Category {
+  name       String
+  province   Province  @relation(fields: [provinceId], references: [id])
+  provinceId String
+
+  commune    Commune[]
+  @@unique([name, provinceId])
+}
+model Commune extends Category {
+  name       String
+  district   District @relation(fields: [districtId], references: [id])
+  districtId String
+
+  @@unique([name, districtId])
+}

@@ -6,6 +6,8 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { UserRole } from '@prisma/client';
+import { UserRoleSchema } from '../enums/UserRole.schema';
 const baseSchema = z.object({
     id: z.string(),
     description: z.string().nullish(),
@@ -15,6 +17,7 @@ const baseSchema = z.object({
     email: z.string().email(),
     userName: z.string(),
     name: z.string(),
+    systemRole: UserRoleSchema,
     ssoId: z.string().nullish(),
     phone: z.string().nullish(),
     role: z.string().nullish(),
@@ -22,6 +25,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     groups: z.array(z.unknown()).optional(),
+    feedback: z.array(z.unknown()).optional(),
 }
 );
 
@@ -57,6 +61,7 @@ export const UserPrismaUpdateSchema = z.object({
     email: z.string().email(),
     userName: z.string(),
     name: z.string(),
+    systemRole: UserRoleSchema,
     ssoId: z.string().nullish(),
     phone: z.string().nullish(),
     role: z.string().nullish()
@@ -67,7 +72,7 @@ export const UserPrismaUpdateSchema = z.object({
  * `User` schema for create operations excluding foreign keys and relations.
  */
 export const UserCreateScalarSchema = baseSchema.partial({
-    id: true, createdAt: true, updatedAt: true
+    id: true, createdAt: true, updatedAt: true, systemRole: true
 });
 
 
@@ -75,7 +80,7 @@ export const UserCreateScalarSchema = baseSchema.partial({
  * `User` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const UserCreateSchema = baseSchema.partial({
-    id: true, createdAt: true, updatedAt: true
+    id: true, createdAt: true, updatedAt: true, systemRole: true
 });
 
 

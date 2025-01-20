@@ -7,71 +7,6 @@
 
 const metadata = {
     models: {
-        user: {
-            name: 'User', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
-                }, email: {
-                    name: "email",
-                    type: "String",
-                }, userName: {
-                    name: "userName",
-                    type: "String",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, ssoId: {
-                    name: "ssoId",
-                    type: "String",
-                    isOptional: true,
-                }, phone: {
-                    name: "phone",
-                    type: "String",
-                    isOptional: true,
-                }, role: {
-                    name: "role",
-                    type: "String",
-                    isOptional: true,
-                }, groups: {
-                    name: "groups",
-                    type: "Group",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'users',
-                    isRelationOwner: true,
-                },
-            }
-            , uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, email: {
-                    name: "email",
-                    fields: ["email"]
-                },
-            }
-            ,
-        }
-        ,
         group: {
             name: 'Group', fields: {
                 id: {
@@ -156,6 +91,197 @@ const metadata = {
                     isArray: true,
                     backLink: 'roles',
                     isRelationOwner: true,
+                }, permissions: {
+                    name: "permissions",
+                    type: "Permission",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'role',
+                    isRelationOwner: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        permission: {
+            name: 'Permission', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "PermissionName",
+                }, permissionType: {
+                    name: "permissionType",
+                    type: "PermissionType",
+                }, disabled: {
+                    name: "disabled",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, role: {
+                    name: "role",
+                    type: "Role",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'permissions',
+                    isRelationOwner: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, name_permissionType: {
+                    name: "name_permissionType",
+                    fields: ["name", "permissionType"]
+                },
+            }
+            ,
+        }
+        ,
+        user: {
+            name: 'User', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, email: {
+                    name: "email",
+                    type: "String",
+                }, userName: {
+                    name: "userName",
+                    type: "String",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, systemRole: {
+                    name: "systemRole",
+                    type: "UserRole",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, ssoId: {
+                    name: "ssoId",
+                    type: "String",
+                    isOptional: true,
+                }, phone: {
+                    name: "phone",
+                    type: "String",
+                    isOptional: true,
+                }, role: {
+                    name: "role",
+                    type: "String",
+                    isOptional: true,
+                }, groups: {
+                    name: "groups",
+                    type: "Group",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'users',
+                    isRelationOwner: true,
+                }, feedback: {
+                    name: "feedback",
+                    type: "Feedback",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, email: {
+                    name: "email",
+                    fields: ["email"]
+                },
+            }
+            ,
+        }
+        ,
+        feedback: {
+            name: 'Feedback', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, status: {
+                    name: "status",
+                    type: "FeedbackStatus",
+                }, satisfaction: {
+                    name: "satisfaction",
+                    type: "Satisfaction",
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'feedback',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
                 },
             }
             , uniqueConstraints: {

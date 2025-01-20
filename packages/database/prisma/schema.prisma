@@ -17,19 +17,39 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-model User {
-  id          String    @id() @default(cuid())
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  email       String    @unique()
-  userName    String
-  name        String
-  ssoId       String?
-  phone       String?
-  role        String?
-  groups      Group[]
+enum PermissionName {
+  UserManagement
+  Category
+  Media
+  Organization
+}
+
+enum PermissionType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  APPROVE
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+}
+
+enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
 }
 
 model Group {
@@ -44,11 +64,56 @@ model Group {
 }
 
 model Role {
-  id          String    @id() @default(cuid())
-  description String?   @db.Text()
+  id          String       @id() @default(cuid())
+  description String?      @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt()
   name        String
   groups      Group[]
+  permissions Permission[]
+}
+
+model Permission {
+  id             String         @id() @default(cuid())
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt()
+  name           PermissionName
+  permissionType PermissionType
+  disabled       Boolean        @default(false)
+  role           Role[]
+
+  @@unique([name, permissionType])
+}
+
+model User {
+  id          String     @id() @default(cuid())
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  email       String     @unique()
+  userName    String
+  name        String
+  systemRole  UserRole   @default(USER)
+  ssoId       String?
+  phone       String?
+  role        String?
+  groups      Group[]
+  feedback    Feedback[]
+}
+
+model Feedback {
+  id           String         @id() @default(cuid())
+  description  String?        @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt()
+  content      String
+  status       FeedbackStatus
+  satisfaction Satisfaction
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
 }

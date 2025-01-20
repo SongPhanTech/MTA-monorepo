@@ -44,6 +44,8 @@ export const getUserByToken = async (token: string) => {
 }
 
 const oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
+    console.log(111, response)
+
     return {
         sub: claims?.sub || orig?.sub || '',
         email: (claims?.email as string) || orig?.email || '',
@@ -59,6 +61,7 @@ export const setupAuth = (app: OpenAPIHono) => {
             return await next()
         }
 
+        // c.set('oidcClaimsHook', oidcClaimsHook)
         const auth = await getAuth(c)
         if (auth) {
             const user = await getUser(auth.sub)

@@ -2,21 +2,6 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
-Table User {
-  id String [pk]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  email String [unique, not null]
-  userName String [not null]
-  name String [not null]
-  ssoId String
-  phone String
-  role String
-  groups Group [not null]
-}
-
 Table Group {
   id String [pk]
   description String
@@ -36,14 +21,103 @@ Table Role {
   updatedAt DateTime [not null]
   name String [not null]
   groups Group [not null]
+  permissions Permission [not null]
+}
+
+Table Permission {
+  id String [pk]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name PermissionName [not null]
+  permissionType PermissionType [not null]
+  disabled Boolean [not null, default: false]
+  role Role [not null]
+
+  indexes {
+    (name, permissionType) [unique]
+  }
+}
+
+Table User {
+  id String [pk]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  userName String [not null]
+  name String [not null]
+  systemRole UserRole [not null, default: 'USER']
+  ssoId String
+  phone String
+  role String
+  groups Group [not null]
+  feedback Feedback [not null]
+}
+
+Table Feedback {
+  id String [pk]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  content String [not null]
+  status FeedbackStatus [not null]
+  satisfaction Satisfaction [not null]
+  user User [not null]
+  userId String [not null]
 }
 
 Table GroupToUser {
-  groupsId String [ref: > Group.id]
   usersId String [ref: > User.id]
+  groupsId String [ref: > Group.id]
 }
 
 Table GroupToRole {
   rolesId String [ref: > Role.id]
   groupsId String [ref: > Group.id]
 }
+
+Table PermissionToRole {
+  permissionsId String [ref: > Permission.id]
+  roleId String [ref: > Role.id]
+}
+
+Enum PermissionName {
+  UserManagement
+  Category
+  Media
+  Organization
+}
+
+Enum PermissionType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  APPROVE
+}
+
+Enum UserRole {
+  ADMIN
+  USER
+}
+
+Enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+}
+
+Enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
+}
+
+Ref: Feedback.userId > User.id

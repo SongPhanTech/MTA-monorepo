@@ -18,7 +18,7 @@ build:
 	docker build -t $(IMAGE_NAME):$(DEV_TAG) .
 
 backend-image:
-	docker build -f Dockerfile.backend -t $(IMAGE_NAME)-backend:$(DEV_TAG) --build-arg FILTER=backend .
+	docker build -f Dockerfile.backend -t $(IMAGE_NAME)_be:$(DEV_TAG) --build-arg FILTER=backend .
 
 web-image:
 	docker build -t $(IMAGE_NAME)-web:$(DEV_TAG) --build-arg FILTER=web --build-arg DATABASE_URL=$(DATABASE_URL) .

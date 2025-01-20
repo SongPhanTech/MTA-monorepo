@@ -7,6 +7,8 @@ import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
 import { logger } from 'hono/logger'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+
+import GroupApp from './api/group'
 import UserApp from './api/user'
 import { setupAuth } from './auth'
 
@@ -20,28 +22,16 @@ app.use(
         credentials: true,
     })
 )
+
 app.use(csrf())
 app.use(logger())
+
+setupOpenApi(app)
 
 setupAuth(app)
 
 app.route('/api/user', UserApp)
-
-app.doc('/openapi', (c) => ({
-    openapi: '3.0.0',
-    info: { version: '1.0.0', title: 'My API' },
-    servers: [
-        { url: new URL(c.req.url).origin, description: 'Current environment' },
-    ],
-}))
-
-app.get(
-    '/reference',
-    apiReference({
-        theme: 'purple',
-        spec: { url: '/openapi' },
-    })
-)
+app.route('/api/group', GroupApp)
 
 app.use(
     '/api/model/*',
@@ -52,13 +42,8 @@ app.use(
     })
 )
 
-app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
-    type: 'http',
-    scheme: 'bearer',
-    bearerFormat: 'JWT',
-})
-
 app.onError((err, c) => {
+    console.log(err.message)
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
         let status: ContentfulStatusCode = 500
         if (err.code === 'P2025') status = 404
@@ -76,3 +61,30 @@ export default app
 process.on('SIGINT', () => {
     process.exit()
 })
+
+function setupOpenApi(app: OpenAPIHono) {
+    app.doc('/openapi', (c) => ({
+        openapi: '3.0.0',
+        info: { version: '1.0.0', title: 'My API' },
+        servers: [
+            {
+                url: new URL(c.req.url).origin,
+                description: 'Current environment',
+            },
+        ],
+    }))
+
+    app.get(
+        '/reference',
+        apiReference({
+            theme: 'purple',
+            spec: { url: '/openapi' },
+        })
+    )
+
+    app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+    })
+}

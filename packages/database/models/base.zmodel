@@ -1,3 +1,5 @@
+import 'user'
+
 abstract model Base {
   id          String    @id @default(cuid())
   description String?   @db.Text
@@ -14,16 +16,6 @@ abstract model Base {
   @@allow('read', auth() != null)
 }
 
-model User extends Base {
-  email    String  @unique @email
-  userName String
-  name     String
-  ssoId    String?
-  phone    String?
-  role     String?
-  groups   Group[]
-}
-
 model Group extends Base {
   name  String
   users User[]
@@ -31,6 +23,32 @@ model Group extends Base {
 }
 
 model Role extends Base {
-  name   String
-  groups Group[]
+  name        String
+  groups      Group[]
+  permissions Permission[]
+}
+
+model Permission extends Base {
+  name           PermissionName
+  permissionType PermissionType
+  disabled       Boolean        @default(false)
+
+  role           Role[]
+
+  @@unique([name, permissionType])
+}
+
+enum PermissionName {
+  UserManagement
+  Category
+  Media
+  Organization
+}
+
+enum PermissionType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  APPROVE
 }
