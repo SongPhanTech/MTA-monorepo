@@ -26,11 +26,9 @@ export default function Page() {
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const onOk = (output?: PutUserFormType) => {
-        if(!output) return
+        if (!output) return
         try {
-        } catch (error) {
-            
-        }
+        } catch (error) {}
     }
 
     const { onOpen } = useDisclosure<string, PutUserFormType>({

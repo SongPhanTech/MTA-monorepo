@@ -121,17 +121,17 @@ const SiderDefaultLayout = ({
             <div className="flex items-center justify-center my-3">
                 {collapsed ? logo1 : logo2}
             </div>
-                <Menu
-                    theme={"light"}
-                    mode="inline"
-                    selectedKeys={[pathname]}
-                    openKeys={openKeys}
-                    onOpenChange={(keys) => setOpenKeys(keys)} // Cập nhật trạng thái openKeys khi menu được mở/đóng
-                    items={getMenus(items)}
-                    style={{
-                        background: 'transparent',
-                    }}
-                />
+            <Menu
+                theme={'light'}
+                mode="inline"
+                selectedKeys={[pathname]}
+                openKeys={openKeys}
+                onOpenChange={(keys) => setOpenKeys(keys)} // Cập nhật trạng thái openKeys khi menu được mở/đóng
+                items={getMenus(items)}
+                style={{
+                    background: 'transparent',
+                }}
+            />
         </Sider>
     )
 }
