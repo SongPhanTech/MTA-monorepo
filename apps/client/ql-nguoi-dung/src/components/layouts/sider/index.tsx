@@ -1,7 +1,7 @@
 import { Layout, Menu } from 'antd'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 const { Sider } = Layout
 
 // Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout

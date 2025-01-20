@@ -35,13 +35,10 @@ glob(`${basePath}/*`, {
             .toUpperCase()
             .replaceAll('-', '_')
         routerPath[subsystemKey] = {}
-        const pages = await glob(
-            `${subsystem}/src/pages/**/*.tsx`,
-            {
-                dotRelative: true,
-                posix: true,
-            }
-        )
+        const pages = await glob(`${subsystem}/src/pages/**/*.tsx`, {
+            dotRelative: true,
+            posix: true,
+        })
 
         for (const page of pages) {
             if (ignorePages.some((ignorePage) => page.includes(ignorePage)))

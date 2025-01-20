@@ -2,7 +2,14 @@
     "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
     "files": {
         "ignoreUnknown": true,
-        "ignore": [".vscode", "package.json", ".next/**/*"]
+        "ignore": [
+            ".vscode",
+            "package.json",
+            ".next/**/*",
+            "generated/**/*",
+            "open-api/**/*",
+            "*.json"
+        ]
     },
     "vcs": {
         "enabled": true,
