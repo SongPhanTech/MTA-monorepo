@@ -1,9 +1,9 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { prisma } from '..'
-import { ListOf, PaginationQuerySchema } from '../zod/base'
-import { SCIMClient } from '../utils/helper'
+import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import * as models from '@workspace/db/zod/models'
 import { HTTPException } from 'hono/http-exception'
+import { prisma } from '..'
+import { SCIMClient } from '../utils/helper'
+import { ListOf, PaginationQuerySchema } from '../zod/base'
 
 const client = new SCIMClient({
     baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
@@ -23,6 +23,7 @@ export const UserFilter = z
     .openapi('UserFilter')
 
 const createUser = createRoute({
+    operationId: 'createUser',
     path: '/',
     method: 'post',
     request: {
@@ -48,6 +49,7 @@ const createUser = createRoute({
 })
 
 const updateUser = createRoute({
+    operationId: 'updateUser',
     method: 'put',
     path: '/:id',
     request: {
@@ -62,7 +64,7 @@ const updateUser = createRoute({
                     })
                         .merge(
                             z.object({
-                                password: z.string(),
+                                password: z.string().optional(),
                                 groupIds: z.array(z.string()),
                             })
                         )
@@ -80,6 +82,7 @@ const updateUser = createRoute({
 })
 
 const getListUsers = createRoute({
+    operationId: 'listUsers',
     method: 'get',
     request: { query: PaginationQuerySchema.merge(UserFilter) },
     path: '/',
@@ -94,6 +97,7 @@ const getListUsers = createRoute({
 })
 
 const getOneUser = createRoute({
+    operationId: 'getOneUser',
     method: 'get',
     request: { params: z.object({ id: z.string() }) },
     path: '/:id',

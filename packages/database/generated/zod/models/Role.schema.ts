@@ -17,6 +17,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     groups: z.array(z.unknown()).optional(),
+    permissions: z.array(z.unknown()).optional(),
 }
 );
 
