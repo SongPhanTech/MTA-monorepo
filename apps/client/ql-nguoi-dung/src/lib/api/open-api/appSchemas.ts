@@ -4,91 +4,91 @@
  * @version 1.0.0
  */
 export type User = {
-  id: string;
-  description?: string | null;
-  deletedAt?: string | null;
-  /**
-   * @default 2025-01-18T04:06:40.905Z
-   */
-  createdAt?: string | null;
-  updatedAt: string | null;
-  /**
-   * @format email
-   */
-  email: string;
-  userName: string;
-  name: string;
-  ssoId?: string | null;
-  phone?: string | null;
-  role?: string | null;
-};
-
-export type UserCreate = {
-  id?: string;
-  description?: string | null;
-  deletedAt?: string | null;
-  /**
-   * @default 2025-01-18T04:06:40.908Z
-   */
-  createdAt?: string | null;
-  updatedAt?: string | null;
-  /**
-   * @format email
-   */
-  email: string;
-  userName: string;
-  name: string;
-  ssoId?: string | null;
-  phone?: string | null;
-  role?: string | null;
-  password: string;
-  groupIds: string[];
-};
-
-export type UserUpdate = {
-  description?: string | null;
-  deletedAt?: string | null;
-  /**
-   * @default 2025-01-18T04:06:40.913Z
-   */
-  createdAt?: string | null;
-  updatedAt?: string | null;
-  /**
-   * @format email
-   */
-  email: string;
-  name: string;
-  phone?: string | null;
-  role?: string | null;
-  password: string;
-  groupIds: string[];
-};
-
-export type PaginationQuery = {
-  page?: number;
-  limit?: number | null;
-};
-
-export type ListOfundefined = PaginationQuery & {
-  data: {
-    id: string;
-    description?: string | null;
-    deletedAt?: string | null;
+    id: string
+    description?: string | null
+    deletedAt?: string | null
     /**
-     * @default 2025-01-18T04:06:40.915Z
+     * @default 2025-01-18T04:06:40.905Z
      */
-    createdAt?: string | null;
-    updatedAt: string | null;
+    createdAt?: string | null
+    updatedAt: string | null
     /**
      * @format email
      */
-    email: string;
-    userName: string;
-    name: string;
-    ssoId?: string | null;
-    phone?: string | null;
-    role?: string | null;
-    groups?: (void | null)[];
-  }[];
-  count: number;
-};
+    email: string
+    userName: string
+    name: string
+    ssoId?: string | null
+    phone?: string | null
+    role?: string | null
+}
+
+export type UserCreate = {
+    id?: string
+    description?: string | null
+    deletedAt?: string | null
+    /**
+     * @default 2025-01-18T04:06:40.908Z
+     */
+    createdAt?: string | null
+    updatedAt?: string | null
+    /**
+     * @format email
+     */
+    email: string
+    userName: string
+    name: string
+    ssoId?: string | null
+    phone?: string | null
+    role?: string | null
+    password: string
+    groupIds: string[]
+}
+
+export type UserUpdate = {
+    description?: string | null
+    deletedAt?: string | null
+    /**
+     * @default 2025-01-18T04:06:40.913Z
+     */
+    createdAt?: string | null
+    updatedAt?: string | null
+    /**
+     * @format email
+     */
+    email: string
+    name: string
+    phone?: string | null
+    role?: string | null
+    password: string
+    groupIds: string[]
+}
+
+export type PaginationQuery = {
+    page?: number
+    limit?: number | null
+}
+
+export type ListOfundefined = PaginationQuery & {
+    data: {
+        id: string
+        description?: string | null
+        deletedAt?: string | null
+        /**
+         * @default 2025-01-18T04:06:40.915Z
+         */
+        createdAt?: string | null
+        updatedAt: string | null
+        /**
+         * @format email
+         */
+        email: string
+        userName: string
+        name: string
+        ssoId?: string | null
+        phone?: string | null
+        role?: string | null
+        groups?: (void | null)[]
+    }[]
+    count: number
+}

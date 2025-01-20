@@ -17,6 +17,7 @@ import lightThemeCustom from '@styles/theme/global-theme-custom'
 import type { NextComponentType } from 'next'
 import { SessionProvider } from 'next-auth/react'
 import { API_BASE_URL } from '@constants/constants'
+import { Spinner } from '@components/commons/spinner'
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
@@ -80,6 +81,7 @@ function App({ Component, pageProps }: AppProps) {
                             }}
                         >
                             {getLayout(<Component {...pageProps} />)}
+                            <Spinner />
                             <ModalWrapper />
                         </ZenStackHooksProvider>
                     </QueryClientProvider>
