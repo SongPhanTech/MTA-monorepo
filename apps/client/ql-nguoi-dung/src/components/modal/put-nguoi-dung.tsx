@@ -1,5 +1,8 @@
+import { useCreateUser } from '@api/open-api/appComponents'
 import FormItem from '@components/commons/form-item'
-import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
+import PutFormModal, {
+    type PutModalFormType,
+} from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
 import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
@@ -14,13 +17,18 @@ export type PutUserFormType = {
 } & PutModalFormType
 const PutNguoiDungModal = () => {
     const [form] = Form.useForm<PutUserFormType>()
-    const { isOpen, onClose, onOk, input } = useDisclosure<string>({
+    const {
+        isOpen,
+        onClose,
+        onOk,
+        input: id,
+    } = useDisclosure<string>({
         tag: PutNguoiDungModal.name,
         onClose: form.resetFields,
     })
     const { data: user } = useFindUniqueUser({
         where: {
-            id: input,
+            id: id,
         },
         include: {
             groups: true,
@@ -28,7 +36,8 @@ const PutNguoiDungModal = () => {
     })
 
     const { data: groups = [] } = useFindManyGroup()
-
+    
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (user) {
             form.setFieldsValue({
@@ -40,14 +49,14 @@ const PutNguoiDungModal = () => {
             })
         }
     }, [user])
-
+    
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input ? 'Chỉnh sửa tài khoản' : 'Thêm mới tài khoản'}
+            title={id ? 'Chỉnh sửa tài khoản' : 'Thêm mới tài khoản'}
         >
             <Col span={12}>
                 <FormItem
@@ -64,9 +73,24 @@ const PutNguoiDungModal = () => {
                     form={form}
                     name="password"
                     label="Mật khẩu"
-                    required={!input}
+                    required={!id}
+                    rules={[
+                        {
+                            pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).+$/,
+                            message:
+                                'Mật khẩu phải có ít nhất một chữ hoa, một ký tự đặc biệt và một số',
+                        },
+                        {
+                            min: 8,
+                            message: 'Mật khẩu phải có ít nhất 8 kí tự',
+                        },
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mật khẩu',
+                        },
+                    ]}
                 >
-                    <Input disabled={!!input} type="password" />
+                    <Input.Password disabled={!!id} />
                 </FormItem>
             </Col>
             <Col span={12}>
