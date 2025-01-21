@@ -4,91 +4,136 @@
  * @version 1.0.0
  */
 export type User = {
-    id: string
-    description?: string | null
-    deletedAt?: string | null
-    /**
-     * @default 2025-01-18T04:06:40.905Z
-     */
-    createdAt?: string | null
-    updatedAt: string | null
-    /**
-     * @format email
-     */
-    email: string
-    userName: string
-    name: string
-    ssoId?: string | null
-    phone?: string | null
-    role?: string | null
-}
+  id: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.952Z
+   */
+  createdAt?: string | null;
+  updatedAt: string | null;
+  /**
+   * @format email
+   */
+  email: string;
+  userName: string;
+  name: string;
+  systemRole: "ADMIN" | "USER";
+  ssoId?: string | null;
+  phone?: string | null;
+  role?: string | null;
+};
 
 export type UserCreate = {
-    id?: string
-    description?: string | null
-    deletedAt?: string | null
-    /**
-     * @default 2025-01-18T04:06:40.908Z
-     */
-    createdAt?: string | null
-    updatedAt?: string | null
-    /**
-     * @format email
-     */
-    email: string
-    userName: string
-    name: string
-    ssoId?: string | null
-    phone?: string | null
-    role?: string | null
-    password: string
-    groupIds: string[]
-}
+  id?: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.953Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  /**
+   * @format email
+   */
+  email: string;
+  userName: string;
+  name: string;
+  systemRole?: "ADMIN" | "USER";
+  ssoId?: string | null;
+  phone?: string | null;
+  role?: string | null;
+  password: string;
+  groupIds: string[];
+};
 
 export type UserUpdate = {
-    description?: string | null
-    deletedAt?: string | null
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.955Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  /**
+   * @format email
+   */
+  email: string;
+  name: string;
+  systemRole?: "ADMIN" | "USER";
+  phone?: string | null;
+  role?: string | null;
+  password?: string;
+  groupIds: string[];
+};
+
+export type PaginationQuery = {
+  page?: number;
+  limit?: number | null;
+};
+
+export type ListOfundefined = PaginationQuery & {
+  data: {
+    id: string;
+    description?: string | null;
+    deletedAt?: string | null;
     /**
-     * @default 2025-01-18T04:06:40.913Z
+     * @default 2025-01-21T05:10:04.955Z
      */
-    createdAt?: string | null
-    updatedAt?: string | null
+    createdAt?: string | null;
+    updatedAt: string | null;
     /**
      * @format email
      */
-    email: string
-    name: string
-    phone?: string | null
-    role?: string | null
-    password: string
-    groupIds: string[]
-}
+    email: string;
+    userName: string;
+    name: string;
+    systemRole: "ADMIN" | "USER";
+    ssoId?: string | null;
+    phone?: string | null;
+    role?: string | null;
+    groups?: (void | null)[];
+    feedback?: (void | null)[];
+  }[];
+  count: number;
+};
 
-export type PaginationQuery = {
-    page?: number
-    limit?: number | null
-}
+export type Group = {
+  id: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.957Z
+   */
+  createdAt?: string | null;
+  updatedAt: string | null;
+  name: string;
+};
 
-export type ListOfundefined = PaginationQuery & {
-    data: {
-        id: string
-        description?: string | null
-        deletedAt?: string | null
-        /**
-         * @default 2025-01-18T04:06:40.915Z
-         */
-        createdAt?: string | null
-        updatedAt: string | null
-        /**
-         * @format email
-         */
-        email: string
-        userName: string
-        name: string
-        ssoId?: string | null
-        phone?: string | null
-        role?: string | null
-        groups?: (void | null)[]
-    }[]
-    count: number
-}
+export type GroupCreate = {
+  id?: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.957Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  name: string;
+  userIds: string[];
+  roleIds: string[];
+};
+
+export type GroupUpdate = {
+  id?: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.958Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  name: string;
+  userIds: string[];
+  roleIds: string[];
+};

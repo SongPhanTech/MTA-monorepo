@@ -1,4 +1,5 @@
 import { env } from '@/env'
+import { LogoutOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { signOut } from 'next-auth/react'
 
@@ -24,9 +25,11 @@ const SignOut = () => {
                 value={`${env.NEXT_PUBLIC_NEXTAUTH_URL}`}
             />
             <input hidden readOnly name="state" value="1" />
-            <Button htmlType="submit" className="text-red-500">
-                Đăng xuất
-            </Button>
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+            <button className="text-red-500 flex items-center gap-2">
+                <LogoutOutlined />
+                <span>Đăng xuất</span>
+            </button>
         </form>
     )
 }

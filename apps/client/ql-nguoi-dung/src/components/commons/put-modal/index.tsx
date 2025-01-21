@@ -36,11 +36,11 @@ const PutFormModal = <T extends PutModalFormType>({
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Row gutter={16}>
                     {children}
-                    <Col span={24}>
+                    {/* <Col span={24}>
                         <FormItem form={form} label="Mô tả" name="description">
                             <Input.TextArea rows={4} />
                         </FormItem>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Form>
         </AntdModal>
