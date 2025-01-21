@@ -4,6 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
 import { SCIMClient } from '../utils/helper'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
+import SessionApp from './users/sessions'
 
 const client = new SCIMClient({
     baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
@@ -12,6 +13,7 @@ const client = new SCIMClient({
 })
 
 const app = new OpenAPIHono({ strict: false })
+app.route('/', SessionApp)
 
 const UserSchema = models.UserScalarSchema.openapi('User')
 export const UserFilter = z
