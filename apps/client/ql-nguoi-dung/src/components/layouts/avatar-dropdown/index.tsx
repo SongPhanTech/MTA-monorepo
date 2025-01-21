@@ -25,7 +25,7 @@ const items: MenuProps['items'] = [
 const AvatarDropdown = () => {
     const pathname = usePathname()
     return (
-        <Dropdown menu={{ items }} placement="bottomLeft">
+        <Dropdown menu={{ items }} placement="bottomLeft" className='cursor-pointer'>
             <Avatar size="large" icon={<UserOutlined />} />
         </Dropdown>
     )
