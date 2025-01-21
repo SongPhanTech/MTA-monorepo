@@ -51,7 +51,7 @@ const createUser = createRoute({
 const updateUser = createRoute({
     operationId: 'updateUser',
     method: 'put',
-    path: '/:id',
+    path: '/{id}',
     request: {
         params: z.object({ id: z.string() }),
         body: {
@@ -100,7 +100,7 @@ const getOneUser = createRoute({
     operationId: 'getOneUser',
     method: 'get',
     request: { params: z.object({ id: z.string() }) },
-    path: '/:id',
+    path: '/{id}',
     responses: {
         200: {
             content: { 'application/json': { schema: UserSchema } },
@@ -116,7 +116,7 @@ app.openapi(createUser, async (c) => {
         password,
         schemas: [],
         name: { givenName: rest.name, familyName: '' },
-        emails: [{ value: rest.email, primary: true, type: 'work' }],
+        emails: [{ value: rest.email }],
     })
 
     const data = await prisma.user.create({
@@ -141,9 +141,10 @@ app.openapi(createUser, async (c) => {
             throw new HTTPException(400, { message: 'User not found' })
         }
         await client.updateUser(oldUser.ssoId, {
+            userName: oldUser.userName,
             password,
             name: { givenName: rest.name, familyName: '' },
-            emails: [{ value: rest.email, primary: true, type: 'work' }],
+            emails: [{ value: rest.email }],
         })
         const data = await prisma.user.update({
             where: { id },
