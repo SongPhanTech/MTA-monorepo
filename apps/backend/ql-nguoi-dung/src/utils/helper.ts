@@ -51,7 +51,7 @@ export interface Role {
 export interface Email {
     primary?: boolean
     value: string
-    type: 'home' | 'work'
+    type?: 'home' | 'work'
 }
 
 export interface Name {
