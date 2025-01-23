@@ -17,7 +17,7 @@
             "cache": false,
             "persistent": true
         },
-        "db:generate": {
+        "generate": {
             "cache": false
         },
         "db:push": {

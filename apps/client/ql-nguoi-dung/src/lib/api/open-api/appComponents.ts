@@ -3,201 +3,282 @@
  *
  * @version 1.0.0
  */
-import * as reactQuery from '@tanstack/react-query'
-import { useAppContext, AppContext } from './appContext'
-import type * as Fetcher from './appFetcher'
-import { appFetch } from './appFetcher'
-import type * as Schemas from './appSchemas'
+import * as reactQuery from "@tanstack/react-query";
+import { useAppContext, AppContext } from "./appContext";
+import type * as Fetcher from "./appFetcher";
+import { appFetch } from "./appFetcher";
+import type * as Schemas from "./appSchemas";
 
-export type CreateUserError = Fetcher.ErrorWrapper<undefined>
+export type CreateUserError = Fetcher.ErrorWrapper<undefined>;
 
 export type CreateUserVariables = {
-    body: Schemas.UserCreate
-} & AppContext['fetcherOptions']
+  body: Schemas.UserCreate;
+} & AppContext["fetcherOptions"];
 
 export const fetchCreateUser = (
-    variables: CreateUserVariables,
-    signal?: AbortSignal
+  variables: CreateUserVariables,
+  signal?: AbortSignal,
 ) =>
-    appFetch<Schemas.User, CreateUserError, Schemas.UserCreate, {}, {}, {}>({
-        url: '/api/user',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  appFetch<Schemas.User, CreateUserError, Schemas.UserCreate, {}, {}, {}>({
+    url: "/api/user",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 export const useCreateUser = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            Schemas.User,
-            CreateUserError,
-            CreateUserVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.User,
+      CreateUserError,
+      CreateUserVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useAppContext()
-    return reactQuery.useMutation<
-        Schemas.User,
-        CreateUserError,
-        CreateUserVariables
-    >({
-        mutationFn: (variables: CreateUserVariables) =>
-            fetchCreateUser({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.User,
+    CreateUserError,
+    CreateUserVariables
+  >({
+    mutationFn: (variables: CreateUserVariables) =>
+      fetchCreateUser({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type ListUsersQueryParams = {
-    page?: number
-    limit?: number | null
-    email?: string
-    userName?: string
-    name?: string
-}
+  page?: number;
+  limit?: number | null;
+  email?: string;
+  userName?: string;
+  name?: string;
+};
 
-export type ListUsersError = Fetcher.ErrorWrapper<undefined>
+export type ListUsersError = Fetcher.ErrorWrapper<undefined>;
 
 export type ListUsersVariables = {
-    queryParams?: ListUsersQueryParams
-} & AppContext['fetcherOptions']
+  queryParams?: ListUsersQueryParams;
+} & AppContext["fetcherOptions"];
 
 export const fetchListUsers = (
-    variables: ListUsersVariables,
-    signal?: AbortSignal
+  variables: ListUsersVariables,
+  signal?: AbortSignal,
 ) =>
-    appFetch<
-        Schemas.ListOfundefined,
-        ListUsersError,
-        undefined,
-        {},
-        ListUsersQueryParams,
-        {}
-    >({ url: '/api/user', method: 'get', ...variables, signal })
+  appFetch<
+    Schemas.ListOfundefined,
+    ListUsersError,
+    undefined,
+    {},
+    ListUsersQueryParams,
+    {}
+  >({ url: "/api/user", method: "get", ...variables, signal });
 
-export const useListUsers = <TData = Schemas.ListOfundefined>(
-    variables: ListUsersVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            Schemas.ListOfundefined,
-            ListUsersError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+export const useListUsers = <TData = Schemas.ListOfundefined,>(
+  variables: ListUsersVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.ListOfundefined, ListUsersError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options)
-    return reactQuery.useQuery<Schemas.ListOfundefined, ListUsersError, TData>({
-        queryKey: queryKeyFn({
-            path: '/api/user',
-            operationId: 'listUsers',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchListUsers({ ...fetcherOptions, ...variables }, signal),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options);
+  return reactQuery.useQuery<Schemas.ListOfundefined, ListUsersError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/user",
+      operationId: "listUsers",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchListUsers({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type UpdateUserPathParams = {
-    id: string
-}
+  id: string;
+};
 
-export type UpdateUserError = Fetcher.ErrorWrapper<undefined>
+export type UpdateUserError = Fetcher.ErrorWrapper<undefined>;
 
 export type UpdateUserVariables = {
-    body: Schemas.UserUpdate
-    pathParams: UpdateUserPathParams
-} & AppContext['fetcherOptions']
+  body: Schemas.UserUpdate;
+  pathParams: UpdateUserPathParams;
+} & AppContext["fetcherOptions"];
 
 export const fetchUpdateUser = (
-    variables: UpdateUserVariables,
-    signal?: AbortSignal
+  variables: UpdateUserVariables,
+  signal?: AbortSignal,
 ) =>
-    appFetch<
-        Schemas.User,
-        UpdateUserError,
-        Schemas.UserUpdate,
-        {},
-        {},
-        UpdateUserPathParams
-    >({ url: '/api/user/:id', method: 'put', ...variables, signal })
+  appFetch<
+    Schemas.User,
+    UpdateUserError,
+    Schemas.UserUpdate,
+    {},
+    {},
+    UpdateUserPathParams
+  >({ url: "/api/user/{id}", method: "put", ...variables, signal });
 
 export const useUpdateUser = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            Schemas.User,
-            UpdateUserError,
-            UpdateUserVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.User,
+      UpdateUserError,
+      UpdateUserVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useAppContext()
-    return reactQuery.useMutation<
-        Schemas.User,
-        UpdateUserError,
-        UpdateUserVariables
-    >({
-        mutationFn: (variables: UpdateUserVariables) =>
-            fetchUpdateUser({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.User,
+    UpdateUserError,
+    UpdateUserVariables
+  >({
+    mutationFn: (variables: UpdateUserVariables) =>
+      fetchUpdateUser({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type GetOneUserPathParams = {
-    id: string
-}
+  id: string;
+};
 
-export type GetOneUserError = Fetcher.ErrorWrapper<undefined>
+export type GetOneUserError = Fetcher.ErrorWrapper<undefined>;
 
 export type GetOneUserVariables = {
-    pathParams: GetOneUserPathParams
-} & AppContext['fetcherOptions']
+  pathParams: GetOneUserPathParams;
+} & AppContext["fetcherOptions"];
 
 export const fetchGetOneUser = (
-    variables: GetOneUserVariables,
-    signal?: AbortSignal
+  variables: GetOneUserVariables,
+  signal?: AbortSignal,
 ) =>
-    appFetch<
-        Schemas.User,
-        GetOneUserError,
-        undefined,
-        {},
-        {},
-        GetOneUserPathParams
-    >({ url: '/api/user/:id', method: 'get', ...variables, signal })
+  appFetch<
+    Schemas.User,
+    GetOneUserError,
+    undefined,
+    {},
+    {},
+    GetOneUserPathParams
+  >({ url: "/api/user/{id}", method: "get", ...variables, signal });
 
-export const useGetOneUser = <TData = Schemas.User>(
-    variables: GetOneUserVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<Schemas.User, GetOneUserError, TData>,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+export const useGetOneUser = <TData = Schemas.User,>(
+  variables: GetOneUserVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.User, GetOneUserError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options)
-    return reactQuery.useQuery<Schemas.User, GetOneUserError, TData>({
-        queryKey: queryKeyFn({
-            path: '/api/user/:id',
-            operationId: 'getOneUser',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchGetOneUser({ ...fetcherOptions, ...variables }, signal),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options);
+  return reactQuery.useQuery<Schemas.User, GetOneUserError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/user/{id}",
+      operationId: "getOneUser",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetOneUser({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type CreateGroupError = Fetcher.ErrorWrapper<undefined>;
+
+export type CreateGroupVariables = {
+  body: Schemas.GroupCreate;
+} & AppContext["fetcherOptions"];
+
+export const fetchCreateGroup = (
+  variables: CreateGroupVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<Schemas.Group, CreateGroupError, Schemas.GroupCreate, {}, {}, {}>({
+    url: "/api/group",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useCreateGroup = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.Group,
+      CreateGroupError,
+      CreateGroupVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.Group,
+    CreateGroupError,
+    CreateGroupVariables
+  >({
+    mutationFn: (variables: CreateGroupVariables) =>
+      fetchCreateGroup({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type UpdateGroupPathParams = {
+  id: string;
+};
+
+export type UpdateGroupError = Fetcher.ErrorWrapper<undefined>;
+
+export type UpdateGroupVariables = {
+  body: Schemas.GroupUpdate;
+  pathParams: UpdateGroupPathParams;
+} & AppContext["fetcherOptions"];
+
+export const fetchUpdateGroup = (
+  variables: UpdateGroupVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    Schemas.Group,
+    UpdateGroupError,
+    Schemas.GroupUpdate,
+    {},
+    {},
+    UpdateGroupPathParams
+  >({ url: "/api/group", method: "put", ...variables, signal });
+
+export const useUpdateGroup = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.Group,
+      UpdateGroupError,
+      UpdateGroupVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.Group,
+    UpdateGroupError,
+    UpdateGroupVariables
+  >({
+    mutationFn: (variables: UpdateGroupVariables) =>
+      fetchUpdateGroup({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type QueryOperation =
-    | {
-          path: '/api/user'
-          operationId: 'listUsers'
-          variables: ListUsersVariables
-      }
-    | {
-          path: '/api/user/:id'
-          operationId: 'getOneUser'
-          variables: GetOneUserVariables
-      }
+  | {
+      path: "/api/user";
+      operationId: "listUsers";
+      variables: ListUsersVariables;
+    }
+  | {
+      path: "/api/user/{id}";
+      operationId: "getOneUser";
+      variables: GetOneUserVariables;
+    };

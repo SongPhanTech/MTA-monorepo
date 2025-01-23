@@ -1,5 +1,5 @@
 import { EyeOutlined } from '@ant-design/icons'
-import { useCreateUser } from '@api/open-api/appComponents'
+import { fetchCreateUser, fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutNguoiDungModal } from '@components/modal'
@@ -50,26 +50,43 @@ export default function Page() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: fetchCreateUser } = useCreateUser()
 
     async function onOk(output?: PutUserFormType) {
         if (!output) return
         try {
             showSpinner()
-            await fetchCreateUser({
-                body: {
-                    email: String(output.email),
-                    password: output.password,
-                    userName: output.username,
-                    name: output.name,
-                    description: output.description,
-                    groupIds: [],
-                },
-            })
+            if (output.id) {
+                await fetchUpdateUser({
+                    pathParams: {
+                      id: output.id  
+                    },
+                    body: {
+                        // username ko sửa
+                        email: String(output.email),
+                        name: output.name,
+                        description: output.description,
+                        groupIds: [],
+                        ...(output.password && { password: String(output.password) }),
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await fetchCreateUser({
+                    body: {
+                        email: String(output.email),
+                        password: String(output.password),
+                        userName: output.username,
+                        name: output.name,
+                        description: output.description,
+                        groupIds: [],
+                    },
+                })
+                message.success('Thêm mới thành công')
+            }
             refetch()
             onClose()
         } catch (error) {
-            message.error(error?.message)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
@@ -90,7 +107,7 @@ export default function Page() {
                 },
             })
         } catch (error) {
-            message.error(error?.message)
+            message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
         }
     }
     return (

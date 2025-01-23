@@ -6,7 +6,7 @@
     "build:backend": "turbo run build --filter=backend",
     "dev": "turbo dev",
     "lint": "biome lint",
-    "db:generate": "turbo run db:generate",
+    "generate": "turbo run generate",
     "router:generate": "node ./scripts/gen-router-path.js",
     "format": "biome format --write --verbose"
   },
