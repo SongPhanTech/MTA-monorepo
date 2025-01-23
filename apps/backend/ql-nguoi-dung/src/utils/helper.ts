@@ -4,6 +4,9 @@ export interface UserCreateRequest {
     userName: string
     password: string
     emails: Email[]
+    'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'?: {
+        accountLocked: boolean
+    }
 }
 
 export interface ListResponse {
