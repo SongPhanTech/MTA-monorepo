@@ -67,7 +67,7 @@ const updateUser = createRoute({
                         .merge(
                             z.object({
                                 password: z.string().optional(),
-                                groupIds: z.array(z.string()),
+                                groupIds: z.array(z.string()).optional(),
                                 lock: z.boolean().optional(),
                             })
                         )
@@ -164,7 +164,7 @@ app.openapi(createUser, async (c) => {
             where: { id },
             data: {
                 ...rest,
-                groups: { set: groupIds.map((id) => ({ id })) },
+                groups: { set: groupIds?.map((id) => ({ id })) },
             },
         })
         return c.json(data, 200)

@@ -8,6 +8,7 @@ import { csrf } from 'hono/csrf'
 import { logger } from 'hono/logger'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
+import { HTTPException } from 'hono/http-exception'
 import GroupApp from './api/group'
 import UserApp from './api/user'
 import { setupAuth } from './auth'
@@ -51,6 +52,10 @@ app.onError((err, c) => {
         if (err.code === 'P2003') status = 400
 
         return c.json({ message: err.message }, status)
+    }
+
+    if (err instanceof HTTPException) {
+        return err.getResponse()
     }
 
     return c.json({ message: err.message }, 500)
