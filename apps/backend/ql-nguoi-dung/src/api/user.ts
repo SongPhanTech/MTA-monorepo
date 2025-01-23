@@ -6,7 +6,7 @@ import { SCIMClient } from '../utils/helper'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
 import SessionApp from './users/sessions'
 
-const client = new SCIMClient({
+const scimClient = new SCIMClient({
     baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
     username: process.env.OIDC_USERNAME || 'admin',
     password: process.env.OIDC_ADMIN_PASSWORD || 'admin',
@@ -68,6 +68,7 @@ const updateUser = createRoute({
                             z.object({
                                 password: z.string().optional(),
                                 groupIds: z.array(z.string()),
+                                lock: z.boolean().optional(),
                             })
                         )
                         .openapi('UserUpdate'),
@@ -113,7 +114,7 @@ const getOneUser = createRoute({
 
 app.openapi(createUser, async (c) => {
     const { password, groupIds, ...rest } = c.req.valid('json')
-    const user = await client.createUser({
+    const user = await scimClient.createUser({
         ...rest,
         password,
         schemas: [],
@@ -134,19 +135,30 @@ app.openapi(createUser, async (c) => {
 
     .openapi(updateUser, async (c) => {
         const { id } = c.req.valid('param')
-        const { password, groupIds, ...rest } = c.req.valid('json')
+        const { password, groupIds, lock, ...rest } = c.req.valid('json')
         const oldUser = await prisma.user.findUniqueOrThrow({
             where: { id },
         })
-
         if (!oldUser.ssoId) {
             throw new HTTPException(400, { message: 'User not found' })
         }
-        await client.updateUser(oldUser.ssoId, {
+
+        const lockData =
+            lock !== undefined
+                ? {
+                      'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User':
+                          {
+                              accountLocked: lock,
+                          },
+                  }
+                : {}
+
+        await scimClient.updateUser(oldUser.ssoId, {
             userName: oldUser.userName,
             password,
             name: { givenName: rest.name, familyName: '' },
             emails: [{ value: rest.email }],
+            ...lockData,
         })
         const data = await prisma.user.update({
             where: { id },

@@ -24,7 +24,5 @@ export async function customFetch<T>(
             ? {}
             : await res.json()
 
-    console.log(data)
-
     return { status: res.status, data, headers: res.headers } as T
 }
