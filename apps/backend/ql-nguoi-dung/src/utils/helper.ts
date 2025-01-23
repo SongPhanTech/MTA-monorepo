@@ -6,6 +6,9 @@ export interface UserCreateRequest {
     userName: string
     password: string
     emails: Email[]
+    'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'?: {
+        accountLocked: boolean
+    }
 }
 
 export interface ListResponse {
@@ -53,7 +56,7 @@ export interface Role {
 export interface Email {
     primary?: boolean
     value: string
-    type: 'home' | 'work'
+    type?: 'home' | 'work'
 }
 
 export interface Name {

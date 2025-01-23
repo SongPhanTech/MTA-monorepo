@@ -11,4 +11,4 @@ export const ListOf = <T extends z.ZodTypeAny>(itemSchema: T) =>
     PaginationQuerySchema.extend({
         data: z.array(itemSchema),
         count: z.number(),
-    }).openapi('ListOf' + itemSchema._def.openapi?._internal?.refId)
+    }).openapi(`ListOf${itemSchema._def.openapi?._internal?.refId}`)

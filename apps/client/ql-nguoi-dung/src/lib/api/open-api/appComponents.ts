@@ -118,7 +118,7 @@ export const fetchUpdateUser = (
     {},
     {},
     UpdateUserPathParams
-  >({ url: "/api/user/:id", method: "put", ...variables, signal });
+  >({ url: "/api/user/{id}", method: "put", ...variables, signal });
 
 export const useUpdateUser = (
   options?: Omit<
@@ -163,7 +163,7 @@ export const fetchGetOneUser = (
     {},
     {},
     GetOneUserPathParams
-  >({ url: "/api/user/:id", method: "get", ...variables, signal });
+  >({ url: "/api/user/{id}", method: "get", ...variables, signal });
 
 export const useGetOneUser = <TData = Schemas.User,>(
   variables: GetOneUserVariables,
@@ -175,7 +175,7 @@ export const useGetOneUser = <TData = Schemas.User,>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options);
   return reactQuery.useQuery<Schemas.User, GetOneUserError, TData>({
     queryKey: queryKeyFn({
-      path: "/api/user/:id",
+      path: "/api/user/{id}",
       operationId: "getOneUser",
       variables,
     }),
@@ -186,6 +186,91 @@ export const useGetOneUser = <TData = Schemas.User,>(
   });
 };
 
+export type CreateGroupError = Fetcher.ErrorWrapper<undefined>;
+
+export type CreateGroupVariables = {
+  body: Schemas.GroupCreate;
+} & AppContext["fetcherOptions"];
+
+export const fetchCreateGroup = (
+  variables: CreateGroupVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<Schemas.Group, CreateGroupError, Schemas.GroupCreate, {}, {}, {}>({
+    url: "/api/group",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useCreateGroup = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.Group,
+      CreateGroupError,
+      CreateGroupVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.Group,
+    CreateGroupError,
+    CreateGroupVariables
+  >({
+    mutationFn: (variables: CreateGroupVariables) =>
+      fetchCreateGroup({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type UpdateGroupPathParams = {
+  id: string;
+};
+
+export type UpdateGroupError = Fetcher.ErrorWrapper<undefined>;
+
+export type UpdateGroupVariables = {
+  body: Schemas.GroupUpdate;
+  pathParams: UpdateGroupPathParams;
+} & AppContext["fetcherOptions"];
+
+export const fetchUpdateGroup = (
+  variables: UpdateGroupVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    Schemas.Group,
+    UpdateGroupError,
+    Schemas.GroupUpdate,
+    {},
+    {},
+    UpdateGroupPathParams
+  >({ url: "/api/group", method: "put", ...variables, signal });
+
+export const useUpdateGroup = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.Group,
+      UpdateGroupError,
+      UpdateGroupVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.Group,
+    UpdateGroupError,
+    UpdateGroupVariables
+  >({
+    mutationFn: (variables: UpdateGroupVariables) =>
+      fetchUpdateGroup({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/api/user";
@@ -193,7 +278,7 @@ export type QueryOperation =
       variables: ListUsersVariables;
     }
   | {
-      path: "/api/user/:id";
+      path: "/api/user/{id}";
       operationId: "getOneUser";
       variables: GetOneUserVariables;
     };

@@ -57,6 +57,8 @@ export const setupAuth = (app: OpenAPIHono) => {
         const token = c.req.header('Authorization')?.split('Bearer ')[1]
         if (token) {
             const user = await getUserByToken(token)
+            console.log('User sso id: ', user.ssoId)
+
             c.set('user', user)
             return await next()
         }
@@ -65,6 +67,8 @@ export const setupAuth = (app: OpenAPIHono) => {
         const auth = await getAuth(c)
         if (auth) {
             const user = await getUser(auth.sub)
+            console.log('User sso id: ', user.ssoId)
+
             c.set('user', user)
             return next()
         }

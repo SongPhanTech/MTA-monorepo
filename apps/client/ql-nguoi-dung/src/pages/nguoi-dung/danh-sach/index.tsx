@@ -1,45 +1,114 @@
 import { EyeOutlined } from '@ant-design/icons'
+import { fetchCreateUser, fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutNguoiDungModal } from '@components/modal'
-import { PutUserFormType } from '@components/modal/put-nguoi-dung'
+import type { PutUserFormType } from '@components/modal/put-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import { useCountUser, useFindManyUser } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
+import {
+    useCountUser,
+    useFindManyUser,
+    useUpdateUser,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tooltip,
+    message,
+} from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [] } = useFindManyUser({
+    const { data = [], refetch } = useFindManyUser({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
     })
     const { data: count } = useCountUser()
     const router = useRouter()
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const onOk = (output?: PutUserFormType) => {
-        if(!output) return
-        try {
-        } catch (error) {
-            
-        }
-    }
 
-    const { onOpen } = useDisclosure<string, PutUserFormType>({
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<string, PutUserFormType>({
         tag: PutNguoiDungModal.name,
         onOk,
     })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
+
+    async function onOk(output?: PutUserFormType) {
+        if (!output) return
+        try {
+            showSpinner()
+            if (output.id) {
+                await fetchUpdateUser({
+                    pathParams: {
+                      id: output.id  
+                    },
+                    body: {
+                        // username ko sửa
+                        email: String(output.email),
+                        name: output.name,
+                        description: output.description,
+                        groupIds: [],
+                        ...(output.password && { password: String(output.password) }),
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await fetchCreateUser({
+                    body: {
+                        email: String(output.email),
+                        password: String(output.password),
+                        userName: output.username,
+                        name: output.name,
+                        description: output.description,
+                        groupIds: [],
+                    },
+                })
+                message.success('Thêm mới thành công')
+            }
+            refetch()
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
     const handleModal = () => {
         onOpen()
+    }
+    const { mutateAsync: updateUser } = useUpdateUser()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateUser({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+        }
     }
     return (
         <div>
@@ -122,9 +191,8 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
+                                                onConfirm: () =>
+                                                    handleDelete(id),
                                             }}
                                         />
                                     </Row>

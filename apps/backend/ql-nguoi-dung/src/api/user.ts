@@ -4,14 +4,16 @@ import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
 import { SCIMClient } from '../utils/helper'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
+import SessionApp from './users/sessions'
 
-const client = new SCIMClient({
+const scimClient = new SCIMClient({
     baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
     username: process.env.OIDC_USERNAME || 'admin',
     password: process.env.OIDC_ADMIN_PASSWORD || 'admin',
 })
 
 const app = new OpenAPIHono({ strict: false })
+app.route('/', SessionApp)
 
 const UserSchema = models.UserScalarSchema.openapi('User')
 export const UserFilter = z
@@ -51,7 +53,7 @@ const createUser = createRoute({
 const updateUser = createRoute({
     operationId: 'updateUser',
     method: 'put',
-    path: '/:id',
+    path: '/{id}',
     request: {
         params: z.object({ id: z.string() }),
         body: {
@@ -66,6 +68,7 @@ const updateUser = createRoute({
                             z.object({
                                 password: z.string().optional(),
                                 groupIds: z.array(z.string()).optional(),
+                                lock: z.boolean().optional(),
                             })
                         )
                         .openapi('UserUpdate'),
@@ -100,7 +103,7 @@ const getOneUser = createRoute({
     operationId: 'getOneUser',
     method: 'get',
     request: { params: z.object({ id: z.string() }) },
-    path: '/:id',
+    path: '/{id}',
     responses: {
         200: {
             content: { 'application/json': { schema: UserSchema } },
@@ -111,46 +114,51 @@ const getOneUser = createRoute({
 
 app.openapi(createUser, async (c) => {
     const { password, groupIds, ...rest } = c.req.valid('json')
-    try {
-        const user = await client.createUser({
+    const user = await scimClient.createUser({
+        ...rest,
+        password,
+        schemas: [],
+        name: { givenName: rest.name, familyName: '' },
+        emails: [{ value: rest.email }],
+    })
+
+    const data = await prisma.user.create({
+        data: {
             ...rest,
-            password,
-            schemas: [],
-            name: { givenName: rest.name, familyName: '' },
-            emails: [{ value: rest.email, primary: true, type: 'work' }],
-        })
+            ssoId: user.id,
+            groups: { connect: groupIds.map((id) => ({ id })) },
+        },
+    })
 
-        const data = await prisma.user.create({
-            data: {
-                ...rest,
-                ssoId: user.id,
-                groups: { connect: groupIds.map((id) => ({ id })) },
-            },
-        })
-
-        return c.json(data, 201)
-    } catch (error) {
-        if (error instanceof HTTPException) {
-            throw error
-        }
-        throw new HTTPException(400, { message: 'Create user failed' })
-    }
+    return c.json(data, 201)
 })
 
     .openapi(updateUser, async (c) => {
         const { id } = c.req.valid('param')
-        const { password, groupIds, ...rest } = c.req.valid('json')
+        const { password, groupIds, lock, ...rest } = c.req.valid('json')
         const oldUser = await prisma.user.findUniqueOrThrow({
             where: { id },
         })
-
         if (!oldUser.ssoId) {
             throw new HTTPException(400, { message: 'User not found' })
         }
-        await client.updateUser(oldUser.ssoId, {
+
+        const lockData =
+            lock !== undefined
+                ? {
+                      'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User':
+                          {
+                              accountLocked: lock,
+                          },
+                  }
+                : {}
+
+        await scimClient.updateUser(oldUser.ssoId, {
+            userName: oldUser.userName,
             password,
             name: { givenName: rest.name, familyName: '' },
-            emails: [{ value: rest.email, primary: true, type: 'work' }],
+            emails: [{ value: rest.email }],
+            ...lockData,
         })
         const data = await prisma.user.update({
             where: { id },

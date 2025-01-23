@@ -8,7 +8,7 @@ export type User = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-18T04:06:40.905Z
+   * @default 2025-01-21T05:10:04.952Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -18,6 +18,7 @@ export type User = {
   email: string;
   userName: string;
   name: string;
+  systemRole: "ADMIN" | "USER";
   ssoId?: string | null;
   phone?: string | null;
   role?: string | null;
@@ -28,7 +29,7 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-18T04:06:40.908Z
+   * @default 2025-01-21T05:10:04.953Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -38,6 +39,7 @@ export type UserCreate = {
   email: string;
   userName: string;
   name: string;
+  systemRole?: "ADMIN" | "USER";
   ssoId?: string | null;
   phone?: string | null;
   role?: string | null;
@@ -49,7 +51,7 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-18T04:06:40.913Z
+   * @default 2025-01-21T05:10:04.955Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -58,9 +60,10 @@ export type UserUpdate = {
    */
   email: string;
   name: string;
+  systemRole?: "ADMIN" | "USER";
   phone?: string | null;
   role?: string | null;
-  password: string;
+  password?: string;
   groupIds: string[];
 };
 
@@ -75,7 +78,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-01-18T04:06:40.915Z
+     * @default 2025-01-21T05:10:04.955Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -85,10 +88,52 @@ export type ListOfundefined = PaginationQuery & {
     email: string;
     userName: string;
     name: string;
+    systemRole: "ADMIN" | "USER";
     ssoId?: string | null;
     phone?: string | null;
     role?: string | null;
     groups?: (void | null)[];
+    feedback?: (void | null)[];
   }[];
   count: number;
+};
+
+export type Group = {
+  id: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.957Z
+   */
+  createdAt?: string | null;
+  updatedAt: string | null;
+  name: string;
+};
+
+export type GroupCreate = {
+  id?: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.957Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  name: string;
+  userIds: string[];
+  roleIds: string[];
+};
+
+export type GroupUpdate = {
+  id?: string;
+  description?: string | null;
+  deletedAt?: string | null;
+  /**
+   * @default 2025-01-21T05:10:04.958Z
+   */
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  name: string;
+  userIds: string[];
+  roleIds: string[];
 };
