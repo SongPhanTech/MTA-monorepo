@@ -2,7 +2,8 @@
   "name": "@backend/ql-nguoi-dung",
   "scripts": {
     "dev": "bun run --hot src/index.tsx",
-    "build": "bun build src/index.tsx --outdir dist --target bun --minify",
+    "build": "bun build --compile --sourcemap --bytecode src/index.tsx --outfile dist/myapp",
+    "postbuild": "rm -f .*.bun-build",
     "start": "bun dist/index.js",
     "generate": "bun --bun orval"
   },

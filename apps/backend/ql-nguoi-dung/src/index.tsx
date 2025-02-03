@@ -29,7 +29,7 @@ app.use(logger())
 
 setupOpenApi(app)
 
-setupAuth(app)
+// setupAuth(app)
 
 app.route('/api/user', UserApp)
 app.route('/api/group', GroupApp)
