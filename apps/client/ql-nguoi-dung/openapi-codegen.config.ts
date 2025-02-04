@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import {
     generateSchemaTypes,
     generateReactQueryComponents,
@@ -9,7 +8,7 @@ export default defineConfig({
     app: {
         from: {
             source: 'url',
-            url: process.env.NEXT_PUBLIC_API_BASE_URL + '/openapi',
+            url: 'https://api.user.mta.swantech.vn/openapi',
         },
         outputDir: 'src/lib/api/open-api',
         to: async (context) => {

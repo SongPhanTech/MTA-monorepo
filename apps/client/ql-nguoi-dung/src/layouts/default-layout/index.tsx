@@ -19,8 +19,6 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
         token: { colorBgContainer },
     } = theme.useToken()
 
-    // const headerTitle = useLayoutTitle()
-
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
             const newValue =
@@ -30,6 +28,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCollapsed()
     }, [])

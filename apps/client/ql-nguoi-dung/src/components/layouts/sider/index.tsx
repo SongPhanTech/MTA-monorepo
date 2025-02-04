@@ -1,4 +1,6 @@
+import type { MenuItem } from '@workspace/router'
 import { Layout, Menu } from 'antd'
+import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type ReactNode, useState } from 'react'
@@ -8,71 +10,35 @@ const { Sider } = Layout
 interface SiderDefaultLayoutProps {
     collapsed: boolean
     theme: 'light' | 'dark'
-    items: any
+    items: MenuItem[]
     onCollapse?: (collapsed: boolean) => void
     logo1: ReactNode
     logo2: ReactNode
 }
 
-// Định nghĩa kiểu dữ liệu cho menu item
-interface MenuItem {
-    label: ReactNode
-    key: string
-    icon?: ReactNode
-    children?: MenuItem[]
-}
-
-// Hàm hỗ trợ để tạo menu item
-function getItem({
-    label,
-    key,
-    icon,
-    children,
-}: {
-    label: ReactNode
-    key: string
-    icon?: ReactNode
-    children?: MenuItem[]
-}): MenuItem {
-    return { label, key, icon, children }
-}
-
 // Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
-function getMenus(
-    menus: {
-        id: string
-        label: string
-        path?: string
-        icon?: any
-        children?: any[]
-    }[]
-): MenuItem[] {
-    return menus.map((item) =>
-        getItem({
-            label: item.children ? (
-                item.label
-            ) : (
-                <Link href={item.path || '#'}>{item.label}</Link>
-            ),
-            key: item.path || item.id,
-            icon: item.icon ? <item.icon /> : undefined,
-            children: item.children
-                ? item.children.map((child) =>
-                      getItem({
-                          label: (
-                              <Link href={child.path || '#'}>
-                                  {child.label}
-                              </Link>
-                          ),
-                          key: child.path || child.id,
-                      })
-                  )
-                : undefined,
-        })
-    )
+function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
+    return menus.map((item) => ({
+        label: item.children ? (
+            item.label
+        ) : (
+            <Link href={item.path || '#'}>{item.label}</Link>
+        ),
+        key: item.path || item.id,
+        icon: item.icon ? <item.icon /> : undefined,
+        children: item.children
+            ? item.children.map((child) => ({
+                  label: <Link href={child.path || '#'}>{child.label}</Link>,
+                  key: child.path || child.id,
+              }))
+            : undefined,
+    }))
 }
 
-const findOpenKeys = (menus: any[], currentPath: string): string[] => {
+const findOpenKeys = (
+    menus: MenuItem[],
+    currentPath: string | null
+): string[] => {
     for (const item of menus) {
         if (item.children) {
             const childKeys = findOpenKeys(item.children, currentPath)
@@ -124,9 +90,9 @@ const SiderDefaultLayout = ({
             <Menu
                 theme={'light'}
                 mode="inline"
-                selectedKeys={[pathname]}
+                selectedKeys={pathname ? [pathname] : []}
                 openKeys={openKeys}
-                onOpenChange={(keys) => setOpenKeys(keys)} // Cập nhật trạng thái openKeys khi menu được mở/đóng
+                onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
                 items={getMenus(items)}
                 style={{
                     background: 'transparent',
