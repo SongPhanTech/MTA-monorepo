@@ -1,4 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined, LockOutlined } from '@ant-design/icons'
 import { fetchCreateUser, fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -34,7 +34,7 @@ export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
-
+    
     const { data = [], refetch } = useFindManyUser({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
@@ -50,7 +50,6 @@ export default function Page() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-
     async function onOk(output?: PutUserFormType) {
         if (!output) return
         try {
@@ -58,7 +57,7 @@ export default function Page() {
             if (output.id) {
                 await fetchUpdateUser({
                     pathParams: {
-                      id: output.id  
+                        id: output.id,
                     },
                     body: {
                         // username ko sửa
@@ -66,7 +65,9 @@ export default function Page() {
                         name: output.name,
                         description: output.description,
                         groupIds: [],
-                        ...(output.password && { password: String(output.password) }),
+                        ...(output.password && {
+                            password: String(output.password),
+                        }),
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -107,8 +108,29 @@ export default function Page() {
                 },
             })
         } catch (error) {
-            message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
+    }
+
+    async function handleLockAcc(id: string) {
+        if (!id) return
+        try {
+            showSpinner()
+            await fetchUpdateUser({
+                pathParams: {
+                    id: id,
+                },
+                body: {
+                    // username ko sửa
+                    lock: true,
+                },
+            })
+            message.success('Cập nhật thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        refetch()
+        onClose()
     }
     return (
         <div>
@@ -172,7 +194,8 @@ export default function Page() {
                             },
                             {
                                 title: 'Trạng thái tài khoản',
-                                dataIndex: '',
+                                dataIndex: 'lock',
+                                render: (_, { lock }) => (lock ? 'Khóa' : 'Đang hoạt động'),
                             },
                             {
                                 title: 'Thao tác',
@@ -180,6 +203,17 @@ export default function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip
+                                            title="Khóa tài khoản"
+                                            placement="leftTop"
+                                        >
+                                            <LockOutlined
+                                                onClick={() =>
+                                                    handleLockAcc(id)
+                                                }
+                                                className="text-sm text-red-700 cursor-pointer"
+                                            />
+                                        </Tooltip>
                                         <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
