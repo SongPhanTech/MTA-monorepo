@@ -10,6 +10,7 @@ import {
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
 export type PutNhomNguoiDungFormType = {
+    id?: string
     name: string
     users: string[]
     roles: string[]
@@ -32,10 +33,11 @@ const PutNhomNguoiDungModal = () => {
 
     const { data: users = [] } = useFindManyUser()
     const { data: roles = [] } = useFindManyRole()
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (group) {
             form.setFieldsValue({
+                id: group.id,
                 description: group.description || '',
                 name: group.name,
                 users: group.users.map((user) => user.id),
