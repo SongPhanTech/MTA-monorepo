@@ -20,8 +20,8 @@ build:
 backend-image:
 	docker build -f Dockerfile.backend -t $(IMAGE_NAME)_be:$(DEV_TAG) --build-arg FILTER=backend .
 
-web-image:
-	docker build -t $(IMAGE_NAME)-web:$(DEV_TAG) --build-arg FILTER=web --build-arg DATABASE_URL=$(DATABASE_URL) .
+ql-nguoi-dung-image:
+	docker build -t $(IMAGE_NAME)-client-ql-nguoi-dung:$(DEV_TAG) --build-arg FILTER=@client/ql-nguoi-dung --build-arg PACKAGE=ql-nguoi-dung .
 
 # Push the development image to the registry
 push:

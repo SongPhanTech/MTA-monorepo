@@ -1,5 +1,6 @@
 # ARG FILTER="*"
 ARG FILTER="@client/ql-nguoi-dung"
+ARG PACKAGE="ql-nguoi-dung"
 
 FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
@@ -16,19 +17,22 @@ RUN turbo prune --docker ${FILTER}
 
 FROM base AS builder
 ARG FILTER
+ARG PACKAGE
 WORKDIR /app
 COPY --from=pruner /app/out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
+COPY ./apps/client/${PACKAGE}/.env ./apps/client/${PACKAGE}/.env
 RUN pnpm generate
 RUN pnpm build --filter=${FILTER}
 
 FROM base as web
+ARG PACKAGE
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/${FILTER}/.next/standalone ./
-COPY --from=builder /app/apps/${FILTER}/.next/static ./apps/ql-nguoi-dung/.next/static
-COPY --from=builder /app/apps/${FILTER}/public ./apps/ql-nguoi-dung/public
+COPY --from=builder /app/apps/client/${PACKAGE}/.next/standalone ./
+COPY --from=builder /app/apps/client/${PACKAGE}/.next/static ./apps/${PACKAGE}/.next/static
+COPY --from=builder /app/apps/client/${PACKAGE}/public ./apps/${PACKAGE}/public
 
-CMD node apps/${FILTER}/server.js
+CMD node apps/${PACKAGE}/server.js
