@@ -44,7 +44,7 @@ app.use(
 )
 
 app.onError((err, c) => {
-    console.log(err.message)
+    console.log(err)
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
         let status: ContentfulStatusCode = 500
         if (err.code === 'P2025') status = 404
@@ -72,6 +72,10 @@ function setupOpenApi(app: OpenAPIHono) {
         openapi: '3.0.0',
         info: { version: '1.0.0', title: 'My API' },
         servers: [
+            {
+                url: 'https://api.user.mta.swantech.vn',
+                description: 'Dev environment',
+            },
             {
                 url: new URL(c.req.url).origin,
                 description: 'Current environment',

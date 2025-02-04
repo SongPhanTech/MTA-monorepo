@@ -63,18 +63,24 @@ export const setupAuth = (app: OpenAPIHono) => {
             return await next()
         }
 
+        throw new HTTPException(401, { message: 'Unauthorized' })
+
         // c.set('oidcClaimsHook', oidcClaimsHook)
-        const auth = await getAuth(c)
-        if (auth) {
-            const user = await getUser(auth.sub)
-            console.log('User sso id: ', user.ssoId)
+        // const auth = await getAuth(c)
+        // if (auth) {
+        //     console.log(111, auth)
 
-            c.set('user', user)
-            return next()
-        }
+        //     const user = await getUser(auth.sub)
+        //     console.log(user)
 
-        const middleware = oidcAuthMiddleware()
-        return middleware(c, next)
+        //     console.log('User sso id: ', user.ssoId)
+
+        //     c.set('user', user)
+        //     return next()
+        // }
+
+        // const middleware = oidcAuthMiddleware()
+        // return middleware(c, next)
     })
 
     app.get('/callback', processOAuthCallback)
