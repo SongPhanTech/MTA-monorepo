@@ -1,4 +1,5 @@
 import { EyeOutlined, LockOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import { fetchCreateUser, fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -84,7 +85,10 @@ export default function Page() {
                 })
                 message.success('Thêm mới thành công')
             }
-            refetch()
+            // refetch()
+            queryClient.invalidateQueries({
+                queryKey:['zenstack','User'],
+            })
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -121,7 +125,6 @@ export default function Page() {
                     id: id,
                 },
                 body: {
-                    // username ko sửa
                     lock: true,
                 },
             })
@@ -195,7 +198,7 @@ export default function Page() {
                             {
                                 title: 'Trạng thái tài khoản',
                                 dataIndex: 'lock',
-                                render: (_, { lock }) => (lock ? 'Khóa' : 'Đang hoạt động'),
+                                render: (_, value) => (value ? 'Khóa' : 'Đang hoạt động'),
                             },
                             {
                                 title: 'Thao tác',
