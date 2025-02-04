@@ -3,12 +3,35 @@
  *
  * @version 1.0.0
  */
+export type SessionsByUserId = {
+  userId?: string;
+  sessions?: {
+    userId?: string;
+    idpName?: string;
+    applications?: {
+      id: string;
+      subject: string;
+      appName: string;
+      appId: string;
+    }[];
+    userAgent?: string;
+    ip?: string;
+    loginTime?: string;
+    lastAccessTime?: string;
+    id?: string;
+  }[];
+};
+
+export type TerminateSessionsByUserId = {};
+
+export type TerminateSessionBySessionId = {};
+
 export type User = {
   id: string;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.952Z
+   * @default 2025-02-04T03:51:29.520Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -29,7 +52,7 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.953Z
+   * @default 2025-02-04T03:51:29.521Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -51,7 +74,7 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.955Z
+   * @default 2025-02-04T03:51:29.522Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -64,7 +87,8 @@ export type UserUpdate = {
   phone?: string | null;
   role?: string | null;
   password?: string;
-  groupIds: string[];
+  groupIds?: string[];
+  lock?: boolean;
 };
 
 export type PaginationQuery = {
@@ -78,7 +102,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-01-21T05:10:04.955Z
+     * @default 2025-02-04T03:51:29.522Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -103,7 +127,7 @@ export type Group = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.957Z
+   * @default 2025-02-04T03:51:29.523Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -115,7 +139,7 @@ export type GroupCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.957Z
+   * @default 2025-02-04T03:51:29.523Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -129,7 +153,7 @@ export type GroupUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.958Z
+   * @default 2025-02-04T03:51:29.523Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;

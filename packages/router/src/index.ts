@@ -3,7 +3,7 @@ import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 interface MenuItem {
     id: string
-    label: string
+    label: React.ReactNode
     icon?: React.ForwardRefExoticComponent<
         Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
     >

@@ -9,6 +9,168 @@ import type * as Fetcher from "./appFetcher";
 import { appFetch } from "./appFetcher";
 import type * as Schemas from "./appSchemas";
 
+export type GetSessionsByUserIdPathParams = {
+  ssoId: string;
+};
+
+export type GetSessionsByUserIdError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {};
+}>;
+
+export type GetSessionsByUserIdVariables = {
+  pathParams: GetSessionsByUserIdPathParams;
+} & AppContext["fetcherOptions"];
+
+export const fetchGetSessionsByUserId = (
+  variables: GetSessionsByUserIdVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    Schemas.SessionsByUserId,
+    GetSessionsByUserIdError,
+    undefined,
+    {},
+    {},
+    GetSessionsByUserIdPathParams
+  >({ url: "/api/user/{ssoId}/sessions", method: "get", ...variables, signal });
+
+export const useGetSessionsByUserId = <TData = Schemas.SessionsByUserId,>(
+  variables: GetSessionsByUserIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SessionsByUserId,
+      GetSessionsByUserIdError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options);
+  return reactQuery.useQuery<
+    Schemas.SessionsByUserId,
+    GetSessionsByUserIdError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/api/user/{ssoId}/sessions",
+      operationId: "getSessionsByUserId",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSessionsByUserId({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type TerminateSessionsByUserIdPathParams = {
+  ssoId: string;
+};
+
+export type TerminateSessionsByUserIdError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {};
+}>;
+
+export type TerminateSessionsByUserIdVariables = {
+  pathParams: TerminateSessionsByUserIdPathParams;
+} & AppContext["fetcherOptions"];
+
+export const fetchTerminateSessionsByUserId = (
+  variables: TerminateSessionsByUserIdVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    Schemas.TerminateSessionsByUserId,
+    TerminateSessionsByUserIdError,
+    undefined,
+    {},
+    {},
+    TerminateSessionsByUserIdPathParams
+  >({
+    url: "/api/user/{ssoId}/sessions",
+    method: "delete",
+    ...variables,
+    signal,
+  });
+
+export const useTerminateSessionsByUserId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.TerminateSessionsByUserId,
+      TerminateSessionsByUserIdError,
+      TerminateSessionsByUserIdVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.TerminateSessionsByUserId,
+    TerminateSessionsByUserIdError,
+    TerminateSessionsByUserIdVariables
+  >({
+    mutationFn: (variables: TerminateSessionsByUserIdVariables) =>
+      fetchTerminateSessionsByUserId({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type TerminateSessionBySessionIdPathParams = {
+  ssoId: string;
+  sessionId: string;
+};
+
+export type TerminateSessionBySessionIdError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {};
+}>;
+
+export type TerminateSessionBySessionIdVariables = {
+  pathParams: TerminateSessionBySessionIdPathParams;
+} & AppContext["fetcherOptions"];
+
+export const fetchTerminateSessionBySessionId = (
+  variables: TerminateSessionBySessionIdVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    Schemas.TerminateSessionBySessionId,
+    TerminateSessionBySessionIdError,
+    undefined,
+    {},
+    {},
+    TerminateSessionBySessionIdPathParams
+  >({
+    url: "/api/user/{ssoId}/sessions/{sessionId}",
+    method: "delete",
+    ...variables,
+    signal,
+  });
+
+export const useTerminateSessionBySessionId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.TerminateSessionBySessionId,
+      TerminateSessionBySessionIdError,
+      TerminateSessionBySessionIdVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    Schemas.TerminateSessionBySessionId,
+    TerminateSessionBySessionIdError,
+    TerminateSessionBySessionIdVariables
+  >({
+    mutationFn: (variables: TerminateSessionBySessionIdVariables) =>
+      fetchTerminateSessionBySessionId({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
 export type CreateUserError = Fetcher.ErrorWrapper<undefined>;
 
 export type CreateUserVariables = {
@@ -272,6 +434,11 @@ export const useUpdateGroup = (
 };
 
 export type QueryOperation =
+  | {
+      path: "/api/user/{ssoId}/sessions";
+      operationId: "getSessionsByUserId";
+      variables: GetSessionsByUserIdVariables;
+    }
   | {
       path: "/api/user";
       operationId: "listUsers";

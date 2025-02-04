@@ -2,12 +2,7 @@ import useDisclosure from '@hooks/disclosure'
 import { Modal } from 'antd'
 
 const ConfirmModal = () => {
-    const {
-        isOpen,
-        onClose,
-        onOk,
-        payload: user_id,
-    } = useDisclosure({
+    const { isOpen, input } = useDisclosure({
         tag: ConfirmModal.name,
     })
 
@@ -22,7 +17,7 @@ const ConfirmModal = () => {
             cancelText="Hủy"
             onCancel={onLogout.bind(null, '1')}
         >
-            {user_id}
+            {input}
         </Modal>
     )
 }
