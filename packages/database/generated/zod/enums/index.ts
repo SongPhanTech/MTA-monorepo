@@ -14,7 +14,6 @@ export * from './FeedbackScalarFieldEnum.schema';
 export * from './SortOrder.schema';
 export * from './QueryMode.schema';
 export * from './NullsOrder.schema';
-export * from './PermissionName.schema';
 export * from './PermissionType.schema';
 export * from './UserRole.schema';
 export * from './FeedbackStatus.schema';

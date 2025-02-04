@@ -134,7 +134,7 @@ const metadata = {
                     attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, name: {
                     name: "name",
-                    type: "PermissionName",
+                    type: "String",
                 }, permissionType: {
                     name: "permissionType",
                     type: "PermissionType",
@@ -233,6 +233,15 @@ const metadata = {
                 }, email: {
                     name: "email",
                     fields: ["email"]
+                }, userName: {
+                    name: "userName",
+                    fields: ["userName"]
+                }, ssoId: {
+                    name: "ssoId",
+                    fields: ["ssoId"]
+                }, phone: {
+                    name: "phone",
+                    fields: ["phone"]
                 },
             }
             ,

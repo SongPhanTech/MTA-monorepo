@@ -30,7 +30,7 @@ Table Permission {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name PermissionName [not null]
+  name String [not null]
   permissionType PermissionType [not null]
   disabled Boolean [not null, default: false]
   role Role [not null]
@@ -47,11 +47,11 @@ Table User {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   email String [unique, not null]
-  userName String [not null]
+  userName String [unique, not null]
   name String [not null]
   systemRole UserRole [not null, default: 'USER']
-  ssoId String
-  phone String
+  ssoId String [unique]
+  phone String [unique]
   role String
   groups Group [not null]
   feedback Feedback [not null]
@@ -85,19 +85,13 @@ Table PermissionToRole {
   roleId String [ref: > Role.id]
 }
 
-Enum PermissionName {
-  UserManagement
-  Category
-  Media
-  Organization
-}
-
 Enum PermissionType {
   CREATE
   READ
   UPDATE
   DELETE
   APPROVE
+  DETAIL
 }
 
 Enum UserRole {

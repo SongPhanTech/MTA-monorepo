@@ -10,18 +10,11 @@ datasource db {
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x", "linux-musl-openssl-3.0.x"]
+  binaryTargets = ["native"]
 }
 
 generator dbml {
   provider = "prisma-dbml-generator"
-}
-
-enum PermissionName {
-  UserManagement
-  Category
-  Media
-  Organization
 }
 
 enum PermissionType {
@@ -30,6 +23,7 @@ enum PermissionType {
   UPDATE
   DELETE
   APPROVE
+  DETAIL
 }
 
 enum UserRole {
@@ -80,7 +74,7 @@ model Permission {
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt()
-  name           PermissionName
+  name           String
   permissionType PermissionType
   disabled       Boolean        @default(false)
   role           Role[]
@@ -95,11 +89,11 @@ model User {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
   email       String     @unique()
-  userName    String
+  userName    String     @unique()
   name        String
   systemRole  UserRole   @default(USER)
-  ssoId       String?
-  phone       String?
+  ssoId       String?    @unique()
+  phone       String?    @unique()
   role        String?
   groups      Group[]
   feedback    Feedback[]

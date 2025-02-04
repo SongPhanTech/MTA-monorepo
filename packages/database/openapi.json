@@ -30,15 +30,6 @@
   ],
   "components": {
     "schemas": {
-      "PermissionName": {
-        "type": "string",
-        "enum": [
-          "UserManagement",
-          "Category",
-          "Media",
-          "Organization"
-        ]
-      },
       "PermissionType": {
         "type": "string",
         "enum": [
@@ -46,7 +37,8 @@
           "READ",
           "UPDATE",
           "DELETE",
-          "APPROVE"
+          "APPROVE",
+          "DETAIL"
         ]
       },
       "UserRole": {
@@ -314,7 +306,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -1329,10 +1321,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFilter"
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
@@ -1500,10 +1492,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFilter"
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
@@ -1629,10 +1621,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/EnumPermissionNameWithAggregatesFilter"
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
@@ -1930,6 +1922,15 @@
           "email": {
             "type": "string"
           },
+          "userName": {
+            "type": "string"
+          },
+          "ssoId": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
           "AND": {
             "oneOf": [
               {
@@ -2011,16 +2012,6 @@
               }
             ]
           },
-          "userName": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
           "name": {
             "oneOf": [
               {
@@ -2038,32 +2029,6 @@
               },
               {
                 "$ref": "#/components/schemas/UserRole"
-              }
-            ]
-          },
-          "ssoId": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringNullableFilter"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "phone": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringNullableFilter"
-              },
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
               }
             ]
           },
@@ -3261,7 +3226,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -3343,10 +3308,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           },
@@ -3411,7 +3376,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -3490,10 +3455,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           },
@@ -4936,36 +4901,6 @@
           }
         }
       },
-      "EnumPermissionNameFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "$ref": "#/components/schemas/PermissionName"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "not": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PermissionName"
-              },
-              {
-                "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
-              }
-            ]
-          }
-        }
-      },
       "EnumPermissionTypeFilter": {
         "type": "object",
         "properties": {
@@ -5018,7 +4953,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -5028,45 +4963,6 @@
           "name",
           "permissionType"
         ]
-      },
-      "EnumPermissionNameWithAggregatesFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "$ref": "#/components/schemas/PermissionName"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "not": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PermissionName"
-              },
-              {
-                "$ref": "#/components/schemas/NestedEnumPermissionNameWithAggregatesFilter"
-              }
-            ]
-          },
-          "_count": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_min": {
-            "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
-          },
-          "_max": {
-            "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
-          }
-        }
       },
       "EnumPermissionTypeWithAggregatesFilter": {
         "type": "object",
@@ -7051,14 +6947,6 @@
           }
         }
       },
-      "EnumPermissionNameFieldUpdateOperationsInput": {
-        "type": "object",
-        "properties": {
-          "set": {
-            "$ref": "#/components/schemas/PermissionName"
-          }
-        }
-      },
       "EnumPermissionTypeFieldUpdateOperationsInput": {
         "type": "object",
         "properties": {
@@ -8745,36 +8633,6 @@
           }
         }
       },
-      "NestedEnumPermissionNameFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "$ref": "#/components/schemas/PermissionName"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "not": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PermissionName"
-              },
-              {
-                "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
-              }
-            ]
-          }
-        }
-      },
       "NestedEnumPermissionTypeFilter": {
         "type": "object",
         "properties": {
@@ -8820,45 +8678,6 @@
                 "$ref": "#/components/schemas/NestedBoolFilter"
               }
             ]
-          }
-        }
-      },
-      "NestedEnumPermissionNameWithAggregatesFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "$ref": "#/components/schemas/PermissionName"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PermissionName"
-            }
-          },
-          "not": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PermissionName"
-              },
-              {
-                "$ref": "#/components/schemas/NestedEnumPermissionNameWithAggregatesFilter"
-              }
-            ]
-          },
-          "_count": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_min": {
-            "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
-          },
-          "_max": {
-            "$ref": "#/components/schemas/NestedEnumPermissionNameFilter"
           }
         }
       },
@@ -10030,7 +9849,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -10080,7 +9899,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -10473,10 +10292,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFilter"
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
@@ -12742,10 +12561,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           },
@@ -12836,10 +12655,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           },
@@ -12930,10 +12749,10 @@
           "name": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumPermissionNameFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           },
@@ -14997,7 +14816,7 @@
             "format": "date-time"
           },
           "name": {
-            "$ref": "#/components/schemas/PermissionName"
+            "type": "string"
           },
           "permissionType": {
             "$ref": "#/components/schemas/PermissionType"
@@ -15768,7 +15587,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
@@ -15856,7 +15675,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/PermissionName"
+                "type": "string"
               }
             ]
           },
