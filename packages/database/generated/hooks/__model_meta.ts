@@ -302,6 +302,54 @@ const metadata = {
             ,
         }
         ,
+        blockedIp: {
+            name: 'BlockedIp', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, ipAddress: {
+                    name: "ipAddress",
+                    type: "String",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, expiresAt: {
+                    name: "expiresAt",
+                    type: "DateTime",
+                    isOptional: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, ipAddress: {
+                    name: "ipAddress",
+                    fields: ["ipAddress"]
+                },
+            }
+            ,
+        }
+        ,
     }
     ,
     deleteCascade: {

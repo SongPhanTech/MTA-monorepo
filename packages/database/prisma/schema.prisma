@@ -111,3 +111,14 @@ model Feedback {
   user         User           @relation(fields: [userId], references: [id])
   userId       String
 }
+
+model BlockedIp {
+  id          String    @id() @default(cuid())
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  ipAddress   String    @unique()
+  reason      String?   @db.Text()
+  expiresAt   DateTime?
+}

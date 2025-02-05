@@ -14,12 +14,10 @@ const createGroup = createRoute({
         body: {
             content: {
                 'application/json': {
-                    schema: models.GroupCreateSchema.merge(
-                        z.object({
-                            userIds: z.array(z.string()),
-                            roleIds: z.array(z.string()),
-                        })
-                    ).openapi('GroupCreate'),
+                    schema: models.GroupCreateSchema.extend({
+                        userIds: z.array(z.string()),
+                        roleIds: z.array(z.string()),
+                    }).openapi('GroupCreate'),
                 },
             },
         },
@@ -41,12 +39,10 @@ const updateGroup = createRoute({
         body: {
             content: {
                 'application/json': {
-                    schema: models.GroupCreateSchema.merge(
-                        z.object({
-                            userIds: z.array(z.string()),
-                            roleIds: z.array(z.string()),
-                        })
-                    ).openapi('GroupUpdate'),
+                    schema: models.GroupCreateSchema.extend({
+                        userIds: z.array(z.string()),
+                        roleIds: z.array(z.string()),
+                    }).openapi('GroupUpdate'),
                 },
             },
         },

@@ -33,12 +33,10 @@ const createUser = createRoute({
         body: {
             content: {
                 'application/json': {
-                    schema: models.UserCreateSchema.merge(
-                        z.object({
-                            password: z.string(),
-                            groupIds: z.array(z.string()),
-                        })
-                    ).openapi('UserCreate'),
+                    schema: models.UserCreateSchema.extend({
+                        password: z.string(),
+                        groupIds: z.array(z.string()),
+                    }).openapi('UserCreate'),
                 },
             },
         },
@@ -65,13 +63,11 @@ const updateUser = createRoute({
                         ssoId: true,
                         id: true,
                     })
-                        .merge(
-                            z.object({
-                                password: z.string(),
-                                groupIds: z.array(z.string()),
-                                lock: z.boolean(),
-                            })
-                        )
+                        .extend({
+                            password: z.string(),
+                            groupIds: z.array(z.string()),
+                            lock: z.boolean(),
+                        })
                         .partial()
                         .openapi('UserUpdate'),
                 },
@@ -94,7 +90,13 @@ const getListUsers = createRoute({
     responses: {
         200: {
             content: {
-                'application/json': { schema: ListOf(models.UserSchema) },
+                'application/json': {
+                    schema: ListOf(
+                        models.UserSchema.extend({
+                            accountLocked: z.boolean().optional(),
+                        })
+                    ),
+                },
             },
             description: 'Retrieve the users',
         },

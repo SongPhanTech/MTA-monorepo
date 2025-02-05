@@ -11,6 +11,7 @@ export * from './RoleScalarFieldEnum.schema';
 export * from './PermissionScalarFieldEnum.schema';
 export * from './UserScalarFieldEnum.schema';
 export * from './FeedbackScalarFieldEnum.schema';
+export * from './BlockedIpScalarFieldEnum.schema';
 export * from './SortOrder.schema';
 export * from './QueryMode.schema';
 export * from './NullsOrder.schema';
