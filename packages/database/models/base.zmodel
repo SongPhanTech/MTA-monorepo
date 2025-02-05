@@ -46,3 +46,8 @@ enum PermissionType {
   APPROVE
   DETAIL
 }
+
+model Config extends Base {
+  key   String
+  value String
+}

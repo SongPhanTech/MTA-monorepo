@@ -8,6 +8,7 @@ import { logger } from 'hono/logger'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
 import GroupApp from './api/group'
+import ISConfig from './api/is/configs'
 import UserApp from './api/user'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
@@ -35,6 +36,7 @@ setupAuth(app)
 
 app.route('/api/user', UserApp)
 app.route('/api/group', GroupApp)
+app.route('/api/is', ISConfig)
 
 app.use(
     '/api/model/*',

@@ -33,7 +33,7 @@ const createGroup = createRoute({
 const updateGroup = createRoute({
     operationId: 'updateGroup',
     method: 'put',
-    path: '/',
+    path: '/{id}',
     request: {
         params: z.object({ id: z.string() }),
         body: {
