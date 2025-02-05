@@ -12,7 +12,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
-    ipAddress: z.string(),
+    ipAddress: z.string().regex(new RegExp("^(?:[0-9]{1,3}.){3}[0-9]{1,3}$"), { message: "Invalid IP address" }),
     reason: z.string().nullish(),
     expiresAt: z.coerce.date().nullish(),
 }
@@ -47,7 +47,7 @@ export const BlockedIpPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
-    ipAddress: z.string(),
+    ipAddress: z.string().regex(new RegExp("^(?:[0-9]{1,3}.){3}[0-9]{1,3}$"), { message: "Invalid IP address" }),
     reason: z.string().nullish(),
     expiresAt: z.coerce.date().nullish()
 }).partial().passthrough();

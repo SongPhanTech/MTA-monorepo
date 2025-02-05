@@ -1,5 +1,10 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { fetchCreateUser, fetchUpdateUser } from '@api/open-api/appComponents'
+import { EyeOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
+import {
+    fetchCreateUser,
+    fetchUpdateUser,
+    useListUsers,
+} from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutNguoiDungModal } from '@components/modal'
@@ -22,6 +27,7 @@ import {
     Form,
     Input,
     Row,
+    Tag,
     Tooltip,
     message,
 } from 'antd'
@@ -35,10 +41,7 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [], refetch } = useFindManyUser({
-        skip: (currentPage - 1) * numberOfPages,
-        take: numberOfPages,
-    })
+    const { data, refetch } = useListUsers({})
     const { data: count } = useCountUser()
     const router = useRouter()
 
@@ -50,7 +53,6 @@ export default function Page() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-
     async function onOk(output?: PutUserFormType) {
         if (!output) return
         try {
@@ -58,7 +60,7 @@ export default function Page() {
             if (output.id) {
                 await fetchUpdateUser({
                     pathParams: {
-                      id: output.id  
+                        id: output.id,
                     },
                     body: {
                         // username ko sửa
@@ -66,7 +68,9 @@ export default function Page() {
                         name: output.name,
                         description: output.description,
                         groupIds: [],
-                        ...(output.password && { password: String(output.password) }),
+                        ...(output.password && {
+                            password: String(output.password),
+                        }),
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -83,7 +87,10 @@ export default function Page() {
                 })
                 message.success('Thêm mới thành công')
             }
-            refetch()
+            // refetch()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'User'],
+            })
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -107,8 +114,29 @@ export default function Page() {
                 },
             })
         } catch (error) {
-            message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
+    }
+
+    async function handleLockAcc(id: string, accountLocked: boolean) {
+        if (!id) return
+        try {
+            showSpinner()
+            await fetchUpdateUser({
+                pathParams: {
+                    id: id,
+                },
+                body: {
+                    accountLocked: !accountLocked,
+                },
+            })
+            message.success('Cập nhật thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+        refetch()
+        onClose()
     }
     return (
         <div>
@@ -168,18 +196,56 @@ export default function Page() {
                                 title: 'Ngày tạo',
                                 dataIndex: 'createdAt',
                                 render: (_, { createdAt }) =>
-                                    formatDateReadable(createdAt),
+                                    createdAt
+                                        ? formatDateReadable(createdAt)
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái tài khoản',
-                                dataIndex: '',
+                                dataIndex: 'accountLocked',
+                                align: 'center',
+                                width: 150,
+                                render: (value, record) => {
+                                    return value ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, accountLocked }) => (
                                     <Row className="justify-center gap-2">
+                                        {!accountLocked ? (
+                                            <Tooltip
+                                                title="Khóa"
+                                                placement="leftTop"
+                                            >
+                                                <LockOutlined
+                                                    onClick={() =>
+                                                        handleLockAcc(id,Boolean(accountLocked))
+                                                    }
+                                                    className="text-sm text-red-500 cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip
+                                                title="Mở khóa"
+                                                placement="leftTop"
+                                            >
+                                                <UnlockOutlined
+                                                    onClick={() =>
+                                                        handleLockAcc(id,Boolean(accountLocked))
+                                                    }
+                                                    className="text-sm text-green-500 cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                        )}
                                         <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
@@ -199,7 +265,7 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={data}
+                        data={data?.data || []}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

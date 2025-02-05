@@ -1,33 +1,85 @@
 import { EyeOutlined } from '@ant-design/icons'
+import { fetchCreateGroup, fetchUpdateGroup } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutNhomNguoiDungModal } from '@components/modal'
+import type { PutNhomNguoiDungFormType } from '@components/modal/put-nhom-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useCountGroup, useFindManyGroup } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
+import { formatDateReadable } from '@lib/utils'
+import { useCountGroup, useFindManyGroup, useUpdateGroup } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip,  } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-
 export default function Page() {
+    const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen } = useDisclosure({
+    const { onOpen, onClose } = useDisclosure({
         tag: PutNhomNguoiDungModal.name,
+        onOk
     })
-    const { data = [] } = useFindManyGroup({
+    const { data = [], refetch } = useFindManyGroup({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
+        include: { users: true, roles: true }
     })
     const { data: count } = useCountGroup()
 
+    async function onOk(output?: PutNhomNguoiDungFormType) {
+        if (!output) return;
+        try {
+            showSpinner()
+            if (output.id) {
+                await fetchUpdateGroup({
+                    pathParams: {
+                        id: output.id,
+                    },
+                    body: {
+                        name: output.name,
+                        userIds:output.users.map((user) => user),
+                        roleIds:output.roles.map((role) => role)
+                    },
+                })
+                message.success('Cập nhật thông tin nhóm người dùng')
+            } else {
+                await fetchCreateGroup({
+                    body: {
+                        name: output.name,
+                        userIds:output.users.map((user) => user),
+                        roleIds:output.roles.map((role) => role)
+                    },
+                })
+                message.success('Tạo nhóm người dùng')
+            }
+            refetch()
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const { mutateAsync: mutateUpdateGroup } = useUpdateGroup()
+    async function handleDelete(id: string) {
+        showSpinner()
+        try {
+            await mutateUpdateGroup({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
     const handleModal = () => {
         onOpen()
     }
@@ -75,27 +127,22 @@ export default function Page() {
                             },
                             {
                                 title: 'Nhóm người dùng',
-                                dataIndex: 'groupName',
+                                dataIndex: 'name',
                                 align: 'left',
-                            },
-                            {
-                                title: 'Mã nhóm',
-                                dataIndex: 'codeName',
                             },
                             {
                                 title: 'Số thành viên',
                                 dataIndex: 'membersCount',
                                 width: 150,
-                            },
-                            {
-                                title: 'Ngày tạo',
-                                dataIndex: 'createAt',
-                                width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'Trạng thái nhóm',
-                                dataIndex: 'status',
+                                title: 'Ngày tạo',
+                                dataIndex: 'createdAt',
+                                width: 200,
+                                align: 'center',
+                                render: (_, { createdAt }) =>
+                                    formatDateReadable(createdAt),
                             },
                             {
                                 title: 'Thao tác',
@@ -113,10 +160,9 @@ export default function Page() {
                                             />
                                         </Tooltip>
                                         <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
+                                             popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDelete(id),
                                             }}
                                         />
                                     </Row>

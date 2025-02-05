@@ -1,5 +1,5 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
 import {
@@ -10,6 +10,7 @@ import {
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
 export type PutNhomNguoiDungFormType = {
+    id?: string
     name: string
     users: string[]
     roles: string[]
@@ -32,11 +33,11 @@ const PutNhomNguoiDungModal = () => {
 
     const { data: users = [] } = useFindManyUser()
     const { data: roles = [] } = useFindManyRole()
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (group) {
             form.setFieldsValue({
-                description: group.description || '',
+                id: group.id,
                 name: group.name,
                 users: group.users.map((user) => user.id),
                 roles: group.roles.map((role) => role.id),
@@ -55,6 +56,9 @@ const PutNhomNguoiDungModal = () => {
             }
         >
             <Col span={24}>
+                <FormItem form={form} name="id" hidden>
+                    <Input />
+                </FormItem>
                 <FormItem
                     form={form}
                     name="name"

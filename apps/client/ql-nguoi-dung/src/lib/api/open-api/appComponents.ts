@@ -265,7 +265,7 @@ export type UpdateUserPathParams = {
 export type UpdateUserError = Fetcher.ErrorWrapper<undefined>;
 
 export type UpdateUserVariables = {
-  body: Schemas.UserUpdate;
+  body?: Schemas.UserUpdate;
   pathParams: UpdateUserPathParams;
 } & AppContext["fetcherOptions"];
 
@@ -409,7 +409,7 @@ export const fetchUpdateGroup = (
     {},
     {},
     UpdateGroupPathParams
-  >({ url: "/api/group", method: "put", ...variables, signal });
+  >({ url: "/api/group/{id}", method: "put", ...variables, signal });
 
 export const useUpdateGroup = (
   options?: Omit<
@@ -433,6 +433,98 @@ export const useUpdateGroup = (
   });
 };
 
+export type GetConfigsError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {};
+}>;
+
+export type GetConfigsVariables = AppContext["fetcherOptions"];
+
+export const fetchGetConfigs = (
+  variables: GetConfigsVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<Schemas.Configs, GetConfigsError, undefined, {}, {}, {}>({
+    url: "/api/is/configs",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useGetConfigs = <TData = Schemas.Configs,>(
+  variables: GetConfigsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.Configs, GetConfigsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useAppContext(options);
+  return reactQuery.useQuery<Schemas.Configs, GetConfigsError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/is/configs",
+      operationId: "getConfigs",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetConfigs({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type UpdateConfigsError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {};
+}>;
+
+export type UpdateConfigsResponse = {
+  message: string;
+};
+
+export type UpdateConfigsRequestBody = {
+  idleSessionTimeoutPeriod?: string;
+  rememberMePeriod?: string;
+};
+
+export type UpdateConfigsVariables = {
+  body?: UpdateConfigsRequestBody;
+} & AppContext["fetcherOptions"];
+
+export const fetchUpdateConfigs = (
+  variables: UpdateConfigsVariables,
+  signal?: AbortSignal,
+) =>
+  appFetch<
+    UpdateConfigsResponse,
+    UpdateConfigsError,
+    UpdateConfigsRequestBody,
+    {},
+    {},
+    {}
+  >({ url: "/api/is/configs", method: "put", ...variables, signal });
+
+export const useUpdateConfigs = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      UpdateConfigsResponse,
+      UpdateConfigsError,
+      UpdateConfigsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useAppContext();
+  return reactQuery.useMutation<
+    UpdateConfigsResponse,
+    UpdateConfigsError,
+    UpdateConfigsVariables
+  >({
+    mutationFn: (variables: UpdateConfigsVariables) =>
+      fetchUpdateConfigs({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/api/user/{ssoId}/sessions";
@@ -448,4 +540,9 @@ export type QueryOperation =
       path: "/api/user/{id}";
       operationId: "getOneUser";
       variables: GetOneUserVariables;
+    }
+  | {
+      path: "/api/is/configs";
+      operationId: "getConfigs";
+      variables: GetConfigsVariables;
     };

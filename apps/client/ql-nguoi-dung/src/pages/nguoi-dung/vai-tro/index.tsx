@@ -2,30 +2,144 @@ import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutVaiTroModal } from '@components/modal'
+import type { PutVaiTroFormType } from '@components/modal/put-vai-tro'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useCountRole, useFindManyRole } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
+import { formatDateReadable } from '@lib/utils'
+import { $Enums } from '@workspace/db'
+import {
+    useCountRole,
+    useCreateGroup,
+    useCreateRole,
+    useFindManyRole,
+    useUpdateRole,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tooltip,
+} from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 export default function Page() {
+    const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const router = useRouter()
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen } = useDisclosure({
-        tag: PutVaiTroModal.name,
-    })
-    const { data = [] } = useFindManyRole({
+    const { data = [], refetch } = useFindManyRole({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
+        include: {
+            permissions: true,
+            groups: true,
+        },
     })
     const { data: count } = useCountRole()
+
+    const router = useRouter()
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<PutVaiTroFormType>({
+        tag: PutVaiTroModal.name,
+        onOk,
+    })
+    const { mutateAsync: mutateUpdateRole } = useUpdateRole()
+    const { mutateAsync: mutateCreateRole } = useCreateRole()
+    async function onOk(output?: PutVaiTroFormType) {
+        if (!output) return
+        showSpinner()
+        try {
+            if (output.id) {
+                await mutateUpdateRole({
+                    where: {
+                        id: output.id,
+                    },
+                    data: {
+                        name: output.name,
+                        permissions: {
+                            connectOrCreate: output.permissions.map((item) => ({
+                                where: {
+                                    name_permissionType: {
+                                        name: item,
+                                        permissionType:
+                                            $Enums.PermissionType.CREATE,
+                                    },
+                                },
+                                create: {
+                                    name: item,
+                                    permissionType:
+                                        $Enums.PermissionType.CREATE,
+                                },
+                            })),
+                        },
+                        groups: {
+                            connect: output.groups.map((item) => ({
+                                id: item,
+                            })),
+                        },
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await mutateCreateRole({
+                    data: {
+                        name: output.name,
+                        permissions: {
+                            connectOrCreate: output.permissions.map((item) => ({
+                                where: {
+                                    name_permissionType: {
+                                        name: item,
+                                        permissionType:
+                                            $Enums.PermissionType.CREATE,
+                                    },
+                                },
+                                create: {
+                                    id: output.id,
+                                    name: item,
+                                    permissionType:
+                                        $Enums.PermissionType.CREATE,
+                                },
+                            })),
+                        },
+                        groups: {
+                            connect: output.groups.map((item) => ({
+                                id: item,
+                            })),
+                        },
+                    },
+                })
+                message.success('Thêm mới thành công')
+            }
+            refetch()
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+
+    }
+    async function handleDelete(id: string) {
+        showSpinner()
+        try {
+            await mutateUpdateRole({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     const handleModal = () => {
         onOpen()
@@ -74,27 +188,30 @@ export default function Page() {
                             },
                             {
                                 title: 'Tên vai trò',
-                                dataIndex: 'roleName',
+                                dataIndex: 'name',
                                 align: 'left',
                             },
                             {
-                                title: 'Mã vai trò',
-                                dataIndex: 'roleCode',
+                                title: 'Nhóm người dùng',
+                                dataIndex: 'groups',
+                                width: 200,
+                                align: 'center',
+                                render: (_, { groups }) => groups.length,
                             },
                             {
-                                title: 'Số quyền cơ bản',
-                                dataIndex: 'roleCount',
-                                width: 150,
+                                title: 'Quyền cơ bản',
+                                dataIndex: 'permissions',
+                                width: 200,
+                                align: 'center',
+                                render: (_, { permissions }) =>
+                                    permissions.length,
                             },
                             {
                                 title: 'Ngày tạo',
-                                dataIndex: 'createdAt',
-                                width: 150,
+                                width: 200,
                                 align: 'center',
-                            },
-                            {
-                                title: 'Trạng thái vai trò',
-                                dataIndex: 'status',
+                                render: (_, { createdAt }) =>
+                                    formatDateReadable(createdAt),
                             },
                             {
                                 title: 'Thao tác',
@@ -113,9 +230,8 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
+                                                onConfirm: () =>
+                                                    handleDelete(id),
                                             }}
                                         />
                                     </Row>
