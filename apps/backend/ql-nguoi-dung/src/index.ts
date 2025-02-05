@@ -1,5 +1,4 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { apiReference } from '@scalar/hono-api-reference'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -8,10 +7,11 @@ import { csrf } from 'hono/csrf'
 import { logger } from 'hono/logger'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
-import { HTTPException } from 'hono/http-exception'
 import GroupApp from './api/group'
 import UserApp from './api/user'
-import { setupAuth } from './auth'
+import { setupAuth } from './middlewares/auth'
+import { checkIp } from './middlewares/check-ip'
+import { setupOpenApi } from './utils/openapi'
 
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
@@ -26,6 +26,8 @@ app.use(
 
 app.use(csrf())
 app.use(logger())
+
+app.use('*', checkIp)
 
 setupOpenApi(app)
 
@@ -51,49 +53,22 @@ app.onError((err, c) => {
         if (err.code === 'P2002') status = 409
         if (err.code === 'P2003') status = 400
 
-        return c.json({ message: err.message }, status)
-    }
+        if (status === 500) {
+            return c.json({ message: 'Internal Server Error' }, status)
+        }
 
-    if (err instanceof HTTPException) {
-        return err.getResponse()
+        return c.json({ message: err.message }, status)
     }
 
     return c.json({ message: err.message }, 500)
 })
 
-export default app
+export default {
+    fetch: app.fetch,
+    hostname: '0.0.0.0',
+    port: process.env.PORT || 3000,
+}
 
 process.on('SIGINT', () => {
     process.exit()
 })
-
-function setupOpenApi(app: OpenAPIHono) {
-    app.doc('/openapi', (c) => ({
-        openapi: '3.0.0',
-        info: { version: '1.0.0', title: 'My API' },
-        servers: [
-            {
-                url: 'https://api.user.mta.swantech.vn',
-                description: 'Dev environment',
-            },
-            {
-                url: new URL(c.req.url).origin,
-                description: 'Current environment',
-            },
-        ],
-    }))
-
-    app.get(
-        '/reference',
-        apiReference({
-            theme: 'purple',
-            spec: { url: '/openapi' },
-        })
-    )
-
-    app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-    })
-}

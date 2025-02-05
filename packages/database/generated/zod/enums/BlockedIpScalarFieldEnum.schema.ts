@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const PermissionNameSchema = z.enum(["UserManagement", "Category", "Media", "Organization"])
+export const BlockedIpScalarFieldEnumSchema = z.enum(["id", "description", "deletedAt", "createdAt", "updatedAt", "ipAddress", "reason", "expiresAt"])

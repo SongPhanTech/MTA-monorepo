@@ -1,4 +1,5 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import type { Prisma } from '@workspace/db'
 import * as models from '@workspace/db/zod/models'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
@@ -32,12 +33,10 @@ const createUser = createRoute({
         body: {
             content: {
                 'application/json': {
-                    schema: models.UserCreateSchema.merge(
-                        z.object({
-                            password: z.string(),
-                            groupIds: z.array(z.string()),
-                        })
-                    ).openapi('UserCreate'),
+                    schema: models.UserCreateSchema.extend({
+                        password: z.string(),
+                        groupIds: z.array(z.string()),
+                    }).openapi('UserCreate'),
                 },
             },
         },
@@ -64,13 +63,12 @@ const updateUser = createRoute({
                         ssoId: true,
                         id: true,
                     })
-                        .merge(
-                            z.object({
-                                password: z.string().optional(),
-                                groupIds: z.array(z.string()).optional(),
-                                lock: z.boolean().optional(),
-                            })
-                        )
+                        .extend({
+                            password: z.string(),
+                            groupIds: z.array(z.string()),
+                            lock: z.boolean(),
+                        })
+                        .partial()
                         .openapi('UserUpdate'),
                 },
             },
@@ -92,7 +90,13 @@ const getListUsers = createRoute({
     responses: {
         200: {
             content: {
-                'application/json': { schema: ListOf(models.UserSchema) },
+                'application/json': {
+                    schema: ListOf(
+                        models.UserSchema.extend({
+                            accountLocked: z.boolean().optional(),
+                        })
+                    ),
+                },
             },
             description: 'Retrieve the users',
         },
@@ -119,7 +123,7 @@ app.openapi(createUser, async (c) => {
         password,
         schemas: [],
         name: { givenName: rest.name, familyName: '' },
-        emails: [{ value: rest.email }],
+        emails: [rest.email],
     })
 
     const data = await prisma.user.create({
@@ -156,8 +160,8 @@ app.openapi(createUser, async (c) => {
         await scimClient.updateUser(oldUser.ssoId, {
             userName: oldUser.userName,
             password,
-            name: { givenName: rest.name, familyName: '' },
-            emails: [{ value: rest.email }],
+            name: { givenName: rest.name || oldUser.name, familyName: '' },
+            emails: [rest.email || oldUser.email],
             ...lockData,
         })
         const data = await prisma.user.update({
@@ -173,17 +177,48 @@ app.openapi(createUser, async (c) => {
     .openapi(getListUsers, async (c) => {
         const { page = 1, limit = 10, ...filter } = c.req.valid('query')
 
-        const where = Object.fromEntries(
-            Object.entries(filter).map(([k, v]) => [k, { contains: v }])
+        const where: Prisma.UserWhereInput = Object.fromEntries(
+            Object.entries(filter).map(([k, v]) => [
+                k,
+                { contains: v, mode: 'insensitive' },
+            ])
         )
 
-        const data = await prisma.user.findMany({
-            skip: (page - 1) * limit,
-            take: limit,
-            where,
+        const users = await scimClient.listUsers({
+            startIndex: (page - 1) * limit + 1,
+            count: limit,
+            ...filter,
         })
-        const count = await prisma.user.count()
-        return c.json({ page, limit, data, count }, 200)
+
+        const usersMetadata =
+            users.Resources?.map((u) => ({
+                ssoId: u.id,
+                accountLocked:
+                    u[
+                        'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'
+                    ]?.accountLocked,
+            })) || []
+
+        const data = await prisma.user.findMany({
+            where: { ssoId: { in: usersMetadata.map((u) => u.ssoId) } },
+        })
+
+        // const count = await prisma.user.count({ where })
+        const count = users.totalResults
+        return c.json(
+            {
+                page,
+                limit,
+                count,
+                data: data.map((item) => ({
+                    ...item,
+                    accountLocked: usersMetadata.find(
+                        (u) => u.ssoId === item.ssoId
+                    )?.accountLocked,
+                })),
+            },
+            200
+        )
     })
 
     .openapi(getOneUser, async (c) => {
