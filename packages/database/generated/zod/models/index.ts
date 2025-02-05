@@ -10,3 +10,4 @@ export * from './Role.schema';
 export * from './Permission.schema';
 export * from './User.schema';
 export * from './Feedback.schema';
+export * from './BlockedIp.schema';

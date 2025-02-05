@@ -29,7 +29,7 @@ model Role extends Base {
 }
 
 model Permission extends Base {
-  name           PermissionName
+  name           String
   permissionType PermissionType
   disabled       Boolean        @default(false)
 
@@ -38,17 +38,11 @@ model Permission extends Base {
   @@unique([name, permissionType])
 }
 
-enum PermissionName {
-  UserManagement
-  Category
-  Media
-  Organization
-}
-
 enum PermissionType {
   CREATE
   READ
   UPDATE
   DELETE
   APPROVE
+  DETAIL
 }
