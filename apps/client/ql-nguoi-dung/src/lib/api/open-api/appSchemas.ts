@@ -31,7 +31,7 @@ export type User = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.952Z
+   * @default 2025-02-05T10:37:27.978Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -52,7 +52,7 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.953Z
+   * @default 2025-02-05T10:37:27.979Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -74,7 +74,7 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.955Z
+   * @default 2025-02-05T10:37:27.979Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -88,7 +88,7 @@ export type UserUpdate = {
   role?: string | null;
   password?: string;
   groupIds?: string[];
-  lock?: boolean;
+  accountLocked?: boolean;
 };
 
 export type PaginationQuery = {
@@ -102,7 +102,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-01-21T05:10:04.955Z
+     * @default 2025-02-05T10:37:27.980Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -118,6 +118,7 @@ export type ListOfundefined = PaginationQuery & {
     role?: string | null;
     groups?: (void | null)[];
     feedback?: (void | null)[];
+    accountLocked?: boolean;
   }[];
   count: number;
 };
@@ -127,7 +128,7 @@ export type Group = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.957Z
+   * @default 2025-02-05T10:37:27.981Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -139,7 +140,7 @@ export type GroupCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.957Z
+   * @default 2025-02-05T10:37:27.981Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -153,11 +154,45 @@ export type GroupUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-01-21T05:10:04.958Z
+   * @default 2025-02-05T10:37:27.981Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
   name: string;
   userIds: string[];
   roleIds: string[];
+};
+
+export type Configs = {
+  homeRealmIdentifiers?: string[];
+  idleSessionTimeoutPeriod?: string;
+  rememberMePeriod?: string;
+  provisioning?: {
+    inbound?: {
+      scim?: {
+        provisioningUserstore?: string;
+        enableProxyMode?: boolean;
+      };
+    };
+  };
+  authenticators?: {
+    id?: string;
+    name?: string;
+    displayName?: string;
+    isEnabled?: boolean;
+    type?: "LOCAL" | "REQUEST_PATH";
+    tags?: string[];
+    self?: string;
+  }[];
+  cors?: {
+    allowGenericHttpRequests?: boolean;
+    allowAnyOrigin?: boolean;
+    allowSubdomains?: boolean;
+    supportedMethods?: string[];
+    supportAnyHeader?: boolean;
+    supportedHeaders?: string[];
+    exposedHeaders?: string[];
+    supportsCredentials?: boolean;
+    maxAge?: number;
+  };
 };
