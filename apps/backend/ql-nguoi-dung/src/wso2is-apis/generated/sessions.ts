@@ -14,7 +14,7 @@ This is applicable for authorization code grant, implicit flow, refresh token gr
 
  * OpenAPI spec version: v1
  */
-import { customFetch } from '../custom-fetch';
+import { userFetch } from '../custom-fetch';
 export type GetSessionsParams = {
 /**
  * Condition to filter the retrieval of records.
@@ -298,7 +298,7 @@ export const getGetSessionsByUserIdUrl = (userId: string,
 export const getSessionsByUserId = async (userId: string,
     params?: GetSessionsByUserIdParams, options?: RequestInit): Promise<getSessionsByUserIdResponse> => {
   
-  return customFetch<getSessionsByUserIdResponse>(getGetSessionsByUserIdUrl(userId,params),
+  return userFetch<getSessionsByUserIdResponse>(getGetSessionsByUserIdUrl(userId,params),
   {      
     ...options,
     method: 'GET'
@@ -330,7 +330,7 @@ export const getTerminateSessionsByUserIdUrl = (userId: string,) => {
 
 export const terminateSessionsByUserId = async (userId: string, options?: RequestInit): Promise<terminateSessionsByUserIdResponse> => {
   
-  return customFetch<terminateSessionsByUserIdResponse>(getTerminateSessionsByUserIdUrl(userId),
+  return userFetch<terminateSessionsByUserIdResponse>(getTerminateSessionsByUserIdUrl(userId),
   {      
     ...options,
     method: 'DELETE'
@@ -365,7 +365,7 @@ export const getGetSessionBySessionIdUrl = (userId: string,
 export const getSessionBySessionId = async (userId: string,
     sessionId: string, options?: RequestInit): Promise<getSessionBySessionIdResponse> => {
   
-  return customFetch<getSessionBySessionIdResponse>(getGetSessionBySessionIdUrl(userId,sessionId),
+  return userFetch<getSessionBySessionIdResponse>(getGetSessionBySessionIdUrl(userId,sessionId),
   {      
     ...options,
     method: 'GET'
@@ -398,7 +398,7 @@ export const getTerminateSessionBySessionIdUrl = (userId: string,
 export const terminateSessionBySessionId = async (userId: string,
     sessionId: string, options?: RequestInit): Promise<terminateSessionBySessionIdResponse> => {
   
-  return customFetch<terminateSessionBySessionIdResponse>(getTerminateSessionBySessionIdUrl(userId,sessionId),
+  return userFetch<terminateSessionBySessionIdResponse>(getTerminateSessionBySessionIdUrl(userId,sessionId),
   {      
     ...options,
     method: 'DELETE'
@@ -437,7 +437,7 @@ export const getGetSessionsUrl = (params?: GetSessionsParams,) => {
 
 export const getSessions = async (params?: GetSessionsParams, options?: RequestInit): Promise<getSessionsResponse> => {
   
-  return customFetch<getSessionsResponse>(getGetSessionsUrl(params),
+  return userFetch<getSessionsResponse>(getGetSessionsUrl(params),
   {      
     ...options,
     method: 'GET'

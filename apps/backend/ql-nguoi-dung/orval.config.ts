@@ -17,7 +17,29 @@ export default {
             override: {
                 mutator: {
                     path: './src/wso2is-apis/custom-fetch.ts',
-                    name: 'customFetch',
+                    name: 'userFetch',
+                },
+            },
+        },
+    },
+
+    configZod: {
+        input: './src/wso2is-apis/configs.yaml',
+        output: {
+            client: 'zod',
+            target: './src/wso2is-apis/generated/zod/config.ts',
+        },
+    },
+    config: {
+        input: './src/wso2is-apis/configs.yaml',
+        output: {
+            client: 'fetch',
+            target: './src/wso2is-apis/generated/config.ts',
+            headers: true,
+            override: {
+                mutator: {
+                    path: './src/wso2is-apis/custom-fetch.ts',
+                    name: 'serverFetch',
                 },
             },
         },

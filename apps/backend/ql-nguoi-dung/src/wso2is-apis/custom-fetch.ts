@@ -1,14 +1,37 @@
+export async function userFetch<T>(
+    path: string,
+    options?: RequestInit
+): Promise<T> {
+    return customFetch<T>('user', path, options)
+}
+
+export async function serverFetch<T>(
+    path: string,
+    options?: RequestInit
+): Promise<T> {
+    return customFetch<T>('server', path, options)
+}
+
 export async function customFetch<T>(
+    type: 'user' | 'server',
     path: string,
     options?: RequestInit
 ): Promise<T> {
     const username = process.env.OIDC_ADMIN_USERNAME
     const password = process.env.OIDC_ADMIN_PASSWORD
+
+    // const username = process.env.OIDC_CLIENT_ID
+    // const password = process.env.OIDC_CLIENT_SECRET
+
+    console.log({ username, password })
+
     const credentials = Buffer.from(`${username}:${password}`).toString(
         'base64'
     )
 
-    const url = `${process.env.OIDC_BASE_URL}/api/users/v1${path}`
+    console.log({ credentials })
+
+    const url = `${process.env.OIDC_BASE_URL}/api/${type}/v1${path}`
     console.log({ url })
 
     const res = await fetch(url, {

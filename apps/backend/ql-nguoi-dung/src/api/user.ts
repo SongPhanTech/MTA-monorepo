@@ -66,7 +66,7 @@ const updateUser = createRoute({
                         .extend({
                             password: z.string(),
                             groupIds: z.array(z.string()),
-                            lock: z.boolean(),
+                            accountLocked: z.boolean(),
                         })
                         .partial()
                         .openapi('UserUpdate'),
@@ -139,7 +139,8 @@ app.openapi(createUser, async (c) => {
 
     .openapi(updateUser, async (c) => {
         const { id } = c.req.valid('param')
-        const { password, groupIds, lock, ...rest } = c.req.valid('json')
+        const { password, groupIds, accountLocked, ...rest } =
+            c.req.valid('json')
         const oldUser = await prisma.user.findUniqueOrThrow({
             where: { id },
         })
@@ -148,12 +149,10 @@ app.openapi(createUser, async (c) => {
         }
 
         const lockData =
-            lock !== undefined
+            accountLocked !== undefined
                 ? {
                       'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User':
-                          {
-                              accountLocked: lock,
-                          },
+                          { accountLocked },
                   }
                 : {}
 
