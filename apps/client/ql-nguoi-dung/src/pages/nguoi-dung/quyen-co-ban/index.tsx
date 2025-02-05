@@ -4,6 +4,7 @@ import DeleteIcon from '@components/icons/delete'
 import { PutQuyenCoBanModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useDisclosure from '@hooks/disclosure'
+import useQuyenCoBan from '@hooks/quyen-co-ban'
 import DefaultLayout from '@layouts/default-layout'
 import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -15,6 +16,7 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
+    const quyenCoBan = useQuyenCoBan()
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
@@ -68,71 +70,22 @@ export default function Page() {
                             },
                             {
                                 title: 'Tên quyền cơ bản',
-                                dataIndex: 'permissionName',
+                                dataIndex: 'label',
                             },
                             {
                                 title: 'Mã quyền',
-                                dataIndex: 'permissionCode',
+                                dataIndex: 'id',
                             },
                             {
                                 title: 'Phân hệ',
                                 dataIndex: 'subSystem',
                             },
                             {
-                                title: 'Ngày tạo',
-                                dataIndex: 'createdAt',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
-                                            }}
-                                        />
-                                    </Row>
-                                ),
+                                title: 'Mô tả',
+                                dataIndex: 'description',
                             },
                         ]}
-                        data={[
-                            {
-                                id: 1,
-                                permissionName: 'Thêm điểm',
-                                permissionCode: 'them_diem',
-                                subSystem: 'Quản lý đào tạo',
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 2,
-                                permissionName: 'Xóa điểm',
-                                permissionCode: 'xoa_diem',
-                                subSystem: 'Quản lý đào tạo',
-                                createdAt: '16-01-2025',
-                            },
-                            {
-                                id: 3,
-                                permissionName: 'Thêm người dùng',
-                                permissionCode: 'them_nguoi_dung',
-                                subSystem: 'Quản lý người dùng',
-                                createdAt: '16-01-2025',
-                            },
-                        ]}
+                        data={quyenCoBan}
                     />
                 </Col>
             </Row>
