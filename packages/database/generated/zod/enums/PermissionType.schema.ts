@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const PermissionTypeSchema = z.enum(["CREATE", "READ", "UPDATE", "DELETE", "APPROVE"])
+export const PermissionTypeSchema = z.enum(["CREATE", "READ", "UPDATE", "DELETE", "APPROVE", "DETAIL"])

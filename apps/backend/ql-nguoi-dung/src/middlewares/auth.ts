@@ -6,6 +6,7 @@ import {
     revokeSession,
 } from '@hono/oidc-auth'
 import type { OpenAPIHono } from '@hono/zod-openapi'
+import type { OidcAuthClaims } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
 
@@ -15,14 +16,27 @@ declare module 'hono' {
     }
 
     interface OidcAuthClaims {
-        email: string
         sub: string
+        given_name: string
+        email: string
+        username: string
     }
 }
 
-export const getUser = async (ssoId: string) => {
-    return prisma.user.findFirstOrThrow({
-        where: { ssoId },
+export const getUser = async (info: OidcAuthClaims) => {
+    return prisma.user.upsert({
+        where: { ssoId: info.sub },
+        create: {
+            ssoId: info.sub,
+            email: info.email,
+            name: info.given_name,
+            userName: info.username,
+        },
+        update: {
+            email: info.email,
+            name: info.given_name,
+            userName: info.username,
+        },
         include: {
             groups: {
                 include: { roles: true },
@@ -36,19 +50,21 @@ export const getUserByToken = async (token: string) => {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
     })
-    const data = await res.json()
-    if (!data?.sub) {
+
+    if (!res.ok) {
         throw new HTTPException(401, { message: 'Unauthorized' })
     }
-    return getUser(data.sub)
+
+    const data: OidcAuthClaims = await res.json()
+    return getUser(data)
 }
 
 const oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
-    console.log(111, response)
-
     return {
         sub: claims?.sub || orig?.sub || '',
         email: (claims?.email as string) || orig?.email || '',
+        given_name: (claims?.given_name as string) || '',
+        username: (claims?.username as string) || '',
     }
 }
 
@@ -57,30 +73,24 @@ export const setupAuth = (app: OpenAPIHono) => {
         const token = c.req.header('Authorization')?.split('Bearer ')[1]
         if (token) {
             const user = await getUserByToken(token)
-            console.log('User sso id: ', user.ssoId)
 
             c.set('user', user)
             return await next()
         }
 
-        throw new HTTPException(401, { message: 'Unauthorized' })
+        // throw new HTTPException(401, { message: 'Unauthorized' })
 
-        // c.set('oidcClaimsHook', oidcClaimsHook)
-        // const auth = await getAuth(c)
-        // if (auth) {
-        //     console.log(111, auth)
+        c.set('oidcClaimsHook', oidcClaimsHook)
+        const auth = await getAuth(c)
+        if (auth) {
+            const user = await getUser(auth)
 
-        //     const user = await getUser(auth.sub)
-        //     console.log(user)
+            c.set('user', user)
+            return next()
+        }
 
-        //     console.log('User sso id: ', user.ssoId)
-
-        //     c.set('user', user)
-        //     return next()
-        // }
-
-        // const middleware = oidcAuthMiddleware()
-        // return middleware(c, next)
+        const middleware = oidcAuthMiddleware()
+        return middleware(c, next)
     })
 
     app.get('/callback', processOAuthCallback)

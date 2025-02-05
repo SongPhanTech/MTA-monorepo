@@ -1,13 +1,14 @@
 import 'base'
 import 'feedback'
+import 'blocked-ip'
 
 model User extends Base {
   email      String     @unique @email
-  userName   String
+  userName   String     @unique
   name       String
   systemRole UserRole   @default(USER)
-  ssoId      String?
-  phone      String?
+  ssoId      String?    @unique
+  phone      String?    @unique
   role       String?
   groups     Group[]
 

@@ -5,7 +5,7 @@ export interface UserCreateRequest {
     name: Name
     userName: string
     password: string
-    emails: Email[]
+    emails: string[]
     'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'?: {
         accountLocked: boolean
     }
@@ -16,16 +16,23 @@ export interface ListResponse {
     startIndex: number
     itemsPerPage: number
     schemas: string[]
-    Resources: UserResponse[]
+    Resources?: UserResponse[]
 }
 
 export interface UserResponse {
-    emails: Email[]
+    emails: string[]
     meta: Meta
     roles: Role[]
     name: Name
     id: string
     userName: string
+    'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'?: {
+        accountLocked: boolean
+        unlockTime: number
+        failedLoginAttempts: number
+        failedLoginAttemptsBeforeSuccess: number
+        totpEnabled: number
+    }
 }
 
 export interface Meta {
@@ -39,7 +46,7 @@ export interface Name {
     givenName: string
     familyName: string
 }
-interface Filter {
+interface Query {
     startIndex?: number
     count?: number
     domain?: string
@@ -51,12 +58,6 @@ interface Filter {
 export interface Role {
     value: string
     type: string
-}
-
-export interface Email {
-    primary?: boolean
-    value: string
-    type?: 'home' | 'work'
 }
 
 export interface Name {
@@ -104,7 +105,7 @@ export class SCIMClient {
         if (!response.ok) {
             const errorBody = await response.json().catch(() => null)
             throw new HTTPException(400, {
-                message: errorBody.detail || response.statusText,
+                message: errorBody?.detail || response.statusText,
             })
         }
 
@@ -128,11 +129,22 @@ export class SCIMClient {
         })
     }
 
-    async listUsers(filter?: Filter): Promise<UserResponse[]> {
-        const params = filter
-            ? `?filter=${encodeURIComponent(JSON.stringify(filter))}`
-            : ''
-        return this.request<UserResponse[]>(`/Users${params}`, {
+    async listUsers(query?: Query): Promise<ListResponse> {
+        const { startIndex, count, domain, email, name, userName } = query || {}
+
+        const filter = [
+            email && `emails+co+${email}`,
+            name && `name.givenName+co+${name}`,
+            userName && `userName+co+${userName}`,
+        ]
+            .filter(Boolean)
+            .join(' and ')
+
+        const params = filter.length
+            ? `?filter=${filter}&startIndex=${startIndex}&count=${count}`
+            : `?startIndex=${startIndex}&count=${count}`
+
+        return this.request<ListResponse>(`/Users${params}`, {
             method: 'GET',
         })
     }

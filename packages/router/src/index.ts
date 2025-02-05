@@ -9,6 +9,7 @@ interface MenuItem {
     >
     path?: string
     children?: MenuItem[]
+    description?: string
 }
 
 type NavigationType = Record<
@@ -27,6 +28,7 @@ const NAVIGATION: NavigationType = {
                 label: 'Trang chủ',
                 icon: PieChartOutlined,
                 path: ROUTER_PATH.QL_NGUOI_DUNG.HOME,
+                description: 'Thông tin trang chủ',
             },
             {
                 id: 'nguoi-dung',
@@ -37,22 +39,26 @@ const NAVIGATION: NavigationType = {
                         id: 'danh-sach',
                         label: 'Danh sách',
                         path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_DANH_SACH,
+                        description: 'Danh sách người dùng',
                     },
                     {
                         id: 'nhom-nguoi-dung',
                         label: 'Nhóm người dùng',
                         path: ROUTER_PATH.QL_NGUOI_DUNG
                             .NGUOI_DUNG_NHOM_NGUOI_DUNG,
+                        description: 'Nhóm người dùng',
                     },
                     {
                         id: 'vai-tro',
                         label: 'Vai trò',
                         path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_VAI_TRO,
+                        description: 'Vai trò người dùng',
                     },
                     {
-                        id: 'quyen',
+                        id: 'quyen-co-ban',
                         label: 'Quyền cơ bản',
                         path: ROUTER_PATH.QL_NGUOI_DUNG.NGUOI_DUNG_QUYEN_CO_BAN,
+                        description: 'Quyền cơ bản người dùng',
                     },
                 ],
             },
