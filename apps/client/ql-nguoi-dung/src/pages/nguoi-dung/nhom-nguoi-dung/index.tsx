@@ -10,7 +10,7 @@ import useDisclosure from '@hooks/disclosure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import { useCountGroup, useFindManyGroup } from '@workspace/db/hooks'
+import { useCountGroup, useFindManyGroup, useUpdateGroup } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip,  } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -23,20 +23,17 @@ export default function Page() {
 
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen } = useDisclosure({
+    const { onOpen, onClose } = useDisclosure({
         tag: PutNhomNguoiDungModal.name,
         onOk
     })
-    const { data = [] } = useFindManyGroup({
+    const { data = [], refetch } = useFindManyGroup({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
         include: { users: true, roles: true }
     })
     const { data: count } = useCountGroup()
 
-    const handleModal = () => {
-        onOpen()
-    }
     async function onOk(output?: PutNhomNguoiDungFormType) {
         if (!output) return;
         try {
@@ -48,8 +45,8 @@ export default function Page() {
                     },
                     body: {
                         name: output.name,
-                        userIds:[],
-                        roleIds:[]
+                        userIds:output.users.map((user) => user),
+                        roleIds:output.roles.map((role) => role)
                     },
                 })
                 message.success('Cập nhật thông tin nhóm người dùng')
@@ -57,16 +54,34 @@ export default function Page() {
                 await fetchCreateGroup({
                     body: {
                         name: output.name,
-                        userIds:[],
-                        roleIds:[]
+                        userIds:output.users.map((user) => user),
+                        roleIds:output.roles.map((role) => role)
                     },
                 })
                 message.success('Tạo nhóm người dùng')
             }
+            refetch()
+            onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
+    }
+    const { mutateAsync: mutateUpdateGroup } = useUpdateGroup()
+    async function handleDelete(id: string) {
+        showSpinner()
+        try {
+            await mutateUpdateGroup({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const handleModal = () => {
+        onOpen()
     }
     return (
         <div>
@@ -145,10 +160,9 @@ export default function Page() {
                                             />
                                         </Tooltip>
                                         <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => {
-                                                    console.log('delete')
-                                                },
+                                             popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDelete(id),
                                             }}
                                         />
                                     </Row>

@@ -1,5 +1,5 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, { PutModalFormType } from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
 import {
@@ -38,7 +38,6 @@ const PutNhomNguoiDungModal = () => {
         if (group) {
             form.setFieldsValue({
                 id: group.id,
-                description: group.description || '',
                 name: group.name,
                 users: group.users.map((user) => user.id),
                 roles: group.roles.map((role) => role.id),
@@ -57,6 +56,9 @@ const PutNhomNguoiDungModal = () => {
             }
         >
             <Col span={24}>
+                <FormItem form={form} name="id" hidden>
+                    <Input />
+                </FormItem>
                 <FormItem
                     form={form}
                     name="name"
