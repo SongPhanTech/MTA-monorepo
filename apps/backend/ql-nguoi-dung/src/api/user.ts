@@ -3,13 +3,13 @@ import type { Prisma } from '@workspace/db'
 import * as models from '@workspace/db/zod/models'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
-import { SCIMClient } from '../utils/helper'
+import { SCIMClient } from '../utils/is-user-api'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
 import SessionApp from './users/sessions'
 
 const scimClient = new SCIMClient({
     baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
-    username: process.env.OIDC_USERNAME || 'admin',
+    username: process.env.OIDC_ADMIN_USERNAME || 'admin',
     password: process.env.OIDC_ADMIN_PASSWORD || 'admin',
 })
 
@@ -188,6 +188,8 @@ app.openapi(createUser, async (c) => {
             count: limit,
             ...filter,
         })
+
+        console.log(1111, users)
 
         const usersMetadata =
             users.Resources?.map((u) => ({
