@@ -280,7 +280,7 @@ export interface AuthenticatorListItem {
   displayName?: string;
   isEnabled?: boolean;
   type?: AuthenticatorListItemType;
-  readonly tags?: string[];
+  readonly tags?: readonly string[];
   self?: string;
 }
 

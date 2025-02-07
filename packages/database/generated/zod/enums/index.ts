@@ -9,6 +9,7 @@ export * from './TransactionIsolationLevel.schema';
 export * from './GroupScalarFieldEnum.schema';
 export * from './RoleScalarFieldEnum.schema';
 export * from './PermissionScalarFieldEnum.schema';
+export * from './ConfigScalarFieldEnum.schema';
 export * from './UserScalarFieldEnum.schema';
 export * from './FeedbackScalarFieldEnum.schema';
 export * from './BlockedIpScalarFieldEnum.schema';
