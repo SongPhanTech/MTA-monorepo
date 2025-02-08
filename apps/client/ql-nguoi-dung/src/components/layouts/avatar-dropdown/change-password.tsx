@@ -1,29 +1,15 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
-import { PutChangePasswordModal } from '@components/modal'
-import type { PutChangePasswordFormType } from '@components/modal/put-change-password'
-import useDisclosure from '@hooks/disclosure'
-import React from 'react'
-
+import { useRouter } from 'next/router'
 function ChangePassword() {
-    const { onOpen, onClose } = useDisclosure<
-        string,
-        PutChangePasswordFormType
-    >({
-        tag: PutChangePasswordModal.name,
-        onOk,
-    })
-
-    function onOk(output?: PutChangePasswordFormType) {
-        console.log(output)
-    }
-    const handleModal = () => {
-        onOpen()
+    const router = useRouter()
+    const handleChangePassword = () => {
+        router.push(String(process.env.NEXT_PUBLIC_MY_ACCOUNT))
     }
     return (
         <div className="flex items-center gap-2 color-black ">
             <SafetyCertificateOutlined />
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-            <span onClick={handleModal}>Đổi mật khẩu</span>
+            <span onClick={handleChangePassword}>Đổi mật khẩu</span>
         </div>
     )
 }
