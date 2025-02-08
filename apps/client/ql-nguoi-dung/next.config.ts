@@ -3,7 +3,13 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
     /* config options here */
     reactStrictMode: true,
-    transpilePackages: ['@workspace/db', '@workspace/router', '@workspace/ui'],
+    transpilePackages: [
+        '@t3-oss/env-nextjs',
+        '@t3-oss/env-core',
+        '@workspace/db',
+        '@workspace/router',
+        '@workspace/ui',
+    ],
     output: 'standalone',
     crossOrigin: 'anonymous',
 }

@@ -17,7 +17,7 @@
 		"@ant-design/nextjs-registry": "^1.0.2",
 		"@casl/ability": "^6.7.2",
 		"@casl/react": "^4.0.0",
-		"@t3-oss/env-nextjs": "^0.11.1",
+		"@t3-oss/env-nextjs": "0.12.0",
 		"@tanstack/react-query": "^5.62.3",
 		"@workspace/db": "workspace:*",
 		"@workspace/router": "workspace:*",

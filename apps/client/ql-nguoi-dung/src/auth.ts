@@ -1,7 +1,8 @@
-import NextAuth, { DefaultSession } from 'next-auth'
+import NextAuth, { type DefaultSession } from 'next-auth'
 import Asgardeo from 'next-auth/providers/asgardeo'
 import 'next-auth/jwt'
 import { cookies } from 'next/headers'
+import { env } from './env'
 declare module 'next-auth/jwt' {
     interface JWT {
         user_id: string
@@ -36,13 +37,14 @@ declare module 'next-auth' {
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Asgardeo({
-            issuer: process.env.AUTH_ASGARDEO_ISSUER,
+            issuer: env.AUTH_ASGARDEO_ISSUER,
             authorization: {
                 params: {
                     scope: 'openid email profile',
                 },
             },
             profile: (profile) => {
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 return profile as any
             },
         }),
@@ -62,6 +64,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async jwt({ token, user, account }) {
             if (user) {
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 token.user_id = (user as any).sub.split('@')[0]
                 token.username = user.username
                 token.given_name = user.given_name
