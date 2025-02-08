@@ -131,10 +131,11 @@ export default function Page() {
                                 align: 'left',
                             },
                             {
-                                title: 'Số thành viên',
-                                dataIndex: 'membersCount',
+                                title: 'Người dùng',
+                                dataIndex: 'users',
                                 width: 150,
                                 align: 'center',
+                                render: (value) => value.length,
                             },
                             {
                                 title: 'Ngày tạo',

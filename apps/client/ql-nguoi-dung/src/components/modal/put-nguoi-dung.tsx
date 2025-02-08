@@ -1,25 +1,30 @@
-import { EditFilled } from '@ant-design/icons'
-import FormItem from '@components/commons/form-item'
+import {
+    CopyOutlined,
+    EditFilled,
+    SafetyCertificateOutlined,
+} from '@ant-design/icons';
+import FormItem from '@components/commons/form-item';
 import PutFormModal, {
     type PutModalFormType,
-} from '@components/commons/put-modal'
-import Select from '@components/commons/select'
-import useDisclosure from '@hooks/disclosure'
-import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
-import { Col, Form, Input, Tooltip } from 'antd'
-import { useEffect, useState } from 'react'
+} from '@components/commons/put-modal';
+import Select from '@components/commons/select';
+import useDisclosure from '@hooks/disclosure';
+import { generatePassword } from '@lib/utils';
+import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks';
+import { Button, Col, Form, Input, Space, Tooltip, message } from 'antd';
+import { useEffect, useState } from 'react';
 export type PutUserFormType = {
-    id?: string
-    username: string
-    name: string
-    email?: string
-    groups?: string[]
-    password?: string
-    confirmPassword?: string
-} & PutModalFormType
+    id?: string;
+    username: string;
+    name: string;
+    email?: string;
+    groups?: string[];
+    password?: string;
+} & PutModalFormType;
 const PutNguoiDungModal = () => {
-    const [isAllowEditPassword, setIsAllowEditPassword] = useState(false)
-    const [form] = Form.useForm<PutUserFormType>()
+    const [isAllowEditPassword, setIsAllowEditPassword] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [form] = Form.useForm<PutUserFormType>();
     const {
         isOpen,
         onClose,
@@ -28,7 +33,7 @@ const PutNguoiDungModal = () => {
     } = useDisclosure<string>({
         tag: PutNguoiDungModal.name,
         onClose: form.resetFields,
-    })
+    });
     const { data: user } = useFindUniqueUser({
         where: {
             id: id,
@@ -36,10 +41,13 @@ const PutNguoiDungModal = () => {
         include: {
             groups: true,
         },
-    })
+    });
 
-    const { data: groups = [] } = useFindManyGroup()
-
+    const { data: groups = [] } = useFindManyGroup();
+    const coppyToClipboard = () => {
+        navigator.clipboard.writeText(newPassword);
+        message.success('Mật khẩu mới đã được sao chép!', 3);
+    };
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (user) {
@@ -50,9 +58,9 @@ const PutNguoiDungModal = () => {
                 name: user.name,
                 username: user.userName,
                 groups: user.groups.map((group) => group.id),
-            })
+            });
         }
-    }, [user])
+    }, [user]);
 
     return (
         <PutFormModal
@@ -62,19 +70,19 @@ const PutNguoiDungModal = () => {
             onCancel={onClose}
             title={id ? 'Chỉnh sửa tài khoản' : 'Thêm mới tài khoản'}
         >
-            <FormItem form={form} name="id" hidden>
+            <FormItem form={form} name='id' hidden>
                 <Input />
             </FormItem>
             <Col span={12}>
-                <FormItem form={form} name="name" label="Họ và tên" required>
+                <FormItem form={form} name='name' label='Họ và tên' required>
                     <Input />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="email"
-                    label="Email"
+                    name='email'
+                    label='Email'
                     rules={[
                         {
                             required: true,
@@ -92,19 +100,19 @@ const PutNguoiDungModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="username"
-                    label="Tên đăng nhập"
+                    name='username'
+                    label='Tên đăng nhập'
                     required
                 >
                     <Input disabled={!!id} />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="groups" label="Nhóm người dùng">
+                <FormItem form={form} name='groups' label='Nhóm người dùng'>
                     <Select
-                        mode="multiple"
+                        mode='multiple'
                         allowClear
-                        placeholder="Chọn nhóm người dùng"
+                        placeholder='Chọn nhóm người dùng'
                         options={groups.map((group) => ({
                             label: group.name,
                             value: group.id,
@@ -112,12 +120,13 @@ const PutNguoiDungModal = () => {
                     />
                 </FormItem>
             </Col>
+
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="password"
+                    name='password'
                     label={
-                        <div className="flex justify-between gap-2">
+                        <div className='flex justify-between gap-2'>
                             {!!id && (
                                 <Tooltip title={'Đổi mật khẩu'}>
                                     <EditFilled
@@ -137,64 +146,52 @@ const PutNguoiDungModal = () => {
                             )}
                         </div>
                     }
-                    required={!id}
                     rules={[
                         {
-                            pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).+$/,
-                            message:
-                                'Mật khẩu phải có ít nhất một chữ hoa, một ký tự đặc biệt và một số',
-                        },
-                        {
-                            min: 8,
-                            message: 'Mật khẩu phải có ít nhất 8 kí tự',
+                            required: true,
+                            message: 'Vui lòng nhập mật khẩu',
                         },
                     ]}
                 >
-                    <Input.Password disabled={!isAllowEditPassword && !!id} />
+                    <Space.Compact style={{ width: '100%' }}>
+                        <Input.Password
+                            disabled={!isAllowEditPassword && !!id}
+                            value={newPassword}
+                        />
+                        {newPassword.length !== 8 ? (
+                            <Tooltip title='Tạo mật khẩu mới'>
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        const generated = generatePassword(8);
+                                        setNewPassword(generated);
+                                        form.setFieldsValue({
+                                            password: generated,
+                                        });
+                                        navigator.clipboard.writeText(
+                                            generated
+                                        );
+                                        message.success('Mật khẩu mới đã được sao chép!',3);
+                                    }}
+                                    disabled={!isAllowEditPassword && !!id}
+                                    icon={<SafetyCertificateOutlined />}
+                                />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title='Sao chép'>
+                                <Button
+                                    icon={<CopyOutlined />}
+                                    type='primary'
+                                    onClick={() => coppyToClipboard()}
+                                    disabled={!isAllowEditPassword && !!id}
+                                />
+                            </Tooltip>
+                        )}
+                    </Space.Compact>
                 </FormItem>
             </Col>
-
-            {(isAllowEditPassword || !id) && (
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="confirmPassword"
-                        label={
-                            isAllowEditPassword ? (
-                                <span>Xác nhận mật khẩu mới</span>
-                            ) : (
-                                <span>Xác nhận mật khẩu</span>
-                            )
-                        }
-                        dependencies={['password']}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng xác nhận mật khẩu',
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    const referencePassword =
-                                        getFieldValue('password')
-                                    if (!value || referencePassword === value) {
-                                        return Promise.resolve()
-                                    }
-
-                                    return Promise.reject(
-                                        new Error(
-                                            'Mật khẩu xác nhận không khớp'
-                                        )
-                                    )
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password />
-                    </FormItem>
-                </Col>
-            )}
         </PutFormModal>
-    )
-}
+    );
+};
 
-export default PutNguoiDungModal
+export default PutNguoiDungModal;
