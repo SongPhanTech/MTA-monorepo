@@ -100,6 +100,29 @@ const stringToSlug = (str: string) => {
         .replace(/[^a-z0-9]/g, '_')
 }
 
+function generatePassword(length: number = 12): string {
+    const upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const numberChars = "0123456789";
+    const specialChars = "!@#$%";
+    const allChars = upperCaseChars + lowerCaseChars + numberChars + specialChars;
+
+    if (length < 4) {
+        throw new Error("Password length must be at least 4 characters");
+    }
+
+    let password = "";
+    password += upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)];
+    password += numberChars[Math.floor(Math.random() * numberChars.length)];
+    password += specialChars[Math.floor(Math.random() * specialChars.length)];
+
+    for (let i = 3; i < length; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
+}
+ 
 export {
     arrayRemoveDuplicates,
     arrayToObject,
@@ -112,4 +135,5 @@ export {
     getUniqueArray,
     cn,
     stringToSlug,
+    generatePassword
 }
