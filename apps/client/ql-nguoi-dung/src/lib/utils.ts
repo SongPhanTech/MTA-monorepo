@@ -1,6 +1,6 @@
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
-import clsx, { ClassValue } from 'clsx'
+import clsx, { type ClassValue } from 'clsx'
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }
@@ -49,50 +49,29 @@ const getColorByIndex = (index: number) => {
     ]
     return colors[index % colors.length]
 }
-const arrayToObject = <T extends Record<string, any>>(
-    arr: Array<T>,
-    key: keyof T,
-    mapFn?: (item: T, currentIndex: number, currentArray: Array<T>) => any
-) => {
-    return arr.reduce(
-        (payload, item, currentIndex, currentArr) => {
-            payload[item[key]] = mapFn
-                ? mapFn(item, currentIndex, currentArr)
-                : item
-            return payload
-        },
-        {} as Record<string, any>
-    )
-}
-
-const arrayRemoveDuplicates = <T extends Record<string, any>>(
-    arr: Array<T>,
-    mapFn: (item: T, currentIndex: number, currentArray: Array<T>) => any
-) => {
-    return [...new Set(arr.map(mapFn).flat())]
-}
 
 const formatNiceBytes = (x: string) => {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    let l = 0,
-        n = parseInt(x, 10) || 0
+    let l = 0
+    let n = Number.parseInt(x, 10) || 0
     while (n >= 1024 && ++l) {
         n = n / 1024
     }
-    return n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]
+    return `${n.toFixed(n < 10 && l > 0 ? 1 : 0)} ${units[l]}`
 }
 
-const getUniqueArray = <T>(arr: Array<T> = [], key: keyof T) => {
+const getUniqueArray = <T>(arr: Array<T>, key: keyof T) => {
     return [...new Map(arr.map((item) => [item[key], item])).values()]
 }
 
 const stringToSlug = (str: string) => {
     const from =
-            'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ',
-        to =
-            'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
-    for (var i = 0, l = from.length; i < l; i++) {
-        str = str.replace(RegExp(from[i], 'gi'), to[i])
+        'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ'
+    const to =
+        'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
+    let strOut = str
+    for (let i = 0, l = from.length; i < l; i++) {
+        strOut = strOut.replace(RegExp(from[i], 'gi'), to[i])
     }
     return str
         .toLowerCase()
@@ -100,32 +79,35 @@ const stringToSlug = (str: string) => {
         .replace(/[^a-z0-9]/g, '_')
 }
 
-function generatePassword(length: number = 12): string {
-    const upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
-    const numberChars = "0123456789";
-    const specialChars = "!@#$%";
-    const allChars = upperCaseChars + lowerCaseChars + numberChars + specialChars;
+function generatePassword(length = 12): string {
+    const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
+    const numberChars = '0123456789'
+    const specialChars = '!@#$%'
+    const allChars =
+        upperCaseChars + lowerCaseChars + numberChars + specialChars
 
     if (length < 4) {
-        throw new Error("Password length must be at least 4 characters");
+        throw new Error('Password length must be at least 4 characters')
     }
 
-    let password = "";
-    password += upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)];
-    password += numberChars[Math.floor(Math.random() * numberChars.length)];
-    password += specialChars[Math.floor(Math.random() * specialChars.length)];
+    let password = ''
+    password +=
+        upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)]
+    password += numberChars[Math.floor(Math.random() * numberChars.length)]
+    password += specialChars[Math.floor(Math.random() * specialChars.length)]
 
     for (let i = 3; i < length; i++) {
-        password += allChars[Math.floor(Math.random() * allChars.length)];
+        password += allChars[Math.floor(Math.random() * allChars.length)]
     }
 
-    return password.split('').sort(() => 0.5 - Math.random()).join('');
+    return password
+        .split('')
+        .sort(() => 0.5 - Math.random())
+        .join('')
 }
- 
+
 export {
-    arrayRemoveDuplicates,
-    arrayToObject,
     formatDate,
     formatDateReadable,
     formatDateVN,
@@ -135,5 +117,5 @@ export {
     getUniqueArray,
     cn,
     stringToSlug,
-    generatePassword
+    generatePassword,
 }

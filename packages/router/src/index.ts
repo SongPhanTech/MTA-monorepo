@@ -1,4 +1,8 @@
-import { PieChartOutlined, UserOutlined } from '@ant-design/icons'
+import {
+    ApartmentOutlined,
+    PieChartOutlined,
+    UserOutlined,
+} from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 interface MenuItem {
@@ -61,6 +65,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Quyền cơ bản người dùng',
                     },
                 ],
+            },
+            {
+                id: 'gioi-han-dia-chi-mang',
+                label: 'Quản trị giới hạn địa chỉ mạng',
+                path: ROUTER_PATH.QL_NGUOI_DUNG.GIOI_HAN_DIA_CHI_MANG,
+                description: 'Quản trị giới hạn địa chỉ mạng từ xa',
+                icon: ApartmentOutlined,
             },
         ],
         label: 'Quản lý người dùng',

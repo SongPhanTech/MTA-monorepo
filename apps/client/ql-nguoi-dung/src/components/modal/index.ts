@@ -4,11 +4,13 @@ import PutNhomNguoiDungModal from './put-nhom-nguoi-dung'
 import PutQuyenCoBanModal from './put-quyen-co-ban'
 import PutVaiTroModal from './put-vai-tro'
 import PutChangePasswordModal from './put-change-password'
+import PutGioiHanDiaChiMangDungModal from './put-gioi-han-dia-chi-mang'
 export {
     ConfirmModal,
     PutNguoiDungModal,
     PutNhomNguoiDungModal,
     PutQuyenCoBanModal,
     PutVaiTroModal,
-    PutChangePasswordModal
+    PutChangePasswordModal,
+    PutGioiHanDiaChiMangDungModal,
 }

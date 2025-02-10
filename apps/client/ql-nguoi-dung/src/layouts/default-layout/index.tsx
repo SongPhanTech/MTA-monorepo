@@ -2,10 +2,10 @@ import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import SiderDefaultLayout from '@components/layouts/sider'
 import NAVIGATION from '@workspace/router'
+import { SearchSystem } from '@workspace/ui'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
-import { SearchSystem } from '@workspace/ui'
 const { Header, Content } = Layout
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
@@ -27,7 +27,6 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCollapsed()
