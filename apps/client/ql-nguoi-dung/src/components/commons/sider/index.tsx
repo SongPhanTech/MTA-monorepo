@@ -1,5 +1,5 @@
-import { Layout, Menu, MenuProps } from 'antd'
-import { ReactNode } from 'react'
+import { Layout, Menu, type MenuProps } from 'antd'
+import type { ReactNode } from 'react'
 
 const { Sider } = Layout
 interface SiderDefaultLayoutProps {

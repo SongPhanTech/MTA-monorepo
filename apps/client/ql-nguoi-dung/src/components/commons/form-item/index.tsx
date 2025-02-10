@@ -1,11 +1,15 @@
-import { Form, FormInstance, FormItemProps as FormItemAntdrops } from 'antd'
+import {
+    Form,
+    type FormInstance,
+    type FormItemProps as FormItemAntDrops,
+} from 'antd'
 
-type FormItemProps<T, K> = FormItemAntdrops & {
+type FormItemProps<T, K> = FormItemAntDrops & {
     form: FormInstance<T>
     name: K
 }
 
-const FormItem = <T extends Record<string, any>, K extends keyof T>({
+const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
     form,
     ...rest
 }: FormItemProps<T, K>) => {

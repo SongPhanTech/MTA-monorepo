@@ -16,10 +16,12 @@ function Skeleton(props: SkeletonProps) {
                 .fill(uniqueId())
                 .map((key) => (
                     <a
+                        href="/"
                         className="skeleton_card"
                         id="skeleton-card-link"
                         target="_blank"
                         key={key}
+                        rel="noreferrer"
                     >
                         <div className="skeleton_card__header">
                             <div>
@@ -33,8 +35,8 @@ function Skeleton(props: SkeletonProps) {
                                 className="skeleton_card__header header__title"
                                 id="skeleton-card-title"
                             >
-                                <div className="skeleton skeleton-text"></div>
-                                <div className="skeleton skeleton-text"></div>
+                                <div className="skeleton skeleton-text" />
+                                <div className="skeleton skeleton-text" />
                             </h3>
                         </div>
 
@@ -43,7 +45,7 @@ function Skeleton(props: SkeletonProps) {
                                 className="skeleton_card__body body__text"
                                 id="skeleton-card-details"
                             >
-                                <div className="skeleton skeleton-text skeleton-text__body"></div>
+                                <div className="skeleton skeleton-text skeleton-text__body" />
                             </div>
 
                             <div className="skeleton_card__body body__img">
@@ -59,7 +61,7 @@ function Skeleton(props: SkeletonProps) {
                             className="skeleton_card__footer"
                             id="skeleton-card-footer"
                         >
-                            <div className="skeleton skeleton-text skeleton-footer"></div>
+                            <div className="skeleton skeleton-text skeleton-footer" />
                         </div>
                     </a>
                 ))
@@ -70,28 +72,28 @@ function Skeleton(props: SkeletonProps) {
                         <thead>
                             <tr>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                                 <th className="tg-cly1">
-                                    <div className="line"></div>
+                                    <div className="line" />
                                 </th>
                             </tr>
                         </thead>
@@ -101,28 +103,28 @@ function Skeleton(props: SkeletonProps) {
                                 .map((key) => (
                                     <tr key={key}>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                         <td className="tg-cly1">
-                                            <div className="line"></div>
+                                            <div className="line" />
                                         </td>
                                     </tr>
                                 ))}
@@ -136,10 +138,7 @@ function Skeleton(props: SkeletonProps) {
                     {Array(count)
                         .fill(uniqueId())
                         .map((key) => (
-                            <div
-                                key={key}
-                                className="skeleton skeleton-text"
-                            ></div>
+                            <div key={key} className="skeleton skeleton-text" />
                         ))}
                 </>
             )

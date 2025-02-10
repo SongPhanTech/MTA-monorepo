@@ -1,4 +1,4 @@
-import { Action } from 'easy-peasy'
+import type { Action } from 'easy-peasy'
 
 interface ImageViewer {
     images: string[]

@@ -1,11 +1,16 @@
-import React from 'react'
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons'
+import React from 'react'
 import './index.css'
+
+type UrlQuery = {
+    orderBy?: string
+    order?: 'ASC' | 'DESC'
+}
 
 type SortingProps = {
     field: string
-    urlQuery: any
-    onSortChange: (params: any) => void
+    urlQuery: UrlQuery
+    onSortChange: (params: UrlQuery) => void
 }
 
 function Sorting(props: SortingProps) {

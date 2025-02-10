@@ -1,6 +1,6 @@
 import {
     DatePicker as AntDatePicker,
-    DatePickerProps as AntDatePickerProps,
+    type DatePickerProps as AntDatePickerProps,
 } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 

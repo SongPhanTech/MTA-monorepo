@@ -1,5 +1,5 @@
 import NextDocument, {
-    DocumentContext,
+    type DocumentContext,
     Head,
     Html,
     Main,
