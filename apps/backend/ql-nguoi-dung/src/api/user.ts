@@ -189,8 +189,6 @@ app.openapi(createUser, async (c) => {
             ...filter,
         })
 
-        console.log(1111, users)
-
         const usersMetadata =
             users.Resources?.map((u) => ({
                 ssoId: u.id,

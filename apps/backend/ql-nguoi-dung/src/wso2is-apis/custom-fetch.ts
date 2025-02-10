@@ -2,7 +2,7 @@ export async function userFetch<T>(
     path: string,
     options?: RequestInit
 ): Promise<T> {
-    return customFetch<T>('user', path, options)
+    return customFetch<T>('users', path, options)
 }
 
 export async function serverFetch<T>(
@@ -13,7 +13,7 @@ export async function serverFetch<T>(
 }
 
 export async function customFetch<T>(
-    type: 'user' | 'server',
+    type: 'users' | 'server',
     path: string,
     options?: RequestInit
 ): Promise<T> {
@@ -22,8 +22,6 @@ export async function customFetch<T>(
 
     // const username = process.env.OIDC_CLIENT_ID
     // const password = process.env.OIDC_CLIENT_SECRET
-
-    console.log({ username, password })
 
     const credentials = Buffer.from(`${username}:${password}`).toString(
         'base64'

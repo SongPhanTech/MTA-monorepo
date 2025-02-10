@@ -10,13 +10,21 @@ import { appFetch } from "./appFetcher";
 import type * as Schemas from "./appSchemas";
 
 export type GetSessionsByUserIdPathParams = {
-  ssoId: string;
+  id: string;
 };
 
-export type GetSessionsByUserIdError = Fetcher.ErrorWrapper<{
-  status: 500;
-  payload: {};
-}>;
+export type GetSessionsByUserIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: {
+        message: string;
+      };
+    }
+  | {
+      status: 500;
+      payload: {};
+    }
+>;
 
 export type GetSessionsByUserIdVariables = {
   pathParams: GetSessionsByUserIdPathParams;
@@ -33,7 +41,7 @@ export const fetchGetSessionsByUserId = (
     {},
     {},
     GetSessionsByUserIdPathParams
-  >({ url: "/api/user/{ssoId}/sessions", method: "get", ...variables, signal });
+  >({ url: "/api/user/{id}/sessions", method: "get", ...variables, signal });
 
 export const useGetSessionsByUserId = <TData = Schemas.SessionsByUserId,>(
   variables: GetSessionsByUserIdVariables,
@@ -53,7 +61,7 @@ export const useGetSessionsByUserId = <TData = Schemas.SessionsByUserId,>(
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/api/user/{ssoId}/sessions",
+      path: "/api/user/{id}/sessions",
       operationId: "getSessionsByUserId",
       variables,
     }),
@@ -65,13 +73,21 @@ export const useGetSessionsByUserId = <TData = Schemas.SessionsByUserId,>(
 };
 
 export type TerminateSessionsByUserIdPathParams = {
-  ssoId: string;
+  id: string;
 };
 
-export type TerminateSessionsByUserIdError = Fetcher.ErrorWrapper<{
-  status: 500;
-  payload: {};
-}>;
+export type TerminateSessionsByUserIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: {
+        message: string;
+      };
+    }
+  | {
+      status: 500;
+      payload: {};
+    }
+>;
 
 export type TerminateSessionsByUserIdVariables = {
   pathParams: TerminateSessionsByUserIdPathParams;
@@ -88,12 +104,7 @@ export const fetchTerminateSessionsByUserId = (
     {},
     {},
     TerminateSessionsByUserIdPathParams
-  >({
-    url: "/api/user/{ssoId}/sessions",
-    method: "delete",
-    ...variables,
-    signal,
-  });
+  >({ url: "/api/user/{id}/sessions", method: "delete", ...variables, signal });
 
 export const useTerminateSessionsByUserId = (
   options?: Omit<
@@ -118,14 +129,22 @@ export const useTerminateSessionsByUserId = (
 };
 
 export type TerminateSessionBySessionIdPathParams = {
-  ssoId: string;
+  id: string;
   sessionId: string;
 };
 
-export type TerminateSessionBySessionIdError = Fetcher.ErrorWrapper<{
-  status: 500;
-  payload: {};
-}>;
+export type TerminateSessionBySessionIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: {
+        message: string;
+      };
+    }
+  | {
+      status: 500;
+      payload: {};
+    }
+>;
 
 export type TerminateSessionBySessionIdVariables = {
   pathParams: TerminateSessionBySessionIdPathParams;
@@ -143,7 +162,7 @@ export const fetchTerminateSessionBySessionId = (
     {},
     TerminateSessionBySessionIdPathParams
   >({
-    url: "/api/user/{ssoId}/sessions/{sessionId}",
+    url: "/api/user/{id}/sessions/{sessionId}",
     method: "delete",
     ...variables,
     signal,
@@ -527,7 +546,7 @@ export const useUpdateConfigs = (
 
 export type QueryOperation =
   | {
-      path: "/api/user/{ssoId}/sessions";
+      path: "/api/user/{id}/sessions";
       operationId: "getSessionsByUserId";
       variables: GetSessionsByUserIdVariables;
     }
