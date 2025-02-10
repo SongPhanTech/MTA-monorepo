@@ -18,7 +18,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ fields, className }) => {
         >
             <Row gutter={[8, 8]}>
                 {fields.map((field, index) => (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={field.value?.toString()}>
                         <Col span={4}>
                             <p className="font-semibold text-base">
                                 {field.label}

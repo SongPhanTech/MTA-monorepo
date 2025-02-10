@@ -87,13 +87,13 @@ export const CardEvent = ({
                                 <ClockCircleOutlined className="mr-2" />
                                 <span className="font-semibold">{time}</span>
                             </div>
-                            <div className="h-5 w-px bg-gray-500"></div>{' '}
+                            <div className="h-5 w-px bg-gray-500" />{' '}
                             {/* Divider */}
                             <div className="flex items-center text-base text-black">
                                 <CalendarOutlined className="mr-2" />
                                 <span className="font-semibold">{date}</span>
                             </div>
-                            <div className="h-5 w-px bg-gray-500"></div>{' '}
+                            <div className="h-5 w-px bg-gray-500" />{' '}
                             {/* Divider */}
                             <div className="flex items-center text-base text-black">
                                 <SendOutlined className="mr-2" />

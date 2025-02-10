@@ -1,5 +1,5 @@
 import { Card } from 'antd'
-import React from 'react'
+import type React from 'react'
 interface CardDashBoardProps {
     icon: React.ReactNode
     title: string
@@ -23,7 +23,7 @@ export const CardDashBoard = ({
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div
                         style={{
-                            background: `${backgroundIcon || `#13ab55`}`,
+                            background: `${backgroundIcon || '#13ab55'}`,
                             color: 'white',
                             borderRadius: '50%',
                             width: '25px',
