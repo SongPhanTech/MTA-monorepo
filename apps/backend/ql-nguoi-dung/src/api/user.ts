@@ -157,7 +157,7 @@ app.openapi(createUser, async (c) => {
                 : {}
 
         await scimClient.updateUser(oldUser.ssoId, {
-            userName: oldUser.userName,
+            // userName: oldUser.userName,
             password,
             name: { givenName: rest.name || oldUser.name, familyName: '' },
             emails: [rest.email || oldUser.email],
@@ -188,8 +188,6 @@ app.openapi(createUser, async (c) => {
             count: limit,
             ...filter,
         })
-
-        console.log(1111, users)
 
         const usersMetadata =
             users.Resources?.map((u) => ({

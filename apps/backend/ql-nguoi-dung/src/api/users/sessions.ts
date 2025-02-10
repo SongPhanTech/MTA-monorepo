@@ -1,4 +1,5 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { prisma } from '../..'
 import {
     type Session,
     getSessionsByUserId,
@@ -13,8 +14,8 @@ app.openapi(
     createRoute({
         operationId: 'getSessionsByUserId',
         method: 'get',
-        request: { params: z.object({ ssoId: z.string() }) },
-        path: '/{ssoId}/sessions',
+        request: { params: z.object({ id: z.string() }) },
+        path: '/{id}/sessions',
         responses: {
             200: {
                 content: {
@@ -25,6 +26,14 @@ app.openapi(
                     },
                 },
                 description: 'Retrieve one user',
+            },
+            400: {
+                content: {
+                    'application/json': {
+                        schema: z.object({ message: z.string() }),
+                    },
+                },
+                description: 'Bad Request',
             },
             500: {
                 content: {
@@ -37,8 +46,15 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { ssoId: userId } = c.req.valid('param')
-        const { status, data } = await getSessionsByUserId(userId)
+        const { id } = c.req.valid('param')
+        const user = await prisma.user.findUniqueOrThrow({
+            where: { id },
+        })
+        if (!user.ssoId) {
+            return c.json({ message: 'User has no ssoId' }, 400)
+        }
+
+        const { status, data } = await getSessionsByUserId(user.ssoId)
 
         if (status !== 200 && 'message' in data) {
             return c.json(data, 500)
@@ -52,9 +68,9 @@ app.openapi(
         operationId: 'terminateSessionsByUserId',
         method: 'delete',
         request: {
-            params: z.object({ ssoId: z.string() }),
+            params: z.object({ id: z.string() }),
         },
-        path: '/{ssoId}/sessions',
+        path: '/{id}/sessions',
         responses: {
             200: {
                 content: {
@@ -65,6 +81,14 @@ app.openapi(
                     },
                 },
                 description: 'Terminate one session',
+            },
+            400: {
+                content: {
+                    'application/json': {
+                        schema: z.object({ message: z.string() }),
+                    },
+                },
+                description: 'Bad Request',
             },
             500: {
                 content: {
@@ -77,8 +101,15 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { ssoId: userId } = c.req.valid('param')
-        const { status, data } = await terminateSessionsByUserId(userId)
+        const { id } = c.req.valid('param')
+        const user = await prisma.user.findUniqueOrThrow({
+            where: { id },
+        })
+        if (!user.ssoId) {
+            return c.json({ message: 'User has no ssoId' }, 400)
+        }
+
+        const { status, data } = await terminateSessionsByUserId(user.ssoId)
 
         if (status !== 200 && 'message' in data) {
             return c.json(data, 500)
@@ -92,9 +123,9 @@ app.openapi(
         operationId: 'terminateSessionBySessionId',
         method: 'delete',
         request: {
-            params: z.object({ ssoId: z.string(), sessionId: z.string() }),
+            params: z.object({ id: z.string(), sessionId: z.string() }),
         },
-        path: '/{ssoId}/sessions/{sessionId}',
+        path: '/{id}/sessions/{sessionId}',
         responses: {
             200: {
                 content: {
@@ -105,6 +136,14 @@ app.openapi(
                     },
                 },
                 description: 'Terminate one session',
+            },
+            400: {
+                content: {
+                    'application/json': {
+                        schema: z.object({ message: z.string() }),
+                    },
+                },
+                description: 'Bad Request',
             },
             500: {
                 content: {
@@ -117,9 +156,15 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { ssoId: userId, sessionId } = c.req.valid('param')
+        const { id, sessionId } = c.req.valid('param')
+        const user = await prisma.user.findUniqueOrThrow({
+            where: { id },
+        })
+        if (!user.ssoId) {
+            return c.json({ message: 'User has no ssoId' }, 400)
+        }
         const { status, data } = await terminateSessionBySessionId(
-            userId,
+            user.ssoId,
             sessionId
         )
 
