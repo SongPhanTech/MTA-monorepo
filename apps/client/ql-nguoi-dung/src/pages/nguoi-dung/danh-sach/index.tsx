@@ -1,21 +1,21 @@
-import { EyeOutlined, UnlockOutlined } from '@ant-design/icons';
-import { queryClient } from '@api/index';
+import { EyeOutlined, UnlockOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import {
     fetchCreateUser,
     fetchUpdateUser,
     useListUsers,
-} from '@api/open-api/appComponents';
-import Table from '@components/commons/table';
-import DeleteIcon from '@components/icons/delete';
-import LockIcon from '@components/icons/lock';
-import { PutNguoiDungModal } from '@components/modal';
-import type { PutUserFormType } from '@components/modal/put-nguoi-dung';
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants';
-import useDisclosure from '@hooks/disclosure';
-import useSpinner from '@hooks/spinner';
-import DefaultLayout from '@layouts/default-layout';
-import { formatDateReadable } from '@lib/utils';
-import { useCountUser, useUpdateUser } from '@workspace/db/hooks';
+} from '@api/open-api/appComponents'
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import LockIcon from '@components/icons/lock'
+import { PutNguoiDungModal } from '@components/modal'
+import type { PutUserFormType } from '@components/modal/put-nguoi-dung'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useDisclosure from '@hooks/disclosure'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import { formatDateReadable } from '@lib/utils'
+import { useCountUser, useUpdateUser } from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -27,33 +27,34 @@ import {
     Tag,
     Tooltip,
     message,
-} from 'antd';
-import _ from 'lodash';
-import { useRouter } from 'next/router';
-import type React from 'react';
-import { useState } from 'react';
+} from 'antd'
+import _ from 'lodash'
+import { useRouter } from 'next/router'
+import type React from 'react'
+import { useState } from 'react'
 
 export default function Page() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
-    const [searchText, setSearchText] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [searchText, setSearchText] = useState<string>('')
 
-    const { data, refetch } = useListUsers({});
-    const { data: count } = useCountUser();
-    const router = useRouter();
+    const { data, refetch } = useListUsers({})
 
-    const debouncedSearchText = _.debounce(setSearchText, 500);
+    const { data: count } = useCountUser()
+    const router = useRouter()
+
+    const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutUserFormType>({
         tag: PutNguoiDungModal.name,
         onOk,
-    });
+    })
 
-    const { showSpinner, hideSpinner } = useSpinner();
+    const { showSpinner, hideSpinner } = useSpinner()
 
     async function onOk(output?: PutUserFormType) {
-        if (!output) return;
+        if (!output) return
         try {
-            showSpinner();
+            showSpinner()
             if (output.id) {
                 await fetchUpdateUser({
                     pathParams: {
@@ -69,8 +70,8 @@ export default function Page() {
                             password: String(output.password),
                         }),
                     },
-                });
-                message.success('Cập nhật thành công');
+                })
+                message.success('Cập nhật thành công')
             } else {
                 await fetchCreateUser({
                     body: {
@@ -81,27 +82,27 @@ export default function Page() {
                         description: output.description,
                         groupIds: [],
                     },
-                });
-                message.success('Thêm mới thành công');
+                })
+                message.success('Thêm mới thành công')
             }
             // refetch()
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'User'],
-            });
-            onClose();
+            })
+            onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
-        hideSpinner();
+        hideSpinner()
     }
 
     const handleModal = () => {
-        onOpen();
-    };
-    const { mutateAsync: updateUser } = useUpdateUser();
+        onOpen()
+    }
+    const { mutateAsync: updateUser } = useUpdateUser()
     async function handleDelete(id: string) {
         try {
-            showSpinner();
+            showSpinner()
             await updateUser({
                 where: {
                     id,
@@ -109,16 +110,16 @@ export default function Page() {
                 data: {
                     deletedAt: new Date(),
                 },
-            });
+            })
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
 
     async function handleLockAcc(id: string, accountLocked: boolean) {
-        if (!id) return;
+        if (!id) return
         try {
-            showSpinner();
+            showSpinner()
             await fetchUpdateUser({
                 pathParams: {
                     id: id,
@@ -126,18 +127,18 @@ export default function Page() {
                 body: {
                     accountLocked: !accountLocked,
                 },
-            });
-            message.success('Cập nhật thành công');
+            })
+            message.success('Cập nhật thành công')
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
-        hideSpinner();
-        refetch();
-        onClose();
+        hideSpinner()
+        refetch()
+        onClose()
     }
     return (
         <div>
-            <Divider orientation='left' orientationMargin={0}>
+            <Divider orientation="left" orientationMargin={0}>
                 Danh sách tài khoản
             </Divider>
             <Row gutter={[16, 16]}>
@@ -145,21 +146,21 @@ export default function Page() {
                     <Row gutter={[16, 16]}>
                         {/* row button */}
                         <Col span={24}>
-                            <Flex justify='end'>
-                                <Button onClick={handleModal} type='primary'>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
                             </Flex>
                         </Col>
                         {/* row filter */}
                         <Col span={6}>
-                            <Form.Item label='Tìm kiếm' name='search'>
+                            <Form.Item label="Tìm kiếm" name="search">
                                 <Input
-                                    id='search'
+                                    id="search"
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder='Tìm kiếm theo tên,...'
+                                    placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
                         </Col>
@@ -204,12 +205,12 @@ export default function Page() {
                                 width: 150,
                                 render: (value, record) => {
                                     return value ? (
-                                        <Tag color='error'>Không hoạt động</Tag>
+                                        <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color='success'>
+                                        <Tag color="success">
                                             Đang hoạt động
                                         </Tag>
-                                    );
+                                    )
                                 },
                             },
                             {
@@ -217,7 +218,7 @@ export default function Page() {
                                 width: 100,
                                 align: 'center',
                                 render: (_, { id, accountLocked, name }) => (
-                                    <Row className='justify-center gap-2'>
+                                    <Row className="justify-center gap-2">
                                         {!/system|admin/i.test(name) &&
                                             (!accountLocked ? (
                                                 <LockIcon
@@ -233,8 +234,8 @@ export default function Page() {
                                                 />
                                             ) : (
                                                 <Tooltip
-                                                    title='Mở khóa'
-                                                    placement='leftTop'
+                                                    title="Mở khóa"
+                                                    placement="leftTop"
                                                 >
                                                     <UnlockOutlined
                                                         onClick={() =>
@@ -245,17 +246,17 @@ export default function Page() {
                                                                 )
                                                             )
                                                         }
-                                                        className='text-sm text-green-600 cursor-pointer'
+                                                        className="text-sm text-green-600 cursor-pointer"
                                                     />
                                                 </Tooltip>
                                             ))}
                                         <Tooltip
-                                            title='Xem chi tiết'
-                                            placement='leftTop'
+                                            title="Xem chi tiết"
+                                            placement="leftTop"
                                         >
                                             <EyeOutlined
                                                 onClick={onOpen.bind(null, id)}
-                                                className='text-sm text-blue-700 cursor-pointer'
+                                                className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>
                                         {!/system|admin/i.test(name) && (
@@ -282,9 +283,9 @@ export default function Page() {
                 </Col>
             </Row>
         </div>
-    );
+    )
 }
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>;
-};
+    return <DefaultLayout>{page}</DefaultLayout>
+}

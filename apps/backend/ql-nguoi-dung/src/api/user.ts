@@ -157,7 +157,7 @@ app.openapi(createUser, async (c) => {
                 : {}
 
         await scimClient.updateUser(oldUser.ssoId, {
-            // userName: oldUser.userName,
+            userName: oldUser.userName,
             password,
             name: { givenName: rest.name || oldUser.name, familyName: '' },
             emails: [rest.email || oldUser.email],

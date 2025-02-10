@@ -2,7 +2,7 @@
 IMAGE_NAME=ghcr.io/songphantech/mta
 DEV_TAG=latest
 RELEASE_TAG=release
-SERVER=swantech
+SERVER=local
 COMPOSE_CMD=docker compose up
 
 # TODO: update to prod database
@@ -29,7 +29,7 @@ push:
 
 # Deploy the development image to the remote server
 deploy:
-	ssh $(SERVER) $(COMPOSE_CMD) mta_be -d
+	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) mta_be -d"
 
 # Build, push, and deploy the release image
 release:

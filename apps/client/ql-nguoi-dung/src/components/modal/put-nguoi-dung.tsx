@@ -2,29 +2,35 @@ import {
     CopyOutlined,
     EditFilled,
     SafetyCertificateOutlined,
-} from '@ant-design/icons';
-import FormItem from '@components/commons/form-item';
+} from '@ant-design/icons'
+import {
+    fetchTerminateSessionBySessionId,
+    useGetSessionsByUserId,
+} from '@api/open-api/appComponents'
+import FormItem from '@components/commons/form-item'
 import PutFormModal, {
     type PutModalFormType,
-} from '@components/commons/put-modal';
-import Select from '@components/commons/select';
-import useDisclosure from '@hooks/disclosure';
-import { generatePassword } from '@lib/utils';
-import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks';
-import { Button, Col, Form, Input, Space, Tooltip, message } from 'antd';
-import { useEffect, useState } from 'react';
+} from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import useDisclosure from '@hooks/disclosure'
+import { formatDateReadable, generatePassword } from '@lib/utils'
+import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
+import { Button, Col, Form, Input, Space, Tooltip, message } from 'antd'
+import { useEffect, useState } from 'react'
 export type PutUserFormType = {
-    id?: string;
-    username: string;
-    name: string;
-    email?: string;
-    groups?: string[];
-    password?: string;
-} & PutModalFormType;
+    id?: string
+    username: string
+    name: string
+    email?: string
+    groups?: string[]
+    password?: string
+} & PutModalFormType
 const PutNguoiDungModal = () => {
-    const [isAllowEditPassword, setIsAllowEditPassword] = useState(false);
-    const [newPassword, setNewPassword] = useState('');
-    const [form] = Form.useForm<PutUserFormType>();
+    const [isAllowEditPassword, setIsAllowEditPassword] = useState(false)
+    const [newPassword, setNewPassword] = useState('')
+    const [form] = Form.useForm<PutUserFormType>()
     const {
         isOpen,
         onClose,
@@ -33,21 +39,24 @@ const PutNguoiDungModal = () => {
     } = useDisclosure<string>({
         tag: PutNguoiDungModal.name,
         onClose: form.resetFields,
-    });
-    const { data: user } = useFindUniqueUser({
-        where: {
-            id: id,
-        },
-        include: {
-            groups: true,
-        },
-    });
+    })
 
-    const { data: groups = [] } = useFindManyGroup();
-    const coppyToClipboard = () => {
-        navigator.clipboard.writeText(newPassword);
-        message.success('Mật khẩu mới đã được sao chép!', 3);
-    };
+    const { data: user } = useFindUniqueUser({
+        where: { id: id },
+        include: { groups: true },
+    })
+
+    const { data: sessions, refetch: refetchSessions } = useGetSessionsByUserId(
+        {
+            pathParams: { id: id || '' },
+        }
+    )
+
+    const { data: groups = [] } = useFindManyGroup()
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(newPassword)
+        message.success('Mật khẩu mới đã được sao chép!', 3)
+    }
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (user) {
@@ -58,9 +67,9 @@ const PutNguoiDungModal = () => {
                 name: user.name,
                 username: user.userName,
                 groups: user.groups.map((group) => group.id),
-            });
+            })
         }
-    }, [user]);
+    }, [user])
 
     return (
         <PutFormModal
@@ -70,19 +79,19 @@ const PutNguoiDungModal = () => {
             onCancel={onClose}
             title={id ? 'Chỉnh sửa tài khoản' : 'Thêm mới tài khoản'}
         >
-            <FormItem form={form} name='id' hidden>
+            <FormItem form={form} name="id" hidden>
                 <Input />
             </FormItem>
             <Col span={12}>
-                <FormItem form={form} name='name' label='Họ và tên' required>
+                <FormItem form={form} name="name" label="Họ và tên" required>
                     <Input />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name='email'
-                    label='Email'
+                    name="email"
+                    label="Email"
                     rules={[
                         {
                             required: true,
@@ -100,19 +109,19 @@ const PutNguoiDungModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name='username'
-                    label='Tên đăng nhập'
+                    name="username"
+                    label="Tên đăng nhập"
                     required
                 >
                     <Input disabled={!!id} />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name='groups' label='Nhóm người dùng'>
+                <FormItem form={form} name="groups" label="Nhóm người dùng">
                     <Select
-                        mode='multiple'
+                        mode="multiple"
                         allowClear
-                        placeholder='Chọn nhóm người dùng'
+                        placeholder="Chọn nhóm người dùng"
                         options={groups.map((group) => ({
                             label: group.name,
                             value: group.id,
@@ -124,9 +133,9 @@ const PutNguoiDungModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name='password'
+                    name="password"
                     label={
-                        <div className='flex justify-between gap-2'>
+                        <div className="flex justify-between gap-2">
                             {!!id && (
                                 <Tooltip title={'Đổi mật khẩu'}>
                                     <EditFilled
@@ -159,30 +168,31 @@ const PutNguoiDungModal = () => {
                             value={newPassword}
                         />
                         {newPassword.length !== 8 ? (
-                            <Tooltip title='Tạo mật khẩu mới'>
+                            <Tooltip title="Tạo mật khẩu mới">
                                 <Button
-                                    type='primary'
+                                    type="primary"
                                     onClick={() => {
-                                        const generated = generatePassword(8);
-                                        setNewPassword(generated);
+                                        const generated = generatePassword(8)
+                                        setNewPassword(generated)
                                         form.setFieldsValue({
                                             password: generated,
-                                        });
-                                        navigator.clipboard.writeText(
-                                            generated
-                                        );
-                                        message.success('Mật khẩu mới đã được sao chép!',3);
+                                        })
+                                        navigator.clipboard.writeText(generated)
+                                        message.success(
+                                            'Mật khẩu mới đã được sao chép!',
+                                            3
+                                        )
                                     }}
                                     disabled={!isAllowEditPassword && !!id}
                                     icon={<SafetyCertificateOutlined />}
                                 />
                             </Tooltip>
                         ) : (
-                            <Tooltip title='Sao chép'>
+                            <Tooltip title="Sao chép">
                                 <Button
                                     icon={<CopyOutlined />}
-                                    type='primary'
-                                    onClick={() => coppyToClipboard()}
+                                    type="primary"
+                                    onClick={() => copyToClipboard()}
                                     disabled={!isAllowEditPassword && !!id}
                                 />
                             </Tooltip>
@@ -190,8 +200,63 @@ const PutNguoiDungModal = () => {
                     </Space.Compact>
                 </FormItem>
             </Col>
-        </PutFormModal>
-    );
-};
 
-export default PutNguoiDungModal;
+            <Table
+                columns={[
+                    {
+                        title: 'STT',
+                        width: 20,
+                        align: 'center',
+                        render: (_, __, index) => index + 1,
+                    },
+                    {
+                        title: 'userAgent',
+                        dataIndex: 'userAgent',
+                    },
+                    {
+                        title: 'IP',
+                        dataIndex: 'ip',
+                    },
+                    {
+                        title: 'Login time',
+                        dataIndex: 'loginTime',
+                        render: (_, { loginTime }) =>
+                            loginTime ? formatDateReadable(loginTime) : '',
+                    },
+                    {
+                        title: 'Last access time',
+                        dataIndex: 'lastAccessTime',
+                        render: (_, { lastAccessTime }) =>
+                            lastAccessTime
+                                ? formatDateReadable(lastAccessTime)
+                                : '',
+                    },
+                    {
+                        title: 'Thao tác',
+                        width: 100,
+                        align: 'center',
+                        render: (_, { id: sessionId }) => (
+                            <DeleteIcon
+                                popConfirm={{
+                                    onConfirm: () => {
+                                        fetchTerminateSessionBySessionId({
+                                            pathParams: {
+                                                id: id || '',
+                                                sessionId: sessionId || '',
+                                            },
+                                        })
+                                        refetchSessions()
+                                    },
+                                }}
+                            />
+                        ),
+                    },
+                ]}
+                data={sessions?.sessions || []}
+                pagination={{ hideOnSinglePage: true }}
+            />
+        </PutFormModal>
+    )
+}
+
+export default PutNguoiDungModal
