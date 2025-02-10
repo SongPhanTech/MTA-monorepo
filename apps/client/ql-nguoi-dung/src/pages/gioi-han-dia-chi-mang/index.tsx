@@ -93,9 +93,8 @@ export default function Page() {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch()
             queryClient.invalidateQueries({
-                queryKey: ['zenstack', 'User'],
+                queryKey: ['zenstack', 'BlockedIp'],
             })
             onClose()
         } catch (error) {
@@ -121,6 +120,7 @@ export default function Page() {
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
+        hideSpinner()
     }
 
     return (

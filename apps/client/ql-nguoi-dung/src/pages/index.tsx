@@ -13,7 +13,6 @@ const IndexPage: NextPage = () => {
     const setIsUpdateAbility = useStoreActions(
         (actions) => actions.appState.setIsUpdateAbility
     )
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (status === 'unauthenticated') {

@@ -114,6 +114,7 @@ export default function Page() {
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
+        hideSpinner()
     }
 
     async function handleLockAcc(id: string, accountLocked: boolean) {

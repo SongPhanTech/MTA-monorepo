@@ -11,7 +11,6 @@ import { formatDateReadable } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
     useCountRole,
-    useCreateGroup,
     useCreateRole,
     useFindManyRole,
     useUpdateRole,
@@ -23,9 +22,9 @@ import {
     Flex,
     Form,
     Input,
-    message,
     Row,
     Tooltip,
+    message,
 } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -49,7 +48,7 @@ export default function Page() {
 
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<PutVaiTroFormType>({
+    const { onOpen, onClose } = useDisclosure<string, PutVaiTroFormType>({
         tag: PutVaiTroModal.name,
         onOk,
     })
@@ -126,7 +125,6 @@ export default function Page() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
-
     }
     async function handleDelete(id: string) {
         showSpinner()
