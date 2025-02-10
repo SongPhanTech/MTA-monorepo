@@ -14,10 +14,11 @@ const IndexPage: NextPage = () => {
         (actions) => actions.appState.setIsUpdateAbility
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if (status == 'unauthenticated') {
+        if (status === 'unauthenticated') {
             signIn('asgardeo')
-        } else if (status == 'authenticated') {
+        } else if (status === 'authenticated') {
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
                 window.location.href = firstMenu[0].path
