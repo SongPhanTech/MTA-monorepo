@@ -1,4 +1,4 @@
-import { ModalTag } from '@redux/models'
+import type { ModalTag } from '@redux/models'
 import { action } from 'easy-peasy'
 
 const dialog: ModalTag = {

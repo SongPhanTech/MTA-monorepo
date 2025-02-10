@@ -1,4 +1,4 @@
-import { ImageViewer } from '@redux/models'
+import type { ImageViewer } from '@redux/models'
 import { action } from 'easy-peasy'
 
 const imageViewer: ImageViewer = {

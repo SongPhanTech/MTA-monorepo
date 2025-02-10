@@ -1,28 +1,28 @@
-import FormItem from '@components/commons/form-item';
+import FormItem from '@components/commons/form-item'
 import PutFormModal, {
     type PutModalFormType,
-} from '@components/commons/put-modal';
-import Select from '@components/commons/select';
-import useDisclosure from '@hooks/disclosure';
+} from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import useDisclosure from '@hooks/disclosure'
 import {
     useFindManyRole,
     useFindManyUser,
     useFindUniqueGroup,
-} from '@workspace/db/hooks';
-import { Col, Form, Input, Table } from 'antd';
-import { useEffect } from 'react';
+} from '@workspace/db/hooks'
+import { Col, Form, Input, Table } from 'antd'
+import { useEffect } from 'react'
 export type PutNhomNguoiDungFormType = {
-    id?: string;
-    name: string;
-    users: string[];
-    roles: string[];
-} & PutModalFormType;
+    id?: string
+    name: string
+    users: string[]
+    roles: string[]
+} & PutModalFormType
 const PutNhomNguoiDungModal = () => {
-    const [form] = Form.useForm<PutNhomNguoiDungFormType>();
+    const [form] = Form.useForm<PutNhomNguoiDungFormType>()
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
         tag: PutNhomNguoiDungModal.name,
         onClose: form.resetFields,
-    });
+    })
     const { data: group } = useFindUniqueGroup({
         where: {
             id: input,
@@ -31,10 +31,10 @@ const PutNhomNguoiDungModal = () => {
             users: true,
             roles: true,
         },
-    });
+    })
 
-    const { data: users = [] } = useFindManyUser();
-    const { data: roles = [] } = useFindManyRole();
+    const { data: users = [] } = useFindManyUser()
+    const { data: roles = [] } = useFindManyRole()
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -44,9 +44,9 @@ const PutNhomNguoiDungModal = () => {
                 name: group.name,
                 users: group.users.map((user) => user.id),
                 roles: group.roles.map((role) => role.id),
-            });
+            })
         }
-    }, [group]);
+    }, [group])
 
     return (
         <PutFormModal
@@ -59,24 +59,24 @@ const PutNhomNguoiDungModal = () => {
             }
         >
             <Col span={12}>
-                <FormItem form={form} name='id' hidden>
+                <FormItem form={form} name="id" hidden>
                     <Input />
                 </FormItem>
                 <FormItem
                     form={form}
-                    name='name'
-                    label='Tên nhóm người dùng'
+                    name="name"
+                    label="Tên nhóm người dùng"
                     required
                 >
                     <Input />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name='roles' label='Vai trò'>
+                <FormItem form={form} name="roles" label="Vai trò">
                     <Select
-                        mode='multiple'
+                        mode="multiple"
                         allowClear
-                        placeholder='Chọn vai trò'
+                        placeholder="Chọn vai trò"
                         options={roles.map((role) => ({
                             label: role.name,
                             value: role.id,
@@ -85,18 +85,21 @@ const PutNhomNguoiDungModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name='users' label='Người dùng'>
+                <FormItem form={form} name="users" label="Người dùng">
                     <Select
                         showSearch
-                        mode='multiple'
+                        mode="multiple"
                         allowClear
-                        placeholder='Chọn người dùng'
-                        optionFilterProp='label'
+                        placeholder="Chọn người dùng"
+                        optionFilterProp="label"
                         filterSort={(optionA, optionB) =>
                             (optionA?.label ?? '')
+                                .toString()
                                 .toLowerCase()
                                 .localeCompare(
-                                    (optionB?.label ?? '').toLowerCase()
+                                    (optionB?.label ?? '')
+                                        .toString()
+                                        .toLowerCase()
                                 )
                         }
                         options={users.map((user) => ({
@@ -114,7 +117,7 @@ const PutNhomNguoiDungModal = () => {
                             {
                                 title: 'STT',
                                 dataIndex: 'index',
-                                align: "center",
+                                align: 'center',
                                 width: 10,
                                 render: (_, __, index) => index + 1,
                             },
@@ -137,7 +140,7 @@ const PutNhomNguoiDungModal = () => {
                 </Col>
             )}
         </PutFormModal>
-    );
-};
+    )
+}
 
-export default PutNhomNguoiDungModal;
+export default PutNhomNguoiDungModal

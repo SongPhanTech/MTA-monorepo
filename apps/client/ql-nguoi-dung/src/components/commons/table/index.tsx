@@ -1,6 +1,6 @@
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { Empty, Table as TableAntd } from 'antd'
-import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 type TableProps<T> = {
     columns?: ColumnsType<T>
     data?: T[]
@@ -9,7 +9,7 @@ type TableProps<T> = {
     }
 }
 
-const Table = <T extends Record<string, any>>({
+const Table = <T extends Record<string, unknown>>({
     columns = [],
     data,
     pagination,
@@ -19,7 +19,9 @@ const Table = <T extends Record<string, any>>({
             className="mt-4"
             columns={columns.map((column) => ({
                 ...column,
-                key: column.key || (column as any).dataIndex,
+                key:
+                    column.key ||
+                    (column as unknown as { dataIndex: string }).dataIndex,
             }))}
             bordered
             dataSource={data}

@@ -1,5 +1,5 @@
 import { createStore } from 'easy-peasy'
-import { StoreModel } from './models'
+import type { StoreModel } from './models'
 import { appState, dialog, imageViewer } from './stores'
 
 const model: StoreModel = {

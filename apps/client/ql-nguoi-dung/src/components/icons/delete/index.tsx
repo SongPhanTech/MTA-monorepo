@@ -1,6 +1,6 @@
-import { Popconfirm, PopconfirmProps, Tooltip } from 'antd'
+import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
+import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
 } & Omit<AntdIconProps, 'ref'> &
