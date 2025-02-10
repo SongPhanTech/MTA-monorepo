@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pagination as PaginationAntd, PaginationProps } from 'antd'
+import { Pagination as PaginationAntd, type PaginationProps } from 'antd'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 const Pagination = ({ ...rest }: PaginationProps) => (
     <PaginationAntd

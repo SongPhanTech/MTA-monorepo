@@ -1,4 +1,4 @@
-import { AppState } from '@redux/models'
+import type { AppState } from '@redux/models'
 import { action } from 'easy-peasy'
 
 const appState: AppState = {

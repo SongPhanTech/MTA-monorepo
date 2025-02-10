@@ -1,5 +1,5 @@
+import { Col, Row } from 'antd'
 import React from 'react'
-import { Row, Col } from 'antd'
 
 interface FieldProps {
     label: string
@@ -17,7 +17,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ fields, className }) => {
             className={`p-4 mt-4 bg-[#D5EBDB] rounded-md border border-[#7bd198] ${className || ''}`}
         >
             <Row gutter={[8, 8]}>
-                {fields.map((field, index) => (
+                {fields.map((field) => (
                     <React.Fragment key={field.value?.toString()}>
                         <Col span={4}>
                             <p className="font-semibold text-base">

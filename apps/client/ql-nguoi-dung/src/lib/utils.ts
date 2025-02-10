@@ -1,6 +1,6 @@
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
-import clsx, { ClassValue } from 'clsx'
+import clsx, { type ClassValue } from 'clsx'
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }
@@ -69,13 +69,13 @@ const arrayRemoveDuplicates = <T extends Record<string, any>>(
     arr: Array<T>,
     mapFn: (item: T, currentIndex: number, currentArray: Array<T>) => any
 ) => {
-    return [...new Set(arr.map(mapFn).flat())]
+    return [...new Set(arr.flatMap(mapFn))]
 }
 
 const formatNiceBytes = (x: string) => {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     let l = 0,
-        n = parseInt(x, 10) || 0
+        n = Number.parseInt(x, 10) || 0
     while (n >= 1024 && ++l) {
         n = n / 1024
     }
@@ -100,7 +100,7 @@ const stringToSlug = (str: string) => {
         .replace(/[^a-z0-9]/g, '_')
 }
 
-function generatePassword(length: number = 12): string {
+function generatePassword(length = 12): string {
     const upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
     const numberChars = "0123456789";

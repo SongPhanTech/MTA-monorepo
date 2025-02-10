@@ -1,4 +1,4 @@
-import { Select as AntdSelect, SelectProps as AntdSelectProps } from 'antd'
+import { Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 
 type SelectProps = AntdSelectProps
 

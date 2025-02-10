@@ -1,16 +1,15 @@
 import {
     Form,
     type FormInstance,
-    type FormItemProps as FormItemAntdrops,
+    type FormItemProps as FormItemAntDrops,
 } from 'antd'
 
-type FormItemProps<T, K> = FormItemAntdrops & {
+type FormItemProps<T, K> = FormItemAntDrops & {
     form: FormInstance<T>
     name: K
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const FormItem = <T extends Record<string, any>, K extends keyof T>({
+const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
     form,
     ...rest
 }: FormItemProps<T, K>) => {
