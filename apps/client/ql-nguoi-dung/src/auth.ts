@@ -54,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async session({ session, token }) {
             if (token) {
                 const res = await fetch(
-                    `${env.AUTH_ASGARDEO_ISSUER.replace('/oauth2', '')}/oauth2/userinfo`,
+                    `${env.AUTH_ASGARDEO_ISSUER.replace('/oauth2/token', '')}/oauth2/userinfo`,
                     {
                         headers: {
                             Authorization: `Bearer ${token.access_token}`,
