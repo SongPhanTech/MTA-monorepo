@@ -30,6 +30,7 @@ interface DisclosureHook<O> {
  *
  */
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const useDisclosure = <I = any, O = any>(disclosureHook: DisclosureHook<O>) => {
     const tag = disclosureHook.tag
 
@@ -68,6 +69,7 @@ const useDisclosure = <I = any, O = any>(disclosureHook: DisclosureHook<O>) => {
         disclosureHook?.onToggle?.()
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (inputState) {
             onOpen(inputState)
