@@ -198,6 +198,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, key: {
+                    name: "key",
+                    fields: ["key"]
                 },
             }
             ,

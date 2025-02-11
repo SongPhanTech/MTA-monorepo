@@ -1,6 +1,7 @@
 import {
     ApartmentOutlined,
     PieChartOutlined,
+    SettingOutlined,
     UserOutlined,
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
@@ -73,12 +74,29 @@ const NAVIGATION: NavigationType = {
                 description: 'Quản trị giới hạn địa chỉ mạng từ xa',
                 icon: ApartmentOutlined,
             },
+            {
+                id: 'cau-hinh',
+                label: 'Cấu hình',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        id: 'thoi-gian-cho',
+                        label: 'Thời gian chờ',
+                        path: ROUTER_PATH.QL_NGUOI_DUNG.CAU_HINH_THOI_GIAN_CHO,
+                    },
+                    {
+                        id: 'sso',
+                        label: 'SSO',
+                        path: 'https://auth.swantech.vn/t/carbon.super/console',
+                    },
+                ],
+            },
         ],
         label: 'Quản lý người dùng',
     },
-    WEB: {
+    QL_HE_THONG: {
         menus: [],
-        label: 'Web',
+        label: 'Quản lý hệ thống',
     },
 }
 export type { MenuItem, NavigationType }

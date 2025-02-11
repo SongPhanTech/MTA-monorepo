@@ -10,8 +10,22 @@ import useDisclosure from '@hooks/disclosure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import { useCountGroup, useFindManyGroup, useUpdateGroup } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip,  } from 'antd'
+import {
+    useCountGroup,
+    useFindManyGroup,
+    useUpdateGroup,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tooltip,
+} from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -25,17 +39,17 @@ export default function Page() {
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure({
         tag: PutNhomNguoiDungModal.name,
-        onOk
+        onOk,
     })
     const { data = [], refetch } = useFindManyGroup({
         skip: (currentPage - 1) * numberOfPages,
         take: numberOfPages,
-        include: { users: true, roles: true }
+        include: { users: true, roles: true },
     })
     const { data: count } = useCountGroup()
 
     async function onOk(output?: PutNhomNguoiDungFormType) {
-        if (!output) return;
+        if (!output) return
         try {
             showSpinner()
             if (output.id) {
@@ -45,8 +59,8 @@ export default function Page() {
                     },
                     body: {
                         name: output.name,
-                        userIds:output.users.map((user) => user),
-                        roleIds:output.roles.map((role) => role)
+                        userIds: output.users.map((user) => user),
+                        roleIds: output.roles.map((role) => role),
                     },
                 })
                 message.success('Cập nhật thông tin nhóm người dùng')
@@ -54,8 +68,8 @@ export default function Page() {
                 await fetchCreateGroup({
                     body: {
                         name: output.name,
-                        userIds:output.users.map((user) => user),
-                        roleIds:output.roles.map((role) => role)
+                        userIds: output.users.map((user) => user),
+                        roleIds: output.roles.map((role) => role),
                     },
                 })
                 message.success('Tạo nhóm người dùng')
@@ -161,7 +175,7 @@ export default function Page() {
                                             />
                                         </Tooltip>
                                         <DeleteIcon
-                                             popConfirm={{
+                                            popConfirm={{
                                                 onConfirm: () =>
                                                     handleDelete(id),
                                             }}

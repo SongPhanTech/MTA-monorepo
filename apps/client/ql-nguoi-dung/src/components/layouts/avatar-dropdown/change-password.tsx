@@ -1,15 +1,16 @@
+import { env } from '@/env'
 import { SafetyCertificateOutlined } from '@ant-design/icons'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 function ChangePassword() {
-    const router = useRouter()
-    const handleChangePassword = () => {
-        router.push(String(process.env.NEXT_PUBLIC_MY_ACCOUNT))
-    }
     return (
         <div className="flex items-center gap-2 color-black ">
             <SafetyCertificateOutlined />
-            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-            <span onClick={handleChangePassword}>Đổi mật khẩu</span>
+            <Link
+                href={`${env.NEXT_PUBLIC_MY_ACCOUNT}/security`}
+                target="_blank"
+            >
+                Đổi mật khẩu
+            </Link>
         </div>
     )
 }

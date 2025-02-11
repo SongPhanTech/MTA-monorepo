@@ -48,6 +48,6 @@ enum PermissionType {
 }
 
 model Config extends Base {
-  key   String
+  key   String @unique
   value String
 }

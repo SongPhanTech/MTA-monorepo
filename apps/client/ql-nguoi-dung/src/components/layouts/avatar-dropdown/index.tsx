@@ -1,16 +1,15 @@
-import { UserOutlined } from '@ant-design/icons'
-// import ROUTER_PATH from '@constants/page-path'
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Dropdown, type MenuProps } from 'antd'
 import { usePathname } from 'next/navigation'
-import SignOut from './sign-out'
+import signOutAction from './sign-out'
 import AccountInformation from './account-information'
 import ChangePassword from './change-password'
+import { Button } from '@workspace/ui'
 
 const items: MenuProps['items'] = [
     {
         key: 'THONG_TIN_TAI_KHOAN',
-        // label: <Link href="#">Thông tin tài khoản</Link>,
-        label: <AccountInformation/>,
+        label: <AccountInformation />,
     },
     {
         key: 'DOI_MAT_KHAU',
@@ -18,14 +17,25 @@ const items: MenuProps['items'] = [
     },
     {
         key: 'DANG_XUAT',
-        label: <SignOut />,
+        label: (
+            <Button
+                onClick={signOutAction}
+                className="text-red-500 flex items-center gap-2"
+            >
+                <LogoutOutlined />
+                <span>Đăng xuất</span>
+            </Button>
+        ),
     },
-   
 ]
 const AvatarDropdown = () => {
     const pathname = usePathname()
     return (
-        <Dropdown menu={{ items }} placement="bottomLeft" className='cursor-pointer'>
+        <Dropdown
+            menu={{ items }}
+            placement="bottomLeft"
+            className="cursor-pointer"
+        >
             <Avatar size="large" icon={<UserOutlined />} />
         </Dropdown>
     )

@@ -6,7 +6,7 @@ import Select from '@components/commons/select'
 import useDisclosure from '@hooks/disclosure'
 import useQuyenCoBan from '@hooks/quyen-co-ban'
 import { useFindManyGroup, useFindUniqueRole } from '@workspace/db/hooks'
-import { Col, Form, Input } from 'antd'
+import { Col, Form, Input, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 export type PutVaiTroFormType = {
     id?: string
@@ -79,14 +79,19 @@ const PutVaiTroModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="permissions" label="Quyền" required>
-                    <Select
-                        mode="multiple"
+                    <TreeSelect
                         showSearch
-                        options={quyenCoBan.map((item) => ({
+                        treeCheckable
+                        showCheckedStrategy="SHOW_ALL"
+                        treeData={quyenCoBan.map((item) => ({
                             label: item.label,
                             value: item.id,
+                            children: item.children?.map((child) => ({
+                                label: child.label,
+                                value: child.id,
+                            })),
                         }))}
                     />
                 </FormItem>

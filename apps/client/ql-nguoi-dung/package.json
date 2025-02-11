@@ -22,6 +22,7 @@
 		"@workspace/db": "workspace:*",
 		"@workspace/router": "workspace:*",
 		"@workspace/ui": "workspace:*",
+		"@workspace/constant": "workspace:*",
 		"antd": "5.23.1",
 		"axios": "1.7.9",
 		"chart.js": "^4.4.7",

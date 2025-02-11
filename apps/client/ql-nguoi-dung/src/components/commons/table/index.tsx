@@ -1,5 +1,9 @@
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Empty, Table as TableAntd } from 'antd'
+import {
+    Empty,
+    Table as TableAntd,
+    type TableProps as TableAntdProps,
+} from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 type TableProps<T> = {
     columns?: ColumnsType<T>
@@ -7,7 +11,7 @@ type TableProps<T> = {
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
     }
-}
+} & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
     columns = [],

@@ -1,8 +1,16 @@
 {
-  "WEB": {
-    "INDEX": "/"
-  },
   "QL_NGUOI_DUNG": {
+    "INDEX": "/",
+    "HOME": "/home",
+    "GIOI_HAN_DIA_CHI_MANG": "/gioi-han-dia-chi-mang",
+    "NGUOI_DUNG_VAI_TRO": "/nguoi-dung/vai-tro",
+    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
+    "NGUOI_DUNG_QUYEN_CO_BAN": "/nguoi-dung/quyen-co-ban",
+    "NGUOI_DUNG_DANH_SACH": "/nguoi-dung/danh-sach",
+    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
+    "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho"
+  },
+  "QL_HE_THONG": {
     "INDEX": "/",
     "HOME": "/home",
     "GIOI_HAN_DIA_CHI_MANG": "/gioi-han-dia-chi-mang",

@@ -23,7 +23,7 @@ const PutNhomNguoiDungModal = () => {
         tag: PutNhomNguoiDungModal.name,
         onClose: form.resetFields,
     })
-    const { data: group } = useFindUniqueGroup({
+    const { data: group, isSuccess } = useFindUniqueGroup({
         where: {
             id: input,
         },
@@ -38,15 +38,21 @@ const PutNhomNguoiDungModal = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if (group) {
+        if (isSuccess) {
             form.setFieldsValue({
                 id: group.id,
                 name: group.name,
                 users: group.users.map((user) => user.id),
                 roles: group.roles.map((role) => role.id),
             })
+        } else {
+            form.setFieldsValue({
+                name: '',
+                users: [],
+                roles: [],
+            })
         }
-    }, [group])
+    }, [isSuccess])
 
     return (
         <PutFormModal

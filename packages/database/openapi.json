@@ -1962,6 +1962,9 @@
           "id": {
             "type": "string"
           },
+          "key": {
+            "type": "string"
+          },
           "AND": {
             "oneOf": [
               {
@@ -2040,16 +2043,6 @@
               {
                 "type": "string",
                 "format": "date-time"
-              }
-            ]
-          },
-          "key": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
-              },
-              {
-                "type": "string"
               }
             ]
           },

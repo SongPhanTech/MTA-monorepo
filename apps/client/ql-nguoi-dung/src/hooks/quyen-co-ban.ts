@@ -4,21 +4,17 @@ import { useMemo } from 'react'
 const useQuyenCoBan = () => {
     const quyenCoBan = useMemo(() => {
         return Object.entries(NAVIGATION).flatMap(([key, value]) =>
-            value.menus.flatMap((menu) =>
-                menu.children
-                    ? menu.children.map((child) => ({
-                          id: child.id,
-                          label: child.label,
-                          subSystem: key,
-                          description: child.description,
-                      }))
-                    : {
-                          id: menu.id,
-                          label: menu.label,
-                          subSystem: key,
-                          description: menu.description,
-                      }
-            )
+            value.menus.flatMap((menu, idx) => ({
+                id: menu.id,
+                label: menu.label,
+                subSystem: key,
+                description: menu.description,
+                index: `${idx + 1}`,
+                children: menu.children?.map((child, idxChild) => ({
+                    ...child,
+                    index: `${idx + 1}.${idxChild + 1}`,
+                })),
+            }))
         )
     }, [])
     return quyenCoBan
