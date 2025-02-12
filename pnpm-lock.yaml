@@ -15,8 +15,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.1
       turbo:
-        specifier: ^2.3.3
-        version: 2.3.3
+        specifier: ^2.4.1
+        version: 2.4.1
       typescript:
         specifier: 5.7.3
         version: 5.7.3
@@ -57,169 +57,6 @@ importers:
       orval:
         specifier: ^7.4.1
         version: 7.4.1(openapi-types@12.1.3)
-
-  apps/client/ql-he-thong:
-    dependencies:
-      '@ant-design/cssinjs':
-        specifier: ^1.22.1
-        version: 1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@ant-design/icons':
-        specifier: ^5.5.2
-        version: 5.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@ant-design/nextjs-registry':
-        specifier: ^1.0.2
-        version: 1.0.2(@ant-design/cssinjs@1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.23.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@casl/ability':
-        specifier: ^6.7.2
-        version: 6.7.3
-      '@casl/react':
-        specifier: ^4.0.0
-        version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
-      '@t3-oss/env-nextjs':
-        specifier: 0.12.0
-        version: 0.12.0(typescript@5.7.2)(zod@3.24.1)
-      '@tanstack/react-query':
-        specifier: ^5.62.3
-        version: 5.64.1(react@18.3.1)
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
-      '@workspace/router':
-        specifier: workspace:*
-        version: link:../../../packages/router
-      '@workspace/ui':
-        specifier: workspace:*
-        version: link:../../../packages/ui
-      antd:
-        specifier: 5.23.1
-        version: 5.23.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      axios:
-        specifier: 1.7.9
-        version: 1.7.9
-      chart.js:
-        specifier: ^4.4.7
-        version: 4.4.7
-      class-variance-authority:
-        specifier: ^0.7.1
-        version: 0.7.1
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
-      easy-peasy:
-        specifier: 6.0.5
-        version: 6.0.5(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      lucide-react:
-        specifier: ^0.468.0
-        version: 0.468.0(react@18.3.1)
-      next:
-        specifier: 15.0.4
-        version: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      next-auth:
-        specifier: 5.0.0-beta.25
-        version: 5.0.0-beta.25(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      qs:
-        specifier: ^6.13.1
-        version: 6.13.1
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-chartjs-2:
-        specifier: ^5.3.0
-        version: 5.3.0(chart.js@4.4.7)(react@18.3.1)
-      react-day-picker:
-        specifier: 8.10.1
-        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      react-icons:
-        specifier: 5.4.0
-        version: 5.4.0(react@18.3.1)
-      react-idle-timer:
-        specifier: ^5.7.2
-        version: 5.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-images-viewer:
-        specifier: ^1.7.1
-        version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-top-loading-bar:
-        specifier: ^2.3.1
-        version: 2.3.1(react@18.3.1)
-      tailwind-merge:
-        specifier: ^2.6.0
-        version: 2.6.0
-      zod:
-        specifier: ^3.23.8
-        version: 3.24.1
-    devDependencies:
-      '@biomejs/biome':
-        specifier: ^1.9.4
-        version: 1.9.4
-      '@openapi-codegen/cli':
-        specifier: ^2.0.2
-        version: 2.0.2(@swc/helpers@0.5.15)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@openapi-codegen/typescript':
-        specifier: ^8.0.2
-        version: 8.0.2
-      '@types/lodash':
-        specifier: ^4.17.13
-        version: 4.17.14
-      '@types/node':
-        specifier: '20'
-        version: 20.17.6
-      '@types/qs':
-        specifier: ^6.9.17
-        version: 6.9.18
-      '@types/react':
-        specifier: 18.3.14
-        version: 18.3.14
-      '@types/react-dom':
-        specifier: 18.3.2
-        version: 18.3.2
-      '@types/react-image-fallback':
-        specifier: ^8.0.6
-        version: 8.0.6
-      '@workspace/biome-config':
-        specifier: workspace:*
-        version: link:../../../packages/biome-config
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.49)
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
-      dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
-      glob:
-        specifier: ^11.0.0
-        version: 11.0.1
-      next-remove-imports:
-        specifier: ^1.0.12
-        version: 1.0.12(webpack@5.97.1(@swc/core@1.10.7(@swc/helpers@0.5.15)))
-      patch-package:
-        specifier: ^8.0.0
-        version: 8.0.0
-      postcss:
-        specifier: ^8.4.49
-        version: 8.4.49
-      prettier-plugin-tailwindcss:
-        specifier: ^0.6.9
-        version: 0.6.9(prettier@3.4.2)
-      tailwindcss:
-        specifier: ^3.4.17
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.10.7(@swc/helpers@0.5.15))(@types/node@20.17.6)(typescript@5.7.2))
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.10.7(@swc/helpers@0.5.15))(@types/node@20.17.6)(typescript@5.7.2)
-      typescript:
-        specifier: 5.7.2
-        version: 5.7.2
 
   apps/client/ql-nguoi-dung:
     dependencies:
@@ -397,10 +234,17 @@ importers:
         version: 5.7.3
 
   packages/constant:
+    dependencies:
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../database
     devDependencies:
       '@types/node':
         specifier: ^20.11.24
         version: 20.17.6
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -417,12 +261,6 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
-      '@openapi-codegen/cli':
-        specifier: ^2.0.2
-        version: 2.0.2(@swc/helpers@0.5.15)(@types/react@18.3.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@openapi-codegen/typescript':
-        specifier: ^8.0.2
-        version: 8.0.2
       '@zenstackhq/openapi':
         specifier: ^2.11.2
         version: 2.11.2(@prisma/client@6.2.1(prisma@6.2.1))
@@ -5283,38 +5121,38 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  turbo-darwin-64@2.3.3:
-    resolution: {integrity: sha512-bxX82xe6du/3rPmm4aCC5RdEilIN99VUld4HkFQuw+mvFg6darNBuQxyWSHZTtc25XgYjQrjsV05888w1grpaA==}
+  turbo-darwin-64@2.4.1:
+    resolution: {integrity: sha512-oos3Gz5N6ol2/7+ys0wPENhl7ZzeVKIumn2BR7X2oE5dEPxNPDMOpKBwreU9ToCxM94e+uFTzKgjcUJpBqpTHA==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@2.3.3:
-    resolution: {integrity: sha512-DYbQwa3NsAuWkCUYVzfOUBbSUBVQzH5HWUFy2Kgi3fGjIWVZOFk86ss+xsWu//rlEAfYwEmopigsPYSmW4X15A==}
+  turbo-darwin-arm64@2.4.1:
+    resolution: {integrity: sha512-NoIQsSSvCJDTShgX+v+doSP/g0kAhHhq5p2fpsEAlougs2wcQvwv/LndeqojzkHbxB39lOQmqBYHJcki46Q3oQ==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@2.3.3:
-    resolution: {integrity: sha512-eHj9OIB0dFaP6BxB88jSuaCLsOQSYWBgmhy2ErCu6D2GG6xW3b6e2UWHl/1Ho9FsTg4uVgo4DB9wGsKa5erjUA==}
+  turbo-linux-64@2.4.1:
+    resolution: {integrity: sha512-iXIeG8YhluaJF/5KQEudRf8ECBWND8X0yxXDrFIq2wmLLCg4A7gSSzVcBq30rYYeyyU4xMj/sm3HbsAaao3jjg==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@2.3.3:
-    resolution: {integrity: sha512-NmDE/NjZoDj1UWBhMtOPmqFLEBKhzGS61KObfrDEbXvU3lekwHeoPvAMfcovzswzch+kN2DrtbNIlz+/rp8OCg==}
+  turbo-linux-arm64@2.4.1:
+    resolution: {integrity: sha512-jd5apBV7lBGn3CnkQN/hEMbwazNgZcrwLt6DIkWy/TSi5xfSQEqcR3k9HxviQ7hKMcr1Q1hN6FHWm8Vw90Ej4A==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@2.3.3:
-    resolution: {integrity: sha512-O2+BS4QqjK3dOERscXqv7N2GXNcqHr9hXumkMxDj/oGx9oCatIwnnwx34UmzodloSnJpgSqjl8iRWiY65SmYoQ==}
+  turbo-windows-64@2.4.1:
+    resolution: {integrity: sha512-4RYRAijohyQ7uetZY4SSikSgGccq+7tmnljdm/XezpK9t0+3gldKA2vHF0++yLZeZr+CFgqmBeGSFi7B+vhc2g==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@2.3.3:
-    resolution: {integrity: sha512-dW4ZK1r6XLPNYLIKjC4o87HxYidtRRcBeo/hZ9Wng2XM/MqqYkAyzJXJGgRMsc0MMEN9z4+ZIfnSNBrA0b08ag==}
+  turbo-windows-arm64@2.4.1:
+    resolution: {integrity: sha512-4lZB0+AxWB01Adx5xHZhO746FgaHR0T3qzEDF2nf/nx8LAUtN3iwaZQgAsTsblaAKjiM7lxWDI0s/Q3fektsPg==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@2.3.3:
-    resolution: {integrity: sha512-DUHWQAcC8BTiUZDRzAYGvpSpGLiaOQPfYXlCieQbwUvmml/LRGIe3raKdrOPOoiX0DYlzxs2nH6BoWJoZrj8hA==}
+  turbo@2.4.1:
+    resolution: {integrity: sha512-XIIHXAhvD3sv34WLaN/969WTHCHYmm3zf0XQ+CrEP1A7ffIQG50cwNcp7Gh96CaGyjEXMh9odoHyggoZQ3Prvw==}
     hasBin: true
 
   typanion@3.14.0:
@@ -5870,29 +5708,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@apollo/client@3.12.5(@types/react@18.3.14)(graphql@15.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@15.9.0)
-      '@wry/caches': 1.0.1
-      '@wry/equality': 0.5.7
-      '@wry/trie': 0.5.0
-      graphql: 15.9.0
-      graphql-tag: 2.12.6(graphql@15.9.0)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.18.1
-      prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@18.3.14)(react@19.0.0)
-      response-iterator: 0.2.13
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.8.1
-      zen-observable-ts: 1.2.5
-    optionalDependencies:
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    transitivePeerDependencies:
-      - '@types/react'
-
   '@asgardeo/auth-js@2.0.15': {}
 
   '@asgardeo/auth-node@0.1.3':
@@ -6401,39 +6216,6 @@ snapshots:
       got-fetch: 5.1.10(got@12.6.1)
       graphql: 15.9.0
       ink: 3.2.0(@types/react@18.3.14)(react@18.3.1)
-      js-yaml: 4.1.0
-      openapi3-ts: 2.0.2
-      prettier: 3.4.2
-      rxjs: 7.8.1
-      slash: 4.0.0
-      swagger2openapi: 7.0.8
-      tslib: 2.8.1
-      typanion: 3.14.0
-      typescript: 4.8.2
-    transitivePeerDependencies:
-      - '@swc/helpers'
-      - '@types/react'
-      - bufferutil
-      - encoding
-      - graphql-ws
-      - react
-      - react-dom
-      - subscriptions-transport-ws
-      - utf-8-validate
-
-  '@openapi-codegen/cli@2.0.2(@swc/helpers@0.5.15)(@types/react@18.3.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@apollo/client': 3.12.5(@types/react@18.3.14)(graphql@15.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@swc/core': 1.10.7(@swc/helpers@0.5.15)
-      case: 1.6.3
-      chalk: 5.4.1
-      cli-highlight: 2.1.11
-      clipanion: 3.2.1(typanion@3.14.0)
-      fs-extra: 10.1.0
-      got: 12.6.1
-      got-fetch: 5.1.10(got@12.6.1)
-      graphql: 15.9.0
-      ink: 3.2.0(@types/react@18.3.14)(react@19.0.0)
       js-yaml: 4.1.0
       openapi3-ts: 2.0.2
       prettier: 3.4.2
@@ -9156,38 +8938,6 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  ink@3.2.0(@types/react@18.3.14)(react@19.0.0):
-    dependencies:
-      ansi-escapes: 4.3.2
-      auto-bind: 4.0.0
-      chalk: 4.1.2
-      cli-boxes: 2.2.1
-      cli-cursor: 3.1.0
-      cli-truncate: 2.1.0
-      code-excerpt: 3.0.0
-      indent-string: 4.0.0
-      is-ci: 2.0.0
-      lodash: 4.17.21
-      patch-console: 1.0.0
-      react: 19.0.0
-      react-devtools-core: 4.28.5
-      react-reconciler: 0.26.2(react@19.0.0)
-      scheduler: 0.20.2
-      signal-exit: 3.0.7
-      slice-ansi: 3.0.0
-      stack-utils: 2.0.6
-      string-width: 4.2.3
-      type-fest: 0.12.0
-      widest-line: 3.1.0
-      wrap-ansi: 6.2.0
-      ws: 7.5.10
-      yoga-layout-prebuilt: 1.10.0
-    optionalDependencies:
-      '@types/react': 18.3.14
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
   inline-style-prefixer@5.1.2:
     dependencies:
       css-in-js-utils: 2.0.1
@@ -11019,13 +10769,6 @@ snapshots:
       react: 18.3.1
       scheduler: 0.20.2
 
-  react-reconciler@0.26.2(react@19.0.0):
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 19.0.0
-      scheduler: 0.20.2
-
   react-scrolllock@3.0.2:
     dependencies:
       exenv: 1.2.2
@@ -11147,11 +10890,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.14
       react: 18.3.1
-
-  rehackt@0.1.0(@types/react@18.3.14)(react@19.0.0):
-    optionalDependencies:
-      '@types/react': 18.3.14
-      react: 19.0.0
 
   replace-string@3.1.0: {}
 
@@ -11839,32 +11577,32 @@ snapshots:
       tslib: 1.14.1
       typescript: 4.8.2
 
-  turbo-darwin-64@2.3.3:
+  turbo-darwin-64@2.4.1:
     optional: true
 
-  turbo-darwin-arm64@2.3.3:
+  turbo-darwin-arm64@2.4.1:
     optional: true
 
-  turbo-linux-64@2.3.3:
+  turbo-linux-64@2.4.1:
     optional: true
 
-  turbo-linux-arm64@2.3.3:
+  turbo-linux-arm64@2.4.1:
     optional: true
 
-  turbo-windows-64@2.3.3:
+  turbo-windows-64@2.4.1:
     optional: true
 
-  turbo-windows-arm64@2.3.3:
+  turbo-windows-arm64@2.4.1:
     optional: true
 
-  turbo@2.3.3:
+  turbo@2.4.1:
     optionalDependencies:
-      turbo-darwin-64: 2.3.3
-      turbo-darwin-arm64: 2.3.3
-      turbo-linux-64: 2.3.3
-      turbo-linux-arm64: 2.3.3
-      turbo-windows-64: 2.3.3
-      turbo-windows-arm64: 2.3.3
+      turbo-darwin-64: 2.4.1
+      turbo-darwin-arm64: 2.4.1
+      turbo-linux-64: 2.4.1
+      turbo-linux-arm64: 2.4.1
+      turbo-windows-64: 2.4.1
+      turbo-windows-arm64: 2.4.1
 
   typanion@3.14.0: {}
 

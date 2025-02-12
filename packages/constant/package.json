@@ -8,8 +8,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "@workspace/typescript-config": "workspace:*"
   },
   "dependencies": {
+		"@workspace/db": "workspace:*"
   }
 }

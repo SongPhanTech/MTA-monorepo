@@ -16,7 +16,12 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const quyenCoBan = useQuyenCoBan()
+    const { data: quyenCoBan, count } = useQuyenCoBan({
+        description: searchText,
+        id: searchText,
+        label: searchText,
+        subSystem: searchText,
+    })
     const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
@@ -58,11 +63,8 @@ export default function Page() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey={(record) => record.id}
                         columns={[
-                            {
-                                title: '',
-                                width: 1,
-                            },
                             {
                                 title: 'STT',
                                 width: 20,
@@ -72,10 +74,12 @@ export default function Page() {
                             {
                                 title: 'Tên quyền cơ bản',
                                 dataIndex: 'label',
+                                key: 'label',
                             },
                             {
                                 title: 'Mã quyền',
                                 dataIndex: 'id',
+                                key: 'id',
                             },
                             {
                                 title: 'Phân hệ',
@@ -87,6 +91,15 @@ export default function Page() {
                             },
                         ]}
                         data={quyenCoBan}
+                        pagination={{
+                            current: currentPage,
+                            total: count,
+                            pageSize: numberOfPages,
+                            onChange: (page, pageSize) => {
+                                setCurrentPage(page)
+                                setNumberOfPages(pageSize)
+                            },
+                        }}
                     />
                 </Col>
             </Row>
