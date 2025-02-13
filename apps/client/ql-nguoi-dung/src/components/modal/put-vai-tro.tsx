@@ -10,6 +10,7 @@ import { PERMISSION_TYPE } from '@workspace/constant'
 import type { $Enums } from '@workspace/db'
 import { useFindManyGroup, useFindUniqueRole } from '@workspace/db/hooks'
 import {
+    Card,
     Checkbox,
     type CheckboxProps,
     Col,
@@ -36,7 +37,8 @@ const PutVaiTroModal = () => {
     })
     const { data: quyenCoBan, dataFlat: quyenCoBanFlat } = useQuyenCoBan()
     const [form] = Form.useForm<PutVaiTroFormType>()
-    const permissions = Form.useWatch('permissions', form)
+    const permissions = Form.useWatch('permissions', form) ?? []
+
     const { data: role } = useFindUniqueRole({
         where: {
             id: input,
@@ -51,19 +53,28 @@ const PutVaiTroModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (input && role) {
+            const permissionGroup = Object.groupBy(
+                role.permissions,
+                ({ name }) => name
+            )
             form.setFieldsValue({
                 id: role.id,
                 description: role.description || '',
                 name: role.name,
                 groups: role.groups.map((group) => group.id),
-                permissions: Object.entries(
-                    Object.groupBy(role.permissions, ({ name }) => name)
-                ).map(([name, permissions]) => ({
-                    name,
-                    permissionTypes: permissions?.map(
-                        ({ permissionType }) => permissionType
-                    ),
-                })),
+                permissions: Object.entries(permissionGroup).map(
+                    ([name, permissions]) => ({
+                        id: name,
+                        value: name,
+                        label:
+                            quyenCoBanFlat
+                                .find((q) => q.id === name)
+                                ?.label?.toString() || '',
+                        permissionTypes: permissions?.map(
+                            ({ permissionType }) => permissionType
+                        ),
+                    })
+                ),
             })
         }
     }, [role, input])
@@ -75,7 +86,7 @@ const PutVaiTroModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             title={input ? 'Chỉnh sửa vai trò' : 'Thêm mới vai trò'}
-            className="w-3/4"
+            className="w-3/4 z-10"
         >
             <FormItem form={form} name="id" hidden>
                 <Input />
@@ -106,21 +117,20 @@ const PutVaiTroModal = () => {
                 <FormItem
                     form={form}
                     normalize={(
-                        current: string[],
-                        prev: PutVaiTroFormType['permissions']
+                        value: string[] = [],
+                        prev: PutVaiTroFormType['permissions'] = []
                     ) => {
-                        return current.flatMap((id) => {
-                            const findQuyenCoBan = quyenCoBanFlat.find(
-                                (item) => item.id === id
+                        return value.map((item) => {
+                            const quyen = quyenCoBanFlat.find(
+                                (q) => q.id === item
                             )
+                            const prevItem = prev.find((p) => p.id === item)
                             return {
-                                id,
-                                value: id,
-                                permissionTypes:
-                                    prev?.find((item) => item.id === id)
-                                        ?.permissionTypes ?? [],
-                                ...findQuyenCoBan,
-                                children: undefined,
+                                id: item,
+                                value: item,
+                                permissionTypes: [],
+                                label: quyen?.label || '',
+                                ...prevItem,
                             }
                         })
                     }}
@@ -143,90 +153,55 @@ const PutVaiTroModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <Table
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 20,
-                            align: 'center',
-                            dataIndex: 'index',
-                        },
-                        {
-                            title: 'Mã',
-                            dataIndex: 'id',
-                            key: 'id',
-                        },
-                        {
-                            title: 'Tên',
-                            dataIndex: 'label',
-                        },
-                        {
-                            title: 'Loại quyền',
-                            render: (_, { id }) => {
-                                const checkedList =
-                                    permissions?.find((item) => item.id === id)
-                                        ?.permissionTypes ?? []
-                                const checkAll =
-                                    PERMISSION_TYPE.length ===
-                                    checkedList.length
-                                const indeterminate =
-                                    checkedList.length > 0 &&
-                                    checkedList.length < PERMISSION_TYPE.length
-                                const onChange = (
-                                    list: $Enums.PermissionType[]
-                                ) => {
-                                    const payload = permissions
-                                        ? permissions.map((item) => {
-                                              if (item.id === id) {
-                                                  return {
-                                                      ...item,
-                                                      permissionTypes: list,
-                                                  }
-                                              }
-                                              return item
-                                          })
-                                        : [
-                                              {
-                                                  id,
-                                                  permissionTypes: list,
-                                              },
-                                          ]
-                                    form.setFieldValue('permissions', payload)
-                                }
+            <Col span={24} className="flex flex-wrap gap-4">
+                {permissions.map(({ label, permissionTypes, id }) => {
+                    const checkedList = permissionTypes ?? []
+                    const checkAll =
+                        PERMISSION_TYPE.length === checkedList.length
+                    const indeterminate =
+                        checkedList.length > 0 &&
+                        checkedList.length < PERMISSION_TYPE.length
 
-                                const onCheckAllChange: CheckboxProps['onChange'] =
-                                    (e) => {
-                                        const list = e.target.checked
-                                            ? PERMISSION_TYPE.map(
-                                                  (item) => item.value
-                                              )
-                                            : []
-                                        onChange(list)
+                    const onChange = (list: $Enums.PermissionType[]) => {
+                        form.setFieldsValue({
+                            permissions: permissions.map((item) => {
+                                if (item.id === id) {
+                                    return {
+                                        ...item,
+                                        permissionTypes: list,
                                     }
-
-                                return (
-                                    <Row className="justify-center">
-                                        <Checkbox
-                                            indeterminate={indeterminate}
-                                            onChange={onCheckAllChange}
-                                            checked={checkAll}
-                                        >
-                                            Chọn tất cả
-                                        </Checkbox>
-                                        <Divider />
-                                        <Checkbox.Group
-                                            options={PERMISSION_TYPE}
-                                            value={checkedList}
-                                            onChange={onChange}
-                                        />
-                                    </Row>
-                                )
-                            },
-                        },
-                    ]}
-                    data={permissions}
-                />
+                                }
+                                return item
+                            }),
+                        })
+                    }
+                    const onCheckAllChange: CheckboxProps['onChange'] = (e) => {
+                        const list = e.target.checked
+                            ? PERMISSION_TYPE.map((e) => e.value)
+                            : []
+                        onChange(list)
+                    }
+                    return (
+                        <Card key={id} title={label} style={{ width: 300 }}>
+                            <div className="flex flex-col justify-center items-center">
+                                <Checkbox
+                                    indeterminate={indeterminate}
+                                    onChange={onCheckAllChange}
+                                    checked={checkAll}
+                                >
+                                    Chọn tất cả
+                                </Checkbox>
+                                <Divider />
+                                <Checkbox.Group
+                                    className="gap-2 justify-between"
+                                    options={PERMISSION_TYPE}
+                                    value={checkedList}
+                                    onChange={onChange}
+                                />
+                            </div>
+                        </Card>
+                    )
+                })}
             </Col>
         </PutFormModal>
     )

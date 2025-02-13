@@ -66,20 +66,21 @@ export default function Page() {
                     data: {
                         name: output.name,
                         permissions: {
-                            connectOrCreate: output.permissions.map((item) => ({
-                                where: {
-                                    name_permissionType: {
-                                        name: item,
-                                        permissionType:
-                                            $Enums.PermissionType.CREATE,
-                                    },
-                                },
-                                create: {
-                                    name: item,
-                                    permissionType:
-                                        $Enums.PermissionType.CREATE,
-                                },
-                            })),
+                            connectOrCreate: output.permissions.flatMap(
+                                (item) =>
+                                    item.permissionTypes.map((type) => ({
+                                        where: {
+                                            name_permissionType: {
+                                                name: item.id,
+                                                permissionType: type,
+                                            },
+                                        },
+                                        create: {
+                                            name: item.id,
+                                            permissionType: type,
+                                        },
+                                    }))
+                            ),
                         },
                         groups: {
                             connect: output.groups.map((item) => ({
@@ -94,21 +95,21 @@ export default function Page() {
                     data: {
                         name: output.name,
                         permissions: {
-                            connectOrCreate: output.permissions.map((item) => ({
-                                where: {
-                                    name_permissionType: {
-                                        name: item,
-                                        permissionType:
-                                            $Enums.PermissionType.CREATE,
-                                    },
-                                },
-                                create: {
-                                    id: output.id,
-                                    name: item,
-                                    permissionType:
-                                        $Enums.PermissionType.CREATE,
-                                },
-                            })),
+                            connectOrCreate: output.permissions.flatMap(
+                                (item) =>
+                                    item.permissionTypes.map((type) => ({
+                                        where: {
+                                            name_permissionType: {
+                                                name: item.id,
+                                                permissionType: type,
+                                            },
+                                        },
+                                        create: {
+                                            name: item.id,
+                                            permissionType: type,
+                                        },
+                                    }))
+                            ),
                         },
                         groups: {
                             connect: output.groups.map((item) => ({

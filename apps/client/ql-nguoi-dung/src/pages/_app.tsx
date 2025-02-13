@@ -82,8 +82,8 @@ function App({ Component, pageProps }: AppProps) {
                             }}
                         >
                             {getLayout(<Component {...pageProps} />)}
-                            <Spinner />
                             <ModalWrapper />
+                            <Spinner />
                         </ZenStackHooksProvider>
                     </QueryClientProvider>
                 </ConfigProvider>

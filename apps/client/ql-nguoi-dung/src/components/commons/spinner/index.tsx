@@ -29,7 +29,12 @@ export function Spinner({ size, className }: SpinnerContentProps) {
     const { isShow } = useSpinner()
     if (!isShow) return null
     return (
-        <div className="fixed z-50 top-0 left-0 right-0 w-full h-full backdrop-blur-sm justify-center flex items-center">
+        <div
+            className="fixed top-0 left-0 right-0 w-full h-full backdrop-blur-sm justify-center flex items-center"
+            style={{
+                zIndex: 9998,
+            }}
+        >
             <Loader2
                 className={cn(
                     loaderVariants({ size, show: isShow }),

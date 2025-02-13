@@ -66,6 +66,11 @@ export default function Page() {
                         rowKey={(record) => record.id}
                         columns={[
                             {
+                                title: '',
+                                width: 20,
+                                className: 'pr-1',
+                            },
+                            {
                                 title: 'STT',
                                 width: 20,
                                 align: 'center',
