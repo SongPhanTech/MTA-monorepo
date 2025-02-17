@@ -7,6 +7,8 @@ import { csrf } from 'hono/csrf'
 import { logger } from 'hono/logger'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
+import { HTTPException } from 'hono/http-exception'
+import { Registry, collectDefaultMetrics } from 'prom-client'
 import GroupApp from './api/group'
 import ISConfig from './api/is/configs'
 import UserApp from './api/user'
@@ -16,11 +18,23 @@ import { setupOpenApi } from './utils/openapi'
 
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
+const register = new Registry()
+
+collectDefaultMetrics({ register })
+
+app.get('/metrics', async (c) => {
+    c.header('Content-Type', register.contentType)
+    return c.text(await register.metrics())
+})
 
 app.use(
     '*',
     cors({
-        origin: ['http://localhost:3000', 'https://*.swantech.vn'],
+        origin: [
+            'http://localhost:3000',
+            'https://user.mta.swantech.vn',
+            'https://*.swantech.vn',
+        ],
         credentials: true,
     })
 )
@@ -60,6 +74,10 @@ app.onError((err, c) => {
         }
 
         return c.json({ message: err.message }, status)
+    }
+
+    if (err instanceof HTTPException) {
+        return err.getResponse()
     }
 
     return c.json({ message: err.message }, 500)
