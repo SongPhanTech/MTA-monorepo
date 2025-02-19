@@ -1,0 +1,143 @@
+version: "3"
+
+dotenv: [".env"]
+
+interval: 500ms
+
+tasks:
+  dev:
+    desc: Build and serve the project with hot reloading
+    watch: true
+    sources:
+      - "**/*.go"
+      - "**/*.sql"
+      - "**/*.js"
+      - "**/*.css"
+      - "**/*.json"
+      - exclude: "./.git/**"
+      - exclude: "./node_modules/**"
+      - exclude: "./internal/database/dbgen/**"
+      - exclude: "./internal/view/static/build/**"
+      - exclude: "./temp/**"
+      - exclude: "./tmp/**"
+      - exclude: "./dist/**"
+      - exclude: "**/*.test.go"
+      - exclude: "**/*.generated.go"
+      - exclude: "**/*.sql.go"
+      - exclude: "**/*.gen.go"
+      - exclude: "**/*.gen.sql"
+      - exclude: "**/*.min.css"
+      - exclude: "**/*.min.js"
+    deps:
+      - build
+    cmds:
+      - ./dist/app
+
+  build:
+    desc: Build the project
+    deps:
+      - gen-db
+      - build-static
+    cmds:
+      - go build -o ./dist/app ./cmd/app/.
+      - go build -o ./dist/change-password ./cmd/changepw/.
+
+  serve:
+    desc: Serve the built project
+    cmd: ./dist/app
+
+  migrate-serve:
+    desc: Run migrations and then serve the built project
+    cmds:
+      - task goose -- up
+      - task serve
+
+  run:
+    desc: Build the project and then serve it
+    cmds:
+      - task build
+      - task serve
+
+  goose:
+    desc: Run goose commands Ex. task goose -- up
+    silent: true
+    cmd: >
+      goose
+      -dir ./internal/database/migrations
+      postgres "{{.PBW_POSTGRES_CONN_STRING}}"
+      {{.CLI_ARGS}}
+
+  gen-db:
+    desc: Generate sqlc files
+    silent: true
+    cmds:
+      - deno run -A ./scripts/sqlc-prebuild.ts
+      - sqlc generate
+    sources:
+      - ./internal/service/**/*.sql
+    generates:
+      - ./internal/database/queries.gen.sql
+      - ./internal/database/dbgen/*.go
+
+  reset-db:
+    desc: Reset the database
+    cmd: go run ./cmd/resetdb/.
+
+  build-static:
+    desc: Build the static files (css and js)
+    silent: true
+    cmds:
+      - >
+          deno task tailwindcss --
+          --minify
+          --config ./tailwind.config.ts
+          --input ./internal/view/static/css/style.css
+          --output ./internal/view/static/build/style.min.css
+      - deno run -A ./scripts/build-js.ts
+
+  tidy:
+    desc: Tidy the go.mod file
+    cmd: go mod tidy
+
+  fmt:
+    desc: Format the go and js files
+    cmds:
+      - go fmt ./...
+      - deno fmt
+
+  lint-only:
+    desc: Lint the go and js files
+    cmds:
+      - task gen-db
+      - golangci-lint run ./...
+      - deno lint
+
+  test-only:
+    desc: Run the tests
+    cmds:
+      - task gen-db
+      - go test ./...
+
+  check-deps:
+    desc: Check if all required dependencies are installed
+    silent: true
+    cmds:
+      - chmod +x ./scripts/check_deps.sh
+      - ./scripts/check_deps.sh
+
+  test:
+    desc: Run the checks, linters and tests
+    cmds:
+      - task check-deps
+      - task lint-only
+      - task test-only
+
+  clean:
+    desc: Clean the temporary and distribution folders
+    cmds:
+      - rm -rf ./tmp
+      - rm -rf ./dist
+
+  fixperms:
+    desc: Fixes the permissions of the files in the project
+    cmd: chmod -R 777 ./

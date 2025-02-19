@@ -2,6 +2,7 @@ import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
+import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
@@ -12,7 +13,10 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
-const DefaultLayout = ({ children }: { children: ReactNode }) => {
+const DefaultLayout = ({
+    children,
+    className,
+}: { children: ReactNode; className?: string }) => {
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -96,7 +100,10 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                             style={{
                                 background: colorBgContainer,
                             }}
-                            className="min-h-[100vh] rounded shadow p-6 pt-2"
+                            className={cn(
+                                'min-h-[100vh] rounded shadow p-6 pt-2',
+                                className
+                            )}
                         >
                             {children}
                         </div>

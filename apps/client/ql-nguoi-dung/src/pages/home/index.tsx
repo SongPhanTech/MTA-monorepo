@@ -1,8 +1,15 @@
 import DefaultLayout from '@layouts/default-layout'
-import React from 'react'
 
 function Home() {
-    return <DefaultLayout>Home</DefaultLayout>
+    return (
+        <DefaultLayout className="p-0">
+            <iframe
+                title="backup"
+                className="w-full h-full"
+                src={'http://localhost:8085'}
+            />
+        </DefaultLayout>
+    )
 }
 
 export default Home
