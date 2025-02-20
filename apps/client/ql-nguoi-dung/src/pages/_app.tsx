@@ -1,6 +1,5 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
-import ModalWrapper from '@components/modal/wrapper'
 import { colors } from '@constants/colors'
 import { API_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
@@ -18,6 +17,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import LoadingBar from 'react-top-loading-bar'
+import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
+import * as modals from '@components/modal'
+
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
@@ -81,9 +83,10 @@ function App({ Component, pageProps }: AppProps) {
                                 fetch: fetchInstance,
                             }}
                         >
-                            {getLayout(<Component {...pageProps} />)}
-                            <ModalWrapper />
-                            <Spinner />
+                            <ReactHookModalProvider modals={modals}>
+                                {getLayout(<Component {...pageProps} />)}
+                                <Spinner />
+                            </ReactHookModalProvider>
                         </ZenStackHooksProvider>
                     </QueryClientProvider>
                 </ConfigProvider>

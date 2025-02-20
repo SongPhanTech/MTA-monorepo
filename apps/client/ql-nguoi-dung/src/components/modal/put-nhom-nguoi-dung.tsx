@@ -3,7 +3,7 @@ import PutFormModal, {
     type PutModalFormType,
 } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import useDisclosure from '@hooks/disclosure'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import {
     useFindManyRole,
     useFindManyUser,

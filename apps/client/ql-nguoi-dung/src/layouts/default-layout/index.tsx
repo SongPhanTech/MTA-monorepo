@@ -2,6 +2,7 @@ import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
+import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -23,6 +24,7 @@ const DefaultLayout = ({
             localStorage.getItem('collapsed') === 'true'
         )
     })
+    const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
@@ -75,7 +77,7 @@ const DefaultLayout = ({
                             </span>
                         </div>
                     }
-                    items={NAVIGATION.QL_NGUOI_DUNG.menus}
+                    items={menus}
                     onCollapse={handleCollapsed}
                     collapsed={collapsed}
                     theme={'light'}

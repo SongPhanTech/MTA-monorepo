@@ -53,17 +53,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async session({ session, token }) {
             if (token) {
-                const res = await fetch(
-                    `${env.AUTH_ASGARDEO_ISSUER.replace('/oauth2/token', '')}/oauth2/userinfo`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token.access_token}`,
-                        },
-                    }
-                )
-                if (!res.ok) {
-                    throw new Error('Failed to fetch user')
-                }
+                // const res = await fetch(
+                //     `${env.AUTH_ASGARDEO_ISSUER.replace('/oauth2/token', '')}/oauth2/userinfo`,
+                //     {
+                //         headers: {
+                //             Authorization: `Bearer ${token.access_token}`,
+                //         },
+                //     }
+                // )
+                // if (!res.ok) {
+                //     throw new Error('Failed to fetch user')
+                // }
                 session.user.user_id = token.user_id
                 session.user.username = token.username
                 session.user.access_token = token.access_token

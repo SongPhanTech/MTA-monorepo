@@ -1,18 +1,11 @@
 import Loading from '@components/commons/loading'
 import { useMenuList } from '@hooks/menu-list'
-import { useStoreActions, useStoreState } from '@redux/hook'
 import type { NextPage } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
     const { status } = useSession()
-    const isUpdateAbility = useStoreState(
-        (state) => state.appState.isUpdateAbility
-    )
-    const setIsUpdateAbility = useStoreActions(
-        (actions) => actions.appState.setIsUpdateAbility
-    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -23,7 +16,7 @@ const IndexPage: NextPage = () => {
                 window.location.href = firstMenu[0].path
             }
         }
-    }, [isUpdateAbility, status])
+    }, [status])
 
     return <Loading />
 }

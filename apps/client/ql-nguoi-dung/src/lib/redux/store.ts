@@ -1,10 +1,9 @@
 import { createStore } from 'easy-peasy'
 import type { StoreModel } from './models'
-import { appState, dialog, imageViewer } from './stores'
+import { appState, imageViewer } from './stores'
 
 const model: StoreModel = {
     appState,
-    dialog,
     imageViewer,
 }
 

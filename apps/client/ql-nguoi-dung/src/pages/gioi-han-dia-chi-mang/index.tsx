@@ -6,7 +6,7 @@ import PutGioiHanDiaChiMangDungModal, {
     type PutGioiHanDiaChiMangFormType,
 } from '@components/modal/put-gioi-han-dia-chi-mang'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useDisclosure from '@hooks/disclosure'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
@@ -30,7 +30,7 @@ import {
 } from 'antd'
 import _ from 'lodash'
 import { useState } from 'react'
-
+import { Can } from '@lib/casl/can'
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -134,9 +134,14 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                <Can
+                                    I={'GIOI_HAN_DIA_CHI_MANG'}
+                                    a='CREATE'
+                                >
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                </Can>
                             </Flex>
                         </Col>
                         {/* row filter */}

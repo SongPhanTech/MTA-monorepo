@@ -1,8 +1,8 @@
-import useDisclosure from '@hooks/disclosure'
 import { Modal } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ConfirmModal = () => {
-    const { isOpen, input } = useDisclosure({
+    const { isOpen, input } = useDisclosure<string>({
         tag: ConfirmModal.name,
     })
 

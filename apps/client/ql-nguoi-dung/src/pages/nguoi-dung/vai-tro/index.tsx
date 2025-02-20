@@ -4,11 +4,9 @@ import DeleteIcon from '@components/icons/delete'
 import { PutVaiTroModal } from '@components/modal'
 import type { PutVaiTroFormType } from '@components/modal/put-vai-tro'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useDisclosure from '@hooks/disclosure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import { $Enums } from '@workspace/db'
 import {
     useCountRole,
     useCreateRole,
@@ -27,8 +25,8 @@ import {
     message,
 } from 'antd'
 import _ from 'lodash'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Page() {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -46,7 +44,6 @@ export default function Page() {
     })
     const { data: count } = useCountRole()
 
-    const router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutVaiTroFormType>({
         tag: PutVaiTroModal.name,

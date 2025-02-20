@@ -14,7 +14,7 @@ import PutFormModal, {
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import useDisclosure from '@hooks/disclosure'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import { formatDateReadable, generatePassword } from '@lib/utils'
 import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Space, Tooltip, message } from 'antd'
@@ -200,61 +200,62 @@ const PutNguoiDungModal = () => {
                     </Space.Compact>
                 </FormItem>
             </Col>
-
-            <Table
-                columns={[
-                    {
-                        title: 'STT',
-                        width: 20,
-                        align: 'center',
-                        render: (_, __, index) => index + 1,
-                    },
-                    {
-                        title: 'userAgent',
-                        dataIndex: 'userAgent',
-                    },
-                    {
-                        title: 'IP',
-                        dataIndex: 'ip',
-                    },
-                    {
-                        title: 'Login time',
-                        dataIndex: 'loginTime',
-                        render: (_, { loginTime }) =>
-                            loginTime ? formatDateReadable(loginTime) : '',
-                    },
-                    {
-                        title: 'Last access time',
-                        dataIndex: 'lastAccessTime',
-                        render: (_, { lastAccessTime }) =>
-                            lastAccessTime
-                                ? formatDateReadable(lastAccessTime)
-                                : '',
-                    },
-                    {
-                        title: 'Thao tác',
-                        width: 100,
-                        align: 'center',
-                        render: (_, { id: sessionId }) => (
-                            <DeleteIcon
-                                popConfirm={{
-                                    onConfirm: () => {
-                                        fetchTerminateSessionBySessionId({
-                                            pathParams: {
-                                                id: id || '',
-                                                sessionId: sessionId || '',
-                                            },
-                                        })
-                                        refetchSessions()
-                                    },
-                                }}
-                            />
-                        ),
-                    },
-                ]}
-                data={sessions?.sessions || []}
-                pagination={{ hideOnSinglePage: true }}
-            />
+            <Col span={24}>
+                <Table
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 20,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'userAgent',
+                            dataIndex: 'userAgent',
+                        },
+                        {
+                            title: 'IP',
+                            dataIndex: 'ip',
+                        },
+                        {
+                            title: 'Thời gian đăng nhập',
+                            dataIndex: 'loginTime',
+                            render: (_, { loginTime }) =>
+                                loginTime ? formatDateReadable(loginTime) : '',
+                        },
+                        {
+                            title: 'Thời gian truy cập cuối',
+                            dataIndex: 'lastAccessTime',
+                            render: (_, { lastAccessTime }) =>
+                                lastAccessTime
+                                    ? formatDateReadable(lastAccessTime)
+                                    : '',
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            render: (_, { id: sessionId }) => (
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () => {
+                                            fetchTerminateSessionBySessionId({
+                                                pathParams: {
+                                                    id: id || '',
+                                                    sessionId: sessionId || '',
+                                                },
+                                            })
+                                            refetchSessions()
+                                        },
+                                    }}
+                                />
+                            ),
+                        },
+                    ]}
+                    data={sessions?.sessions || []}
+                    pagination={{ hideOnSinglePage: true }}
+                />
+            </Col>
         </PutFormModal>
     )
 }

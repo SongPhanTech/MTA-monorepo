@@ -2,9 +2,9 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal, {
     type PutModalFormType,
 } from '@components/commons/put-modal'
-import useDisclosure from '@hooks/disclosure'
 import { Col, Form, Input } from 'antd'
 import { type ChangeEvent, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutChangePasswordFormType = {
     oldPassword: string
     newPassword: string

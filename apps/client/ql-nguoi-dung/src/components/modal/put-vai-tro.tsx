@@ -3,8 +3,6 @@ import PutFormModal, {
     type PutModalFormType,
 } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import Table from '@components/commons/table'
-import useDisclosure from '@hooks/disclosure'
 import useQuyenCoBan from '@hooks/quyen-co-ban'
 import { PERMISSION_TYPE } from '@workspace/constant'
 import type { $Enums } from '@workspace/db'
@@ -17,10 +15,10 @@ import {
     Divider,
     Form,
     Input,
-    Row,
-    TreeSelect,
+    TreeSelect
 } from 'antd'
 import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutVaiTroFormType = {
     id?: string
     name: string
@@ -29,6 +27,11 @@ export type PutVaiTroFormType = {
         permissionTypes: $Enums.PermissionType[]
         id: string
         label: string
+        parent?: {
+            id: string
+            label: React.ReactNode
+        }
+        index: string
     }>
 } & PutModalFormType
 const PutVaiTroModal = () => {
@@ -63,17 +66,21 @@ const PutVaiTroModal = () => {
                 name: role.name,
                 groups: role.groups.map((group) => group.id),
                 permissions: Object.entries(permissionGroup).map(
-                    ([name, permissions]) => ({
-                        id: name,
-                        value: name,
-                        label:
-                            quyenCoBanFlat
-                                .find((q) => q.id === name)
-                                ?.label?.toString() || '',
-                        permissionTypes: permissions?.map(
-                            ({ permissionType }) => permissionType
-                        ),
-                    })
+                    ([name, permissions]) => {
+                        const quyenCoban = quyenCoBanFlat.find(
+                            (q) => q.id === name
+                        )
+                        return {
+                            id: name,
+                            value: name,
+                            label: quyenCoban?.label?.toString() || '',
+                            permissionTypes: permissions?.map(
+                                ({ permissionType }) => permissionType
+                            ),
+                            index: quyenCoban?.index || '',
+                            parent: quyenCoban?.parent,
+                        }
+                    }
                 ),
             })
         }
@@ -130,6 +137,8 @@ const PutVaiTroModal = () => {
                                 value: item,
                                 permissionTypes: [],
                                 label: quyen?.label || '',
+                                parent: quyen?.parent,
+                                index: quyen?.index || '',
                                 ...prevItem,
                             }
                         })
@@ -154,54 +163,68 @@ const PutVaiTroModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="flex flex-wrap gap-4">
-                {permissions.map(({ label, permissionTypes, id }) => {
-                    const checkedList = permissionTypes ?? []
-                    const checkAll =
-                        PERMISSION_TYPE.length === checkedList.length
-                    const indeterminate =
-                        checkedList.length > 0 &&
-                        checkedList.length < PERMISSION_TYPE.length
+                {permissions.map(
+                    ({ label, permissionTypes, id, index, parent }) => {
+                        const checkedList = permissionTypes ?? []
+                        const checkAll =
+                            PERMISSION_TYPE.length === checkedList.length
+                        const indeterminate =
+                            checkedList.length > 0 &&
+                            checkedList.length < PERMISSION_TYPE.length
 
-                    const onChange = (list: $Enums.PermissionType[]) => {
-                        form.setFieldsValue({
-                            permissions: permissions.map((item) => {
-                                if (item.id === id) {
-                                    return {
-                                        ...item,
-                                        permissionTypes: list,
+                        const onChange = (list: $Enums.PermissionType[]) => {
+                            form.setFieldsValue({
+                                permissions: permissions.map((item) => {
+                                    if (item.id === id) {
+                                        return {
+                                            ...item,
+                                            permissionTypes: list,
+                                        }
                                     }
+                                    return item
+                                }),
+                            })
+                        }
+                        const onCheckAllChange: CheckboxProps['onChange'] = (
+                            e
+                        ) => {
+                            const list = e.target.checked
+                                ? PERMISSION_TYPE.map((e) => e.value)
+                                : []
+                            onChange(list)
+                        }
+                        return (
+                            <Card
+                                key={id}
+                                className='w-[336px]'
+                                title={
+                                    <span
+                                        className='text-xs'
+                                    >{[index, parent?.label, label]
+                                        .filter(Boolean)
+                                        .join(' - ')}</span>
                                 }
-                                return item
-                            }),
-                        })
+                            >
+                                <div className="flex flex-col justify-center items-center">
+                                    <Checkbox
+                                        indeterminate={indeterminate}
+                                        onChange={onCheckAllChange}
+                                        checked={checkAll}
+                                    >
+                                        Chọn tất cả
+                                    </Checkbox>
+                                    <Divider />
+                                    <Checkbox.Group
+                                        className="gap-2 justify-between"
+                                        options={PERMISSION_TYPE}
+                                        value={checkedList}
+                                        onChange={onChange}
+                                    />
+                                </div>
+                            </Card>
+                        )
                     }
-                    const onCheckAllChange: CheckboxProps['onChange'] = (e) => {
-                        const list = e.target.checked
-                            ? PERMISSION_TYPE.map((e) => e.value)
-                            : []
-                        onChange(list)
-                    }
-                    return (
-                        <Card key={id} title={label} style={{ width: 300 }}>
-                            <div className="flex flex-col justify-center items-center">
-                                <Checkbox
-                                    indeterminate={indeterminate}
-                                    onChange={onCheckAllChange}
-                                    checked={checkAll}
-                                >
-                                    Chọn tất cả
-                                </Checkbox>
-                                <Divider />
-                                <Checkbox.Group
-                                    className="gap-2 justify-between"
-                                    options={PERMISSION_TYPE}
-                                    value={checkedList}
-                                    onChange={onChange}
-                                />
-                            </div>
-                        </Card>
-                    )
-                })}
+                )}
             </Col>
         </PutFormModal>
     )

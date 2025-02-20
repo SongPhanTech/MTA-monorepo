@@ -28,6 +28,10 @@ const useQuyenCoBan = (input?: Partial<QuyenCoBanInput>) => {
                     key: child.id,
                     subSystem: value.label,
                     index: `${idx + 1}.${idxChild + 1}`,
+                    parent: {
+                        id: menu.id,
+                        label: menu.label,
+                    }
                 })),
             }))
         )
@@ -38,19 +42,27 @@ const useQuyenCoBan = (input?: Partial<QuyenCoBanInput>) => {
             value.menus.flatMap((menu, idx) =>
                 menu.children
                     ? menu.children?.map((child, idxChild) => ({
-                          ...child,
-                          key: child.id,
-                          subSystem: value.label,
-                          index: `${idx + 1}.${idxChild + 1}`,
-                      }))
+                        ...child,
+                        key: child.id,
+                        subSystem: value.label,
+                        index: `${idx + 1}.${idxChild + 1}`,
+                        parent: {
+                            id: menu.id,
+                            label: menu.label,
+                        },
+                    }))
                     : {
-                          id: menu.id,
-                          label: menu.label,
-                          key: menu.id,
-                          subSystem: value.label,
-                          description: menu.description,
-                          index: `${idx + 1}`,
-                      }
+                        id: menu.id,
+                        label: menu.label,
+                        key: menu.id,
+                        subSystem: value.label,
+                        description: menu.description,
+                        index: `${idx + 1}`,
+                        parent: {
+                            id: '',
+                            label: '',
+                        }
+                    }
             )
         )
     }, [])
