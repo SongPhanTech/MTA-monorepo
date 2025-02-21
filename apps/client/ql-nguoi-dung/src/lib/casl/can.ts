@@ -2,6 +2,7 @@ import type { $Enums } from '@workspace/db'
 import NAVIGATION, { type ROUTER_PATH } from '@workspace/router'
 import { useAbility } from './hooks'
 import { useMenuList } from '@hooks/menu-list'
+import { useMemo } from 'react'
 
 type CanProps = {
     children: React.ReactNode
@@ -22,7 +23,7 @@ const menus = NAVIGATION.QL_NGUOI_DUNG.menus.flatMap((menu) => {
 })
 const Can = ({ children, I, a }: CanProps) => {
     const { can } = useAbility()
-    const subject = menus.find((menu) => menu.id === I)?.path ?? I
+    const subject = useMemo(() => menus.find((menu) => menu.id === I)?.path ?? I, [I])
     if (!can(subject, a)) {
         return null
     }
