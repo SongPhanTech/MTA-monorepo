@@ -1,20 +1,23 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { SpanKind, context, trace } from '@opentelemetry/api'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
+import { contextStorage, getContext } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
-import { logger } from 'hono/logger'
-import type { ContentfulStatusCode } from 'hono/utils/http-status'
-
 import { HTTPException } from 'hono/http-exception'
+import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
 import GroupApp from './api/group'
 import ISConfig from './api/is/configs'
 import UserApp from './api/user'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
+import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
+
+import './otel'
 
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
@@ -40,12 +43,11 @@ app.use(
 )
 
 app.use(csrf())
-app.use(logger())
-
+app.use(contextStorage())
+app.use(tracingMiddleware)
 app.use('*', checkIp)
 
 setupOpenApi(app)
-
 setupAuth(app)
 
 app.route('/api/user', UserApp)
@@ -62,7 +64,27 @@ app.use(
 )
 
 app.onError((err, c) => {
-    console.log(err)
+    if (err instanceof HTTPException) {
+        return err.getResponse()
+    }
+
+    const tracer = trace.getTracer('InternalError')
+    const parentSpan = getContext().var.rootSpan
+
+    const subSpan = tracer.startSpan(
+        'internal-error',
+        {
+            attributes: { 'error.message': err.message },
+            kind: SpanKind.INTERNAL,
+        },
+        parentSpan
+            ? trace.setSpan(context.active(), parentSpan)
+            : context.active()
+    )
+
+    subSpan.recordException(err)
+    subSpan.end()
+
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
         let status: ContentfulStatusCode = 500
         if (err.code === 'P2025') status = 404
@@ -73,11 +95,7 @@ app.onError((err, c) => {
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
-        return c.json({ message: err.message }, status)
-    }
-
-    if (err instanceof HTTPException) {
-        return err.getResponse()
+        return c.json({ message: err.meta?.cause }, status)
     }
 
     return c.json({ message: err.message }, 500)

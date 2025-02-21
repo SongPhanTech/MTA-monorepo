@@ -3,15 +3,11 @@ import type { Prisma } from '@workspace/db'
 import * as models from '@workspace/db/zod/models'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
-import { SCIMClient } from '../utils/is-user-api'
+import { SCIMClient } from '../wso2is-apis/users'
 import { ListOf, PaginationQuerySchema } from '../zod/base'
 import SessionApp from './users/sessions'
 
-const scimClient = new SCIMClient({
-    baseURL: `${process.env.OIDC_BASE_URL}/scim2`,
-    username: process.env.OIDC_ADMIN_USERNAME || 'admin',
-    password: process.env.OIDC_ADMIN_PASSWORD || 'admin',
-})
+const scimClient = new SCIMClient()
 
 const app = new OpenAPIHono({ strict: false })
 app.route('/', SessionApp)

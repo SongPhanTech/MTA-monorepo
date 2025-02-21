@@ -1,4 +1,5 @@
 import { HTTPException } from 'hono/http-exception'
+import { customFetch } from './custom-fetch'
 
 export interface UserCreateRequest {
     schemas: string[]
@@ -72,48 +73,33 @@ export interface Meta {
     resourceType: string
 }
 
-interface SCIMClientOptions {
-    baseURL: string
-    username: string
-    password: string
-}
-
 export class SCIMClient {
-    private baseURL: string
-    private auth: string
-
-    constructor(options: SCIMClientOptions) {
-        this.baseURL = options.baseURL
-        this.auth = Buffer.from(
-            `${options.username}:${options.password}`
-        ).toString('base64')
-    }
-
     private async request<T>(
         endpoint: string,
         options: RequestInit = {}
     ): Promise<T> {
-        const url = `${this.baseURL}${endpoint}`
         const headers = {
             'Content-Type': 'application/scim+json',
-            Authorization: `Basic ${this.auth}`,
             ...options.headers,
         }
 
-        const response = await fetch(url, { ...options, headers })
+        const { data, status } = await customFetch<{ data: T; status: number }>(
+            'scim2',
+            endpoint,
+            {
+                ...options,
+                headers,
+            }
+        )
 
-        if (!response.ok) {
-            const errorBody = await response.json().catch(() => null)
-            throw new HTTPException(400, {
-                message: errorBody?.detail || response.statusText,
+        if (status >= 400) {
+            throw new HTTPException(500, {
+                message: 'Internal Server Error',
+                cause: data,
             })
         }
 
-        if (response.status !== 204) {
-            return response.json()
-        }
-
-        return null as T // Explicitly return `null` for DELETE and similar requests
+        return data
     }
 
     async createUser(user: UserCreateRequest): Promise<UserResponse> {
