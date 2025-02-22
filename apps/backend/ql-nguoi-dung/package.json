@@ -1,9 +1,11 @@
 {
   "name": "@backend/ql-nguoi-dung",
+  "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "build": "bun build --compile --sourcemap --bytecode src/index.ts --outfile dist/myapp",
-    "postbuild": "rm -f .*.bun-build",
+    "build": "bun build.ts",
+    "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
+    "postcompile": "rm -f .*.bun-build",
     "start": "bun dist/index.js",
     "generate": "bun --bun orval"
   },

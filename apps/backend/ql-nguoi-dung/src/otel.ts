@@ -3,13 +3,19 @@ import { Resource } from '@opentelemetry/resources'
 import {
     ConsoleSpanExporter,
     SimpleSpanProcessor,
-} from '@opentelemetry/sdk-trace-base'
-import { WebTracerProvider } from '@opentelemetry/sdk-trace-web'
+    WebTracerProvider,
+} from '@opentelemetry/sdk-trace-web'
+
+const baseUrl = process.env.OPEN_OBSERVE_URL
+const username = process.env.OPEN_OBSERVE_USERNAME
+const password = process.env.OPEN_OBSERVE_PASSWORD
+
+const credentials = Buffer.from(`${username}:${password}`).toString('base64')
 
 const traceExporter = new OTLPTraceExporter({
-    url: 'http://14.232.238.203:5080/api/default/v1/traces',
+    url: `${baseUrl}/api/default/v1/traces`,
     headers: {
-        Authorization: 'Basic c3dhbnRlY2hAZ21haWwuY29tOlN3YW50ZWNoQDEyMw==',
+        Authorization: `Basic ${credentials}`,
         'stream-name': 'default',
         'Content-Type': 'application/json',
     },

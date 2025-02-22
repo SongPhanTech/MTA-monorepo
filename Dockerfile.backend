@@ -1,4 +1,4 @@
-FROM node:20-slim AS base
+FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g pnpm
@@ -20,17 +20,18 @@ RUN pnpm generate
 RUN pnpm build
 RUN ls -la
 
-FROM debian:11-slim AS backend
-WORKDIR /app
-COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
-COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist/myapp .
-
-CMD ["/app/myapp"]
-
-# FROM oven/bun:alpine AS backend
+# FROM debian:11-alpine AS backend
 # WORKDIR /app
-# COPY --from=builder /app/packages/database/node_modules/prisma/libquery_engine-linux-musl-openssl-3.0.x.so.node /tmp/prisma-engines/
-# COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist/index.js .
-# USER bun
+# COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
+# COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist/myapp .
 
-# CMD bun index.js
+# CMD ["/app/myapp"]
+
+FROM oven/bun:alpine AS backend
+WORKDIR /app
+RUN bun add @opentelemetry/exporter-trace-otlp-http
+COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
+COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist .
+USER bun
+
+CMD bun index.js

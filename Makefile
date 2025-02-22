@@ -1,5 +1,5 @@
 # Variables
-IMAGE_NAME=ghcr.io/songphantech/mta
+IMAGE_NAME=ghcr.io/songphantech/mta_be
 DEV_TAG=latest
 RELEASE_TAG=release
 SERVER=local
