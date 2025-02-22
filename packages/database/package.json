@@ -7,8 +7,9 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./zod": "./prisma/generated/zod/index.ts",
+    "./zod": "./generated/zod/index.ts",
     "./zod/models": "./generated/zod/models/index.ts",
+    "./zod/enums": "./generated/zod/enums/index.ts",
     "./hooks": "./generated/hooks/index.ts",
     "./hono": "./src/hono/index.ts"
   },
