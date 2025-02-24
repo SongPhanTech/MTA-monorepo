@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
     const { status } = useSession()
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
@@ -16,7 +15,7 @@ const IndexPage: NextPage = () => {
                 window.location.href = firstMenu[0].path
             }
         }
-    }, [status])
+    }, [status, menus])
 
     return <Loading />
 }
