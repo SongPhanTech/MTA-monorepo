@@ -109,7 +109,7 @@ func createDestinationButton() nodx.Node {
 					Placeholder: "Access key",
 					Required:    true,
 					Type:        component.InputTypeText,
-					HelpText:    "It will be stored securely using PGP encryption.",
+					HelpText:    "Sẽ được lưu trữ an toàn bằng cách sử dụng mã hóa PGP.",
 				}),
 
 				component.InputControl(component.InputControlParams{
@@ -118,7 +118,7 @@ func createDestinationButton() nodx.Node {
 					Placeholder: "Secret key",
 					Required:    true,
 					Type:        component.InputTypeText,
-					HelpText:    "It will be stored securely using PGP encryption.",
+					HelpText:    "Sẽ được lưu trữ an toàn bằng cách sử dụng mã hóa PGP.",
 				}),
 			),
 

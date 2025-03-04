@@ -57,7 +57,7 @@ func createDatabaseButton() nodx.Node {
 
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeMd,
-		Title: "Add database",
+		Title: "Thêm cơ sở dữ liệu",
 		Content: []nodx.Node{
 			nodx.FormEl(
 				nodx.Id("add-database-form"),

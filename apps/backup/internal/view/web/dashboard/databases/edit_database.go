@@ -102,7 +102,7 @@ func editDatabaseButton(
 					Placeholder: "postgresql://user:password@localhost:5432/mydb",
 					Required:    true,
 					Type:        component.InputTypeText,
-					HelpText:    "It should be a valid PostgreSQL connection string including the database name. It will be stored securely using PGP encryption.",
+					HelpText:    "Một chuỗi kết nối PostgreSQL hợp lệ, bao gồm tên cơ sở dữ liệu. Chuỗi này sẽ được lưu trữ an toàn bằng cách sử dụng mã hóa PGP.",
 					Children: []nodx.Node{
 						nodx.Value(database.DecryptedConnectionString),
 					},
