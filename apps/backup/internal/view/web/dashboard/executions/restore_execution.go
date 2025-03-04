@@ -35,13 +35,13 @@ func (h *handlers) restoreExecutionHandler(c echo.Context) error {
 
 	if formData.DatabaseID == uuid.Nil && formData.ConnString == "" {
 		return respondhtmx.ToastError(
-			c, "Database or connection string is required",
+			c, "Cần có cơ sở dữ liệu hoặc chuỗi kết nối.",
 		)
 	}
 
 	if formData.DatabaseID != uuid.Nil && formData.ConnString != "" {
 		return respondhtmx.ToastError(
-			c, "Database and connection string cannot be both set",
+			c, "Cơ sở dữ liệu và chuỗi kết nối không thể được thiết lập đồng thời.",
 		)
 	}
 
@@ -75,7 +75,7 @@ func (h *handlers) restoreExecutionHandler(c echo.Context) error {
 	}()
 
 	return respondhtmx.ToastSuccess(
-		c, "Process started, check the restorations page for more details",
+		c, "Quá trình đã bắt đầu, hãy kiểm tra trang khôi phục để biết thêm chi tiết.",
 	)
 }
 
@@ -108,7 +108,7 @@ func restoreExecutionForm(
 ) nodx.Node {
 	return nodx.FormEl(
 		htmx.HxPost("/dashboard/executions/"+execution.ID.String()+"/restore"),
-		htmx.HxConfirm("Are you sure you want to restore this backup?"),
+		htmx.HxConfirm("Bạn có chắc chắn muốn khôi phục bản sao lưu này không?"),
 		htmx.HxDisabledELT("find button"),
 
 		alpine.XData(`{ backup_to: "database" }`),
@@ -126,17 +126,17 @@ func restoreExecutionForm(
 				Name:     "backup_to",
 				Label:    "Backup to",
 				Required: true,
-				HelpText: "You can restore the backup to an existing database or any other database using a connection string",
+				HelpText: "Bạn có thể khôi phục bản sao lưu vào một cơ sở dữ liệu hiện có hoặc bất kỳ cơ sở dữ liệu nào khác bằng cách sử dụng chuỗi kết nối.",
 				Children: []nodx.Node{
 					alpine.XModel("backup_to"),
 					nodx.Option(
 						nodx.Value("database"),
-						nodx.Text("Existing database"),
+						nodx.Text("Cơ sở dữ liệu hiện tại."),
 						nodx.Selected(""),
 					),
 					nodx.Option(
 						nodx.Value("conn_string"),
-						nodx.Text("Other database"),
+						nodx.Text("Cơ sở dữ liệu khác."),
 					),
 				},
 			}),
@@ -145,8 +145,8 @@ func restoreExecutionForm(
 				alpine.XIf("backup_to === 'database'"),
 				component.SelectControl(component.SelectControlParams{
 					Name:        "database_id",
-					Label:       "Database",
-					Placeholder: "Select a database",
+					Label:       "Cơ sở dữ liệu",
+					Placeholder: "Chọn một cơ sở dữ liệu.",
 					Required:    true,
 					Children: []nodx.Node{
 						nodx.Map(
@@ -217,7 +217,7 @@ func restoreExecutionButton(execution dbgen.ExecutionsServicePaginateExecutionsR
 
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeMd,
-		Title: "Restore backup execution",
+		Title: "Khôi phục thực thi sao lưu.",
 		Content: []nodx.Node{
 			nodx.Div(
 				htmx.HxGet("/dashboard/executions/"+execution.ID.String()+"/restore-form"),

@@ -25,7 +25,7 @@ func (h *handlers) testDatabaseHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.ToastSuccess(c, "Connection successful")
+	return respondhtmx.ToastSuccess(c, "Kết nối thành công")
 }
 
 func (h *handlers) testExistingDatabaseHandler(c echo.Context) error {
@@ -40,5 +40,5 @@ func (h *handlers) testExistingDatabaseHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.ToastSuccess(c, "Connection successful")
+	return respondhtmx.ToastSuccess(c, "Kết nối thành công")
 }

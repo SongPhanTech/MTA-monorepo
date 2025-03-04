@@ -24,7 +24,7 @@ func (h *handlers) testDestinationHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.ToastSuccess(c, "Connection successful")
+	return respondhtmx.ToastSuccess(c, "Kết nối thành công")
 }
 
 func (h *handlers) testExistingDestinationHandler(c echo.Context) error {
@@ -39,5 +39,5 @@ func (h *handlers) testExistingDestinationHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.ToastSuccess(c, "Connection successful")
+	return respondhtmx.ToastSuccess(c, "Kết nối thành công")
 }
