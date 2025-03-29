@@ -328,7 +328,7 @@ export function useSuspenseCountConfig<TArgs extends Prisma.ConfigCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Config', `${endpoint}/config/count`, args, options, fetch);
 }
 
-export function useCheckConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; description?: string; key?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; key?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Config', `${endpoint}/config/check`, args, options, fetch);
 }

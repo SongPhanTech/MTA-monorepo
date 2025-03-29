@@ -8,6 +8,7 @@
 import { z } from 'zod';
 const baseSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
@@ -46,6 +47,7 @@ export const RolePrismaCreateSchema = baseSchema.partial().passthrough();
  */
 export const RolePrismaUpdateSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),

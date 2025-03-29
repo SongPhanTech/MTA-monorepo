@@ -134,11 +134,11 @@ export default function Page() {
                         {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Can
-                                    I={'GIOI_HAN_DIA_CHI_MANG'}
-                                    a='CREATE'
-                                >
-                                    <Button onClick={handleModal} type="primary">
+                                <Can I={'GIOI_HAN_DIA_CHI_MANG'} a="CREATE">
+                                    <Button
+                                        onClick={handleModal}
+                                        type="primary"
+                                    >
                                         Thêm mới
                                     </Button>
                                 </Can>

@@ -12,3 +12,7 @@ export * from './Config.schema';
 export * from './User.schema';
 export * from './Feedback.schema';
 export * from './BlockedIp.schema';
+export * from './Province.schema';
+export * from './District.schema';
+export * from './Commune.schema';
+export * from './Level.schema';

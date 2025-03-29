@@ -22,3 +22,7 @@ model Commune extends Base {
 
   @@unique([name, districtId])
 }
+
+model Level extends Base {
+  name String @unique
+}

@@ -14,6 +14,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -53,6 +57,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             }
             ,
@@ -65,6 +72,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -104,6 +115,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             }
             ,
@@ -116,6 +130,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -155,6 +173,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, name_permissionType: {
                     name: "name_permissionType",
                     fields: ["name", "permissionType"]
@@ -170,6 +191,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -198,6 +223,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, key: {
                     name: "key",
                     fields: ["key"]
@@ -213,6 +241,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -273,6 +305,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, email: {
                     name: "email",
                     fields: ["email"]
@@ -297,6 +332,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -340,6 +379,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             }
             ,
@@ -352,6 +394,10 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, description: {
                     name: "description",
                     type: "String",
@@ -385,9 +431,236 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 }, ipAddress: {
                     name: "ipAddress",
                     fields: ["ipAddress"]
+                },
+            }
+            ,
+        }
+        ,
+        province: {
+            name: 'Province', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, district: {
+                    name: "district",
+                    type: "District",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'province',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            }
+            ,
+        }
+        ,
+        district: {
+            name: 'District', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, province: {
+                    name: "province",
+                    type: "Province",
+                    isDataModel: true,
+                    backLink: 'district',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "provinceId" },
+                }, provinceId: {
+                    name: "provinceId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'province',
+                }, commune: {
+                    name: "commune",
+                    type: "Commune",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'district',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name_provinceId: {
+                    name: "name_provinceId",
+                    fields: ["name", "provinceId"]
+                },
+            }
+            ,
+        }
+        ,
+        commune: {
+            name: 'Commune', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, district: {
+                    name: "district",
+                    type: "District",
+                    isDataModel: true,
+                    backLink: 'commune',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "districtId" },
+                }, districtId: {
+                    name: "districtId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'district',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name_districtId: {
+                    name: "name_districtId",
+                    fields: ["name", "districtId"]
+                },
+            }
+            ,
+        }
+        ,
+        level: {
+            name: 'Level', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
                 },
             }
             ,

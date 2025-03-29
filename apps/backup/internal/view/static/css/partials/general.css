@@ -1,8 +1,8 @@
 html {
-  overflow-x: hidden;
-  overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .table tbody tr {
-  @apply hover:bg-base-200;
+    @apply hover:bg-base-200;
 }

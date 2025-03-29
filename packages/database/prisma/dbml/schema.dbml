@@ -4,6 +4,7 @@
 
 Table Group {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -15,6 +16,7 @@ Table Group {
 
 Table Role {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -26,6 +28,7 @@ Table Role {
 
 Table Permission {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -42,6 +45,7 @@ Table Permission {
 
 Table Config {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -52,6 +56,7 @@ Table Config {
 
 Table User {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -69,6 +74,7 @@ Table User {
 
 Table Feedback {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -82,6 +88,7 @@ Table Feedback {
 
 Table BlockedIp {
   id String [pk]
+  code String [unique]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -89,6 +96,60 @@ Table BlockedIp {
   ipAddress String [unique, not null]
   reason String
   expiresAt DateTime
+}
+
+Table Province {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  district District [not null]
+}
+
+Table District {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  province Province [not null]
+  provinceId String [not null]
+  commune Commune [not null]
+
+  indexes {
+    (name, provinceId) [unique]
+  }
+}
+
+Table Commune {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  district District [not null]
+  districtId String [not null]
+
+  indexes {
+    (name, districtId) [unique]
+  }
+}
+
+Table Level {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
 }
 
 Table GroupToUser {
@@ -136,3 +197,7 @@ Enum Satisfaction {
 }
 
 Ref: Feedback.userId > User.id
+
+Ref: District.provinceId > Province.id
+
+Ref: Commune.districtId > District.id

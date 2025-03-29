@@ -328,7 +328,7 @@ export function useSuspenseCountGroup<TArgs extends Prisma.GroupCountArgs, TQuer
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Group', `${endpoint}/group/count`, args, options, fetch);
 }
 
-export function useCheckGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; description?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Group', `${endpoint}/group/check`, args, options, fetch);
 }

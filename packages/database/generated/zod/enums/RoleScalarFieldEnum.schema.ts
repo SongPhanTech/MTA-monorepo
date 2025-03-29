@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const RoleScalarFieldEnumSchema = z.enum(["id", "description", "deletedAt", "createdAt", "updatedAt", "name"])
+export const RoleScalarFieldEnumSchema = z.enum(["id", "code", "description", "deletedAt", "createdAt", "updatedAt", "name"])

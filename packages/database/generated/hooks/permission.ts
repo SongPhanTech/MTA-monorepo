@@ -329,7 +329,7 @@ export function useSuspenseCountPermission<TArgs extends Prisma.PermissionCountA
 }
 import type { PermissionType } from '@prisma/client';
 
-export function useCheckPermission<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; description?: string; name?: string; permissionType?: PermissionType; disabled?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPermission<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string; permissionType?: PermissionType; disabled?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Permission', `${endpoint}/permission/check`, args, options, fetch);
 }

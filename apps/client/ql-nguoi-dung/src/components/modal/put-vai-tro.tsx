@@ -15,7 +15,7 @@ import {
     Divider,
     Form,
     Input,
-    TreeSelect
+    TreeSelect,
 } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -196,13 +196,13 @@ const PutVaiTroModal = () => {
                         return (
                             <Card
                                 key={id}
-                                className='w-[336px]'
+                                className="w-[336px]"
                                 title={
-                                    <span
-                                        className='text-xs'
-                                    >{[index, parent?.label, label]
-                                        .filter(Boolean)
-                                        .join(' - ')}</span>
+                                    <span className="text-xs">
+                                        {[index, parent?.label, label]
+                                            .filter(Boolean)
+                                            .join(' - ')}
+                                    </span>
                                 }
                             >
                                 <div className="flex flex-col justify-center items-center">

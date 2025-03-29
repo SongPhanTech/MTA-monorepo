@@ -1,4 +1,5 @@
 import './models/base.zmodel'
+import './models/categories.zmodel'
 
 datasource db {
   provider = "postgresql"

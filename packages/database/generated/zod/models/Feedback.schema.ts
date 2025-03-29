@@ -11,6 +11,7 @@ import { FeedbackStatusSchema } from '../enums/FeedbackStatus.schema';
 import { SatisfactionSchema } from '../enums/Satisfaction.schema';
 const baseSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
@@ -54,6 +55,7 @@ export const FeedbackPrismaCreateSchema = baseSchema.partial().passthrough();
  */
 export const FeedbackPrismaUpdateSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),

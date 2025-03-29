@@ -10,6 +10,7 @@ import { UserRole } from '@prisma/client';
 import { UserRoleSchema } from '../enums/UserRole.schema';
 const baseSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
@@ -54,6 +55,7 @@ export const UserPrismaCreateSchema = baseSchema.partial().passthrough();
  */
 export const UserPrismaUpdateSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),

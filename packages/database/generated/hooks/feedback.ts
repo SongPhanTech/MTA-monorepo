@@ -329,7 +329,7 @@ export function useSuspenseCountFeedback<TArgs extends Prisma.FeedbackCountArgs,
 }
 import type { FeedbackStatus, Satisfaction } from '@prisma/client';
 
-export function useCheckFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; description?: string; content?: string; status?: FeedbackStatus; satisfaction?: Satisfaction; userId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; content?: string; status?: FeedbackStatus; satisfaction?: Satisfaction; userId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Feedback', `${endpoint}/feedback/check`, args, options, fetch);
 }

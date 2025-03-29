@@ -48,6 +48,7 @@ enum Satisfaction {
 
 model Group {
   id          String    @id() @default(cuid())
+  code        String?   @unique()
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -59,6 +60,7 @@ model Group {
 
 model Role {
   id          String       @id() @default(cuid())
+  code        String?      @unique()
   description String?      @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
@@ -70,6 +72,7 @@ model Role {
 
 model Permission {
   id             String         @id() @default(cuid())
+  code           String?        @unique()
   description    String?        @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
@@ -84,6 +87,7 @@ model Permission {
 
 model Config {
   id          String    @id() @default(cuid())
+  code        String?   @unique()
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -94,6 +98,7 @@ model Config {
 
 model User {
   id          String     @id() @default(cuid())
+  code        String?    @unique()
   description String?    @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
@@ -111,6 +116,7 @@ model User {
 
 model Feedback {
   id           String         @id() @default(cuid())
+  code         String?        @unique()
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
@@ -124,6 +130,7 @@ model Feedback {
 
 model BlockedIp {
   id          String    @id() @default(cuid())
+  code        String?   @unique()
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -131,4 +138,54 @@ model BlockedIp {
   ipAddress   String    @unique()
   reason      String?   @db.Text()
   expiresAt   DateTime?
+}
+
+model Province {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
+  district    District[]
+}
+
+model District {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  province    Province  @relation(fields: [provinceId], references: [id])
+  provinceId  String
+  commune     Commune[]
+
+  @@unique([name, provinceId])
+}
+
+model Commune {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  district    District  @relation(fields: [districtId], references: [id])
+  districtId  String
+
+  @@unique([name, districtId])
+}
+
+model Level {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
 }

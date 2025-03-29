@@ -94,9 +94,16 @@ const NAVIGATION: NavigationType = {
         ],
         label: 'Quản lý người dùng',
     },
-    QL_HE_THONG: {
-        menus: [],
-        label: 'Quản lý hệ thống',
+    QL_DANH_MUC: {
+        menus: [
+            {
+                id: 'level',
+                label: 'Danh mục phân cấp',
+                icon: PieChartOutlined,
+                path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
+            },
+        ],
+        label: 'Quản lý danh mục',
     },
 }
 export type { MenuItem, NavigationType }

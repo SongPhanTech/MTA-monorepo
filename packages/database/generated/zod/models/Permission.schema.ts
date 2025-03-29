@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { PermissionTypeSchema } from '../enums/PermissionType.schema';
 const baseSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
@@ -48,6 +49,7 @@ export const PermissionPrismaCreateSchema = baseSchema.partial().passthrough();
  */
 export const PermissionPrismaUpdateSchema = z.object({
     id: z.string(),
+    code: z.string().nullish(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
