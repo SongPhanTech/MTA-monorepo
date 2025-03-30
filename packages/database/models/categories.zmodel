@@ -26,3 +26,36 @@ model Commune extends Base {
 model Level extends Base {
   name String @unique
 }
+// cấp bậc hàm
+model Rank extends Base {
+  name String @unique
+}
+
+// học hàm
+model AcademicDegreeType extends Base {
+  name String @unique
+}
+
+// học vị
+model AcademicRankType extends Base {
+  name String @unique
+}
+
+// chức vụ
+model Position extends Base {
+  name String @unique
+}
+
+// loại đơn vị
+model OrganizationType extends Base {
+  name          String         @unique
+  organizations Organization[] 
+}
+
+// đơn vị
+model Organization extends Base {
+  name String @unique
+  type OrganizationType @relation(fields: [typeId], references: [id])
+  typeId String
+  address String
+}

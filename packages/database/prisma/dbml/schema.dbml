@@ -9,6 +9,7 @@ Table Group {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [not null]
   users User [not null]
   roles Role [not null]
@@ -21,6 +22,7 @@ Table Role {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [not null]
   groups Group [not null]
   permissions Permission [not null]
@@ -33,6 +35,7 @@ Table Permission {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [not null]
   permissionType PermissionType [not null]
   disabled Boolean [not null, default: false]
@@ -50,6 +53,7 @@ Table Config {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   key String [unique, not null]
   value String [not null]
 }
@@ -61,6 +65,7 @@ Table User {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   email String [unique, not null]
   userName String [unique, not null]
   name String [not null]
@@ -79,6 +84,7 @@ Table Feedback {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   content String [not null]
   status FeedbackStatus [not null]
   satisfaction Satisfaction [not null]
@@ -93,6 +99,7 @@ Table BlockedIp {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   ipAddress String [unique, not null]
   reason String
   expiresAt DateTime
@@ -105,6 +112,7 @@ Table Province {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [unique, not null]
   district District [not null]
 }
@@ -116,6 +124,7 @@ Table District {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [not null]
   province Province [not null]
   provinceId String [not null]
@@ -133,6 +142,7 @@ Table Commune {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [not null]
   district District [not null]
   districtId String [not null]
@@ -149,7 +159,78 @@ Table Level {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
   name String [unique, not null]
+}
+
+Table Rank {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+}
+
+Table AcademicDegreeType {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+}
+
+Table AcademicRankType {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+}
+
+Table Position {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+}
+
+Table OrganizationType {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+  organizations Organization [not null]
+}
+
+Table Organization {
+  id String [pk]
+  code String [unique]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  isDelete Boolean [not null, default: false]
+  name String [unique, not null]
+  type OrganizationType [not null]
+  typeId String [not null]
+  address String [not null]
 }
 
 Table GroupToUser {
@@ -201,3 +282,5 @@ Ref: Feedback.userId > User.id
 Ref: District.provinceId > Province.id
 
 Ref: Commune.districtId > District.id
+
+Ref: Organization.typeId > OrganizationType.id

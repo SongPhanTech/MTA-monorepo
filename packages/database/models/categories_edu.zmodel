@@ -1,0 +1,56 @@
+import 'base'
+
+// đối tượng đào tạo
+model TrainingObjectType extends Base {
+  name String @unique
+}
+
+// loại hình đào tạo
+model TrainingType extends Base {
+  name String @unique
+}
+
+// địa điểm đào tạo
+model TrainingLocation extends Base {
+  name String @unique
+}
+
+// ngành đào tạo
+model TrainingField extends Base {
+  name String @unique
+}
+
+// chuyên ngành đào tạo
+model TrainingMajor extends Base {
+  name String @unique
+}
+
+// khối kiến thức
+model TrainingBlock extends Base {
+  name String @unique
+}
+
+// thời gian đào tạo  
+model TrainingTime extends Base {
+  name String @unique
+}
+
+// hình thức đào tạo
+model TrainingForm extends Base {
+  name String @unique
+}
+
+// xếp loại học tập
+model StudyRank extends Base {
+  name String @unique
+}
+
+//xếp loại rèn luyện
+model TrainingRank extends Base {
+  name String @unique
+}
+
+// nội dung tính tải đào tạo
+model TrainingKPI extends Base {
+  name String @unique
+}
