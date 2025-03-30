@@ -27,11 +27,10 @@ pnpm i
 
 1. Edit or add schema in `zmodel` folder
 2. Run `pnpm generate` to generate prisma schema
-3. Run `pnpm migrate dev` for create a migration from changes in schema, apply it to the database **_Use it only in development, You can't migrate down_**
+3. Run `pnpm prisma migrate dev` for create a migration from changes in schema, apply it to the database **_Use it only in development, You can't migrate down_**
 4. If typescript doesn't work, restart your TS language server
-5. You can use `pnpm studio` to open Prisma Studio(web app for managing databases)
-6. Start development with `pnpm start:dev`
-7. Make sure your model changes is OK before pushing to GitHub
+5. You can use `pnpm prisma studio` to open Prisma Studio(web app for managing databases)
+6. Make sure your model changes is OK before pushing to GitHub
 
 ## Get started
 
