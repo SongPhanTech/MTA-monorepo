@@ -53,6 +53,7 @@ model Group {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   name        String
   users       User[]
   roles       Role[]
@@ -65,6 +66,7 @@ model Role {
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
+  isDelete    Boolean      @default(false)
   name        String
   groups      Group[]
   permissions Permission[]
@@ -77,6 +79,7 @@ model Permission {
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt()
+  isDelete       Boolean        @default(false)
   name           String
   permissionType PermissionType
   disabled       Boolean        @default(false)
@@ -92,6 +95,7 @@ model Config {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   key         String    @unique()
   value       String
 }
@@ -103,6 +107,7 @@ model User {
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
+  isDelete    Boolean    @default(false)
   email       String     @unique()
   userName    String     @unique()
   name        String
@@ -121,6 +126,7 @@ model Feedback {
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt()
+  isDelete     Boolean        @default(false)
   content      String
   status       FeedbackStatus
   satisfaction Satisfaction
@@ -135,6 +141,7 @@ model BlockedIp {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   ipAddress   String    @unique()
   reason      String?   @db.Text()
   expiresAt   DateTime?
@@ -147,6 +154,7 @@ model Province {
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
+  isDelete    Boolean    @default(false)
   name        String     @unique()
   district    District[]
 }
@@ -158,6 +166,7 @@ model District {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   name        String
   province    Province  @relation(fields: [provinceId], references: [id])
   provinceId  String
@@ -173,6 +182,7 @@ model Commune {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   name        String
   district    District  @relation(fields: [districtId], references: [id])
   districtId  String
@@ -187,5 +197,76 @@ model Level {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
   name        String    @unique()
+}
+
+model Rank {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
+  name        String    @unique()
+}
+
+model AcademicDegreeType {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
+  name        String    @unique()
+}
+
+model AcademicRankType {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
+  name        String    @unique()
+}
+
+model Position {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  isDelete    Boolean   @default(false)
+  name        String    @unique()
+}
+
+model OrganizationType {
+  id            String         @id() @default(cuid())
+  code          String?        @unique()
+  description   String?        @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  isDelete      Boolean        @default(false)
+  name          String         @unique()
+  organizations Organization[]
+}
+
+model Organization {
+  id          String           @id() @default(cuid())
+  code        String?          @unique()
+  description String?          @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt()
+  isDelete    Boolean          @default(false)
+  name        String           @unique()
+  type        OrganizationType @relation(fields: [typeId], references: [id])
+  typeId      String
+  address     String
 }
