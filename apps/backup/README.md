@@ -42,3 +42,7 @@ PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@postgres:5432/pgbackweb
 Chạy `task dev`
 
 Các lệnh khác tham khảo file `taskfile.yaml`
+
+## Lưu ý
+
+Phải chạy ql-nguoi-dung ở localhost:3000, sau đó truy cập vào localhost:3000/home để sử dụng  
