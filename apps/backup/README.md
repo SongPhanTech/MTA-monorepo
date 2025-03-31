@@ -28,7 +28,7 @@ services:
 PBW_ENCRYPTION_KEY="encryption-key"
 
 # Kết nối cơ sở dữ liệu bên trên
-PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@postgres:5432/pgbackweb?sslmode=disable"
+PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@localhost:5432/pgbackweb?sslmode=disable"
 
 ```
 
