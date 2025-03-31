@@ -9,6 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountLevel,
     useFindManyLevel,
+    useUpdateLevel,
     useUpdateUser,
 } from '@workspace/db/hooks'
 import {
@@ -54,16 +55,16 @@ export default function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateUser } = useUpdateUser()
+    const { mutateAsync: updateLevel } = useUpdateLevel()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateUser({
+            await updateLevel({
                 where: {
                     id,
                 },
                 data: {
-                    deletedAt: new Date(),
+                    deletedAt: new Date()
                 },
             })
         } catch (error) {

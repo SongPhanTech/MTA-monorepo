@@ -7,7 +7,6 @@ abstract model Base {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  isDeleted   Boolean   @default(false)
   // TODO: change this
   @@allow('all', auth() != null)
 
