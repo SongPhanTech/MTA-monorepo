@@ -38,6 +38,42 @@ PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@localhost:5432/pgbackwe
 - Deno `https://docs.deno.com/runtime/getting_started/installation/`
 - Task `https://taskfile.dev/installation/`
 
+apps/backup/internal/integration/postgres/postgres.go
+
+Cài đặt postgresql để backup nhận đc tool `pg_dump` và `psql` theo đường dẫn đã khai báo
+```go
+var (
+	PG13 = PGVersion{version{
+		Version: "13",
+		PGDump:  "/usr/lib/postgresql/13/bin/pg_dump",
+		PSQL:    "/usr/lib/postgresql/13/bin/psql",
+	}}
+	PG14 = PGVersion{version{
+		Version: "14",
+		PGDump:  "/usr/lib/postgresql/14/bin/pg_dump",
+		PSQL:    "/usr/lib/postgresql/14/bin/psql",
+	}}
+	PG15 = PGVersion{version{
+		Version: "15",
+		PGDump:  "/usr/lib/postgresql/15/bin/pg_dump",
+		PSQL:    "/usr/lib/postgresql/15/bin/psql",
+	}}
+	PG16 = PGVersion{version{
+		Version: "16",
+		PGDump:  "/usr/lib/postgresql/16/bin/pg_dump",
+		PSQL:    "/usr/lib/postgresql/16/bin/psql",
+	}}
+	PG17 = PGVersion{version{
+		Version: "17",
+		PGDump:  "/usr/lib/postgresql/17/bin/pg_dump",
+		PSQL:    "/usr/lib/postgresql/17/bin/psql",
+	}}
+
+	PGVersions = []PGVersion{PG13, PG14, PG15, PG16, PG17}
+)
+```
+
+
 ## Khởi chạy
 Chạy `task dev`
 
