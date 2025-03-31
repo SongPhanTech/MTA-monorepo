@@ -12,6 +12,7 @@ type Env struct {
 	PBW_POSTGRES_CONN_STRING string `env:"PBW_POSTGRES_CONN_STRING,required"`
 	PBW_LISTEN_HOST          string `env:"PBW_LISTEN_HOST" envDefault:"0.0.0.0"`
 	PBW_LISTEN_PORT          string `env:"PBW_LISTEN_PORT" envDefault:"8085"`
+	PBW_AUTH_URL			 string `env:"PBW_AUTH_URL" envDefault:""`
 }
 
 var (

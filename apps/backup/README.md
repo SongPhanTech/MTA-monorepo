@@ -29,7 +29,8 @@ PBW_ENCRYPTION_KEY="encryption-key"
 
 # Kết nối cơ sở dữ liệu bên trên
 PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@localhost:5432/pgbackweb?sslmode=disable"
-
+# Đường dẫn để lấy session của ql-nguoi-dung đã login
+PBW_AUTH_URL="http://localhost:3000/api/auth/session"
 ```
 
 ## Cài đặt

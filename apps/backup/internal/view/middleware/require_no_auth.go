@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/google/uuid"
@@ -28,7 +29,11 @@ type Session struct {
 
 func (m *Middleware) RequireNoAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req, err := http.NewRequest(http.MethodGet, "http://localhost:3000/api/auth/session", nil)
+		env, err := config.GetEnv()
+		if err != nil {
+			panic(err)
+		}
+		req, err := http.NewRequest(http.MethodGet, env.PBW_AUTH_URL, nil)
 		if err != nil {
 			logger.Error("failed to create request", logger.KV{
 				"error": err,
