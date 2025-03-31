@@ -23,7 +23,7 @@ export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 const register = new Registry()
 
-collectDefaultMetrics({ register })
+// collectDefaultMetrics({ register })
 
 app.get('/metrics', async (c) => {
     c.header('Content-Type', register.contentType)

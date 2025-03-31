@@ -1,6 +1,7 @@
 import 'base'
 import 'feedback'
 import 'blocked-ip'
+import 'student'
 
 model User extends Base {
   email      String     @unique @email
@@ -13,6 +14,8 @@ model User extends Base {
   groups     Group[]
 
   feedback   Feedback[]
+  student    Student?
+  lecturer   Lecturer?
 }
 
 enum UserRole {
