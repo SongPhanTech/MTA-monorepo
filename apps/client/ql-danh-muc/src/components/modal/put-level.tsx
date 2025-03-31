@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-// import type { Level } from '@workspace/db'
+import type { Level } from '@workspace/db'
 import {
     useCreateLevel,
     useFindUniqueLevel,
@@ -11,12 +11,7 @@ import {
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-// export type PutLevelFormType = Level
-export type PutLevelFormType = {
-    name: string
-    description: string
-} 
-
+export type PutLevelFormType = Level
 const PutLevelModal = () => {
     const [form] = Form.useForm<PutLevelFormType>()
     const {
@@ -38,6 +33,7 @@ const PutLevelModal = () => {
             if (id) {
                 await updateLevel({
                     data: {
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -47,12 +43,9 @@ const PutLevelModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                console.log( {
-                    name: output.name,
-                    description: output.description,
-                },)
                 await createLevel({
                     data: {
+                        code : output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -86,6 +79,7 @@ const PutLevelModal = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
+            maskClosable={true}
             title={
                 id
                     ? 'Chỉnh sửa danh mục phân cấp'
@@ -96,11 +90,21 @@ const PutLevelModal = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
+                    name="code"
+                    label="Mã danh mục phân cấp"
+                    required
+                >
+                    <Input placeholder='Nhập mã danh mục phân cấp' />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem
+                    form={form}
                     name="name"
                     label="Tên danh mục phân cấp"
                     required
                 >
-                    <Input />
+                    <Input placeholder="Nhập tên danh mục phân cấp" />
                 </FormItem>
             </Col>
         </PutFormModal>
