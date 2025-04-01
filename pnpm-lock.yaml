@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hono/zod-openapi':
+        specifier: ^0.18.4
+        version: 0.18.4(hono@4.7.2)(zod@3.24.2)
       esbuild:
         specifier: 0.24.2
         version: 0.24.2
@@ -26,6 +29,58 @@ importers:
         version: 5.7.3
 
   apps/backend/ql-danh-muc:
+    dependencies:
+      '@hono/oidc-auth':
+        specifier: ^1.4.1
+        version: 1.4.1(hono@4.7.2)
+      '@hono/zod-openapi':
+        specifier: ^0.18.4
+        version: 0.18.4(hono@4.7.2)(zod@3.24.2)
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: ^0.57.2
+        version: 0.57.2(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@scalar/hono-api-reference':
+        specifier: ^0.5.175
+        version: 0.5.175(hono@4.7.2)
+      hono:
+        specifier: ^4.7.2
+        version: 4.7.2
+      prom-client:
+        specifier: ^15.1.3
+        version: 15.1.3
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.2.2
+        version: 1.2.2
+      '@workspace/biome-config':
+        specifier: workspace:*
+        version: link:../../../packages/biome-config
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../../packages/typescript-config
+      orval:
+        specifier: ^7.5.0
+        version: 7.5.0(openapi-types@12.1.3)
+
+  apps/backend/ql-dao-tao:
     dependencies:
       '@hono/oidc-auth':
         specifier: ^1.4.1
@@ -278,7 +333,176 @@ importers:
         version: 11.0.1
       next-remove-imports:
         specifier: ^1.0.12
-        version: 1.0.12(webpack@5.98.0(@swc/core@1.10.18(@swc/helpers@0.5.15)))
+        version: 1.0.12(webpack@5.98.0(@swc/core@1.10.18(@swc/helpers@0.5.15))(esbuild@0.24.2))
+      patch-package:
+        specifier: ^8.0.0
+        version: 8.0.0
+      postcss:
+        specifier: ^8.4.49
+        version: 8.4.49
+      prettier-plugin-tailwindcss:
+        specifier: ^0.6.9
+        version: 0.6.9(prettier@3.5.1)
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.10.18(@swc/helpers@0.5.15))(@types/node@20.17.19)(typescript@5.7.2))
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.10.18(@swc/helpers@0.5.15))(@types/node@20.17.19)(typescript@5.7.2)
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+
+  apps/client/ql-dao-tao:
+    dependencies:
+      '@ant-design/cssinjs':
+        specifier: ^1.22.1
+        version: 1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/icons':
+        specifier: ^5.5.2
+        version: 5.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/nextjs-registry':
+        specifier: ^1.0.2
+        version: 1.0.2(@ant-design/cssinjs@1.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.23.1(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@casl/ability':
+        specifier: ^6.7.2
+        version: 6.7.3
+      '@casl/react':
+        specifier: ^4.0.0
+        version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
+      '@t3-oss/env-nextjs':
+        specifier: 0.12.0
+        version: 0.12.0(typescript@5.7.2)(zod@3.24.2)
+      '@tanstack/react-query':
+        specifier: ^5.62.3
+        version: 5.64.1(react@18.3.1)
+      '@workspace/constant':
+        specifier: workspace:*
+        version: link:../../../packages/constant
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/router':
+        specifier: workspace:*
+        version: link:../../../packages/router
+      '@workspace/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
+      antd:
+        specifier: 5.23.1
+        version: 5.23.1(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      axios:
+        specifier: 1.7.9
+        version: 1.7.9
+      chart.js:
+        specifier: ^4.4.7
+        version: 4.4.7
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      easy-peasy:
+        specifier: 6.0.5
+        version: 6.0.5(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      lucide-react:
+        specifier: ^0.468.0
+        version: 0.468.0(react@18.3.1)
+      next:
+        specifier: 15.0.4
+        version: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next-auth:
+        specifier: 5.0.0-beta.25
+        version: 5.0.0-beta.25(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      qs:
+        specifier: ^6.13.1
+        version: 6.13.1
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.0(chart.js@4.4.7)(react@18.3.1)
+      react-day-picker:
+        specifier: 8.10.1
+        version: 8.10.1(date-fns@4.1.0)(react@18.3.1)
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-disclosure-modal:
+        specifier: 1.0.4
+        version: 1.0.4(@types/react-dom@18.3.2)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-icons:
+        specifier: 5.4.0
+        version: 5.4.0(react@18.3.1)
+      react-idle-timer:
+        specifier: ^5.7.2
+        version: 5.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-images-viewer:
+        specifier: ^1.7.1
+        version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-top-loading-bar:
+        specifier: ^2.3.1
+        version: 2.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.6.0
+        version: 2.6.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.24.2
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^1.9.4
+        version: 1.9.4
+      '@openapi-codegen/cli':
+        specifier: ^2.0.2
+        version: 2.0.2(@swc/helpers@0.5.15)(@types/react@18.3.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@openapi-codegen/typescript':
+        specifier: ^8.0.2
+        version: 8.0.2
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.14
+      '@types/node':
+        specifier: '20'
+        version: 20.17.19
+      '@types/qs':
+        specifier: ^6.9.17
+        version: 6.9.18
+      '@types/react':
+        specifier: 18.3.14
+        version: 18.3.14
+      '@types/react-dom':
+        specifier: 18.3.2
+        version: 18.3.2
+      '@types/react-image-fallback':
+        specifier: ^8.0.6
+        version: 8.0.6
+      '@workspace/biome-config':
+        specifier: workspace:*
+        version: link:../../../packages/biome-config
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.4.20(postcss@8.4.49)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
+      glob:
+        specifier: ^11.0.0
+        version: 11.0.1
+      next-remove-imports:
+        specifier: ^1.0.12
+        version: 1.0.12(webpack@5.98.0(@swc/core@1.10.18(@swc/helpers@0.5.15))(esbuild@0.24.2))
       patch-package:
         specifier: ^8.0.0
         version: 8.0.0
@@ -3145,10 +3369,6 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-
-  fast-glob@3.3.2:
-    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
-    engines: {node: '>=8.6.0'}
 
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
@@ -9216,7 +9436,7 @@ snapshots:
       data-view-buffer: 1.0.1
       data-view-byte-length: 1.0.1
       data-view-byte-offset: 1.0.0
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
       es-set-tostringtag: 2.0.3
@@ -9488,14 +9708,6 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fast-glob@3.3.2:
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.8
-
   fast-glob@3.3.3:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -9691,7 +9903,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.3.7
+      debug: 4.4.0
       fs-extra: 11.3.0
     transitivePeerDependencies:
       - supports-color
@@ -12687,7 +12899,7 @@ snapshots:
       chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
-      fast-glob: 3.3.2
+      fast-glob: 3.3.3
       glob-parent: 6.0.2
       is-glob: 4.0.3
       jiti: 1.21.7
