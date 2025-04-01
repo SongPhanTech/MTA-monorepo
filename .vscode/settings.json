@@ -8,5 +8,8 @@
   },
   "[zmodel]": {
     "editor.defaultFormatter": "zenstack.zenstack"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
   }
 }

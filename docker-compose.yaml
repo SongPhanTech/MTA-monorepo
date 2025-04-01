@@ -1,8 +1,51 @@
 services:
-  postgres:
-    image: postgres
+  backup:
+    build:
+      context: apps/backup
+      dockerfile: docker/Dockerfile
+    container_name: backup
+    hostname: backup
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      PBW_ENCRYPTION_KEY: "my_secret_key" # Change this to a strong key
+      # PBW_POSTGRES_CONN_STRING: "postgresql://postgres:postgres@postgres:5432/pgbackweb?sslmode=disable"
+      TZ: "Asia/Ho_chi_minh" # Set your timezone, optional
+    ports:
+      - "8085:8085"
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    hostname: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pgbackweb
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  openobserve:
+    container_name: openobserve
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    restart: unless-stopped
+    environment:
+      ZO_ROOT_USER_EMAIL: root@swantech.vn
+      ZO_ROOT_USER_PASSWORD: Password@123
+    ports:
+      - "5080:5080"
+    volumes:
+      - openobserve_data:/data
+
+volumes:
+  postgres_data:

@@ -54,12 +54,13 @@ const useMenuList = () => {
     }, [permissions])
 
     const menus = NAVIGATION.QL_NGUOI_DUNG.menus.filter((menu) => {
-        if (menu.children) {
-            return menu.children.some((child) =>
-                permissionNames.includes(child.id)
-            )
-        }
-        return permissionNames.includes(menu.id)
+        // if (menu.children) {
+        //     return menu.children.some((child) =>
+        //         permissionNames.includes(child.id)
+        //     )
+        // }
+        // return permissionNames.includes(menu.id)
+        return true
     })
     return menus
 }
