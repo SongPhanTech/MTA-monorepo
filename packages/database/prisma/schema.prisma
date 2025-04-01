@@ -46,6 +46,30 @@ enum Satisfaction {
   VerySatisfied
 }
 
+enum Gender {
+  Male
+  Female
+}
+
+enum TrainingStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 model Group {
   id          String    @id() @default(cuid())
   code        String?   @unique()
@@ -53,7 +77,6 @@ model Group {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
   name        String
   users       User[]
   roles       Role[]
@@ -66,7 +89,6 @@ model Role {
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
-  isDelete    Boolean      @default(false)
   name        String
   groups      Group[]
   permissions Permission[]
@@ -79,7 +101,6 @@ model Permission {
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt()
-  isDelete       Boolean        @default(false)
   name           String
   permissionType PermissionType
   disabled       Boolean        @default(false)
@@ -95,7 +116,6 @@ model Config {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
   key         String    @unique()
   value       String
 }
@@ -107,7 +127,6 @@ model User {
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
-  isDelete    Boolean    @default(false)
   email       String     @unique()
   userName    String     @unique()
   name        String
@@ -117,6 +136,8 @@ model User {
   role        String?
   groups      Group[]
   feedback    Feedback[]
+  student     Student?
+  lecturer    Lecturer?
 }
 
 model Feedback {
@@ -126,7 +147,6 @@ model Feedback {
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt()
-  isDelete     Boolean        @default(false)
   content      String
   status       FeedbackStatus
   satisfaction Satisfaction
@@ -141,10 +161,108 @@ model BlockedIp {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
   ipAddress   String    @unique()
   reason      String?   @db.Text()
   expiresAt   DateTime?
+}
+
+model Student {
+  id               String                   @id() @default(uuid())
+  user             User                     @relation(fields: [userId], references: [id])
+  userId           String                   @unique()
+  dateOfBirth      DateTime?
+  phone            String?
+  address          String?
+  gender           Gender?
+  enrollments      Enrollment[]
+  trainingPrograms StudentTrainingProgram[]
+  payments         Payment[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt()
+}
+
+model Lecturer {
+  id             String   @id() @default(uuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String   @unique()
+  specialization String?
+  hireDate       DateTime @default(now())
+  courses        Course[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt()
+}
+
+model TrainingProgram {
+  id          String                   @id() @default(uuid())
+  title       String
+  description String?
+  courses     Course[]
+  students    StudentTrainingProgram[]
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt()
+}
+
+model StudentTrainingProgram {
+  id                String          @id() @default(uuid())
+  student           Student         @relation(fields: [studentId], references: [id])
+  studentId         String
+  trainingProgram   TrainingProgram @relation(fields: [trainingProgramId], references: [id])
+  trainingProgramId String
+  startDate         DateTime
+  endDate           DateTime?
+  status            TrainingStatus  @default(ACTIVE)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt()
+
+  @@unique([studentId, trainingProgramId])
+}
+
+model Course {
+  id                 String          @id() @default(uuid())
+  title              String
+  description        String?
+  lecturer           Lecturer        @relation(fields: [lecturerId], references: [id])
+  lecturerId         String
+  trainingProgram    TrainingProgram @relation(fields: [trainingProgramId], references: [id])
+  trainingProgramId  String
+  price              Float
+  startDate          DateTime
+  endDate            DateTime?
+  isActive           Boolean         @default(true)
+  equivalentCourseId String?         @unique()
+  equivalentCourse   Course?         @relation("EquivalentCourses", fields: [equivalentCourseId], references: [id])
+  equivalentTo       Course?         @relation("EquivalentCourses")
+  enrollments        Enrollment[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt()
+}
+
+model Enrollment {
+  id         String           @id() @default(uuid())
+  student    Student          @relation(fields: [studentId], references: [id])
+  studentId  String
+  course     Course           @relation(fields: [courseId], references: [id])
+  courseId   String
+  enrolledAt DateTime         @default(now())
+  status     EnrollmentStatus @default(ACTIVE)
+  grade      Float?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt()
+
+  @@unique([studentId, courseId])
+}
+
+model Payment {
+  id            String        @id() @default(uuid())
+  student       Student       @relation(fields: [studentId], references: [id])
+  studentId     String
+  amount        Float
+  paymentDate   DateTime      @default(now())
+  paymentMethod String
+  status        PaymentStatus @default(PENDING)
+  transactionId String?       @unique()
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt()
 }
 
 model Province {
@@ -154,8 +272,7 @@ model Province {
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
-  isDelete    Boolean    @default(false)
-  name        String     @unique()
+  name        String
   district    District[]
 }
 
@@ -166,7 +283,6 @@ model District {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
   name        String
   province    Province  @relation(fields: [provinceId], references: [id])
   provinceId  String
@@ -182,7 +298,6 @@ model Commune {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
   name        String
   district    District  @relation(fields: [districtId], references: [id])
   districtId  String
@@ -197,8 +312,7 @@ model Level {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
-  name        String    @unique()
+  name        String
 }
 
 model Rank {
@@ -208,8 +322,7 @@ model Rank {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
-  name        String    @unique()
+  name        String
 }
 
 model AcademicDegreeType {
@@ -219,8 +332,7 @@ model AcademicDegreeType {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
-  name        String    @unique()
+  name        String
 }
 
 model AcademicRankType {
@@ -230,8 +342,7 @@ model AcademicRankType {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
-  name        String    @unique()
+  name        String
 }
 
 model Position {
@@ -241,8 +352,7 @@ model Position {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  isDelete    Boolean   @default(false)
-  name        String    @unique()
+  name        String
 }
 
 model OrganizationType {
@@ -252,8 +362,7 @@ model OrganizationType {
   deletedAt     DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt()
-  isDelete      Boolean        @default(false)
-  name          String         @unique()
+  name          String
   organizations Organization[]
 }
 
@@ -264,7 +373,6 @@ model Organization {
   deletedAt   DateTime?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt()
-  isDelete    Boolean          @default(false)
   name        String           @unique()
   type        OrganizationType @relation(fields: [typeId], references: [id])
   typeId      String

@@ -97,10 +97,54 @@ const NAVIGATION: NavigationType = {
     QL_DANH_MUC: {
         menus: [
             {
-                id: 'level',
-                label: 'Danh mục phân cấp',
+                id: 'danh-muc',
+                label: 'Quản lý danh mục',
                 icon: PieChartOutlined,
-                path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
+
+                children:  [
+                   {
+                    id: 'level',
+                    label: 'Danh mục phân cấp',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
+                   },
+                   {
+                    id: 'rank',
+                    label: 'Danh mục cấp bậc hàm',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_RANK,
+                   },
+                   {
+                    id: 'academic-degree-type',
+                    label: 'Danh mục học hàm',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_DEGREE_TYPE,
+                   },
+                   {
+                    id: 'academic-rank-type',
+                    label: 'Danh mục học vị',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_RANK_TYPE,
+                   },
+                   {
+                    id: 'position',
+                    label: 'Danh mục chức vụ',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_POSITION,
+                   },
+                   {
+                    id: 'organization-type',
+                    label: 'Danh mục loại đơn vị',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION_TYPE,
+                   },
+                   {
+                    id: 'organization',
+                    label: 'Danh mục đơn vị',
+                    icon: PieChartOutlined,
+                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION,
+                   }
+                ]
             },
         ],
         label: 'Quản lý danh mục',
