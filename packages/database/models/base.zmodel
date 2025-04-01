@@ -2,7 +2,7 @@ import 'user'
 
 abstract model Base {
   id          String    @id @default(cuid())
-  code        String?   @unique
+  code        String?
   description String?   @db.Text
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())

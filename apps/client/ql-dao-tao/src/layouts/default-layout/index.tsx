@@ -90,7 +90,7 @@ const DefaultLayout = ({
                 >
                     <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
                         <span className="text-lg font-bold text-primary">
-                            PHÂN HỆ QUẢN LÝ NGƯỜI DÙNG
+                            PHÂN HỆ QUẢN LÝ ĐÀO TẠO
                         </span>
                         <div className="flex gap-2 items-center">
                             <SearchSystem />
