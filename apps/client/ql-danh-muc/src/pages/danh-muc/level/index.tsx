@@ -9,6 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountLevel,
     useFindManyLevel,
+    useUpdateLevel,
     useUpdateUser,
 } from '@workspace/db/hooks'
 import {
@@ -54,16 +55,16 @@ export default function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateUser } = useUpdateUser()
+    const { mutateAsync: updateLevel } = useUpdateLevel()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateUser({
+            await updateLevel({
                 where: {
                     id,
                 },
                 data: {
-                    deletedAt: new Date(),
+                    deletedAt: new Date()
                 },
             })
         } catch (error) {
@@ -94,6 +95,7 @@ export default function Page() {
     }
     return (
         <div>
+            
             <Divider orientation="left" orientationMargin={0}>
                 Danh mục phân cấp
             </Divider>
@@ -135,7 +137,11 @@ export default function Page() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên danh mục',
+                                title: 'Mã danh mục phân cấp',
+                                dataIndex: 'code',
+                            },
+                            {
+                                title: 'Tên danh mục phân cấp',
                                 dataIndex: 'name',
                             },
                             {

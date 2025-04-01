@@ -9,7 +9,6 @@ Table Group {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [not null]
   users User [not null]
   roles Role [not null]
@@ -22,7 +21,6 @@ Table Role {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [not null]
   groups Group [not null]
   permissions Permission [not null]
@@ -35,7 +33,6 @@ Table Permission {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [not null]
   permissionType PermissionType [not null]
   disabled Boolean [not null, default: false]
@@ -53,7 +50,6 @@ Table Config {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   key String [unique, not null]
   value String [not null]
 }
@@ -65,7 +61,6 @@ Table User {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   email String [unique, not null]
   userName String [unique, not null]
   name String [not null]
@@ -75,6 +70,8 @@ Table User {
   role String
   groups Group [not null]
   feedback Feedback [not null]
+  student Student
+  lecturer Lecturer
 }
 
 Table Feedback {
@@ -84,7 +81,6 @@ Table Feedback {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   content String [not null]
   status FeedbackStatus [not null]
   satisfaction Satisfaction [not null]
@@ -99,10 +95,112 @@ Table BlockedIp {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   ipAddress String [unique, not null]
   reason String
   expiresAt DateTime
+}
+
+Table Student {
+  id String [pk]
+  user User [not null]
+  userId String [unique, not null]
+  dateOfBirth DateTime
+  phone String
+  address String
+  gender Gender
+  enrollments Enrollment [not null]
+  trainingPrograms StudentTrainingProgram [not null]
+  payments Payment [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Lecturer {
+  id String [pk]
+  user User [not null]
+  userId String [unique, not null]
+  specialization String
+  hireDate DateTime [default: `now()`, not null]
+  courses Course [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table TrainingProgram {
+  id String [pk]
+  title String [not null]
+  description String
+  courses Course [not null]
+  students StudentTrainingProgram [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table StudentTrainingProgram {
+  id String [pk]
+  student Student [not null]
+  studentId String [not null]
+  trainingProgram TrainingProgram [not null]
+  trainingProgramId String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  status TrainingStatus [not null, default: 'ACTIVE']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (studentId, trainingProgramId) [unique]
+  }
+}
+
+Table Course {
+  id String [pk]
+  title String [not null]
+  description String
+  lecturer Lecturer [not null]
+  lecturerId String [not null]
+  trainingProgram TrainingProgram [not null]
+  trainingProgramId String [not null]
+  price Float [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  isActive Boolean [not null, default: true]
+  equivalentCourseId String [unique]
+  equivalentCourse Course
+  equivalentTo Course
+  enrollments Enrollment [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Enrollment {
+  id String [pk]
+  student Student [not null]
+  studentId String [not null]
+  course Course [not null]
+  courseId String [not null]
+  enrolledAt DateTime [default: `now()`, not null]
+  status EnrollmentStatus [not null, default: 'ACTIVE']
+  grade Float
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (studentId, courseId) [unique]
+  }
+}
+
+Table Payment {
+  id String [pk]
+  student Student [not null]
+  studentId String [not null]
+  amount Float [not null]
+  paymentDate DateTime [default: `now()`, not null]
+  paymentMethod String [not null]
+  status PaymentStatus [not null, default: 'PENDING']
+  transactionId String [unique]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Table Province {
@@ -112,8 +210,7 @@ Table Province {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
   district District [not null]
 }
 
@@ -124,7 +221,6 @@ Table District {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [not null]
   province Province [not null]
   provinceId String [not null]
@@ -142,7 +238,6 @@ Table Commune {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [not null]
   district District [not null]
   districtId String [not null]
@@ -159,8 +254,7 @@ Table Level {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
 }
 
 Table Rank {
@@ -170,8 +264,7 @@ Table Rank {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
 }
 
 Table AcademicDegreeType {
@@ -181,8 +274,7 @@ Table AcademicDegreeType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
 }
 
 Table AcademicRankType {
@@ -192,8 +284,7 @@ Table AcademicRankType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
 }
 
 Table Position {
@@ -203,8 +294,7 @@ Table Position {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
 }
 
 Table OrganizationType {
@@ -214,8 +304,7 @@ Table OrganizationType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
-  name String [unique, not null]
+  name String [not null]
   organizations Organization [not null]
 }
 
@@ -226,7 +315,6 @@ Table Organization {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  isDelete Boolean [not null, default: false]
   name String [unique, not null]
   type OrganizationType [not null]
   typeId String [not null]
@@ -277,7 +365,51 @@ Enum Satisfaction {
   VerySatisfied
 }
 
+Enum Gender {
+  Male
+  Female
+}
+
+Enum TrainingStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+Enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+Enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 Ref: Feedback.userId > User.id
+
+Ref: Student.userId - User.id
+
+Ref: Lecturer.userId - User.id
+
+Ref: StudentTrainingProgram.studentId > Student.id
+
+Ref: StudentTrainingProgram.trainingProgramId > TrainingProgram.id
+
+Ref: Course.lecturerId > Lecturer.id
+
+Ref: Course.trainingProgramId > TrainingProgram.id
+
+Ref: Course.equivalentCourseId - Course.id
+
+Ref: Enrollment.studentId > Student.id
+
+Ref: Enrollment.courseId > Course.id
+
+Ref: Payment.studentId > Student.id
 
 Ref: District.provinceId > Province.id
 

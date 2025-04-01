@@ -299,6 +299,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'user',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'user',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'user',
                 },
             }
             , uniqueConstraints: {
@@ -442,6 +454,469 @@ const metadata = {
             ,
         }
         ,
+        student: {
+            name: 'Student', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'student',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, dateOfBirth: {
+                    name: "dateOfBirth",
+                    type: "DateTime",
+                    isOptional: true,
+                }, phone: {
+                    name: "phone",
+                    type: "String",
+                    isOptional: true,
+                }, address: {
+                    name: "address",
+                    type: "String",
+                    isOptional: true,
+                }, gender: {
+                    name: "gender",
+                    type: "Gender",
+                    isOptional: true,
+                }, enrollments: {
+                    name: "enrollments",
+                    type: "Enrollment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, trainingPrograms: {
+                    name: "trainingPrograms",
+                    type: "StudentTrainingProgram",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, payments: {
+                    name: "payments",
+                    type: "Payment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId: {
+                    name: "userId",
+                    fields: ["userId"]
+                },
+            }
+            ,
+        }
+        ,
+        lecturer: {
+            name: 'Lecturer', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'lecturer',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, specialization: {
+                    name: "specialization",
+                    type: "String",
+                    isOptional: true,
+                }, hireDate: {
+                    name: "hireDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, courses: {
+                    name: "courses",
+                    type: "Course",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId: {
+                    name: "userId",
+                    fields: ["userId"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingProgram: {
+            name: 'TrainingProgram', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, courses: {
+                    name: "courses",
+                    type: "Course",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingProgram',
+                }, students: {
+                    name: "students",
+                    type: "StudentTrainingProgram",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingProgram',
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        studentTrainingProgram: {
+            name: 'StudentTrainingProgram', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'trainingPrograms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, trainingProgram: {
+                    name: "trainingProgram",
+                    type: "TrainingProgram",
+                    isDataModel: true,
+                    backLink: 'students',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingProgramId" },
+                }, trainingProgramId: {
+                    name: "trainingProgramId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingProgram',
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "TrainingStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, studentId_trainingProgramId: {
+                    name: "studentId_trainingProgramId",
+                    fields: ["studentId", "trainingProgramId"]
+                },
+            }
+            ,
+        }
+        ,
+        course: {
+            name: 'Course', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    backLink: 'courses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, trainingProgram: {
+                    name: "trainingProgram",
+                    type: "TrainingProgram",
+                    isDataModel: true,
+                    backLink: 'courses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingProgramId" },
+                }, trainingProgramId: {
+                    name: "trainingProgramId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingProgram',
+                }, price: {
+                    name: "price",
+                    type: "Float",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isActive: {
+                    name: "isActive",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                }, equivalentCourseId: {
+                    name: "equivalentCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'equivalentCourse',
+                }, equivalentCourse: {
+                    name: "equivalentCourse",
+                    type: "Course",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'equivalentTo',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "equivalentCourseId" },
+                }, equivalentTo: {
+                    name: "equivalentTo",
+                    type: "Course",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'equivalentCourse',
+                }, enrollments: {
+                    name: "enrollments",
+                    type: "Enrollment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'course',
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, equivalentCourseId: {
+                    name: "equivalentCourseId",
+                    fields: ["equivalentCourseId"]
+                },
+            }
+            ,
+        }
+        ,
+        enrollment: {
+            name: 'Enrollment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'enrollments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, course: {
+                    name: "course",
+                    type: "Course",
+                    isDataModel: true,
+                    backLink: 'enrollments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "courseId" },
+                }, courseId: {
+                    name: "courseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'course',
+                }, enrolledAt: {
+                    name: "enrolledAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, status: {
+                    name: "status",
+                    type: "EnrollmentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, grade: {
+                    name: "grade",
+                    type: "Float",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, studentId_courseId: {
+                    name: "studentId_courseId",
+                    fields: ["studentId", "courseId"]
+                },
+            }
+            ,
+        }
+        ,
+        payment: {
+            name: 'Payment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'payments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, amount: {
+                    name: "amount",
+                    type: "Float",
+                }, paymentDate: {
+                    name: "paymentDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, paymentMethod: {
+                    name: "paymentMethod",
+                    type: "String",
+                }, status: {
+                    name: "status",
+                    type: "PaymentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, transactionId: {
+                    name: "transactionId",
+                    type: "String",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, transactionId: {
+                    name: "transactionId",
+                    fields: ["transactionId"]
+                },
+            }
+            ,
+        }
+        ,
         province: {
             name: 'Province', fields: {
                 id: {
@@ -487,9 +962,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
                 },
             }
             ,
@@ -648,6 +1120,291 @@ const metadata = {
                     attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, name: {
                     name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        rank: {
+            name: 'Rank', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        academicDegreeType: {
+            name: 'AcademicDegreeType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        academicRankType: {
+            name: 'AcademicRankType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        position: {
+            name: 'Position', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        organizationType: {
+            name: 'OrganizationType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, organizations: {
+                    name: "organizations",
+                    type: "Organization",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'type',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        organization: {
+            name: 'Organization', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, type: {
+                    name: "type",
+                    type: "OrganizationType",
+                    isDataModel: true,
+                    backLink: 'organizations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "typeId" },
+                }, typeId: {
+                    name: "typeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'type',
+                }, address: {
+                    name: "address",
                     type: "String",
                 },
             }

@@ -33,6 +33,7 @@ const PutLevelModal = () => {
             if (id) {
                 await updateLevel({
                     data: {
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -44,6 +45,7 @@ const PutLevelModal = () => {
             } else {
                 await createLevel({
                     data: {
+                        code : output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -77,6 +79,7 @@ const PutLevelModal = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
+            maskClosable={true}
             title={
                 id
                     ? 'Chỉnh sửa danh mục phân cấp'
@@ -87,11 +90,21 @@ const PutLevelModal = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
+                    name="code"
+                    label="Mã danh mục phân cấp"
+                    required
+                >
+                    <Input placeholder='Nhập mã danh mục phân cấp' />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem
+                    form={form}
                     name="name"
                     label="Tên danh mục phân cấp"
                     required
                 >
-                    <Input />
+                    <Input placeholder="Nhập tên danh mục phân cấp" />
                 </FormItem>
             </Col>
         </PutFormModal>
