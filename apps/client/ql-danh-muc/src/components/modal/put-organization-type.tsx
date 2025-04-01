@@ -54,7 +54,7 @@ const PutOrganizationTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['OrganizationType'],
             })
             onClose()
         } catch (error) {

@@ -54,7 +54,7 @@ const PutAcademicRankTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['AcademicRankType'],
             })
             onClose()
         } catch (error) {

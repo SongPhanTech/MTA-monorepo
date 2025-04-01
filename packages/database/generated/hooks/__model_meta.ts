@@ -57,9 +57,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -115,9 +112,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -173,9 +167,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, name_permissionType: {
                     name: "name_permissionType",
                     fields: ["name", "permissionType"]
@@ -223,9 +214,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, key: {
                     name: "key",
                     fields: ["key"]
@@ -317,9 +305,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, email: {
                     name: "email",
                     fields: ["email"]
@@ -391,9 +376,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -443,9 +425,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, ipAddress: {
                     name: "ipAddress",
                     fields: ["ipAddress"]
@@ -959,9 +938,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1021,9 +997,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, name_provinceId: {
                     name: "name_provinceId",
                     fields: ["name", "provinceId"]
@@ -1080,9 +1053,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, name_districtId: {
                     name: "name_districtId",
                     fields: ["name", "districtId"]
@@ -1127,9 +1097,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1171,9 +1138,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1215,9 +1179,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1259,9 +1220,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1303,9 +1261,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1353,9 +1308,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1412,12 +1364,460 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, name: {
                     name: "name",
                     fields: ["name"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingObjectType: {
+            name: 'TrainingObjectType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingType: {
+            name: 'TrainingType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingLocation: {
+            name: 'TrainingLocation', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingField: {
+            name: 'TrainingField', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingMajor: {
+            name: 'TrainingMajor', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingBlock: {
+            name: 'TrainingBlock', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingTime: {
+            name: 'TrainingTime', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingForm: {
+            name: 'TrainingForm', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        studyRank: {
+            name: 'StudyRank', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingRank: {
+            name: 'TrainingRank', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        trainingKPI: {
+            name: 'TrainingKPI', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
                 },
             }
             ,

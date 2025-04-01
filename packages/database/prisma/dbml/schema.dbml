@@ -4,7 +4,7 @@
 
 Table Group {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -16,7 +16,7 @@ Table Group {
 
 Table Role {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -28,7 +28,7 @@ Table Role {
 
 Table Permission {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -45,7 +45,7 @@ Table Permission {
 
 Table Config {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -56,7 +56,7 @@ Table Config {
 
 Table User {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -76,7 +76,7 @@ Table User {
 
 Table Feedback {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -90,7 +90,7 @@ Table Feedback {
 
 Table BlockedIp {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -205,7 +205,7 @@ Table Payment {
 
 Table Province {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -216,7 +216,7 @@ Table Province {
 
 Table District {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -233,7 +233,7 @@ Table District {
 
 Table Commune {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -249,7 +249,7 @@ Table Commune {
 
 Table Level {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -259,7 +259,7 @@ Table Level {
 
 Table Rank {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -269,7 +269,7 @@ Table Rank {
 
 Table AcademicDegreeType {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -279,7 +279,7 @@ Table AcademicDegreeType {
 
 Table AcademicRankType {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -289,7 +289,7 @@ Table AcademicRankType {
 
 Table Position {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -299,7 +299,7 @@ Table Position {
 
 Table OrganizationType {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -310,7 +310,7 @@ Table OrganizationType {
 
 Table Organization {
   id String [pk]
-  code String [unique]
+  code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -319,6 +319,116 @@ Table Organization {
   type OrganizationType [not null]
   typeId String [not null]
   address String [not null]
+}
+
+Table TrainingObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingLocation {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingField {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingMajor {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingBlock {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingTime {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingForm {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table StudyRank {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingRank {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table TrainingKPI {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
 }
 
 Table GroupToUser {

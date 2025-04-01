@@ -54,7 +54,7 @@ const PutPositionModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['Position'],
             })
             onClose()
         } catch (error) {
