@@ -72,7 +72,7 @@ enum PaymentStatus {
 
 model Group {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -84,7 +84,7 @@ model Group {
 
 model Role {
   id          String       @id() @default(cuid())
-  code        String?      @unique()
+  code        String?
   description String?      @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
@@ -96,7 +96,7 @@ model Role {
 
 model Permission {
   id             String         @id() @default(cuid())
-  code           String?        @unique()
+  code           String?
   description    String?        @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
@@ -111,7 +111,7 @@ model Permission {
 
 model Config {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -122,7 +122,7 @@ model Config {
 
 model User {
   id          String     @id() @default(cuid())
-  code        String?    @unique()
+  code        String?
   description String?    @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
@@ -142,7 +142,7 @@ model User {
 
 model Feedback {
   id           String         @id() @default(cuid())
-  code         String?        @unique()
+  code         String?
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
@@ -156,7 +156,7 @@ model Feedback {
 
 model BlockedIp {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -267,7 +267,7 @@ model Payment {
 
 model Province {
   id          String     @id() @default(cuid())
-  code        String?    @unique()
+  code        String?
   description String?    @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
@@ -278,7 +278,7 @@ model Province {
 
 model District {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -293,7 +293,7 @@ model District {
 
 model Commune {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -307,7 +307,7 @@ model Commune {
 
 model Level {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -317,7 +317,7 @@ model Level {
 
 model Rank {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -327,7 +327,7 @@ model Rank {
 
 model AcademicDegreeType {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -337,7 +337,7 @@ model AcademicDegreeType {
 
 model AcademicRankType {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -347,7 +347,7 @@ model AcademicRankType {
 
 model Position {
   id          String    @id() @default(cuid())
-  code        String?   @unique()
+  code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -357,7 +357,7 @@ model Position {
 
 model OrganizationType {
   id            String         @id() @default(cuid())
-  code          String?        @unique()
+  code          String?
   description   String?        @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime       @default(now())
@@ -368,7 +368,7 @@ model OrganizationType {
 
 model Organization {
   id          String           @id() @default(cuid())
-  code        String?          @unique()
+  code        String?
   description String?          @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime         @default(now())
@@ -377,4 +377,114 @@ model Organization {
   type        OrganizationType @relation(fields: [typeId], references: [id])
   typeId      String
   address     String
+}
+
+model TrainingObjectType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingLocation {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingField {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingMajor {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingBlock {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingTime {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingForm {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model StudyRank {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingRank {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+}
+
+model TrainingKPI {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
 }

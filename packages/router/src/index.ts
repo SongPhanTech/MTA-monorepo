@@ -3,6 +3,7 @@ import {
     PieChartOutlined,
     SettingOutlined,
     UserOutlined,
+    HomeOutlined
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
@@ -97,10 +98,16 @@ const NAVIGATION: NavigationType = {
     QL_DANH_MUC: {
         menus: [
             {
-                id: 'danh-muc',
-                label: 'Quản lý danh mục',
+                id: 'home',
+                label: 'Trang chủ',
+                icon: HomeOutlined,
+                path: ROUTER_PATH.QL_DANH_MUC.HOME,
+                description: 'Thông tin trang chủ',
+            },
+            {
+                id: 'danh-muc-chung',
+                label: 'Danh mục chung',
                 icon: PieChartOutlined,
-
                 children:  [
                    {
                     id: 'level',
@@ -146,7 +153,82 @@ const NAVIGATION: NavigationType = {
                    }
                 ]
             },
+            {
+                id: 'danh-muc-dao-tao',
+                label: 'Danh mục đào tạo',
+                icon: PieChartOutlined,
+                children:  [
+                    {
+                        id: 'training-object-type',
+                        label: 'Danh mục đối tượng đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE,
+                    },
+                    {
+                        id: 'training-type',
+                        label: 'Danh mục loại hình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_TYPE,
+                    },
+                    {
+                        id: 'training-location',
+                        label: 'Danh mục địa điểm đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LOCATION,
+                    },
+                    {
+                        id: 'training-field',
+                        label: 'Danh mục ngành đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FIELD,
+                    },
+                    {
+                        id: 'training-major',
+                        label: 'Danh mục chuyên ngành đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_MAJOR,
+                    },
+                    {
+                        id: 'training-block',
+                        label: 'Danh mục khối kiến thức',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_BLOCK,
+                    },
+                    {
+                        id: 'training-time',
+                        label: 'Danh mục thời gian đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_TIME,
+                    },
+                    {
+                        id: 'training-form',
+                        label: 'Danh mục hình thức đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FORM,
+                    },
+                    {
+                        id: 'study-rank',
+                        label: 'Danh mục xếp loại học tập',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_STUDY_RANK,
+                    },
+                    {
+                        id: 'training-rank',
+                        label: 'Danh mục xếp loại rèn luyện',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_RANK,
+                    },
+                    {
+                        id: 'training-kpi',
+                        label: 'Danh mục tải đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_KPI,
+                    }
+                ]
+            },
         ],
+
+        
         label: 'Quản lý danh mục',
     },
 }
