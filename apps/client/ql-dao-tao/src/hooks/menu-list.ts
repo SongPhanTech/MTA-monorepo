@@ -53,7 +53,7 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
 
-    const menus = NAVIGATION.QL_DANH_MUC.menus.filter((menu) => {
+    const menus = NAVIGATION.QL_DAO_TAO.menus.filter((menu) => {
         // if (menu.children) {
         //     return menu.children.some((child) => permissionNames.includes(child.id))
         // }

@@ -16,6 +16,9 @@ import _ from 'lodash'
 import PieChart from '@components/dashboard/org-structure'
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
+import StaffLevel from '@components/dashboard/staff-level'
+import TypeOfTraining from '@components/dashboard/type-of-training';
+import StaffByOrg from '@components/dashboard/staff-by-org';
 function Home() {
     return (
         <DefaultLayout className="p-0">
@@ -35,16 +38,18 @@ function Home() {
             </Row>
             <Row gutter={[16, 16]} className="p-4">
                 <Col span={12}>
-                    <Title level={2}>Thống kê đối tượng đào tạo</Title>
-                    <PieChart />
+                    <Title level={4}>Thống kê số lượng giảng viên theo trình độ</Title>
+                    <StaffLevel />
                 </Col>
-                <Col span={6}>
-                    <Title level={2}>Tin tức</Title>
-                    <News />
+                <Col span={12}>
+                    <Title level={4}>Thống kê số lượng học viên theo loại hình đào tạo</Title>
+                    <TypeOfTraining />
                 </Col>
-                <Col span={6}>
-                    <Title level={2}>Thông báo</Title>
-                    <Notifications />
+            </Row>
+            <Row gutter={[16, 16]} className="p-4">
+                <Col span={24}>
+                    <Title level={4}>Thống kê số lượng giảng viên theo đầu mối</Title>
+                    <StaffByOrg />
                 </Col>
             </Row>
         </DefaultLayout >
