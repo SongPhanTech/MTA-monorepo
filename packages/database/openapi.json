@@ -529,7 +529,9 @@
           "updatedAt",
           "name",
           "typeId",
-          "address"
+          "parentId",
+          "address",
+          "organizationId"
         ]
       },
       "TrainingObjectTypeScalarFieldEnum": {
@@ -2287,8 +2289,44 @@
           "typeId": {
             "type": "string"
           },
+          "parent": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Organization"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          },
           "address": {
             "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "required": [
@@ -13354,6 +13392,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -13361,6 +13412,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -13373,6 +13437,22 @@
                 "$ref": "#/components/schemas/OrganizationTypeWhereInput"
               }
             ]
+          },
+          "parent": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationNullableScalarRelationFilter"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationListRelationFilter"
           }
         }
       },
@@ -13424,11 +13504,37 @@
           "typeId": {
             "$ref": "#/components/schemas/SortOrder"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
           "address": {
             "$ref": "#/components/schemas/SortOrder"
           },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeOrderByWithRelationInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationOrderByWithRelationInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationOrderByRelationAggregateInput"
           }
         }
       },
@@ -13545,6 +13651,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -13552,6 +13671,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -13564,6 +13696,22 @@
                 "$ref": "#/components/schemas/OrganizationTypeWhereInput"
               }
             ]
+          },
+          "parent": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationNullableScalarRelationFilter"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationListRelationFilter"
           }
         }
       },
@@ -13694,6 +13842,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -13701,6 +13862,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -25009,11 +25183,27 @@
           "name": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutChildrenInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedManyWithoutParentInput"
           }
         },
         "required": [
@@ -25107,6 +25297,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -25119,6 +25322,12 @@
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeUpdateOneRequiredWithoutOrganizationsNestedInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneWithoutChildrenNestedInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUpdateManyWithoutParentNestedInput"
           }
         }
       },
@@ -25173,8 +25382,28 @@
           "typeId": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "required": [
@@ -25265,6 +25494,19 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -30312,6 +30554,31 @@
           },
           "isNot": {
             "$ref": "#/components/schemas/OrganizationTypeWhereInput"
+          }
+        }
+      },
+      "OrganizationNullableScalarRelationFilter": {
+        "type": "object",
+        "properties": {
+          "is": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
+          },
+          "isNot": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
           }
         }
       },
@@ -37979,6 +38246,139 @@
           }
         }
       },
+      "OrganizationCreateNestedOneWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutChildrenInput"
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutChildrenInput"
+          },
+          "connect": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          }
+        }
+      },
+      "OrganizationCreateNestedManyWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/OrganizationCreateManyParentInputEnvelope"
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationUncheckedCreateNestedManyWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/OrganizationCreateManyParentInputEnvelope"
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
       "OrganizationTypeUpdateOneRequiredWithoutOrganizationsNestedInput": {
         "type": "object",
         "properties": {
@@ -38011,6 +38411,357 @@
               },
               {
                 "$ref": "#/components/schemas/OrganizationTypeUncheckedUpdateWithoutOrganizationsInput"
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationUpdateOneWithoutChildrenNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutChildrenInput"
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutChildrenInput"
+          },
+          "upsert": {
+            "$ref": "#/components/schemas/OrganizationUpsertWithoutChildrenInput"
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
+          },
+          "connect": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateToOneWithWhereWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutChildrenInput"
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationUpdateManyWithoutParentNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpsertWithWhereUniqueWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpsertWithWhereUniqueWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/OrganizationCreateManyParentInputEnvelope"
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithWhereUniqueWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpdateWithWhereUniqueWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateManyWithWhereWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpdateManyWithWhereWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationUncheckedUpdateManyWithoutParentNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpsertWithWhereUniqueWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpsertWithWhereUniqueWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/OrganizationCreateManyParentInputEnvelope"
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithWhereUniqueWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpdateWithWhereUniqueWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateManyWithWhereWithoutParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUpdateManyWithWhereWithoutParentInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationScalarWhereInput"
+                }
               }
             ]
           }
@@ -51484,8 +52235,24 @@
           "name": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutChildrenInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedManyWithoutParentInput"
           }
         },
         "required": [
@@ -51541,8 +52308,31 @@
           "name": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedCreateNestedManyWithoutParentInput"
           }
         },
         "required": [
@@ -51800,6 +52590,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -51807,6 +52610,19 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -51938,6 +52754,377 @@
         "required": [
           "where",
           "create"
+        ]
+      },
+      "OrganizationCreateWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutChildrenInput"
+          }
+        },
+        "required": [
+          "name",
+          "address",
+          "type"
+        ]
+      },
+      "OrganizationUncheckedCreateWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "typeId",
+          "address"
+        ]
+      },
+      "OrganizationCreateOrConnectWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutChildrenInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
+      "OrganizationCreateWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedManyWithoutParentInput"
+          }
+        },
+        "required": [
+          "name",
+          "address",
+          "type"
+        ]
+      },
+      "OrganizationUncheckedCreateWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedCreateNestedManyWithoutParentInput"
+          }
+        },
+        "required": [
+          "name",
+          "typeId",
+          "address"
+        ]
+      },
+      "OrganizationCreateOrConnectWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
+      "OrganizationCreateManyParentInputEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateManyParentInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationCreateManyParentInput"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "data"
         ]
       },
       "OrganizationTypeUpsertWithoutOrganizationsInput": {
@@ -52166,6 +53353,385 @@
             ]
           }
         }
+      },
+      "OrganizationUpsertWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutChildrenInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutChildrenInput"
+              }
+            ]
+          },
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereInput"
+          }
+        },
+        "required": [
+          "update",
+          "create"
+        ]
+      },
+      "OrganizationUpdateToOneWithWhereWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutChildrenInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutChildrenInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "OrganizationUpdateWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeUpdateOneRequiredWithoutOrganizationsNestedInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneWithoutChildrenNestedInput"
+          }
+        }
+      },
+      "OrganizationUncheckedUpdateWithoutChildrenInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "typeId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationUpsertWithWhereUniqueWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutParentInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutParentInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutParentInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutParentInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "update",
+          "create"
+        ]
+      },
+      "OrganizationUpdateWithWhereUniqueWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutParentInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutParentInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "OrganizationUpdateManyWithWhereWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationScalarWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateManyMutationInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateManyWithoutParentInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
       },
       "UserUpdateWithoutGroupsInput": {
         "type": "object",
@@ -57428,8 +58994,28 @@
           "name": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "required": [
@@ -57522,6 +59108,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -57531,6 +59130,12 @@
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneWithoutChildrenNestedInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUpdateManyWithoutParentNestedInput"
           }
         }
       },
@@ -57619,6 +59224,19 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "address": {
             "oneOf": [
               {
@@ -57628,6 +59246,22 @@
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedUpdateManyWithoutParentNestedInput"
           }
         }
       },
@@ -57713,6 +59347,462 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationCreateManyParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "typeId",
+          "address"
+        ]
+      },
+      "OrganizationUpdateWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeUpdateOneRequiredWithoutOrganizationsNestedInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUpdateManyWithoutParentNestedInput"
+          }
+        }
+      },
+      "OrganizationUncheckedUpdateWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "typeId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedUpdateManyWithoutParentNestedInput"
+          }
+        }
+      },
+      "OrganizationUncheckedUpdateManyWithoutParentInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "typeId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -57813,6 +59903,17 @@
           },
           "include": {
             "$ref": "#/components/schemas/OrganizationTypeInclude"
+          }
+        }
+      },
+      "OrganizationDefaultArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/OrganizationSelect"
+          },
+          "include": {
+            "$ref": "#/components/schemas/OrganizationInclude"
           }
         }
       },
@@ -58348,6 +60449,36 @@
                 "$ref": "#/components/schemas/OrganizationTypeDefaultArgs"
               }
             ]
+          },
+          "parent": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationDefaultArgs"
+              }
+            ]
+          },
+          "children": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationFindManyArgs"
+              }
+            ]
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationCountOutputTypeDefaultArgs"
+              }
+            ]
           }
         }
       },
@@ -58457,6 +60588,14 @@
           }
         }
       },
+      "OrganizationCountOutputTypeSelect": {
+        "type": "object",
+        "properties": {
+          "children": {
+            "type": "boolean"
+          }
+        }
+      },
       "GroupCountOutputTypeDefaultArgs": {
         "type": "object",
         "properties": {
@@ -58542,6 +60681,14 @@
         "properties": {
           "select": {
             "$ref": "#/components/schemas/OrganizationTypeCountOutputTypeSelect"
+          }
+        }
+      },
+      "OrganizationCountOutputTypeDefaultArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/OrganizationCountOutputTypeSelect"
           }
         }
       },
@@ -59689,8 +61836,44 @@
           "typeId": {
             "type": "boolean"
           },
+          "parent": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationDefaultArgs"
+              }
+            ]
+          },
+          "parentId": {
+            "type": "boolean"
+          },
+          "children": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationFindManyArgs"
+              }
+            ]
+          },
           "address": {
             "type": "boolean"
+          },
+          "organizationId": {
+            "type": "boolean"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationCountOutputTypeDefaultArgs"
+              }
+            ]
           }
         }
       },
@@ -62125,7 +64308,13 @@
           "typeId": {
             "type": "boolean"
           },
+          "parentId": {
+            "type": "boolean"
+          },
           "address": {
+            "type": "boolean"
+          },
+          "organizationId": {
             "type": "boolean"
           },
           "_all": {
@@ -62160,7 +64349,13 @@
           "typeId": {
             "type": "boolean"
           },
+          "parentId": {
+            "type": "boolean"
+          },
           "address": {
+            "type": "boolean"
+          },
+          "organizationId": {
             "type": "boolean"
           }
         }
@@ -62192,7 +64387,13 @@
           "typeId": {
             "type": "boolean"
           },
+          "parentId": {
+            "type": "boolean"
+          },
           "address": {
+            "type": "boolean"
+          },
+          "organizationId": {
             "type": "boolean"
           }
         }
@@ -66147,8 +68348,28 @@
           "typeId": {
             "type": "string"
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
             "type": "string"
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "_count": {
             "oneOf": [
@@ -72679,7 +74900,13 @@
           "typeId": {
             "type": "integer"
           },
+          "parentId": {
+            "type": "integer"
+          },
           "address": {
+            "type": "integer"
+          },
+          "organizationId": {
             "type": "integer"
           },
           "_all": {
@@ -72695,7 +74922,9 @@
           "updatedAt",
           "name",
           "typeId",
+          "parentId",
           "address",
+          "organizationId",
           "_all"
         ]
       },
@@ -72785,7 +75014,27 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
             "oneOf": [
               {
                 "type": "null"
@@ -72883,7 +75132,27 @@
               }
             ]
           },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "address": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
             "oneOf": [
               {
                 "type": "null"

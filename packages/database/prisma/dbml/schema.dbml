@@ -318,7 +318,11 @@ Table Organization {
   name String [unique, not null]
   type OrganizationType [not null]
   typeId String [not null]
+  parent Organization
+  parentId String
+  children Organization [not null]
   address String [not null]
+  organizationId String
 }
 
 Table TrainingObjectType {
@@ -526,3 +530,5 @@ Ref: District.provinceId > Province.id
 Ref: Commune.districtId > District.id
 
 Ref: Organization.typeId > OrganizationType.id
+
+Ref: Organization.organizationId - Organization.id

@@ -1,5 +1,5 @@
 {
-  "name": "@backend/ql-danh-muc",
+  "name": "@backend/ql-dao-tao",
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
