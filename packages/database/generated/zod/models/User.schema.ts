@@ -27,8 +27,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     groups: z.array(z.unknown()).optional(),
     feedback: z.array(z.unknown()).optional(),
-    student: z.record(z.unknown()).optional(),
-    lecturer: z.record(z.unknown()).optional(),
+    userProfile: z.array(z.unknown()).optional(),
 }
 );
 
