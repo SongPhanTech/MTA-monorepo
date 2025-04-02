@@ -14,8 +14,6 @@ model User extends Base {
   groups     Group[]
 
   feedback   Feedback[]
-
-
 	userProfile UserProfile[]
 
 }

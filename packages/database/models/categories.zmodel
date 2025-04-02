@@ -60,4 +60,5 @@ model Organization extends Base {
   address String
 
 	curriculum Curriculum[]
+	fixedClass FixedClass[]
 }
