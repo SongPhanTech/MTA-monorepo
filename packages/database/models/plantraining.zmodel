@@ -1,6 +1,7 @@
 import 'base'
 import 'categories_edu'
 import 'categories'
+import 'user_info'
 
 // năm học
 model SchoolYear extends Base {
@@ -43,6 +44,8 @@ model TrainingCourse extends Base {
   trainingLevelId      String
   TrainingForm         TrainingForm       @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
   trainingFormId       String
+
+	fixedClass FixedClass[]
 }
 
 enum ActiveStatus {
@@ -69,3 +72,14 @@ model Curriculum extends Base {
   renderPath               String?  // Đường dẫn tài liệu kết xuất
 }
 
+// lớp biên chế
+model FixedClass extends Base {
+  name                     String
+
+  TrainingCourse         TrainingCourse     @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourseId       String
+  
+  ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganizationId String
+
+}

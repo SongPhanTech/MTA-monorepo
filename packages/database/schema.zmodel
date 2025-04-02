@@ -2,6 +2,8 @@ import './models/base.zmodel'
 import './models/categories.zmodel'
 import './models/categories_edu.zmodel'
 import './models/plantraining.zmodel'
+import './models/user_info.zmodel'
+import './models/user.zmodel'
 
 datasource db {
   provider = "postgresql"
