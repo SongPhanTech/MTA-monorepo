@@ -1,0 +1,194 @@
+import 'base'
+import 'user'
+import 'categories'
+
+// đối tượng ưu tiên
+model PriorityObject extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+// khu vực đăng ký
+model RegistrationArea extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+// quốc tịch
+model Nationality extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+// tôn giáo
+model Religion extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+// dân tộc
+model Ethnicity extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+// đối tượng (sinh viên, học viên, giảng viên, cán bộ, nhân viên, người lao động, quân nhân chuyên nghiệp, ...)
+model UserType extends Base {
+  name        String
+  userProfile UserProfile[]
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+model UserProfile {
+  id                     String            @id @default(uuid())
+  user                   User?             @relation(fields: [userId], references: [id])
+  userId                 String?           @unique
+  code                   String?           @unique
+  UserType               UserType          @relation(fields: [userTypeId], references: [id]) // loại đối tượng
+  userTypeId             String
+
+  // Thông tin cá nhân
+  firstName              String
+  lastName               String
+  dateOfBirth            DateTime?  // ngày sinh
+  placeOfBirth           String? // nơi sinh
+  idCardNumber           String? // số căn cước công dân
+  idCardDate             DateTime? // ngày cấp
+
+  PriorityObject         PriorityObject?   @relation(fields: [priorityObjectId], references: [id]) // đối tượng ưu tiên
+  priorityObjectId       String?
+  RegistrationArea       RegistrationArea? @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
+  registrationAreaId     String?
+  Nationality            Nationality?      @relation(fields: [nationalityId], references: [id]) // quốc tịch
+  nationalityId          String?
+  Religion               Religion?         @relation(fields: [religionId], references: [id]) // tôn giáo
+  religionId             String?
+  Ethnicity              Ethnicity?        @relation(fields: [ethnicityId], references: [id]) // dân tộc
+  ethnicityId            String?
+  gender                 Gender?
+  permanentAddress       String? // địa chỉ thường trú
+  temporaryAddress       String? // địa chỉ tạm trú
+  contactAddress         String? // địa chỉ liên hệ
+  phoneNumber            String? // số điện thoại
+  email                  String? // email
+
+  parentPhoneNumber      String? // số điện thoại phụ huynh
+  parentName             String? // tên phụ huynh
+
+
+  // thông tin đoàn thể
+  unionDate              DateTime? // ngày vào Đoàn
+  unionPlace             String? // nơi vào Đoàn
+  // ngày vào Đảng (ĐẢNG CỘNG SẢN VIỆT NAM – COMMUNIST PARTY OF VIET NAM (CPV) )
+  CPVJoinDate            DateTime? // ngày vào Đảng
+  officialCPVDate        DateTime? // ngày chính thức
+  CPVJoinPlace           String? // nơi vào Đảng
+  tenureDate             DateTime? // ngày vào biên chế
+  enlistmentDate         DateTime? // ngày nhập ngũ
+  dischargeDate          DateTime? // ngày xuất ngũ
+  
+
+  // thông tin thay đổi (có bảng lịch sử riêng)
+  rankName               String? // cấp bậc hàm
+  educationLevel         String? // trình độ học vấn
+  academicDegreeTypeName String? // học hàm
+  academicRankTypeName   String? // học vị
+  positionName           String? // chức vụ chính quyền
+  positionCPVName        String? // chức vụ Đảng
+  organizationName       String? // đơn vị
+  organizationCPVName    String? // nơi sinh hoạt Đảng
+
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+}
+
+
+
+// // TrainingProgram model
+// model TrainingProgram {
+//   id          String                   @id @default(uuid())
+//   title       String
+//   description String?
+//   courses     Course[]
+//   students    StudentTrainingProgram[]
+//   createdAt   DateTime                 @default(now())
+//   updatedAt   DateTime                 @updatedAt
+// }
+
+// // Junction table for Student and TrainingProgram (many-to-many)
+// model StudentTrainingProgram {
+//   id                String          @id @default(uuid())
+//   student           Student         @relation(fields: [studentId], references: [id])
+//   studentId         String
+//   trainingProgram   TrainingProgram @relation(fields: [trainingProgramId], references: [id])
+//   trainingProgramId String
+//   startDate         DateTime
+//   endDate           DateTime?
+//   status            TrainingStatus  @default(ACTIVE)
+//   createdAt         DateTime        @default(now())
+//   updatedAt         DateTime        @updatedAt
+
+//   @@unique([studentId, trainingProgramId])
+// }
+
+// enum TrainingStatus {
+//   ACTIVE
+//   COMPLETED
+//   DROPPED
+// }
+
+// // Course model
+// model Course {
+//   id                 String          @id @default(uuid())
+//   title              String
+//   description        String?
+//   lecturer           Lecturer        @relation(fields: [lecturerId], references: [id])
+//   lecturerId         String
+//   trainingProgram    TrainingProgram @relation(fields: [trainingProgramId], references: [id])
+//   trainingProgramId  String
+//   price              Float
+//   startDate          DateTime
+//   endDate            DateTime?
+//   isActive           Boolean         @default(true)
+//   equivalentCourseId String?         @unique
+//   equivalentCourse   Course?         @relation("EquivalentCourses", fields: [equivalentCourseId], references: [id])
+//   equivalentTo       Course?         @relation("EquivalentCourses")
+//   enrollments        Enrollment[]
+//   createdAt          DateTime        @default(now())
+//   updatedAt          DateTime        @updatedAt
+// }
+
+// // Enrollment model (junction table between Student and Course)
+// model Enrollment {
+//   id         String           @id @default(uuid())
+//   student    Student          @relation(fields: [studentId], references: [id])
+//   studentId  String
+//   course     Course           @relation(fields: [courseId], references: [id])
+//   courseId   String
+//   enrolledAt DateTime         @default(now())
+//   status     EnrollmentStatus @default(ACTIVE)
+//   grade      Float?
+//   createdAt  DateTime         @default(now())
+//   updatedAt  DateTime         @updatedAt
+
+//   @@unique([studentId, courseId])
+// }
+
+// enum EnrollmentStatus {
+//   ACTIVE
+//   COMPLETED
+//   DROPPED
+// }
+
+
+
+// enum PaymentStatus {
+//   PENDING
+//   COMPLETED
+//   FAILED
+//   REFUNDED
+// }

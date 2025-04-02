@@ -41,8 +41,6 @@ model TrainingCourse extends Base {
   trainingTypeId       String
   TrainingLevel        TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId      String
-  TrainingLocation     TrainingLocation   @relation(fields: [trainingLocationId], references: [id]) // Địa điểm đào tạo
-  trainingLocationId   String
   TrainingForm         TrainingForm       @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
   trainingFormId       String
 }
@@ -64,8 +62,10 @@ model Curriculum extends Base {
   trainingObjectTypeId     String
   TrainingLevel            TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId          String
-  infomation               String //Thông tin
-  documentPath             String? // Đường dẫn tài liệu
-  renderPath               String? // Đường dẫn tài liệu kết xuất
+  TraingTime               TrainingTime       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
+  trainingTimeId           String
+  infomation               String   //Thông tin
+  documentPath             String?  // Đường dẫn tài liệu
+  renderPath               String?  // Đường dẫn tài liệu kết xuất
 }
 

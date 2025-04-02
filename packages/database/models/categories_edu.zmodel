@@ -32,7 +32,6 @@ model TrainingForm extends Base {
 // địa điểm đào tạo
 model TrainingLocation extends Base {
   name String
-	trainingCourse TrainingCourse[]
 }
 
 // ngành đào tạo
@@ -53,6 +52,8 @@ model TrainingBlock extends Base {
 // thời gian đào tạo  
 model TrainingTime extends Base {
   name String
+
+	curriculum Curriculum[]
 }
 
 // xếp loại học tập
