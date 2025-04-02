@@ -1,18 +1,38 @@
 import 'base'
+import 'plantraining'
 
-// đối tượng đào tạo
+// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
   name String
+	TrainingCourse TrainingCourse[]
+	curriculum Curriculum[]
 }
 
-// loại hình đào tạo
+// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType extends Base {
   name String
+
+	trainingCourse TrainingCourse[]
+}
+
+// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
+model TrainingLevel extends Base {
+  name String
+
+	trainingCourse TrainingCourse[]
+	curriculum Curriculum[]
+}
+
+// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+model TrainingForm extends Base {
+  name String
+	trainingCourse TrainingCourse[]
 }
 
 // địa điểm đào tạo
 model TrainingLocation extends Base {
   name String
+	trainingCourse TrainingCourse[]
 }
 
 // ngành đào tạo
@@ -32,11 +52,6 @@ model TrainingBlock extends Base {
 
 // thời gian đào tạo  
 model TrainingTime extends Base {
-  name String
-}
-
-// hình thức đào tạo
-model TrainingForm extends Base {
   name String
 }
 
