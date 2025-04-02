@@ -367,16 +367,20 @@ model OrganizationType {
 }
 
 model Organization {
-  id          String           @id() @default(cuid())
-  code        String?
-  description String?          @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt()
-  name        String           @unique()
-  type        OrganizationType @relation(fields: [typeId], references: [id])
-  typeId      String
-  address     String
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String           @unique()
+  type           OrganizationType @relation(fields: [typeId], references: [id])
+  typeId         String
+  parent         Organization?    @relation("ParentChild", fields: [organizationId], references: [id])
+  parentId       String?
+  children       Organization[]   @relation("ParentChild")
+  address        String
+  organizationId String?
 }
 
 model TrainingObjectType {

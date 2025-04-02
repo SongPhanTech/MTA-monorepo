@@ -1355,6 +1355,22 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'type',
+                }, parent: {
+                    name: "parent",
+                    type: "Organization",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'children',
+                }, parentId: {
+                    name: "parentId",
+                    type: "String",
+                    isOptional: true,
+                }, children: {
+                    name: "children",
+                    type: "Organization",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parent',
                 }, address: {
                     name: "address",
                     type: "String",

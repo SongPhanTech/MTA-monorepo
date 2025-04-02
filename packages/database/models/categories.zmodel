@@ -57,5 +57,8 @@ model Organization extends Base {
   name    String           @unique
   type    OrganizationType @relation(fields: [typeId], references: [id])
   typeId  String
+  parent  Organization? @relation("ParentChild")
+  parentId String?
+  children Organization[] @relation("ParentChild")
   address String
 }

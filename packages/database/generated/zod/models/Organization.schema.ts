@@ -14,11 +14,14 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     name: z.string(),
+    parentId: z.string().nullish(),
     address: z.string(),
 }
 ).strict();
 const relationSchema = z.object({
     type: z.record(z.unknown()),
+    parent: z.record(z.unknown()).optional(),
+    children: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -57,6 +60,7 @@ export const OrganizationPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     name: z.string(),
+    parentId: z.string().nullish(),
     address: z.string()
 }).partial().passthrough();
 
