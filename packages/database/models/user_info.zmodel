@@ -58,6 +58,7 @@ model UserProfile {
   placeOfBirth           String? // nơi sinh
   idCardNumber           String? // số căn cước công dân
   idCardDate             DateTime? // ngày cấp
+  officerNumber          String? // số hiệu sĩ quan
 
   PriorityObject         PriorityObject?   @relation(fields: [priorityObjectId], references: [id]) // đối tượng ưu tiên
   priorityObjectId       String?
@@ -104,6 +105,8 @@ model UserProfile {
 
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
+
+	
 }
 
 
