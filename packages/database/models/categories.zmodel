@@ -1,5 +1,5 @@
 import 'base'
-
+import 'plantraining'
 
 model Province extends Base {
   name     String
@@ -61,4 +61,6 @@ model Organization extends Base {
   parentId String?
   children Organization[] @relation("ParentChild")
   address String
+
+	curriculum Curriculum[]
 }

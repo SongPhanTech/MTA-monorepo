@@ -1,4 +1,6 @@
 import 'base'
+import 'categories_edu'
+import 'categories'
 
 // năm học
 model SchoolYear extends Base {
@@ -26,5 +28,44 @@ model Milestone extends Base {
   endDate      DateTime
   SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
+}
+
+// Khóa học
+model TrainingCourse extends Base {
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
+  TrainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId String
+  TrainingType         TrainingType       @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
+  trainingTypeId       String
+  TrainingLevel        TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevelId      String
+  TrainingLocation     TrainingLocation   @relation(fields: [trainingLocationId], references: [id]) // Địa điểm đào tạo
+  trainingLocationId   String
+  TrainingForm         TrainingForm       @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
+  trainingFormId       String
+}
+
+enum ActiveStatus {
+  ACTIVE
+  INACTIVATED
+}
+
+// chương trình giảng dạy
+model Curriculum extends Base {
+  name                     String
+  status                   ActiveStatus       @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
+  startDate                DateTime
+  endDate                  DateTime?
+  ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganizationId String
+  TrainingObjectType       TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId     String
+  TrainingLevel            TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevelId          String
+  infomation               String //Thông tin
+  documentPath             String? // Đường dẫn tài liệu
+  renderPath               String? // Đường dẫn tài liệu kết xuất
 }
 
