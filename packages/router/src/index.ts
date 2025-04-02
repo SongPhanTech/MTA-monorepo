@@ -231,6 +231,18 @@ const NAVIGATION: NavigationType = {
         
         label: 'Quản lý danh mục',
     },
+    QL_DAO_TAO: {
+        menus: [
+            {
+                id: 'home',
+                label: 'Trang chủ',
+                icon: HomeOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.HOME,
+                description: 'Thông tin trang chủ',
+            },
+        ],
+        label: 'Quản lý đào tạo',
+    },
 }
 export type { MenuItem, NavigationType }
 export { ROUTER_PATH }
