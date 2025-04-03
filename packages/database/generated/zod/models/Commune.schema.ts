@@ -17,11 +17,11 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    district: z.record(z.unknown()),
+    Province: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
-    districtId: z.string(),
+    provinceId: z.string(),
 }
 );
 

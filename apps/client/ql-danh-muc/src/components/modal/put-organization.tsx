@@ -7,6 +7,7 @@ import {
     useCreateOrganization,
     useFindUniqueOrganization,
     useFindManyOrganizationType,
+    useFindManyOrganization,
     useUpdateOrganization
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
@@ -30,7 +31,10 @@ const PutOrganizationModal = () => {
             take: 1000,
             skip: 0,
     })
-    console.log(data)
+    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyOrganization({
+        take: 1000, 
+        skip: 0,
+    })
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()
@@ -41,9 +45,12 @@ const PutOrganizationModal = () => {
             if (id) {
                 await updateLevel({
                     data: {
+                        typeId:output.typeId,
+                        address: output.address,
                         code: output.code,
                         name: output.name,
                         description: output.description,
+                        parentId:output.parentId
                     },
                     where: {
                         id,
@@ -58,6 +65,7 @@ const PutOrganizationModal = () => {
                         code : output.code,
                         name: output.name,
                         description: output.description,
+                        parentId:output.parentId
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -133,6 +141,21 @@ const PutOrganizationModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="parentId"
+                    label="Đơn vị cấp trên"
+                    required
+                >
+                    <Select placeholder='Chọn đơn vị cấp trên' options={organizations.map((i: Organization) =>{
+                        return {
+                            value: i.id,
+                            label: i.name
+                        }
+                    })} />
+                </FormItem>
+            </Col>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="address"

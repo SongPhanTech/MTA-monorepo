@@ -70,8 +70,7 @@ Table User {
   role String
   groups Group [not null]
   feedback Feedback [not null]
-  student Student
-  lecturer Lecturer
+  userProfile UserProfile [not null]
 }
 
 Table Feedback {
@@ -100,105 +99,120 @@ Table BlockedIp {
   expiresAt DateTime
 }
 
-Table Student {
+Table PriorityObject {
   id String [pk]
-  user User [not null]
-  userId String [unique, not null]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table RegistrationArea {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table Nationality {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table Religion {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table Ethnicity {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table UserType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  userProfile UserProfile [not null]
+}
+
+Table UserProfile {
+  id String [pk]
+  user User
+  userId String [unique]
+  code String [unique]
+  UserType UserType [not null]
+  userTypeId String [not null]
+  firstName String [not null]
+  lastName String [not null]
   dateOfBirth DateTime
-  phone String
-  address String
+  placeOfBirth String
+  idCardNumber String
+  idCardDate DateTime
+  officerNumber String
+  PriorityObject PriorityObject
+  priorityObjectId String
+  RegistrationArea RegistrationArea
+  registrationAreaId String
+  Nationality Nationality
+  nationalityId String
+  Religion Religion
+  religionId String
+  Ethnicity Ethnicity
+  ethnicityId String
   gender Gender
-  enrollments Enrollment [not null]
-  trainingPrograms StudentTrainingProgram [not null]
-  payments Payment [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-}
-
-Table Lecturer {
-  id String [pk]
-  user User [not null]
-  userId String [unique, not null]
-  specialization String
-  hireDate DateTime [default: `now()`, not null]
-  courses Course [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-}
-
-Table TrainingProgram {
-  id String [pk]
-  title String [not null]
-  description String
-  courses Course [not null]
-  students StudentTrainingProgram [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-}
-
-Table StudentTrainingProgram {
-  id String [pk]
-  student Student [not null]
-  studentId String [not null]
-  trainingProgram TrainingProgram [not null]
-  trainingProgramId String [not null]
-  startDate DateTime [not null]
-  endDate DateTime
-  status TrainingStatus [not null, default: 'ACTIVE']
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-
-  indexes {
-    (studentId, trainingProgramId) [unique]
-  }
-}
-
-Table Course {
-  id String [pk]
-  title String [not null]
-  description String
-  lecturer Lecturer [not null]
-  lecturerId String [not null]
-  trainingProgram TrainingProgram [not null]
-  trainingProgramId String [not null]
-  price Float [not null]
-  startDate DateTime [not null]
-  endDate DateTime
-  isActive Boolean [not null, default: true]
-  equivalentCourseId String [unique]
-  equivalentCourse Course
-  equivalentTo Course
-  enrollments Enrollment [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-}
-
-Table Enrollment {
-  id String [pk]
-  student Student [not null]
-  studentId String [not null]
-  course Course [not null]
-  courseId String [not null]
-  enrolledAt DateTime [default: `now()`, not null]
-  status EnrollmentStatus [not null, default: 'ACTIVE']
-  grade Float
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-
-  indexes {
-    (studentId, courseId) [unique]
-  }
-}
-
-Table Payment {
-  id String [pk]
-  student Student [not null]
-  studentId String [not null]
-  amount Float [not null]
-  paymentDate DateTime [default: `now()`, not null]
-  paymentMethod String [not null]
-  status PaymentStatus [not null, default: 'PENDING']
-  transactionId String [unique]
+  permanentAddress String
+  temporaryAddress String
+  contactAddress String
+  phoneNumber String
+  email String
+  parentPhoneNumber String
+  parentName String
+  unionDate DateTime
+  unionPlace String
+  CPVJoinDate DateTime
+  officialCPVDate DateTime
+  CPVJoinPlace String
+  tenureDate DateTime
+  enlistmentDate DateTime
+  dischargeDate DateTime
+  rankName String
+  educationLevel String
+  academicDegreeTypeName String
+  academicRankTypeName String
+  positionName String
+  positionCPVName String
+  organizationName String
+  organizationCPVName String
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
 }
@@ -211,24 +225,7 @@ Table Province {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  district District [not null]
-}
-
-Table District {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  province Province [not null]
-  provinceId String [not null]
-  commune Commune [not null]
-
-  indexes {
-    (name, provinceId) [unique]
-  }
+  Commune Commune [not null]
 }
 
 Table Commune {
@@ -239,11 +236,11 @@ Table Commune {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  district District [not null]
-  districtId String [not null]
+  Province Province [not null]
+  provinceId String [not null]
 
   indexes {
-    (name, districtId) [unique]
+    (name, provinceId) [unique]
   }
 }
 
@@ -297,6 +294,16 @@ Table Position {
   name String [not null]
 }
 
+Table PositionCPV {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
 Table OrganizationType {
   id String [pk]
   code String
@@ -322,7 +329,111 @@ Table Organization {
   parentId String
   children Organization [not null]
   address String [not null]
+  curriculum Curriculum [not null]
+  fixedClass FixedClass [not null]
   organizationId String
+}
+
+Table SchoolYear {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  Semesters Semester [not null]
+  milestone Milestone [not null]
+}
+
+Table Semester {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  SchoolYear SchoolYear [not null]
+  schoolYearId String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+}
+
+Table Milestone {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  period Int [not null]
+  startDate DateTime [not null]
+  endDate DateTime [not null]
+  SchoolYear SchoolYear [not null]
+  schoolYearId String [not null]
+}
+
+Table TrainingCourse {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  TrainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+  TrainingType TrainingType [not null]
+  trainingTypeId String [not null]
+  TrainingLevel TrainingLevel [not null]
+  trainingLevelId String [not null]
+  TrainingForm TrainingForm [not null]
+  trainingFormId String [not null]
+  fixedClass FixedClass [not null]
+}
+
+Table Curriculum {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  status ActiveStatus [not null, default: 'ACTIVE']
+  startDate DateTime [not null]
+  endDate DateTime
+  ManagementOrganization Organization [not null]
+  managementOrganizationId String [not null]
+  TrainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+  TrainingLevel TrainingLevel [not null]
+  trainingLevelId String [not null]
+  TraingTime TrainingTime [not null]
+  trainingTimeId String [not null]
+  infomation String [not null]
+  documentPath String
+  renderPath String
+}
+
+Table FixedClass {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  TrainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  ManagementOrganization Organization [not null]
+  managementOrganizationId String [not null]
 }
 
 Table TrainingObjectType {
@@ -333,6 +444,8 @@ Table TrainingObjectType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  TrainingCourse TrainingCourse [not null]
+  curriculum Curriculum [not null]
 }
 
 Table TrainingType {
@@ -343,6 +456,30 @@ Table TrainingType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  trainingCourse TrainingCourse [not null]
+}
+
+Table TrainingLevel {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  trainingCourse TrainingCourse [not null]
+  curriculum Curriculum [not null]
+}
+
+Table TrainingForm {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  trainingCourse TrainingCourse [not null]
 }
 
 Table TrainingLocation {
@@ -393,16 +530,7 @@ Table TrainingTime {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-}
-
-Table TrainingForm {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
+  curriculum Curriculum [not null]
 }
 
 Table StudyRank {
@@ -484,51 +612,53 @@ Enum Gender {
   Female
 }
 
-Enum TrainingStatus {
+Enum ActiveStatus {
   ACTIVE
-  COMPLETED
-  DROPPED
-}
-
-Enum EnrollmentStatus {
-  ACTIVE
-  COMPLETED
-  DROPPED
-}
-
-Enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
+  INACTIVATED
 }
 
 Ref: Feedback.userId > User.id
 
-Ref: Student.userId - User.id
+Ref: UserProfile.userId > User.id
 
-Ref: Lecturer.userId - User.id
+Ref: UserProfile.userTypeId > UserType.id
 
-Ref: StudentTrainingProgram.studentId > Student.id
+Ref: UserProfile.priorityObjectId > PriorityObject.id
 
-Ref: StudentTrainingProgram.trainingProgramId > TrainingProgram.id
+Ref: UserProfile.registrationAreaId > RegistrationArea.id
 
-Ref: Course.lecturerId > Lecturer.id
+Ref: UserProfile.nationalityId > Nationality.id
 
-Ref: Course.trainingProgramId > TrainingProgram.id
+Ref: UserProfile.religionId > Religion.id
 
-Ref: Course.equivalentCourseId - Course.id
+Ref: UserProfile.ethnicityId > Ethnicity.id
 
-Ref: Enrollment.studentId > Student.id
-
-Ref: Enrollment.courseId > Course.id
-
-Ref: Payment.studentId > Student.id
-
-Ref: District.provinceId > Province.id
-
-Ref: Commune.districtId > District.id
+Ref: Commune.provinceId > Province.id
 
 Ref: Organization.typeId > OrganizationType.id
 
 Ref: Organization.organizationId - Organization.id
+
+Ref: Semester.schoolYearId > SchoolYear.id
+
+Ref: Milestone.schoolYearId > SchoolYear.id
+
+Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: TrainingCourse.trainingTypeId > TrainingType.id
+
+Ref: TrainingCourse.trainingLevelId > TrainingLevel.id
+
+Ref: TrainingCourse.trainingFormId > TrainingForm.id
+
+Ref: Curriculum.managementOrganizationId > Organization.id
+
+Ref: Curriculum.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: Curriculum.trainingLevelId > TrainingLevel.id
+
+Ref: Curriculum.trainingTimeId > TrainingTime.id
+
+Ref: FixedClass.trainingCourseId > TrainingCourse.id
+
+Ref: FixedClass.managementOrganizationId > Organization.id
