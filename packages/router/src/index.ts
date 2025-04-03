@@ -3,6 +3,7 @@ import {
     PieChartOutlined,
     SettingOutlined,
     UserOutlined,
+    ScheduleOutlined,
     HomeOutlined
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
@@ -239,6 +240,13 @@ const NAVIGATION: NavigationType = {
                 icon: HomeOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
+            },
+             {
+                id: 'schoolyear-semester',
+                label: 'Năm học, kỳ học',
+                icon: ScheduleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.SCHOOLYEAR_SEMESTER,
+                description: 'Thông tin năm học, kỳ học',
             },
         ],
         label: 'Quản lý đào tạo',

@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const CommuneScalarFieldEnumSchema = z.enum(["id", "code", "description", "deletedAt", "createdAt", "updatedAt", "name", "districtId"])
+export const CommuneScalarFieldEnumSchema = z.enum(["id", "code", "description", "deletedAt", "createdAt", "updatedAt", "name", "provinceId"])

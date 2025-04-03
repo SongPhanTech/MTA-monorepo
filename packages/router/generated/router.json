@@ -1,29 +1,30 @@
 {
   "QL_NGUOI_DUNG": {
     "INDEX": "/",
-    "HOME": "/home",
     "GIOI_HAN_DIA_CHI_MANG": "/gioi-han-dia-chi-mang",
-    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
+    "HOME": "/home",
     "NGUOI_DUNG_VAI_TRO": "/nguoi-dung/vai-tro",
+    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
     "NGUOI_DUNG_QUYEN_CO_BAN": "/nguoi-dung/quyen-co-ban",
-    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
     "NGUOI_DUNG_DANH_SACH": "/nguoi-dung/danh-sach",
+    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho"
   },
   "QL_DAO_TAO": {
     "INDEX": "/",
+    "SCHOOLYEAR_SEMESTER": "/schoolyear-semester",
     "HOME": "/home"
   },
   "QL_DANH_MUC": {
     "INDEX": "/",
     "HOME": "/home",
-    "DANH_MUC_DAO_TAO_TRANINING_TIME": "/danh-muc-dao-tao/tranining-time",
     "DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE": "/danh-muc-dao-tao/tranining-object-type",
+    "DANH_MUC_DAO_TAO_TRANINING_TIME": "/danh-muc-dao-tao/tranining-time",
+    "DANH_MUC_DAO_TAO_TRANINING_FIELD": "/danh-muc-dao-tao/tranining-field",
     "DANH_MUC_DAO_TAO_TRANINING_MAJOR": "/danh-muc-dao-tao/tranining-major",
     "DANH_MUC_DAO_TAO_TRANINING_FORM": "/danh-muc-dao-tao/tranining-form",
-    "DANH_MUC_DAO_TAO_TRANINING_BLOCK": "/danh-muc-dao-tao/tranining-block",
-    "DANH_MUC_DAO_TAO_TRANINING_FIELD": "/danh-muc-dao-tao/tranining-field",
     "DANH_MUC_DAO_TAO_TRAINING_TYPE": "/danh-muc-dao-tao/training-type",
+    "DANH_MUC_DAO_TAO_TRANINING_BLOCK": "/danh-muc-dao-tao/tranining-block",
     "DANH_MUC_DAO_TAO_TRAINING_RANK": "/danh-muc-dao-tao/training-rank",
     "DANH_MUC_DAO_TAO_TRAINING_KPI": "/danh-muc-dao-tao/training-kpi",
     "DANH_MUC_DAO_TAO_TRAINING_LOCATION": "/danh-muc-dao-tao/training-location",

@@ -17,7 +17,7 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    district: z.array(z.unknown()).optional(),
+    Commune: z.array(z.unknown()).optional(),
 }
 );
 
