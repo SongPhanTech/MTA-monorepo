@@ -1,14 +1,11 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import * as models from '@workspace/db/zod/models'
-import { prisma } from '..'
-
-const app = new OpenAPIHono({ strict: false })
 
 const GroupSchema = models.GroupScalarSchema.openapi('Group')
 
 const createGroup = createRoute({
     operationId: 'createGroup',
-    path: '/',
+    path: '/group/',
     method: 'post',
     request: {
         body: {
@@ -33,7 +30,7 @@ const createGroup = createRoute({
 const updateGroup = createRoute({
     operationId: 'updateGroup',
     method: 'put',
-    path: '/{id}',
+    path: '/group/{id}',
     request: {
         params: z.object({ id: z.string() }),
         body: {
@@ -55,31 +52,9 @@ const updateGroup = createRoute({
     },
 })
 
-app.openapi(createGroup, async (c) => {
-    const { userIds, roleIds, ...rest } = c.req.valid('json')
-
-    const data = await prisma.group.create({
-        data: {
-            ...rest,
-            users: { connect: userIds.map((id) => ({ id })) },
-            roles: { connect: roleIds.map((id) => ({ id })) },
-        },
-    })
-
-    return c.json(data, 201)
-}).openapi(updateGroup, async (c) => {
-    const { id } = c.req.valid('param')
-    const { userIds, roleIds, ...rest } = c.req.valid('json')
-
-    const data = await prisma.group.update({
-        where: { id },
-        data: {
-            ...rest,
-            users: { set: userIds.map((id) => ({ id })) },
-            roles: { set: roleIds.map((id) => ({ id })) },
-        },
-    })
-    return c.json(data, 200)
-})
-
-export default app
+export default
+{
+    createGroup,
+    updateGroup
+}
+    
