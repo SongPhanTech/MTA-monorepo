@@ -2,48 +2,57 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Organization, OrganizationType } from '@workspace/db'
+import type { Semester, SchoolYear } from '@workspace/db'
 import {
-    useCreateOrganization,
-    useFindUniqueOrganization,
-    useFindManyOrganizationType,
-    useUpdateOrganization
+    useCreateSemester,
+    useFindUniqueSemester,
+    useFindManySchoolYear,
+    useFindManySemester,
+    useUpdateSemester
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-export type PutOrganizationType = Organization
-const PutOrganizationModal = () => {
-    const [form] = Form.useForm<PutOrganizationType>()
+import DatePicker from '@components/commons/date-picker'
+import dayjs from 'dayjs'
+export type PutSemester = Semester
+const PutSemesterModal = () => {
+    const [form] = Form.useForm<PutSemester>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOrganizationModal.name,
+        tag: PutSemesterModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data = [], refetch } = useFindManyOrganizationType({
-            take: 1000,
-            skip: 0,
+    const { data = [], refetch } = useFindManySchoolYear({
+        take: 1000,
+        skip: 0,
     })
-    console.log(data)
+    const { data: organizations = [], refetch: refetchSemesters } = useFindManySemester({
+        take: 1000,
+        skip: 0,
+    })
 
-    const { mutateAsync: createLevel } = useCreateOrganization()
-    const { mutateAsync: updateLevel } = useUpdateOrganization()
-    async function onOk(output?: PutOrganizationType) {
+    const { mutateAsync: createSemester } = useCreateSemester()
+    const { mutateAsync: updateSemester } = useUpdateSemester()
+    async function onOk(output?: PutSemester) {
         if (!output) return
         try {
             showSpinner()
             if (id) {
-                await updateLevel({
+                await updateSemester({
                     data: {
                         code: output.code,
                         name: output.name,
                         description: output.description,
+                        startDate: output.startDate,
+                        endDate: output.endDate,
+                        schoolYearId: output.schoolYearId
                     },
                     where: {
                         id,
@@ -51,20 +60,21 @@ const PutOrganizationModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createLevel({
+                await createSemester({
                     data: {
-                        typeId:output.typeId,
-                        address: output.address,
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
+                        startDate: output.startDate,
+                        endDate: output.endDate,
+                        schoolYearId: output.schoolYearId
                     },
                 })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['Semester'],
             })
             onClose()
         } catch (error) {
@@ -73,13 +83,17 @@ const PutOrganizationModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueOrganization({
+    const { data: level } = useFindUniqueSemester({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
-            form.setFieldsValue(level)
+            form.setFieldsValue({
+                ...level,
+                startDate: dayjs(level.startDate),
+                endDate: dayjs(level.endDate)
+            })
         }
     }, [level])
 
@@ -92,39 +106,39 @@ const PutOrganizationModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa đơn vị'
-                    : 'Thêm mới đơn vị'
+                    ? 'Chỉnh sửa học kỳ'
+                    : 'Thêm mới học kỳ'
             }
             className="w-[30vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã đơn vị"
+                    label="Mã học kỳ"
                     required
                 >
-                    <Input placeholder='Nhập mã đơn vị' />
+                    <Input placeholder='Nhập mã học kỳ' />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên đơn vị"
+                    label="Tên học kỳ"
                     required
                 >
-                    <Input placeholder="Nhập tên đơn vị" />
+                    <Input placeholder="Nhập tên học kỳ" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
-                    name="typeId"
-                    label="Loại đơn vị"
+                    name="schoolYearId"
+                    label="Năm học"
                     required
                 >
-                    <Select placeholder='Chọn loại đơn vị' options={data.map((i: OrganizationType) =>{
+                    <Select placeholder='Chọn năm học' options={data.map((i: SchoolYear) => {
                         return {
                             value: i.id,
                             label: i.name
@@ -132,18 +146,23 @@ const PutOrganizationModal = () => {
                     })} />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="address"
-                    label="Địa chỉ"
-                    required
-                >
-                    <Input placeholder="Nhập địa chỉ" />
+            <Col span={24}>
+                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
+                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
+                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutOrganizationModal
+export default PutSemesterModal

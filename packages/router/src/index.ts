@@ -3,7 +3,9 @@ import {
     PieChartOutlined,
     SettingOutlined,
     UserOutlined,
-    HomeOutlined
+    ScheduleOutlined,
+    HomeOutlined,
+    ClockCircleOutlined
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
@@ -289,6 +291,20 @@ const NAVIGATION: NavigationType = {
                 icon: HomeOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
+            },
+             {
+                id: 'schoolyear-semester',
+                label: 'Năm học, kỳ học',
+                icon: ScheduleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.SCHOOLYEAR_SEMESTER,
+                description: 'Thông tin năm học, kỳ học',
+            },
+             {
+                id: 'milestone',
+                label: 'Mốc huấn luyện',
+                icon: ClockCircleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.MILESTONE,
+                description: 'Thông tin năm học, kỳ học',
             },
         ],
         label: 'Quản lý đào tạo',
