@@ -42,6 +42,9 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                 schoolYearId: selectedSchoolYear.id,
             }),
         },
+        include: {
+            SchoolYear: true
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -125,6 +128,11 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             {
                                 title: 'Tên học kỳ',
                                 dataIndex: 'name',
+                            },
+                            {
+                                title: 'Năm học',
+                                dataIndex: 'SchoolYear',
+                                render: (value) => value?.name ? value?.name : ""
                             },
                             {
                                 title: 'Ngày bắt đầu',

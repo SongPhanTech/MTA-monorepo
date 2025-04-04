@@ -45,7 +45,6 @@ export default function Page() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    console.log(data)
 
     const { data: count } = useCountOrganization()
 

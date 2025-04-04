@@ -39,6 +39,9 @@ export default function MilestonePage() {
                 contains: searchText,
             }
         },
+        include: {
+            SchoolYear: true
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -122,6 +125,11 @@ export default function MilestonePage() {
                             {
                                 title: 'Số tiết',
                                 dataIndex: 'period',
+                            },
+                            {
+                                title: 'Năm học',
+                                dataIndex: 'SchoolYear',
+                                render: (value) => value?.name ? value?.name : ""
                             },
                             {
                                 title: 'Ngày bắt đầu',
