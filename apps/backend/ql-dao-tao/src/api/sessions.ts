@@ -1,12 +1,12 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { prisma } from '../..'
+import { prisma } from '..'
 import {
     type Session,
     getSessionsByUserId,
     terminateSessionBySessionId,
     terminateSessionsByUserId,
-} from '../../wso2is-apis/generated/sessions'
-import { getSessionsByUserIdResponse } from '../../wso2is-apis/generated/zod/sessions'
+} from '../wso2is-apis/generated/sessions'
+import { getSessionsByUserIdResponse } from '../wso2is-apis/generated/zod/sessions'
 
 const app = new OpenAPIHono({ strict: false })
 

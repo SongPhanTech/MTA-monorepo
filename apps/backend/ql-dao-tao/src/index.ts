@@ -9,9 +9,9 @@ import { csrf } from 'hono/csrf'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
-import GroupApp from './api/group'
+
 import ISConfig from './api/is/configs'
-import UserApp from './api/user'
+import API from './api/api'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
@@ -23,7 +23,7 @@ export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 const register = new Registry()
 
-collectDefaultMetrics({ register })
+// collectDefaultMetrics({ register })
 
 app.get('/metrics', async (c) => {
     c.header('Content-Type', register.contentType)
@@ -50,8 +50,7 @@ app.use('*', checkIp)
 setupOpenApi(app)
 setupAuth(app)
 
-app.route('/api/user', UserApp)
-app.route('/api/group', GroupApp)
+app.route('/api', API)
 app.route('/api/is', ISConfig)
 
 app.use(
