@@ -10,13 +10,15 @@ type TableProps<T> = {
     data?: T[]
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
-    }
+    },
+    onRowClick?: (record: T) => void
 } & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
     columns = [],
     data,
     pagination,
+    onRowClick
 }: TableProps<T>) => {
     return (
         <TableAntd
@@ -44,6 +46,13 @@ const Table = <T extends Record<string, unknown>>({
                     pagination?.onShowSizeChange?.(size)
                 },
             }}
+            onRow={(record) => ({
+                onClick: () => {
+                    if (onRowClick) {
+                        onRowClick(record); // Gọi hàm khi click vào row
+                    }
+                }
+            })}
         />
     )
 }

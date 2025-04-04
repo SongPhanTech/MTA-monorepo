@@ -17,6 +17,13 @@ import PutTrainingObjectTypeModal from './put-training-object-type'
 import PutTraningRankModal from './put-training-rank'
 import PutTrainingTimeModal from './put-training-time'
 import PutTrainingTypeModal from './put-training-type'
+import PutTrainingLevelModal from './put-training-level'
+import PutPriorityObjectModal from './put-priority-object'
+import PutEthnicityModal from './put-ethnicity'
+import PutNationalityModal from './put-nationality'
+import PutRegistrationAreaModal from './put-registration-area'
+import PutReligionModal from './put-religion'
+import PutUserTypeModal from './put-user-type'
 export { ConfirmModal, PutLevelModal, PutRankModal, PutAcademicDegreeTypeModal, PutAcademicRankTypeModal, PutOrganizationTypeModal,PutPositionModal, PutOrganizationModal,
     PutStudyRankModal,
     PutTrainingBlockModal,
@@ -28,5 +35,12 @@ export { ConfirmModal, PutLevelModal, PutRankModal, PutAcademicDegreeTypeModal, 
     PutTrainingObjectTypeModal,
     PutTraningRankModal,
     PutTrainingTimeModal,
-    PutTrainingTypeModal
+    PutTrainingTypeModal,
+    PutTrainingLevelModal,
+    PutPriorityObjectModal,
+    PutEthnicityModal,
+    PutNationalityModal,
+    PutRegistrationAreaModal,
+    PutReligionModal,
+    PutUserTypeModal
   }

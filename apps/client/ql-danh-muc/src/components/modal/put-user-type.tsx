@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { AcademicDegreeType } from '@workspace/db'
+import type { UserType } from "@workspace/db"
 import {
-    useCreateAcademicDegreeType,
-    useFindUniqueAcademicDegreeType,
-    useUpdateAcademicDegreeType,
+    useCreateUserType,
+    useFindUniqueUserType,
+    useUpdateUserType,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutAcademicDegreeType = AcademicDegreeType
-const PutAcademicDegreeTypeModal = () => {
-    const [form] = Form.useForm<PutAcademicDegreeType>()
+export type PutUserTypeType = UserType
+const PutUserTypeModal = () => {
+    const [form] = Form.useForm<UserType>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutAcademicDegreeTypeModal.name,
+        tag: PutUserTypeModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreateAcademicDegreeType()
-    const { mutateAsync: updateLevel } = useUpdateAcademicDegreeType()
-    async function onOk(output?: PutAcademicDegreeType) {
+    const { mutateAsync: createLevel } = useCreateUserType()
+    const { mutateAsync: updateLevel } = useUpdateUserType()
+    async function onOk(output?: UserType) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutAcademicDegreeTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutAcademicDegreeTypeModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueAcademicDegreeType({
+    const { data: level } = useFindUniqueUserType({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutAcademicDegreeTypeModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa học hàm'
-                    : 'Thêm mới học hàm'
+                    ? 'Chỉnh sửa đối tượng'
+                    : 'Thêm mới đối tượng'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutAcademicDegreeTypeModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã học hàm"
+                    label="Mã đối tượng"
                     required
                 >
-                    <Input placeholder='Nhập mã học hàm' />
+                    <Input placeholder='Nhập mã đối tượng' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên học hàm"
+                    label="Tên đối tượng"
                     required
                 >
-                    <Input placeholder="Nhập tên học hàm" />
+                    <Input placeholder="Nhập đối tượng" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutAcademicDegreeTypeModal
+export default PutUserTypeModal

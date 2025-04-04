@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Rank } from '@workspace/db'
+import type { Nationality } from "@workspace/db"
 import {
-    useCreateRank,
-    useFindUniqueRank,
-    useUpdateRank,
+    useCreateNationality,
+    useFindUniqueNationality,
+    useUpdateNationality,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutRankFormType = Rank
-const PutRankModal = () => {
-    const [form] = Form.useForm<PutRankFormType>()
+export type PutNationalityType = Nationality
+const PutNationalityModal = () => {
+    const [form] = Form.useForm<Nationality>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutRankModal.name,
+        tag: PutNationalityModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreateRank()
-    const { mutateAsync: updateLevel } = useUpdateRank()
-    async function onOk(output?: PutRankFormType) {
+    const { mutateAsync: createLevel } = useCreateNationality()
+    const { mutateAsync: updateLevel } = useUpdateNationality()
+    async function onOk(output?: Nationality) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutRankModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutRankModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueRank({
+    const { data: level } = useFindUniqueNationality({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutRankModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa cấp bậc hàm'
-                    : 'Thêm mới cấp bậc hàm'
+                    ? 'Chỉnh sửa quốc tịch'
+                    : 'Thêm mới quốc tịch'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutRankModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã cấp bậc hàm"
+                    label="Mã quốc tịch"
                     required
                 >
-                    <Input placeholder='Nhập mã cấp bậc hàm' />
+                    <Input placeholder='Nhập mã quốc tịch' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên cấp bậc hàm"
+                    label="Tên quốc tịch"
                     required
                 >
-                    <Input placeholder="Nhập tên cấp bậc hàm" />
+                    <Input placeholder="Nhập quốc tịch" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutRankModal
+export default PutNationalityModal

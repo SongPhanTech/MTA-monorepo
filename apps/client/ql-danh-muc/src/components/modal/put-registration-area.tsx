@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Position } from '@workspace/db'
+import type { RegistrationArea } from "@workspace/db"
 import {
-    useCreatePosition,
-    useFindUniquePosition,
-    useUpdatePosition,
+    useCreateRegistrationArea,
+    useFindUniqueRegistrationArea,
+    useUpdateRegistrationArea,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutPositionType = Position
-const PutPositionModal = () => {
-    const [form] = Form.useForm<PutPositionType>()
+export type PutRegistrationAreaType = RegistrationArea
+const PutRegistrationAreaModal = () => {
+    const [form] = Form.useForm<RegistrationArea>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutPositionModal.name,
+        tag: PutRegistrationAreaModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreatePosition()
-    const { mutateAsync: updateLevel } = useUpdatePosition()
-    async function onOk(output?: PutPositionType) {
+    const { mutateAsync: createLevel } = useCreateRegistrationArea()
+    const { mutateAsync: updateLevel } = useUpdateRegistrationArea()
+    async function onOk(output?: RegistrationArea) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutPositionModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutPositionModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniquePosition({
+    const { data: level } = useFindUniqueRegistrationArea({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutPositionModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa chức vụ'
-                    : 'Thêm mới chức vụ'
+                    ? 'Chỉnh sửa khu vực đăng ký'
+                    : 'Thêm mới khu vực đăng ký'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutPositionModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã chức vụ"
+                    label="Mã khu vực đăng ký"
                     required
                 >
-                    <Input placeholder='Nhập mã chức vụ' />
+                    <Input placeholder='Nhập mã khu vực đăng ký' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên chức vụ"
+                    label="Tên khu vực đăng ký"
                     required
                 >
-                    <Input placeholder="Nhập tên chức vụ" />
+                    <Input placeholder="Nhập khu vực đăng ký" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutPositionModal
+export default PutRegistrationAreaModal

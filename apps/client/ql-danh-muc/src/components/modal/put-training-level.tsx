@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Level } from '@workspace/db'
+import type { TrainingLevel } from "@workspace/db"
 import {
-    useCreateLevel,
-    useFindUniqueLevel,
-    useUpdateLevel,
+    useCreateTrainingLevel,
+    useFindUniqueTrainingLevel,
+    useUpdateTrainingLevel,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutLevelFormType = Level
-const PutLevelModal = () => {
-    const [form] = Form.useForm<PutLevelFormType>()
+export type PutTrainingLevelType = TrainingLevel
+const PutTrainingLevelModal = () => {
+    const [form] = Form.useForm<TrainingLevel>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutLevelModal.name,
+        tag: PutTrainingLevelModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreateLevel()
-    const { mutateAsync: updateLevel } = useUpdateLevel()
-    async function onOk(output?: PutLevelFormType) {
+    const { mutateAsync: createLevel } = useCreateTrainingLevel()
+    const { mutateAsync: updateLevel } = useUpdateTrainingLevel()
+    async function onOk(output?: TrainingLevel) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutLevelModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Level'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutLevelModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueLevel({
+    const { data: level } = useFindUniqueTrainingLevel({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutLevelModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa danh mục phân cấp'
-                    : 'Thêm mới danh mục phân cấp'
+                    ? 'Chỉnh sửa bậc đào tạo'
+                    : 'Thêm mới bậc đào tạo'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutLevelModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã danh mục phân cấp"
+                    label="Mã bậc đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã danh mục phân cấp' />
+                    <Input placeholder='Nhập mã bậc đào tạo' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên danh mục phân cấp"
+                    label="Tên bậc đào tạo"
                     required
                 >
-                    <Input placeholder="Nhập tên danh mục phân cấp" />
+                    <Input placeholder="Nhập bậc đào tạo" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutLevelModal
+export default PutTrainingLevelModal

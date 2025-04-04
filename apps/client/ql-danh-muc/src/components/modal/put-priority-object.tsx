@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { OrganizationType } from '@workspace/db'
+import type { PriorityObject } from "@workspace/db"
 import {
-    useCreateOrganizationType,
-    useFindUniqueOrganizationType,
-    useUpdateOrganizationType,
+    useCreatePriorityObject,
+    useFindUniquePriorityObject,
+    useUpdatePriorityObject,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutOrganizationType = OrganizationType
-const PutOrganizationTypeModal = () => {
-    const [form] = Form.useForm<PutOrganizationType>()
+export type PutPriorityObjectType = PriorityObject
+const PutPriorityObjectModal = () => {
+    const [form] = Form.useForm<PriorityObject>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOrganizationTypeModal.name,
+        tag: PutPriorityObjectModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreateOrganizationType()
-    const { mutateAsync: updateLevel } = useUpdateOrganizationType()
-    async function onOk(output?: PutOrganizationType) {
+    const { mutateAsync: createLevel } = useCreatePriorityObject()
+    const { mutateAsync: updateLevel } = useUpdatePriorityObject()
+    async function onOk(output?: PriorityObject) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutOrganizationTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutOrganizationTypeModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueOrganizationType({
+    const { data: level } = useFindUniquePriorityObject({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutOrganizationTypeModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa loại đơn vị'
-                    : 'Thêm mới loại đơn vị'
+                    ? 'Chỉnh sửa đối tượng ưu tiên'
+                    : 'Thêm mới đối tượng ưu tiên'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutOrganizationTypeModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã loại đơn vị"
+                    label="Mã đối tượng ưu tiên"
                     required
                 >
-                    <Input placeholder='Nhập mã loại đơn vị' />
+                    <Input placeholder='Nhập mã đối tượng ưu tiên' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên loại đơn vị"
+                    label="Tên đối tượng ưu tiên"
                     required
                 >
-                    <Input placeholder="Nhập tên loại đơn vị" />
+                    <Input placeholder="Nhập đối tượng ưu tiên" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutOrganizationTypeModal
+export default PutPriorityObjectModal

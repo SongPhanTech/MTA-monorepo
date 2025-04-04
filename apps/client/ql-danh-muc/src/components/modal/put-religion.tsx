@@ -2,39 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Organization, OrganizationType } from '@workspace/db'
+import type { Religion } from "@workspace/db"
 import {
-    useCreateOrganization,
-    useFindUniqueOrganization,
-    useFindManyOrganizationType,
-    useUpdateOrganization
+    useCreateReligion,
+    useFindUniqueReligion,
+    useUpdateReligion,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-export type PutOrganizationType = Organization
-const PutOrganizationModal = () => {
-    const [form] = Form.useForm<PutOrganizationType>()
+export type PutReligionType = Religion
+const PutReligionModal = () => {
+    const [form] = Form.useForm<Religion>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOrganizationModal.name,
+        tag: PutReligionModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data = [], refetch } = useFindManyOrganizationType({
-            take: 1000,
-            skip: 0,
-    })
-    console.log(data)
-
-    const { mutateAsync: createLevel } = useCreateOrganization()
-    const { mutateAsync: updateLevel } = useUpdateOrganization()
-    async function onOk(output?: PutOrganizationType) {
+    const { mutateAsync: createLevel } = useCreateReligion()
+    const { mutateAsync: updateLevel } = useUpdateReligion()
+    async function onOk(output?: Religion) {
         if (!output) return
         try {
             showSpinner()
@@ -53,8 +45,6 @@ const PutOrganizationModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        typeId:output.typeId,
-                        address: output.address,
                         code : output.code,
                         name: output.name,
                         description: output.description,
@@ -64,7 +54,7 @@ const PutOrganizationModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -73,7 +63,7 @@ const PutOrganizationModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueOrganization({
+    const { data: level } = useFindUniqueReligion({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -92,58 +82,33 @@ const PutOrganizationModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa đơn vị'
-                    : 'Thêm mới đơn vị'
+                    ? 'Chỉnh sửa tôn giáo'
+                    : 'Thêm mới tôn giáo'
             }
             className="w-[30vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã đơn vị"
+                    label="Mã tôn giáo"
                     required
                 >
-                    <Input placeholder='Nhập mã đơn vị' />
+                    <Input placeholder='Nhập mã tôn giáo' />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên đơn vị"
+                    label="Tên tôn giáo"
                     required
                 >
-                    <Input placeholder="Nhập tên đơn vị" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="typeId"
-                    label="Loại đơn vị"
-                    required
-                >
-                    <Select placeholder='Chọn loại đơn vị' options={data.map((i: OrganizationType) =>{
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="address"
-                    label="Địa chỉ"
-                    required
-                >
-                    <Input placeholder="Nhập địa chỉ" />
+                    <Input placeholder="Nhập tôn giáo" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutOrganizationModal
+export default PutReligionModal

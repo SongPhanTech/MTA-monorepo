@@ -172,6 +172,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_TYPE,
                     },
                     {
+                        id: 'training-level',
+                        label: 'Danh mục bậc đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LEVEL,
+                    },
+                    {
                         id: 'training-location',
                         label: 'Danh mục địa điểm đào tạo',
                         icon: PieChartOutlined,
@@ -226,6 +232,50 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_KPI,
                     }
                 ]
+            },
+            {
+                id: 'danh-muc-ho-so',
+                label: 'Danh mục hồ sơ',
+                icon: PieChartOutlined,
+                children:  [
+                    {
+                        id: 'priority-object',
+                        label: 'Danh mục đối tượng ưu tiên',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_PRIORITY_OBJECT,
+                    },
+                    {
+                        id: 'registration-area',
+                        label: 'Danh mục khu vực đăng ký',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_REGISTRATION_AREA,
+                    },
+                    {
+                        id: 'nationality',
+                        label: 'Danh mục quốc tịch',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_NATIONALITY,
+                    },
+                    {
+                        id: 'religion',
+                        label: 'Danh mục tôn giáo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_RELIGION,
+                    },
+                    {
+                        id: 'ethnicity',
+                        label: 'Danh mục dân tộc',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_ETHNICITY,
+                    },
+                    {
+                        id: 'user-typ',
+                        label: 'Danh mục đối tượng',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_USER_TYPE,
+                    }
+                ]
+                
             },
         ],
 

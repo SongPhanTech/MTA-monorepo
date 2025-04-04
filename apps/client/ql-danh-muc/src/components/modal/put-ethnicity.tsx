@@ -2,31 +2,31 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { AcademicRankType } from '@workspace/db'
+import type { Ethnicity } from "@workspace/db"
 import {
-    useCreateAcademicRankType,
-    useFindUniqueAcademicRankType,
-    useUpdateAcademicRankType,
+    useCreateEthnicity,
+    useFindUniqueEthnicity,
+    useUpdateEthnicity,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutAcademicRankType = AcademicRankType
-const PutAcademicRankTypeModal = () => {
-    const [form] = Form.useForm<PutAcademicRankType>()
+export type PutEthnicityType = Ethnicity
+const PutEthnicityModal = () => {
+    const [form] = Form.useForm<Ethnicity>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutAcademicRankTypeModal.name,
+        tag: PutEthnicityModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createLevel } = useCreateAcademicRankType()
-    const { mutateAsync: updateLevel } = useUpdateAcademicRankType()
-    async function onOk(output?: PutAcademicRankType) {
+    const { mutateAsync: createLevel } = useCreateEthnicity()
+    const { mutateAsync: updateLevel } = useUpdateEthnicity()
+    async function onOk(output?: Ethnicity) {
         if (!output) return
         try {
             showSpinner()
@@ -54,7 +54,7 @@ const PutAcademicRankTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Rank'],
+                queryKey: ['TraningForm'],
             })
             onClose()
         } catch (error) {
@@ -63,7 +63,7 @@ const PutAcademicRankTypeModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueAcademicRankType({
+    const { data: level } = useFindUniqueEthnicity({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -82,8 +82,8 @@ const PutAcademicRankTypeModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa học vị'
-                    : 'Thêm mới học vị'
+                    ? 'Chỉnh sửa dân tộc'
+                    : 'Thêm mới dân tộc'
             }
             className="w-[30vw]"
         >
@@ -91,24 +91,24 @@ const PutAcademicRankTypeModal = () => {
                 <FormItem
                     form={form}
                     name="code"
-                    label="Mã học vị"
+                    label="Mã dân tộc"
                     required
                 >
-                    <Input placeholder='Nhập mã học vị' />
+                    <Input placeholder='Nhập mã dân tộc' />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên học vị"
+                    label="Tên dân tộc"
                     required
                 >
-                    <Input placeholder="Nhập tên học vị" />
+                    <Input placeholder="Nhập dân tộc" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutAcademicRankTypeModal
+export default PutEthnicityModal
