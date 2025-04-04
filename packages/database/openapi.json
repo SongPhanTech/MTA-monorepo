@@ -410,6 +410,7 @@
           "lastName",
           "dateOfBirth",
           "placeOfBirth",
+          "homeTown",
           "idCardNumber",
           "idCardDate",
           "officerNumber",
@@ -1807,6 +1808,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -2808,7 +2819,14 @@
             }
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "curriculum": {
             "type": "array",
@@ -2839,8 +2857,7 @@
           "updatedAt",
           "name",
           "type",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "SchoolYear": {
@@ -3056,7 +3073,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -3078,7 +3102,6 @@
           "createdAt",
           "updatedAt",
           "name",
-          "period",
           "startDate",
           "endDate",
           "SchoolYear",
@@ -10051,6 +10074,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -10641,6 +10677,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -11079,6 +11125,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -11742,6 +11801,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
@@ -15994,10 +16066,13 @@
           "address": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -16107,7 +16182,14 @@
             ]
           },
           "address": {
-            "$ref": "#/components/schemas/SortOrder"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -16265,10 +16347,13 @@
           "address": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -16462,10 +16547,13 @@
           "address": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -17648,10 +17736,13 @@
           "period": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/IntFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
-                "type": "integer"
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -17745,7 +17836,14 @@
             "$ref": "#/components/schemas/SortOrder"
           },
           "period": {
-            "$ref": "#/components/schemas/SortOrder"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
           },
           "startDate": {
             "$ref": "#/components/schemas/SortOrder"
@@ -17874,10 +17972,13 @@
           "period": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/IntFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
-                "type": "integer"
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -18045,10 +18146,13 @@
           "period": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/IntWithAggregatesFilter"
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
               },
               {
-                "type": "integer"
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -29245,6 +29349,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -29619,6 +29733,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -30090,6 +30217,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -30493,6 +30630,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -33489,7 +33639,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
@@ -33509,7 +33666,6 @@
         },
         "required": [
           "name",
-          "address",
           "type"
         ]
       },
@@ -33617,7 +33773,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -33700,7 +33859,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -33715,8 +33881,7 @@
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "OrganizationUpdateManyMutationInput": {
@@ -33823,7 +33988,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -34625,7 +34793,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -34641,7 +34816,6 @@
         },
         "required": [
           "name",
-          "period",
           "startDate",
           "endDate",
           "SchoolYear"
@@ -34735,10 +34909,13 @@
           "period": {
             "oneOf": [
               {
-                "type": "integer"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -34818,7 +34995,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -34834,7 +35018,6 @@
         },
         "required": [
           "name",
-          "period",
           "startDate",
           "endDate",
           "schoolYearId"
@@ -34928,10 +35111,13 @@
           "period": {
             "oneOf": [
               {
-                "type": "integer"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -41148,105 +41334,6 @@
           },
           "isNot": {
             "$ref": "#/components/schemas/SchoolYearWhereInput"
-          }
-        }
-      },
-      "IntFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "type": "integer"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "lt": {
-            "type": "integer"
-          },
-          "lte": {
-            "type": "integer"
-          },
-          "gt": {
-            "type": "integer"
-          },
-          "gte": {
-            "type": "integer"
-          },
-          "not": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "$ref": "#/components/schemas/NestedIntFilter"
-              }
-            ]
-          }
-        }
-      },
-      "IntWithAggregatesFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "type": "integer"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "lt": {
-            "type": "integer"
-          },
-          "lte": {
-            "type": "integer"
-          },
-          "gt": {
-            "type": "integer"
-          },
-          "gte": {
-            "type": "integer"
-          },
-          "not": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "$ref": "#/components/schemas/NestedIntWithAggregatesFilter"
-              }
-            ]
-          },
-          "_count": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_avg": {
-            "$ref": "#/components/schemas/NestedFloatFilter"
-          },
-          "_sum": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_min": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_max": {
-            "$ref": "#/components/schemas/NestedIntFilter"
           }
         }
       },
@@ -49011,26 +49098,6 @@
           }
         }
       },
-      "IntFieldUpdateOperationsInput": {
-        "type": "object",
-        "properties": {
-          "set": {
-            "type": "integer"
-          },
-          "increment": {
-            "type": "integer"
-          },
-          "decrement": {
-            "type": "integer"
-          },
-          "multiply": {
-            "type": "integer"
-          },
-          "divide": {
-            "type": "integer"
-          }
-        }
-      },
       "SchoolYearUpdateOneRequiredWithoutMilestoneNestedInput": {
         "type": "object",
         "properties": {
@@ -53377,105 +53444,6 @@
           }
         }
       },
-      "NestedIntWithAggregatesFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "type": "integer"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "lt": {
-            "type": "integer"
-          },
-          "lte": {
-            "type": "integer"
-          },
-          "gt": {
-            "type": "integer"
-          },
-          "gte": {
-            "type": "integer"
-          },
-          "not": {
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "$ref": "#/components/schemas/NestedIntWithAggregatesFilter"
-              }
-            ]
-          },
-          "_count": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_avg": {
-            "$ref": "#/components/schemas/NestedFloatFilter"
-          },
-          "_sum": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_min": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          },
-          "_max": {
-            "$ref": "#/components/schemas/NestedIntFilter"
-          }
-        }
-      },
-      "NestedFloatFilter": {
-        "type": "object",
-        "properties": {
-          "equals": {
-            "type": "number"
-          },
-          "in": {
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "notIn": {
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "lt": {
-            "type": "number"
-          },
-          "lte": {
-            "type": "number"
-          },
-          "gt": {
-            "type": "number"
-          },
-          "gte": {
-            "type": "number"
-          },
-          "not": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/NestedFloatFilter"
-              }
-            ]
-          }
-        }
-      },
       "NestedEnumActiveStatusFilter": {
         "type": "object",
         "properties": {
@@ -55606,6 +55574,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -55953,6 +55931,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -56846,6 +56834,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -57947,6 +57948,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -58304,6 +58315,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -58811,6 +58832,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -59168,6 +59199,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -59675,6 +59716,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -60032,6 +60083,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -60539,6 +60600,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -60896,6 +60967,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -61403,6 +61484,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -61760,6 +61851,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -62267,6 +62368,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -62620,6 +62731,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -66594,7 +66715,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "parent": {
             "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutChildrenInput"
@@ -66610,8 +66738,7 @@
           }
         },
         "required": [
-          "name",
-          "address"
+          "name"
         ]
       },
       "OrganizationUncheckedCreateWithoutTypeInput": {
@@ -66673,7 +66800,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -66696,8 +66830,7 @@
           }
         },
         "required": [
-          "name",
-          "address"
+          "name"
         ]
       },
       "OrganizationCreateOrConnectWithoutTypeInput": {
@@ -66966,10 +67099,13 @@
           "address": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -67175,7 +67311,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
@@ -67192,7 +67335,6 @@
         },
         "required": [
           "name",
-          "address",
           "type"
         ]
       },
@@ -67258,7 +67400,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -67279,8 +67428,7 @@
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "OrganizationCreateOrConnectWithoutChildrenInput": {
@@ -67364,7 +67512,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
@@ -67381,7 +67536,6 @@
         },
         "required": [
           "name",
-          "address",
           "type"
         ]
       },
@@ -67447,7 +67601,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "children": {
             "$ref": "#/components/schemas/OrganizationUncheckedCreateNestedManyWithoutParentInput"
@@ -67461,8 +67622,7 @@
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "OrganizationCreateOrConnectWithoutParentInput": {
@@ -68317,7 +68477,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -68449,7 +68612,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -69307,7 +69473,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -69320,7 +69493,6 @@
         },
         "required": [
           "name",
-          "period",
           "startDate",
           "endDate"
         ]
@@ -69374,7 +69546,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -69387,7 +69566,6 @@
         },
         "required": [
           "name",
-          "period",
           "startDate",
           "endDate"
         ]
@@ -69866,10 +70044,13 @@
           "period": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/IntFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
-                "type": "integer"
+                "type": "string"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -72545,7 +72726,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
@@ -72562,7 +72750,6 @@
         },
         "required": [
           "name",
-          "address",
           "type"
         ]
       },
@@ -72628,7 +72815,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -72649,8 +72843,7 @@
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "OrganizationCreateOrConnectWithoutCurriculumInput": {
@@ -73228,7 +73421,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -73360,7 +73556,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -74329,7 +74528,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": {
             "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
@@ -74346,7 +74552,6 @@
         },
         "required": [
           "name",
-          "address",
           "type"
         ]
       },
@@ -74412,7 +74617,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -74433,8 +74645,7 @@
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "OrganizationCreateOrConnectWithoutFixedClassInput": {
@@ -74945,7 +75156,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -75077,7 +75291,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -79176,6 +79393,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -80179,6 +80406,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -80650,6 +80890,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -81192,6 +81445,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -81695,6 +81961,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -82088,6 +82364,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -82584,6 +82873,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -83126,6 +83428,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -83616,6 +83931,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -84009,6 +84334,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -84505,6 +84843,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -85047,6 +85398,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -85537,6 +85901,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -85930,6 +86304,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -86426,6 +86813,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -86968,6 +87368,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -87458,6 +87871,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -87851,6 +88274,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -88347,6 +88783,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -88889,6 +89338,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -89379,6 +89841,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -89772,6 +90244,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -90268,6 +90753,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -90810,6 +91308,19 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -91297,6 +91808,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -91699,6 +92220,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -92185,6 +92719,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -92718,6 +93265,19 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "string"
@@ -93550,7 +94110,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -93564,8 +94131,7 @@
           }
         },
         "required": [
-          "name",
-          "address"
+          "name"
         ]
       },
       "OrganizationUpdateWithoutTypeInput": {
@@ -93672,7 +94238,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -93794,7 +94363,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -93926,7 +94498,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -94007,13 +94582,19 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "required": [
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "CurriculumCreateManyManagementOrganizationInput": {
@@ -94285,7 +94866,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -94417,7 +95001,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -94546,7 +95133,10 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -95497,7 +96087,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -95510,7 +96107,6 @@
         },
         "required": [
           "name",
-          "period",
           "startDate",
           "endDate"
         ]
@@ -95939,10 +96535,13 @@
           "period": {
             "oneOf": [
               {
-                "type": "integer"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -96058,10 +96657,13 @@
           "period": {
             "oneOf": [
               {
-                "type": "integer"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -96177,10 +96779,13 @@
           "period": {
             "oneOf": [
               {
-                "type": "integer"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -102536,6 +103141,9 @@
           "placeOfBirth": {
             "type": "boolean"
           },
+          "homeTown": {
+            "type": "boolean"
+          },
           "idCardNumber": {
             "type": "boolean"
           },
@@ -105120,6 +105728,9 @@
           "placeOfBirth": {
             "type": "boolean"
           },
+          "homeTown": {
+            "type": "boolean"
+          },
           "idCardNumber": {
             "type": "boolean"
           },
@@ -105254,6 +105865,9 @@
           "placeOfBirth": {
             "type": "boolean"
           },
+          "homeTown": {
+            "type": "boolean"
+          },
           "idCardNumber": {
             "type": "boolean"
           },
@@ -105383,6 +105997,9 @@
             "type": "boolean"
           },
           "placeOfBirth": {
+            "type": "boolean"
+          },
+          "homeTown": {
             "type": "boolean"
           },
           "idCardNumber": {
@@ -106588,22 +107205,6 @@
             "type": "boolean"
           },
           "_all": {
-            "type": "boolean"
-          }
-        }
-      },
-      "MilestoneAvgAggregateInput": {
-        "type": "object",
-        "properties": {
-          "period": {
-            "type": "boolean"
-          }
-        }
-      },
-      "MilestoneSumAggregateInput": {
-        "type": "object",
-        "properties": {
-          "period": {
             "type": "boolean"
           }
         }
@@ -109812,6 +110413,16 @@
               }
             ]
           },
+          "homeTown": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "idCardNumber": {
             "oneOf": [
               {
@@ -111377,7 +111988,14 @@
             ]
           },
           "address": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "organizationId": {
             "oneOf": [
@@ -111425,8 +112043,7 @@
           "createdAt",
           "updatedAt",
           "name",
-          "typeId",
-          "address"
+          "typeId"
         ]
       },
       "AggregateSchoolYear": {
@@ -111720,26 +112337,6 @@
               }
             ]
           },
-          "_avg": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/MilestoneAvgAggregateOutputType"
-              }
-            ]
-          },
-          "_sum": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/MilestoneSumAggregateOutputType"
-              }
-            ]
-          },
           "_min": {
             "oneOf": [
               {
@@ -111811,7 +112408,14 @@
             "type": "string"
           },
           "period": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "startDate": {
             "type": "string",
@@ -111831,26 +112435,6 @@
               },
               {
                 "$ref": "#/components/schemas/MilestoneCountAggregateOutputType"
-              }
-            ]
-          },
-          "_avg": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/MilestoneAvgAggregateOutputType"
-              }
-            ]
-          },
-          "_sum": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/MilestoneSumAggregateOutputType"
               }
             ]
           },
@@ -111880,7 +112464,6 @@
           "createdAt",
           "updatedAt",
           "name",
-          "period",
           "startDate",
           "endDate",
           "schoolYearId"
@@ -116701,6 +117284,9 @@
           "placeOfBirth": {
             "type": "integer"
           },
+          "homeTown": {
+            "type": "integer"
+          },
           "idCardNumber": {
             "type": "integer"
           },
@@ -116816,6 +117402,7 @@
           "lastName",
           "dateOfBirth",
           "placeOfBirth",
+          "homeTown",
           "idCardNumber",
           "idCardDate",
           "officerNumber",
@@ -116928,6 +117515,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -117363,6 +117960,16 @@
             ]
           },
           "placeOfBirth": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "homeTown": {
             "oneOf": [
               {
                 "type": "null"
@@ -120366,36 +120973,6 @@
           "_all"
         ]
       },
-      "MilestoneAvgAggregateOutputType": {
-        "type": "object",
-        "properties": {
-          "period": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "number"
-              }
-            ]
-          }
-        }
-      },
-      "MilestoneSumAggregateOutputType": {
-        "type": "object",
-        "properties": {
-          "period": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "integer"
-              }
-            ]
-          }
-        }
-      },
       "MilestoneMinAggregateOutputType": {
         "type": "object",
         "properties": {
@@ -120478,7 +121055,7 @@
                 "type": "null"
               },
               {
-                "type": "integer"
+                "type": "string"
               }
             ]
           },
@@ -120598,7 +121175,7 @@
                 "type": "null"
               },
               {
-                "type": "integer"
+                "type": "string"
               }
             ]
           },
@@ -131865,12 +132442,6 @@
           "_max": {
             "$ref": "#/components/schemas/MilestoneMaxAggregateInput"
           },
-          "_sum": {
-            "$ref": "#/components/schemas/MilestoneSumAggregateInput"
-          },
-          "_avg": {
-            "$ref": "#/components/schemas/MilestoneAvgAggregateInput"
-          },
           "meta": {
             "$ref": "#/components/schemas/_Meta"
           }
@@ -131912,12 +132483,6 @@
           },
           "_max": {
             "$ref": "#/components/schemas/MilestoneMaxAggregateInput"
-          },
-          "_sum": {
-            "$ref": "#/components/schemas/MilestoneSumAggregateInput"
-          },
-          "_avg": {
-            "$ref": "#/components/schemas/MilestoneAvgAggregateInput"
           },
           "meta": {
             "$ref": "#/components/schemas/_Meta"

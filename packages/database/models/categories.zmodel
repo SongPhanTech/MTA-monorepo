@@ -57,7 +57,7 @@ model Organization extends Base {
   parent  Organization? @relation("ParentChild")
   parentId String?
   children Organization[] @relation("ParentChild")
-  address String
+  address String?
 
 	curriculum Curriculum[]
 	fixedClass FixedClass[]
