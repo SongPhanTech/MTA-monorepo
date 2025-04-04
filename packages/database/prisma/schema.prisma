@@ -228,6 +228,7 @@ model UserProfile {
   lastName               String
   dateOfBirth            DateTime?
   placeOfBirth           String?
+  homeTown               String?
   idCardNumber           String?
   idCardDate             DateTime?
   officerNumber          String?
@@ -378,7 +379,7 @@ model Organization {
   parent         Organization?    @relation("ParentChild", fields: [organizationId], references: [id])
   parentId       String?
   children       Organization[]   @relation("ParentChild")
-  address        String
+  address        String?
   curriculum     Curriculum[]
   fixedClass     FixedClass[]
   organizationId String?
@@ -420,7 +421,7 @@ model Milestone {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
   name         String
-  period       Int
+  period       String?
   startDate    DateTime
   endDate      DateTime
   SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])

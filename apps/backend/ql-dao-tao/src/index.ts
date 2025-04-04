@@ -11,7 +11,8 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
 
 import ISConfig from './api/is/configs'
-import API from './api/api'
+import API from './api/index'
+
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'

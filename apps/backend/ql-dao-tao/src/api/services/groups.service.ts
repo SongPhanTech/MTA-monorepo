@@ -14,7 +14,7 @@ const createGroup = async (context: any): Promise<any> => {
         },
     })
 
-    return context.json(data, 201)
+    return data
 }
 
 const updateGroup= async (context: any): Promise<any> => {
@@ -29,7 +29,7 @@ const updateGroup= async (context: any): Promise<any> => {
             roles: { set: roleIds.map((id: any) => ({ id })) },
         },
     })
-    return context.json(data, 200)
+    return data
 }
 
 export default {

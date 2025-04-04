@@ -62,7 +62,7 @@ const updateUser = async (context: any): Promise<any> => {
             groups: { set: groupIds?.map((groupId: string) => ({ id: groupId })) },
         },
     });
-    return context.json(data, 200);
+    data
 };
 
 const getListUsers = async (context: any): Promise<any> => {

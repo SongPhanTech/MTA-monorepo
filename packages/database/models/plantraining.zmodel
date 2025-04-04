@@ -24,11 +24,18 @@ model Semester extends Base {
 // Mốc huấn luyện
 model Milestone extends Base {
   name         String
-  period       Int
+  period       String? // Thời gian thực hiện
   startDate    DateTime
   endDate      DateTime
   SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
+}
+
+enum TrainingCourseStatus {
+  ACTIVE
+  COMPLETED
+  SUSPEND
+  CANCEL
 }
 
 // Khóa học
@@ -36,16 +43,16 @@ model TrainingCourse extends Base {
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  TrainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
-  TrainingType         TrainingType       @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
+  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
   trainingTypeId       String
-  TrainingLevel        TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId      String
-  TrainingForm         TrainingForm       @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
+  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
   trainingFormId       String
-
-	fixedClass FixedClass[]
+  status               TrainingCourseStatus @default(ACTIVE)
+  fixedClass           FixedClass[]
 }
 
 enum ActiveStatus {
@@ -76,10 +83,9 @@ model Curriculum extends Base {
 model FixedClass extends Base {
   name                     String
 
-  TrainingCourse         TrainingCourse     @relation(fields: [trainingCourseId], references: [id]) // Khóa học
-  trainingCourseId       String
-  
-  ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
-  managementOrganizationId String
+  TrainingCourse           TrainingCourse @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourseId         String
 
+  ManagementOrganization   Organization   @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganizationId String
 }

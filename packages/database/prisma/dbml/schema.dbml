@@ -176,6 +176,7 @@ Table UserProfile {
   lastName String [not null]
   dateOfBirth DateTime
   placeOfBirth String
+  homeTown String
   idCardNumber String
   idCardDate DateTime
   officerNumber String
@@ -328,7 +329,7 @@ Table Organization {
   parent Organization
   parentId String
   children Organization [not null]
-  address String [not null]
+  address String
   curriculum Curriculum [not null]
   fixedClass FixedClass [not null]
   organizationId String
@@ -370,7 +371,7 @@ Table Milestone {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  period Int [not null]
+  period String
   startDate DateTime [not null]
   endDate DateTime [not null]
   SchoolYear SchoolYear [not null]
