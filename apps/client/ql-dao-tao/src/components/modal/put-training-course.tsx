@@ -177,7 +177,7 @@ const PutTrainingCourseModal = () => {
                     label="Loại hình đào tạo"
                     required
                 >
-                    <Select placeholder='Loại hình đào tạo' options={trainingTypeData.map((i: TrainingType) => {
+                    <Select placeholder='Chọn loại hình đào tạo' options={trainingTypeData.map((i: TrainingType) => {
                         return {
                             value: i.id,
                             label: i.name
@@ -204,10 +204,10 @@ const PutTrainingCourseModal = () => {
                 <FormItem
                     form={form}
                     name="trainingLevelId"
-                    label="Mức độ đào tạo"
+                    label="Trình độ đào tạo"
                     required
                 >
-                    <Select placeholder='Chọn mức độ đào tạo' options={trainingLevelData.map((i: TrainingLevel) => {
+                    <Select placeholder='Chọn trình độ đào tạo' options={trainingLevelData.map((i: TrainingLevel) => {
                         return {
                             value: i.id,
                             label: i.name

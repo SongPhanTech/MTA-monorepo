@@ -9,8 +9,14 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
+    useFindManyTrainingForm,
     useUpdateTrainingCourse,
+    useFindManyTrainingType,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingLevel
 } from '@workspace/db/hooks'
+import type { TrainingCourse, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType } from '@workspace/db'
+
 import {
     Button,
     Col,
@@ -25,19 +31,31 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
+import Select from '@components/commons/select'
+
 export default function TrainingCoursePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [filters, setFilters] = useState({
+        searchText: '',
+        trainingFormId: undefined,
+        trainingTypeId: undefined,
+        trainingLevelId: undefined,
+        trainingObjectTypeId: undefined
+    });
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
             name: {
-                contains: searchText,
-            }
+                contains: filters.searchText,
+            },
+            trainingFormId: filters.trainingFormId,
+            trainingTypeId: filters.trainingTypeId,
+            trainingLevelId: filters.trainingLevelId,
+            trainingObjectTypeId: filters.trainingObjectTypeId
         },
         include: {
             TrainingForm: true,
@@ -47,11 +65,14 @@ export default function TrainingCoursePage() {
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-    })
+    });
+
 
     const { data: count } = useCountTrainingCourse()
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const debouncedRefetch = useCallback(_.debounce(() => {
+        refetch();
+    }, 500), []);
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutTrainingCourseModal.name,
     })
@@ -78,6 +99,30 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
+    const { data: trainingFormData = [], refetch: refetchForm } = useFindManyTrainingForm({
+        take: 1000,
+        skip: 0,
+    });
+
+    const { data: trainingTypeData = [], refetch: refetchType } = useFindManyTrainingType({
+        take: 1000,
+        skip: 0,
+    });
+    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel({
+        take: 1000,
+        skip: 0,
+    });
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } = useFindManyTrainingObjectType({
+        take: 1000,
+        skip: 0,
+    });
+    const handleFilterChange = (key: any, value: any) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value };
+            debouncedRefetch();
+            return newFilters;
+        });
+    };
 
     return (
         <div>
@@ -86,8 +131,8 @@ export default function TrainingCoursePage() {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
+                    {/* Row nút thêm */}
                     <Row gutter={[16, 16]}>
-                        {/* row button */}
                         <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
@@ -95,20 +140,78 @@ export default function TrainingCoursePage() {
                                 </Button>
                             </Flex>
                         </Col>
-                        {/* row filter */}
+                    </Row>
+
+                    {/* Row ô tìm kiếm */}
+                    <Row gutter={[16, 16]}>
                         <Col span={6}>
-                            <Form.Item label="Tìm kiếm" name="search">
+                            <Form.Item label="Tìm kiếm" name="searchText">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
                         </Col>
                     </Row>
+
+                    {/* Row các select box */}
+                    <Row gutter={[16, 16]}>
+                        <Col span={6}>
+                            <Form.Item label="Hình thức đào tạo" name="trainingForm">
+                                <Select
+                                    placeholder="Chọn hình thức đào tạo"
+                                    options={trainingFormData.map((i: TrainingForm) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    onChange={(val) => handleFilterChange('trainingFormId', val)}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item label="Đối tượng đào tạo" name="trainingObjectType">
+                                <Select
+                                    placeholder="Chọn đối tượng đào tạo"
+                                    options={trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    onChange={(val) => handleFilterChange('trainingObjectTypeId', val)}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item label="Loại hình đào tạo" name="trainingType">
+                                <Select
+                                    placeholder="Chọn loại hình đào tạo"
+                                    options={trainingTypeData.map((i: TrainingType) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    onChange={(val) => handleFilterChange('trainingTypeId', val)}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item label="Trình độ đào tạo" name="trainingLevel">
+                                <Select
+                                    placeholder="Chọn trình độ đào tạo"
+                                    options={trainingLevelData.map((i: TrainingForm) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    onChange={(val) => handleFilterChange('trainingLevelId', val)}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Col>
+
                 <Col span={24}>
                     <Table
                         columns={[
@@ -145,7 +248,7 @@ export default function TrainingCoursePage() {
                                 render: (value) => value?.name ? value?.name : ""
                             },
                             {
-                                title: 'Mức độ đào tạo',
+                                title: 'Trình độ đào tạo',
                                 dataIndex: 'TrainingLevel',
                                 render: (value) => value?.name ? value?.name : ""
                             },

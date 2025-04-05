@@ -6,10 +6,13 @@ import { PutFixedClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingCourse, Organization } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
     useUpdateFixedClass,
+    useFindManyOrganization,
+    useFindManyTrainingCourse
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -25,19 +28,26 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import Select from '@components/commons/select'
 
 export default function FixedClassPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
-
+    const [filters, setFilters] = useState({
+        searchText: '',
+        trainingCourseId: undefined,
+        managementOrganizationId: undefined,
+    });
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             name: {
                 contains: searchText,
-            }
+            },
+            trainingCourseId: filters.trainingCourseId,
+            managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
             ManagementOrganization: true,
@@ -46,11 +56,20 @@ export default function FixedClassPage() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyOrganization({
+        take: 1000,
+        skip: 0,
+    });
 
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
+        take: 1000,
+        skip: 0,
+    });
     const { data: count } = useCountFixedClass()
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<string>({
+    const debouncedRefetch = useCallback(_.debounce(() => {
+        refetch();
+    }, 500), []); const { onOpen, onClose } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
 
@@ -76,11 +95,17 @@ export default function FixedClassPage() {
         }
         hideSpinner()
     }
-
+    const handleFilterChange = (key: any, value: any) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value };
+            debouncedRefetch();
+            return newFilters;
+        });
+    };
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Mốc huấn luyện
+                Lớp biên chế
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
@@ -98,10 +123,42 @@ export default function FixedClassPage() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                name="trainingCourseId"
+                                label="Khóa"
+                            >
+                                <Select
+                                    placeholder='Chọn khóa' options={trainingCourseData.map((i: TrainingCourse) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name
+                                        }
+                                    })}
+                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                name="managementOrganizationId"
+                                label="Đơn vị quản lý"
+                            >
+                                <Select
+                                    placeholder='Chọn đơn vị quản lý' options={manageOrgData.map((i: Organization) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name
+                                        }
+                                    })}
+                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    allowClear
                                 />
                             </Form.Item>
                         </Col>

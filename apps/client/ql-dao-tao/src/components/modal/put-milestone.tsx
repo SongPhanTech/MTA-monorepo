@@ -48,7 +48,7 @@ const PutMilestoneModal = () => {
                 await updateMilestone({
                     data: {
                         name: output.name,
-                        period: +output.period,
+                        period: output.period,
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId
@@ -62,7 +62,7 @@ const PutMilestoneModal = () => {
                 await createMilestone({
                     data: {
                         name: output.name,
-                        period: +output.period,
+                        period: output.period,
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId
@@ -94,7 +94,7 @@ const PutMilestoneModal = () => {
             })
         } else {
             form.setFieldsValue({
-                period: 12
+                period: "12"
             })
         }
     }, [level])
