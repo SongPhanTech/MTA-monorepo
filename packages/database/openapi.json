@@ -42583,7 +42583,7 @@
           }
         }
       },
-      "EnumTrainingCourseStatusWithAggregatesFilter": {
+      "EnumActiveStatusFilter": {
         "type": "object",
         "properties": {
           "equals": {
@@ -55683,7 +55683,7 @@
           }
         }
       },
-      "NestedEnumFixedClassStudentStatusFilter": {
+      "NestedEnumActiveStatusFilter": {
         "type": "object",
         "properties": {
           "equals": {
