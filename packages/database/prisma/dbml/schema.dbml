@@ -396,6 +396,7 @@ Table TrainingCourse {
   trainingLevelId String [not null]
   TrainingForm TrainingForm [not null]
   trainingFormId String [not null]
+  status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 }
 
@@ -611,6 +612,13 @@ Enum Satisfaction {
 Enum Gender {
   Male
   Female
+}
+
+Enum TrainingCourseStatus {
+  ACTIVE
+  COMPLETED
+  SUSPEND
+  CANCEL
 }
 
 Enum ActiveStatus {

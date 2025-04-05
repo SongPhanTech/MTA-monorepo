@@ -1,0 +1,186 @@
+import { EyeOutlined } from '@ant-design/icons'
+import { fetchUpdateUser } from '@api/open-api/appComponents'
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import { PutFixedClassModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import {
+    useCountFixedClass,
+    useFindManyFixedClass,
+    useUpdateFixedClass,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tooltip,
+    message,
+} from 'antd'
+import dayjs from 'dayjs'
+import _ from 'lodash'
+import type React from 'react'
+import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
+export default function FixedClassPage() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [searchText, setSearchText] = useState<string>('')
+
+    const { data = [], refetch } = useFindManyFixedClass({
+        where: {
+            name: {
+                contains: searchText,
+            }
+        },
+        include: {
+            ManagementOrganization: true,
+            TrainingCourse: true
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count } = useCountFixedClass()
+
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutFixedClassModal.name,
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpen()
+    }
+    const { mutateAsync: updateAcademicDegreeType } = useUpdateFixedClass()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateAcademicDegreeType({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date()
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    return (
+        <div>
+            <Divider orientation="left" orientationMargin={0}>
+                Mốc huấn luyện
+            </Divider>
+            <Row gutter={[16, 16]}>
+                <Col span={24}>
+                    <Row gutter={[16, 16]}>
+                        {/* row button */}
+                        <Col span={24}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
+                        </Col>
+                        {/* row filter */}
+                        <Col span={6}>
+                            <Form.Item label="Tìm kiếm" name="search">
+                                <Input
+                                    id="search"
+                                    onChange={(e) =>
+                                        debouncedSearchText(e.target.value)
+                                    }
+                                    placeholder="Tìm kiếm theo tên,..."
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col span={24}>
+                    <Table
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 20,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index +
+                                    1 +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã lớp biên chế',
+                                dataIndex: 'code',
+                            },
+                            {
+                                title: 'Tên lớp biên chế',
+                                dataIndex: 'name',
+                            },
+                            {
+                                title: 'Khóa',
+                                dataIndex: 'TrainingCourse',
+                                render: (value) => value?.name ? value?.name : ""
+                            },
+                            {
+                                title: 'Đơn vị quản lý',
+                                dataIndex: 'ManagementOrganization',
+                                render: (value) => value?.name ? value?.name : ""
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        <Tooltip
+                                            title="Xem chi tiết"
+                                            placement="leftTop"
+                                        >
+                                            <EyeOutlined
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDelete(id),
+                                            }}
+                                        />
+                                    </Row>
+                                ),
+                            },
+                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
+}
+
+FixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}
