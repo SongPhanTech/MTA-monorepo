@@ -25,7 +25,7 @@ const createUser = async (context: any): Promise<any> => {
         },
     });
 
-    return data;
+    return context.json(data, 201);
 }
 
 const updateUser = async (context: any): Promise<any> => {
@@ -62,7 +62,7 @@ const updateUser = async (context: any): Promise<any> => {
             groups: { set: groupIds?.map((groupId: string) => ({ id: groupId })) },
         },
     });
-    data
+    return context.json(data, 200)
 };
 
 const getListUsers = async (context: any): Promise<any> => {

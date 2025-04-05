@@ -32,10 +32,10 @@ model Milestone extends Base {
 }
 
 enum TrainingCourseStatus {
-  ACTIVE
-  COMPLETED
-  SUSPEND
-  CANCEL
+  ACTIVE // Đang hoạt động
+  COMPLETED // Hoàn thành
+  SUSPEND // Tạm dừng
+  CANCEL // Hủy bỏ
 }
 
 // Khóa học
@@ -55,7 +55,7 @@ model TrainingCourse extends Base {
   fixedClass           FixedClass[]
 }
 
-enum ActiveStatus {
+enum CurriculumStatus {
   ACTIVE
   INACTIVATED
 }
@@ -63,7 +63,7 @@ enum ActiveStatus {
 // chương trình giảng dạy
 model Curriculum extends Base {
   name                     String
-  status                   ActiveStatus       @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
+  status                   CurriculumStatus       @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   startDate                DateTime
   endDate                  DateTime?
   ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
@@ -83,9 +83,11 @@ model Curriculum extends Base {
 model FixedClass extends Base {
   name                     String
 
-  TrainingCourse           TrainingCourse @relation(fields: [trainingCourseId], references: [id]) // Khóa học
-  trainingCourseId         String
+  TrainingCourse           TrainingCourse? @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourseId         String?
 
-  ManagementOrganization   Organization   @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
-  managementOrganizationId String
+  ManagementOrganization   Organization?   @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganizationId String?
+
+  fixedClassStudent FixedClassStudent[]
 }

@@ -17,13 +17,14 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    TrainingCourse: z.record(z.unknown()),
-    ManagementOrganization: z.record(z.unknown()),
+    TrainingCourse: z.record(z.unknown()).optional(),
+    ManagementOrganization: z.record(z.unknown()).optional(),
+    fixedClassStudent: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    trainingCourseId: z.string(),
-    managementOrganizationId: z.string(),
+    trainingCourseId: z.string().nullish(),
+    managementOrganizationId: z.string().nullish(),
 }
 );
 

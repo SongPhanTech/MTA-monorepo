@@ -49,6 +49,8 @@ app.use(tracingMiddleware)
 app.use('*', checkIp)
 
 setupOpenApi(app)
+
+// Update: Bật lại khi release
 setupAuth(app)
 
 app.route('/api', API)

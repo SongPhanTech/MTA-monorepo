@@ -950,6 +950,12 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, fixedClassStudent: {
+                    name: "fixedClassStudent",
+                    type: "FixedClassStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'UserProfile',
                 },
             }
             , uniqueConstraints: {
@@ -962,6 +968,72 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            }
+            ,
+        }
+        ,
+        fixedClassStudent: {
+            name: 'FixedClassStudent', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    backLink: 'fixedClassStudent',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fixedClassId" },
+                }, fixedClassId: {
+                    name: "fixedClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'fixedClass',
+                }, UserProfile: {
+                    name: "UserProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'fixedClassStudent',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'UserProfile',
+                }, status: {
+                    name: "status",
+                    type: "FixedClassStudentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, fixedClassId_userProfileId: {
+                    name: "fixedClassId_userProfileId",
+                    fields: ["fixedClassId", "userProfileId"]
                 },
             }
             ,
@@ -1772,7 +1844,7 @@ const metadata = {
                     type: "String",
                 }, status: {
                     name: "status",
-                    type: "ActiveStatus",
+                    type: "CurriculumStatus",
                     attributes: [{ "name": "@default", "args": [] }],
                 }, startDate: {
                     name: "startDate",
@@ -1885,26 +1957,36 @@ const metadata = {
                     name: "TrainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
                 }, trainingCourseId: {
                     name: "trainingCourseId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'TrainingCourse',
                 }, ManagementOrganization: {
                     name: "ManagementOrganization",
                     type: "Organization",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "managementOrganizationId" },
                 }, managementOrganizationId: {
                     name: "managementOrganizationId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'ManagementOrganization',
+                }, fixedClassStudent: {
+                    name: "fixedClassStudent",
+                    type: "FixedClassStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'fixedClass',
                 },
             }
             , uniqueConstraints: {

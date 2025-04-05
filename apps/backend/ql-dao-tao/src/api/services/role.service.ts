@@ -18,7 +18,7 @@ const createRole = async (context: any): Promise<any> => {
         },
     })
 
-    return role
+    return context.json(role, 201)
 }
 
 
@@ -43,7 +43,7 @@ const updateRole = async (context: any): Promise<any> => {
         },
     })
 
-    return role
+    return context.json(role, 200)
 }
 
 
