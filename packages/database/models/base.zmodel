@@ -51,3 +51,16 @@ model Config extends Base {
   key   String @unique
   value String
 }
+
+enum TemplateFileType {
+  UPLOAD
+  DOWNLOAD
+  LOGS
+}
+model TemplateFile extends Base {
+  name        String
+  path        String @unique
+  type        TemplateFileType?
+  extensions  String? //loại file
+  numberField Int? // Số lượng trường trong file
+}

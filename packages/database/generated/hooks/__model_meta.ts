@@ -222,6 +222,65 @@ const metadata = {
             ,
         }
         ,
+        templateFile: {
+            name: 'TemplateFile', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, path: {
+                    name: "path",
+                    type: "String",
+                }, type: {
+                    name: "type",
+                    type: "TemplateFileType",
+                    isOptional: true,
+                }, extensions: {
+                    name: "extensions",
+                    type: "String",
+                    isOptional: true,
+                }, numberField: {
+                    name: "numberField",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, path: {
+                    name: "path",
+                    fields: ["path"]
+                },
+            }
+            ,
+        }
+        ,
         user: {
             name: 'User', fields: {
                 id: {
@@ -716,6 +775,26 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, user: {
                     name: "user",
                     type: "User",
@@ -730,10 +809,6 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'user',
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, UserType: {
                     name: "UserType",
                     type: "UserType",
@@ -942,14 +1017,6 @@ const metadata = {
                     name: "organizationCPVName",
                     type: "String",
                     isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, fixedClassStudent: {
                     name: "fixedClassStudent",
                     type: "FixedClassStudent",
@@ -965,9 +1032,6 @@ const metadata = {
                 }, userId: {
                     name: "userId",
                     fields: ["userId"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,
@@ -1031,9 +1095,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, fixedClassId_userProfileId: {
-                    name: "fixedClassId_userProfileId",
-                    fields: ["fixedClassId", "userProfileId"]
                 },
             }
             ,
@@ -1981,6 +2042,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'ManagementOrganization',
+                }, classSize: {
+                    name: "classSize",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, fixedClassStudent: {
                     name: "fixedClassStudent",
                     type: "FixedClassStudent",

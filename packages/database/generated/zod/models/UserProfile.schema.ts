@@ -10,6 +10,10 @@ import { GenderSchema } from '../enums/Gender.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date(),
     firstName: z.string(),
     lastName: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -42,8 +46,6 @@ const baseSchema = z.object({
     positionCPVName: z.string().nullish(),
     organizationName: z.string().nullish(),
     organizationCPVName: z.string().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -94,6 +96,10 @@ export const UserProfilePrismaCreateSchema = baseSchema.partial().passthrough();
 export const UserProfilePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date(),
     firstName: z.string(),
     lastName: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -125,9 +131,7 @@ export const UserProfilePrismaUpdateSchema = z.object({
     positionName: z.string().nullish(),
     positionCPVName: z.string().nullish(),
     organizationName: z.string().nullish(),
-    organizationCPVName: z.string().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date()
+    organizationCPVName: z.string().nullish()
 }).partial().passthrough();
 
 

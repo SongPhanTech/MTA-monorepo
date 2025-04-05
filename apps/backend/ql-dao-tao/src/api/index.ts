@@ -9,7 +9,8 @@ import roleService from './services/role.service'
 import roleRoute from './routes/role.route'
 import userProfileRoute from './routes/user-profile.route'
 import userProfileService from './services/user-profile.service'
-
+import fixedClassRoute from './routes/fixed-class.route'
+import fixedClassService from './services/fixed-class.service'
 
 const app = new OpenAPIHono({ strict: false })
 app.route('/', SessionApp)
@@ -57,7 +58,6 @@ app
     // #endregion
     // #region UserProfile
     .openapi(userProfileRoute.uploadExcelCreateUserProfile, async (c) => {
-        console.log('uploadExcel')
         const data = await userProfileService.uploadFileUserProfile(c)
         return data
     })
@@ -65,6 +65,11 @@ app
         const data = await userProfileService.uploadFileUserProfile(c)
         return data
     })
-// #endregion
-
+    // #endregion
+    // #region Fixed Class
+    .openapi(fixedClassRoute.uploadExcelCreateFixedClass, async (c) => {
+        const data = await fixedClassService.uploadExcelCreateFixedClass(c)
+        return data
+    })
+    // #endregion
 export default app

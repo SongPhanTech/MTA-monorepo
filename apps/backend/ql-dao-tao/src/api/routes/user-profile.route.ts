@@ -15,7 +15,7 @@ const uploadExcelCreateUserProfile = createRoute({
                     schema: z.object({
                         file: z.any(), // file upload
                         type: z.string() // loại thông tin
-                    }).openapi('ExcelUpload'),
+                    }).openapi('uploadExcelCreateUserProfile'),
                 },
             },
         },
@@ -50,7 +50,7 @@ const uploadExcelUpdateUserProfile = createRoute({
                     schema: z.object({
                         file: z.any(), // file upload
                         type: z.string() // loại thông tin
-                    }).openapi('ExcelUpload'),
+                    }).openapi('uploadExcelUpdateUserProfile'),
                 },
             },
         },

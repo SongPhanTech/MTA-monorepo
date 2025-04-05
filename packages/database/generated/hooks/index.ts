@@ -9,6 +9,7 @@ export * from './group';
 export * from './role';
 export * from './permission';
 export * from './config';
+export * from './template-file';
 export * from './user';
 export * from './feedback';
 export * from './blocked-ip';

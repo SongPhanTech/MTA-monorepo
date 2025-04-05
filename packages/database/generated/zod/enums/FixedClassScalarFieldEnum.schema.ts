@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const FixedClassScalarFieldEnumSchema = z.enum(["id", "code", "description", "deletedAt", "createdAt", "updatedAt", "name", "trainingCourseId", "managementOrganizationId"])
+export const FixedClassScalarFieldEnumSchema = z.enum(["id", "code", "description", "deletedAt", "createdAt", "updatedAt", "name", "trainingCourseId", "managementOrganizationId", "classSize"])

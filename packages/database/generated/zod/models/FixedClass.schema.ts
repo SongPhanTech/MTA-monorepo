@@ -14,6 +14,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     name: z.string(),
+    classSize: z.number().default(0),
 }
 ).strict();
 const relationSchema = z.object({
@@ -58,7 +59,8 @@ export const FixedClassPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
-    name: z.string()
+    name: z.string(),
+    classSize: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
@@ -66,7 +68,7 @@ export const FixedClassPrismaUpdateSchema = z.object({
  * `FixedClass` schema for create operations excluding foreign keys and relations.
  */
 export const FixedClassCreateScalarSchema = baseSchema.partial({
-    id: true, createdAt: true, updatedAt: true
+    id: true, createdAt: true, updatedAt: true, classSize: true
 });
 
 

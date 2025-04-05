@@ -63,7 +63,7 @@ enum CurriculumStatus {
 // chương trình giảng dạy
 model Curriculum extends Base {
   name                     String
-  status                   CurriculumStatus       @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
+  status                   CurriculumStatus   @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   startDate                DateTime
   endDate                  DateTime?
   ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
@@ -83,11 +83,13 @@ model Curriculum extends Base {
 model FixedClass extends Base {
   name                     String
 
-  TrainingCourse           TrainingCourse? @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  TrainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id]) // Khóa học
   trainingCourseId         String?
 
-  ManagementOrganization   Organization?   @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String?
 
-  fixedClassStudent FixedClassStudent[]
+  classSize                Int                 @default(0) // sĩ số
+
+  fixedClassStudent        FixedClassStudent[]
 }
