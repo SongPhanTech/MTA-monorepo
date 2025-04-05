@@ -109,15 +109,9 @@ export default function FixedClassPage() {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
                         {/* row button */}
-                        <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
+
                         {/* row filter */}
                         <Col span={6}>
                             <Form.Item label="Tìm kiếm" name="search">
@@ -161,6 +155,13 @@ export default function FixedClassPage() {
                                     allowClear
                                 />
                             </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
                         </Col>
                     </Row>
                 </Col>

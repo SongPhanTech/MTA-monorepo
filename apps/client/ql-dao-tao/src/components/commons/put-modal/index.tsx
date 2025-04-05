@@ -15,12 +15,14 @@ export type PutModalFormType = {}
 export type ModalProps<T = PutModalFormType> = {
     form: FormInstance<T>
     onFinish: (values: T) => void
+    layout?: 'horizontal' | 'vertical' // Cho phép truyền layout là horizontal hoặc vertical
 } & AntdModalProps
 
 const PutFormModal = <T extends PutModalFormType>({
     onFinish,
     form,
     children,
+    layout = 'vertical', // Mặc định layout là 'vertical' nếu không truyền
     ...rest
 }: ModalProps<T>) => {
     return (
@@ -32,7 +34,7 @@ const PutFormModal = <T extends PutModalFormType>({
             onOk={form.submit}
             {...rest}
         >
-            <Form form={form} layout="vertical" onFinish={onFinish}>
+            <Form form={form} layout={layout} onFinish={onFinish}>
                 <Row gutter={16}>{children}</Row>
             </Form>
         </AntdModal>
