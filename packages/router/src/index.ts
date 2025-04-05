@@ -320,6 +320,13 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.FIXED_CLASS,
                 description: 'Quản lý lớp biên chế',
             },
+            {
+                id: 'user-profile',
+                label: 'Quản lý hồ sơ học viên',
+                icon: ClockCircleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE,
+                description: 'Quản lý lớp biên chế',
+            },
         ],
         label: 'Quản lý đào tạo',
     },

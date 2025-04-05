@@ -86,17 +86,9 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]}>
-                        {/* row button */}
-                        <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                        {/* row filter */}
-                        <Col span={6}>
+                    <Row gutter={[16, 16]} align="top">
+                        {/* Tìm kiếm */}
+                        <Col span={12}>
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
@@ -106,6 +98,15 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
+                        </Col>
+
+                        {/* Thêm mới */}
+                        <Col span={12}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
                         </Col>
                     </Row>
                 </Col>
