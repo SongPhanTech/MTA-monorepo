@@ -216,6 +216,24 @@ Table UserProfile {
   organizationCPVName String
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  fixedClassStudent FixedClassStudent [not null]
+}
+
+Table FixedClassStudent {
+  id String [pk]
+  fixedClass FixedClass [not null]
+  fixedClassId String [not null]
+  UserProfile UserProfile [not null]
+  userProfileId String [not null]
+  status FixedClassStudentStatus [not null, default: 'ENROLLED']
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (fixedClassId, userProfileId) [unique]
+  }
 }
 
 Table Province {
@@ -396,6 +414,7 @@ Table TrainingCourse {
   trainingLevelId String [not null]
   TrainingForm TrainingForm [not null]
   trainingFormId String [not null]
+  status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 }
 
@@ -407,7 +426,7 @@ Table Curriculum {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  status ActiveStatus [not null, default: 'ACTIVE']
+  status CurriculumStatus [not null, default: 'ACTIVE']
   startDate DateTime [not null]
   endDate DateTime
   ManagementOrganization Organization [not null]
@@ -431,10 +450,11 @@ Table FixedClass {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  TrainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-  ManagementOrganization Organization [not null]
-  managementOrganizationId String [not null]
+  TrainingCourse TrainingCourse
+  trainingCourseId String
+  ManagementOrganization Organization
+  managementOrganizationId String
+  fixedClassStudent FixedClassStudent [not null]
 }
 
 Table TrainingObjectType {
@@ -613,7 +633,25 @@ Enum Gender {
   Female
 }
 
-Enum ActiveStatus {
+Enum FixedClassStudentStatus {
+  ENROLLED
+  GRADUATED
+  DEFERRED_STUDY
+  SUSPENDED_STUDY
+  WITHDRAWN
+  TRANSFERRED
+  PENDING_GRADUATION_REVIEW
+  ACADEMIC_SUSPENSION
+}
+
+Enum TrainingCourseStatus {
+  ACTIVE
+  COMPLETED
+  SUSPEND
+  CANCEL
+}
+
+Enum CurriculumStatus {
   ACTIVE
   INACTIVATED
 }
@@ -633,6 +671,10 @@ Ref: UserProfile.nationalityId > Nationality.id
 Ref: UserProfile.religionId > Religion.id
 
 Ref: UserProfile.ethnicityId > Ethnicity.id
+
+Ref: FixedClassStudent.fixedClassId > FixedClass.id
+
+Ref: FixedClassStudent.userProfileId > UserProfile.id
 
 Ref: Commune.provinceId > Province.id
 
