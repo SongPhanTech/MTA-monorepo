@@ -51,7 +51,7 @@ app.use('*', checkIp)
 setupOpenApi(app)
 
 // Update: Bật lại khi release
-// setupAuth(app)
+setupAuth(app)
 
 app.route('/api', API)
 app.route('/api/is', ISConfig)

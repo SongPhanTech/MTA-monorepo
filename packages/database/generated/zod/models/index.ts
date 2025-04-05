@@ -19,6 +19,7 @@ export * from './Religion.schema';
 export * from './Ethnicity.schema';
 export * from './UserType.schema';
 export * from './UserProfile.schema';
+export * from './FixedClassStudent.schema';
 export * from './Province.schema';
 export * from './Commune.schema';
 export * from './Level.schema';

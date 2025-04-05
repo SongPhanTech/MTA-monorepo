@@ -19,6 +19,7 @@ export * from './religion';
 export * from './ethnicity';
 export * from './user-type';
 export * from './user-profile';
+export * from './fixed-class-student';
 export * from './province';
 export * from './commune';
 export * from './level';

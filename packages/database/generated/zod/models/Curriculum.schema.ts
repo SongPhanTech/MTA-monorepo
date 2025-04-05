@@ -6,8 +6,8 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { ActiveStatus } from '@prisma/client';
-import { ActiveStatusSchema } from '../enums/ActiveStatus.schema';
+import { CurriculumStatus } from '@prisma/client';
+import { CurriculumStatusSchema } from '../enums/CurriculumStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,7 +16,7 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     name: z.string(),
-    status: ActiveStatusSchema,
+    status: CurriculumStatusSchema,
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     infomation: z.string(),
@@ -70,7 +70,7 @@ export const CurriculumPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
     name: z.string(),
-    status: ActiveStatusSchema,
+    status: CurriculumStatusSchema,
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     infomation: z.string(),

@@ -54,6 +54,7 @@ const relationSchema = z.object({
     Nationality: z.record(z.unknown()).optional(),
     Religion: z.record(z.unknown()).optional(),
     Ethnicity: z.record(z.unknown()).optional(),
+    fixedClassStudent: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

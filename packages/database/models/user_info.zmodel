@@ -44,11 +44,10 @@ enum Gender {
   Female
 }
 
-model UserProfile {
-  id                     String              @id @default(uuid())
+model UserProfile extends Base{
+
   user                   User?               @relation(fields: [userId], references: [id])
   userId                 String?             @unique
-  code                   String?             @unique
   UserType               UserType            @relation(fields: [userTypeId], references: [id]) // loại đối tượng
   userTypeId             String
 
@@ -104,9 +103,6 @@ model UserProfile {
   positionCPVName        String? // chức vụ Đảng
   organizationName       String? // đơn vị
   organizationCPVName    String? // nơi sinh hoạt Đảng
-
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
 
   fixedClassStudent      FixedClassStudent[]
 }
