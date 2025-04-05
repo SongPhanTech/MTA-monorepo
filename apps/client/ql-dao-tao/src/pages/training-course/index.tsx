@@ -131,19 +131,7 @@ export default function TrainingCoursePage() {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    {/* Row nút thêm */}
-                    <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-
-                    {/* Row ô tìm kiếm */}
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={6}>
                             <Form.Item label="Tìm kiếm" name="searchText">
                                 <Input
@@ -152,6 +140,13 @@ export default function TrainingCoursePage() {
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
                         </Col>
                     </Row>
 

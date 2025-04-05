@@ -83,16 +83,8 @@ export default function MilestonePage() {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]}>
-                        {/* row button */}
-                        <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                        {/* row filter */}
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        {/* Tìm kiếm */}
                         <Col span={6}>
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
@@ -103,6 +95,15 @@ export default function MilestonePage() {
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
+                        </Col>
+
+                        {/* Thêm mới */}
+                        <Col span={6}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
                         </Col>
                     </Row>
                 </Col>
