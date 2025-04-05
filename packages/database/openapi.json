@@ -222,6 +222,15 @@
           "Female"
         ]
       },
+      "TrainingCourseStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "COMPLETED",
+          "SUSPEND",
+          "CANCEL"
+        ]
+      },
       "ActiveStatus": {
         "type": "string",
         "enum": [
@@ -632,7 +641,8 @@
           "trainingObjectTypeId",
           "trainingTypeId",
           "trainingLevelId",
-          "trainingFormId"
+          "trainingFormId",
+          "status"
         ]
       },
       "CurriculumScalarFieldEnum": {
@@ -3195,6 +3205,9 @@
           "trainingFormId": {
             "type": "string"
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "fixedClass": {
             "type": "array",
             "items": {
@@ -3215,7 +3228,8 @@
           "TrainingLevel",
           "trainingLevelId",
           "TrainingForm",
-          "trainingFormId"
+          "trainingFormId",
+          "status"
         ]
       },
       "Curriculum": {
@@ -18372,6 +18386,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              }
+            ]
+          },
           "TrainingObjectType": {
             "oneOf": [
               {
@@ -18485,6 +18509,9 @@
             "$ref": "#/components/schemas/SortOrder"
           },
           "trainingFormId": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "status": {
             "$ref": "#/components/schemas/SortOrder"
           },
           "TrainingObjectType": {
@@ -18676,6 +18703,16 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
               }
             ]
           },
@@ -18903,6 +18940,16 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusWithAggregatesFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
               }
             ]
           }
@@ -35208,6 +35255,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -35343,6 +35393,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
@@ -35434,6 +35494,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -35552,6 +35615,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -41337,6 +41410,36 @@
           }
         }
       },
+      "EnumTrainingCourseStatusFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
+              }
+            ]
+          }
+        }
+      },
       "TrainingObjectTypeScalarRelationFilter": {
         "type": "object",
         "properties": {
@@ -41378,6 +41481,45 @@
           },
           "isNot": {
             "$ref": "#/components/schemas/TrainingFormWhereInput"
+          }
+        }
+      },
+      "EnumTrainingCourseStatusWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
           }
         }
       },
@@ -49331,6 +49473,14 @@
           }
         }
       },
+      "EnumTrainingCourseStatusFieldUpdateOperationsInput": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          }
+        }
+      },
       "TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput": {
         "type": "object",
         "properties": {
@@ -53441,6 +53591,75 @@
           },
           "_max": {
             "$ref": "#/components/schemas/NestedEnumGenderNullableFilter"
+          }
+        }
+      },
+      "NestedEnumTrainingCourseStatusFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
+              }
+            ]
+          }
+        }
+      },
+      "NestedEnumTrainingCourseStatusWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourseStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTrainingCourseStatusFilter"
           }
         }
       },
@@ -74340,6 +74559,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -74436,6 +74658,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -74833,6 +75058,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
@@ -74994,6 +75229,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -75382,6 +75627,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingType": {
             "$ref": "#/components/schemas/TrainingTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -75474,6 +75722,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput"
@@ -76053,6 +76304,16 @@
                 "type": "string"
               }
             ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              }
+            ]
           }
         }
       },
@@ -76196,6 +76457,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -76288,6 +76552,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput"
@@ -76487,6 +76754,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -76579,6 +76849,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput"
@@ -77117,6 +77390,9 @@
               }
             ]
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
@@ -77209,6 +77485,9 @@
           },
           "trainingLevelId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput"
@@ -97225,6 +97504,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -97453,6 +97735,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingType": {
             "$ref": "#/components/schemas/TrainingTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
@@ -97607,6 +97899,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput"
           }
@@ -97749,6 +98051,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -98368,6 +98680,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -98485,6 +98800,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           },
@@ -98642,6 +98967,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput"
           }
@@ -98786,6 +99121,16 @@
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
           }
         }
       },
@@ -98860,6 +99205,9 @@
           },
           "trainingFormId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -99088,6 +99436,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
@@ -99242,6 +99600,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput"
           }
@@ -99384,6 +99752,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -100003,6 +100381,9 @@
           },
           "trainingLevelId": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
           }
         },
         "required": [
@@ -100120,6 +100501,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           },
@@ -100277,6 +100668,16 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput"
           }
@@ -100419,6 +100820,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -103920,6 +104331,9 @@
           "trainingFormId": {
             "type": "boolean"
           },
+          "status": {
+            "type": "boolean"
+          },
           "fixedClass": {
             "oneOf": [
               {
@@ -107327,6 +107741,9 @@
           "trainingFormId": {
             "type": "boolean"
           },
+          "status": {
+            "type": "boolean"
+          },
           "_all": {
             "type": "boolean"
           }
@@ -107373,6 +107790,9 @@
           },
           "trainingFormId": {
             "type": "boolean"
+          },
+          "status": {
+            "type": "boolean"
           }
         }
       },
@@ -107416,6 +107836,9 @@
             "type": "boolean"
           },
           "trainingFormId": {
+            "type": "boolean"
+          },
+          "status": {
             "type": "boolean"
           }
         }
@@ -112579,6 +113002,9 @@
           "trainingFormId": {
             "type": "string"
           },
+          "status": {
+            "$ref": "#/components/schemas/TrainingCourseStatus"
+          },
           "_count": {
             "oneOf": [
               {
@@ -112619,7 +113045,8 @@
           "trainingObjectTypeId",
           "trainingTypeId",
           "trainingLevelId",
-          "trainingFormId"
+          "trainingFormId",
+          "status"
         ]
       },
       "AggregateCurriculum": {
@@ -121255,6 +121682,9 @@
           "trainingFormId": {
             "type": "integer"
           },
+          "status": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -121273,6 +121703,7 @@
           "trainingTypeId",
           "trainingLevelId",
           "trainingFormId",
+          "status",
           "_all"
         ]
       },
@@ -121413,6 +121844,16 @@
                 "type": "string"
               }
             ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
+              }
+            ]
           }
         }
       },
@@ -121551,6 +121992,16 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingCourseStatus"
               }
             ]
           }

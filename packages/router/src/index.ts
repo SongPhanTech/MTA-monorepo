@@ -110,56 +110,56 @@ const NAVIGATION: NavigationType = {
                 id: 'danh-muc-chung',
                 label: 'Danh mục chung',
                 icon: PieChartOutlined,
-                children:  [
-                   {
-                    id: 'level',
-                    label: 'Danh mục phân cấp',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
-                   },
-                   {
-                    id: 'rank',
-                    label: 'Danh mục cấp bậc hàm',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_RANK,
-                   },
-                   {
-                    id: 'academic-degree-type',
-                    label: 'Danh mục học hàm',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_DEGREE_TYPE,
-                   },
-                   {
-                    id: 'academic-rank-type',
-                    label: 'Danh mục học vị',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_RANK_TYPE,
-                   },
-                   {
-                    id: 'position',
-                    label: 'Danh mục chức vụ',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_POSITION,
-                   },
-                   {
-                    id: 'organization-type',
-                    label: 'Danh mục loại đơn vị',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION_TYPE,
-                   },
-                   {
-                    id: 'organization',
-                    label: 'Danh mục đơn vị',
-                    icon: PieChartOutlined,
-                    path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION,
-                   }
+                children: [
+                    {
+                        id: 'level',
+                        label: 'Danh mục phân cấp',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
+                    },
+                    {
+                        id: 'rank',
+                        label: 'Danh mục cấp bậc hàm',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_RANK,
+                    },
+                    {
+                        id: 'academic-degree-type',
+                        label: 'Danh mục học hàm',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_DEGREE_TYPE,
+                    },
+                    {
+                        id: 'academic-rank-type',
+                        label: 'Danh mục học vị',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_RANK_TYPE,
+                    },
+                    {
+                        id: 'position',
+                        label: 'Danh mục chức vụ',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_POSITION,
+                    },
+                    {
+                        id: 'organization-type',
+                        label: 'Danh mục loại đơn vị',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION_TYPE,
+                    },
+                    {
+                        id: 'organization',
+                        label: 'Danh mục đơn vị',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION,
+                    }
                 ]
             },
             {
                 id: 'danh-muc-dao-tao',
                 label: 'Danh mục đào tạo',
                 icon: PieChartOutlined,
-                children:  [
+                children: [
                     {
                         id: 'training-object-type',
                         label: 'Danh mục đối tượng đào tạo',
@@ -238,7 +238,7 @@ const NAVIGATION: NavigationType = {
                 id: 'danh-muc-ho-so',
                 label: 'Danh mục hồ sơ',
                 icon: PieChartOutlined,
-                children:  [
+                children: [
                     {
                         id: 'priority-object',
                         label: 'Danh mục đối tượng ưu tiên',
@@ -276,11 +276,11 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_USER_TYPE,
                     }
                 ]
-                
+
             },
         ],
 
-        
+
         label: 'Quản lý danh mục',
     },
     QL_DAO_TAO: {
@@ -292,19 +292,33 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
             },
-             {
+            {
                 id: 'schoolyear-semester',
                 label: 'Năm học, kỳ học',
                 icon: ScheduleOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.SCHOOLYEAR_SEMESTER,
                 description: 'Thông tin năm học, kỳ học',
             },
-             {
+            {
                 id: 'milestone',
                 label: 'Mốc huấn luyện',
                 icon: ClockCircleOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.MILESTONE,
                 description: 'Thông tin năm học, kỳ học',
+            },
+            {
+                id: 'traning-course',
+                label: 'Quản lý khóa',
+                icon: ClockCircleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.TRAINING_COURSE,
+                description: 'Quản lý khóa',
+            },
+            {
+                id: 'fixed-class',
+                label: 'Quản lý lớp biên chế',
+                icon: ClockCircleOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.FIXED_CLASS,
+                description: 'Quản lý lớp biên chế',
             },
         ],
         label: 'Quản lý đào tạo',

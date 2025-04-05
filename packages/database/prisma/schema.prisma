@@ -51,6 +51,13 @@ enum Gender {
   Female
 }
 
+enum TrainingCourseStatus {
+  ACTIVE
+  COMPLETED
+  SUSPEND
+  CANCEL
+}
+
 enum ActiveStatus {
   ACTIVE
   INACTIVATED
@@ -429,23 +436,24 @@ model Milestone {
 }
 
 model TrainingCourse {
-  id                   String             @id() @default(cuid())
+  id                   String               @id() @default(cuid())
   code                 String?
-  description          String?            @db.Text()
+  description          String?              @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt()
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  TrainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
-  TrainingType         TrainingType       @relation(fields: [trainingTypeId], references: [id])
+  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId       String
-  TrainingLevel        TrainingLevel      @relation(fields: [trainingLevelId], references: [id])
+  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String
-  TrainingForm         TrainingForm       @relation(fields: [trainingFormId], references: [id])
+  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String
+  status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
 }
 
