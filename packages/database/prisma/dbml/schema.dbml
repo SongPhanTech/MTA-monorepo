@@ -54,6 +54,20 @@ Table Config {
   value String [not null]
 }
 
+Table TemplateFile {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  path String [unique, not null]
+  type TemplateFileType
+  extensions String
+  numberField Int
+}
+
 Table User {
   id String [pk]
   code String
@@ -167,9 +181,13 @@ Table UserType {
 
 Table UserProfile {
   id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   user User
   userId String [unique]
-  code String [unique]
   UserType UserType [not null]
   userTypeId String [not null]
   firstName String [not null]
@@ -214,8 +232,6 @@ Table UserProfile {
   positionCPVName String
   organizationName String
   organizationCPVName String
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
   fixedClassStudent FixedClassStudent [not null]
 }
 
@@ -230,10 +246,6 @@ Table FixedClassStudent {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
-
-  indexes {
-    (fixedClassId, userProfileId) [unique]
-  }
 }
 
 Table Province {
@@ -454,6 +466,7 @@ Table FixedClass {
   trainingCourseId String
   ManagementOrganization Organization
   managementOrganizationId String
+  classSize Int [not null, default: 0]
   fixedClassStudent FixedClassStudent [not null]
 }
 
@@ -606,6 +619,12 @@ Enum PermissionType {
   DELETE
   APPROVE
   DETAIL
+}
+
+Enum TemplateFileType {
+  UPLOAD
+  DOWNLOAD
+  LOGS
 }
 
 Enum UserRole {

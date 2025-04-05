@@ -328,7 +328,7 @@ export function useSuspenseCountFixedClass<TArgs extends Prisma.FixedClassCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('FixedClass', `${endpoint}/fixedClass/count`, args, options, fetch);
 }
 
-export function useCheckFixedClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string; trainingCourseId?: string; managementOrganizationId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckFixedClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string; trainingCourseId?: string; managementOrganizationId?: string; classSize?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('FixedClass', `${endpoint}/fixedClass/check`, args, options, fetch);
 }
