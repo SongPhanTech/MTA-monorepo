@@ -153,8 +153,8 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) =>
-                                    dayjs(endDate).format('DD/MM/YYYY'),
+                                render: ({ endDate }) => endDate ?
+                                    dayjs(endDate).format('DD/MM/YYYY') : "",
                             },
                             {
                                 title: 'Mô tả',

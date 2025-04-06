@@ -256,8 +256,8 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) =>
-                                    dayjs(endDate).format('DD/MM/YYYY'),
+                                render: ({ endDate }) => endDate ?
+                                    dayjs(endDate).format('DD/MM/YYYY') : "",
                             },
                             {
                                 title: 'Trạng thái',

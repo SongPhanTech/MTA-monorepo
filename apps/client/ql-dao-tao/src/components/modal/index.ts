@@ -5,4 +5,6 @@ import PutMilestoneModal from './put-milestone'
 import PutTrainingCourseModal from './put-training-course'
 import PutFixedClassModal from './put-fixed-class'
 import PutUserProfileModal from './put-user-profile'
-export { ConfirmModal, PutSchoolYearModal, PutSemesterModal, PutMilestoneModal, PutTrainingCourseModal, PutFixedClassModal, PutUserProfileModal }
+import PutUploadProfileModal from './put-upload-profile'
+import PutUserProfileUpdateModal from './put-user-profile-update'
+export { ConfirmModal, PutSchoolYearModal, PutSemesterModal, PutMilestoneModal, PutTrainingCourseModal, PutFixedClassModal, PutUserProfileModal, PutUploadProfileModal, PutUserProfileUpdateModal }

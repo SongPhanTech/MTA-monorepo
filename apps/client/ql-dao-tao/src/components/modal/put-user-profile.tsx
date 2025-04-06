@@ -103,7 +103,10 @@ const PutUserProfileModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
-            form.setFieldsValue(level)
+            form.setFieldsValue({
+                ...level,
+                dateOfBirth: dayjs(level.dateOfBirth)
+            })
         }
     }, [level])
 

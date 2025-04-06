@@ -116,7 +116,7 @@ const PutTrainingCourseModal = () => {
             form.setFieldsValue({
                 ...level,
                 startDate: dayjs(level.startDate),
-                endDate: dayjs(level.endDate)
+                endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
         }
     }, [level])
