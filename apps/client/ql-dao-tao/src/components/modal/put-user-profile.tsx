@@ -19,6 +19,8 @@ import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { GENDER_LIST } from '@constants/constants'
 export type PutUserProfile = UserProfile
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutUserProfileModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
     const {

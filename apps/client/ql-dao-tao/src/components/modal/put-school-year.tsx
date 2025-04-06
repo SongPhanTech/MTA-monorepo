@@ -14,6 +14,8 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
 export type PutSchoolYearFormType = SchoolYear
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutSchoolYearModal = () => {
     const [form] = Form.useForm<PutSchoolYearFormType>()
     const {

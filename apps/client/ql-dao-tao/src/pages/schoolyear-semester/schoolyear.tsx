@@ -55,11 +55,11 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateSchoolYear()
+    const { mutateAsync: updateSchoolYear } = useUpdateSchoolYear()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateSchoolYear({
                 where: {
                     id,
                 },

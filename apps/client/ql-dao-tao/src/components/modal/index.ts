@@ -7,4 +7,5 @@ import PutFixedClassModal from './put-fixed-class'
 import PutUserProfileModal from './put-user-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutUserProfileUpdateModal from './put-user-profile-update'
-export { ConfirmModal, PutSchoolYearModal, PutSemesterModal, PutMilestoneModal, PutTrainingCourseModal, PutFixedClassModal, PutUserProfileModal, PutUploadProfileModal, PutUserProfileUpdateModal }
+import PutUpdateProfileModal from './put-update-profile'
+export { ConfirmModal, PutSchoolYearModal, PutSemesterModal, PutMilestoneModal, PutTrainingCourseModal, PutFixedClassModal, PutUserProfileModal, PutUploadProfileModal, PutUserProfileUpdateModal, PutUpdateProfileModal }

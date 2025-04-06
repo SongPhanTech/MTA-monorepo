@@ -82,11 +82,11 @@ export default function TrainingCoursePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateTrainingCourse({
                 where: {
                     id,
                 },

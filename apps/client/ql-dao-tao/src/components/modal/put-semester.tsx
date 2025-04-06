@@ -17,6 +17,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutSemester = Semester
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutSemesterModal = () => {
     const [form] = Form.useForm<PutSemester>()
     const {

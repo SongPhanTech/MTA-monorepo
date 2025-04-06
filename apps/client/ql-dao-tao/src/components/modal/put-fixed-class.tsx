@@ -18,6 +18,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutFixedClass = FixedClass
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutFixedClassModal = () => {
     const [form] = Form.useForm<PutFixedClass>()
     const {

@@ -61,11 +61,11 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateSemester()
+    const { mutateAsync: updateSemester } = useUpdateSemester()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateSemester({
                 where: {
                     id,
                 },
