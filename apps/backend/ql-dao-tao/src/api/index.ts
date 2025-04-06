@@ -71,5 +71,9 @@ app
         const data = await fixedClassService.uploadExcelCreateFixedClass(c)
         return data
     })
+    .openapi(fixedClassRoute.classDivision, async (c) => {
+        const data = await fixedClassService.classDivision(c)
+        return data
+    })
     // #endregion
 export default app
