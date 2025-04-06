@@ -329,7 +329,7 @@
           "updatedAt",
           "name",
           "path",
-          "type",
+          "fileType",
           "extensions",
           "numberField"
         ]
@@ -1224,7 +1224,7 @@
           "path": {
             "type": "string"
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"
@@ -6285,7 +6285,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/EnumTemplateFileTypeNullableFilter"
@@ -6374,7 +6374,7 @@
           "path": {
             "$ref": "#/components/schemas/SortOrder"
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SortOrder"
@@ -6519,7 +6519,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/EnumTemplateFileTypeNullableFilter"
@@ -6687,7 +6687,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/EnumTemplateFileTypeNullableWithAggregatesFilter"
@@ -27979,7 +27979,7 @@
           "path": {
             "type": "string"
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"
@@ -28110,7 +28110,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TemplateFileType"
@@ -28202,7 +28202,7 @@
           "path": {
             "type": "string"
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"
@@ -28333,7 +28333,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TemplateFileType"
@@ -112471,7 +112471,7 @@
           "path": {
             "type": "boolean"
           },
-          "type": {
+          "fileType": {
             "type": "boolean"
           },
           "extensions": {
@@ -114826,7 +114826,7 @@
           "path": {
             "type": "boolean"
           },
-          "type": {
+          "fileType": {
             "type": "boolean"
           },
           "extensions": {
@@ -114883,7 +114883,7 @@
           "path": {
             "type": "boolean"
           },
-          "type": {
+          "fileType": {
             "type": "boolean"
           },
           "extensions": {
@@ -114921,7 +114921,7 @@
           "path": {
             "type": "boolean"
           },
-          "type": {
+          "fileType": {
             "type": "boolean"
           },
           "extensions": {
@@ -119465,7 +119465,7 @@
           "path": {
             "type": "string"
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"
@@ -125865,7 +125865,7 @@
           "path": {
             "type": "integer"
           },
-          "type": {
+          "fileType": {
             "type": "integer"
           },
           "extensions": {
@@ -125887,7 +125887,7 @@
           "updatedAt",
           "name",
           "path",
-          "type",
+          "fileType",
           "extensions",
           "numberField",
           "_all"
@@ -126009,7 +126009,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"
@@ -126127,7 +126127,7 @@
               }
             ]
           },
-          "type": {
+          "fileType": {
             "oneOf": [
               {
                 "type": "null"

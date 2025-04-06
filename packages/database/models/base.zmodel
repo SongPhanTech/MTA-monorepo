@@ -60,7 +60,7 @@ enum TemplateFileType {
 model TemplateFile extends Base {
   name        String
   path        String @unique
-  type        TemplateFileType?
+  fileType    TemplateFileType?
   extensions  String? //loại file
-  numberField Int? // Số lượng trường trong file
+  numberField Int? @default(0)// Số lượng trường trong file
 }

@@ -42,7 +42,7 @@ const classDivision = createRoute({
     method: 'post',
     description: 
         'Phân chia học viên vào các lớp',
-    tags: ['UserProfile'],
+    tags: ['FixedClass'],
     summary: 'Class Division',
     request: {
         body: {
