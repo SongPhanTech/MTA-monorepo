@@ -137,7 +137,7 @@ export default function FixedClassPage() {
                                     onChange={(val) => handleFilterChange('trainingCourseId', val)}
                                     allowClear
                                 />
-                                e                 </Form.Item>
+                            </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item
