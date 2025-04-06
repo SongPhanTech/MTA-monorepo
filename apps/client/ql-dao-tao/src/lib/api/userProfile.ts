@@ -12,7 +12,7 @@ const fetchUpload = async (formData: FormData) => {
         }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/UserProfile/upload-excel-create-user-profile`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_NO_AUTH}/api/UserProfile/upload-excel-create-user-profile`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${accessToken}`,

@@ -24,6 +24,10 @@
       "description": "Config operations"
     },
     {
+      "name": "templateFile",
+      "description": "TemplateFile operations"
+    },
+    {
       "name": "user",
       "description": "User operations"
     },
@@ -193,6 +197,14 @@
           "DETAIL"
         ]
       },
+      "TemplateFileType": {
+        "type": "string",
+        "enum": [
+          "UPLOAD",
+          "DOWNLOAD",
+          "LOGS"
+        ]
+      },
       "UserRole": {
         "type": "string",
         "enum": [
@@ -304,6 +316,22 @@
           "updatedAt",
           "key",
           "value"
+        ]
+      },
+      "TemplateFileScalarFieldEnum": {
+        "type": "string",
+        "enum": [
+          "id",
+          "code",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "path",
+          "type",
+          "extensions",
+          "numberField"
         ]
       },
       "UserScalarFieldEnum": {
@@ -710,7 +738,8 @@
           "updatedAt",
           "name",
           "trainingCourseId",
-          "managementOrganizationId"
+          "managementOrganizationId",
+          "classSize"
         ]
       },
       "TrainingObjectTypeScalarFieldEnum": {
@@ -1142,6 +1171,96 @@
           "updatedAt",
           "key",
           "value"
+        ]
+      },
+      "TemplateFile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "path"
         ]
       },
       "User": {
@@ -3579,6 +3698,9 @@
               }
             ]
           },
+          "classSize": {
+            "type": "integer"
+          },
           "fixedClassStudent": {
             "type": "array",
             "items": {
@@ -3590,7 +3712,8 @@
           "id",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "classSize"
         ]
       },
       "TrainingObjectType": {
@@ -6030,6 +6153,576 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileWhereInput": {
+        "type": "object",
+        "properties": {
+          "AND": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileWhereInput"
+                }
+              }
+            ]
+          },
+          "OR": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemplateFileWhereInput"
+            }
+          },
+          "NOT": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileWhereInput"
+                }
+              }
+            ]
+          },
+          "id": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTemplateFileTypeNullableFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntNullableFilter"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileOrderByWithRelationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "name": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "path": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileWhereUniqueInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "AND": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileWhereInput"
+                }
+              }
+            ]
+          },
+          "OR": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemplateFileWhereInput"
+            }
+          },
+          "NOT": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileWhereInput"
+                }
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTemplateFileTypeNullableFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntNullableFilter"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileScalarWhereWithAggregatesInput": {
+        "type": "object",
+        "properties": {
+          "AND": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+                }
+              }
+            ]
+          },
+          "OR": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+            }
+          },
+          "NOT": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+                }
+              }
+            ]
+          },
+          "id": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTemplateFileTypeNullableWithAggregatesFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntNullableWithAggregatesFilter"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -12774,9 +13467,6 @@
         "properties": {
           "id": {
             "type": "string"
-          },
-          "fixedClassId_userProfileId": {
-            "$ref": "#/components/schemas/FixedClassStudentFixedClassIdUserProfileIdCompoundUniqueInput"
           },
           "AND": {
             "oneOf": [
@@ -20727,6 +21417,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntFilter"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
           "TrainingCourse": {
             "oneOf": [
               {
@@ -20822,6 +21522,9 @@
                 "$ref": "#/components/schemas/SortOrderInput"
               }
             ]
+          },
+          "classSize": {
+            "$ref": "#/components/schemas/SortOrder"
           },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseOrderByWithRelationInput"
@@ -20967,6 +21670,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntFilter"
+              },
+              {
+                "type": "integer"
               }
             ]
           },
@@ -21141,6 +21854,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntWithAggregatesFilter"
+              },
+              {
+                "type": "integer"
               }
             ]
           }
@@ -27200,6 +27923,452 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileCreateInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ]
+      },
+      "TemplateFileUpdateInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NullableEnumTemplateFileTypeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NullableIntFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileCreateManyInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ]
+      },
+      "TemplateFileUpdateManyMutationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NullableEnumTemplateFileTypeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NullableIntFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           }
@@ -37415,6 +38584,9 @@
           "name": {
             "type": "string"
           },
+          "classSize": {
+            "type": "integer"
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseCreateNestedOneWithoutFixedClassInput"
           },
@@ -37514,6 +38686,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUpdateOneWithoutFixedClassNestedInput"
           },
@@ -37592,6 +38774,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           }
         },
         "required": [
@@ -37680,6 +38865,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
               }
             ]
           }
@@ -41866,6 +43061,270 @@
           }
         }
       },
+      "EnumTemplateFileTypeNullableFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "IntNullableFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntNullableFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "EnumTemplateFileTypeNullableWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableWithAggregatesFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+          }
+        }
+      },
+      "IntNullableWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntNullableWithAggregatesFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/NestedFloatNullableFilter"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          }
+        }
+      },
       "EnumUserRoleFilter": {
         "type": "object",
         "properties": {
@@ -42480,21 +43939,6 @@
           }
         }
       },
-      "FixedClassStudentFixedClassIdUserProfileIdCompoundUniqueInput": {
-        "type": "object",
-        "properties": {
-          "fixedClassId": {
-            "type": "string"
-          },
-          "userProfileId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "fixedClassId",
-          "userProfileId"
-        ]
-      },
       "EnumFixedClassStudentStatusWithAggregatesFilter": {
         "type": "object",
         "properties": {
@@ -42943,6 +44387,48 @@
           }
         }
       },
+      "IntFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "type": "integer"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntFilter"
+              }
+            ]
+          }
+        }
+      },
       "TrainingCourseNullableScalarRelationFilter": {
         "type": "object",
         "properties": {
@@ -42965,6 +44451,63 @@
                 "$ref": "#/components/schemas/TrainingCourseWhereInput"
               }
             ]
+          }
+        }
+      },
+      "IntWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "type": "integer"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/NestedFloatFilter"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedIntFilter"
           }
         }
       },
@@ -44824,6 +46367,48 @@
                 }
               }
             ]
+          }
+        }
+      },
+      "NullableEnumTemplateFileTypeFieldUpdateOperationsInput": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          }
+        }
+      },
+      "NullableIntFieldUpdateOperationsInput": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "increment": {
+            "type": "integer"
+          },
+          "decrement": {
+            "type": "integer"
+          },
+          "multiply": {
+            "type": "integer"
+          },
+          "divide": {
+            "type": "integer"
           }
         }
       },
@@ -52190,6 +53775,26 @@
           }
         }
       },
+      "IntFieldUpdateOperationsInput": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "type": "integer"
+          },
+          "increment": {
+            "type": "integer"
+          },
+          "decrement": {
+            "type": "integer"
+          },
+          "multiply": {
+            "type": "integer"
+          },
+          "divide": {
+            "type": "integer"
+          }
+        }
+      },
       "TrainingCourseUpdateOneWithoutFixedClassNestedInput": {
         "type": "object",
         "properties": {
@@ -55589,6 +57194,270 @@
           }
         }
       },
+      "NestedEnumTemplateFileTypeNullableFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "NestedEnumTemplateFileTypeNullableWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileType"
+                }
+              }
+            ]
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableWithAggregatesFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTemplateFileTypeNullableFilter"
+          }
+        }
+      },
+      "NestedIntNullableWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntNullableWithAggregatesFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/NestedFloatNullableFilter"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedIntNullableFilter"
+          }
+        }
+      },
+      "NestedFloatNullableFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "in": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            ]
+          },
+          "notIn": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            ]
+          },
+          "lt": {
+            "type": "number"
+          },
+          "lte": {
+            "type": "number"
+          },
+          "gt": {
+            "type": "number"
+          },
+          "gte": {
+            "type": "number"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/NestedFloatNullableFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
       "NestedEnumUserRoleFilter": {
         "type": "object",
         "properties": {
@@ -56117,6 +57986,105 @@
           },
           "_max": {
             "$ref": "#/components/schemas/NestedEnumCurriculumStatusFilter"
+          }
+        }
+      },
+      "NestedIntWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "type": "integer"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "lt": {
+            "type": "integer"
+          },
+          "lte": {
+            "type": "integer"
+          },
+          "gt": {
+            "type": "integer"
+          },
+          "gte": {
+            "type": "integer"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/NestedIntWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/NestedFloatFilter"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          }
+        }
+      },
+      "NestedFloatFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "type": "number"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "lt": {
+            "type": "number"
+          },
+          "lte": {
+            "type": "number"
+          },
+          "gt": {
+            "type": "number"
+          },
+          "gte": {
+            "type": "number"
+          },
+          "not": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/NestedFloatFilter"
+              }
+            ]
           }
         }
       },
@@ -69319,6 +71287,9 @@
           "name": {
             "type": "string"
           },
+          "classSize": {
+            "type": "integer"
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseCreateNestedOneWithoutFixedClassInput"
           },
@@ -69397,6 +71368,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           }
         },
         "required": [
@@ -70401,6 +72375,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUpdateOneWithoutFixedClassNestedInput"
           },
@@ -70517,6 +72501,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
               }
             ]
           }
@@ -73712,6 +75706,9 @@
           "name": {
             "type": "string"
           },
+          "classSize": {
+            "type": "integer"
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseCreateNestedOneWithoutFixedClassInput"
           },
@@ -73780,6 +75777,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutFixedClassInput"
@@ -74983,6 +76983,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/IntFilter"
+              },
+              {
+                "type": "integer"
               }
             ]
           }
@@ -77306,6 +79316,9 @@
           "name": {
             "type": "string"
           },
+          "classSize": {
+            "type": "integer"
+          },
           "ManagementOrganization": {
             "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutFixedClassInput"
           },
@@ -77374,6 +79387,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutFixedClassInput"
@@ -101873,6 +103889,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           }
         },
         "required": [
@@ -102887,6 +104906,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUpdateOneWithoutFixedClassNestedInput"
           },
@@ -102993,6 +105022,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedUpdateManyWithoutFixedClassNestedInput"
           }
@@ -103093,6 +105132,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
               }
             ]
           }
@@ -103999,6 +106048,9 @@
                 "type": "string"
               }
             ]
+          },
+          "classSize": {
+            "type": "integer"
           }
         },
         "required": [
@@ -104087,6 +106139,16 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
               }
             ]
           },
@@ -104196,6 +106258,16 @@
               }
             ]
           },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedUpdateManyWithoutFixedClassNestedInput"
           }
@@ -104296,6 +106368,16 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/IntFieldUpdateOperationsInput"
               }
             ]
           }
@@ -110362,6 +112444,44 @@
           }
         }
       },
+      "TemplateFileSelect": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "boolean"
+          },
+          "extensions": {
+            "type": "boolean"
+          },
+          "numberField": {
+            "type": "boolean"
+          }
+        }
+      },
       "UserSelect": {
         "type": "object",
         "properties": {
@@ -111871,6 +113991,9 @@
           "managementOrganizationId": {
             "type": "boolean"
           },
+          "classSize": {
+            "type": "boolean"
+          },
           "fixedClassStudent": {
             "oneOf": [
               {
@@ -112672,6 +114795,139 @@
             "type": "boolean"
           },
           "value": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TemplateFileCountAggregateInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "boolean"
+          },
+          "extensions": {
+            "type": "boolean"
+          },
+          "numberField": {
+            "type": "boolean"
+          },
+          "_all": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TemplateFileAvgAggregateInput": {
+        "type": "object",
+        "properties": {
+          "numberField": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TemplateFileSumAggregateInput": {
+        "type": "object",
+        "properties": {
+          "numberField": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TemplateFileMinAggregateInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "boolean"
+          },
+          "extensions": {
+            "type": "boolean"
+          },
+          "numberField": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TemplateFileMaxAggregateInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "boolean"
+          },
+          "extensions": {
+            "type": "boolean"
+          },
+          "numberField": {
             "type": "boolean"
           }
         }
@@ -115541,7 +117797,26 @@
           "managementOrganizationId": {
             "type": "boolean"
           },
+          "classSize": {
+            "type": "boolean"
+          },
           "_all": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FixedClassAvgAggregateInput": {
+        "type": "object",
+        "properties": {
+          "classSize": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FixedClassSumAggregateInput": {
+        "type": "object",
+        "properties": {
+          "classSize": {
             "type": "boolean"
           }
         }
@@ -115575,6 +117850,9 @@
           },
           "managementOrganizationId": {
             "type": "boolean"
+          },
+          "classSize": {
+            "type": "boolean"
           }
         }
       },
@@ -115606,6 +117884,9 @@
             "type": "boolean"
           },
           "managementOrganizationId": {
+            "type": "boolean"
+          },
+          "classSize": {
             "type": "boolean"
           }
         }
@@ -117076,6 +119357,201 @@
           "updatedAt",
           "key",
           "value"
+        ]
+      },
+      "AggregateTemplateFile": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileCountAggregateOutputType"
+              }
+            ]
+          },
+          "_avg": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileAvgAggregateOutputType"
+              }
+            ]
+          },
+          "_sum": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileSumAggregateOutputType"
+              }
+            ]
+          },
+          "_min": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileMinAggregateOutputType"
+              }
+            ]
+          },
+          "_max": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileMaxAggregateOutputType"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileGroupByOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileCountAggregateOutputType"
+              }
+            ]
+          },
+          "_avg": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileAvgAggregateOutputType"
+              }
+            ]
+          },
+          "_sum": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileSumAggregateOutputType"
+              }
+            ]
+          },
+          "_min": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileMinAggregateOutputType"
+              }
+            ]
+          },
+          "_max": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileMaxAggregateOutputType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "path"
         ]
       },
       "AggregateUser": {
@@ -120886,6 +123362,26 @@
               }
             ]
           },
+          "_avg": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassAvgAggregateOutputType"
+              }
+            ]
+          },
+          "_sum": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassSumAggregateOutputType"
+              }
+            ]
+          },
           "_min": {
             "oneOf": [
               {
@@ -120976,6 +123472,9 @@
               }
             ]
           },
+          "classSize": {
+            "type": "integer"
+          },
           "_count": {
             "oneOf": [
               {
@@ -120983,6 +123482,26 @@
               },
               {
                 "$ref": "#/components/schemas/FixedClassCountAggregateOutputType"
+              }
+            ]
+          },
+          "_avg": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassAvgAggregateOutputType"
+              }
+            ]
+          },
+          "_sum": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassSumAggregateOutputType"
               }
             ]
           },
@@ -121011,7 +123530,8 @@
           "id",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "classSize"
         ]
       },
       "AggregateTrainingObjectType": {
@@ -123313,6 +125833,327 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileCountAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "integer"
+          },
+          "deletedAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "integer"
+          },
+          "path": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "extensions": {
+            "type": "integer"
+          },
+          "numberField": {
+            "type": "integer"
+          },
+          "_all": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "path",
+          "type",
+          "extensions",
+          "numberField",
+          "_all"
+        ]
+      },
+      "TemplateFileAvgAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileSumAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileMinAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        }
+      },
+      "TemplateFileMaxAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "path": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileType"
+              }
+            ]
+          },
+          "extensions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "numberField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
               }
             ]
           }
@@ -130400,6 +133241,9 @@
           "managementOrganizationId": {
             "type": "integer"
           },
+          "classSize": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -130414,8 +133258,39 @@
           "name",
           "trainingCourseId",
           "managementOrganizationId",
+          "classSize",
           "_all"
         ]
+      },
+      "FixedClassAvgAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        }
+      },
+      "FixedClassSumAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        }
       },
       "FixedClassMinAggregateOutputType": {
         "type": "object",
@@ -130510,6 +133385,16 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
               }
             ]
           }
@@ -130608,6 +133493,16 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "classSize": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
               }
             ]
           }
@@ -134174,6 +137069,294 @@
           },
           "_max": {
             "$ref": "#/components/schemas/ConfigMaxAggregateInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileCreateArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TemplateFileCreateInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileCreateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TemplateFileCreateManyInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateFileCreateManyInput"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean",
+            "description": "Do not insert records with unique fields or ID fields that already exist."
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileFindUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereUniqueInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileFindFirstArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileFindManyArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileUpdateArgs": {
+        "type": "object",
+        "required": [
+          "where",
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereUniqueInput"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TemplateFileUpdateInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileUpdateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TemplateFileUpdateManyMutationInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileUpsertArgs": {
+        "type": "object",
+        "required": [
+          "create",
+          "update",
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereUniqueInput"
+          },
+          "create": {
+            "$ref": "#/components/schemas/TemplateFileCreateInput"
+          },
+          "update": {
+            "$ref": "#/components/schemas/TemplateFileUpdateInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileDeleteUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereUniqueInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileDeleteManyArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileCountArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TemplateFileSelect"
+          },
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileAggregateArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/TemplateFileOrderByWithRelationInput"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/TemplateFileWhereUniqueInput"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileCountAggregateInput"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/TemplateFileMinAggregateInput"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/TemplateFileMaxAggregateInput"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/TemplateFileSumAggregateInput"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/TemplateFileAvgAggregateInput"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "TemplateFileGroupByArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TemplateFileWhereInput"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/TemplateFileOrderByWithRelationInput"
+          },
+          "by": {
+            "$ref": "#/components/schemas/TemplateFileScalarFieldEnum"
+          },
+          "having": {
+            "$ref": "#/components/schemas/TemplateFileScalarWhereWithAggregatesInput"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TemplateFileCountAggregateInput"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/TemplateFileMinAggregateInput"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/TemplateFileMaxAggregateInput"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/TemplateFileSumAggregateInput"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/TemplateFileAvgAggregateInput"
           },
           "meta": {
             "$ref": "#/components/schemas/_Meta"
@@ -142005,6 +145188,12 @@
           "_max": {
             "$ref": "#/components/schemas/FixedClassMaxAggregateInput"
           },
+          "_sum": {
+            "$ref": "#/components/schemas/FixedClassSumAggregateInput"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/FixedClassAvgAggregateInput"
+          },
           "meta": {
             "$ref": "#/components/schemas/_Meta"
           }
@@ -142046,6 +145235,12 @@
           },
           "_max": {
             "$ref": "#/components/schemas/FixedClassMaxAggregateInput"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/FixedClassSumAggregateInput"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/FixedClassAvgAggregateInput"
           },
           "meta": {
             "$ref": "#/components/schemas/_Meta"
@@ -149826,6 +153021,1096 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ConfigGroupByArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/create": {
+      "post": {
+        "operationId": "createTemplateFile",
+        "description": "Create a new TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateFileCreateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/templateFile/createMany": {
+      "post": {
+        "operationId": "createManyTemplateFile",
+        "description": "Create several TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateFileCreateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/templateFile/findUnique": {
+      "get": {
+        "operationId": "findUniqueTemplateFile",
+        "description": "Find one unique TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileFindUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/findFirst": {
+      "get": {
+        "operationId": "findFirstTemplateFile",
+        "description": "Find the first TemplateFile matching the given condition",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileFindFirstArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/findMany": {
+      "get": {
+        "operationId": "findManyTemplateFile",
+        "description": "Find a list of TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TemplateFile"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileFindManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/update": {
+      "patch": {
+        "operationId": "updateTemplateFile",
+        "description": "Update a TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateFileUpdateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/templateFile/updateMany": {
+      "patch": {
+        "operationId": "updateManyTemplateFile",
+        "description": "Update TemplateFiles matching the given condition",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateFileUpdateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/templateFile/upsert": {
+      "post": {
+        "operationId": "upsertTemplateFile",
+        "description": "Upsert a TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateFileUpsertArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/templateFile/delete": {
+      "delete": {
+        "operationId": "deleteTemplateFile",
+        "description": "Delete one unique TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileDeleteUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/deleteMany": {
+      "delete": {
+        "operationId": "deleteManyTemplateFile",
+        "description": "Delete TemplateFiles matching the given condition",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileDeleteManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/count": {
+      "get": {
+        "operationId": "countTemplateFile",
+        "description": "Find a list of TemplateFile",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "$ref": "#/components/schemas/TemplateFileCountAggregateOutputType"
+                        }
+                      ],
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileCountArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/aggregate": {
+      "get": {
+        "operationId": "aggregateTemplateFile",
+        "description": "Aggregate TemplateFiles",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AggregateTemplateFile",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileAggregateArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/models/templateFile/groupBy": {
+      "get": {
+        "operationId": "groupByTemplateFile",
+        "description": "Group TemplateFiles by fields",
+        "tags": [
+          "templateFile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TemplateFileGroupByOutputType"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFileGroupByArgs"
                 }
               }
             }

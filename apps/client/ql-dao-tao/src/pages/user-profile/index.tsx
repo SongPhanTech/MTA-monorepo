@@ -2,7 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutUploadProfileModal, PutUserProfileModal } from '@components/modal'
+import { PutUploadProfileModal, PutUserProfileModal, PutUserProfileUpdateModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -14,7 +14,8 @@ import {
     useFindManyTrainingType,
     useFindManyTrainingObjectType,
     useFindManyTrainingLevel,
-    useFindManyUserType
+    useFindManyUserType,
+    useFindManyTemplateFile
 } from '@workspace/db/hooks'
 import type { UserProfile, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, UserType } from '@workspace/db'
 
@@ -72,6 +73,9 @@ export default function UserProfilePage() {
     const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
         tag: PutUploadProfileModal.name,
     })
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<string>({
+        tag: PutUserProfileUpdateModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -102,6 +106,15 @@ export default function UserProfilePage() {
         take: 1000,
         skip: 0,
     });
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile({
+        where: {
+            code: {
+                equals: 'IMPORT_USERPROFILE',
+            },
+        },
+        take: 1000,
+        skip: 0,
+    });
 
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
@@ -111,6 +124,17 @@ export default function UserProfilePage() {
         });
     };
 
+    const handleDownloadTemplate = () => {
+        const fileLink = templateFile?.length > 0 ? templateFile[0].path : null
+        if (fileLink) {
+            const link = document.createElement('a');
+            link.href = fileLink;
+            link.setAttribute('download', '');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -119,14 +143,17 @@ export default function UserProfilePage() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
+                                <Button className='ml-4' onClick={handleDownloadTemplate} type="primary">
+                                    Tải file mẫu
+                                </Button>
                                 <Button className='ml-4' onClick={handleModalUpload} type="primary">
-                                    Tải file
+                                    Nhập file
                                 </Button>
                             </Flex>
 
@@ -218,7 +245,7 @@ export default function UserProfilePage() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
+                                                onClick={onOpenUpdate.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>

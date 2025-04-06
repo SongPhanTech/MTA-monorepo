@@ -26,6 +26,12 @@ enum PermissionType {
   DETAIL
 }
 
+enum TemplateFileType {
+  UPLOAD
+  DOWNLOAD
+  LOGS
+}
+
 enum UserRole {
   ADMIN
   USER
@@ -122,6 +128,20 @@ model Config {
   updatedAt   DateTime  @updatedAt()
   key         String    @unique()
   value       String
+}
+
+model TemplateFile {
+  id          String            @id() @default(cuid())
+  code        String?
+  description String?           @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt()
+  name        String
+  path        String            @unique()
+  type        TemplateFileType?
+  extensions  String?
+  numberField Int?
 }
 
 model User {
@@ -302,8 +322,6 @@ model FixedClassStudent {
   deletedAt     DateTime?
   createdAt     DateTime                @default(now())
   updatedAt     DateTime?               @updatedAt()
-
-  @@unique([fixedClassId, userProfileId])
 }
 
 model Province {
@@ -522,6 +540,7 @@ model FixedClass {
   trainingCourseId         String?
   ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String?
+  classSize                Int                 @default(0)
   fixedClassStudent        FixedClassStudent[]
 }
 
