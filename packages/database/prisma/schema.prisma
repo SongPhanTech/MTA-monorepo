@@ -139,9 +139,9 @@ model TemplateFile {
   updatedAt   DateTime          @updatedAt()
   name        String
   path        String            @unique()
-  type        TemplateFileType?
+  fileType    TemplateFileType?
   extensions  String?
-  numberField Int?
+  numberField Int?              @default(0)
 }
 
 model User {

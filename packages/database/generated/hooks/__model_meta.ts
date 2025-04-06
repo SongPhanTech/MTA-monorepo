@@ -255,8 +255,8 @@ const metadata = {
                 }, path: {
                     name: "path",
                     type: "String",
-                }, type: {
-                    name: "type",
+                }, fileType: {
+                    name: "fileType",
                     type: "TemplateFileType",
                     isOptional: true,
                 }, extensions: {
@@ -267,6 +267,7 @@ const metadata = {
                     name: "numberField",
                     type: "Int",
                     isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 },
             }
             , uniqueConstraints: {

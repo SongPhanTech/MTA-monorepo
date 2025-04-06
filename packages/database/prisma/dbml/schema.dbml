@@ -63,9 +63,9 @@ Table TemplateFile {
   updatedAt DateTime [not null]
   name String [not null]
   path String [unique, not null]
-  type TemplateFileType
+  fileType TemplateFileType
   extensions String
-  numberField Int
+  numberField Int [default: 0]
 }
 
 Table User {

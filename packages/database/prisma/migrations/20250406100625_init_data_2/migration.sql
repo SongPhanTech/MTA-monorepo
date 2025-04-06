@@ -1,0 +1,6 @@
+-- Thêm data mặc định cho bảng TemplateFile
+INSERT INTO "TemplateFile"("id", "name", "code", "createdAt", "updatedAt", "path", "fileType", "extensions","numberField") VALUES
+('550e8408-e29b-41d4-a716-446655440000', 'File nhập thông tin học viên mới', 'IMPORT_USERPROFILE', '2025-04-03 12:58:40.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileNhapMauThongTinHocVien.xlsx', 'UPLOAD', 'xlsx',0),
+('550e8408-e29b-41d4-a716-446655440001', 'File cập nhập thông tin người dùng', 'UPDATE_USERPROFILE', '2025-04-03 12:58:40.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileCapNhatThongTin.xlsx', 'UPLOAD', 'xlsx',0),
+('550e8408-e29b-41d4-a716-446655440002', 'File tạo lớp biên chế', 'IMPORT_FIXCLASS', '2025-04-03 12:58:40.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx', 'UPLOAD', 'xlsx',0),
+('550e8408-e29b-41d4-a716-446655440003', 'File xếp lớp', 'CLASS_DEVISION', '2025-04-03 12:58:40.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx', 'UPLOAD', 'xlsx',0);
