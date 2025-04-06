@@ -716,6 +716,26 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, user: {
                     name: "user",
                     type: "User",
@@ -730,10 +750,6 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'user',
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, UserType: {
                     name: "UserType",
                     type: "UserType",
@@ -942,14 +958,6 @@ const metadata = {
                     name: "organizationCPVName",
                     type: "String",
                     isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }],
                 }, fixedClassStudent: {
                     name: "fixedClassStudent",
                     type: "FixedClassStudent",
@@ -965,9 +973,6 @@ const metadata = {
                 }, userId: {
                     name: "userId",
                     fields: ["userId"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             }
             ,

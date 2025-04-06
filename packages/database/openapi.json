@@ -429,8 +429,12 @@
         "type": "string",
         "enum": [
           "id",
-          "userId",
           "code",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "userId",
           "userTypeId",
           "firstName",
           "lastName",
@@ -468,9 +472,7 @@
           "positionName",
           "positionCPVName",
           "organizationName",
-          "organizationCPVName",
-          "createdAt",
-          "updatedAt"
+          "organizationCPVName"
         ]
       },
       "FixedClassStudentScalarFieldEnum": {
@@ -1785,6 +1787,45 @@
           "id": {
             "type": "string"
           },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "user": {
             "oneOf": [
               {
@@ -1796,16 +1837,6 @@
             ]
           },
           "userId": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -2235,14 +2266,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "fixedClassStudent": {
             "type": "array",
             "items": {
@@ -2252,12 +2275,12 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "UserType",
           "userTypeId",
           "firstName",
-          "lastName",
-          "createdAt",
-          "updatedAt"
+          "lastName"
         ]
       },
       "FixedClassStudent": {
@@ -10139,7 +10162,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -10152,7 +10175,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -10655,28 +10727,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           },
@@ -10779,7 +10829,7 @@
           "id": {
             "$ref": "#/components/schemas/SortOrder"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SortOrder"
@@ -10789,7 +10839,33 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "userId": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SortOrder"
@@ -11158,12 +11234,6 @@
               }
             ]
           },
-          "createdAt": {
-            "$ref": "#/components/schemas/SortOrder"
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/SortOrder"
-          },
           "user": {
             "$ref": "#/components/schemas/UserOrderByWithRelationInput"
           },
@@ -11199,9 +11269,6 @@
           "userId": {
             "type": "string"
           },
-          "code": {
-            "type": "string"
-          },
           "AND": {
             "oneOf": [
               {
@@ -11231,6 +11298,68 @@
                 "items": {
                   "$ref": "#/components/schemas/UserProfileWhereInput"
                 }
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
               }
             ]
           },
@@ -11724,28 +11853,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           },
@@ -11887,7 +11994,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
@@ -11900,7 +12007,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
@@ -12403,28 +12559,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           }
@@ -30044,6 +30178,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -30358,14 +30521,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -30420,6 +30575,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -30841,28 +31045,6 @@
               }
             ]
           },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
@@ -30895,7 +31077,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -30905,7 +31087,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -31281,14 +31492,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -31320,6 +31523,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -31738,28 +31990,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           }
@@ -57924,6 +58154,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -58238,14 +58497,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "UserType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
@@ -58289,6 +58540,35 @@
                 "type": "string"
               }
             ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           },
           "userTypeId": {
             "type": "string"
@@ -58656,14 +58936,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -59146,7 +59418,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -59159,7 +59431,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringNullableFilter"
@@ -59662,28 +59983,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DateTimeFilter"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           }
@@ -60304,6 +60603,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -60618,14 +60946,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -60660,7 +60980,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -60670,7 +60990,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -61036,14 +61385,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -61194,6 +61535,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -61508,14 +61878,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -61550,7 +61912,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -61560,7 +61922,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -61926,14 +62317,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -62084,6 +62467,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -62398,14 +62810,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -62440,7 +62844,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -62450,7 +62854,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -62816,14 +63249,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -62974,6 +63399,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -63288,14 +63742,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -63330,7 +63776,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -63340,7 +63786,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -63706,14 +64181,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -63864,6 +64331,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -64178,14 +64674,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -64220,7 +64708,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -64230,7 +64718,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -64597,14 +65114,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
           }
@@ -64753,6 +65262,35 @@
                 "type": "string"
               }
             ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           },
           "firstName": {
             "type": "string"
@@ -65068,14 +65606,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -65109,7 +65639,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -65119,7 +65649,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -65492,14 +66051,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "fixedClassStudent": {
             "$ref": "#/components/schemas/FixedClassStudentUncheckedCreateNestedManyWithoutUserProfileInput"
@@ -68890,6 +69441,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "firstName": {
             "type": "string"
           },
@@ -69204,14 +69784,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
@@ -69246,7 +69818,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -69256,7 +69828,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -69632,14 +70233,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -70008,6 +70601,55 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "firstName": {
             "oneOf": [
               {
@@ -70426,28 +71068,6 @@
               }
             ]
           },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
@@ -70484,7 +71104,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -70497,7 +71117,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -71000,28 +71669,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           }
@@ -84764,6 +85411,35 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "userTypeId": {
             "type": "string"
           },
@@ -85130,14 +85806,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -85760,6 +86428,55 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "firstName": {
             "oneOf": [
               {
@@ -86175,28 +86892,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -86249,6 +86944,55 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "userTypeId": {
             "oneOf": [
               {
@@ -86739,28 +87483,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -86795,6 +87517,55 @@
               }
             ]
           },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
           "userTypeId": {
             "oneOf": [
               {
@@ -87287,28 +88058,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -87318,7 +88067,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -87328,7 +88077,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -87694,14 +88472,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -87733,6 +88503,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -88151,28 +88970,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -88212,7 +89009,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -88225,7 +89022,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -88715,28 +89561,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -88758,7 +89582,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -88771,7 +89595,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -89263,28 +90136,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -89294,7 +90145,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -89304,7 +90155,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -89670,14 +90550,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -89709,6 +90581,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -90127,28 +91048,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -90188,7 +91087,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -90201,7 +91100,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -90691,28 +91639,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -90734,7 +91660,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -90747,7 +91673,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -91239,28 +92214,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -91270,7 +92223,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -91280,7 +92233,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -91646,14 +92628,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -91685,6 +92659,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -92103,28 +93126,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -92164,7 +93165,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -92177,7 +93178,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -92667,28 +93717,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -92710,7 +93738,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -92723,7 +93751,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -93215,28 +94292,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -93246,7 +94301,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -93256,7 +94311,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -93622,14 +94706,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -93661,6 +94737,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -94079,28 +95204,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -94140,7 +95243,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -94153,7 +95256,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -94643,28 +95795,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -94686,7 +95816,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -94699,7 +95829,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -95191,28 +96370,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -95222,7 +96379,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -95232,7 +96389,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -95598,14 +96784,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -95637,6 +96815,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -96055,28 +97282,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -96116,7 +97321,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -96129,7 +97334,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -96619,28 +97873,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -96662,7 +97894,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -96675,7 +97907,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -97167,28 +98448,6 @@
                 "type": "null"
               }
             ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
           }
         }
       },
@@ -97198,7 +98457,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -97208,7 +98467,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -97581,14 +98869,6 @@
                 "type": "string"
               }
             ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -97619,6 +98899,55 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -98037,28 +99366,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -98098,7 +99405,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -98111,7 +99418,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -98604,28 +99960,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           },
@@ -98647,7 +99981,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
@@ -98660,7 +99994,56 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "string"
@@ -99153,28 +100536,6 @@
               },
               {
                 "type": "null"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           }
@@ -109444,6 +110805,21 @@
           "id": {
             "type": "boolean"
           },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
           "user": {
             "oneOf": [
               {
@@ -109455,9 +110831,6 @@
             ]
           },
           "userId": {
-            "type": "boolean"
-          },
-          "code": {
             "type": "boolean"
           },
           "UserType": {
@@ -109632,12 +111005,6 @@
             "type": "boolean"
           },
           "organizationCPVName": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "boolean"
-          },
-          "updatedAt": {
             "type": "boolean"
           },
           "fixedClassStudent": {
@@ -112143,10 +113510,22 @@
           "id": {
             "type": "boolean"
           },
-          "userId": {
+          "code": {
             "type": "boolean"
           },
-          "code": {
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "userId": {
             "type": "boolean"
           },
           "userTypeId": {
@@ -112261,12 +113640,6 @@
             "type": "boolean"
           },
           "organizationCPVName": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "boolean"
-          },
-          "updatedAt": {
             "type": "boolean"
           },
           "_all": {
@@ -112280,10 +113653,22 @@
           "id": {
             "type": "boolean"
           },
-          "userId": {
+          "code": {
             "type": "boolean"
           },
-          "code": {
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "userId": {
             "type": "boolean"
           },
           "userTypeId": {
@@ -112398,12 +113783,6 @@
             "type": "boolean"
           },
           "organizationCPVName": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "boolean"
-          },
-          "updatedAt": {
             "type": "boolean"
           }
         }
@@ -112414,10 +113793,22 @@
           "id": {
             "type": "boolean"
           },
-          "userId": {
+          "code": {
             "type": "boolean"
           },
-          "code": {
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
+          "userId": {
             "type": "boolean"
           },
           "userTypeId": {
@@ -112532,12 +113923,6 @@
             "type": "boolean"
           },
           "organizationCPVName": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "boolean"
-          },
-          "updatedAt": {
             "type": "boolean"
           }
         }
@@ -116898,7 +118283,7 @@
           "id": {
             "type": "string"
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -116908,7 +118293,36 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -117285,14 +118699,6 @@
               }
             ]
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "_count": {
             "oneOf": [
               {
@@ -117326,11 +118732,11 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "userTypeId",
           "firstName",
-          "lastName",
-          "createdAt",
-          "updatedAt"
+          "lastName"
         ]
       },
       "AggregateFixedClassStudent": {
@@ -123939,10 +125345,22 @@
           "id": {
             "type": "integer"
           },
-          "userId": {
+          "code": {
             "type": "integer"
           },
-          "code": {
+          "description": {
+            "type": "integer"
+          },
+          "deletedAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "userId": {
             "type": "integer"
           },
           "userTypeId": {
@@ -124059,20 +125477,18 @@
           "organizationCPVName": {
             "type": "integer"
           },
-          "createdAt": {
-            "type": "integer"
-          },
-          "updatedAt": {
-            "type": "integer"
-          },
           "_all": {
             "type": "integer"
           }
         },
         "required": [
           "id",
-          "userId",
           "code",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "userId",
           "userTypeId",
           "firstName",
           "lastName",
@@ -124111,8 +125527,6 @@
           "positionCPVName",
           "organizationName",
           "organizationCPVName",
-          "createdAt",
-          "updatedAt",
           "_all"
         ]
       },
@@ -124129,7 +125543,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -124139,7 +125553,50 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -124534,28 +125991,6 @@
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           }
@@ -124574,7 +126009,7 @@
               }
             ]
           },
-          "userId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
@@ -124584,7 +126019,50 @@
               }
             ]
           },
-          "code": {
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "userId": {
             "oneOf": [
               {
                 "type": "null"
@@ -124979,28 +126457,6 @@
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           }

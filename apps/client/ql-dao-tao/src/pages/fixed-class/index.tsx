@@ -139,7 +139,7 @@ export default function FixedClassPage() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Form.Item
                                 name="managementOrganizationId"
                                 label="Đơn vị quản lý"
@@ -156,7 +156,7 @@ export default function FixedClassPage() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
