@@ -449,7 +449,7 @@ model SchoolYear {
   name        String
   startDate   DateTime
   endDate     DateTime?
-  Semesters   Semester[]  @relation("SchoolYearToSemester")
+  Semesters   Semester[]
   milestone   Milestone[]
 }
 
@@ -461,7 +461,7 @@ model Semester {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
   name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], name: "SchoolYearToSemester")
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
   endDate      DateTime?

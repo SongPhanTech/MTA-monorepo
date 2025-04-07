@@ -61,7 +61,7 @@ model StudyRank extends Base {
   name String
 }
 
-//xếp loại rèn luyện
+//xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)
 model TrainingRank extends Base {
   name String
 }

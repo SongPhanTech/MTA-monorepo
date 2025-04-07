@@ -8,14 +8,14 @@ model SchoolYear extends Base {
   name      String
   startDate DateTime
   endDate   DateTime?
-  Semesters Semester[]  @relation("SchoolYearToSemester")
+  Semesters Semester[]
   milestone Milestone[]
 }
 
 // kỳ học
 model Semester extends Base {
   name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], name: "SchoolYearToSemester")
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
   endDate      DateTime?

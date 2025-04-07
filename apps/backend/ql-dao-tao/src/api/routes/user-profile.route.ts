@@ -40,7 +40,7 @@ const uploadExcelUpdateUserProfile = createRoute({
     path: '/UserProfile/upload-excel-update-user-profile',
     method: 'post',
     description: 
-        'Cập nhật thông tin học viên/sinh viên\n\n [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType',
+        'Cập nhật thông tin học viên/sinh viên',
     tags: ['UserProfile'],
     summary: 'Upload Excel Update UserProfile',
     request: {
@@ -49,7 +49,6 @@ const uploadExcelUpdateUserProfile = createRoute({
                 'multipart/form-data': {
                     schema: z.object({
                         file: z.any(), // file upload
-                        type: z.string() // loại thông tin
                     }).openapi('uploadExcelUpdateUserProfile'),
                 },
             },
