@@ -63,6 +63,9 @@ export default function TrainingCoursePage() {
             TrainingType: true,
             TrainingObjectType: true
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     });

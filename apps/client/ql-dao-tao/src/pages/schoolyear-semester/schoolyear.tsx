@@ -39,6 +39,9 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                 contains: searchText,
             },
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -136,10 +139,10 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                                     1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            {
-                                title: 'Mã năm học',
-                                dataIndex: 'code',
-                            },
+                            // {
+                            //     title: 'Mã năm học',
+                            //     dataIndex: 'code',
+                            // },
                             {
                                 title: 'Tên năm học',
                                 dataIndex: 'name',

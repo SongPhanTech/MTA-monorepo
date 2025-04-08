@@ -42,6 +42,9 @@ export default function MilestonePage() {
         include: {
             SchoolYear: true
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -120,11 +123,11 @@ export default function MilestonePage() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên mốc thời gian',
+                                title: 'Nội dung',
                                 dataIndex: 'name',
                             },
                             {
-                                title: 'Số tiết',
+                                title: 'Thời gian',
                                 dataIndex: 'period',
                             },
                             {
@@ -144,10 +147,10 @@ export default function MilestonePage() {
                                 render: ({ endDate }) => endDate ?
                                     dayjs(endDate).format('DD/MM/YYYY') : "",
                             },
-                            // {
-                            //     title: 'Mô tả',
-                            //     dataIndex: 'description',
-                            // },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                            },
                             {
                                 title: 'Thao tác',
                                 width: 100,

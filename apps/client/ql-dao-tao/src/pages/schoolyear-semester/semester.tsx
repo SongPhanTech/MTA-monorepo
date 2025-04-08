@@ -42,6 +42,9 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                 schoolYearId: selectedSchoolYear.id,
             }),
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         include: {
             SchoolYear: true
         },
@@ -122,10 +125,10 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                     1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            {
-                                title: 'Mã học kỳ',
-                                dataIndex: 'code',
-                            },
+                            // {
+                            //     title: 'Mã học kỳ',
+                            //     dataIndex: 'code',
+                            // },
                             {
                                 title: 'Tên học kỳ',
                                 dataIndex: 'name',

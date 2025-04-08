@@ -60,6 +60,9 @@ export default function UserProfilePage() {
         include: {
             UserType: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     });
