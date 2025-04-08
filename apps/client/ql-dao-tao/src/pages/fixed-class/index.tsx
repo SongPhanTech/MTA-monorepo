@@ -78,11 +78,11 @@ export default function FixedClassPage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateFixedClass()
+    const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateFixedClass({
                 where: {
                     id,
                 },
@@ -137,7 +137,7 @@ export default function FixedClassPage() {
                                     onChange={(val) => handleFilterChange('trainingCourseId', val)}
                                     allowClear
                                 />
-           e                 </Form.Item>
+                            </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item

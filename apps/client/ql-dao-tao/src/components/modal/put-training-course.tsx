@@ -21,6 +21,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
     const [form] = Form.useForm<PutTrainingCourse>()
     const {

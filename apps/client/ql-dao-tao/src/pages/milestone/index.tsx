@@ -58,11 +58,11 @@ export default function MilestonePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateMilestone()
+    const { mutateAsync: updateMilestone } = useUpdateMilestone()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateMilestone({
                 where: {
                     id,
                 },

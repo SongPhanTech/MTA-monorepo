@@ -17,6 +17,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutMilestone = Milestone
+import 'dayjs/locale/vi'
+dayjs.locale('vi')
 const PutMilestoneModal = () => {
     const [form] = Form.useForm<PutMilestone>()
     const {
