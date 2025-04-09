@@ -27,6 +27,7 @@ import {
     Row,
     Tooltip,
     message,
+    TreeSelect
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -34,6 +35,7 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
+import { buildOrgTree } from '@lib/utils'
 
 export default function FixedClassPage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -185,6 +187,8 @@ export default function FixedClassPage() {
             ))}
         </Menu>
     );
+    const treeData = buildOrgTree(manageOrgData);
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -224,15 +228,16 @@ export default function FixedClassPage() {
                                 name="managementOrganizationId"
                                 label="Đơn vị quản lý"
                             >
-                                <Select
-                                    placeholder='Chọn đơn vị quản lý' options={manageOrgData.map((i: Organization) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name
-                                        }
-                                    })}
-                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                <TreeSelect
+                                    placeholder="Chọn đơn vị quản lý"
                                     allowClear
+                                    showSearch
+                                    treeDefaultExpandAll
+                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string).toLowerCase().includes(input.toLowerCase())
+                                    }
                                 />
                             </Form.Item>
                         </Col>
