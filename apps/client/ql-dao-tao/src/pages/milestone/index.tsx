@@ -55,7 +55,14 @@ export default function MilestonePage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountMilestone()
+    const { data: count } = useCountMilestone({
+        where: {
+            name: {
+                contains: searchText,
+            },
+            schoolYearId: filters.schoolYearId,
+        },
+    })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
@@ -107,8 +114,6 @@ export default function MilestonePage() {
             }
         }
     }, [dataSchoolYear]);
-    console.log("filters.schoolYearId", filters.schoolYearId)
-    console.log("options", dataSchoolYear.map((i: SchoolYear) => ({ value: i.id, label: i.name })))
 
     return (
         <div>

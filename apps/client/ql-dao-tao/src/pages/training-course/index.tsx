@@ -85,7 +85,20 @@ export default function TrainingCoursePage() {
     });
 
 
-    const { data: count } = useCountTrainingCourse()
+    const { data: count } = useCountTrainingCourse({
+        where: {
+            name: {
+                contains: filters.name,
+            },
+            code: {
+                contains: filters.code,
+            },
+            trainingFormId: filters.trainingFormId,
+            trainingTypeId: filters.trainingTypeId,
+            trainingLevelId: filters.trainingLevelId,
+            trainingObjectTypeId: filters.trainingObjectTypeId
+        },
+    })
 
     const debouncedRefetch = useCallback(_.debounce(() => {
         refetch();

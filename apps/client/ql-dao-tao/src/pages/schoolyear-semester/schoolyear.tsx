@@ -46,7 +46,13 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSchoolYear()
+    const { data: count } = useCountSchoolYear({
+        where: {
+            name: {
+                contains: searchText,
+            },
+        },
+    })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({

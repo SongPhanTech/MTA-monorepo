@@ -42,12 +42,11 @@ import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
 
 dayjs.locale('vi')
-export default function UserProfilePage() {
+export default function UserProfilePageDs() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState({
         searchText: '',
-        userTypeId: 'SV',
     });
 
     const { data = [], refetch } = useFindManyUserProfile({
@@ -55,7 +54,11 @@ export default function UserProfilePage() {
             firstName: {
                 contains: filters.searchText,
             },
-            userTypeId: filters.userTypeId,
+            UserType: {
+                is: {
+                    code: "SV",
+                },
+            }
         },
         include: {
             UserType: true,
@@ -68,12 +71,23 @@ export default function UserProfilePage() {
     });
 
 
-    const { data: count } = useCountUserProfile()
+    const { data: count } = useCountUserProfile({
+        where: {
+            firstName: {
+                contains: filters.searchText,
+            },
+            UserType: {
+                is: {
+                    code: "SV",
+                },
+            }
+        },
+    })
 
     const debouncedRefetch = useCallback(_.debounce(() => {
         refetch();
     }, 500), []);
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen, onClose } = useDisclosure<any>({
         tag: PutUserProfileModal.name,
     })
 
@@ -83,20 +97,20 @@ export default function UserProfilePage() {
     const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
         tag: PutUpdateProfileModal.name,
     })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<string>({
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>({
         tag: PutUserProfileUpdateModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        onOpen({ id: null, code: 'SV' })
     }
     const handleModalUpload = (type: string) => {
         if (type === "upload") {
-            onOpenUpload()
+            onOpenUpload('SV')
         } else {
-            onOpenUpdateFile()
+            onOpenUpdateFile('SV')
         }
     }
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -307,7 +321,7 @@ export default function UserProfilePage() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpenUpdate.bind(null, { id: id, code: 'DS' })}
+                                                onClick={onOpenUpdate.bind(null, { id: id, code: 'SV' })}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>
@@ -331,6 +345,7 @@ export default function UserProfilePage() {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
+                       
                     />
                 </Col>
             </Row>
@@ -338,6 +353,6 @@ export default function UserProfilePage() {
     )
 }
 
-UserProfilePage.getLayout = function getLayout(page: React.ReactElement) {
+UserProfilePageDs.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

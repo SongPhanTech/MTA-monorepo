@@ -36,6 +36,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
+import OptionsPage from '@pages/fixed-class/options'
 
 export default function FixedClassPage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -55,8 +56,13 @@ export default function FixedClassPage() {
             managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
+            fixedClassStudent: {
+                include: {
+                    UserProfile: true
+                }
+            },
             ManagementOrganization: true,
-            TrainingCourse: true
+            TrainingCourse: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -73,7 +79,15 @@ export default function FixedClassPage() {
         take: 1000,
         skip: 0,
     });
-    const { data: count } = useCountFixedClass()
+    const { data: count } = useCountFixedClass({
+        where: {
+            name: {
+                contains: searchText,
+            },
+            trainingCourseId: filters.trainingCourseId,
+            managementOrganizationId: filters.managementOrganizationId,
+        },
+    })
 
     const debouncedRefetch = useCallback(_.debounce(() => {
         refetch();
@@ -264,6 +278,8 @@ export default function FixedClassPage() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey="id"
+                        id="fixed-class"
                         columns={[
                             {
                                 title: 'STT',
@@ -330,6 +346,13 @@ export default function FixedClassPage() {
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => <OptionsPage
+                                className="sub-table [&_.ant-table-tbody>tr:hover]:bg-blue-50"
+                                key={record.id}
+                                fixedClass={record} />
+                            // rowExpandable: (record) => !!record.description,
                         }}
                     />
                 </Col>

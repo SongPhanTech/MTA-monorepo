@@ -19,6 +19,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import LoadingBar from 'react-top-loading-bar'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import * as modals from '@components/modal'
+import '@assets/css/custom.css'
 
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
