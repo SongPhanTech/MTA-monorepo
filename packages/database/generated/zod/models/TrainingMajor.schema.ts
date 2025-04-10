@@ -16,6 +16,10 @@ const baseSchema = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    curriculum: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `TrainingMajor` schema excluding foreign keys and relations.
@@ -26,7 +30,7 @@ export const TrainingMajorScalarSchema = baseSchema;
 /**
  * `TrainingMajor` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const TrainingMajorSchema = TrainingMajorScalarSchema;
+export const TrainingMajorSchema = TrainingMajorScalarSchema.merge(relationSchema.partial());
 
 
 /**

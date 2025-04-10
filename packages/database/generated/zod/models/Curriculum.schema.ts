@@ -29,6 +29,8 @@ const relationSchema = z.object({
     TrainingObjectType: z.record(z.unknown()),
     TrainingLevel: z.record(z.unknown()),
     TraingTime: z.record(z.unknown()),
+    TrainingMajor: z.record(z.unknown()),
+    curriculumVersion: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -36,6 +38,7 @@ const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
     trainingLevelId: z.string(),
     trainingTimeId: z.string(),
+    trainingMajorId: z.string(),
 }
 );
 

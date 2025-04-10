@@ -62,7 +62,7 @@ app
         return data
     })
     .openapi(userProfileRoute.uploadExcelUpdateUserProfile, async (c) => {
-        const data = await userProfileService.uploadFileUserProfile(c)
+        const data = await userProfileService.updateFileUserProfile(c)
         return data
     })
     // #endregion
@@ -73,6 +73,10 @@ app
     })
     .openapi(fixedClassRoute.classDivision, async (c) => {
         const data = await fixedClassService.classDivision(c)
+        return data
+    })
+    .openapi(fixedClassRoute.exportDocxListStudentFixedClass, async (c) => {
+        const data = await fixedClassService.exportFixedClassByCourse(c)
         return data
     })
     // #endregion

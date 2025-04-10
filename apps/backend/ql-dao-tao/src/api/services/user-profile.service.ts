@@ -105,7 +105,7 @@ const uploadFileUserProfile = async (context: any): Promise<any> => {
             );
             return jsonData;
         });
-        return context.json(jsonData,200)
+        return context.json(jsonData, 200)
     } catch (error) {
         console.error('Error processing Excel file:', error)
         return context.json({ error: 'Failed to process Excel file' }, 400)
@@ -116,8 +116,8 @@ const uploadFileUserProfile = async (context: any): Promise<any> => {
 
 const updateFileUserProfile = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
-    const typeUser = body.type
     const file = body.file
+    console.log(file)
     // Kiểm tra xem file có tồn tại và là File object không
     if (!file || !(file instanceof File)) {
         return context.json({ error: 'No valid file uploaded' }, 400)
@@ -134,13 +134,7 @@ const updateFileUserProfile = async (context: any): Promise<any> => {
     }
 
     try {
-        // Đọc file Excel
-        const UserType = await prisma.userType.findFirst({
-            where: { code: typeUser }, // Tìm kiếm UserType của Sinh viên
-        })
-        if (!UserType) {
-            return context.json({ error: 'Không tìm thấy loại hồ sơ' }, 400)
-        }
+
         // Đọc file Excel
         const arrayBuffer = await file.arrayBuffer()
         const workbook = XLSX.read(arrayBuffer, { type: 'array' })
@@ -162,34 +156,90 @@ const updateFileUserProfile = async (context: any): Promise<any> => {
 
         await prisma.$transaction(async (prisma) => {
             jsonData = await Promise.all(
-                (rowData as any[][]).slice(2).map(async (row: any[], index: number) => {      
-                    const userProfile = await prisma.userProfile.create({
-                        data: {
-                            userTypeId: UserType?.id,
-                            firstName: splitFullName(row[2]).firstName || '',
-                            lastName: splitFullName(row[2]).lastName || '',
-                            code: row[1] || '', // Mã
-                            gender: row[3] === "Nam" ? "Male" : "Female", // Giới tính
-                            dateOfBirth: parseDate(row[4]), // Chuyển đổi thành Date
-                            homeTown: row[5] || '', // Quê quán
-                            idCardNumber: row[6] || '', // CCCD
-                            phoneNumber: row[7] || '', // Số điện thoại
-                        },
+                (rowData as any[][]).slice(1).map(async (row: any[], index: number) => {
+                    console.log("row", row[0], row[2], index);
+                    const existingUserProfile = await prisma.userProfile.findFirst({
+                        where: { code: row[2] }, // Tìm kiếm UserType của Sinh viên
                     });
-                    // console.log("userProfile", userProfile);
-                    return userProfile;
+                    if (!existingUserProfile || row[2] === '' || row[2] === undefined) {
+                        // Nếu không tìm thấy hồ sơ hoặc mã hồ sơ trống, trả về thông báo lỗi
+                        console.log("existingUserProfile", existingUserProfile?.code, row[1]);
+                        return 'Không tìm thấy hồ sơ' + ' ' + row[2];
+                    }
+                    else {
+                        const { firstName, lastName } = splitFullName(row[1])
+                        const priorityObject = await prisma.priorityObject.findFirst({
+                            where: { name: row[9] }, // đối tượng ưu tiên
+                        })
+                        const registrationArea = await prisma.registrationArea.findFirst({
+                            where: { name: row[10] }, // khu vực đăng ký
+                        })
+                        const nationality = await prisma.nationality.findFirst({
+                            where: { name: row[11] }, // quốc tịch
+                        })
+                        const religion = await prisma.religion.findFirst({
+                            where: { name: row[12] }, // tôn giáo
+                        })
+                        const ethnicity = await prisma.ethnicity.findFirst({
+                            where: { name: row[13] }, // dân tộc
+                        })
+                        const updatedUserProfile = await prisma.userProfile.update({
+                            where: { id: existingUserProfile.id },
+                            data: {
+                                firstName: firstName || '', // Tên
+                                lastName: lastName || '', // Họ
+                                dateOfBirth: parseDate(row[3]), // Ngày sinh
+                                placeOfBirth: row[4] || '', // Nơi sinh
+                                homeTown: row[5] || '', // Quê quán
+                                idCardNumber: String(row[6] || ''), // CCCD
+                                idCardDate: parseDate(row[7]), // Ngày cấp CCCD
+                                officerNumber: String(row[8] || ''), // Số hiệu sĩ quan
+                                priorityObjectId: priorityObject?.id || null, // Đối tượng ưu tiên
+                                registrationAreaId: registrationArea?.id || null, // Khu vực đăng ký
+                                nationalityId: nationality?.id || null, // Quốc tịch
+                                religionId: religion?.id || null, // Tôn giáo
+                                ethnicityId: ethnicity?.id || null, // Dân tộc
+                                permanentAddress: row[14] || '', // Địa chỉ thường trú
+                                temporaryAddress: row[15] || '', // Địa chỉ tạm trú
+                                // Địa chỉ liên lạc
+                                phoneNumber: String(row[17] || ''), // Số điện thoại
+                                email: row[18] || '', // Email
+                                parentPhoneNumber: String(row[19] || ''), // Số điện thoại phụ huynh
+                                parentName: String(row[20] || ''), // Tên phụ huynh
+                                unionDate: parseDate(row[21]), // Ngày kết nạp Đoàn
+                                unionPlace: row[22] || '', // Nơi kết nạp Đoàn
+                                CPVJoinDate: parseDate(row[23]), // Ngày kết nạp Đảng
+                                officialCPVDate: parseDate(row[24]), // Ngày chính thức Đảng
+                                CPVJoinPlace: row[25] || '', // Nơi kết nạp Đảng
+                                tenureDate: parseDate(row[26]), // Ngày vào biên chế
+                                enlistmentDate: parseDate(row[27]), // Ngày nhập ngũ
+                                dischargeDate: parseDate(row[28]), // Ngày xuất ngũ
+                                rankName: row[29] || '', // Quân hàm
+                                educationLevel: row[30] || '', // Trình độ học vấn
+                                academicDegreeTypeName: row[31] || '', // Trình độ học vấn
+                                academicRankTypeName: row[32] || '', // Trình độ học vấn
+                                positionName: row[33] || '', // Chức vụ
+                                positionCPVName: row[34] || '', // Chức vụ Đảng
+                                organizationName: row[35] || '', // đơn vị
+                                organizationCPVName: row[36] || '', // Đơn vị Đảng
+                            }, // Cập nhật mã
+                        })
+                        return updatedUserProfile;
+                    }
                 })
+                // console.log("updatedUserProfile", updatedUserProfile);
+
             );
             return jsonData;
         });
-        return context.json(jsonData,200)
+        return context.json(jsonData, 200)
     } catch (error) {
         console.error('Error processing Excel file:', error)
         return context.json({ error: 'Failed to process Excel file' }, 400)
     }
 }
 export default
-{
-    uploadFileUserProfile,
-    updateFileUserProfile,
-}
+    {
+        uploadFileUserProfile,
+        updateFileUserProfile,
+    }
