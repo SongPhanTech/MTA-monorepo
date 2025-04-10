@@ -29,6 +29,7 @@ const Table = <T extends Record<string, unknown>>({
                     column.key ||
                     (column as unknown as { dataIndex: string }).dataIndex,
             }))}
+            scroll={{ x: 'max-content' }} 
             bordered
             dataSource={data}
             locale={{
@@ -41,6 +42,8 @@ const Table = <T extends Record<string, unknown>>({
                     labelRender: ({ value }) => `${value} / trang`,
                     optionRender: (oriOption) => `${oriOption.value} / trang`,
                 },
+                showTotal: (total, range) =>
+                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                 ...pagination,
                 onShowSizeChange(current, size) {
                     pagination?.onShowSizeChange?.(size)

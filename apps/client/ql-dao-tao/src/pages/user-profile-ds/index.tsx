@@ -47,7 +47,7 @@ export default function UserProfilePage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState({
         searchText: '',
-        userTypeId: undefined,
+        userTypeId: 'SV',
     });
 
     const { data = [], refetch } = useFindManyUserProfile({
@@ -149,12 +149,12 @@ export default function UserProfilePage() {
     const itemsDownload = [
         {
             key: 'import',
-            label: 'Tải file nhập thông tin học viên',
+            label: 'Tải file nhập thông tin sinh viên',
             onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
         },
         {
             key: 'update',
-            label: 'Tải file cập nhật thông tin học viên',
+            label: 'Tải file cập nhật thông tin sinh viên',
             onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
         },
     ]
@@ -162,12 +162,12 @@ export default function UserProfilePage() {
     const itemsUpload = [
         {
             key: 'upload',
-            label: 'Nhập file nhập thông tin học viên',
+            label: 'Nhập file nhập thông tin sinh viên',
             onClick: () => handleModalUpload('upload'),
         },
         {
             key: 'update',
-            label: 'Nhập file cập nhật thông tin học viên',
+            label: 'Nhập file cập nhật thông tin sinh viên',
             onClick: () => handleModalUpload('update'),
         },
     ]
@@ -193,7 +193,7 @@ export default function UserProfilePage() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Học viên
+                Sinh viên
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
@@ -235,7 +235,7 @@ export default function UserProfilePage() {
                             </Form.Item>
                         </Col>
 
-                        <Col span={8}>
+                        {/* <Col span={8}>
                             <Form.Item label="Đối tượng" name="trainingForm">
                                 <Select
                                     placeholder="Chọn đối tượng"
@@ -247,7 +247,7 @@ export default function UserProfilePage() {
                                     allowClear
                                 />
                             </Form.Item>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Col>
                 <Col span={24}>
@@ -263,7 +263,7 @@ export default function UserProfilePage() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã học viên',
+                                title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 align: "center"
                             },
@@ -272,11 +272,11 @@ export default function UserProfilePage() {
                                 // dataIndex: 'name',
                                 render: ({ firstName, lastName }: any) => `${lastName}` + ' ' + `${firstName}`
                             },
-                            {
-                                title: 'Đối tượng',
-                                dataIndex: 'UserType',
-                                render: (value) => value?.name ? value?.name : ""
-                            },
+                            // {
+                            //     title: 'Đối tượng',
+                            //     dataIndex: 'UserType',
+                            //     render: (value) => value?.name ? value?.name : ""
+                            // },
                             {
                                 title: 'Ngày sinh',
                                 // dataIndex: 'startDate',
@@ -307,7 +307,7 @@ export default function UserProfilePage() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpenUpdate.bind(null, id)}
+                                                onClick={onOpenUpdate.bind(null, { id: id, code: 'DS' })}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>
@@ -328,6 +328,8 @@ export default function UserProfilePage() {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

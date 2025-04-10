@@ -328,6 +328,8 @@ export default function FixedClassPage() {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

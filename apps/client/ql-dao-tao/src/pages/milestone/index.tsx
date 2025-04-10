@@ -6,9 +6,11 @@ import { PutMilestoneModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { SchoolYear } from '@workspace/db'
 import {
     useCountMilestone,
     useFindManyMilestone,
+    useFindManySchoolYear,
     useUpdateMilestone,
 } from '@workspace/db/hooks'
 import {
@@ -25,19 +27,23 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import Select from '@components/commons/select'
 
 export default function MilestonePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
-
+    const [filters, setFilters] = useState({
+        schoolYearId: undefined,
+    });
     const { data = [], refetch } = useFindManyMilestone({
         where: {
             name: {
                 contains: searchText,
-            }
+            },
+            schoolYearId: filters.schoolYearId,
         },
         include: {
             SchoolYear: true
@@ -78,6 +84,31 @@ export default function MilestonePage() {
         }
         hideSpinner()
     }
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
+        take: 1000,
+        skip: 0,
+    })
+    useEffect(() => {
+        if (dataSchoolYear && dataSchoolYear.length > 0) {
+            const today = new Date();
+            const currentSchoolYear = dataSchoolYear.find((year) => {
+                const start = new Date(year.startDate);
+                const end = year.endDate ? new Date(year.endDate) : undefined;
+                if (end) {
+                    return today >= start && today <= end;
+                }
+                return today >= start;
+            });
+            if (currentSchoolYear) {
+                setFilters((prev: any) => ({
+                    ...prev,
+                    schoolYearId: currentSchoolYear.id,
+                }));
+            }
+        }
+    }, [dataSchoolYear]);
+    console.log("filters.schoolYearId", filters.schoolYearId)
+    console.log("options", dataSchoolYear.map((i: SchoolYear) => ({ value: i.id, label: i.name })))
 
     return (
         <div>
@@ -99,7 +130,32 @@ export default function MilestonePage() {
                                 />
                             </Form.Item>
                         </Col>
+                        <Col span={6}>
+                            {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
+                            <Flex justify='space-between' align='center'>
+                                <label>Năm học:</label>
+                                <Select
+                                    className="w-[70%]"
+                                    placeholder='Chọn năm học'
+                                    allowClear
+                                    options={dataSchoolYear.map((i: SchoolYear) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name
+                                        }
+                                    })}
+                                    value={filters.schoolYearId}
+                                    onChange={(value: number | null) => {
+                                        setFilters((prev: any) => ({
+                                            ...prev,
+                                            schoolYearId: value ?? undefined,
+                                        }));
+                                    }}
+                                />
+                            </Flex>
 
+                            {/* </Form.Item> */}
+                        </Col>
                         {/* Thêm mới */}
                         <Col span={6}>
                             <Flex justify="end">
@@ -183,6 +239,8 @@ export default function MilestonePage() {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
