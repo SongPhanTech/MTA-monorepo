@@ -13,7 +13,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
-import { fetchUpdateFile } from '@api/userProfile'
+import { fetchUploadFile } from '@api/userProfile'
 export type PutUpdateProfile = {
     type: string,
     file: File
@@ -42,7 +42,7 @@ const PutUpdateProfileModal = () => {
             const formData = new FormData()
             formData.append('file', output.file)
             formData.append('type', output.type)
-            const res = await fetchUpdateFile(formData)
+            const res = await fetchUploadFile(formData, "api/UserProfile/upload-excel-update-user-profile")
             const data = await res.json()
             if (res.ok) {
                 message.success('Tải lên thành công!')

@@ -2,7 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutFixedClassModal } from '@components/modal'
+import { PutFixedClassModal, PutUploadDivisionModal, PutUploadFixedClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -12,18 +12,22 @@ import {
     useFindManyFixedClass,
     useUpdateFixedClass,
     useFindManyOrganization,
-    useFindManyTrainingCourse
+    useFindManyTrainingCourse,
+    useFindManyTemplateFile
 } from '@workspace/db/hooks'
 import {
     Button,
     Col,
     Divider,
+    Dropdown,
     Flex,
     Form,
     Input,
+    Menu,
     Row,
     Tooltip,
     message,
+    TreeSelect
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -31,6 +35,7 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
+import { buildOrgTree } from '@lib/utils'
 
 export default function FixedClassPage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -53,6 +58,9 @@ export default function FixedClassPage() {
             ManagementOrganization: true,
             TrainingCourse: true
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -69,14 +77,26 @@ export default function FixedClassPage() {
 
     const debouncedRefetch = useCallback(_.debounce(() => {
         refetch();
-    }, 500), []); const { onOpen, onClose } = useDisclosure<string>({
+    }, 500), []);
+    const { onOpen, onClose } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-
+    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } = useDisclosure<string>({
+        tag: PutUploadFixedClassModal.name,
+    })
+    const { onOpen: onOpenDivision, onClose: onCloseDivision } = useDisclosure<string>({
+        tag: PutUploadDivisionModal.name,
+    })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
+    }
+    const handleModalUploadFixedClass = () => {
+        onOpenFixedClass()
+    }
+    const handleModalDivision = () => {
+        onOpenDivision()
     }
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
@@ -102,6 +122,73 @@ export default function FixedClassPage() {
             return newFilters;
         });
     };
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile({
+        take: 1000,
+        skip: 0,
+    });
+    const handleDownloadTemplate = (type: string) => {
+        const fileRecord = templateFile?.find(item => item.code === type)
+        const fileLink = fileRecord ? fileRecord.path : null
+        if (fileLink) {
+            const link = document.createElement('a');
+            link.href = fileLink;
+            link.setAttribute('download', '');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
+    const imtemsDivide = [
+        {
+            key: 'import',
+            label: 'Tải file mẫu xếp lớp',
+            onClick: () => handleDownloadTemplate('CLASS_DEVISION'),
+        },
+        {
+            key: 'update',
+            label: 'Nhập file xếp lớp',
+            onClick: () => handleModalDivision(),
+        },
+    ]
+    const itemsImport = [
+        {
+            key: 'create',
+            label: 'Thêm mới một lớp',
+            onClick: () => handleModal(),
+        },
+        {
+            key: 'download',
+            label: 'Tải file danh sách lớp mẫu',
+            onClick: () => handleDownloadTemplate('IMPORT_FIXCLASS'),
+        },
+        {
+            key: 'import',
+            label: 'Nhập file danh sách lớp',
+            onClick: () => handleModalUploadFixedClass(),
+        },
+    ]
+
+    const menuImport = (
+        <Menu>
+            {itemsImport.map(item => (
+                <Menu.Item key={item.key} onClick={item.onClick}>
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
+    );
+    const menuDivision = (
+        <Menu>
+            {imtemsDivide.map(item => (
+                <Menu.Item key={item.key} onClick={item.onClick}>
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
+    );
+    const treeData = buildOrgTree(manageOrgData);
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -110,9 +197,6 @@ export default function FixedClassPage() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        {/* row button */}
-
-                        {/* row filter */}
                         <Col span={6}>
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
@@ -122,7 +206,7 @@ export default function FixedClassPage() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <Form.Item
                                 name="trainingCourseId"
                                 label="Khóa"
@@ -144,23 +228,36 @@ export default function FixedClassPage() {
                                 name="managementOrganizationId"
                                 label="Đơn vị quản lý"
                             >
-                                <Select
-                                    placeholder='Chọn đơn vị quản lý' options={manageOrgData.map((i: Organization) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name
-                                        }
-                                    })}
-                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                <TreeSelect
+                                    placeholder="Chọn đơn vị quản lý"
                                     allowClear
+                                    showSearch
+                                    treeDefaultExpandAll
+                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string).toLowerCase().includes(input.toLowerCase())
+                                    }
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
-                            <Flex justify="end">
+                        <Col span={6}>
+                            {/* <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
+                            </Flex> */}
+                            <Flex justify="end">
+                                <Dropdown overlay={menuImport} trigger={['hover']}>
+                                    <Button className="ml-4" type="primary">
+                                        Thêm mới
+                                    </Button>
+                                </Dropdown>
+                                <Dropdown overlay={menuDivision} trigger={['hover']}>
+                                    <Button className="ml-4" type="primary">
+                                        Xếp lớp
+                                    </Button>
+                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>

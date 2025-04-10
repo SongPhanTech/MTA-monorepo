@@ -5,7 +5,10 @@ import {
     UserOutlined,
     ScheduleOutlined,
     HomeOutlined,
-    ClockCircleOutlined
+    ClockCircleOutlined,
+    BookOutlined,
+    TeamOutlined,
+    IdcardOutlined
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
@@ -309,21 +312,21 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'traning-course',
                 label: 'Quản lý khóa',
-                icon: ClockCircleOutlined,
+                icon: BookOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.TRAINING_COURSE,
                 description: 'Quản lý khóa',
             },
             {
                 id: 'fixed-class',
                 label: 'Quản lý lớp biên chế',
-                icon: ClockCircleOutlined,
+                icon: TeamOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.FIXED_CLASS,
                 description: 'Quản lý lớp biên chế',
             },
             {
                 id: 'user-profile',
                 label: 'Quản lý hồ sơ học viên',
-                icon: ClockCircleOutlined,
+                icon: IdcardOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE,
                 description: 'Quản lý lớp biên chế',
             },

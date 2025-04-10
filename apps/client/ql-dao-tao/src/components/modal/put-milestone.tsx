@@ -53,7 +53,8 @@ const PutMilestoneModal = () => {
                         period: output.period,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        schoolYearId: output.schoolYearId
+                        schoolYearId: output.schoolYearId,
+                        description: output.description
                     },
                     where: {
                         id,
@@ -67,7 +68,8 @@ const PutMilestoneModal = () => {
                         period: output.period,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        schoolYearId: output.schoolYearId
+                        schoolYearId: output.schoolYearId,
+                        description: output.description
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -120,20 +122,20 @@ const PutMilestoneModal = () => {
                 <FormItem
                     form={form}
                     name="name"
-                    label="Tên mốc huấn luyện"
+                    label="Nội dung"
                     required
                 >
-                    <Input placeholder="Nhập tên mốc huấn luyện" />
+                    <Input placeholder="Nhập nội dung" />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
                     name="period"
-                    label="Số tiết"
+                    label="Thời gian"
                     required
                 >
-                    <Input placeholder="Nhập số tiết" />
+                    <Input placeholder="Nhập thời gian" />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -161,7 +163,11 @@ const PutMilestoneModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }

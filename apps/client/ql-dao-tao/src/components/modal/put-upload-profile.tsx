@@ -42,7 +42,7 @@ const PutUploadProfileModal = () => {
             const formData = new FormData()
             formData.append('file', output.file)
             formData.append('type', output.type)
-            const res = await fetchUploadFile(formData)
+            const res = await fetchUploadFile(formData, "api/UserProfile/upload-excel-create-user-profile")
             const data = await res.json()
             if (res.ok) {
                 message.success('Tải lên thành công!')
