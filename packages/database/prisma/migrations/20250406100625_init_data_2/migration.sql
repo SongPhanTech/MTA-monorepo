@@ -4,7 +4,7 @@ INSERT INTO "TemplateFile"("id", "name", "code", "createdAt", "updatedAt", "path
 ('550e8408-e29b-41d4-a716-446655440001', 'File cập nhập thông tin người dùng', 'UPDATE_USERPROFILE', '2025-04-03 12:58:41.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileCapNhatThongTin.xlsx', 'UPLOAD', 'xlsx', 0),
 ('550e8408-e29b-41d4-a716-446655440002', 'File tạo lớp biên chế', 'IMPORT_FIXCLASS', '2025-04-03 12:58:42.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx', 'UPLOAD', 'xlsx', 0),
 ('550e8408-e29b-41d4-a716-446655440003', 'File xếp lớp', 'CLASS_DEVISION', '2025-04-03 12:58:43.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx', 'UPLOAD', 'xlsx', 0),
-('550e8408-e29b-41d4-a716-446655440004', 'File danh sách lớp', 'LIST_STUDENT_FIXCLASS', '2025-04-03 12:58:43.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx', 'DOWNLOAD', 'docx', 0);
+('550e8408-e29b-41d4-a716-446655440004', 'File danh sách học viên lớp', 'LIST_STUDENT_FIXCLASS', '2025-04-03 12:58:43.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/DanhSachHocVienLop.docx', 'DOWNLOAD', 'docx', 0);
 
 
 -- Thêm data mặc định cho bảng PriorityObject

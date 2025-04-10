@@ -256,6 +256,48 @@ const exportFixedClassByCourse = async (context: any): Promise<any> => {
 const getContent = async (fixedClassId: string) => {
     const ListStudentInfo: StudentInfo[] = []
 
+
+    let stt = 1;
+    try {
+        let fixedClasses;
+        if (fixedClassId) {
+            fixedClasses = await prisma.fixedClassStudent.findMany({
+                include: {
+                    UserProfile: true
+                },
+                where: {
+                    fixedClassId: fixedClassId,
+                }
+            });
+            let studentInfo: StudentInfo | undefined;
+            for (const userProfile of fixedClasses) {
+                // console.log("userProfile", userProfile.UserProfile.firstName);
+                studentInfo = new StudentInfo();
+                studentInfo.stt = stt++;
+                studentInfo.id = userProfile.UserProfile.id;
+                studentInfo.name = userProfile.UserProfile.lastName + ' ' + userProfile.UserProfile.firstName;
+                studentInfo.code = userProfile.UserProfile.code ? userProfile.UserProfile.code : ' ';
+                studentInfo.DoB = userProfile.UserProfile.dateOfBirth
+                    ? new Date(userProfile.UserProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                    : ' ';
+                studentInfo.HomeTown = userProfile.UserProfile.homeTown ? userProfile.UserProfile.homeTown : ' ';
+
+                ListStudentInfo.push(studentInfo);
+            }
+        } else {
+            console.log("Không tìm thấy lớp biên chế nào", fixedClassId);
+            return [];
+        }
+        return ListStudentInfo;
+    } catch (error) {
+        return [];
+    }
+}
+
+const ListStudentInfo = async (fixedClassId: string) => {
+    const ListStudentInfo: StudentInfo[] = []
+
+
     let stt = 1;
     try {
         let fixedClasses;

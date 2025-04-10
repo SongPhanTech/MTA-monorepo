@@ -61,4 +61,8 @@ model Organization extends Base {
 
 	curriculum Curriculum[]
 	fixedClass FixedClass[]
+
+	subject Subject[]
+
+	subjectGroup SubjectGroup[]
 }
