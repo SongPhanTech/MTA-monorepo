@@ -2,7 +2,7 @@ import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import { getStorage, removeStorage, setStorage } from '@lib/storage'
 import { getSession } from 'next-auth/react'
 
-const fetchUpload = async (formData: FormData) => {
+export const fetchUploadFile = async (formData: FormData, url: string) => {
     let accessToken = getStorage('ACCESS_TOKEN')
     if (!accessToken) {
         const session = await getSession()
@@ -12,7 +12,7 @@ const fetchUpload = async (formData: FormData) => {
         }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_NO_AUTH}/api/UserProfile/upload-excel-create-user-profile`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_NO_AUTH}/${url}`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -29,4 +29,3 @@ const fetchUpload = async (formData: FormData) => {
     return response
 }
 
-export default fetchUpload

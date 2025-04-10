@@ -11,13 +11,16 @@ import {
     useFindManyOrganization,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutFixedClass = FixedClass
+import 'dayjs/locale/vi'
+import { buildOrgTree } from '@lib/utils'
+dayjs.locale('vi')
 const PutFixedClassModal = () => {
     const [form] = Form.useForm<PutFixedClass>()
     const {
@@ -97,6 +100,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue(level)
         }
     }, [level])
+    const treeData = buildOrgTree(manageOrgData);
 
     return (
         <PutFormModal
@@ -154,12 +158,16 @@ const PutFixedClassModal = () => {
                     label="Đơn vị quản lý"
                     required
                 >
-                    <Select placeholder='Chọn đơn vị quản lý' options={manageOrgData.map((i: Organization) => {
-                        return {
-                            value: i.id,
-                            label: i.name
+                    <TreeSelect
+                        placeholder="Chọn đơn vị quản lý"
+                        allowClear
+                        showSearch
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={(input, node) =>
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
-                    })} />
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

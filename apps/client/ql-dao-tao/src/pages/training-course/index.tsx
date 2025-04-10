@@ -63,6 +63,9 @@ export default function TrainingCoursePage() {
             TrainingType: true,
             TrainingObjectType: true
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     });
@@ -82,11 +85,11 @@ export default function TrainingCoursePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateAcademicDegreeType({
+            await updateTrainingCourse({
                 where: {
                     id,
                 },

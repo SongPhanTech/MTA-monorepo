@@ -13,7 +13,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
-import fetchUpload from '@api/userProfile'
+import { fetchUploadFile } from '@api/userProfile'
 export type PutUploadProfile = {
     type: string,
     file: File
@@ -42,7 +42,7 @@ const PutUploadProfileModal = () => {
             const formData = new FormData()
             formData.append('file', output.file)
             formData.append('type', output.type)
-            const res = await fetchUpload(formData)
+            const res = await fetchUploadFile(formData, "api/UserProfile/upload-excel-create-user-profile")
             const data = await res.json()
             if (res.ok) {
                 message.success('Tải lên thành công!')
@@ -69,7 +69,7 @@ const PutUploadProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title="Tải file"
+            title="Tải file nhập thông tin học viên"
             className="w-[30vw]"
         >
             <Col span={24}>
