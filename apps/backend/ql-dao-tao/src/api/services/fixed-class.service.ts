@@ -21,7 +21,7 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
     }
     try {
         // Đọc file Excel
-        
+
 
         // Đọc file Excel
         const arrayBuffer = await file.arrayBuffer()
@@ -41,7 +41,7 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
         // Chuyển đổi dữ liệu từ sheet thành JSON
         const rowData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         let jsonData;
-        
+
         // Kiểm tra mã khóa có trùng với đầu vào không để tránh nhập nhầm
         const cellAddress = 'C8';
         const cell = sheet[cellAddress];
@@ -72,10 +72,10 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
                             trainingCourseId: TrainingCourse?.id,
                             name: row[1], // Tên lớp
                             code: row[2],// Mã lớp
-                            classSize: (() => { 
+                            classSize: (() => {
                                 console.log("row[3]", row[3], row[0]);
-                                const size = parseInt(row[3], 10); 
-                                return isNaN(size) ? 0 : size; 
+                                const size = parseInt(row[3], 10);
+                                return isNaN(size) ? 0 : size;
                             })() // Sĩ số converted to int
                         },
                     });
@@ -85,7 +85,7 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
             );
             return jsonData;
         });
-        return context.json(jsonData,200)
+        return context.json(jsonData, 200)
     } catch (error) {
         console.error('Error processing Excel file:', error)
         return context.json({ error: 'Failed to process Excel file' }, 400)
@@ -94,7 +94,7 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
 
 const classDivision = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
-   
+
     const file = body.file
     // Kiểm tra xem file có tồn tại và là File object không
     if (!file || !(file instanceof File)) {
@@ -112,7 +112,7 @@ const classDivision = async (context: any): Promise<any> => {
     }
     try {
         // Đọc file Excel
-        
+
 
         // Đọc file Excel
         const arrayBuffer = await file.arrayBuffer()
@@ -132,7 +132,7 @@ const classDivision = async (context: any): Promise<any> => {
         // Chuyển đổi dữ liệu từ sheet thành JSON
         const rowData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         let jsonData;
-        
+
 
 
         // Duyệt dòng 11 theo mẫu
@@ -143,13 +143,13 @@ const classDivision = async (context: any): Promise<any> => {
                         where: { code: row[7] }, // Tìm kiếm lớp biên chế
                     })
                     if (!fixedClass) {
-                        return 'Không tìm thấy lớp biên chế' +' ' + row[7]
+                        return 'Không tìm thấy lớp biên chế' + ' ' + row[7]
                     }
                     const userProfile = await prisma.userProfile.findFirst({
                         where: { code: row[1] }, // Tìm kiếm UserType của Sinh viên
                     })
                     if (!userProfile) {
-                        return  'Không tìm thấy học viên' + ' ' + row[1]
+                        return 'Không tìm thấy học viên' + ' ' + row[1]
                     }
                     let fixedClassStudent = await prisma.fixedClassStudent.findFirst({
                         where: { userProfileId: userProfile.id, fixedClassId: fixedClass.id },
@@ -164,20 +164,48 @@ const classDivision = async (context: any): Promise<any> => {
                     }
                     // console.log("userProfile", userProfile);
                     return fixedClassStudent;
-                    
+
                 })
             );
             return jsonData;
         });
-        return context.json(jsonData,200)
+        return context.json(jsonData, 200)
     } catch (error) {
         console.error('Error processing Excel file:', error)
         return context.json({ error: 'Failed to process Excel file' }, 400)
     }
 }
+const getFixedClassWithStudents = async (trainingCourseId?: string) => {
+    try {
+        const fixedClasses = await prisma.fixedClass.findMany({
+            where: {
+                trainingCourseId: trainingCourseId,
+                deletedAt: null
+            },
+            include: {
+                fixedClassStudent: {
+                    include: {
+                        UserProfile: true
+                    }
+                },
+                TrainingCourse: true,
+                ManagementOrganization: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        return fixedClasses;
+    } catch (error) {
+        console.error('Error fetching fixed classes with students:', error);
+        throw new Error('Failed to fetch fixed classes with students');
+    }
+};
 
 export default
-{
-    uploadExcelCreateFixedClass,
-    classDivision,
-}
+    {
+        uploadExcelCreateFixedClass,
+        classDivision,
+        getFixedClassWithStudents
+    }
