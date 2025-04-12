@@ -1,5 +1,11 @@
 import { prisma } from '../..'
 import * as XLSX from 'xlsx'
+import templateService from './template.service'
+
+import { promises as fs } from 'fs'
+import PizZip from 'pizzip';
+import Docxtemplater from 'docxtemplater';
+
 
 const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
@@ -112,9 +118,6 @@ const classDivision = async (context: any): Promise<any> => {
     }
     try {
         // Đọc file Excel
-
-
-        // Đọc file Excel
         const arrayBuffer = await file.arrayBuffer()
         const workbook = XLSX.read(arrayBuffer, { type: 'array' })
 
@@ -132,8 +135,6 @@ const classDivision = async (context: any): Promise<any> => {
         // Chuyển đổi dữ liệu từ sheet thành JSON
         const rowData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         let jsonData;
-
-
 
         // Duyệt dòng 11 theo mẫu
         await prisma.$transaction(async (prisma) => {
@@ -175,37 +176,168 @@ const classDivision = async (context: any): Promise<any> => {
         return context.json({ error: 'Failed to process Excel file' }, 400)
     }
 }
-const getFixedClassWithStudents = async (trainingCourseId?: string) => {
-    try {
-        const fixedClasses = await prisma.fixedClass.findMany({
-            where: {
-                trainingCourseId: trainingCourseId,
-                deletedAt: null
-            },
-            include: {
-                fixedClassStudent: {
-                    include: {
-                        UserProfile: true
-                    }
-                },
-                TrainingCourse: true,
-                ManagementOrganization: true
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
 
-        return fixedClasses;
-    } catch (error) {
-        console.error('Error fetching fixed classes with students:', error);
-        throw new Error('Failed to fetch fixed classes with students');
+export class StudentInfo {
+    stt: number | undefined
+    id: string | undefined
+    name: string | undefined
+    code: string | undefined
+    DoB: string | undefined
+    HomeTown: string | undefined
+}
+
+const exportFixedClassByCourse = async (context: any): Promise<any> => {
+    const query = context.req.valid('query')
+    const fixedClassId = query.fixedClassId
+
+    // dạng thông tin
+    const content = await getContent(fixedClassId)
+    console.log("content", content);
+    const fixedClass = await prisma.fixedClass.findFirst({
+        where: { id: fixedClassId }, // Tìm kiếm lớp biên chế
+    })
+    if (!fixedClass) {
+        console.log("Không tìm thấy lớp biên chế nào", fixedClassId);
+        return 404;
     }
-};
+    const { date, month, year } = templateService.getCurrentDateForReport()
+    // console.log("fixedClass", date, month, year, fixedClass.name);
+    // dạng bảng
+
+    const templateData = {
+        fields: [
+            date,
+            month,
+            year,
+            fixedClass.name,
+        ],
+        cellValues: {
+            sheet: content.map((item: StudentInfo) => ({
+                ["A"]: item.stt,
+                ["B"]: item.code,
+                ["C"]: item.name,
+                ["D"]: item.DoB,
+                ["E"]: item.HomeTown,
+            })),
+        }
+    }
+    // console.log("templateData", templateData);
+
+    const docxBuffer = await templateService.getBufferFromUrl('LIST_STUDENT_FIXCLASS');
+    const templateZip = new PizZip(docxBuffer);
+    const document = new Docxtemplater(templateZip, {
+        paragraphLoop: true,
+        linebreaks: true,
+    });
+    const fillData: Record<number, any> = templateData.fields.reduce(
+        (obj, value, index) => {
+            obj[index + 1] = value;
+            return obj;
+        },
+        {} as Record<number, any>,
+    );
+
+    const tableData = templateData.cellValues;
+    const data = {
+        ...fillData,
+        ...tableData
+    };
+    // console.log("data", data);
+    const reportDocx = document.render(data);
+    return new Response(reportDocx.getZip().generate({ type: 'nodebuffer' }), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Disposition': 'attachment; filename="DSLop_' + fixedClass.name + '.docx"',
+        },
+    })
+}
+
+const getContent = async (fixedClassId: string) => {
+    const ListStudentInfo: StudentInfo[] = []
+
+
+    let stt = 1;
+    try {
+        let fixedClasses;
+        if (fixedClassId) {
+            fixedClasses = await prisma.fixedClassStudent.findMany({
+                include: {
+                    UserProfile: true
+                },
+                where: {
+                    fixedClassId: fixedClassId,
+                }
+            });
+            let studentInfo: StudentInfo | undefined;
+            for (const userProfile of fixedClasses) {
+                // console.log("userProfile", userProfile.UserProfile.firstName);
+                studentInfo = new StudentInfo();
+                studentInfo.stt = stt++;
+                studentInfo.id = userProfile.UserProfile.id;
+                studentInfo.name = userProfile.UserProfile.lastName + ' ' + userProfile.UserProfile.firstName;
+                studentInfo.code = userProfile.UserProfile.code ? userProfile.UserProfile.code : ' ';
+                studentInfo.DoB = userProfile.UserProfile.dateOfBirth
+                    ? new Date(userProfile.UserProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                    : ' ';
+                studentInfo.HomeTown = userProfile.UserProfile.homeTown ? userProfile.UserProfile.homeTown : ' ';
+
+                ListStudentInfo.push(studentInfo);
+            }
+        } else {
+            console.log("Không tìm thấy lớp biên chế nào", fixedClassId);
+            return [];
+        }
+        return ListStudentInfo;
+    } catch (error) {
+        return [];
+    }
+}
+
+const ListStudentInfo = async (fixedClassId: string) => {
+    const ListStudentInfo: StudentInfo[] = []
+
+
+    let stt = 1;
+    try {
+        let fixedClasses;
+        if (fixedClassId) {
+            fixedClasses = await prisma.fixedClassStudent.findMany({
+                include: {
+                    UserProfile: true
+                },
+                where: {
+                    fixedClassId: fixedClassId,
+                }
+            });
+            let studentInfo: StudentInfo | undefined;
+            for (const userProfile of fixedClasses) {
+                // console.log("userProfile", userProfile.UserProfile.firstName);
+                studentInfo = new StudentInfo();
+                studentInfo.stt = stt++;
+                studentInfo.id = userProfile.UserProfile.id;
+                studentInfo.name = userProfile.UserProfile.lastName + ' ' + userProfile.UserProfile.firstName;
+                studentInfo.code = userProfile.UserProfile.code ? userProfile.UserProfile.code : ' ';
+                studentInfo.DoB = userProfile.UserProfile.dateOfBirth
+                    ? new Date(userProfile.UserProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                    : ' ';
+                studentInfo.HomeTown = userProfile.UserProfile.homeTown ? userProfile.UserProfile.homeTown : ' ';
+
+                ListStudentInfo.push(studentInfo);
+            }
+        } else {
+            console.log("Không tìm thấy lớp biên chế nào", fixedClassId);
+            return [];
+        }
+        return ListStudentInfo;
+    } catch (error) {
+        return [];
+    }
+}
 
 export default
-    {
-        uploadExcelCreateFixedClass,
-        classDivision,
-        getFixedClassWithStudents
-    }
+{
+    uploadExcelCreateFixedClass,
+    classDivision,
+    exportFixedClassByCourse
+}

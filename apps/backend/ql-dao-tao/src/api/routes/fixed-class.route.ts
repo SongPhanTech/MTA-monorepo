@@ -6,7 +6,7 @@ const uploadExcelCreateFixedClass = createRoute({
     path: '/FixedClass/upload-excel-create-fixed-class',
     method: 'post',
     description:
-        'Thêm mới danh sách lớp biên chế \n\n [trainingCourseId] là mã của khóa học, lấy trong bảng TrainingCourse',
+        'Thêm mới danh sách lớp biên chế \n\n [trainingCourseId] là id của khóa học, lấy trong bảng TrainingCourse',
     tags: ['FixedClass'],
     summary: 'Upload Excel Create FixedClass',
     request: {
@@ -38,7 +38,7 @@ const uploadExcelCreateFixedClass = createRoute({
 
 const classDivision = createRoute({
     operationId: 'classDivision',
-    path: '/fixClass/upload-excel-update-user-profile',
+    path: '/FixedClass/upload-excel-update-user-profile',
     method: 'post',
     description:
         'Phân chia học viên vào các lớp',
@@ -70,45 +70,41 @@ const classDivision = createRoute({
     },
 })
 
-const getFixedClassList = createRoute({
-    operationId: 'getFixedClassList',
-    path: '/fixedClass/list',
-    method: 'get',
-    description: 'Lấy danh sách lớp biên chế kèm theo học viên',
-    tags: ['FixedClass'],
-    summary: 'Get FixedClass With Students',
-    request: {
-        query: z.object({
-            trainingCourseId: z.string().optional(),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Danh sách lớp biên chế kèm học viên',
-            content: {
-                'application/json': {
-                    schema: z.array(z.any()), // Bạn có thể thay bằng schema chi tiết nếu muốn strict hơn
+const exportDocxListStudentFixedClass =
+    createRoute({
+        operationId: 'exportStudentFixedClassDocx',
+        path: '/FixedClass/export-docx-list-student-fixed-class',
+        description: 'Xuất file docx danh sách sinh viên trong lớp biên chế',
+        tags: ['FixedClass'],
+        summary: 'Export list of student FixedClass as .docx',
+        method: 'get',
+        request: {
+            query: z.object({
+                fixedClassId: z
+                    .string()
+                    .optional()
+                    .openapi({ param: { style: 'form' } }),
+                // includeGroups: z
+                //     .string()
+                //     .optional()
+                //     .openapi({ param: { style: 'form' } }),
+            }),
+        },
+        responses: {
+            200: {
+                description: 'Export list of  student FixedClass as .docx',
+                content: {
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                        schema: z.string().openapi('ExportedRolesDOCX (base64)'),
+                    },
                 },
             },
         },
-        400: {
-            description: 'Bad request',
-        },
-    },
-    handler: async ({ query, res }: any) => {
-        try {
-            const fixedClasses = await fixedClassService.getFixedClassWithStudents(query.trainingCourseId);
-            return res.status(200).json(fixedClasses);
-        } catch (error) {
-            console.error(error);
-            return res.status(400).json({ error: 'Không thể lấy danh sách lớp biên chế' });
-        }
-    },
-});
+    })
 
 export default
     {
         uploadExcelCreateFixedClass,
         classDivision,
-        getFixedClassList
+        exportDocxListStudentFixedClass
     }

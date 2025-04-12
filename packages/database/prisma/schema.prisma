@@ -80,6 +80,23 @@ enum CurriculumStatus {
   INACTIVATED
 }
 
+enum SubjectEquivalentType {
+  NONE
+  OneByOne
+  TwoByOne
+  ThreeByOne
+  FourByOne
+  OneByTwo
+  OneByThree
+}
+
+enum CurriculumVersionSubjectType {
+  NONE
+  MANDATORY
+  OPTIONAL
+  ELECTIVE
+}
+
 model Group {
   id          String    @id() @default(cuid())
   code        String?
@@ -436,6 +453,8 @@ model Organization {
   address        String?
   curriculum     Curriculum[]
   fixedClass     FixedClass[]
+  subject        Subject[]
+  subjectGroup   SubjectGroup[]
   organizationId String?
 }
 
@@ -449,7 +468,7 @@ model SchoolYear {
   name        String
   startDate   DateTime
   endDate     DateTime?
-  Semesters   Semester[]  @relation("SchoolYearToSemester")
+  Semesters   Semester[]
   milestone   Milestone[]
 }
 
@@ -461,7 +480,7 @@ model Semester {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
   name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], name: "SchoolYearToSemester")
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
   endDate      DateTime?
@@ -504,30 +523,6 @@ model TrainingCourse {
   fixedClass           FixedClass[]
 }
 
-model Curriculum {
-  id                       String             @id() @default(cuid())
-  code                     String?
-  description              String?            @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt()
-  name                     String
-  status                   CurriculumStatus   @default(ACTIVE)
-  startDate                DateTime
-  endDate                  DateTime?
-  ManagementOrganization   Organization       @relation(fields: [managementOrganizationId], references: [id])
-  managementOrganizationId String
-  TrainingObjectType       TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String
-  TrainingLevel            TrainingLevel      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId          String
-  TraingTime               TrainingTime       @relation(fields: [trainingTimeId], references: [id])
-  trainingTimeId           String
-  infomation               String
-  documentPath             String?
-  renderPath               String?
-}
-
 model FixedClass {
   id                       String              @id() @default(cuid())
   code                     String?
@@ -542,6 +537,108 @@ model FixedClass {
   managementOrganizationId String?
   classSize                Int                 @default(0)
   fixedClassStudent        FixedClassStudent[]
+}
+
+model Curriculum {
+  id                       String              @id() @default(cuid())
+  code                     String?
+  description              String?             @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt()
+  name                     String
+  status                   CurriculumStatus    @default(ACTIVE)
+  startDate                DateTime
+  endDate                  DateTime?
+  ManagementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  TrainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  TrainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId          String
+  TraingTime               TrainingTime        @relation(fields: [trainingTimeId], references: [id])
+  trainingTimeId           String
+  TrainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId          String
+  infomation               String
+  documentPath             String?
+  renderPath               String?
+  curriculumVersion        CurriculumVersion[]
+}
+
+model CurriculumVersion {
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  status                   CurriculumStatus           @default(ACTIVE)
+  startDate                DateTime
+  endDate                  DateTime?
+  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
+  curriculumId             String
+  infomation               String?
+  documentPath             String?
+  renderPath               String?
+  curriculumVersionSubject CurriculumVersionSubject[]
+}
+
+model SubjectGroup {
+  id                       String       @id() @default(cuid())
+  code                     String?
+  description              String?      @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt()
+  name                     String
+  ManagementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  infomation               String?
+  Subject                  Subject[]
+}
+
+model Subject {
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  subjectEquivalentType    SubjectEquivalentType      @default(NONE)
+  credit                   Int                        @default(0)
+  period                   Int                        @default(0)
+  numberOfTheory           Int                        @default(0)
+  numberOfPractice         Int                        @default(0)
+  numberOfSelfStudy        Int                        @default(0)
+  numberOfProject          Int                        @default(0)
+  numberOfInternship       Int                        @default(0)
+  numberOfOther            Int                        @default(0)
+  ManagementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
+  subjectGroupId           String
+  curriculumVersionSubject CurriculumVersionSubject[]
+}
+
+model CurriculumVersionSubject {
+  id                  String            @id() @default(cuid())
+  code                String?
+  description         String?           @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt()
+  CurriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId String
+  Subject             Subject           @relation(fields: [subjectId], references: [id])
+  subjectId           String
+  TraningBlock        TrainingBlock?    @relation(fields: [traningBlockId], references: [id])
+  traningBlockId      String?
+  infomation          String?
+  documentPath        String?
+  renderPath          String?
 }
 
 model TrainingObjectType {
@@ -611,23 +708,25 @@ model TrainingField {
 }
 
 model TrainingMajor {
-  id          String    @id() @default(cuid())
+  id          String       @id() @default(cuid())
   code        String?
-  description String?   @db.Text()
+  description String?      @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt()
   name        String
+  curriculum  Curriculum[]
 }
 
 model TrainingBlock {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  curriculumVersionSubject CurriculumVersionSubject[]
 }
 
 model TrainingTime {

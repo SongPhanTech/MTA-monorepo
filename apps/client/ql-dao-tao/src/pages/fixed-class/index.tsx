@@ -202,6 +202,9 @@ export default function FixedClassPage() {
         </Menu>
     );
     const treeData = buildOrgTree(manageOrgData);
+    const renderExpandedRow = useCallback((record: any) => {
+        return <OptionsPage key={record.id} fixedClass={record} />;
+    }, []);
 
     return (
         <div>
@@ -347,12 +350,15 @@ export default function FixedClassPage() {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
+                        // expandable={{
+                        //     expandedRowRender: (record) => <OptionsPage
+                        //         className="sub-table [&_.ant-table-tbody>tr:hover]:bg-blue-50"
+                        //         key={record.id}
+                        //         fixedClass={record} />
+                        //     // rowExpandable: (record) => !!record.description,
+                        // }}
                         expandable={{
-                            expandedRowRender: (record) => <OptionsPage
-                                className="sub-table [&_.ant-table-tbody>tr:hover]:bg-blue-50"
-                                key={record.id}
-                                fixedClass={record} />
-                            // rowExpandable: (record) => !!record.description,
+                            expandedRowRender: renderExpandedRow,
                         }}
                     />
                 </Col>

@@ -1571,6 +1571,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'ManagementOrganization',
+                }, subject: {
+                    name: "subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ManagementOrganization',
+                }, subjectGroup: {
+                    name: "subjectGroup",
+                    type: "SubjectGroup",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ManagementOrganization',
                 },
             }
             , uniqueConstraints: {
@@ -1874,6 +1886,85 @@ const metadata = {
             ,
         }
         ,
+        fixedClass: {
+            name: 'FixedClass', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, TrainingCourse: {
+                    name: "TrainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'fixedClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'TrainingCourse',
+                }, ManagementOrganization: {
+                    name: "ManagementOrganization",
+                    type: "Organization",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'fixedClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "managementOrganizationId" },
+                }, managementOrganizationId: {
+                    name: "managementOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'ManagementOrganization',
+                }, classSize: {
+                    name: "classSize",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, fixedClassStudent: {
+                    name: "fixedClassStudent",
+                    type: "FixedClassStudent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'fixedClass',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
         curriculum: {
             name: 'Curriculum', fields: {
                 id: {
@@ -1963,6 +2054,18 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'TraingTime',
+                }, TrainingMajor: {
+                    name: "TrainingMajor",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    backLink: 'curriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingMajorId" },
+                }, trainingMajorId: {
+                    name: "trainingMajorId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'TrainingMajor',
                 }, infomation: {
                     name: "infomation",
                     type: "String",
@@ -1974,6 +2077,12 @@ const metadata = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'Curriculum',
                 },
             }
             , uniqueConstraints: {
@@ -1985,8 +2094,8 @@ const metadata = {
             ,
         }
         ,
-        fixedClass: {
-            name: 'FixedClass', fields: {
+        curriculumVersion: {
+            name: 'CurriculumVersion', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -2015,44 +2124,305 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, TrainingCourse: {
-                    name: "TrainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
+                }, status: {
+                    name: "status",
+                    type: "CurriculumStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
                     isOptional: true,
-                    backLink: 'fixedClass',
+                }, Curriculum: {
+                    name: "Curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    backLink: 'curriculumVersion',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
+                    foreignKeyMapping: { "id": "curriculumId" },
+                }, curriculumId: {
+                    name: "curriculumId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'Curriculum',
+                }, infomation: {
+                    name: "infomation",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'TrainingCourse',
+                }, documentPath: {
+                    name: "documentPath",
+                    type: "String",
+                    isOptional: true,
+                }, renderPath: {
+                    name: "renderPath",
+                    type: "String",
+                    isOptional: true,
+                }, curriculumVersionSubject: {
+                    name: "curriculumVersionSubject",
+                    type: "CurriculumVersionSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'CurriculumVersion',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        subjectGroup: {
+            name: 'SubjectGroup', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
                 }, ManagementOrganization: {
                     name: "ManagementOrganization",
                     type: "Organization",
                     isDataModel: true,
-                    isOptional: true,
-                    backLink: 'fixedClass',
+                    backLink: 'subjectGroup',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "managementOrganizationId" },
                 }, managementOrganizationId: {
                     name: "managementOrganizationId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'ManagementOrganization',
-                }, classSize: {
-                    name: "classSize",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
-                }, fixedClassStudent: {
-                    name: "fixedClassStudent",
-                    type: "FixedClassStudent",
+                }, infomation: {
+                    name: "infomation",
+                    type: "String",
+                    isOptional: true,
+                }, Subject: {
+                    name: "Subject",
+                    type: "Subject",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'fixedClass',
+                    backLink: 'SubjectGroup',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        subject: {
+            name: 'Subject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, subjectEquivalentType: {
+                    name: "subjectEquivalentType",
+                    type: "SubjectEquivalentType",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, credit: {
+                    name: "credit",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, period: {
+                    name: "period",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfTheory: {
+                    name: "numberOfTheory",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfPractice: {
+                    name: "numberOfPractice",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfSelfStudy: {
+                    name: "numberOfSelfStudy",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfProject: {
+                    name: "numberOfProject",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfInternship: {
+                    name: "numberOfInternship",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, numberOfOther: {
+                    name: "numberOfOther",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, ManagementOrganization: {
+                    name: "ManagementOrganization",
+                    type: "Organization",
+                    isDataModel: true,
+                    backLink: 'subject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "managementOrganizationId" },
+                }, managementOrganizationId: {
+                    name: "managementOrganizationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ManagementOrganization',
+                }, SubjectGroup: {
+                    name: "SubjectGroup",
+                    type: "SubjectGroup",
+                    isDataModel: true,
+                    backLink: 'Subject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectGroupId" },
+                }, subjectGroupId: {
+                    name: "subjectGroupId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'SubjectGroup',
+                }, curriculumVersionSubject: {
+                    name: "curriculumVersionSubject",
+                    type: "CurriculumVersionSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'Subject',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        curriculumVersionSubject: {
+            name: 'CurriculumVersionSubject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, CurriculumVersion: {
+                    name: "CurriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    backLink: 'curriculumVersionSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'CurriculumVersion',
+                }, Subject: {
+                    name: "Subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    backLink: 'curriculumVersionSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectId" },
+                }, subjectId: {
+                    name: "subjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'Subject',
+                }, TraningBlock: {
+                    name: "TraningBlock",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'curriculumVersionSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "traningBlockId" },
+                }, traningBlockId: {
+                    name: "traningBlockId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'TraningBlock',
+                }, infomation: {
+                    name: "infomation",
+                    type: "String",
+                    isOptional: true,
+                }, documentPath: {
+                    name: "documentPath",
+                    type: "String",
+                    isOptional: true,
+                }, renderPath: {
+                    name: "renderPath",
+                    type: "String",
+                    isOptional: true,
                 },
             }
             , uniqueConstraints: {
@@ -2376,6 +2746,12 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'TrainingMajor',
                 },
             }
             , uniqueConstraints: {
@@ -2417,6 +2793,12 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, curriculumVersionSubject: {
+                    name: "curriculumVersionSubject",
+                    type: "CurriculumVersionSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'TraningBlock',
                 },
             }
             , uniqueConstraints: {

@@ -362,6 +362,8 @@ Table Organization {
   address String
   curriculum Curriculum [not null]
   fixedClass FixedClass [not null]
+  subject Subject [not null]
+  subjectGroup SubjectGroup [not null]
   organizationId String
 }
 
@@ -430,6 +432,22 @@ Table TrainingCourse {
   fixedClass FixedClass [not null]
 }
 
+Table FixedClass {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  TrainingCourse TrainingCourse
+  trainingCourseId String
+  ManagementOrganization Organization
+  managementOrganizationId String
+  classSize Int [not null, default: 0]
+  fixedClassStudent FixedClassStudent [not null]
+}
+
 Table Curriculum {
   id String [pk]
   code String
@@ -449,12 +467,15 @@ Table Curriculum {
   trainingLevelId String [not null]
   TraingTime TrainingTime [not null]
   trainingTimeId String [not null]
+  TrainingMajor TrainingMajor [not null]
+  trainingMajorId String [not null]
   infomation String [not null]
   documentPath String
   renderPath String
+  curriculumVersion CurriculumVersion [not null]
 }
 
-Table FixedClass {
+Table CurriculumVersion {
   id String [pk]
   code String
   description String
@@ -462,12 +483,71 @@ Table FixedClass {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  TrainingCourse TrainingCourse
-  trainingCourseId String
-  ManagementOrganization Organization
-  managementOrganizationId String
-  classSize Int [not null, default: 0]
-  fixedClassStudent FixedClassStudent [not null]
+  status CurriculumStatus [not null, default: 'ACTIVE']
+  startDate DateTime [not null]
+  endDate DateTime
+  Curriculum Curriculum [not null]
+  curriculumId String [not null]
+  infomation String
+  documentPath String
+  renderPath String
+  curriculumVersionSubject CurriculumVersionSubject [not null]
+}
+
+Table SubjectGroup {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  ManagementOrganization Organization [not null]
+  managementOrganizationId String [not null]
+  infomation String
+  Subject Subject [not null]
+}
+
+Table Subject {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  subjectEquivalentType SubjectEquivalentType [not null, default: 'NONE']
+  credit Int [not null, default: 0]
+  period Int [not null, default: 0]
+  numberOfTheory Int [not null, default: 0]
+  numberOfPractice Int [not null, default: 0]
+  numberOfSelfStudy Int [not null, default: 0]
+  numberOfProject Int [not null, default: 0]
+  numberOfInternship Int [not null, default: 0]
+  numberOfOther Int [not null, default: 0]
+  ManagementOrganization Organization [not null]
+  managementOrganizationId String [not null]
+  SubjectGroup SubjectGroup [not null]
+  subjectGroupId String [not null]
+  curriculumVersionSubject CurriculumVersionSubject [not null]
+}
+
+Table CurriculumVersionSubject {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  CurriculumVersion CurriculumVersion [not null]
+  curriculumVersionId String [not null]
+  Subject Subject [not null]
+  subjectId String [not null]
+  TraningBlock TrainingBlock
+  traningBlockId String
+  infomation String
+  documentPath String
+  renderPath String
 }
 
 Table TrainingObjectType {
@@ -544,6 +624,7 @@ Table TrainingMajor {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  curriculum Curriculum [not null]
 }
 
 Table TrainingBlock {
@@ -554,6 +635,7 @@ Table TrainingBlock {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  curriculumVersionSubject CurriculumVersionSubject [not null]
 }
 
 Table TrainingTime {
@@ -675,6 +757,23 @@ Enum CurriculumStatus {
   INACTIVATED
 }
 
+Enum SubjectEquivalentType {
+  NONE
+  OneByOne
+  TwoByOne
+  ThreeByOne
+  FourByOne
+  OneByTwo
+  OneByThree
+}
+
+Enum CurriculumVersionSubjectType {
+  NONE
+  MANDATORY
+  OPTIONAL
+  ELECTIVE
+}
+
 Ref: Feedback.userId > User.id
 
 Ref: UserProfile.userId > User.id
@@ -713,6 +812,10 @@ Ref: TrainingCourse.trainingLevelId > TrainingLevel.id
 
 Ref: TrainingCourse.trainingFormId > TrainingForm.id
 
+Ref: FixedClass.trainingCourseId > TrainingCourse.id
+
+Ref: FixedClass.managementOrganizationId > Organization.id
+
 Ref: Curriculum.managementOrganizationId > Organization.id
 
 Ref: Curriculum.trainingObjectTypeId > TrainingObjectType.id
@@ -721,6 +824,18 @@ Ref: Curriculum.trainingLevelId > TrainingLevel.id
 
 Ref: Curriculum.trainingTimeId > TrainingTime.id
 
-Ref: FixedClass.trainingCourseId > TrainingCourse.id
+Ref: Curriculum.trainingMajorId > TrainingMajor.id
 
-Ref: FixedClass.managementOrganizationId > Organization.id
+Ref: CurriculumVersion.curriculumId > Curriculum.id
+
+Ref: SubjectGroup.managementOrganizationId > Organization.id
+
+Ref: Subject.managementOrganizationId > Organization.id
+
+Ref: Subject.subjectGroupId > SubjectGroup.id
+
+Ref: CurriculumVersionSubject.curriculumVersionId > CurriculumVersion.id
+
+Ref: CurriculumVersionSubject.subjectId > Subject.id
+
+Ref: CurriculumVersionSubject.traningBlockId > TrainingBlock.id
