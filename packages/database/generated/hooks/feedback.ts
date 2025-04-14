@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Feedback } from "@prisma/client";
+import type { Prisma, Feedback } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -327,7 +327,7 @@ export function useSuspenseCountFeedback<TArgs extends Prisma.FeedbackCountArgs,
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Feedback', `${endpoint}/feedback/count`, args, options, fetch);
 }
-import type { FeedbackStatus, Satisfaction } from '@prisma/client';
+import type { FeedbackStatus, Satisfaction } from '@zenstackhq/runtime/models';
 
 export function useCheckFeedback<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; content?: string; status?: FeedbackStatus; satisfaction?: Satisfaction; userId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

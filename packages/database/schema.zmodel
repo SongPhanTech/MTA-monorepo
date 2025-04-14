@@ -3,7 +3,7 @@ import './models/index.zmodel'
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["he-thong","ql-danh-muc", "ql-nguoi-dung", "ql-dao-tao"]
+  schemas  = ["he-thong", "ql-danh-muc", "ql-nguoi-dung", "ql-dao-tao", "tro-ly-ao"]
 }
 
 generator client {

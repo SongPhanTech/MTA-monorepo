@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@zenstackhq/runtime/models';
 import { UserRoleSchema } from '../enums/UserRole.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -28,6 +28,11 @@ const relationSchema = z.object({
     groups: z.array(z.unknown()).optional(),
     feedback: z.array(z.unknown()).optional(),
     userProfile: z.array(z.unknown()).optional(),
+    conversation: z.array(z.unknown()).optional(),
+    documentUploaded: z.array(z.unknown()).optional(),
+    documentApproved: z.array(z.unknown()).optional(),
+    fAQUploaded: z.array(z.unknown()).optional(),
+    fAQApproved: z.array(z.unknown()).optional(),
 }
 );
 

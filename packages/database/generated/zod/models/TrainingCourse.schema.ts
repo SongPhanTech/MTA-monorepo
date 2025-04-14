@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { TrainingCourseStatus } from '@prisma/client';
+import { TrainingCourseStatus } from '@zenstackhq/runtime/models';
 import { TrainingCourseStatusSchema } from '../enums/TrainingCourseStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
