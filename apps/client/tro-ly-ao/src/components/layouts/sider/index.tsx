@@ -1,14 +1,12 @@
-import { MoreOutlined } from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
-import { Layout, Menu, Dropdown } from 'antd'
+import { Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import { useRouter } from 'next/router'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 const { Sider } = Layout
 
-// Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
 interface SiderDefaultLayoutProps {
     collapsed: boolean
     theme: 'light' | 'dark'
@@ -18,32 +16,8 @@ interface SiderDefaultLayoutProps {
     logo2: React.ReactNode
 }
 
-// Định nghĩa kiểu cho hàm onDelete
-type OnDelete = (id: string) => void
-
-// Tạo component cho dropdown của MoreOutlined để tránh gọi lại getMenus
-const MoreDropdown = ({ onDelete, childId }: { onDelete: OnDelete, childId: string }) => {
-    return (
-        <Dropdown
-            trigger={['click']}
-            overlay={
-                <Menu>
-                    <Menu.Item key="edit" onClick={() => onDelete(childId)}>
-                        Chỉnh sửa
-                    </Menu.Item>
-                    <Menu.Item key="delete" danger onClick={() => console.log('Xoá', childId)}>
-                        Xoá
-                    </Menu.Item>
-                </Menu>
-            }
-        >
-            <MoreOutlined className="text-gray-400 hover:text-blue-500 cursor-pointer ml-2" />
-        </Dropdown>
-    )
-}
-
-// Hàm hỗ trợ để chuyển đổi "item props" thành cấu trúc phù hợp
-function getMenus(menus: MenuItem[], onDelete: OnDelete): ItemType<MenuItemType>[] {
+// Chuyển đổi item sang định dạng Menu phù hợp
+function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
     const router = useRouter()
 
     return menus.map((item) => {
@@ -56,16 +30,14 @@ function getMenus(menus: MenuItem[], onDelete: OnDelete): ItemType<MenuItemType>
                     key: child.path || child.id,
                     label: (
                         <div
-                            className="flex items-center justify-between pr-2 group cursor-pointer"
-                            onClick={(e) => {
-                                // Nếu bạn click vào label thì nó sẽ điều hướng
+                            className="cursor-pointer"
+                            onClick={() => {
                                 if (child.path) {
                                     router.push(child.path)
                                 }
                             }}
                         >
-                            <div className="flex-1 truncate">{child.label}</div>
-                            <MoreDropdown onDelete={onDelete} childId={child.id} />
+                            {child.label}
                         </div>
                     ),
                 })),
@@ -73,31 +45,26 @@ function getMenus(menus: MenuItem[], onDelete: OnDelete): ItemType<MenuItemType>
         }
 
         return {
-            label: item.children ? (
-                item.label
-            ) : (
+            label: (
                 <div
                     onClick={(e) => {
-                        // Ngừng sự kiện nếu click vào item mà không muốn điều hướng
                         e.stopPropagation()
-
                         if (item.path) {
                             router.push(item.path)
                         }
                     }}
-                    className="cursor-pointer hover:text-blue-500"
                 >
                     {item.label}
                 </div>
             ),
             key: item.path || item.id,
             icon: item.icon ? <item.icon /> : undefined,
-            children: item.children ? getMenus(item.children, onDelete) : undefined,
+            children: item.children ? getMenus(item.children) : undefined,
         }
     })
 }
 
-// Hàm tìm các menu được mở
+// Tìm các menu mở sẵn theo pathname
 const findOpenKeys = (
     menus: MenuItem[],
     currentPath: string | null
@@ -116,7 +83,6 @@ const findOpenKeys = (
     return []
 }
 
-// Component SiderDefaultLayout
 const SiderDefaultLayout = ({
     collapsed,
     theme,
@@ -126,16 +92,9 @@ const SiderDefaultLayout = ({
     logo2,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
-
-    // State để quản lý các menu đang mở
     const [openKeys, setOpenKeys] = useState<string[]>(
         findOpenKeys(items, pathname)
     )
-
-    const handleDelete: OnDelete = useCallback((id: string) => {
-        // Xử lý xóa hội thoại tại đây
-        console.log('Xoá hội thoại với id:', id)
-    }, [])
 
     return (
         <Sider
@@ -158,12 +117,12 @@ const SiderDefaultLayout = ({
                 {collapsed ? logo1 : logo2}
             </div>
             <Menu
-                theme={'light'}
+                theme={theme}
                 mode="inline"
                 selectedKeys={pathname ? [pathname] : []}
                 openKeys={openKeys}
-                onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
-                items={getMenus(items, handleDelete)}
+                onOpenChange={setOpenKeys}
+                items={getMenus(items)}
                 style={{
                     background: 'transparent',
                 }}
