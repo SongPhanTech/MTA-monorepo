@@ -1,17 +1,14 @@
-import './models/base.zmodel'
-import './models/categories.zmodel'
-import './models/categories_edu.zmodel'
-import './models/plantraining.zmodel'
-import './models/user_info.zmodel'
-import './models/user.zmodel'
+import './models/index.zmodel'
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["he-thong","ql-danh-muc", "ql-nguoi-dung", "ql-dao-tao"]
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
   binaryTargets = ["native"]
 }
 

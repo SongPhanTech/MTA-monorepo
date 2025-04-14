@@ -6,55 +6,54 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["he-thong", "ql-danh-muc", "ql-nguoi-dung", "ql-dao-tao"]
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native"]
 }
 
 generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-enum PermissionType {
-  CREATE
-  READ
-  UPDATE
-  DELETE
-  APPROVE
-  DETAIL
+enum TrainingCourseStatus {
+  ACTIVE
+  COMPLETED
+  SUSPEND
+  CANCEL
+
+  @@schema("ql-dao-tao")
 }
 
-enum TemplateFileType {
-  UPLOAD
-  DOWNLOAD
-  LOGS
+enum CurriculumStatus {
+  ACTIVE
+  INACTIVATED
+
+  @@schema("ql-dao-tao")
 }
 
-enum UserRole {
-  ADMIN
-  USER
+enum SubjectEquivalentType {
+  NONE
+  OneByOne
+  TwoByOne
+  ThreeByOne
+  FourByOne
+  OneByTwo
+  OneByThree
+
+  @@schema("ql-dao-tao")
 }
 
-enum FeedbackStatus {
-  Pending
-  InProgress
-  Resolved
-  Closed
-}
+enum CurriculumVersionSubjectType {
+  NONE
+  MANDATORY
+  OPTIONAL
+  ELECTIVE
 
-enum Satisfaction {
-  VeryDissatisfied
-  Dissatisfied
-  Neutral
-  Satisfied
-  VerySatisfied
-}
-
-enum Gender {
-  Male
-  Female
+  @@schema("ql-dao-tao")
 }
 
 enum FixedClassStudentStatus {
@@ -66,38 +65,63 @@ enum FixedClassStudentStatus {
   TRANSFERRED
   PENDING_GRADUATION_REVIEW
   ACADEMIC_SUSPENSION
+
+  @@schema("ql-nguoi-dung")
 }
 
-enum TrainingCourseStatus {
-  ACTIVE
-  COMPLETED
-  SUSPEND
-  CANCEL
+enum UserRole {
+  ADMIN
+  USER
+
+  @@schema("ql-nguoi-dung")
 }
 
-enum CurriculumStatus {
-  ACTIVE
-  INACTIVATED
+enum PermissionType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  APPROVE
+  DETAIL
+
+  @@schema("ql-nguoi-dung")
 }
 
-enum SubjectEquivalentType {
-  NONE
-  OneByOne
-  TwoByOne
-  ThreeByOne
-  FourByOne
-  OneByTwo
-  OneByThree
+enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+
+  @@schema("ql-nguoi-dung")
 }
 
-enum CurriculumVersionSubjectType {
-  NONE
-  MANDATORY
-  OPTIONAL
-  ELECTIVE
+enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
+
+  @@schema("ql-nguoi-dung")
 }
 
-model Group {
+enum Gender {
+  Male
+  Female
+
+  @@schema("ql-danh-muc")
+}
+
+enum TemplateFileType {
+  UPLOAD
+  DOWNLOAD
+  LOGS
+
+  @@schema("ql-danh-muc")
+}
+
+model Province {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
@@ -105,11 +129,416 @@ model Group {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-  users       User[]
-  roles       Role[]
+  Commune     Commune[]
+
+  @@schema("ql-danh-muc")
 }
 
-model Role {
+model Commune {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  Province    Province  @relation(fields: [provinceId], references: [id])
+  provinceId  String
+
+  @@unique([name, provinceId])
+  @@schema("ql-danh-muc")
+}
+
+model Level {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model Rank {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicDegreeType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicRankType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model Position {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model PositionCPV {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model OrganizationType {
+  id            String         @id() @default(cuid())
+  code          String?
+  description   String?        @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  name          String
+  organizations Organization[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Organization {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String           @unique()
+  type           OrganizationType @relation(fields: [typeId], references: [id])
+  typeId         String
+  parent         Organization?    @relation("ParentChild", fields: [organizationId], references: [id])
+  parentId       String?
+  children       Organization[]   @relation("ParentChild")
+  address        String?
+  curriculum     Curriculum[]
+  fixedClass     FixedClass[]
+  subject        Subject[]
+  subjectGroup   SubjectGroup[]
+  organizationId String?
+
+  @@schema("ql-danh-muc")
+}
+
+model SchoolYear {
+  id          String      @id() @default(cuid())
+  code        String?
+  description String?     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt()
+  name        String
+  startDate   DateTime
+  endDate     DateTime?
+  Semesters   Semester[]
+  milestone   Milestone[]
+
+  @@schema("ql-dao-tao")
+}
+
+model Semester {
+  id           String     @id() @default(cuid())
+  code         String?
+  description  String?    @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt()
+  name         String
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+  startDate    DateTime
+  endDate      DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
+model Milestone {
+  id           String     @id() @default(cuid())
+  code         String?
+  description  String?    @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt()
+  name         String
+  period       String?
+  startDate    DateTime
+  endDate      DateTime
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+
+  @@schema("ql-dao-tao")
+}
+
+model TrainingCourse {
+  id                   String               @id() @default(cuid())
+  code                 String?
+  description          String?              @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt()
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
+  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId       String
+  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String
+  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String
+  status               TrainingCourseStatus @default(ACTIVE)
+  fixedClass           FixedClass[]
+
+  @@schema("ql-dao-tao")
+}
+
+model FixedClass {
+  id                       String              @id() @default(cuid())
+  code                     String?
+  description              String?             @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt()
+  name                     String
+  TrainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId         String?
+  ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String?
+  classSize                Int                 @default(0)
+  fixedClassStudent        FixedClassStudent[]
+
+  @@schema("ql-dao-tao")
+}
+
+model Curriculum {
+  id                       String              @id() @default(cuid())
+  code                     String?
+  description              String?             @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt()
+  name                     String
+  status                   CurriculumStatus    @default(ACTIVE)
+  startDate                DateTime
+  endDate                  DateTime?
+  ManagementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  TrainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  TrainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId          String
+  TraingTime               TrainingTime        @relation(fields: [trainingTimeId], references: [id])
+  trainingTimeId           String
+  TrainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId          String
+  infomation               String
+  documentPath             String?
+  renderPath               String?
+  curriculumVersion        CurriculumVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
+model CurriculumVersion {
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  status                   CurriculumStatus           @default(ACTIVE)
+  startDate                DateTime
+  endDate                  DateTime?
+  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
+  curriculumId             String
+  infomation               String?
+  documentPath             String?
+  renderPath               String?
+  curriculumVersionSubject CurriculumVersionSubject[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectGroup {
+  id                       String       @id() @default(cuid())
+  code                     String?
+  description              String?      @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt()
+  name                     String
+  ManagementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  infomation               String?
+  Subject                  Subject[]
+
+  @@schema("ql-dao-tao")
+}
+
+model Subject {
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  subjectEquivalentType    SubjectEquivalentType      @default(NONE)
+  credit                   Int                        @default(0)
+  period                   Int                        @default(0)
+  numberOfTheory           Int                        @default(0)
+  numberOfPractice         Int                        @default(0)
+  numberOfSelfStudy        Int                        @default(0)
+  numberOfProject          Int                        @default(0)
+  numberOfInternship       Int                        @default(0)
+  numberOfOther            Int                        @default(0)
+  ManagementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganizationId String
+  SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
+  subjectGroupId           String
+  curriculumVersionSubject CurriculumVersionSubject[]
+
+  @@schema("ql-dao-tao")
+}
+
+model CurriculumVersionSubject {
+  id                  String            @id() @default(cuid())
+  code                String?
+  description         String?           @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt()
+  CurriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId String
+  Subject             Subject           @relation(fields: [subjectId], references: [id])
+  subjectId           String
+  TraningBlock        TrainingBlock?    @relation(fields: [traningBlockId], references: [id])
+  traningBlockId      String?
+  infomation          String?
+  documentPath        String?
+  renderPath          String?
+
+  @@schema("ql-dao-tao")
+}
+
+model TrainingObjectType {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String
+  TrainingCourse TrainingCourse[]
+  curriculum     Curriculum[]
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingType {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String
+  trainingCourse TrainingCourse[]
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingLevel {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String
+  trainingCourse TrainingCourse[]
+  curriculum     Curriculum[]
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingForm {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String
+  trainingCourse TrainingCourse[]
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingLocation {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingField {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingMajor {
   id          String       @id() @default(cuid())
   code        String?
   description String?      @db.Text()
@@ -117,159 +546,71 @@ model Role {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
   name        String
-  groups      Group[]
-  permissions Permission[]
+  curriculum  Curriculum[]
+
+  @@schema("ql-danh-muc")
 }
 
-model Permission {
-  id             String         @id() @default(cuid())
-  code           String?
-  description    String?        @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt()
-  name           String
-  permissionType PermissionType
-  disabled       Boolean        @default(false)
-  role           Role[]
+model TrainingBlock {
+  id                       String                     @id() @default(cuid())
+  code                     String?
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt()
+  name                     String
+  curriculumVersionSubject CurriculumVersionSubject[]
 
-  @@unique([name, permissionType])
+  @@schema("ql-danh-muc")
 }
 
-model Config {
+model TrainingTime {
+  id          String       @id() @default(cuid())
+  code        String?
+  description String?      @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt()
+  name        String
+  curriculum  Curriculum[]
+
+  @@schema("ql-danh-muc")
+}
+
+model StudyRank {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  key         String    @unique()
-  value       String
-}
-
-model TemplateFile {
-  id          String            @id() @default(cuid())
-  code        String?
-  description String?           @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt()
   name        String
-  path        String            @unique()
-  fileType    TemplateFileType?
-  extensions  String?
-  numberField Int?              @default(0)
+
+  @@schema("ql-danh-muc")
 }
 
-model User {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  email       String        @unique()
-  userName    String        @unique()
-  name        String
-  systemRole  UserRole      @default(USER)
-  ssoId       String?       @unique()
-  phone       String?       @unique()
-  role        String?
-  groups      Group[]
-  feedback    Feedback[]
-  userProfile UserProfile[]
-}
-
-model Feedback {
-  id           String         @id() @default(cuid())
-  code         String?
-  description  String?        @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
-  content      String
-  status       FeedbackStatus
-  satisfaction Satisfaction
-  user         User           @relation(fields: [userId], references: [id])
-  userId       String
-}
-
-model BlockedIp {
+model TrainingRank {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  ipAddress   String    @unique()
-  reason      String?   @db.Text()
-  expiresAt   DateTime?
+  name        String
+
+  @@schema("ql-danh-muc")
 }
 
-model PriorityObject {
-  id          String        @id() @default(cuid())
+model TrainingKPI {
+  id          String    @id() @default(cuid())
   code        String?
-  description String?       @db.Text()
+  description String?   @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
   name        String
-  userProfile UserProfile[]
-}
 
-model RegistrationArea {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
-}
-
-model Nationality {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
-}
-
-model Religion {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
-}
-
-model Ethnicity {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
-}
-
-model UserType {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
+  @@schema("ql-danh-muc")
 }
 
 model UserProfile {
@@ -326,6 +667,8 @@ model UserProfile {
   organizationName       String?
   organizationCPVName    String?
   fixedClassStudent      FixedClassStudent[]
+
+  @@schema("ql-nguoi-dung")
 }
 
 model FixedClassStudent {
@@ -339,9 +682,32 @@ model FixedClassStudent {
   deletedAt     DateTime?
   createdAt     DateTime                @default(now())
   updatedAt     DateTime?               @updatedAt()
+
+  @@schema("ql-nguoi-dung")
 }
 
-model Province {
+model User {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  email       String        @unique()
+  userName    String        @unique()
+  name        String
+  systemRole  UserRole      @default(USER)
+  ssoId       String?       @unique()
+  phone       String?       @unique()
+  role        String?
+  groups      Group[]
+  feedback    Feedback[]
+  userProfile UserProfile[]
+
+  @@schema("ql-nguoi-dung")
+}
+
+model Group {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
@@ -349,365 +715,13 @@ model Province {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-  Commune     Commune[]
+  users       User[]
+  roles       Role[]
+
+  @@schema("ql-nguoi-dung")
 }
 
-model Commune {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  Province    Province  @relation(fields: [provinceId], references: [id])
-  provinceId  String
-
-  @@unique([name, provinceId])
-}
-
-model Level {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model Rank {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model AcademicDegreeType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model AcademicRankType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model Position {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model PositionCPV {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model OrganizationType {
-  id            String         @id() @default(cuid())
-  code          String?
-  description   String?        @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt()
-  name          String
-  organizations Organization[]
-}
-
-model Organization {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String           @unique()
-  type           OrganizationType @relation(fields: [typeId], references: [id])
-  typeId         String
-  parent         Organization?    @relation("ParentChild", fields: [organizationId], references: [id])
-  parentId       String?
-  children       Organization[]   @relation("ParentChild")
-  address        String?
-  curriculum     Curriculum[]
-  fixedClass     FixedClass[]
-  subject        Subject[]
-  subjectGroup   SubjectGroup[]
-  organizationId String?
-}
-
-model SchoolYear {
-  id          String      @id() @default(cuid())
-  code        String?
-  description String?     @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt()
-  name        String
-  startDate   DateTime
-  endDate     DateTime?
-  Semesters   Semester[]
-  milestone   Milestone[]
-}
-
-model Semester {
-  id           String     @id() @default(cuid())
-  code         String?
-  description  String?    @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt()
-  name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String
-  startDate    DateTime
-  endDate      DateTime?
-}
-
-model Milestone {
-  id           String     @id() @default(cuid())
-  code         String?
-  description  String?    @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt()
-  name         String
-  period       String?
-  startDate    DateTime
-  endDate      DateTime
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String
-}
-
-model TrainingCourse {
-  id                   String               @id() @default(cuid())
-  code                 String?
-  description          String?              @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt()
-  name                 String
-  startDate            DateTime
-  endDate              DateTime?
-  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
-  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId       String
-  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String
-  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String
-  status               TrainingCourseStatus @default(ACTIVE)
-  fixedClass           FixedClass[]
-}
-
-model FixedClass {
-  id                       String              @id() @default(cuid())
-  code                     String?
-  description              String?             @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime            @default(now())
-  updatedAt                DateTime            @updatedAt()
-  name                     String
-  TrainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId         String?
-  ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
-  managementOrganizationId String?
-  classSize                Int                 @default(0)
-  fixedClassStudent        FixedClassStudent[]
-}
-
-model Curriculum {
-  id                       String              @id() @default(cuid())
-  code                     String?
-  description              String?             @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime            @default(now())
-  updatedAt                DateTime            @updatedAt()
-  name                     String
-  status                   CurriculumStatus    @default(ACTIVE)
-  startDate                DateTime
-  endDate                  DateTime?
-  ManagementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
-  managementOrganizationId String
-  TrainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String
-  TrainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId          String
-  TraingTime               TrainingTime        @relation(fields: [trainingTimeId], references: [id])
-  trainingTimeId           String
-  TrainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
-  trainingMajorId          String
-  infomation               String
-  documentPath             String?
-  renderPath               String?
-  curriculumVersion        CurriculumVersion[]
-}
-
-model CurriculumVersion {
-  id                       String                     @id() @default(cuid())
-  code                     String?
-  description              String?                    @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt()
-  name                     String
-  status                   CurriculumStatus           @default(ACTIVE)
-  startDate                DateTime
-  endDate                  DateTime?
-  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
-  curriculumId             String
-  infomation               String?
-  documentPath             String?
-  renderPath               String?
-  curriculumVersionSubject CurriculumVersionSubject[]
-}
-
-model SubjectGroup {
-  id                       String       @id() @default(cuid())
-  code                     String?
-  description              String?      @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime     @default(now())
-  updatedAt                DateTime     @updatedAt()
-  name                     String
-  ManagementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
-  managementOrganizationId String
-  infomation               String?
-  Subject                  Subject[]
-}
-
-model Subject {
-  id                       String                     @id() @default(cuid())
-  code                     String?
-  description              String?                    @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt()
-  name                     String
-  subjectEquivalentType    SubjectEquivalentType      @default(NONE)
-  credit                   Int                        @default(0)
-  period                   Int                        @default(0)
-  numberOfTheory           Int                        @default(0)
-  numberOfPractice         Int                        @default(0)
-  numberOfSelfStudy        Int                        @default(0)
-  numberOfProject          Int                        @default(0)
-  numberOfInternship       Int                        @default(0)
-  numberOfOther            Int                        @default(0)
-  ManagementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
-  managementOrganizationId String
-  SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
-  subjectGroupId           String
-  curriculumVersionSubject CurriculumVersionSubject[]
-}
-
-model CurriculumVersionSubject {
-  id                  String            @id() @default(cuid())
-  code                String?
-  description         String?           @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt()
-  CurriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId String
-  Subject             Subject           @relation(fields: [subjectId], references: [id])
-  subjectId           String
-  TraningBlock        TrainingBlock?    @relation(fields: [traningBlockId], references: [id])
-  traningBlockId      String?
-  infomation          String?
-  documentPath        String?
-  renderPath          String?
-}
-
-model TrainingObjectType {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String
-  TrainingCourse TrainingCourse[]
-  curriculum     Curriculum[]
-}
-
-model TrainingType {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String
-  trainingCourse TrainingCourse[]
-}
-
-model TrainingLevel {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String
-  trainingCourse TrainingCourse[]
-  curriculum     Curriculum[]
-}
-
-model TrainingForm {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String
-  trainingCourse TrainingCourse[]
-}
-
-model TrainingLocation {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model TrainingField {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-}
-
-model TrainingMajor {
+model Role {
   id          String       @id() @default(cuid())
   code        String?
   description String?      @db.Text()
@@ -715,57 +729,161 @@ model TrainingMajor {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
   name        String
-  curriculum  Curriculum[]
+  groups      Group[]
+  permissions Permission[]
+
+  @@schema("ql-nguoi-dung")
 }
 
-model TrainingBlock {
-  id                       String                     @id() @default(cuid())
-  code                     String?
-  description              String?                    @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt()
-  name                     String
-  curriculumVersionSubject CurriculumVersionSubject[]
+model Permission {
+  id             String         @id() @default(cuid())
+  code           String?
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt()
+  name           String
+  permissionType PermissionType
+  disabled       Boolean        @default(false)
+  role           Role[]
+
+  @@unique([name, permissionType])
+  @@schema("ql-nguoi-dung")
 }
 
-model TrainingTime {
-  id          String       @id() @default(cuid())
+model Feedback {
+  id           String         @id() @default(cuid())
+  code         String?
+  description  String?        @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt()
+  content      String
+  status       FeedbackStatus
+  satisfaction Satisfaction
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
+
+  @@schema("ql-nguoi-dung")
+}
+
+model PriorityObject {
+  id          String        @id() @default(cuid())
   code        String?
-  description String?      @db.Text()
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
   name        String
-  curriculum  Curriculum[]
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
 }
 
-model StudyRank {
+model RegistrationArea {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Nationality {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Religion {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Ethnicity {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model UserType {
+  id          String        @id() @default(cuid())
+  code        String?
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  userProfile UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model BlockedIp {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  name        String
+  ipAddress   String    @unique()
+  reason      String?   @db.Text()
+  expiresAt   DateTime?
+
+  @@schema("ql-nguoi-dung")
 }
 
-model TrainingRank {
+model Config {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  name        String
+  key         String    @unique()
+  value       String
+
+  @@schema("he-thong")
 }
 
-model TrainingKPI {
-  id          String    @id() @default(cuid())
+model TemplateFile {
+  id          String            @id() @default(cuid())
   code        String?
-  description String?   @db.Text()
+  description String?           @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt()
   name        String
+  path        String            @unique()
+  fileType    TemplateFileType?
+  extensions  String?
+  numberField Int?              @default(0)
+
+  @@schema("ql-danh-muc")
 }

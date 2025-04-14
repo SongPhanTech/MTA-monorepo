@@ -1,0 +1,7 @@
+import '../base.zmodel'
+
+model Config extends Base {
+    key   String @unique
+    value String
+    @@schema("he-thong")
+}

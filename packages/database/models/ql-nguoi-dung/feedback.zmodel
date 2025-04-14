@@ -1,4 +1,4 @@
-import 'base'
+import '../base'
 import 'user'
 
 model Feedback extends Base {
@@ -11,6 +11,7 @@ model Feedback extends Base {
   @@allow('create', auth() != null)
   @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)
   @@allow('delete', auth().role == 'ADMIN' || auth() == user)
+  @@schema("ql-nguoi-dung")
 }
 
 enum FeedbackStatus {
@@ -18,6 +19,7 @@ enum FeedbackStatus {
   InProgress
   Resolved
   Closed
+  @@schema("ql-nguoi-dung")
 }
 
 enum Satisfaction {
@@ -26,4 +28,5 @@ enum Satisfaction {
   Neutral
   Satisfied
   VerySatisfied
+  @@schema("ql-nguoi-dung")
 }

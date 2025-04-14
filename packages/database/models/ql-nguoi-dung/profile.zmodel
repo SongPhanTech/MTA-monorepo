@@ -1,50 +1,9 @@
-import 'base'
-import 'user'
-import 'categories'
-import 'plantraining'
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/user'
+import '../ql-dao-tao/plan-training'
 
-// đối tượng ưu tiên
-model PriorityObject extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-// khu vực đăng ký
-model RegistrationArea extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-// quốc tịch
-model Nationality extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-// tôn giáo
-model Religion extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-// dân tộc
-model Ethnicity extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-// đối tượng (sinh viên, học viên, giảng viên, cán bộ, nhân viên, người lao động, quân nhân chuyên nghiệp, ...)
-model UserType extends Base {
-  name        String
-  userProfile UserProfile[]
-}
-
-enum Gender {
-  Male
-  Female
-}
-
-model UserProfile extends Base{
+model UserProfile extends Base {
   user                   User?               @relation(fields: [userId], references: [id])
   userId                 String?             @unique
   UserType               UserType            @relation(fields: [userTypeId], references: [id]) // loại đối tượng
@@ -104,6 +63,8 @@ model UserProfile extends Base{
   organizationCPVName    String? // nơi sinh hoạt Đảng
 
   fixedClassStudent      FixedClassStudent[]
+
+  @@schema("ql-nguoi-dung")
 }
 
 
@@ -116,6 +77,7 @@ enum FixedClassStudentStatus {
   TRANSFERRED  // Chuyển trường: Sinh viên đã chuyển sang trường khác.
   PENDING_GRADUATION_REVIEW  // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
   ACADEMIC_SUSPENSION  // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
+  @@schema("ql-nguoi-dung")
 }
 
 // học viên - lớp biên chế
@@ -130,6 +92,7 @@ model FixedClassStudent {
   deletedAt     DateTime?
   createdAt     DateTime                @default(now())
   updatedAt     DateTime?               @updatedAt
+  @@schema("ql-nguoi-dung")
 }
 
 

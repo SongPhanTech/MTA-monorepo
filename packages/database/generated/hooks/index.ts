@@ -5,22 +5,6 @@
 /* eslint-disable */
 // @ts-nocheck
 
-export * from './group';
-export * from './role';
-export * from './permission';
-export * from './config';
-export * from './template-file';
-export * from './user';
-export * from './feedback';
-export * from './blocked-ip';
-export * from './priority-object';
-export * from './registration-area';
-export * from './nationality';
-export * from './religion';
-export * from './ethnicity';
-export * from './user-type';
-export * from './user-profile';
-export * from './fixed-class-student';
 export * from './province';
 export * from './commune';
 export * from './level';
@@ -53,6 +37,22 @@ export * from './training-time';
 export * from './study-rank';
 export * from './training-rank';
 export * from './training-kpi';
+export * from './user-profile';
+export * from './fixed-class-student';
+export * from './user';
+export * from './group';
+export * from './role';
+export * from './permission';
+export * from './feedback';
+export * from './priority-object';
+export * from './registration-area';
+export * from './nationality';
+export * from './religion';
+export * from './ethnicity';
+export * from './user-type';
+export * from './blocked-ip';
+export * from './config';
+export * from './template-file';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react';
 export { default as metadata } from './__model_meta';
