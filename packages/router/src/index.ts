@@ -9,6 +9,7 @@ import {
     BookOutlined,
     TeamOutlined,
     IdcardOutlined,
+    MessageOutlined,
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
@@ -21,6 +22,7 @@ interface MenuItem {
     path?: string
     children?: MenuItem[]
     description?: string
+    type?: string
 }
 
 type NavigationType = Record<
@@ -382,7 +384,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'tro-ly-ao',
                 label: 'Trợ lý ảo',
-                icon: SettingOutlined,
+                icon: MessageOutlined,
                 path: ROUTER_PATH.TRO_LY_AO.INDEX,
             }
         ]
