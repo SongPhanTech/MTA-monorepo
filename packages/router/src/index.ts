@@ -337,6 +337,25 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_DS,
                 description: 'Quản lý hồ sơ sinh viên',
             },
+            {
+                id: 'chuong-trinh-dao-tao',
+                label: 'Quản lý chương trình đào tạo',
+                icon: PieChartOutlined,
+                children: [
+                    {
+                        id: 'curriculumn-version',
+                        label: 'Phiên bản chương trình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM_VERSION,
+                    },
+                    {
+                        id: 'curriculumn',
+                        label: 'Chương trình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM,
+                    },
+                ]
+            }
         ],
         label: 'Quản lý đào tạo',
     },

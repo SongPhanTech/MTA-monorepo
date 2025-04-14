@@ -30,7 +30,7 @@ import {
     TreeSelect
 } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
+import _, { filter } from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,13 +38,13 @@ import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
 import OptionsPage from '@pages/fixed-class/options'
 
-export default function FixedClassPage() {
+export default function FixedClassPage({ trainingCourse }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
-        trainingCourseId: undefined,
+        trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
         managementOrganizationId: undefined,
     });
     const { data = [], refetch } = useFindManyFixedClass({
@@ -223,7 +223,7 @@ export default function FixedClassPage() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
+                        {!trainingCourse && <Col span={4}>
                             <Form.Item
                                 name="trainingCourseId"
                                 label="Khóa"
@@ -239,7 +239,7 @@ export default function FixedClassPage() {
                                     allowClear
                                 />
                             </Form.Item>
-                        </Col>
+                        </Col>}
                         <Col span={8}>
                             <Form.Item
                                 name="managementOrganizationId"

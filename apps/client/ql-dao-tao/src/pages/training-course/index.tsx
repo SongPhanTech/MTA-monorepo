@@ -13,9 +13,10 @@ import {
     useUpdateTrainingCourse,
     useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel
+    useFindManyTrainingLevel,
+    useFindManySchoolYear
 } from '@workspace/db/hooks'
-import type { TrainingCourse, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, TrainingCourseStatus } from '@workspace/db'
+import { TrainingCourse, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, TrainingCourseStatus } from '@workspace/db'
 
 import {
     Button,
@@ -37,6 +38,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
+import FixedClassPage from '@pages/fixed-class'
 // const { Option } = Select;
 
 const statusOptions = {
@@ -54,22 +56,28 @@ export default function TrainingCoursePage() {
         trainingFormId: undefined,
         trainingTypeId: undefined,
         trainingLevelId: undefined,
-        trainingObjectTypeId: undefined
+        trainingObjectTypeId: undefined,
+        status: undefined,
+        startDate: undefined,
+        endDate: undefined
     });
 
     const [dataToView, setDataToView] = useState<any>([])
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            name: {
-                contains: filters.name,
-            },
-            code: {
-                contains: filters.code,
-            },
-            trainingFormId: filters.trainingFormId,
-            trainingTypeId: filters.trainingTypeId,
-            trainingLevelId: filters.trainingLevelId,
-            trainingObjectTypeId: filters.trainingObjectTypeId
+            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
+            ...(filters.code && filters.code !== "" ? { code: { contains: filters.code } } : {}),
+            ...(filters.trainingFormId ? { trainingFormId: filters.trainingFormId } : {}),
+            ...(filters.trainingTypeId ? { trainingTypeId: filters.trainingTypeId } : {}),
+            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
+            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
+            ...(filters.status ? { status: filters.status } : {}),
+            ...(filters.startDate && filters.endDate ? {
+                startDate: {
+                    gte: new Date(filters.startDate),
+                    lte: new Date(filters.endDate),
+                }
+            } : {}),
         },
         include: {
             TrainingForm: true,
@@ -87,16 +95,19 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            name: {
-                contains: filters.name,
-            },
-            code: {
-                contains: filters.code,
-            },
-            trainingFormId: filters.trainingFormId,
-            trainingTypeId: filters.trainingTypeId,
-            trainingLevelId: filters.trainingLevelId,
-            trainingObjectTypeId: filters.trainingObjectTypeId
+            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
+            ...(filters.code && filters.code !== "" ? { code: { contains: filters.code } } : {}),
+            ...(filters.trainingFormId ? { trainingFormId: filters.trainingFormId } : {}),
+            ...(filters.trainingTypeId ? { trainingTypeId: filters.trainingTypeId } : {}),
+            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
+            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
+            ...(filters.status ? { status: filters.status } : {}),
+            ...(filters.startDate && filters.endDate ? {
+                startDate: {
+                    gte: new Date(filters.startDate),
+                    lte: new Date(filters.endDate),
+                }
+            } : {}),
         },
     })
 
@@ -147,11 +158,23 @@ export default function TrainingCoursePage() {
         skip: 0,
     });
     const handleFilterChange = (key: any, value: any) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
+        if (key !== "time") {
+            setFilters((prev) => {
+                const newFilters = { ...prev, [key]: value };
+                debouncedRefetch();
+                return newFilters;
+            });
+        } else {
+            setFilters((prev) => {
+                const newFilters = {
+                    ...prev,
+                    startDate: value?.startDate ?? undefined,
+                    endDate: value?.endDate ?? undefined
+                };
+                debouncedRefetch();
+                return newFilters;
+            });
+        }
     };
     async function handleStatusChange(id: string, newStatus: TrainingCourseStatus) {
         try {
@@ -181,6 +204,10 @@ export default function TrainingCoursePage() {
         const dataWithFilter = [filterRow, ...data];
         setDataToView(dataWithFilter)
     }, [data])
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
+        take: 1000,
+        skip: 0,
+    })
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -189,7 +216,32 @@ export default function TrainingCoursePage() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
+                        <Col span={6}>
+                            {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
+                            <Flex justify='space-between' align='center'>
+                                <label>Năm học:</label>
+                                <Select
+                                    className="w-[70%]"
+                                    placeholder='Chọn năm học'
+                                    allowClear
+                                    options={dataSchoolYear.map((i: SchoolYear) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                            startDate: i.startDate,
+                                            endDate: i.endDate
+                                        }
+                                    })}
+                                    // value={filters.schoolYearId}
+                                    onChange={(value: number | null, option: any) => {
+                                        handleFilterChange("time", option ?? undefined)
+                                    }}
+                                />
+                            </Flex>
+
+                            {/* </Form.Item> */}
+                        </Col>
+                        <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -201,6 +253,8 @@ export default function TrainingCoursePage() {
 
                 <Col span={24}>
                     <Table
+                        rowKey="id"
+                        id="training-course"
                         columns={[
                             {
                                 title: 'STT',
@@ -367,7 +421,17 @@ export default function TrainingCoursePage() {
                                 width: 130,
                                 render: (record: any) => {
                                     if (record.isFilterRow) {
-                                        return ""
+                                        return <Select
+                                            className='w-[155px]'
+                                            onChange={(val) => handleFilterChange('status', val)}
+                                            options={Object.entries(statusOptions).map(([value, { label, color }]) => ({
+                                                value,
+                                                label, // hiển thị trong dropdown
+                                            }))
+                                            }
+                                            allowClear
+                                        // style={{ width: 180 }}
+                                        />
                                     } else return (
                                         <Select
                                             className='w-[155px]'
@@ -423,6 +487,12 @@ export default function TrainingCoursePage() {
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => <div style={{ maxWidth: '100%' }}>
+                                <FixedClassPage key={record.id} trainingCourse={record} />
+                            </div>,
+                            rowExpandable: (record) => !(record.isFilterRow === true), // điều kiện nào đó
                         }}
                     />
                 </Col>
