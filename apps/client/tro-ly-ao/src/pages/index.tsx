@@ -1,22 +1,11 @@
-import Loading from '@components/commons/loading'
-import { useMenuList } from '@hooks/menu-list'
-import type { NextPage } from 'next'
-import { signIn, useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-const IndexPage: NextPage = () => {
-    const menus = useMenuList()
-    const { status } = useSession()
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn('asgardeo')
-        } else if (status === 'authenticated') {
-            const firstMenu = menus.flatMap((e) => e.children ?? e)
-            if (firstMenu.length > 0 && firstMenu[0].path) {
-                window.location.href = firstMenu[0].path
-            }
-        }
-    }, [status, menus])
+import ChatLayout from '@layouts/chat-layout'
+import React from 'react'
 
-    return <Loading />
+export default function Page() {
+    return (
+        <div>Tro li ao</div>
+    )
 }
-export default IndexPage
+Page.getLayout = function getLayout(page: React.ReactElement) {
+    return <ChatLayout>{page}</ChatLayout>
+}

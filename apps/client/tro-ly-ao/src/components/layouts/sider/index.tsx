@@ -1,9 +1,11 @@
+import { MoreOutlined } from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Dropdown } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
-import { type ReactNode, useState } from 'react'
+
 const { Sider } = Layout
 
 // Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
@@ -12,29 +14,90 @@ interface SiderDefaultLayoutProps {
     theme: 'light' | 'dark'
     items: MenuItem[]
     onCollapse?: (collapsed: boolean) => void
-    logo1: ReactNode
-    logo2: ReactNode
+    logo1: React.ReactNode
+    logo2: React.ReactNode
 }
 
-// Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
-function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-    return menus.map((item) => ({
-        label: item.children ? (
-            item.label
-        ) : (
-            <Link href={item.path || '#'}>{item.label}</Link>
-        ),
-        key: item.path || item.id,
-        icon: item.icon ? <item.icon /> : undefined,
-        children: item.children
-            ? item.children.map((child) => ({
-                  label: <Link href={child.path || '#'}>{child.label}</Link>,
-                  key: child.path || child.id,
-              }))
-            : undefined,
-    }))
+// Định nghĩa kiểu cho hàm onDelete
+type OnDelete = (id: string) => void
+
+// Tạo component cho dropdown của MoreOutlined để tránh gọi lại getMenus
+const MoreDropdown = ({ onDelete, childId }: { onDelete: OnDelete, childId: string }) => {
+    return (
+        <Dropdown
+            trigger={['click']}
+            overlay={
+                <Menu>
+                    <Menu.Item key="edit" onClick={() => onDelete(childId)}>
+                        Chỉnh sửa
+                    </Menu.Item>
+                    <Menu.Item key="delete" danger onClick={() => console.log('Xoá', childId)}>
+                        Xoá
+                    </Menu.Item>
+                </Menu>
+            }
+        >
+            <MoreOutlined className="text-gray-400 hover:text-blue-500 cursor-pointer ml-2" />
+        </Dropdown>
+    )
 }
 
+// Hàm hỗ trợ để chuyển đổi "item props" thành cấu trúc phù hợp
+function getMenus(menus: MenuItem[], onDelete: OnDelete): ItemType<MenuItemType>[] {
+    const router = useRouter()
+
+    return menus.map((item) => {
+        if (item.type === 'group' && item.children) {
+            return {
+                type: 'group',
+                label: item.label,
+                key: item.id,
+                children: item.children.map((child) => ({
+                    key: child.path || child.id,
+                    label: (
+                        <div
+                            className="flex items-center justify-between pr-2 group cursor-pointer"
+                            onClick={(e) => {
+                                // Nếu bạn click vào label thì nó sẽ điều hướng
+                                if (child.path) {
+                                    router.push(child.path)
+                                }
+                            }}
+                        >
+                            <div className="flex-1 truncate">{child.label}</div>
+                            <MoreDropdown onDelete={onDelete} childId={child.id} />
+                        </div>
+                    ),
+                })),
+            }
+        }
+
+        return {
+            label: item.children ? (
+                item.label
+            ) : (
+                <div
+                    onClick={(e) => {
+                        // Ngừng sự kiện nếu click vào item mà không muốn điều hướng
+                        e.stopPropagation()
+
+                        if (item.path) {
+                            router.push(item.path)
+                        }
+                    }}
+                    className="cursor-pointer hover:text-blue-500"
+                >
+                    {item.label}
+                </div>
+            ),
+            key: item.path || item.id,
+            icon: item.icon ? <item.icon /> : undefined,
+            children: item.children ? getMenus(item.children, onDelete) : undefined,
+        }
+    })
+}
+
+// Hàm tìm các menu được mở
 const findOpenKeys = (
     menus: MenuItem[],
     currentPath: string | null
@@ -52,6 +115,7 @@ const findOpenKeys = (
     }
     return []
 }
+
 // Component SiderDefaultLayout
 const SiderDefaultLayout = ({
     collapsed,
@@ -67,6 +131,12 @@ const SiderDefaultLayout = ({
     const [openKeys, setOpenKeys] = useState<string[]>(
         findOpenKeys(items, pathname)
     )
+
+    const handleDelete: OnDelete = useCallback((id: string) => {
+        // Xử lý xóa hội thoại tại đây
+        console.log('Xoá hội thoại với id:', id)
+    }, [])
+
     return (
         <Sider
             style={{
@@ -93,7 +163,7 @@ const SiderDefaultLayout = ({
                 selectedKeys={pathname ? [pathname] : []}
                 openKeys={openKeys}
                 onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
-                items={getMenus(items)}
+                items={getMenus(items, handleDelete)}
                 style={{
                     background: 'transparent',
                 }}
