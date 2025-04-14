@@ -10,8 +10,7 @@ const IndexPage: NextPage = () => {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
         } else if (status === 'authenticated') {
-            const firstMenu = menus.flat()
-            console.log('check menus', menus)
+            const firstMenu = menus.flatMap((e) => e.children ?? e)
             if (firstMenu.length > 0 && firstMenu[0].path) {
                 window.location.href = firstMenu[0].path
             }

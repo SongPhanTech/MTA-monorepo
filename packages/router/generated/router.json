@@ -2,10 +2,10 @@
   "TRO_LY_AO": {
     "INDEX": "/",
     "QUAN_TRI": "/quan-tri",
-    "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu.tsx",
-    "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so.tsx",
-    "QUAN_TRI_CAU_HINH_PROMT_RAG": "/quan-tri/cau-hinh/promt-rag.tsx",
-    "QUAN_TRI_CAU_HINH_PROMT_HOI_DAP": "/quan-tri/cau-hinh/promt-hoi-dap.tsx"
+    "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
+    "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
+    "QUAN_TRI_CAU_HINH_PROMT_RAG": "/quan-tri/cau-hinh/promt-rag",
+    "QUAN_TRI_CAU_HINH_PROMT_HOI_DAP": "/quan-tri/cau-hinh/promt-hoi-dap"
   },
   "QL_NGUOI_DUNG": {
     "INDEX": "/",
@@ -21,13 +21,13 @@
   "QL_DAO_TAO": {
     "INDEX": "/",
     "USER_PROFILE": "/user-profile",
-    "SCHOOLYEAR_SEMESTER_SEMESTER": "/schoolyear-semester/semester.tsx",
-    "SCHOOLYEAR_SEMESTER_SCHOOLYEAR": "/schoolyear-semester/schoolyear.tsx",
-    "SCHOOLYEAR_SEMESTER": "/schoolyear-semester",
     "TRAINING_COURSE": "/training-course",
+    "SCHOOLYEAR_SEMESTER_SEMESTER": "/schoolyear-semester/semester",
+    "SCHOOLYEAR_SEMESTER_SCHOOLYEAR": "/schoolyear-semester/schoolyear",
+    "SCHOOLYEAR_SEMESTER": "/schoolyear-semester",
     "MILESTONE": "/milestone",
-    "HOME": "/home",
-    "FIXED_CLASS": "/fixed-class"
+    "FIXED_CLASS": "/fixed-class",
+    "HOME": "/home"
   },
   "QL_DANH_MUC": {
     "INDEX": "/",
@@ -36,11 +36,11 @@
     "DANH_MUC_HO_SO_RELIGION": "/danh-muc-ho-so/religion",
     "DANH_MUC_HO_SO_REGISTRATION_AREA": "/danh-muc-ho-so/registration-area",
     "DANH_MUC_HO_SO_PRIORITY_OBJECT": "/danh-muc-ho-so/priority-object",
-    "DANH_MUC_HO_SO_ETHNICITY": "/danh-muc-ho-so/ethnicity",
     "DANH_MUC_HO_SO_NATIONALITY": "/danh-muc-ho-so/nationality",
+    "DANH_MUC_HO_SO_ETHNICITY": "/danh-muc-ho-so/ethnicity",
     "DANH_MUC_DAO_TAO_TRANINING_TIME": "/danh-muc-dao-tao/tranining-time",
-    "DANH_MUC_DAO_TAO_TRANINING_MAJOR": "/danh-muc-dao-tao/tranining-major",
     "DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE": "/danh-muc-dao-tao/tranining-object-type",
+    "DANH_MUC_DAO_TAO_TRANINING_MAJOR": "/danh-muc-dao-tao/tranining-major",
     "DANH_MUC_DAO_TAO_TRANINING_FORM": "/danh-muc-dao-tao/tranining-form",
     "DANH_MUC_DAO_TAO_TRANINING_FIELD": "/danh-muc-dao-tao/tranining-field",
     "DANH_MUC_DAO_TAO_TRANINING_BLOCK": "/danh-muc-dao-tao/tranining-block",
@@ -48,14 +48,14 @@
     "DANH_MUC_DAO_TAO_TRAINING_RANK": "/danh-muc-dao-tao/training-rank",
     "DANH_MUC_DAO_TAO_TRAINING_LOCATION": "/danh-muc-dao-tao/training-location",
     "DANH_MUC_DAO_TAO_TRAINING_LEVEL": "/danh-muc-dao-tao/training-level",
-    "DANH_MUC_DAO_TAO_STUDY_RANK": "/danh-muc-dao-tao/study-rank",
     "DANH_MUC_DAO_TAO_TRAINING_KPI": "/danh-muc-dao-tao/training-kpi",
+    "DANH_MUC_DAO_TAO_STUDY_RANK": "/danh-muc-dao-tao/study-rank",
     "DANH_MUC_RANK": "/danh-muc/rank",
+    "DANH_MUC_ORGANIZATION": "/danh-muc/organization",
+    "DANH_MUC_LEVEL": "/danh-muc/level",
+    "DANH_MUC_ACADEMIC_RANK_TYPE": "/danh-muc/academic-rank-type",
     "DANH_MUC_POSITION": "/danh-muc/position",
     "DANH_MUC_ORGANIZATION_TYPE": "/danh-muc/organization-type",
-    "DANH_MUC_ORGANIZATION": "/danh-muc/organization",
-    "DANH_MUC_ACADEMIC_RANK_TYPE": "/danh-muc/academic-rank-type",
-    "DANH_MUC_LEVEL": "/danh-muc/level",
     "DANH_MUC_ACADEMIC_DEGREE_TYPE": "/danh-muc/academic-degree-type"
   }
 }

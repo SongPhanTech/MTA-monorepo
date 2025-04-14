@@ -349,6 +349,44 @@ const NAVIGATION: NavigationType = {
         ],
         label: 'Quản lý đào tạo',
     },
+    TRO_LY_AO: {
+        label: 'Trợ lý ảo',
+        menus: [
+            {
+                id: 'quan-tri',
+                label: 'Quản trị trợ lý ảo',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        id: 'quan-tri-du-lieu',
+                        label: 'Quản trị dữ liệu',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
+                    },
+                    {
+                        id: 'quan-tri-cau-hinh-tham-so',
+                        label: 'Quản trị cấu hình tham số',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_THAM_SO,
+                    },
+                    {
+                        id: 'quan-tri-cau-hinh-promt-rag',
+                        label: 'Quản trị cấu hình promt RAG',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_RAG,
+                    },
+                    {
+                        id: 'quan-tri-cau-hinh-promt-hoi-dap',
+                        label: 'Quản trị cấu hình promt hỏi đáp',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_HOI_DAP,
+                    },
+                ]
+            },
+            {
+                id: 'tro-ly-ao',
+                label: 'Trợ lý ảo',
+                icon: SettingOutlined,
+                path: ROUTER_PATH.TRO_LY_AO.INDEX,
+            }
+        ]
+    },
 }
 export type { MenuItem, NavigationType }
 export { ROUTER_PATH }
