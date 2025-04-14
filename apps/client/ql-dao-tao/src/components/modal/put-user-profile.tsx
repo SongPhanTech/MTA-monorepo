@@ -2,7 +2,12 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserProfile, TrainingCourse, Organization, UserType } from '@workspace/db'
+import type {
+    UserProfile,
+    TrainingCourse,
+    Organization,
+    UserType,
+} from '@workspace/db'
 import {
     useCreateUserProfile,
     useFindUniqueUserProfile,
@@ -33,19 +38,22 @@ const PutUserProfileModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: fixedClassData = [], refetch: refetchFixedClassData } = useFindManyFixedClass({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: fixedClassData = [], refetch: refetchFixedClassData } =
+        useFindManyFixedClass({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: userTypeData = [], refetch: refetchUserType } =
+        useFindManyUserType({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -64,7 +72,7 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: output.userTypeId
+                        userTypeId: output.userTypeId,
                         // fixedClass: output.fixedClass
                     },
                     where: {
@@ -83,7 +91,7 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: output.userTypeId
+                        userTypeId: output.userTypeId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -107,7 +115,7 @@ const PutUserProfileModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                dateOfBirth: dayjs(level.dateOfBirth)
+                dateOfBirth: dayjs(level.dateOfBirth),
             })
         }
     }, [level])
@@ -119,21 +127,12 @@ const PutUserProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học viên'
-                    : 'Thêm mới học viên'
-            }
+            title={id ? 'Chỉnh sửa học viên' : 'Thêm mới học viên'}
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã học viên"
-                    required
-                >
-                    <Input placeholder='Nhập mã học viên' />
+                <FormItem form={form} name="code" label="Mã học viên" required>
+                    <Input placeholder="Nhập mã học viên" />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -143,12 +142,15 @@ const PutUserProfileModal = () => {
                     label="Đối tượng"
                     required
                 >
-                    <Select placeholder='Chọn đối tượng' options={userTypeData.map((i: UserType) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn đối tượng"
+                        options={userTypeData.map((i: UserType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -162,12 +164,7 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="lastName"
-                    label="Tên"
-                    required
-                >
+                <FormItem form={form} name="lastName" label="Tên" required>
                     <Input placeholder="Nhập tên" />
                 </FormItem>
             </Col>
@@ -181,23 +178,21 @@ const PutUserProfileModal = () => {
                     form={form}
                     name="gender"
                     label="Giới tính"
-                // required
+                    // required
                 >
-                    <Select placeholder="Chọn giới tính" options={GENDER_LIST.map((i: any) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn giới tính"
+                        options={GENDER_LIST.map((i: any) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="idCardNumber"
-                    label="Số CCCD"
-
-                >
+                <FormItem form={form} name="idCardNumber" label="Số CCCD">
                     <Input placeholder="Nhập số CCCD" />
                 </FormItem>
             </Col>
@@ -206,7 +201,7 @@ const PutUserProfileModal = () => {
                     form={form}
                     name="phoneNumber"
                     label="Số điện thoại"
-                // required
+                    // required
                 >
                     <Input placeholder="Nhập số điện thoại" />
                 </FormItem>

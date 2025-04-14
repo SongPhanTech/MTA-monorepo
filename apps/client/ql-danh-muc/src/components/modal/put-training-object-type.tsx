@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingObjectType } from "@workspace/db"
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingObjectType,
     useFindUniqueTrainingObjectType,
@@ -45,7 +45,7 @@ const PutTrainingObjectTypeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutTrainingObjectTypeModal = () => {
                     label="Mã đối tượng đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã đối tượng đào tạo' />
+                    <Input placeholder="Nhập mã đối tượng đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

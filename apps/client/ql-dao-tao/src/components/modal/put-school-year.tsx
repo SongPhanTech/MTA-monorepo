@@ -106,7 +106,12 @@ const PutSchoolYearModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
+                <FormItem
+                    form={form}
+                    name="startDate"
+                    label="Ngày bắt đầu"
+                    required
+                >
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
@@ -121,7 +126,6 @@ const PutSchoolYearModal = () => {
                 </FormItem>
             </Col>
         </PutFormModal>
-
     )
 }
 

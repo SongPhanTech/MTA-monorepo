@@ -45,7 +45,7 @@ const PutLevelModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutLevelModal = () => {
                     label="Mã danh mục phân cấp"
                     required
                 >
-                    <Input placeholder='Nhập mã danh mục phân cấp' />
+                    <Input placeholder="Nhập mã danh mục phân cấp" />
                 </FormItem>
             </Col>
             <Col span={24}>

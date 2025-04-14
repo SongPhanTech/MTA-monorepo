@@ -2,7 +2,19 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserProfile, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, PriorityObject, RegistrationArea, Nationality, Religion, Ethnicity } from '@workspace/db'
+import type {
+    UserProfile,
+    SchoolYear,
+    TrainingForm,
+    TrainingLevel,
+    TrainingType,
+    TrainingObjectType,
+    PriorityObject,
+    RegistrationArea,
+    Nationality,
+    Religion,
+    Ethnicity,
+} from '@workspace/db'
 import {
     useCreateUserProfile,
     useFindUniqueUserProfile,
@@ -18,7 +30,7 @@ import {
     useFindManyRegistrationArea,
     useFindManyNationality,
     useFindManyReligion,
-    useFindManyEthnicity
+    useFindManyEthnicity,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Tabs, Collapse, Row } from 'antd'
 import { useEffect } from 'react'
@@ -27,8 +39,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { GENDER_LIST } from '@constants/constants'
-const { TabPane } = Tabs;
-const { Panel } = Collapse;
+const { TabPane } = Tabs
+const { Panel } = Collapse
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
 export type PutUserProfile = UserProfile
@@ -44,38 +56,45 @@ const PutUserProfileUpdateModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: userTypeData = [], refetch: refetchUserType } =
+        useFindManyUserType({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: priorityObjectData = [], refetch: refetchPriorityObject } = useFindManyPriorityObject({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: registrationAreaData = [], refetch: refetchRe } = useFindManyRegistrationArea({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: nationalityData = [], refetch: refetchNa } = useFindManyNationality({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
+        useFindManyPriorityObject({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: registrationAreaData = [], refetch: refetchRe } =
+        useFindManyRegistrationArea({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: nationalityData = [], refetch: refetchNa } =
+        useFindManyNationality({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: religionData = [], refetch: refetchReli } = useFindManyReligion({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: religionData = [], refetch: refetchReli } =
+        useFindManyReligion({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: ethnicityData = [], refetch: refetchEth } = useFindManyEthnicity({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: ethnicityData = [], refetch: refetchEth } =
+        useFindManyEthnicity({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: fixedClassData = [], refetch: refetchFix } = useFindManyReligion({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: fixedClassData = [], refetch: refetchFix } =
+        useFindManyReligion({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -125,7 +144,7 @@ const PutUserProfileUpdateModal = () => {
                         registrationAreaId: output.registrationAreaId,
                         nationalityId: output.nationalityId,
                         religionId: output.religionId,
-                        ethnicityId: output.ethnicityId
+                        ethnicityId: output.ethnicityId,
                     },
                     where: {
                         id,
@@ -174,7 +193,7 @@ const PutUserProfileUpdateModal = () => {
                         registrationAreaId: output.registrationAreaId,
                         nationalityId: output.nationalityId,
                         religionId: output.religionId,
-                        ethnicityId: output.ethnicityId
+                        ethnicityId: output.ethnicityId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -198,14 +217,24 @@ const PutUserProfileUpdateModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                dateOfBirth: level.dateOfBirth ? dayjs(level.dateOfBirth) : null,
+                dateOfBirth: level.dateOfBirth
+                    ? dayjs(level.dateOfBirth)
+                    : null,
                 idCardDate: level.idCardDate ? dayjs(level.idCardDate) : null,
                 unionDate: level.unionDate ? dayjs(level.unionDate) : null,
-                CPVJoinDate: level.CPVJoinDate ? dayjs(level.CPVJoinDate) : null,
-                officialCPVDate: level.officialCPVDate ? dayjs(level.officialCPVDate) : null,
+                CPVJoinDate: level.CPVJoinDate
+                    ? dayjs(level.CPVJoinDate)
+                    : null,
+                officialCPVDate: level.officialCPVDate
+                    ? dayjs(level.officialCPVDate)
+                    : null,
                 tenureDate: level.tenureDate ? dayjs(level.tenureDate) : null,
-                enlistmentDate: level.enlistmentDate ? dayjs(level.enlistmentDate) : null,
-                dischargeDate: level.dischargeDate ? dayjs(level.dischargeDate) : null,
+                enlistmentDate: level.enlistmentDate
+                    ? dayjs(level.enlistmentDate)
+                    : null,
+                dischargeDate: level.dischargeDate
+                    ? dayjs(level.dischargeDate)
+                    : null,
             })
         }
     }, [level])
@@ -217,18 +246,14 @@ const PutUserProfileUpdateModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học viên'
-                    : 'Thêm mới học viên'
-            }
+            title={id ? 'Chỉnh sửa học viên' : 'Thêm mới học viên'}
             className="w-[70vw]"
-            layout='horizontal'
-            labelCol={{ span: 8 }}      // label chiếm 6 cột (trên 24)
-            wrapperCol={{ span: 16 }}   // input chiếm 18 cột
+            layout="horizontal"
+            labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+            wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Tabs className='w-full' defaultActiveKey="1">
-                <TabPane tab="Thông tin cá nhân" key="1" id='info-block'>
+            <Tabs className="w-full" defaultActiveKey="1">
+                <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
                     <Collapse defaultActiveKey={['1']} accordion>
                         <Panel header="Thông tin cá nhân" key="1">
                             <Row gutter={[16, 16]}>
@@ -237,15 +262,20 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="userTypeId"
                                         label="Đối tượng"
-                                        className='mb-0'
+                                        className="mb-0"
                                         required
                                     >
-                                        <Select placeholder='Chọn đối tượng' options={userTypeData.map((i: TrainingLevel) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            placeholder="Chọn đối tượng"
+                                            options={userTypeData.map(
+                                                (i: TrainingLevel) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -254,9 +284,9 @@ const PutUserProfileUpdateModal = () => {
                                         name="code"
                                         label="Mã học viên"
                                         required
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập mã học viên' />
+                                        <Input placeholder="Nhập mã học viên" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -265,9 +295,9 @@ const PutUserProfileUpdateModal = () => {
                                         name="lastName"
                                         label="Họ và tên đệm"
                                         required
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập họ và tên đệm' />
+                                        <Input placeholder="Nhập họ và tên đệm" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -276,9 +306,9 @@ const PutUserProfileUpdateModal = () => {
                                         name="firstName"
                                         label="Tên"
                                         required
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập tên' />
+                                        <Input placeholder="Nhập tên" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -286,9 +316,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="dateOfBirth"
                                         label="Ngày sinh"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -296,9 +329,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="placeOfBirth"
                                         label="Nơi sinh"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập nơi sinh' />
+                                        <Input placeholder="Nhập nơi sinh" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -306,9 +339,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="homeTown"
                                         label="Quê quán"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập quê quán' />
+                                        <Input placeholder="Nhập quê quán" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -316,9 +349,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="officerNumber"
                                         label="Số hiệu sĩ quan"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập số hiệu sĩ quan' />
+                                        <Input placeholder="Nhập số hiệu sĩ quan" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -326,9 +359,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="idCardNumber"
                                         label="Số CCCD"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập số CCCD' />
+                                        <Input placeholder="Nhập số CCCD" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -336,9 +369,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="idCardDate"
                                         label="Ngày cấp CCCD"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -346,14 +382,20 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="gender"
                                         label="Giới tính"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Select allowClear placeholder='Chọn giới tính' options={GENDER_LIST.map((i: any) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn giới tính"
+                                            options={GENDER_LIST.map(
+                                                (i: any) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -361,9 +403,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="permanentAddress"
                                         label="HK thường trú"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập hk thường trú' />
+                                        <Input placeholder="Nhập hk thường trú" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -371,9 +413,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="temporaryAddress"
                                         label="Địa chỉ tạm trú"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập địa chỉ tạm trú' />
+                                        <Input placeholder="Nhập địa chỉ tạm trú" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -381,9 +423,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="contactAddress"
                                         label="Địa chỉ liên lạc"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập địa chỉ liên lạc' />
+                                        <Input placeholder="Nhập địa chỉ liên lạc" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -391,9 +433,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="phoneNumber"
                                         label="Số điện thoại"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập số điện thoại' />
+                                        <Input placeholder="Nhập số điện thoại" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -401,9 +443,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="email"
                                         label="Thư điện tử"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập thư điện tử' />
+                                        <Input placeholder="Nhập thư điện tử" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -411,15 +453,23 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="priorityObjectId"
                                         label="Đối tượng ưu tiên"
-                                        className='mb-0'
-                                        normalize={(value) => (value === undefined ? null : value)}
+                                        className="mb-0"
+                                        normalize={(value) =>
+                                            value === undefined ? null : value
+                                        }
                                     >
-                                        <Select allowClear placeholder='Chọn đối tượng ưu tiên' options={priorityObjectData.map((i: PriorityObject) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn đối tượng ưu tiên"
+                                            options={priorityObjectData.map(
+                                                (i: PriorityObject) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -427,15 +477,23 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="registrationAreaId"
                                         label="Khu vực đăng ký"
-                                        className='mb-0'
-                                        normalize={(value) => (value === undefined ? null : value)}
+                                        className="mb-0"
+                                        normalize={(value) =>
+                                            value === undefined ? null : value
+                                        }
                                     >
-                                        <Select allowClear placeholder='Chọn khu vực đăng ký' options={registrationAreaData.map((i: RegistrationArea) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn khu vực đăng ký"
+                                            options={registrationAreaData.map(
+                                                (i: RegistrationArea) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -443,15 +501,23 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="nationalityId"
                                         label="Quốc tịch"
-                                        className='mb-0'
-                                        normalize={(value) => (value === undefined ? null : value)}
+                                        className="mb-0"
+                                        normalize={(value) =>
+                                            value === undefined ? null : value
+                                        }
                                     >
-                                        <Select allowClear placeholder='Chọn quốc tịch' options={nationalityData.map((i: Nationality) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn quốc tịch"
+                                            options={nationalityData.map(
+                                                (i: Nationality) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -459,15 +525,23 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="religionId"
                                         label="Tôn giáo"
-                                        className='mb-0'
-                                        normalize={(value) => (value === undefined ? null : value)}
+                                        className="mb-0"
+                                        normalize={(value) =>
+                                            value === undefined ? null : value
+                                        }
                                     >
-                                        <Select allowClear placeholder='Chọn tôn giáo' options={religionData.map((i: Religion) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn tôn giáo"
+                                            options={religionData.map(
+                                                (i: Religion) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -475,15 +549,23 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="ethnicityId"
                                         label="Dân tộc"
-                                        className='mb-0'
-                                        normalize={(value) => (value === undefined ? null : value)}
+                                        className="mb-0"
+                                        normalize={(value) =>
+                                            value === undefined ? null : value
+                                        }
                                     >
-                                        <Select allowClear placeholder='Chọn dân tộc' options={ethnicityData.map((i: Ethnicity) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name
-                                            }
-                                        })} />
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn dân tộc"
+                                            options={ethnicityData.map(
+                                                (i: Ethnicity) => {
+                                                    return {
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }
+                                                }
+                                            )}
+                                        />
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -495,9 +577,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="unionDate"
                                         label="Ngày vào đoàn"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -505,9 +590,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="unionPlace"
                                         label="Nơi vào đoàn"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập nơi vào đoàn' />
+                                        <Input placeholder="Nhập nơi vào đoàn" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -515,9 +600,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="CPVJoinDate"
                                         label="Ngày vào Đảng"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -525,9 +613,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="officialCPVDate"
                                         label="Ngày chính thức"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -535,9 +626,9 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="CPVJoinPlace"
                                         label="Nơi vào Đảng"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <Input placeholder='Nhập nơi vào Đảng' />
+                                        <Input placeholder="Nhập nơi vào Đảng" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -545,9 +636,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="tenureDate"
                                         label="Ngày vào biên chế"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -555,9 +649,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="enlistmentDate"
                                         label="Ngày nhập ngũ"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -565,9 +662,12 @@ const PutUserProfileUpdateModal = () => {
                                         form={form}
                                         name="dischargeDate"
                                         label="Ngày xuất ngũ"
-                                        className='mb-0'
+                                        className="mb-0"
                                     >
-                                        <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                        />
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -581,9 +681,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="parentName"
                                 label="Tên phụ huynh"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập tên phụ huynh' />
+                                <Input placeholder="Nhập tên phụ huynh" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -591,9 +691,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="parentPhoneNumber"
                                 label="Số điện thoại phụ huynh"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập số điện thoại phụ huynh' />
+                                <Input placeholder="Nhập số điện thoại phụ huynh" />
                             </FormItem>
                         </Col>
                     </Row>
@@ -605,9 +705,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="rankName"
                                 label="Cấp bậc hàm"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập cấp bậc hàm' />
+                                <Input placeholder="Nhập cấp bậc hàm" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -615,9 +715,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="educationLevel"
                                 label="Trình độ học vấn"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập trình độ học vấn' />
+                                <Input placeholder="Nhập trình độ học vấn" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -625,9 +725,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="academicDegreeTypeName"
                                 label="Học hàm"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập học hàm' />
+                                <Input placeholder="Nhập học hàm" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -635,9 +735,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="academicRankTypeName"
                                 label="Học vị"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập học vị' />
+                                <Input placeholder="Nhập học vị" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -645,9 +745,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="positionName"
                                 label="Chức vụ chính quyền"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập chức vụ chính quyền' />
+                                <Input placeholder="Nhập chức vụ chính quyền" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -655,9 +755,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="positionCPVName"
                                 label="Chức vụ Đảng"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập chức vụ Đảng' />
+                                <Input placeholder="Nhập chức vụ Đảng" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -665,9 +765,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="organizationName"
                                 label="Đơn vị"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập đơn vị' />
+                                <Input placeholder="Nhập đơn vị" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -675,9 +775,9 @@ const PutUserProfileUpdateModal = () => {
                                 form={form}
                                 name="organizationCPVName"
                                 label="Nơi sinh hoạt Đảng"
-                                className='mb-0'
+                                className="mb-0"
                             >
-                                <Input placeholder='Nhập nơi sinh hoạt Đảng' />
+                                <Input placeholder="Nhập nơi sinh hoạt Đảng" />
                             </FormItem>
                         </Col>
                     </Row>

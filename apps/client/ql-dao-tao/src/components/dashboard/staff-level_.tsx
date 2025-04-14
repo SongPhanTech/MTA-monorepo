@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Column } from '@ant-design/plots';
+import React, { useEffect, useRef } from 'react'
+import { Column } from '@ant-design/plots'
 
 const StaffLevel = () => {
-    const chartRef = useRef<any>(null);
+    const chartRef = useRef<any>(null)
 
     const dataFake = [
         { 月份: 'Jan', 月均降雨量: 50, name: 'London' },
@@ -13,7 +13,7 @@ const StaffLevel = () => {
         { 月份: 'Feb', 月均降雨量: 60, name: 'New York' },
         { 月份: 'Mar', 月均降雨量: 35, name: 'New York' },
         { 月份: 'Apr', 月均降雨量: 50, name: 'New York' },
-    ];
+    ]
 
     const config = {
         data: dataFake,
@@ -25,21 +25,20 @@ const StaffLevel = () => {
             inset: 5,
         },
         onReady: (chart: any) => {
-            chartRef.current = chart;
+            chartRef.current = chart
             try {
                 chart.on('afterrender', () => {
                     chart.emit('legend:filter', {
                         data: { channel: 'color', values: ['London'] },
-                    });
-                });
+                    })
+                })
             } catch (e) {
-                console.error(e);
+                console.error(e)
             }
         },
-    };
+    }
 
-    return <Column {...config} />;
-};
+    return <Column {...config} />
+}
 
-
-export default StaffLevel;
+export default StaffLevel

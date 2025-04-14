@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { PriorityObject } from "@workspace/db"
+import type { PriorityObject } from '@workspace/db'
 import {
     useCreatePriorityObject,
     useFindUniquePriorityObject,
@@ -45,7 +45,7 @@ const PutPriorityObjectModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutPriorityObjectModal = () => {
                     label="Mã đối tượng ưu tiên"
                     required
                 >
-                    <Input placeholder='Nhập mã đối tượng ưu tiên' />
+                    <Input placeholder="Nhập mã đối tượng ưu tiên" />
                 </FormItem>
             </Col>
             <Col span={24}>

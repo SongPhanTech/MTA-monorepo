@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingRank } from "@workspace/db"
+import type { TrainingRank } from '@workspace/db'
 import {
     useCreateTrainingRank,
     useFindUniqueTrainingRank,
@@ -45,7 +45,7 @@ const PutTraningRankModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutTraningRankModal = () => {
                     label="Mã xếp loại rèn luyện"
                     required
                 >
-                    <Input placeholder='Nhập mã xếp loại rèn luyện' />
+                    <Input placeholder="Nhập mã xếp loại rèn luyện" />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -2,7 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import {PutTrainingLocaltionModal} from '@components/modal'
+import { PutTrainingLocaltionModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -55,7 +55,8 @@ export default function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateTrainingLocation()
+    const { mutateAsync: updateAcademicDegreeType } =
+        useUpdateTrainingLocation()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -64,7 +65,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {

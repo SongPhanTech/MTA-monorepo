@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { Column } from '@ant-design/plots';
+import React, { useRef } from 'react'
+import { Column } from '@ant-design/plots'
 
 const StaffByOrg = () => {
-    const chartRef = useRef(null);
+    const chartRef = useRef(null)
 
     const data = [
         { letter: 'Công nghệ phần mềm', frequency: 15 },
@@ -27,9 +27,8 @@ const StaffByOrg = () => {
         { letter: 'Toán', frequency: 8 },
         { letter: 'Vật lý đại cương', frequency: 17 },
         { letter: 'Tiếng Anh', frequency: 7 },
-        { letter: 'Tiếng Nga', frequency: 14 }
-    ];
-
+        { letter: 'Tiếng Nga', frequency: 14 },
+    ]
 
     const config = {
         data,
@@ -38,17 +37,18 @@ const StaffByOrg = () => {
         tooltip: {
             // Tùy chỉnh tooltip để hiển thị "Số lượng"
             formatter: (datum: any) => {
-                console.log("datum in tooltip:", datum); // Kiểm tra giá trị của datum
+                console.log('datum in tooltip:', datum) // Kiểm tra giá trị của datum
                 if (datum && datum.frequency) {
-                    return { name: 'Số lượng', value: datum.frequency }; // Hiển thị "Số lượng" và giá trị 'frequency'
+                    return { name: 'Số lượng', value: datum.frequency } // Hiển thị "Số lượng" và giá trị 'frequency'
                 }
-                return { name: 'Số lượng', value: 'N/A' }; // Trường hợp không có dữ liệu
+                return { name: 'Số lượng', value: 'N/A' } // Trường hợp không có dữ liệu
             },
         },
         onReady: (chart: any) => {
             try {
-                const { height } = chart._container.getBoundingClientRect();
-                const tooltipItem = data[Math.floor(Math.random() * data.length)];
+                const { height } = chart._container.getBoundingClientRect()
+                const tooltipItem =
+                    data[Math.floor(Math.random() * data.length)]
                 chart.on(
                     'afterrender',
                     () => {
@@ -57,18 +57,17 @@ const StaffByOrg = () => {
                                 data: tooltipItem,
                             },
                             offsetY: height / 2 - 60,
-                        });
+                        })
                     },
-                    true,
-                );
+                    true
+                )
             } catch (e) {
-                console.error(e);
+                console.error(e)
             }
         },
-    };
+    }
 
+    return <Column {...config} />
+}
 
-    return <Column {...config} />;
-};
-
-export default StaffByOrg;
+export default StaffByOrg

@@ -13,9 +13,16 @@ import {
     useUpdateTrainingCourse,
     useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel
+    useFindManyTrainingLevel,
 } from '@workspace/db/hooks'
-import type { TrainingCourse, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType } from '@workspace/db'
+import type {
+    TrainingCourse,
+    SchoolYear,
+    TrainingForm,
+    TrainingLevel,
+    TrainingType,
+    TrainingObjectType,
+} from '@workspace/db'
 
 import {
     Button,
@@ -44,8 +51,8 @@ export default function TrainingCoursePage() {
         trainingFormId: undefined,
         trainingTypeId: undefined,
         trainingLevelId: undefined,
-        trainingObjectTypeId: undefined
-    });
+        trainingObjectTypeId: undefined,
+    })
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
@@ -55,27 +62,29 @@ export default function TrainingCoursePage() {
             trainingFormId: filters.trainingFormId,
             trainingTypeId: filters.trainingTypeId,
             trainingLevelId: filters.trainingLevelId,
-            trainingObjectTypeId: filters.trainingObjectTypeId
+            trainingObjectTypeId: filters.trainingObjectTypeId,
         },
         include: {
             TrainingForm: true,
             TrainingLevel: true,
             TrainingType: true,
-            TrainingObjectType: true
+            TrainingObjectType: true,
         },
         orderBy: {
             createdAt: 'desc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-    });
-
+    })
 
     const { data: count } = useCountTrainingCourse()
 
-    const debouncedRefetch = useCallback(_.debounce(() => {
-        refetch();
-    }, 500), []);
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutTrainingCourseModal.name,
     })
@@ -94,7 +103,7 @@ export default function TrainingCoursePage() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -102,30 +111,34 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-    const { data: trainingFormData = [], refetch: refetchForm } = useFindManyTrainingForm({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingFormData = [], refetch: refetchForm } =
+        useFindManyTrainingForm({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingTypeData = [], refetch: refetchType } = useFindManyTrainingType({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } = useFindManyTrainingObjectType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingTypeData = [], refetch: refetchType } =
+        useFindManyTrainingType({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: trainingLevelData = [], refetch: refetchLevel } =
+        useFindManyTrainingLevel({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+            take: 1000,
+            skip: 0,
+        })
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
-    };
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
 
     return (
         <div>
@@ -139,7 +152,12 @@ export default function TrainingCoursePage() {
                             <Form.Item label="Tìm kiếm" name="searchText">
                                 <Input
                                     id="search"
-                                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -156,53 +174,93 @@ export default function TrainingCoursePage() {
                     {/* Row các select box */}
                     <Row gutter={[16, 16]}>
                         <Col span={6}>
-                            <Form.Item label="Hình thức đào tạo" name="trainingForm">
+                            <Form.Item
+                                label="Hình thức đào tạo"
+                                name="trainingForm"
+                            >
                                 <Select
                                     placeholder="Chọn hình thức đào tạo"
-                                    options={trainingFormData.map((i: TrainingForm) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    onChange={(val) => handleFilterChange('trainingFormId', val)}
+                                    options={trainingFormData.map(
+                                        (i: TrainingForm) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingFormId',
+                                            val
+                                        )
+                                    }
                                     allowClear
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Form.Item label="Đối tượng đào tạo" name="trainingObjectType">
+                            <Form.Item
+                                label="Đối tượng đào tạo"
+                                name="trainingObjectType"
+                            >
                                 <Select
                                     placeholder="Chọn đối tượng đào tạo"
-                                    options={trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    onChange={(val) => handleFilterChange('trainingObjectTypeId', val)}
+                                    options={trainingObjectTypeData.map(
+                                        (i: TrainingObjectType) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingObjectTypeId',
+                                            val
+                                        )
+                                    }
                                     allowClear
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Form.Item label="Loại hình đào tạo" name="trainingType">
+                            <Form.Item
+                                label="Loại hình đào tạo"
+                                name="trainingType"
+                            >
                                 <Select
                                     placeholder="Chọn loại hình đào tạo"
-                                    options={trainingTypeData.map((i: TrainingType) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    onChange={(val) => handleFilterChange('trainingTypeId', val)}
+                                    options={trainingTypeData.map(
+                                        (i: TrainingType) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingTypeId',
+                                            val
+                                        )
+                                    }
                                     allowClear
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Form.Item label="Trình độ đào tạo" name="trainingLevel">
+                            <Form.Item
+                                label="Trình độ đào tạo"
+                                name="trainingLevel"
+                            >
                                 <Select
                                     placeholder="Chọn trình độ đào tạo"
-                                    options={trainingLevelData.map((i: TrainingForm) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    onChange={(val) => handleFilterChange('trainingLevelId', val)}
+                                    options={trainingLevelData.map(
+                                        (i: TrainingForm) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingLevelId',
+                                            val
+                                        )
+                                    }
                                     allowClear
                                 />
                             </Form.Item>
@@ -233,22 +291,26 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Loại hình đào tạo',
                                 dataIndex: 'TrainingType',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'TrainingObjectType',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Hình thức đào tạo',
                                 dataIndex: 'TrainingForm',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Trình độ đào tạo',
                                 dataIndex: 'TrainingLevel',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -259,13 +321,18 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái',
                                 // dataIndex: 'status',
-                                render: ({ status }) => TRAINING_COURSE_STATUS[status as keyof typeof TRAINING_COURSE_STATUS],
+                                render: ({ status }) =>
+                                    TRAINING_COURSE_STATUS[
+                                        status as keyof typeof TRAINING_COURSE_STATUS
+                                    ],
                             },
                             {
                                 title: 'Mô tả',

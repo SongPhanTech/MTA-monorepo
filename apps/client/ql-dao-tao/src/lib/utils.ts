@@ -108,17 +108,16 @@ function generatePassword(length = 12): string {
 }
 function buildOrgTree(
     list: Array<{ id: string; name: string; parentId: string | null }>,
-    parentId: string = '0' 
+    parentId: string = '0'
 ): Array<{ title: string; value: string; children: any[] }> {
     return list
-        .filter(item => (item.parentId ?? '0') === parentId)
-        .map(item => ({
+        .filter((item) => (item.parentId ?? '0') === parentId)
+        .map((item) => ({
             title: item.name,
             value: item.id,
-            children: buildOrgTree(list, item.id)
-        }));
+            children: buildOrgTree(list, item.id),
+        }))
 }
-
 
 export {
     formatDate,
@@ -131,5 +130,5 @@ export {
     cn,
     stringToSlug,
     generatePassword,
-    buildOrgTree
+    buildOrgTree,
 }

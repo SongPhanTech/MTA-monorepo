@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingLocation } from "@workspace/db"
+import type { TrainingLocation } from '@workspace/db'
 import {
     useCreateTrainingLocation,
     useFindUniqueTrainingLocation,
@@ -45,7 +45,7 @@ const PutTrainingLocaltionModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -81,9 +81,7 @@ const PutTrainingLocaltionModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={
-                id
-                    ? 'Chỉnh sửa địa điểm đào tạo'
-                    : 'Thêm mới địa điểm đào tạo'
+                id ? 'Chỉnh sửa địa điểm đào tạo' : 'Thêm mới địa điểm đào tạo'
             }
             className="w-[30vw]"
         >
@@ -94,7 +92,7 @@ const PutTrainingLocaltionModal = () => {
                     label="Mã địa điểm đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã địa điểm đào tạo' />
+                    <Input placeholder="Nhập mã địa điểm đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

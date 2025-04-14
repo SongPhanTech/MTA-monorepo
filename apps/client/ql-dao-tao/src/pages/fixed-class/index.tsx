@@ -2,7 +2,11 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutFixedClassModal, PutUploadDivisionModal, PutUploadFixedClassModal } from '@components/modal'
+import {
+    PutFixedClassModal,
+    PutUploadDivisionModal,
+    PutUploadFixedClassModal,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -13,7 +17,7 @@ import {
     useUpdateFixedClass,
     useFindManyOrganization,
     useFindManyTrainingCourse,
-    useFindManyTemplateFile
+    useFindManyTemplateFile,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -27,7 +31,7 @@ import {
     Row,
     Tooltip,
     message,
-    TreeSelect
+    TreeSelect,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -45,7 +49,7 @@ export default function FixedClassPage() {
         searchText: '',
         trainingCourseId: undefined,
         managementOrganizationId: undefined,
-    });
+    })
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             name: {
@@ -56,7 +60,7 @@ export default function FixedClassPage() {
         },
         include: {
             ManagementOrganization: true,
-            TrainingCourse: true
+            TrainingCourse: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -64,29 +68,36 @@ export default function FixedClassPage() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyOrganization({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: manageOrgData = [], refetch: refetchManageOrg } =
+        useFindManyOrganization({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            take: 1000,
+            skip: 0,
+        })
     const { data: count } = useCountFixedClass()
 
-    const debouncedRefetch = useCallback(_.debounce(() => {
-        refetch();
-    }, 500), []);
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } = useDisclosure<string>({
-        tag: PutUploadFixedClassModal.name,
-    })
-    const { onOpen: onOpenDivision, onClose: onCloseDivision } = useDisclosure<string>({
-        tag: PutUploadDivisionModal.name,
-    })
+    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } =
+        useDisclosure<string>({
+            tag: PutUploadFixedClassModal.name,
+        })
+    const { onOpen: onOpenDivision, onClose: onCloseDivision } =
+        useDisclosure<string>({
+            tag: PutUploadDivisionModal.name,
+        })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
@@ -107,7 +118,7 @@ export default function FixedClassPage() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -117,25 +128,26 @@ export default function FixedClassPage() {
     }
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
-    };
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile({
-        take: 1000,
-        skip: 0,
-    });
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+    const { data: templateFile = [], refetch: refetchTemplateFile } =
+        useFindManyTemplateFile({
+            take: 1000,
+            skip: 0,
+        })
     const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find(item => item.code === type)
+        const fileRecord = templateFile?.find((item) => item.code === type)
         const fileLink = fileRecord ? fileRecord.path : null
         if (fileLink) {
-            const link = document.createElement('a');
-            link.href = fileLink;
-            link.setAttribute('download', '');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const link = document.createElement('a')
+            link.href = fileLink
+            link.setAttribute('download', '')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
         }
     }
 
@@ -171,23 +183,23 @@ export default function FixedClassPage() {
 
     const menuImport = (
         <Menu>
-            {itemsImport.map(item => (
+            {itemsImport.map((item) => (
                 <Menu.Item key={item.key} onClick={item.onClick}>
                     {item.label}
                 </Menu.Item>
             ))}
         </Menu>
-    );
+    )
     const menuDivision = (
         <Menu>
-            {imtemsDivide.map(item => (
+            {imtemsDivide.map((item) => (
                 <Menu.Item key={item.key} onClick={item.onClick}>
                     {item.label}
                 </Menu.Item>
             ))}
         </Menu>
-    );
-    const treeData = buildOrgTree(manageOrgData);
+    )
+    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <div>
@@ -201,24 +213,34 @@ export default function FixedClassPage() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item
-                                name="trainingCourseId"
-                                label="Khóa"
-                            >
+                            <Form.Item name="trainingCourseId" label="Khóa">
                                 <Select
-                                    placeholder='Chọn khóa' options={trainingCourseData.map((i: TrainingCourse) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name
+                                    placeholder="Chọn khóa"
+                                    options={trainingCourseData.map(
+                                        (i: TrainingCourse) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
                                         }
-                                    })}
-                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingCourseId',
+                                            val
+                                        )
+                                    }
                                     allowClear
                                 />
                             </Form.Item>
@@ -233,10 +255,17 @@ export default function FixedClassPage() {
                                     allowClear
                                     showSearch
                                     treeDefaultExpandAll
-                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'managementOrganizationId',
+                                            val
+                                        )
+                                    }
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.title as string).toLowerCase().includes(input.toLowerCase())
+                                        (node.title as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
                                     }
                                 />
                             </Form.Item>
@@ -248,12 +277,18 @@ export default function FixedClassPage() {
                                 </Button>
                             </Flex> */}
                             <Flex justify="end">
-                                <Dropdown overlay={menuImport} trigger={['hover']}>
+                                <Dropdown
+                                    overlay={menuImport}
+                                    trigger={['hover']}
+                                >
                                     <Button className="ml-4" type="primary">
                                         Thêm mới
                                     </Button>
                                 </Dropdown>
-                                <Dropdown overlay={menuDivision} trigger={['hover']}>
+                                <Dropdown
+                                    overlay={menuDivision}
+                                    trigger={['hover']}
+                                >
                                     <Button className="ml-4" type="primary">
                                         Xếp lớp
                                     </Button>
@@ -285,12 +320,14 @@ export default function FixedClassPage() {
                             {
                                 title: 'Khóa',
                                 dataIndex: 'TrainingCourse',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'ManagementOrganization',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Mô tả',

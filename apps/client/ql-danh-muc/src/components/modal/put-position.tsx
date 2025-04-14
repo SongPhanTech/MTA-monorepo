@@ -45,7 +45,7 @@ const PutPositionModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,30 +80,16 @@ const PutPositionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa chức vụ'
-                    : 'Thêm mới chức vụ'
-            }
+            title={id ? 'Chỉnh sửa chức vụ' : 'Thêm mới chức vụ'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã chức vụ"
-                    required
-                >
-                    <Input placeholder='Nhập mã chức vụ' />
+                <FormItem form={form} name="code" label="Mã chức vụ" required>
+                    <Input placeholder="Nhập mã chức vụ" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên chức vụ"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên chức vụ" required>
                     <Input placeholder="Nhập tên chức vụ" />
                 </FormItem>
             </Col>

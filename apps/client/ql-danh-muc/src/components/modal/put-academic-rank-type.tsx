@@ -45,7 +45,7 @@ const PutAcademicRankTypeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,30 +80,16 @@ const PutAcademicRankTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học vị'
-                    : 'Thêm mới học vị'
-            }
+            title={id ? 'Chỉnh sửa học vị' : 'Thêm mới học vị'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã học vị"
-                    required
-                >
-                    <Input placeholder='Nhập mã học vị' />
+                <FormItem form={form} name="code" label="Mã học vị" required>
+                    <Input placeholder="Nhập mã học vị" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên học vị"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên học vị" required>
                     <Input placeholder="Nhập tên học vị" />
                 </FormItem>
             </Col>

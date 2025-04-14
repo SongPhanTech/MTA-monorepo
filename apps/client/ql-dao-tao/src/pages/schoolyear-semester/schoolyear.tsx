@@ -28,7 +28,10 @@ import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYear }: any) {
+export default function SchoolYearPage({
+    selectedSchoolYear,
+    setSelectedSchoolYear,
+}: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -67,7 +70,7 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -156,8 +159,10 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -175,10 +180,9 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                                         >
                                             <EyeOutlined
                                                 onClick={(e: any) => {
-                                                    e.stopPropagation();
-                                                    onOpen(id);
-                                                }
-                                                }
+                                                    e.stopPropagation()
+                                                    onOpen(id)
+                                                }}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>
@@ -188,7 +192,7 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                                                     handleDelete(id),
                                             }}
                                             onClick={(e: any) => {
-                                                e.stopPropagation();
+                                                e.stopPropagation()
                                             }}
                                         />
                                     </Row>
@@ -204,7 +208,7 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                             onShowSizeChange: setNumberOfPages,
                         }}
                         onRowClick={(record) => {
-                            console.log(record, "nè he");
+                            console.log(record, 'nè he')
                             setSelectedSchoolYear(record)
                         }}
                     />

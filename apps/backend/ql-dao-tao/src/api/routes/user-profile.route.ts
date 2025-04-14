@@ -4,7 +4,7 @@ const uploadExcelCreateUserProfile = createRoute({
     operationId: 'uploadExcelCreateUserProfile',
     path: '/UserProfile/upload-excel-create-user-profile',
     method: 'post',
-    description: 
+    description:
         'Thêm mới danh sách học viên/sinh viên \n\n [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType',
     tags: ['UserProfile'],
     summary: 'Upload Excel Create UserProfile',
@@ -12,20 +12,22 @@ const uploadExcelCreateUserProfile = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z.object({
-                        file: z.any(), // file upload
-                        type: z.string() // loại thông tin
-                    }).openapi('uploadExcelCreateUserProfile'),
+                    schema: z
+                        .object({
+                            file: z.any(), // file upload
+                            type: z.string(), // loại thông tin
+                        })
+                        .openapi('uploadExcelCreateUserProfile'),
                 },
             },
         },
     },
     responses: {
         200: {
-            content: { 
-                'application/json': { 
-                    schema: z.array(z.any()) 
-                } 
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()),
+                },
             },
             description: 'Tải danh sách thành công',
         },
@@ -39,27 +41,28 @@ const uploadExcelUpdateUserProfile = createRoute({
     operationId: 'uploadExcelUpdateUserProfile',
     path: '/UserProfile/upload-excel-update-user-profile',
     method: 'post',
-    description: 
-        'Cập nhật thông tin học viên/sinh viên',
+    description: 'Cập nhật thông tin học viên/sinh viên',
     tags: ['UserProfile'],
     summary: 'Upload Excel Update UserProfile',
     request: {
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z.object({
-                        file: z.any(), // file upload
-                    }).openapi('uploadExcelUpdateUserProfile'),
+                    schema: z
+                        .object({
+                            file: z.any(), // file upload
+                        })
+                        .openapi('uploadExcelUpdateUserProfile'),
                 },
             },
         },
     },
     responses: {
         200: {
-            content: { 
-                'application/json': { 
-                    schema: z.array(z.any()) 
-                } 
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()),
+                },
             },
             description: 'Tải danh sách thành công',
         },
@@ -71,5 +74,5 @@ const uploadExcelUpdateUserProfile = createRoute({
 
 export default {
     uploadExcelCreateUserProfile,
-    uploadExcelUpdateUserProfile
+    uploadExcelUpdateUserProfile,
 }

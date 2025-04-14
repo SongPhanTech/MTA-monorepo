@@ -45,7 +45,7 @@ const PutOrganizationTypeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,11 +80,7 @@ const PutOrganizationTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa loại đơn vị'
-                    : 'Thêm mới loại đơn vị'
-            }
+            title={id ? 'Chỉnh sửa loại đơn vị' : 'Thêm mới loại đơn vị'}
             className="w-[30vw]"
         >
             <Col span={24}>
@@ -94,7 +90,7 @@ const PutOrganizationTypeModal = () => {
                     label="Mã loại đơn vị"
                     required
                 >
-                    <Input placeholder='Nhập mã loại đơn vị' />
+                    <Input placeholder="Nhập mã loại đơn vị" />
                 </FormItem>
             </Col>
             <Col span={24}>

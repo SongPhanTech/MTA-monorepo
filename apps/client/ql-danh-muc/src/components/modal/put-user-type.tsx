@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserType } from "@workspace/db"
+import type { UserType } from '@workspace/db'
 import {
     useCreateUserType,
     useFindUniqueUserType,
@@ -45,7 +45,7 @@ const PutUserTypeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,21 +80,12 @@ const PutUserTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa đối tượng'
-                    : 'Thêm mới đối tượng'
-            }
+            title={id ? 'Chỉnh sửa đối tượng' : 'Thêm mới đối tượng'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã đối tượng"
-                    required
-                >
-                    <Input placeholder='Nhập mã đối tượng' />
+                <FormItem form={form} name="code" label="Mã đối tượng" required>
+                    <Input placeholder="Nhập mã đối tượng" />
                 </FormItem>
             </Col>
             <Col span={24}>

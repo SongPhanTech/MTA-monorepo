@@ -45,7 +45,7 @@ const PutAcademicDegreeTypeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,30 +80,16 @@ const PutAcademicDegreeTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học hàm'
-                    : 'Thêm mới học hàm'
-            }
+            title={id ? 'Chỉnh sửa học hàm' : 'Thêm mới học hàm'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã học hàm"
-                    required
-                >
-                    <Input placeholder='Nhập mã học hàm' />
+                <FormItem form={form} name="code" label="Mã học hàm" required>
+                    <Input placeholder="Nhập mã học hàm" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên học hàm"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên học hàm" required>
                     <Input placeholder="Nhập tên học hàm" />
                 </FormItem>
             </Col>

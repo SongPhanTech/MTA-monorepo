@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingTime } from "@workspace/db"
+import type { TrainingTime } from '@workspace/db'
 import {
     useCreateTrainingTime,
     useFindUniqueTrainingTime,
@@ -45,7 +45,7 @@ const PutTrainingTimeModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutTrainingTimeModal = () => {
                     label="Mã thời gian đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã thời gian đào tạo' />
+                    <Input placeholder="Nhập mã thời gian đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

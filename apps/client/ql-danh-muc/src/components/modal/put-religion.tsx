@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Religion } from "@workspace/db"
+import type { Religion } from '@workspace/db'
 import {
     useCreateReligion,
     useFindUniqueReligion,
@@ -45,7 +45,7 @@ const PutReligionModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,30 +80,16 @@ const PutReligionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa tôn giáo'
-                    : 'Thêm mới tôn giáo'
-            }
+            title={id ? 'Chỉnh sửa tôn giáo' : 'Thêm mới tôn giáo'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã tôn giáo"
-                    required
-                >
-                    <Input placeholder='Nhập mã tôn giáo' />
+                <FormItem form={form} name="code" label="Mã tôn giáo" required>
+                    <Input placeholder="Nhập mã tôn giáo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên tôn giáo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên tôn giáo" required>
                     <Input placeholder="Nhập tôn giáo" />
                 </FormItem>
             </Col>

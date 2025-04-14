@@ -8,7 +8,7 @@ import {
     useFindUniqueSemester,
     useFindManySchoolYear,
     useFindManySemester,
-    useUpdateSemester
+    useUpdateSemester,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
@@ -35,10 +35,11 @@ const PutSemesterModal = () => {
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchSemesters } = useFindManySemester({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: organizations = [], refetch: refetchSemesters } =
+        useFindManySemester({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createSemester } = useCreateSemester()
     const { mutateAsync: updateSemester } = useUpdateSemester()
@@ -54,7 +55,7 @@ const PutSemesterModal = () => {
                         description: output.description,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        schoolYearId: output.schoolYearId
+                        schoolYearId: output.schoolYearId,
                     },
                     where: {
                         id,
@@ -69,7 +70,7 @@ const PutSemesterModal = () => {
                         description: output.description,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        schoolYearId: output.schoolYearId
+                        schoolYearId: output.schoolYearId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -106,30 +107,16 @@ const PutSemesterModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học kỳ'
-                    : 'Thêm mới học kỳ'
-            }
+            title={id ? 'Chỉnh sửa học kỳ' : 'Thêm mới học kỳ'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã học kỳ"
-                    required
-                >
-                    <Input placeholder='Nhập mã học kỳ' />
+                <FormItem form={form} name="code" label="Mã học kỳ" required>
+                    <Input placeholder="Nhập mã học kỳ" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên học kỳ"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên học kỳ" required>
                     <Input placeholder="Nhập tên học kỳ" />
                 </FormItem>
             </Col>
@@ -140,16 +127,24 @@ const PutSemesterModal = () => {
                     label="Năm học"
                     required
                 >
-                    <Select placeholder='Chọn năm học' options={data.map((i: SchoolYear) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn năm học"
+                        options={data.map((i: SchoolYear) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
+                <FormItem
+                    form={form}
+                    name="startDate"
+                    label="Ngày bắt đầu"
+                    required
+                >
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
