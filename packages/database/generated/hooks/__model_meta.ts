@@ -2289,6 +2289,36 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'user',
+                }, conversation: {
+                    name: "conversation",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
+                }, documentUploaded: {
+                    name: "documentUploaded",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'uploadedBy',
+                }, documentApproved: {
+                    name: "documentApproved",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'approvedBy',
+                }, fAQUploaded: {
+                    name: "fAQUploaded",
+                    type: "FAQ",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'uploadedBy',
+                }, fAQApproved: {
+                    name: "fAQApproved",
+                    type: "FAQ",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'approvedBy',
                 },
             }
             , uniqueConstraints: {
@@ -2475,6 +2505,358 @@ const metadata = {
                 }, name_permissionType: {
                     name: "name_permissionType",
                     fields: ["name", "permissionType"]
+                },
+            }
+            ,
+        }
+        ,
+        document: {
+            name: 'Document', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                    isOptional: true,
+                }, body: {
+                    name: "body",
+                    type: "String",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "DocumentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, uri: {
+                    name: "uri",
+                    type: "String",
+                    isOptional: true,
+                }, fileType: {
+                    name: "fileType",
+                    type: "String",
+                    isOptional: true,
+                }, type: {
+                    name: "type",
+                    type: "DocumentType",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, uploadedBy: {
+                    name: "uploadedBy",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'documentUploaded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "uploadedById" },
+                }, uploadedById: {
+                    name: "uploadedById",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    defaultValueProvider: $default$Document$uploadedById,
+                    isForeignKey: true,
+                    relationField: 'uploadedBy',
+                }, approvedBy: {
+                    name: "approvedBy",
+                    type: "User",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentApproved',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "approvedById" },
+                }, approvedById: {
+                    name: "approvedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'approvedBy',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        fAQ: {
+            name: 'FAQ', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, question: {
+                    name: "question",
+                    type: "String",
+                    isOptional: true,
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "DocumentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, type: {
+                    name: "type",
+                    type: "DocumentType",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, uploadedBy: {
+                    name: "uploadedBy",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'fAQUploaded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "uploadedById" },
+                }, uploadedById: {
+                    name: "uploadedById",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
+                    defaultValueProvider: $default$FAQ$uploadedById,
+                    isForeignKey: true,
+                    relationField: 'uploadedBy',
+                }, approvedBy: {
+                    name: "approvedBy",
+                    type: "User",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'fAQApproved',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "approvedById" },
+                }, approvedById: {
+                    name: "approvedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'approvedBy',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        prompt: {
+            name: 'Prompt', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, prompt: {
+                    name: "prompt",
+                    type: "String",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "DocumentStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, type: {
+                    name: "type",
+                    type: "DocumentType",
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        conversation: {
+            name: 'Conversation', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'conversation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, type: {
+                    name: "type",
+                    type: "DocumentType",
+                    isOptional: true,
+                }, message: {
+                    name: "message",
+                    type: "Message",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'conversation',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        message: {
+            name: 'Message', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, conversationId: {
+                    name: "conversationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'conversation',
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                }, sender: {
+                    name: "sender",
+                    type: "MessageSender",
+                }, conversation: {
+                    name: "conversation",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'message',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "conversationId" },
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
                 },
             }
             ,
@@ -2987,4 +3369,11 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$Document$uploadedById(user: any): unknown {
+    return user?.id;
+}
+
+function $default$FAQ$uploadedById(user: any): unknown {
+    return user?.id;
+}
 export default metadata;

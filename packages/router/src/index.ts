@@ -361,22 +361,22 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: 'quan-tri-du-lieu',
-                        label: 'Quản trị dữ liệu',
+                        label: 'Dữ liệu',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
                     },
                     {
                         id: 'quan-tri-cau-hinh-tham-so',
-                        label: 'Quản trị cấu hình tham số',
+                        label: 'Cấu hình tham số',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_THAM_SO,
                     },
                     {
                         id: 'quan-tri-cau-hinh-promt-rag',
-                        label: 'Quản trị cấu hình promt RAG',
+                        label: 'Cấu hình promt RAG',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_RAG,
                     },
                     {
                         id: 'quan-tri-cau-hinh-promt-hoi-dap',
-                        label: 'Quản trị cấu hình promt hỏi đáp',
+                        label: 'Cấu hình promt hỏi đáp',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_HOI_DAP,
                     },
                 ]

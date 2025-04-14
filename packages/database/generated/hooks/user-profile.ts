@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, UserProfile } from "@prisma/client";
+import type { Prisma, UserProfile } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -327,7 +327,7 @@ export function useSuspenseCountUserProfile<TArgs extends Prisma.UserProfileCoun
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('UserProfile', `${endpoint}/userProfile/count`, args, options, fetch);
 }
-import type { Gender } from '@prisma/client';
+import type { Gender } from '@zenstackhq/runtime/models';
 
 export function useCheckUserProfile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; userId?: string; userTypeId?: string; firstName?: string; lastName?: string; placeOfBirth?: string; homeTown?: string; idCardNumber?: string; officerNumber?: string; priorityObjectId?: string; registrationAreaId?: string; nationalityId?: string; religionId?: string; ethnicityId?: string; gender?: Gender; permanentAddress?: string; temporaryAddress?: string; contactAddress?: string; phoneNumber?: string; email?: string; parentPhoneNumber?: string; parentName?: string; unionPlace?: string; CPVJoinPlace?: string; rankName?: string; educationLevel?: string; academicDegreeTypeName?: string; academicRankTypeName?: string; positionName?: string; positionCPVName?: string; organizationName?: string; organizationCPVName?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

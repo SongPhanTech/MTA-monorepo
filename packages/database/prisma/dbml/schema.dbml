@@ -519,6 +519,11 @@ Table User {
   groups Group [not null]
   feedback Feedback [not null]
   userProfile UserProfile [not null]
+  conversation Conversation [not null]
+  documentUploaded Document [not null]
+  documentApproved Document [not null]
+  fAQUploaded FAQ [not null]
+  fAQApproved FAQ [not null]
 }
 
 Table Group {
@@ -560,6 +565,83 @@ Table Permission {
   indexes {
     (name, permissionType) [unique]
   }
+}
+
+Table Document {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String
+  body String
+  status DocumentStatus [not null, default: 'PENDING']
+  uri String
+  fileType String
+  type DocumentType [not null]
+  reason String
+  uploadedBy User [not null]
+  uploadedById String [not null]
+  approvedBy User
+  approvedById String
+}
+
+Table FAQ {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  question String
+  answer String
+  status DocumentStatus [not null, default: 'PENDING']
+  type DocumentType [not null]
+  reason String
+  uploadedBy User [not null]
+  uploadedById String [not null]
+  approvedBy User
+  approvedById String
+}
+
+Table Prompt {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  prompt String
+  status DocumentStatus [not null, default: 'PENDING']
+  type DocumentType [not null]
+  reason String
+}
+
+Table Conversation {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User
+  userId String
+  type DocumentType
+  message Message [not null]
+}
+
+Table Message {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  conversationId String
+  content String
+  sender MessageSender [not null]
+  conversation Conversation
 }
 
 Table Feedback {
@@ -748,6 +830,36 @@ Enum PermissionType {
   DETAIL
 }
 
+Enum MessageSender {
+  USER
+  BOT
+}
+
+Enum DocumentStatus {
+  PENDING
+  APPROVE
+  DENY
+}
+
+Enum DocumentType {
+  GENERAL_ADMISSIONS_INFORMATION
+  ADMISSIONS_RULES_AND_REGULATIONS
+  TRAINING_RULES_AND_REGULATIONS
+  EXAMINATION_RULES_AND_REGULATIONS
+  ACADEMY_INFORMATION
+  TRAINING_PROGRAMS_INFORMATION
+  REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS
+  REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS
+  FREQUENTLY_ASKED_QUESTIONS
+  PARTY_WORK_AND_POLITICAL_WORK
+  INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY
+  IN_THE_FACULTY_HANDBOOK
+  TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE
+  DETECTION_AND_CORRECTION_OF_TEXT_ERRORS
+  EXTRACTIVE_TEXT_SUMMARIZATION
+  ABSTRACTIVE_TEXT_SUMMARIZATION
+}
+
 Enum FeedbackStatus {
   Pending
   InProgress
@@ -837,5 +949,17 @@ Ref: UserProfile.ethnicityId > Ethnicity.id
 Ref: FixedClassStudent.fixedClassId > FixedClass.id
 
 Ref: FixedClassStudent.userProfileId > UserProfile.id
+
+Ref: Document.uploadedById > User.id
+
+Ref: Document.approvedById > User.id
+
+Ref: FAQ.uploadedById > User.id
+
+Ref: FAQ.approvedById > User.id
+
+Ref: Conversation.userId > User.id
+
+Ref: Message.conversationId > Conversation.id
 
 Ref: Feedback.userId > User.id
