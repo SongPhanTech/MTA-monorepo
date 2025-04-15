@@ -1,0 +1,88 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+
+// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
+model TrainingObjectType extends Base {
+  name           String
+  TrainingCourse TrainingCourse[]
+  curriculum     Curriculum[]
+  @@schema("ql-danh-muc")
+}
+
+// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
+model TrainingType extends Base {
+  name           String
+
+  trainingCourse TrainingCourse[]
+  @@schema("ql-danh-muc")
+}
+
+// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
+model TrainingLevel extends Base {
+  name           String
+
+  trainingCourse TrainingCourse[]
+  curriculum     Curriculum[]
+  @@schema("ql-danh-muc")
+}
+
+// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+model TrainingForm extends Base {
+  name           String
+  trainingCourse TrainingCourse[]
+  @@schema("ql-danh-muc")
+}
+
+// địa điểm đào tạo
+model TrainingLocation extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// ngành đào tạo
+model TrainingField extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// chuyên ngành đào tạo
+model TrainingMajor extends Base {
+  name       String
+
+  curriculum Curriculum[]
+  @@schema("ql-danh-muc")
+}
+
+// khối kiến thức
+model TrainingBlock extends Base {
+  name                     String
+
+  curriculumVersionSubject CurriculumVersionSubject[]
+  @@schema("ql-danh-muc")
+}
+
+// thời gian đào tạo  
+model TrainingTime extends Base {
+  name       String
+
+  curriculum Curriculum[]
+  @@schema("ql-danh-muc")
+}
+
+// xếp loại học tập
+model StudyRank extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+//xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)
+model TrainingRank extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// nội dung tính tải đào tạo
+model TrainingKPI extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}

@@ -83,15 +83,14 @@ export default function TrainingCoursePage() {
             TrainingForm: true,
             TrainingLevel: true,
             TrainingType: true,
-            TrainingObjectType: true
+            TrainingObjectType: true,
         },
         orderBy: {
             createdAt: 'desc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-    });
-
+    })
 
     const { data: count } = useCountTrainingCourse({
         where: {
@@ -111,9 +110,12 @@ export default function TrainingCoursePage() {
         },
     })
 
-    const debouncedRefetch = useCallback(_.debounce(() => {
-        refetch();
-    }, 500), []);
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutTrainingCourseModal.name,
     })
@@ -132,7 +134,7 @@ export default function TrainingCoursePage() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -140,23 +142,27 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-    const { data: trainingFormData = [], refetch: refetchForm } = useFindManyTrainingForm({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingFormData = [], refetch: refetchForm } =
+        useFindManyTrainingForm({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingTypeData = [], refetch: refetchType } = useFindManyTrainingType({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } = useFindManyTrainingObjectType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingTypeData = [], refetch: refetchType } =
+        useFindManyTrainingType({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: trainingLevelData = [], refetch: refetchLevel } =
+        useFindManyTrainingLevel({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+            take: 1000,
+            skip: 0,
+        })
     const handleFilterChange = (key: any, value: any) => {
         if (key !== "time") {
             setFilters((prev) => {

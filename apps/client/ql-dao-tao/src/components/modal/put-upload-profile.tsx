@@ -3,9 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { UserType } from '@workspace/db'
-import {
-    useFindManyUserType
-} from '@workspace/db/hooks'
+import { useFindManyUserType } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react'
@@ -34,10 +32,11 @@ const PutUploadProfileModal = () => {
     }, [code])
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: userTypeData = [], refetch: refetchUserType } =
+        useFindManyUserType({
+            take: 1000,
+            skip: 0,
+        })
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return
@@ -64,7 +63,6 @@ const PutUploadProfileModal = () => {
         }
         hideSpinner()
     }
-
 
     return (
         <PutFormModal
@@ -100,20 +98,20 @@ const PutUploadProfileModal = () => {
                     required
                     valuePropName="fileList"
                     getValueFromEvent={(e) => {
-                        return Array.isArray(e) ? e : e?.fileList;
+                        return Array.isArray(e) ? e : e?.fileList
                     }}
                 >
                     <Upload
                         beforeUpload={() => false} // Không upload ngay, chỉ chọn file
-                        maxCount={1}               // Chỉ cho chọn 1 file
-                        accept=".xlsx,.xls"        // Chỉ chấp nhận file Excel
+                        maxCount={1} // Chỉ cho chọn 1 file
+                        accept=".xlsx,.xls" // Chỉ chấp nhận file Excel
                     >
-                        <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
+                        <Button icon={<UploadOutlined />}>
+                            Chọn file Excel
+                        </Button>
                     </Upload>
                 </FormItem>
             </Col>
-
-
         </PutFormModal>
     )
 }

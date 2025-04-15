@@ -21,7 +21,6 @@ const createRole = async (context: any): Promise<any> => {
     return context.json(role, 201)
 }
 
-
 const updateRole = async (context: any): Promise<any> => {
     const { id } = context.req.param()
     const { groupIds = [], permissions, ...rest } = context.req.valid('json')
@@ -46,9 +45,7 @@ const updateRole = async (context: any): Promise<any> => {
     return context.json(role, 200)
 }
 
-
-export default 
-{
+export default {
     createRole,
     updateRole,
 }

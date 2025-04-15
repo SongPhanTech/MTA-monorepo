@@ -33,20 +33,23 @@ const PutFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyOrganization({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: manageOrgData = [], refetch: refetchManageOrg } =
+        useFindManyOrganization({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: organizations = [], refetch: refetchFixedClasss } = useFindManyFixedClass({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: organizations = [], refetch: refetchFixedClasss } =
+        useFindManyFixedClass({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -61,7 +64,8 @@ const PutFixedClassModal = () => {
                         name: output.name,
                         description: output.description,
                         trainingCourseId: output.trainingCourseId,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                     },
                     where: {
                         id,
@@ -75,7 +79,8 @@ const PutFixedClassModal = () => {
                         name: output.name,
                         description: output.description,
                         trainingCourseId: output.trainingCourseId,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -100,7 +105,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue(level)
         }
     }, [level])
-    const treeData = buildOrgTree(manageOrgData);
+    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <PutFormModal
@@ -109,11 +114,7 @@ const PutFixedClassModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa lớp biên chế'
-                    : 'Thêm mới lớp biên chế'
-            }
+            title={id ? 'Chỉnh sửa lớp biên chế' : 'Thêm mới lớp biên chế'}
             className="w-[30vw]"
         >
             <Col span={24}>
@@ -123,7 +124,7 @@ const PutFixedClassModal = () => {
                     label="Mã lớp biên chế"
                     required
                 >
-                    <Input placeholder='Nhập mã lớp biên chế' />
+                    <Input placeholder="Nhập mã lớp biên chế" />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -143,12 +144,15 @@ const PutFixedClassModal = () => {
                     label="Khóa"
                     required
                 >
-                    <Select placeholder='Chọn khóa' options={trainingCourseData.map((i: TrainingCourse) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn khóa"
+                        options={trainingCourseData.map((i: TrainingCourse) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -165,7 +169,9 @@ const PutFixedClassModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                         }
                     />
                 </FormItem>

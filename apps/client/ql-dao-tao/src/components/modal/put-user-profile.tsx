@@ -2,7 +2,12 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserProfile, TrainingCourse, Organization, UserType } from '@workspace/db'
+import type {
+    UserProfile,
+    TrainingCourse,
+    Organization,
+    UserType,
+} from '@workspace/db'
 import {
     useCreateUserProfile,
     useFindUniqueUserProfile,
@@ -34,19 +39,22 @@ const PutUserProfileModal = () => {
     const { id, code } = input ?? {};
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: fixedClassData = [], refetch: refetchFixedClassData } = useFindManyFixedClass({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: fixedClassData = [], refetch: refetchFixedClassData } =
+        useFindManyFixedClass({
+            take: 1000,
+            skip: 0,
+        })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: userTypeData = [], refetch: refetchUserType } =
+        useFindManyUserType({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -108,7 +116,7 @@ const PutUserProfileModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                dateOfBirth: dayjs(level.dateOfBirth)
+                dateOfBirth: dayjs(level.dateOfBirth),
             })
         }
     }, [level])
@@ -149,12 +157,15 @@ const PutUserProfileModal = () => {
                     label="Đối tượng"
                     required
                 >
-                    <Select placeholder='Chọn đối tượng' options={userTypeData.map((i: UserType) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn đối tượng"
+                        options={userTypeData.map((i: UserType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col> */}
             <Col span={12}>
@@ -187,23 +198,21 @@ const PutUserProfileModal = () => {
                     form={form}
                     name="gender"
                     label="Giới tính"
-                // required
+                    // required
                 >
-                    <Select placeholder="Chọn giới tính" options={GENDER_LIST.map((i: any) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn giới tính"
+                        options={GENDER_LIST.map((i: any) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="idCardNumber"
-                    label="Số CCCD"
-
-                >
+                <FormItem form={form} name="idCardNumber" label="Số CCCD">
                     <Input placeholder="Nhập số CCCD" />
                 </FormItem>
             </Col>

@@ -6,7 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { FeedbackStatus } from '@prisma/client';
+import { FeedbackStatus } from '@zenstackhq/runtime/models';
 import { FeedbackStatusSchema } from '../enums/FeedbackStatus.schema';
 import { SatisfactionSchema } from '../enums/Satisfaction.schema';
 const baseSchema = z.object({

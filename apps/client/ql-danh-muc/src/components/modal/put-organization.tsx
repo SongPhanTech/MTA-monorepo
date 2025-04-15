@@ -8,7 +8,7 @@ import {
     useFindUniqueOrganization,
     useFindManyOrganizationType,
     useFindManyOrganization,
-    useUpdateOrganization
+    useUpdateOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
@@ -28,13 +28,14 @@ const PutOrganizationModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data = [], refetch } = useFindManyOrganizationType({
-            take: 1000,
-            skip: 0,
-    })
-    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyOrganization({
-        take: 1000, 
+        take: 1000,
         skip: 0,
     })
+    const { data: organizations = [], refetch: refetchOrganizations } =
+        useFindManyOrganization({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()
@@ -45,12 +46,12 @@ const PutOrganizationModal = () => {
             if (id) {
                 await updateLevel({
                     data: {
-                        typeId:output.typeId,
+                        typeId: output.typeId,
                         address: output.address,
                         code: output.code,
                         name: output.name,
                         description: output.description,
-                        parentId:output.parentId
+                        parentId: output.parentId,
                     },
                     where: {
                         id,
@@ -60,12 +61,12 @@ const PutOrganizationModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        typeId:output.typeId,
+                        typeId: output.typeId,
                         address: output.address,
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
-                        parentId:output.parentId
+                        parentId: output.parentId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -98,30 +99,16 @@ const PutOrganizationModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa đơn vị'
-                    : 'Thêm mới đơn vị'
-            }
+            title={id ? 'Chỉnh sửa đơn vị' : 'Thêm mới đơn vị'}
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã đơn vị"
-                    required
-                >
-                    <Input placeholder='Nhập mã đơn vị' />
+                <FormItem form={form} name="code" label="Mã đơn vị" required>
+                    <Input placeholder="Nhập mã đơn vị" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên đơn vị"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên đơn vị" required>
                     <Input placeholder="Nhập tên đơn vị" />
                 </FormItem>
             </Col>
@@ -132,12 +119,15 @@ const PutOrganizationModal = () => {
                     label="Loại đơn vị"
                     required
                 >
-                    <Select placeholder='Chọn loại đơn vị' options={data.map((i: OrganizationType) =>{
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn loại đơn vị"
+                        options={data.map((i: OrganizationType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -147,21 +137,19 @@ const PutOrganizationModal = () => {
                     label="Đơn vị cấp trên"
                     required
                 >
-                    <Select placeholder='Chọn đơn vị cấp trên' options={organizations.map((i: Organization) =>{
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn đơn vị cấp trên"
+                        options={organizations.map((i: Organization) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="address"
-                    label="Địa chỉ"
-                    required
-                >
+                <FormItem form={form} name="address" label="Địa chỉ" required>
                     <Input placeholder="Nhập địa chỉ" />
                 </FormItem>
             </Col>

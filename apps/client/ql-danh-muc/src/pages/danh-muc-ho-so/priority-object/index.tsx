@@ -9,7 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountPriorityObject,
     useFindManyPriorityObject,
-    useUpdatePriorityObject
+    useUpdatePriorityObject,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -62,7 +62,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {

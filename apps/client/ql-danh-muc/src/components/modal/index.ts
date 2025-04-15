@@ -24,7 +24,15 @@ import PutNationalityModal from './put-nationality'
 import PutRegistrationAreaModal from './put-registration-area'
 import PutReligionModal from './put-religion'
 import PutUserTypeModal from './put-user-type'
-export { ConfirmModal, PutLevelModal, PutRankModal, PutAcademicDegreeTypeModal, PutAcademicRankTypeModal, PutOrganizationTypeModal,PutPositionModal, PutOrganizationModal,
+export {
+    ConfirmModal,
+    PutLevelModal,
+    PutRankModal,
+    PutAcademicDegreeTypeModal,
+    PutAcademicRankTypeModal,
+    PutOrganizationTypeModal,
+    PutPositionModal,
+    PutOrganizationModal,
     PutStudyRankModal,
     PutTrainingBlockModal,
     PutTrainingFieldModal,
@@ -42,5 +50,5 @@ export { ConfirmModal, PutLevelModal, PutRankModal, PutAcademicDegreeTypeModal, 
     PutNationalityModal,
     PutRegistrationAreaModal,
     PutReligionModal,
-    PutUserTypeModal
-  }
+    PutUserTypeModal,
+}

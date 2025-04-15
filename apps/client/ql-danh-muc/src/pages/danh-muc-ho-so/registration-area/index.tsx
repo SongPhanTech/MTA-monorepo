@@ -9,7 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountRegistrationArea,
     useFindManyRegistrationArea,
-    useUpdateRegistrationArea
+    useUpdateRegistrationArea,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -53,7 +53,8 @@ export default function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateRegistrationArea()
+    const { mutateAsync: updateAcademicDegreeType } =
+        useUpdateRegistrationArea()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -62,7 +63,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {

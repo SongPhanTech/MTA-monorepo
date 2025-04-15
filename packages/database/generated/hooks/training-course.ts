@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, TrainingCourse } from "@prisma/client";
+import type { Prisma, TrainingCourse } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingCourse<TArgs extends Prisma.TrainingCour
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingCourse', `${endpoint}/trainingCourse/count`, args, options, fetch);
 }
-import type { TrainingCourseStatus } from '@prisma/client';
+import type { TrainingCourseStatus } from '@zenstackhq/runtime/models';
 
 export function useCheckTrainingCourse<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string; trainingObjectTypeId?: string; trainingTypeId?: string; trainingLevelId?: string; trainingFormId?: string; status?: TrainingCourseStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

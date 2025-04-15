@@ -13,6 +13,6 @@
     "editor.defaultFormatter": "golang.go"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }

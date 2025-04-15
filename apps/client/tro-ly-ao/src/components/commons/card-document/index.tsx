@@ -1,0 +1,128 @@
+import { env } from '@/env'
+import {
+    DeleteFilled,
+    FileExcelFilled,
+    FileFilled,
+    FilePdfFilled,
+    FilePptFilled,
+    FileWordFilled,
+} from '@ant-design/icons'
+import { cn } from '@lib/utils'
+import type { Document } from '@workspace/db'
+import { Image, Popconfirm } from 'antd'
+import { useCallback, useMemo } from 'react'
+
+type CardDocumentProps = {
+    onDelete?: () => void
+    className?: string
+} & Partial<Document>
+
+export const CardDocument = ({
+    title,
+    onDelete,
+    className,
+    fileType,
+    uri,
+}: CardDocumentProps) => {
+    const onDownload = async (url: string, fileName: string) => {
+        const response = await fetch(url)
+        if (!response.ok) throw new Error('Lỗi khi tải file')
+        const blob = await response.blob()
+        const blobUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode?.removeChild(link)
+    }
+
+    const isDisplayable = useMemo(() => {
+        if (fileType) {
+            return (
+                fileType.includes('image') ||
+                fileType.includes('video') ||
+                fileType.includes('audio')
+            )
+        }
+        return false
+    }, [fileType])
+    const IconOfFile = useMemo(() => {
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ) {
+            return FileWordFilled
+        }
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ) {
+            return FileExcelFilled
+        }
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        ) {
+            return FilePptFilled
+        }
+        if (fileType === 'application/pdf') {
+            return FilePdfFilled
+        }
+        return FileFilled
+    }, [fileType])
+
+    const getUrl = useCallback((path: string) => {
+        const isAbsolutePath =
+            path.startsWith('http') || path.startsWith('blob')
+        if (isAbsolutePath) return path
+        return new URL(path, env.NEXT_PUBLIC_MINIO_ENDPOINT).href
+    }, [])
+
+    return (
+        <div className="w-[150px] flex flex-col gap-2">
+            <div
+                className={cn(
+                    'group relative w-[150px] h-[150px] flex justify-center border border-solid border-gray-300 rounded-md items-center',
+                    className
+                )}
+            >
+                <div className="absolute flex top-1 right-2 gap-2 group-hover:visible invisible z-50">
+                    <Popconfirm
+                        placement="topLeft"
+                        title="Xác nhận xóa dữ liệu?"
+                        description="Dữ liệu sẽ bị xóa vĩnh viễn"
+                        okText="Đồng ý"
+                        onConfirm={onDelete}
+                        cancelText="Hủy"
+                    >
+                        <div className="bg-[#DCDCDCBB]  w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer">
+                            <DeleteFilled className="w-5 h-5 cursor-pointer text-xl text-[#FF4D4F]" />
+                        </div>
+                    </Popconfirm>
+                </div>
+                {!isDisplayable ? (
+                    <IconOfFile
+                        className="cursor-pointer text-7xl text-primary"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            // window.open(getUrl(url || ''), '_blank')
+                            const urlDownload = getUrl(uri || '')
+                            onDownload(urlDownload, title || urlDownload)
+                        }}
+                    />
+                ) : (
+                    <Image
+                        src={getUrl(uri || '')}
+                        className={cn(
+                            'w-[150px] h-[150px] rounded-md cursor-pointer object-cover',
+                            className
+                        )}
+                        alt="img-tai-lieu"
+                    />
+                )}
+            </div>
+            <span>{title}</span>
+        </div>
+    )
+}

@@ -2,16 +2,17 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutMilestoneModal } from '@components/modal'
+import { PutCurriculumVersionModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { SchoolYear } from '@workspace/db'
+import { Curriculum, CurriculumStatus, SchoolYear } from '@workspace/db'
 import {
-    useCountMilestone,
-    useFindManyMilestone,
+    useCountCurriculumVersion,
+    useFindManyCurriculum,
+    useFindManyCurriculumVersion,
     useFindManySchoolYear,
-    useUpdateMilestone,
+    useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -21,32 +22,45 @@ import {
     Form,
     Input,
     Row,
+    Tag,
     Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-
-export default function MilestonePage() {
+const statusOptions = {
+    ACTIVE: { label: 'Đang hoạt động', color: 'green' },
+    INACTIVATED: { label: 'Không hoạt động', color: 'red' },
+}
+export default function CurriculumVersionPage({ curriculumInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
-        schoolYearId: undefined,
+        name: '',
+        startDate: undefined,
+        endDate: undefined,
+        curriculumId: curriculumInfo ? curriculumInfo.id : undefined
     });
-    const { data = [], refetch } = useFindManyMilestone({
+    const { data = [], refetch } = useFindManyCurriculumVersion({
         where: {
             name: {
-                contains: searchText,
+                contains: filters.name,
             },
-            schoolYearId: filters.schoolYearId,
+            ...(filters.curriculumId ? { curriculumId: filters.curriculumId } : {}),
+            ...(filters.startDate && filters.endDate ? {
+                startDate: {
+                    gte: new Date(filters.startDate),
+                    lte: new Date(filters.endDate),
+                }
+            } : {}),
         },
         include: {
-            SchoolYear: true
+            Curriculum: true
         },
         orderBy: {
             createdAt: 'desc',
@@ -55,18 +69,24 @@ export default function MilestonePage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountMilestone({
+    const { data: count } = useCountCurriculumVersion({
         where: {
             name: {
                 contains: searchText,
             },
-            schoolYearId: filters.schoolYearId,
+            ...(filters.curriculumId ? { curriculumId: filters.curriculumId } : {}),
+            ...(filters.startDate && filters.endDate ? {
+                startDate: {
+                    gte: new Date(filters.startDate),
+                    lte: new Date(filters.endDate),
+                }
+            } : {}),
         },
     })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutMilestoneModal.name,
+        tag: PutCurriculumVersionModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -74,11 +94,11 @@ export default function MilestonePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateMilestone } = useUpdateMilestone()
+    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateMilestone({
+            await updateCurriculumVersion({
                 where: {
                     id,
                 },
@@ -92,6 +112,10 @@ export default function MilestonePage() {
         hideSpinner()
     }
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
+        take: 1000,
+        skip: 0,
+    })
+    const { data: dataCurriculum = [], refetch: refetchCurriculum } = useFindManyCurriculum({
         take: 1000,
         skip: 0,
     })
@@ -115,10 +139,55 @@ export default function MilestonePage() {
         }
     }, [dataSchoolYear]);
 
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+    const handleFilterChange = (key: any, value: any) => {
+        if (key !== "time") {
+            setFilters((prev) => {
+                const newFilters = { ...prev, [key]: value };
+                debouncedRefetch();
+                return newFilters;
+            });
+        } else {
+            setFilters((prev) => {
+                const newFilters = {
+                    ...prev,
+                    startDate: value?.startDate ?? undefined,
+                    endDate: value?.endDate ?? undefined
+                };
+                debouncedRefetch();
+                return newFilters;
+            });
+        }
+    };
+    async function handleStatusChange(id: string, newStatus: CurriculumStatus) {
+        try {
+            showSpinner()
+            await updateCurriculumVersion({
+                where: {
+                    id,
+                },
+                data: {
+                    status: newStatus
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const options = Object.entries(statusOptions).map(([value, { label, color }]) => ({
+        value,
+        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+    }));
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Mốc huấn luyện
+                Phiên bản chương trình đào tạo
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
@@ -128,15 +197,21 @@ export default function MilestonePage() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    allowClear
+                                    onPressEnter={(e) => {
+                                        const value = e.currentTarget.value?.trim();
+                                        handleFilterChange('name', value);
+                                    }}
+                                    onChange={(e) => {
+                                        if (!e.target.value || e.target.value === "") {
+                                            handleFilterChange('name', undefined);
+                                        }
+                                    }}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
                             <Flex justify='space-between' align='center'>
                                 <label>Năm học:</label>
                                 <Select
@@ -146,21 +221,43 @@ export default function MilestonePage() {
                                     options={dataSchoolYear.map((i: SchoolYear) => {
                                         return {
                                             value: i.id,
-                                            label: i.name
+                                            label: i.name,
+                                            startDate: i.startDate,
+                                            endDate: i.endDate
                                         }
                                     })}
-                                    value={filters.schoolYearId}
-                                    onChange={(value: number | null) => {
-                                        setFilters((prev: any) => ({
-                                            ...prev,
-                                            schoolYearId: value ?? undefined,
-                                        }));
+                                    // value={filters.schoolYearId}
+                                    onChange={(value: number | null, option: any) => {
+                                        handleFilterChange("time", option ?? undefined)
                                     }}
                                 />
                             </Flex>
 
                             {/* </Form.Item> */}
                         </Col>
+                        {!curriculumInfo && <Col span={6}>
+                            <Flex justify='space-between' align='center'>
+                                <label>CTĐT:</label>
+                                <Select
+                                    className="w-[70%]"
+                                    placeholder='Chọn chương trình đào tạo'
+                                    allowClear
+                                    options={dataCurriculum.map((i: Curriculum) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                        }
+                                    })}
+                                    // value={filters.schoolYearId}
+                                    onChange={(value: number | null, option: any) => {
+                                        handleFilterChange("curriculumId", value)
+                                    }}
+                                />
+                            </Flex>
+
+                            {/* </Form.Item> */}
+                        </Col>
+                        }
                         {/* Thêm mới */}
                         <Col span={6}>
                             <Flex justify="end">
@@ -188,13 +285,11 @@ export default function MilestonePage() {
                                 dataIndex: 'name',
                             },
                             {
-                                title: 'Thời gian',
-                                dataIndex: 'period',
-                            },
-                            {
-                                title: 'Năm học',
-                                dataIndex: 'SchoolYear',
-                                render: (value) => value?.name ? value?.name : ""
+                                title: 'CTĐT',
+                                dataIndex: 'Curriculum',
+                                width: 120,
+                                render: (value: any, record: any) => value?.name ? value?.name : ""
+
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -209,8 +304,52 @@ export default function MilestonePage() {
                                     dayjs(endDate).format('DD/MM/YYYY') : "",
                             },
                             {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
+                                title: 'Tài liệu kết xuất',
+                                render: ({ documentPath }) => documentPath ?
+                                    <a
+                                        href={documentPath}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: "blue", textDecoration: "underline" }}
+                                    >
+                                        Xem thêm
+                                    </a> : "",
+                            },
+                            {
+                                title: 'Tài liệu kết xuất',
+                                render: ({ renderPath }) => renderPath ?
+                                    <a
+                                        href={renderPath}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: "blue", textDecoration: "underline" }}
+                                    >
+                                        Xem thêm
+                                    </a> : "",
+                            },
+                            {
+                                title: 'Thông tin',
+                                dataIndex: 'infomation',
+                                // width: 100,
+                            },
+                            {
+                                title: 'Trạng thái',
+                                width: 130,
+                                render: (record: any) => {
+                                    return (
+                                        <Select
+                                            className='w-[155px]'
+                                            value={record.status}
+                                            onChange={(newStatus) => handleStatusChange(record.id, newStatus as CurriculumStatus)}
+                                            options={options}
+                                            optionLabelProp="label"
+                                            // style={{ width: 180 }}
+                                            bordered={false}
+                                            showSearch={false}
+
+                                        />
+                                    )
+                                }
                             },
                             {
                                 title: 'Thao tác',
@@ -254,6 +393,6 @@ export default function MilestonePage() {
     )
 }
 
-MilestonePage.getLayout = function getLayout(page: React.ReactElement) {
+CurriculumVersionPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

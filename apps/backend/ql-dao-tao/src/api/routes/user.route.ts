@@ -3,8 +3,6 @@ import * as models from '@workspace/db/zod/models'
 import { ListOf, PaginationQuerySchema } from '../../zod/base'
 import SessionApp from '../sessions'
 
-
-
 const UserSchema = models.UserScalarSchema.openapi('User')
 export const UserFilter = z
     .object({
@@ -115,14 +113,19 @@ const getOneUser = createRoute({
             description: 'Retrieve one user',
         },
         404: {
-            content: { 'application/json': { schema: z.object({ message: z.string() }).openapi('ErrorSchema') } },
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({ message: z.string() })
+                        .openapi('ErrorSchema'),
+                },
+            },
             description: 'User not found',
         },
     },
 })
 
-export default
-{
+export default {
     createUser,
     updateUser,
     getListUsers,

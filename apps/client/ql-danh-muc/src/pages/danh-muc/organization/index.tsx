@@ -40,7 +40,7 @@ export default function Page() {
             },
         },
         include: {
-            type: true, 
+            type: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -67,7 +67,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -149,7 +149,8 @@ export default function Page() {
                             {
                                 title: 'Loại đơn vị',
                                 dataIndex: 'type',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Địa chỉ',

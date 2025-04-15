@@ -13,10 +13,12 @@ const uploadExcelCreateFixedClass = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z.object({
-                        file: z.any(), // file upload
-                        trainingCourseId: z.string() // loại thông tin
-                    }).openapi('uploadExcelCreateFixedClass'),
+                    schema: z
+                        .object({
+                            file: z.any(), // file upload
+                            trainingCourseId: z.string(), // loại thông tin
+                        })
+                        .openapi('uploadExcelCreateFixedClass'),
                 },
             },
         },
@@ -25,8 +27,8 @@ const uploadExcelCreateFixedClass = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(z.any())
-                }
+                    schema: z.array(z.any()),
+                },
             },
             description: 'Tải danh sách thành công',
         },
@@ -40,17 +42,18 @@ const classDivision = createRoute({
     operationId: 'classDivision',
     path: '/FixedClass/upload-excel-update-user-profile',
     method: 'post',
-    description:
-        'Phân chia học viên vào các lớp',
+    description: 'Phân chia học viên vào các lớp',
     tags: ['FixedClass'],
     summary: 'Class Division',
     request: {
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z.object({
-                        file: z.any(), // file uploadƯ
-                    }).openapi('classDivision'),
+                    schema: z
+                        .object({
+                            file: z.any(), // file uploadƯ
+                        })
+                        .openapi('classDivision'),
                 },
             },
         },
@@ -59,8 +62,8 @@ const classDivision = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(z.any())
-                }
+                    schema: z.array(z.any()),
+                },
             },
             description: 'Tải danh sách thành công',
         },
@@ -70,41 +73,42 @@ const classDivision = createRoute({
     },
 })
 
-const exportDocxListStudentFixedClass =
-    createRoute({
-        operationId: 'exportStudentFixedClassDocx',
-        path: '/FixedClass/export-docx-list-student-fixed-class',
-        description: 'Xuất file docx danh sách sinh viên trong lớp biên chế',
-        tags: ['FixedClass'],
-        summary: 'Export list of student FixedClass as .docx',
-        method: 'get',
-        request: {
-            query: z.object({
-                fixedClassId: z
-                    .string()
-                    .optional()
-                    .openapi({ param: { style: 'form' } }),
-                // includeGroups: z
-                //     .string()
-                //     .optional()
-                //     .openapi({ param: { style: 'form' } }),
-            }),
-        },
-        responses: {
-            200: {
-                description: 'Export list of  student FixedClass as .docx',
-                content: {
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
-                        schema: z.string().openapi('ExportedRolesDOCX (base64)'),
+const exportDocxListStudentFixedClass = createRoute({
+    operationId: 'exportStudentFixedClassDocx',
+    path: '/FixedClass/export-docx-list-student-fixed-class',
+    description: 'Xuất file docx danh sách sinh viên trong lớp biên chế',
+    tags: ['FixedClass'],
+    summary: 'Export list of student FixedClass as .docx',
+    method: 'get',
+    request: {
+        query: z.object({
+            fixedClassId: z
+                .string()
+                .optional()
+                .openapi({ param: { style: 'form' } }),
+            // includeGroups: z
+            //     .string()
+            //     .optional()
+            //     .openapi({ param: { style: 'form' } }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of  student FixedClass as .docx',
+            content: {
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    {
+                        schema: z
+                            .string()
+                            .openapi('ExportedRolesDOCX (base64)'),
                     },
-                },
             },
         },
-    })
+    },
+})
 
-export default
-    {
-        uploadExcelCreateFixedClass,
-        classDivision,
-        exportDocxListStudentFixedClass
-    }
+export default {
+    uploadExcelCreateFixedClass,
+    classDivision,
+    exportDocxListStudentFixedClass,
+}

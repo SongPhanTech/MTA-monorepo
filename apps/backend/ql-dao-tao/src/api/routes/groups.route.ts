@@ -52,9 +52,7 @@ const updateGroup = createRoute({
     },
 })
 
-export default
-{
+export default {
     createGroup,
-    updateGroup
+    updateGroup,
 }
-    

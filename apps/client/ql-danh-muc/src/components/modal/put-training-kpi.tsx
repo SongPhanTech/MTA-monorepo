@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingKPI } from "@workspace/db"
+import type { TrainingKPI } from '@workspace/db'
 import {
     useCreateTrainingKPI,
     useFindUniqueTrainingKPI,
@@ -45,7 +45,7 @@ const PutTraningKPIModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutTraningKPIModal = () => {
                     label="Mã nội dung tính tải đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã nội dung tính tải đào tạo' />
+                    <Input placeholder="Nhập mã nội dung tính tải đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

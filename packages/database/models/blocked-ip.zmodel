@@ -1,7 +1,0 @@
-import 'base'
-
-model BlockedIp extends Base {
-  ipAddress String    @unique @regex("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", "Invalid IP address")
-  reason    String?   @db.Text
-  expiresAt DateTime?
-}

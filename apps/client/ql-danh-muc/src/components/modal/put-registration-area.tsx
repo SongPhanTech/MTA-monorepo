@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { RegistrationArea } from "@workspace/db"
+import type { RegistrationArea } from '@workspace/db'
 import {
     useCreateRegistrationArea,
     useFindUniqueRegistrationArea,
@@ -45,7 +45,7 @@ const PutRegistrationAreaModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -81,9 +81,7 @@ const PutRegistrationAreaModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={
-                id
-                    ? 'Chỉnh sửa khu vực đăng ký'
-                    : 'Thêm mới khu vực đăng ký'
+                id ? 'Chỉnh sửa khu vực đăng ký' : 'Thêm mới khu vực đăng ký'
             }
             className="w-[30vw]"
         >
@@ -94,7 +92,7 @@ const PutRegistrationAreaModal = () => {
                     label="Mã khu vực đăng ký"
                     required
                 >
-                    <Input placeholder='Nhập mã khu vực đăng ký' />
+                    <Input placeholder="Nhập mã khu vực đăng ký" />
                 </FormItem>
             </Col>
             <Col span={24}>

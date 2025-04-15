@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { StudyRank } from "@workspace/db"
+import type { StudyRank } from '@workspace/db'
 import {
     useCreateStudyRank,
     useFindUniqueStudyRank,
@@ -45,7 +45,7 @@ const PutStudyRankModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -94,7 +94,7 @@ const PutStudyRankModal = () => {
                     label="Mã hình thức đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã hình thức đào tạo' />
+                    <Input placeholder="Nhập mã hình thức đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -1,0 +1,32 @@
+import '../base'
+import 'user'
+
+model Feedback extends Base {
+  content      String
+  status       FeedbackStatus
+  satisfaction Satisfaction
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
+
+  @@allow('create', auth() != null)
+  @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)
+  @@allow('delete', auth().role == 'ADMIN' || auth() == user)
+  @@schema("ql-nguoi-dung")
+}
+
+enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+  @@schema("ql-nguoi-dung")
+}
+
+enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
+  @@schema("ql-nguoi-dung")
+}

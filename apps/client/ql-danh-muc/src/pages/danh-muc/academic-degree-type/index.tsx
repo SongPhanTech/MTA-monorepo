@@ -55,7 +55,8 @@ export default function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateAcademicDegreeType } = useUpdateAcademicDegreeType()
+    const { mutateAsync: updateAcademicDegreeType } =
+        useUpdateAcademicDegreeType()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -64,7 +65,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {

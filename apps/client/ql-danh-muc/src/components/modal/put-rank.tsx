@@ -45,7 +45,7 @@ const PutRankModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,11 +80,7 @@ const PutRankModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa cấp bậc hàm'
-                    : 'Thêm mới cấp bậc hàm'
-            }
+            title={id ? 'Chỉnh sửa cấp bậc hàm' : 'Thêm mới cấp bậc hàm'}
             className="w-[30vw]"
         >
             <Col span={24}>
@@ -94,7 +90,7 @@ const PutRankModal = () => {
                     label="Mã cấp bậc hàm"
                     required
                 >
-                    <Input placeholder='Nhập mã cấp bậc hàm' />
+                    <Input placeholder="Nhập mã cấp bậc hàm" />
                 </FormItem>
             </Col>
             <Col span={24}>

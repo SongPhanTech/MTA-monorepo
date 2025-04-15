@@ -8,7 +8,7 @@ import {
     useFindUniqueMilestone,
     useFindManySchoolYear,
     useFindManyMilestone,
-    useUpdateMilestone
+    useUpdateMilestone,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
@@ -35,10 +35,11 @@ const PutMilestoneModal = () => {
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchMilestones } = useFindManyMilestone({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: organizations = [], refetch: refetchMilestones } =
+        useFindManyMilestone({
+            take: 1000,
+            skip: 0,
+        })
 
     const { mutateAsync: createMilestone } = useCreateMilestone()
     const { mutateAsync: updateMilestone } = useUpdateMilestone()
@@ -54,7 +55,7 @@ const PutMilestoneModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
-                        description: output.description
+                        description: output.description,
                     },
                     where: {
                         id,
@@ -69,7 +70,7 @@ const PutMilestoneModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
-                        description: output.description
+                        description: output.description,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -95,11 +96,10 @@ const PutMilestoneModal = () => {
                 ...level,
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
-
             })
         } else {
             form.setFieldsValue({
-                period: "12"
+                period: '12',
             })
         }
     }, [level])
@@ -111,30 +111,16 @@ const PutMilestoneModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa mốc huấn luyện'
-                    : 'Thêm mới mốc huấn luyện'
-            }
+            title={id ? 'Chỉnh sửa mốc huấn luyện' : 'Thêm mới mốc huấn luyện'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Nội dung"
-                    required
-                >
+                <FormItem form={form} name="name" label="Nội dung" required>
                     <Input placeholder="Nhập nội dung" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="period"
-                    label="Thời gian"
-                    required
-                >
+                <FormItem form={form} name="period" label="Thời gian" required>
                     <Input placeholder="Nhập thời gian" />
                 </FormItem>
             </Col>
@@ -145,21 +131,34 @@ const PutMilestoneModal = () => {
                     label="Năm học"
                     required
                 >
-                    <Select placeholder='Chọn năm học' options={data.map((i: SchoolYear) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
+                    <Select
+                        placeholder="Chọn năm học"
+                        options={data.map((i: SchoolYear) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
+                <FormItem
+                    form={form}
+                    name="startDate"
+                    label="Ngày bắt đầu"
+                    required
+                >
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
+                <FormItem
+                    form={form}
+                    name="endDate"
+                    label="Ngày kết thúc"
+                    required
+                >
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>

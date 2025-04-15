@@ -63,7 +63,7 @@ const Table = <T extends Record<string, unknown>>({
                     if (onRowClick) {
                         onRowClick(record);
                     }
-                }
+                },
             })}
         />
     )

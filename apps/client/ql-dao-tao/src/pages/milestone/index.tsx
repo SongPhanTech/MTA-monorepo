@@ -46,7 +46,7 @@ export default function MilestonePage() {
             schoolYearId: filters.schoolYearId,
         },
         include: {
-            SchoolYear: true
+            SchoolYear: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -83,7 +83,7 @@ export default function MilestonePage() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -194,7 +194,8 @@ export default function MilestonePage() {
                             {
                                 title: 'Năm học',
                                 dataIndex: 'SchoolYear',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -205,8 +206,10 @@ export default function MilestonePage() {
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',

@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Nationality } from "@workspace/db"
+import type { Nationality } from '@workspace/db'
 import {
     useCreateNationality,
     useFindUniqueNationality,
@@ -45,7 +45,7 @@ const PutNationalityModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,21 +80,12 @@ const PutNationalityModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa quốc tịch'
-                    : 'Thêm mới quốc tịch'
-            }
+            title={id ? 'Chỉnh sửa quốc tịch' : 'Thêm mới quốc tịch'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã quốc tịch"
-                    required
-                >
-                    <Input placeholder='Nhập mã quốc tịch' />
+                <FormItem form={form} name="code" label="Mã quốc tịch" required>
+                    <Input placeholder="Nhập mã quốc tịch" />
                 </FormItem>
             </Col>
             <Col span={24}>

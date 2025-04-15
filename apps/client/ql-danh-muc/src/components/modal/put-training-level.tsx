@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingLevel } from "@workspace/db"
+import type { TrainingLevel } from '@workspace/db'
 import {
     useCreateTrainingLevel,
     useFindUniqueTrainingLevel,
@@ -45,7 +45,7 @@ const PutTrainingLevelModal = () => {
             } else {
                 await createLevel({
                     data: {
-                        code : output.code,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                     },
@@ -80,11 +80,7 @@ const PutTrainingLevelModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa bậc đào tạo'
-                    : 'Thêm mới bậc đào tạo'
-            }
+            title={id ? 'Chỉnh sửa bậc đào tạo' : 'Thêm mới bậc đào tạo'}
             className="w-[30vw]"
         >
             <Col span={24}>
@@ -94,7 +90,7 @@ const PutTrainingLevelModal = () => {
                     label="Mã bậc đào tạo"
                     required
                 >
-                    <Input placeholder='Nhập mã bậc đào tạo' />
+                    <Input placeholder="Nhập mã bậc đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

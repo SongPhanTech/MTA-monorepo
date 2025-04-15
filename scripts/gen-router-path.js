@@ -14,13 +14,15 @@ const cleanPath = (path = '') => {
         .replaceAll('-', '_')
         .replaceAll('[', '')
         .replaceAll(']', '')
-        .replace('.tsx', '')
+        .replaceAll('.tsx', '')
         .replace('_index', '')
         .toUpperCase()
 }
 
 const cleanRouter = (router = '') => {
     const r = router.replace('/index.tsx', '')
+        .replaceAll('.tsx', '')
+
     return r === '' ? '/' : r
 }
 

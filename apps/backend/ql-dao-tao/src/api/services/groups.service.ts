@@ -2,7 +2,6 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import * as models from '@workspace/db/zod/models'
 import { prisma } from '../..'
 
-
 const createGroup = async (context: any): Promise<any> => {
     const { userIds, roleIds, ...rest } = context.req.valid('json')
 
@@ -17,7 +16,7 @@ const createGroup = async (context: any): Promise<any> => {
     return context.json(data, 201)
 }
 
-const updateGroup= async (context: any): Promise<any> => {
+const updateGroup = async (context: any): Promise<any> => {
     const { id } = context.req.valid('param')
     const { userIds, roleIds, ...rest } = context.req.valid('json')
 
@@ -34,5 +33,5 @@ const updateGroup= async (context: any): Promise<any> => {
 
 export default {
     createGroup,
-    updateGroup
+    updateGroup,
 }

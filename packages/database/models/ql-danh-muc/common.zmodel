@@ -1,0 +1,78 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-nguoi-dung/profile'
+
+model Province extends Base {
+  name    String
+
+  Commune Commune[]
+  @@schema("ql-danh-muc")
+}
+
+model Commune extends Base {
+  name       String
+  Province   Province @relation(fields: [provinceId], references: [id])
+  provinceId String
+  @@unique([name, provinceId])
+  @@schema("ql-danh-muc")
+}
+
+model Level extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+// cấp bậc hàm
+model Rank extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// học hàm
+model AcademicDegreeType extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// học vị
+model AcademicRankType extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// chức vụ
+model Position extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// chức vụ Đảng
+model PositionCPV extends Base {
+  name String
+  @@schema("ql-danh-muc")
+}
+
+// loại đơn vị
+model OrganizationType extends Base {
+  name          String
+  organizations Organization[]
+  @@schema("ql-danh-muc")
+}
+
+// đơn vị
+model Organization extends Base {
+  name         String           @unique
+  type         OrganizationType @relation(fields: [typeId], references: [id])
+  typeId       String
+  parent       Organization?    @relation("ParentChild")
+  parentId     String?
+  children     Organization[]   @relation("ParentChild")
+  address      String?
+
+  curriculum   Curriculum[]
+  fixedClass   FixedClass[]
+
+  subject      Subject[]
+
+  subjectGroup SubjectGroup[]
+  @@schema("ql-danh-muc")
+}

@@ -1,11 +1,10 @@
 // import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
-
 // const uploadExcelCreateFixedClass = createRoute({
 //     operationId: 'uploadExcelCreateFixedClass',
 //     path: '/FixedClass/upload-excel-create-fixed-class',
 //     method: 'post',
-//     description: 
+//     description:
 //         'Thêm mới danh sách lớp biên chế \n\n [trainingCourseId] là mã của khóa học, lấy trong bảng TrainingCourse',
 //     tags: ['FixedClass'],
 //     summary: 'Upload Excel Create FixedClass',
@@ -23,10 +22,10 @@
 //     },
 //     responses: {
 //         200: {
-//             content: { 
-//                 'application/json': { 
-//                     schema: z.array(z.any()) 
-//                 } 
+//             content: {
+//                 'application/json': {
+//                     schema: z.array(z.any())
+//                 }
 //             },
 //             description: 'Tải danh sách thành công',
 //         },
@@ -36,8 +35,7 @@
 //     },
 // })
 
-
-// export default 
+// export default
 // {
 //     uploadExcelCreateFixedClass,
 

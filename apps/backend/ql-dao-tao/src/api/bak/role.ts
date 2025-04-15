@@ -57,79 +57,86 @@ app.openapi(
 
 app.openapi(
     createRoute({
-      operationId: 'exportRoles',
-      path: '/export',
-      method: 'get',
-      responses: {
-        200: {
-          description: 'Export list of roles as .xlsx',
-          content: {
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-              schema: z.string().openapi('ExportedRolesXLSX (base64)'), // optional OpenAPI doc
+        operationId: 'exportRoles',
+        path: '/export',
+        method: 'get',
+        responses: {
+            200: {
+                description: 'Export list of roles as .xlsx',
+                content: {
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                        {
+                            schema: z
+                                .string()
+                                .openapi('ExportedRolesXLSX (base64)'), // optional OpenAPI doc
+                        },
+                },
             },
-          },
         },
-      },
     }),
     async (c) => {
-      const roles = await prisma.role.findMany()
-  
-      // Bước 1: Chuyển đổi dữ liệu sang sheet
-      const data = roles.map(role => ({
-        ID: role.id,
-        Name: role.name,
-        Description: role.description || '',
-        CreatedAt: role.createdAt.toISOString(),
-        UpdatedAt: role.updatedAt.toISOString(),
-      }))
-      const worksheet = XLSX.utils.json_to_sheet(data)
-      const workbook = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Roles')
-  
-      // Bước 2: Ghi ra buffer
-      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
-  
-      // Bước 3: Trả về file với header tải xuống
-      return new Response(buffer, {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          'Content-Disposition': 'attachment; filename="roles.xlsx"',
-        },
-      })
+        const roles = await prisma.role.findMany()
+
+        // Bước 1: Chuyển đổi dữ liệu sang sheet
+        const data = roles.map((role) => ({
+            ID: role.id,
+            Name: role.name,
+            Description: role.description || '',
+            CreatedAt: role.createdAt.toISOString(),
+            UpdatedAt: role.updatedAt.toISOString(),
+        }))
+        const worksheet = XLSX.utils.json_to_sheet(data)
+        const workbook = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Roles')
+
+        // Bước 2: Ghi ra buffer
+        const buffer = XLSX.write(workbook, {
+            type: 'buffer',
+            bookType: 'xlsx',
+        })
+
+        // Bước 3: Trả về file với header tải xuống
+        return new Response(buffer, {
+            status: 200,
+            headers: {
+                'Content-Type':
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition': 'attachment; filename="roles.xlsx"',
+            },
+        })
     }
-  )
+)
 //   app.openapi(
-  // createRoute({
-  //   operationId: 'exportRolesDocx',
-  //   path: '/export-docx',
-  //   method: 'get',
-  //   request: {
-  //     query: z.object({
-  //       includePermissions: z
-  //         .string()
-  //         .optional()
-  //         .openapi({ param: { style: 'form' } }),
-  //       includeGroups: z
-  //         .string()
-  //         .optional()
-  //         .openapi({ param: { style: 'form' } }),
-  //     }),
-  //   },
-  //   responses: {
-  //     200: {
-  //       description: 'Export list of roles as .docx',
-  //       content: {
-  //         'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
-  //           schema: z.string().openapi('ExportedRolesDOCX (base64)'),
-  //         },
-  //       },
-  //     },
-  //   },
-  // }),
+// createRoute({
+//   operationId: 'exportRolesDocx',
+//   path: '/export-docx',
+//   method: 'get',
+//   request: {
+//     query: z.object({
+//       includePermissions: z
+//         .string()
+//         .optional()
+//         .openapi({ param: { style: 'form' } }),
+//       includeGroups: z
+//         .string()
+//         .optional()
+//         .openapi({ param: { style: 'form' } }),
+//     }),
+//   },
+//   responses: {
+//     200: {
+//       description: 'Export list of roles as .docx',
+//       content: {
+//         'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+//           schema: z.string().openapi('ExportedRolesDOCX (base64)'),
+//         },
+//       },
+//     },
+//   },
+// }),
 //     async (c) => {
 //       const roles = await prisma.role.findMany()
-  
+
 //       const table = new Table({
 //         width: {
 //           size: 100,
@@ -164,7 +171,7 @@ app.openapi(
 //           ),
 //         ],
 //       })
-  
+
 //       const doc = new Document({
 //         sections: [
 //           {
@@ -173,9 +180,9 @@ app.openapi(
 //           },
 //         ],
 //       })
-  
+
 //       const buffer = await Packer.toBuffer(doc)
-  
+
 //       return new Response(buffer, {
 //         status: 200,
 //         headers: {
@@ -185,6 +192,5 @@ app.openapi(
 //       })
 //     }
 //   )
-
 
 export default app

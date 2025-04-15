@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Curriculum } from "@prisma/client";
+import type { Prisma, Curriculum } from "@zenstackhq/runtime/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
@@ -327,7 +327,7 @@ export function useSuspenseCountCurriculum<TArgs extends Prisma.CurriculumCountA
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Curriculum', `${endpoint}/curriculum/count`, args, options, fetch);
 }
-import type { CurriculumStatus } from '@prisma/client';
+import type { CurriculumStatus } from '@zenstackhq/runtime/models';
 
 export function useCheckCurriculum<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; description?: string; name?: string; status?: CurriculumStatus; managementOrganizationId?: string; trainingObjectTypeId?: string; trainingLevelId?: string; trainingTimeId?: string; trainingMajorId?: string; infomation?: string; documentPath?: string; renderPath?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();

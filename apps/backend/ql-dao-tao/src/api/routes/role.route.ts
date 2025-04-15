@@ -32,7 +32,6 @@ const createRole = createRoute({
     },
 })
 
-
 const updateRole = createRoute({
     operationId: 'updateRole',
     path: '/{id}',
@@ -64,8 +63,7 @@ const updateRole = createRoute({
     },
 })
 
-export default 
-{
+export default {
     createRole,
     updateRole,
 }

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Column } from '@ant-design/plots';
+import React, { useEffect, useRef } from 'react'
+import { Column } from '@ant-design/plots'
 
 const StaffLevel = () => {
-    const chartRef = useRef<any>(null);
+    const chartRef = useRef<any>(null)
 
     const dataFake = [
         { name: 'Cử nhân', count: 50 },
@@ -11,8 +11,7 @@ const StaffLevel = () => {
         { name: 'Tiến sĩ khoa học', count: 3 },
         { name: 'Phó giáo sư', count: 15 },
         { name: 'Giáo sư', count: 5 },
-    ];
-
+    ]
 
     const config = {
         data: dataFake,
@@ -22,10 +21,9 @@ const StaffLevel = () => {
         style: {
             inset: 5,
         },
-    };
+    }
 
-    return <Column {...config} />;
-};
+    return <Column {...config} />
+}
 
-
-export default StaffLevel;
+export default StaffLevel

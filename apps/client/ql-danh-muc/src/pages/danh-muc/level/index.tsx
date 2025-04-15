@@ -64,7 +64,7 @@ export default function Page() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -95,7 +95,6 @@ export default function Page() {
     }
     return (
         <div>
-            
             <Divider orientation="left" orientationMargin={0}>
                 Danh mục phân cấp
             </Divider>

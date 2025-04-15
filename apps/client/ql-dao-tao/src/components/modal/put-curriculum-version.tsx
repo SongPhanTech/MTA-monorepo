@@ -2,44 +2,46 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { CurriculumVersion, SchoolYear } from '@workspace/db'
+import type {
+    Curriculum,
+    CurriculumVersion,
+} from '@workspace/db'
 import {
     useCreateCurriculumVersion,
     useFindUniqueCurriculumVersion,
     useFindManySchoolYear,
     useFindManyCurriculumVersion,
-    useUpdateCurriculumVersion
+    useUpdateCurriculumVersion,
+    useFindManyCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutCurriculumVersion = CurriculumVersion
+import { buildOrgTree } from '@lib/utils'
+
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
-const PutCurriculumVersion = () => {
+const PutCurriculumVersionModal = () => {
     const [form] = Form.useForm<PutCurriculumVersion>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutCurriculumVersion.name,
+        tag: PutCurriculumVersionModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data = [], refetch } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
-    const { data: organizations = [], refetch: refetchCurriculumVersions } = useFindManyCurriculumVersion({
-        take: 1000,
-        skip: 0,
-    })
-
+    const { data: curriculumData = [], refetch: refetchCurriculum } =
+        useFindManyCurriculum({
+            take: 1000,
+            skip: 0,
+        })
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
     async function onOk(output?: PutCurriculumVersion) {
@@ -52,6 +54,7 @@ const PutCurriculumVersion = () => {
                         name: output.name,
                         startDate: output.startDate,
                         endDate: output.endDate,
+                        curriculumId: output.curriculumId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
                         renderPath: output.renderPath
@@ -67,6 +70,7 @@ const PutCurriculumVersion = () => {
                         name: output.name,
                         startDate: output.startDate,
                         endDate: output.endDate,
+                        curriculumId: output.curriculumId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
                         renderPath: output.renderPath
@@ -106,65 +110,66 @@ const PutCurriculumVersion = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa học kỳ'
-                    : 'Thêm mới học kỳ'
-            }
-            className="w-[30vw]"
+            title={id ? 'Chỉnh sửa phiên bản chương trình đào tạo' : 'Thêm mới phiên bản chương trình đào tạo'}
+            className="w-[45vw]"
         >
-            <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã học kỳ"
-                    required
-                >
-                    <Input placeholder='Nhập mã học kỳ' />
+            <Col span={12}>
+                <FormItem form={form} name="name" label="Tên phiên bản" required>
+                    <Input placeholder="Nhập tên phiên bản" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem
                     form={form}
-                    name="name"
-                    label="Tên học kỳ"
+                    name="curriculumId"
+                    label="Chương trình đào tạo"
                     required
                 >
-                    <Input placeholder="Nhập tên học kỳ" />
+                    <Select
+                        placeholder="Chọn chương trình đào tạo"
+                        options={curriculumData.map(
+                            (i: Curriculum) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            }
+                        )}
+                    />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem
                     form={form}
-                    name="schoolYearId"
-                    label="Năm học"
+                    name="startDate"
+                    label="Ngày bắt đầu"
                     required
                 >
-                    <Select placeholder='Chọn năm học' options={data.map((i: SchoolYear) => {
-                        return {
-                            value: i.id,
-                            label: i.name
-                        }
-                    })} />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="endDate" label="Ngày kết thúc">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                <FormItem form={form} name="infomation" label="Thông tin" required>
+                    <Input.TextArea placeholder="Nhập thông tin" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="documentPath" label="Đường dẫn tài liệu">
+                    <Input placeholder="Nhập đường dẫn tài liệu" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="renderPath" label="Đường dẫn tài liệu kết xuất">
+                    <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutCurriculumVersion
+export default PutCurriculumVersionModal

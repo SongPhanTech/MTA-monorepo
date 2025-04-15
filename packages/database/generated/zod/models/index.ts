@@ -5,22 +5,6 @@
 /* eslint-disable */
 // @ts-nocheck
 
-export * from './Group.schema';
-export * from './Role.schema';
-export * from './Permission.schema';
-export * from './Config.schema';
-export * from './TemplateFile.schema';
-export * from './User.schema';
-export * from './Feedback.schema';
-export * from './BlockedIp.schema';
-export * from './PriorityObject.schema';
-export * from './RegistrationArea.schema';
-export * from './Nationality.schema';
-export * from './Religion.schema';
-export * from './Ethnicity.schema';
-export * from './UserType.schema';
-export * from './UserProfile.schema';
-export * from './FixedClassStudent.schema';
 export * from './Province.schema';
 export * from './Commune.schema';
 export * from './Level.schema';
@@ -53,3 +37,24 @@ export * from './TrainingTime.schema';
 export * from './StudyRank.schema';
 export * from './TrainingRank.schema';
 export * from './TrainingKPI.schema';
+export * from './UserProfile.schema';
+export * from './FixedClassStudent.schema';
+export * from './User.schema';
+export * from './Group.schema';
+export * from './Role.schema';
+export * from './Permission.schema';
+export * from './Document.schema';
+export * from './FAQ.schema';
+export * from './Prompt.schema';
+export * from './Conversation.schema';
+export * from './Message.schema';
+export * from './Feedback.schema';
+export * from './PriorityObject.schema';
+export * from './RegistrationArea.schema';
+export * from './Nationality.schema';
+export * from './Religion.schema';
+export * from './Ethnicity.schema';
+export * from './UserType.schema';
+export * from './BlockedIp.schema';
+export * from './Config.schema';
+export * from './TemplateFile.schema';

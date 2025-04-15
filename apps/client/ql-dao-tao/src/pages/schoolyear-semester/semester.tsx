@@ -46,7 +46,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
             createdAt: 'desc',
         },
         include: {
-            SchoolYear: true
+            SchoolYear: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -82,7 +82,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -145,7 +145,8 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             {
                                 title: 'Năm học',
                                 dataIndex: 'SchoolYear',
-                                render: (value) => value?.name ? value?.name : ""
+                                render: (value) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -155,8 +156,10 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',

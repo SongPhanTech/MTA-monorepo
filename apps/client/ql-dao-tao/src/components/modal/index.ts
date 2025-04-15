@@ -10,5 +10,25 @@ import PutUserProfileUpdateModal from './put-user-profile-update'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadFixedClassModal from './put-upload-fixed-class'
 import PutUploadDivisionModal from './put-upload-division'
-import PutCurriculumVersion from './put-curriculum-version'
-export { ConfirmModal, PutSchoolYearModal, PutSemesterModal, PutMilestoneModal, PutTrainingCourseModal, PutFixedClassModal, PutUserProfileModal, PutUploadProfileModal, PutUserProfileUpdateModal, PutUpdateProfileModal, PutUploadFixedClassModal, PutUploadDivisionModal, PutCurriculumVersion }
+import PutCurriculumVersionModal from './put-curriculum-version'
+import PutCurriculumModal from './put-curriculum'
+import PutSubjectGroupModal from './put-subject-group'
+import PutSubjectModal from './put-subject'
+export {
+    ConfirmModal,
+    PutSchoolYearModal,
+    PutSemesterModal,
+    PutMilestoneModal,
+    PutTrainingCourseModal,
+    PutFixedClassModal,
+    PutUserProfileModal,
+    PutUploadProfileModal,
+    PutUserProfileUpdateModal,
+    PutUpdateProfileModal,
+    PutUploadFixedClassModal,
+    PutUploadDivisionModal,
+    PutCurriculumVersionModal,
+    PutCurriculumModal,
+    PutSubjectGroupModal,
+    PutSubjectModal
+}

@@ -9,16 +9,16 @@ import {
     Row,
     Tooltip,
     message,
-    Typography
+    Typography,
 } from 'antd'
-const { Title } = Typography;
+const { Title } = Typography
 import _ from 'lodash'
 import PieChart from '@components/dashboard/org-structure'
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
 import StaffLevel from '@components/dashboard/staff-level'
-import TypeOfTraining from '@components/dashboard/type-of-training';
-import StaffByOrg from '@components/dashboard/staff-by-org';
+import TypeOfTraining from '@components/dashboard/type-of-training'
+import StaffByOrg from '@components/dashboard/staff-by-org'
 function Home() {
     return (
         <DefaultLayout className="p-0">
@@ -38,21 +38,27 @@ function Home() {
             </Row>
             <Row gutter={[16, 16]} className="p-4">
                 <Col span={12}>
-                    <Title level={4}>Thống kê số lượng giảng viên theo trình độ</Title>
+                    <Title level={4}>
+                        Thống kê số lượng giảng viên theo trình độ
+                    </Title>
                     <StaffLevel />
                 </Col>
                 <Col span={12}>
-                    <Title level={4}>Thống kê số lượng học viên theo loại hình đào tạo</Title>
+                    <Title level={4}>
+                        Thống kê số lượng học viên theo loại hình đào tạo
+                    </Title>
                     <TypeOfTraining />
                 </Col>
             </Row>
             <Row gutter={[16, 16]} className="p-4">
                 <Col span={24}>
-                    <Title level={4}>Thống kê số lượng giảng viên theo đầu mối</Title>
+                    <Title level={4}>
+                        Thống kê số lượng giảng viên theo đầu mối
+                    </Title>
                     <StaffByOrg />
                 </Col>
             </Row>
-        </DefaultLayout >
+        </DefaultLayout>
     )
 }
 
