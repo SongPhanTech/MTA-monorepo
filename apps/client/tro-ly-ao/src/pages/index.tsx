@@ -52,15 +52,22 @@ export default function Page() {
                                 padding: '8px 0',
                             }}
                         >
-                            <List.Item.Meta
-                                avatar={
-                                    <Avatar
-                                        icon={msg.role === 'user' ? <UserOutlined /> : <RobotOutlined />}
-                                        style={{ backgroundColor: msg.role === 'user' ? '#000' : '#005f37' }}
-                                    />
-                                }
-                                description={msg.content}
-                            />
+                            <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                                <Avatar
+                                    icon={msg.role === 'user' ? <UserOutlined /> : <RobotOutlined />}
+                                    style={{
+                                        backgroundColor: msg.role === 'user' ? '#000' : '#005f37',
+                                    }}
+                                />
+                                <div
+                                    className={`px-4 py-2 rounded-xl max-w-xs break-words ${msg.role === 'user'
+                                            ? 'bg-black text-white rounded-br-none'
+                                            : 'bg-[#005f37] text-white rounded-bl-none'
+                                        }`}
+                                >
+                                    {msg.content}
+                                </div>
+                            </div>
                         </List.Item>
                     )}
                 />
