@@ -371,23 +371,18 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'quan-tri-cau-hinh-promt-rag',
-                        label: 'Cấu hình promt RAG',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_RAG,
+                        label: 'Cấu hình promt',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
                     },
-                    {
-                        id: 'quan-tri-cau-hinh-promt-hoi-dap',
-                        label: 'Cấu hình promt hỏi đáp',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT_HOI_DAP,
-                    },
-                ]
+                ],
             },
             {
                 id: 'tro-ly-ao',
                 label: 'Trợ lý ảo',
                 icon: MessageOutlined,
                 path: ROUTER_PATH.TRO_LY_AO.INDEX,
-            }
-        ]
+            },
+        ],
     },
 }
 export type { MenuItem, NavigationType }

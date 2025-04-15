@@ -1,6 +1,6 @@
 import ChatLayout from '@layouts/chat-layout'
 import { useRouter } from 'next/router'
-import React from 'react'
+import type React from 'react'
 
 export default function Page() {
     const router = useRouter()
