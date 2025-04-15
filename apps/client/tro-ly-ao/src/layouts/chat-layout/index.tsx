@@ -12,7 +12,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
-const DefaultLayout = ({
+const ChatLayout = ({
     children,
     className,
 }: { children: ReactNode; className?: string }) => {
@@ -48,14 +48,15 @@ const DefaultLayout = ({
 
     const mockData: ConversationDataFromAPI = {
         today: [
-            { id: 'hoi-thoai-a', label: 'Hội thoại A' },
-            { id: 'hoi-thoai-b', label: 'Hội thoại B' },
+            { id: 'hoi-thoai-a', label: 'Hội thoại A', path: '/hoi-thoai/hoi-thoai-a' },
+            { id: 'hoi-thoai-b', label: 'Hội thoại B', path: '/hoi-thoai/hoi-thoai-b' },
         ],
         yesterday: [
             { id: 'hoi-thoai-c', label: 'Hội thoại C' },
         ],
         old: [],
     }
+    
     return (
         <IdleTimerProvider
             timeout={
@@ -122,4 +123,4 @@ const DefaultLayout = ({
     )
 }
 
-export default DefaultLayout
+export default ChatLayout
