@@ -95,21 +95,21 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
+                    {/* <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
                         <span className="text-lg font-bold text-primary">
                             TRỢ LÝ ẢO
                         </span>
                         <div className="flex gap-2 items-center">
                             <AvatarDropdown />
                         </div>
-                    </Header>
+                    </Header> */}
                     <Content className="flex flex-col gap-2 m-4 mt-1">
                         <div
                             style={{
                                 background: colorBgContainer,
                             }}
                             className={cn(
-                                'min-h-[100vh] rounded shadow p-6 pt-2',
+                                'min-h-[100vh] rounded shadow p-4',
                                 className
                             )}
                         >
