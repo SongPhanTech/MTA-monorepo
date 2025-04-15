@@ -5,15 +5,14 @@ import useSpinner from '@hooks/spinner'
 import type { UserType } from '@workspace/db'
 import { useFindManyUserType } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { UploadOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { fetchUploadFile } from '@api/userProfile'
 export type PutUpdateProfile = {
-    type: string
     file: File
 }
 const PutUpdateProfileModal = () => {
@@ -21,18 +20,21 @@ const PutUpdateProfileModal = () => {
     const {
         isOpen,
         onClose,
-        input: id,
-    } = useDisclosure<string>({
+        input: code,
+    } = useDisclosure<any>({
         tag: PutUpdateProfileModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+    const [typeId, setTypeId] = useState<any>()
+    useEffect(() => {
+        const type = userTypeData?.find((item: any) => item.code === code)
+        setTypeId(type?.id ?? undefined)
+    }, [code])
+    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
+        take: 1000,
+        skip: 0,
+    });
 
     async function onOk(output?: PutUpdateProfile) {
         if (!output) return
@@ -40,11 +42,8 @@ const PutUpdateProfileModal = () => {
             showSpinner()
             const formData = new FormData()
             formData.append('file', output.file)
-            formData.append('type', output.type)
-            const res = await fetchUploadFile(
-                formData,
-                'api/UserProfile/upload-excel-update-user-profile'
-            )
+            formData.append('type', typeId)
+            const res = await fetchUploadFile(formData, "api/UserProfile/upload-excel-update-user-profile")
             const data = await res.json()
             if (res.ok) {
                 message.success('Tải lên thành công!')
@@ -70,22 +69,24 @@ const PutUpdateProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title="Tải file cập nhật thông tin học viên"
+            title={code === 'HV' ? "Tải file cập nhật thông tin học viên" : "Tải file cập nhật thông tin sinh viên"}
             className="w-[30vw]"
         >
-            <Col span={24}>
-                <FormItem form={form} name="type" label="Đối tượng" required>
-                    <Select
-                        placeholder="Chọn đối tượng"
-                        options={userTypeData.map((i: UserType) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
+            {/* <Col span={24}>
+                <FormItem
+                    form={form}
+                    name="type"
+                    label="Đối tượng"
+                    required
+                >
+                    <Select placeholder='Chọn đối tượng' options={userTypeData.map((i: UserType) => {
+                        return {
+                            value: i.id,
+                            label: i.name
+                        }
+                    })} />
                 </FormItem>
-            </Col>
+            </Col> */}
 
             <Col span={24}>
                 <FormItem

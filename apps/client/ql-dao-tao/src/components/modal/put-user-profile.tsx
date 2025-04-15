@@ -31,11 +31,12 @@ const PutUserProfileModal = () => {
     const {
         isOpen,
         onClose,
-        input: id,
-    } = useDisclosure<string>({
+        input,
+    } = useDisclosure<any>({
         tag: PutUserProfileModal.name,
         onClose: form.resetFields,
     })
+    const { id, code } = input ?? {};
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [], refetch: refetchFixedClassData } =
@@ -72,7 +73,7 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: output.userTypeId,
+                        userTypeId: userTypeData?.find((type: any) => type.code === code)?.id ?? undefined
                         // fixedClass: output.fixedClass
                     },
                     where: {
@@ -91,7 +92,7 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: output.userTypeId,
+                        userTypeId: userTypeData?.find((type: any) => type.code === code)!.id
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -127,15 +128,29 @@ const PutUserProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa học viên' : 'Thêm mới học viên'}
+            title={
+                id
+                    ? code === 'SV'
+                        ? 'Chỉnh sửa sinh viên'
+                        : 'Chỉnh sửa học viên'
+                    : code === 'SV'
+                        ? 'Thêm mới sinh viên'
+                        : 'Thêm mới học viên'
+            }
+
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã học viên" required>
-                    <Input placeholder="Nhập mã học viên" />
+                <FormItem
+                    form={form}
+                    name="code"
+                    label="Mã"
+                    required
+                >
+                    <Input placeholder='Nhập mã' />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="userTypeId"
@@ -152,11 +167,11 @@ const PutUserProfileModal = () => {
                         })}
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="firstName"
+                    name="lastName"
                     label="Họ và tên đệm"
                     required
                 >
@@ -164,7 +179,12 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="lastName" label="Tên" required>
+                <FormItem
+                    form={form}
+                    name="firstName"
+                    label="Tên"
+                    required
+                >
                     <Input placeholder="Nhập tên" />
                 </FormItem>
             </Col>
@@ -201,14 +221,17 @@ const PutUserProfileModal = () => {
                     form={form}
                     name="phoneNumber"
                     label="Số điện thoại"
-                    // required
                 >
                     <Input placeholder="Nhập số điện thoại" />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem form={form} name="homeTown" label="Quê quán">
-                    <Input.TextArea placeholder="Nhập quê quán" />
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="homeTown"
+                    label="Quê quán"
+                >
+                    <Input placeholder="Nhập quê quán" />
                 </FormItem>
             </Col>
         </PutFormModal>

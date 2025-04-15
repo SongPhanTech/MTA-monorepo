@@ -52,7 +52,16 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSemester()
+    const { data: count } = useCountSemester({
+        where: {
+            name: {
+                contains: searchText,
+            },
+            ...(selectedSchoolYear?.id && {
+                schoolYearId: selectedSchoolYear.id,
+            }),
+        },
+    })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
@@ -188,6 +197,8 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

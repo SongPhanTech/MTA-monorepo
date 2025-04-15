@@ -1,4 +1,5 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import fixedClassService from '../services/fixed-class.service';
 
 const uploadExcelCreateFixedClass = createRoute({
     operationId: 'uploadExcelCreateFixedClass',

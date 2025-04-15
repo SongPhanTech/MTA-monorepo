@@ -342,12 +342,50 @@ const NAVIGATION: NavigationType = {
                 description: 'Quản lý lớp biên chế',
             },
             {
-                id: 'user-profile',
+                id: 'user-profile-qs',
                 label: 'Quản lý hồ sơ học viên',
                 icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE,
-                description: 'Quản lý lớp biên chế',
+                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_QS,
+                description: 'Quản lý hồ sơ học viên',
             },
+            {
+                id: 'user-profile-ds',
+                label: 'Quản lý hồ sơ sinh viên',
+                icon: IdcardOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_DS,
+                description: 'Quản lý hồ sơ sinh viên',
+            },
+            {
+                id: 'chuong-trinh-dao-tao',
+                label: 'Quản lý chương trình đào tạo',
+                icon: PieChartOutlined,
+                children: [
+                    {
+                        id: 'curriculumn',
+                        label: 'Chương trình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM,
+                    },
+                    {
+                        id: 'curriculumn-version',
+                        label: 'Phiên bản chương trình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM_VERSION,
+                    },
+                    {
+                        id: 'subject-group',
+                        label: 'Nhóm môn học',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.SUBJECT_GROUP,
+                    },
+                     {
+                        id: 'subject',
+                        label: 'Môn học',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.SUBJECT,
+                    },
+                ]
+            }
         ],
         label: 'Quản lý đào tạo',
     },

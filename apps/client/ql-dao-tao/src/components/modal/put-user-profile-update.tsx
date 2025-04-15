@@ -49,11 +49,12 @@ const PutUserProfileUpdateModal = () => {
     const {
         isOpen,
         onClose,
-        input: id,
-    } = useDisclosure<string>({
+        input,
+    } = useDisclosure<any>({
         tag: PutUserProfileUpdateModal.name,
         onClose: form.resetFields,
     })
+    const { id, code } = input
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: userTypeData = [], refetch: refetchUserType } =
@@ -138,7 +139,7 @@ const PutUserProfileUpdateModal = () => {
                         positionCPVName: output.positionCPVName,
                         organizationName: output.organizationName,
                         organizationCPVName: output.organizationCPVName,
-                        userTypeId: output.userTypeId,
+                        userTypeId: userTypeData?.find((type: any) => type.code === code)?.id ?? undefined,
                         userId: output.userId,
                         priorityObjectId: output.priorityObjectId,
                         registrationAreaId: output.registrationAreaId,
@@ -187,7 +188,7 @@ const PutUserProfileUpdateModal = () => {
                         positionCPVName: output.positionCPVName,
                         organizationName: output.organizationName,
                         organizationCPVName: output.organizationCPVName,
-                        userTypeId: output.userTypeId,
+                        userTypeId: userTypeData?.find((type: any) => type.code === code)!.id,
                         userId: output.userId,
                         priorityObjectId: output.priorityObjectId,
                         registrationAreaId: output.registrationAreaId,
@@ -238,7 +239,6 @@ const PutUserProfileUpdateModal = () => {
             })
         }
     }, [level])
-
     return (
         <PutFormModal
             open={isOpen}
@@ -246,7 +246,15 @@ const PutUserProfileUpdateModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa học viên' : 'Thêm mới học viên'}
+            title={
+                id
+                    ? code === 'SV'
+                        ? 'Chỉnh sửa sinh viên'
+                        : 'Chỉnh sửa học viên'
+                    : code === 'SV'
+                        ? 'Thêm mới sinh viên'
+                        : 'Thêm mới học viên'
+            }
             className="w-[70vw]"
             layout="horizontal"
             labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
@@ -257,7 +265,7 @@ const PutUserProfileUpdateModal = () => {
                     <Collapse defaultActiveKey={['1']} accordion>
                         <Panel header="Thông tin cá nhân" key="1">
                             <Row gutter={[16, 16]}>
-                                <Col span={12}>
+                                {/* <Col span={12}>
                                     <FormItem
                                         form={form}
                                         name="userTypeId"
@@ -277,16 +285,16 @@ const PutUserProfileUpdateModal = () => {
                                             )}
                                         />
                                     </FormItem>
-                                </Col>
+                                </Col> */}
                                 <Col span={12}>
                                     <FormItem
                                         form={form}
                                         name="code"
-                                        label="Mã học viên"
+                                        label="Mã"
                                         required
                                         className="mb-0"
                                     >
-                                        <Input placeholder="Nhập mã học viên" />
+                                        <Input placeholder='Nhập mã' />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>

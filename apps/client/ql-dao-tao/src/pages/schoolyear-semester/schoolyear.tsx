@@ -49,7 +49,13 @@ export default function SchoolYearPage({
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSchoolYear()
+    const { data: count } = useCountSchoolYear({
+        where: {
+            name: {
+                contains: searchText,
+            },
+        },
+    })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
@@ -206,6 +212,8 @@ export default function SchoolYearPage({
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                         onRowClick={(record) => {
                             console.log(record, 'nè he')
