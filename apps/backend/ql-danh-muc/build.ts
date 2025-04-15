@@ -3,6 +3,7 @@ Bun.build({
     outdir: 'dist',
     sourcemap: 'linked',
     external: ['@opentelemetry/exporter-trace-otlp-http'],
-    bytecode: true,
+    // bytecode: true,
     target: 'bun',
+    format: 'esm',
 })

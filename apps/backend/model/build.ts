@@ -2,7 +2,8 @@ Bun.build({
     entrypoints: ['src/index.ts'],
     outdir: 'dist',
     sourcemap: 'linked',
-    external: [],
-    bytecode: true,
+    external: ['@opentelemetry/exporter-trace-otlp-http'],
+    // bytecode: true,
     target: 'bun',
+    format: 'esm',
 })

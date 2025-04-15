@@ -34,20 +34,21 @@ import {
     TreeSelect,
 } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
+import _, { filter } from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
+import OptionsPage from '@pages/fixed-class/options'
 
-export default function FixedClassPage() {
+export default function FixedClassPage({ trainingCourse }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
-        trainingCourseId: undefined,
+        trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
         managementOrganizationId: undefined,
     })
     const { data = [], refetch } = useFindManyFixedClass({
@@ -59,6 +60,11 @@ export default function FixedClassPage() {
             managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
+            fixedClassStudent: {
+                include: {
+                    UserProfile: true
+                }
+            },
             ManagementOrganization: true,
             TrainingCourse: true,
         },
@@ -74,12 +80,19 @@ export default function FixedClassPage() {
             skip: 0,
         })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            take: 1000,
-            skip: 0,
-        })
-    const { data: count } = useCountFixedClass()
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
+        take: 1000,
+        skip: 0,
+    });
+    const { data: count } = useCountFixedClass({
+        where: {
+            name: {
+                contains: searchText,
+            },
+            trainingCourseId: filters.trainingCourseId,
+            managementOrganizationId: filters.managementOrganizationId,
+        },
+    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -198,8 +211,11 @@ export default function FixedClassPage() {
                 </Menu.Item>
             ))}
         </Menu>
-    )
-    const treeData = buildOrgTree(manageOrgData)
+    );
+    const treeData = buildOrgTree(manageOrgData);
+    const renderExpandedRow = useCallback((record: any) => {
+        return <OptionsPage key={record.id} fixedClass={record} />;
+    }, []);
 
     return (
         <div>
@@ -223,8 +239,11 @@ export default function FixedClassPage() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
-                            <Form.Item name="trainingCourseId" label="Khóa">
+                        {!trainingCourse && <Col span={4}>
+                            <Form.Item
+                                name="trainingCourseId"
+                                label="Khóa"
+                            >
                                 <Select
                                     placeholder="Chọn khóa"
                                     options={trainingCourseData.map(
@@ -244,7 +263,7 @@ export default function FixedClassPage() {
                                     allowClear
                                 />
                             </Form.Item>
-                        </Col>
+                        </Col>}
                         <Col span={8}>
                             <Form.Item
                                 name="managementOrganizationId"
@@ -299,6 +318,8 @@ export default function FixedClassPage() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey="id"
+                        id="fixed-class"
                         columns={[
                             {
                                 title: 'STT',
@@ -365,6 +386,18 @@ export default function FixedClassPage() {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                        // expandable={{
+                        //     expandedRowRender: (record) => <OptionsPage
+                        //         className="sub-table [&_.ant-table-tbody>tr:hover]:bg-blue-50"
+                        //         key={record.id}
+                        //         fixedClass={record} />
+                        //     // rowExpandable: (record) => !!record.description,
+                        // }}
+                        expandable={{
+                            expandedRowRender: renderExpandedRow,
                         }}
                     />
                 </Col>

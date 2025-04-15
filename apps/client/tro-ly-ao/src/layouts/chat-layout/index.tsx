@@ -12,7 +12,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
-const DefaultLayout = ({
+const ChatLayout = ({
     children,
     className,
 }: { children: ReactNode; className?: string }) => {
@@ -48,14 +48,15 @@ const DefaultLayout = ({
 
     const mockData: ConversationDataFromAPI = {
         today: [
-            { id: 'hoi-thoai-a', label: 'Hội thoại A' },
-            { id: 'hoi-thoai-b', label: 'Hội thoại B' },
+            { id: 'hoi-thoai-a', label: 'Hội thoại A', path: '/hoi-thoai/hoi-thoai-a' },
+            { id: 'hoi-thoai-b', label: 'Hội thoại B', path: '/hoi-thoai/hoi-thoai-b' },
         ],
         yesterday: [
             { id: 'hoi-thoai-c', label: 'Hội thoại C' },
         ],
         old: [],
     }
+    
     return (
         <IdleTimerProvider
             timeout={
@@ -95,21 +96,21 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
+                    {/* <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
                         <span className="text-lg font-bold text-primary">
                             TRỢ LÝ ẢO
                         </span>
                         <div className="flex gap-2 items-center">
                             <AvatarDropdown />
                         </div>
-                    </Header>
+                    </Header> */}
                     <Content className="flex flex-col gap-2 m-4 mt-1">
                         <div
                             style={{
                                 background: colorBgContainer,
                             }}
                             className={cn(
-                                'min-h-[100vh] rounded shadow p-6 pt-2',
+                                'min-h-[100vh] rounded shadow p-4',
                                 className
                             )}
                         >
@@ -122,4 +123,4 @@ const DefaultLayout = ({
     )
 }
 
-export default DefaultLayout
+export default ChatLayout

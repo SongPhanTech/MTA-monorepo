@@ -10,6 +10,10 @@ import PutUserProfileUpdateModal from './put-user-profile-update'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadFixedClassModal from './put-upload-fixed-class'
 import PutUploadDivisionModal from './put-upload-division'
+import PutCurriculumVersionModal from './put-curriculum-version'
+import PutCurriculumModal from './put-curriculum'
+import PutSubjectGroupModal from './put-subject-group'
+import PutSubjectModal from './put-subject'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -23,4 +27,8 @@ export {
     PutUpdateProfileModal,
     PutUploadFixedClassModal,
     PutUploadDivisionModal,
+    PutCurriculumVersionModal,
+    PutCurriculumModal,
+    PutSubjectGroupModal,
+    PutSubjectModal
 }
