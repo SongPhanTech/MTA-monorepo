@@ -9,6 +9,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
+import MinIOApp from './api/minio'
 
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
@@ -30,6 +31,8 @@ app.use(contextStorage())
 app.use('*', checkIp)
 
 setupAuth(app)
+
+app.route('/api/minio', MinIOApp)
 
 app.use(
     '/api/model/*',

@@ -3,72 +3,88 @@ REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
 SERVER := local
-COMPOSE_CMD := docker compose -f docker-compose.mta.yml up
-
-# Image Names
-IMAGE_BACKEND := $(REGISTRY)/mta_be
-IMAGE_QL_NGUOI_DUNG := $(REGISTRY)/mta-ql-nguoi-dung
-IMAGE_THI_TRAC_NGHIEM := $(REGISTRY)/mta-thi-trac-nghiem
-
-# Build Filters
-FILTER_BACKEND := @backend/ql-nguoi-dung
-FILTER_QL_NGUOI_DUNG := @client/ql-nguoi-dung
-FILTER_THI_TRAC_NGHIEM := @client/thi-trac-nghiem
+COMPOSE_CMD := docker compose up
+IMG_PREFIX := mta-
 
 # Package Names
-PACKAGE_BACKEND := be
-PACKAGE_QL_NGUOI_DUNG := ql-nguoi-dung
+PKG_MODEL := model
+PKG_CATEGORIES := ql-danh-muc
+PKG_TRAINING := ql-dao-tao
+PKG_USER := ql-nguoi-dung
 
-# Default target
-.PHONY: all build push deploy release clean all-be all-ql-nguoi-dung all-thi-trac-nghiem build-backend build-ql-nguoi-dung build-thi-trac-nghiem
+# Maps for build types (backend/frontend)
+PKGS := $(PKG_MODEL) $(PKG_CATEGORIES) $(PKG_TRAINING) $(PKG_USER)
 
-all-be:
-	MAKE build-backend
-	docker push $(IMAGE_BACKEND):$(DEV_TAG)
-	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) mta_$(PACKAGE_BACKEND) -d"
+# Targets
+.PHONY: all clean push deploy release \
+	build-% all-%
 
-all-ql-nguoi-dung:
-	MAKE build-ql-nguoi-dung
-	docker push $(IMAGE_QL_NGUOI_DUNG):$(DEV_TAG)
-	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) mta-$(PACKAGE_QL_NGUOI_DUNG) -d"
+help:
+	@echo "Available targets:"
+	@echo "  build-be-$(PKG_MODEL)"
+	@echo "  build-be-$(PKG_CATEGORIES)"
+	@echo "  build-be-$(PKG_TRAINING)"
+	@echo "  build-be-$(PKG_USER)"
+	@echo "  build-fe-$(PKG_MODEL)"
+	@echo "  build-fe-$(PKG_CATEGORIES)"
+	@echo "  build-fe-$(PKG_TRAINING)"
+	@echo "  build-fe-$(PKG_USER)"
 
-# Build an image by specifying IMAGE and FILTER dynamically
-build:
-ifndef IMAGE
-	$(error IMAGE is not set. Use 'make build IMAGE=<image-name>')
-endif
-ifndef FILTER
-	$(error FILTER is not set. Use 'make build FILTER=<filter-value>')
-endif
-	docker build -t $(IMAGE):$(DEV_TAG) --build-arg FILTER=$(FILTER) --build-arg PACKAGE=$(PACKAGE) .
+# Pattern rule: build-<name>
+build-be-%:
+	$(MAKE) _build-be PACKAGE=$*
 
-# Named builds for convenience
-build-backend:
-	docker build -f Dockerfile.backend -t $(IMAGE_BACKEND):$(DEV_TAG) .
+build-fe-%:
+	$(MAKE) _build-fe PACKAGE=$*
 
-build-ql-nguoi-dung:
-	MAKE build IMAGE=$(IMAGE_QL_NGUOI_DUNG) FILTER=$(FILTER_QL_NGUOI_DUNG) PACKAGE=$(PACKAGE_QL_NGUOI_DUNG)
+# Pattern rule: all-<name> = build + push + deploy
+all-be-%: build-be-%
+	docker push $(REGISTRY)/$(IMG_PREFIX)-be-$*:$(DEV_TAG)
+	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)-be-$* -d"
 
-# Push a specific image
+all-fe-%: build-fe-%
+	docker push $(REGISTRY)/$(IMG_PREFIX)-fe-$*:$(DEV_TAG)
+	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)-fe-$* -d"
+
+# Internal backend build
+_build-be:
+	docker build -f Dockerfile.backend --platform linux/amd64 \
+		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
+		--build-arg FILTER=@backend/${PACKAGE} \
+		--build-arg PACKAGE=${PACKAGE} \
+		. --output type=docker
+
+# Internal frontend build
+_build-fe:
+	docker build --platform linux/amd64 \
+		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
+		--build-arg FILTER=@client/${PACKAGE} \
+		--build-arg PACKAGE=${PACKAGE} \
+		.
+
+# Push specific image manually
 push:
-ifndef IMAGE
-	$(error IMAGE is not set. Use 'make push IMAGE=<image-name>')
+ifndef PACKAGE
+	$(error PACKAGE is not set. Use 'make push PACKAGE=<package-name>')
 endif
-	docker push $(IMAGE):$(DEV_TAG)
+	docker push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG)
 
-# Deploy the application
-deploy:
-	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) -d"
-
-# Release (Build, push, and deploy release versions)
+# Release
 release:
-ifndef IMAGE
-	$(error IMAGE is not set. Use 'make release IMAGE=<image-name>')
+ifndef PACKAGE
+	$(error PACKAGE is not set. Use 'make release PACKAGE=<package-name>')
 endif
-	docker build -t $(IMAGE):$(RELEASE_TAG) .
-	docker push $(IMAGE):$(RELEASE_TAG)
-	ssh $(SERVER) "$(COMPOSE_CMD) -d"
+	docker build -f Dockerfile.backend --platform linux/amd64 -t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG) .
+	docker push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG)
+	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) $(IMG_PREFIX)${PACKAGE} -d"
 
-# Clean up Docker images
+# Deploy only
+deploy:
+	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) $(IMG_PREFIX)${PACKAGE} -d"
+
+# Clean image
 clean:
-	docker rmi $(IMAGE_BACKEND):$(DEV_TAG) $(IMAGE_QL_NGUOI_DUNG):$(DEV_TAG) $(IMAGE_THI_TRAC_NGHIEM):$(DEV_TAG) || true
+ifndef PACKAGE
+	$(error PACKAGE is not set. Use 'make clean PACKAGE=<package-name>')
+endif
+	docker rmi $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) || true

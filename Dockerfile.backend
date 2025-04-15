@@ -1,14 +1,17 @@
-FROM node:20-alpine AS base
+ARG PACKAGE
+
+FROM imbios/bun-node:23-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN npm install -g pnpm
-RUN npm i -g bun
+RUN corepack enable
 
 FROM base AS pruner
+ARG PACKAGE
+ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
-RUN npm add -g turbo
+RUN pnpm add -g turbo
 COPY . .
-RUN turbo prune @backend/ql-nguoi-dung --docker
+RUN turbo prune @backend/${PACKAGE} --docker
 
 FROM base AS builder
 WORKDIR /app
@@ -16,22 +19,28 @@ COPY --from=pruner /app/out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
+RUN echo "DATABASE_URL=postgres://root:SwanT3chDB@swantech.duckdns.org:5432/mta" > packages/database/.env
 RUN pnpm generate
+# RUN pnpm generate:sql
 RUN pnpm build
 RUN ls -la
 
 # FROM debian:11-alpine AS backend
+# ARG PACKAGE
+# ENV PACKAGE="${PACKAGE}"
 # WORKDIR /app
 # COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
-# COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist/myapp .
+# COPY --from=builder /app/apps/${PACKAGE}/dist/myapp .
 
 # CMD ["/app/myapp"]
 
-FROM oven/bun:alpine AS backend
+FROM oven/bun:slim AS backend
+ARG PACKAGE
+ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
 RUN bun add @opentelemetry/exporter-trace-otlp-http
 COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
-COPY --from=builder /app/apps/backend/ql-nguoi-dung/dist .
+COPY --from=builder /app/apps/backend/${PACKAGE}/dist .
 USER bun
 
-CMD bun index.js
+CMD ["bun", "index.js"]
