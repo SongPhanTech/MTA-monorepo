@@ -1,8 +1,9 @@
-import { ConversationDataFromAPI, generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
+import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
+import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
-import SiderDefaultLayout from '@components/layouts/sider'
+import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -15,14 +16,17 @@ const { Header, Content } = Layout
 const ChatLayout = ({
     children,
     className,
-}: { children: ReactNode; className?: string }) => {
+}: {
+    children: ReactNode
+    className?: string
+}) => {
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
             localStorage.getItem('collapsed') === 'true'
         )
     })
-    
+
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
             key: CONFIG_KEY.USER_SESSION_TIMEOUT,
@@ -46,17 +50,12 @@ const ChatLayout = ({
         handleCollapsed()
     }, [])
 
-    const mockData: ConversationDataFromAPI = {
-        today: [
-            { id: 'hoi-thoai-a', label: 'Hội thoại A', path: '/hoi-thoai/hoi-thoai-a' },
-            { id: 'hoi-thoai-b', label: 'Hội thoại B', path: '/hoi-thoai/hoi-thoai-b' },
-        ],
-        yesterday: [
-            { id: 'hoi-thoai-c', label: 'Hội thoại C' },
-        ],
-        old: [],
-    }
-    
+    const mockData: ConversationDataFromAPI = [
+        { id: '1', label: 'Chat với khách A' },
+        { id: '2', label: 'Chat nội bộ' },
+        { id: '3' },
+    ]
+
     return (
         <IdleTimerProvider
             timeout={
@@ -64,59 +63,51 @@ const ChatLayout = ({
             }
             onIdle={signOutAction}
         >
-            <Layout style={{ minHeight: '100vh' }} hasSider>
-                <SiderDefaultLayout
-                    logo1={
+            <Layout style={{ minHeight: '100vh' }}>
+                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
+                    <div className="flex items-center gap-2">
                         <Image
                             src={logo_mta}
-                            alt="logo k01"
+                            alt="logo_mta"
                             className="size-12"
                         />
-                    }
-                    logo2={
-                        <div className="flex items-center justify-center flex-col text-center">
-                            <Image
-                                src={logo_mta}
-                                alt="logo k01"
-                                className="w-12 h-12 mb-2"
-                            />
-                            <span className="text-base font-bold color text-primary">
-                                HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                            </span>
-                        </div>
-                    }
-                    items={generateMenusTroLyAo(mockData)}
-                    onCollapse={handleCollapsed}
-                    collapsed={collapsed}
-                    theme={'light'}
-                />
-                <Layout
-                    style={{
-                        marginInlineStart: collapsed ? 80 : 280, // Điều chỉnh margin theo trạng thái collapsed
-                        transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
-                    }}
-                >
-                    {/* <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
                         <span className="text-lg font-bold text-primary">
-                            TRỢ LÝ ẢO
+                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
                         </span>
-                        <div className="flex gap-2 items-center">
-                            <AvatarDropdown />
-                        </div>
-                    </Header> */}
-                    <Content className="flex flex-col gap-2 m-4 mt-1">
-                        <div
-                            style={{
-                                background: colorBgContainer,
-                            }}
-                            className={cn(
-                                'min-h-[100vh] rounded shadow p-4',
-                                className
-                            )}
-                        >
-                            {children}
-                        </div>
-                    </Content>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <AvatarDropdown />
+                    </div>
+                </Header>
+
+                <Layout hasSider style={{ paddingTop: 64 }}>
+                    {/* Sider */}
+                    <SiderChatLayout
+                        items={generateMenusTroLyAo(mockData)}
+                        onCollapse={handleCollapsed}
+                        collapsed={collapsed}
+                        theme={'light'}
+                    />
+
+                    {/* Content */}
+                    <Layout
+                        style={{
+                            marginInlineStart: collapsed ? 80 : 280,
+                            transition: 'margin-inline-start 0.2s',
+                        }}
+                    >
+                        <Content className="flex flex-col gap-2 mt-[11px] mx-2">
+                            <div
+                                style={{ background: colorBgContainer }}
+                                className={cn(
+                                    'min-h-[100vh] rounded shadow p-4',
+                                    className
+                                )}
+                            >
+                                {children}
+                            </div>
+                        </Content>
+                    </Layout>
                 </Layout>
             </Layout>
         </IdleTimerProvider>
