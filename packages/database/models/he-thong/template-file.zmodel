@@ -3,7 +3,7 @@ enum TemplateFileType {
     UPLOAD
     DOWNLOAD
     LOGS
-    // @@schema("ql-danh-muc")
+    @@schema("ql-danh-muc")
 }
 
 model TemplateFile extends Base {
@@ -12,5 +12,5 @@ model TemplateFile extends Base {
     fileType    TemplateFileType?
     extensions  String? //loại file
     numberField Int?              @default(0)// Số lượng trường trong file
-    // @@schema("ql-danh-muc")
+    @@schema("ql-danh-muc")
 }
