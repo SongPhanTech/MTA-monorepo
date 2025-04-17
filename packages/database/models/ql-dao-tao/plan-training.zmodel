@@ -169,6 +169,9 @@ model Subject extends Base {
 
   curriculumVersionSubject CurriculumVersionSubject[]
   @@schema("ql-dao-tao")
+
+	prerequisiteSubject PrerequisiteSubject[]
+	coRequisiteSubject CoRequisiteSubject[]
 }
 
 enum CurriculumVersionSubjectType { // loại môn học
@@ -193,5 +196,31 @@ model CurriculumVersionSubject extends Base {
   infomation          String?   //Thông tin
   documentPath        String?  // Đường dẫn tài liệu
   renderPath          String?  // Đường dẫn tài liệu kết xuất
+  @@schema("ql-dao-tao")
+
+	coRequisiteSubject CoRequisiteSubject[]
+
+	prerequisiteSubject PrerequisiteSubject[]
+}
+
+// Môn học tiên quyết
+model PrerequisiteSubject extends Base {
+  CurriculumVersionSubject CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
+  curriculumVersionSubjectId String
+
+  Subject                   Subject @relation(fields: [subjectId], references: [id]) // Môn học
+  subjectId                 String
+
+  @@schema("ql-dao-tao")
+}
+
+// Môn học song hành
+model CoRequisiteSubject extends Base {
+  CurriculumVersionSubject CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
+  curriculumVersionSubjectId String
+
+  Subject                   Subject @relation(fields: [subjectId], references: [id]) // Môn học
+  subjectId                 String
+
   @@schema("ql-dao-tao")
 }
