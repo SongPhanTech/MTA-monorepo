@@ -46,16 +46,11 @@ const ChatLayout = ({
         handleCollapsed()
     }, [])
 
-    const mockData: ConversationDataFromAPI = {
-        today: [
-            { id: 'hoi-thoai-a', label: 'Hội thoại A', path: '/hoi-thoai/hoi-thoai-a' },
-            { id: 'hoi-thoai-b', label: 'Hội thoại B', path: '/hoi-thoai/hoi-thoai-b' },
-        ],
-        yesterday: [
-            { id: 'hoi-thoai-c', label: 'Hội thoại C' },
-        ],
-        old: [],
-    }
+    const mockData: ConversationDataFromAPI = [
+        { id: '1', label: 'Chat với khách A' },
+        { id: '2', label: 'Chat nội bộ' },
+        { id: '3' }, // sẽ auto thành "Hội thoại số 3"
+    ]
     
     return (
         <IdleTimerProvider
