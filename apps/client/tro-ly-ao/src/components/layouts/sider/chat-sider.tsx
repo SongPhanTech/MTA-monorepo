@@ -84,6 +84,46 @@ const SiderChatLayout = ({
         findOpenKeys(items, pathname)
     )
 
+    // Tìm item đầu tiên hợp lệ
+    const getFirstValidItem = (menus: MenuItem[]): MenuItem | null => {
+        for (const item of menus) {
+            if (item.path) return item
+            if (item.children) {
+                const child = getFirstValidItem(item.children)
+                if (child) return child
+            }
+        }
+        return null
+    }
+
+    const firstItem = getFirstValidItem(items)
+
+    // Filter menu để loại bỏ item đầu tiên khỏi menu
+    const filterFirstItem = (
+        menus: MenuItem[],
+        excludePath: string | undefined
+    ): MenuItem[] => {
+        return menus
+            .map((item) => {
+                if (item.path === excludePath) return null
+                if (item.children) {
+                    const filteredChildren = filterFirstItem(
+                        item.children,
+                        excludePath
+                    )
+                    if (filteredChildren.length === 0) return null
+                    return { ...item, children: filteredChildren }
+                }
+                return item
+            })
+            .filter(Boolean) as MenuItem[]
+    }
+
+    const filteredItems = filterFirstItem(items, firstItem?.path)
+
+    // Xử lý active status khi user click vào Button
+    const isActive = pathname === firstItem?.path
+
     return (
         <Sider
             collapsed={collapsed}
@@ -92,16 +132,32 @@ const SiderChatLayout = ({
             className="h-full relative mr-[10px]"
         >
             <div className="overflow-y-auto h-full pb-[60px]">
+                <div className="px-1">
+                    <Button
+                        color={'primary'}
+                        variant={isActive ? 'solid' : 'outlined'}
+                        className={
+                            'w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-lg'
+                        }
+                        icon={firstItem?.icon ? <firstItem.icon /> : undefined}
+                        onClick={() => {
+                            if (firstItem?.path) router.push(firstItem.path)
+                        }}
+                    >
+                        {!collapsed && firstItem?.label}
+                    </Button>
+                </div>
+
                 <Menu
                     theme={theme}
                     mode="inline"
                     selectedKeys={pathname ? [pathname] : []}
                     openKeys={openKeys}
                     onOpenChange={setOpenKeys}
-                    items={getMenus(items)}
+                    items={getMenus(filteredItems)}
                     className="bg-transparent"
                     onClick={({ key }) => {
-                        const menuItem = findMenuItemByKey(items, key)
+                        const menuItem = findMenuItemByKey(filteredItems, key)
                         if (menuItem?.path) {
                             router.push(menuItem.path)
                         }
@@ -121,5 +177,4 @@ const SiderChatLayout = ({
         </Sider>
     )
 }
-
 export default SiderChatLayout

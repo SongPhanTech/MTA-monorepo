@@ -3,6 +3,7 @@ import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
+import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -50,8 +51,11 @@ const ChatLayout = ({
     }, [])
 
     const mockData: ConversationDataFromAPI = [
-        { id: '1', label: 'Chat với khách A' },
-        { id: '2', label: 'Chat nội bộ' },
+        { id: '1', label: 'Create HTML Game Environment' },
+        { id: '2', label: 'Apply to Leave for Emergency' },
+        { id: '3', label: 'What is UI UX Design?' },
+        { id: '4', label: 'Create POS System' },
+        { id: '5', label: 'Develop E-commerce Website' },
     ]
 
     return (
@@ -86,6 +90,7 @@ const ChatLayout = ({
                         theme={'light'}
                     />
                     <Layout className="overflow-hidden">
+                        <HeaderContent />
                         <Content className="h-full overflow-y-auto p-[10px] bg-white">
                             {children}
                         </Content>

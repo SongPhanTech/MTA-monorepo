@@ -24,7 +24,7 @@ export function generateMenusTroLyAo(
     const menuItems: MenuItem[] = [
         {
             id: 'tro-ly-ao',
-            label: 'Trợ lý ảo',
+            label: 'Hội thoại mới',
             icon: OpenAIOutlined,
             path: '/tro-ly-ao',
         },
