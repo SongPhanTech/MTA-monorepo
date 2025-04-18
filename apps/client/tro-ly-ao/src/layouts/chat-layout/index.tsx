@@ -3,6 +3,7 @@ import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
+import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -86,6 +87,7 @@ const ChatLayout = ({
                         theme={'light'}
                     />
                     <Layout className="overflow-hidden">
+                        <HeaderContent />
                         <Content className="h-full overflow-y-auto p-[10px] bg-white">
                             {children}
                         </Content>
