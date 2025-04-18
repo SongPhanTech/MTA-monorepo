@@ -1,3 +1,5 @@
+import { Button } from 'antd'
+
 const lightThemeCustom = {
     token: {
         colorPrimary: '#005f37',
@@ -13,6 +15,9 @@ const lightThemeCustom = {
             itemSelectedColor: '#fff',
             itemSelectedBg: '#005f37',
             subMenuItemSelectedColor: '#005f37',
+        },
+        Button: {
+            primaryShadow: '0',
         },
     },
 }
