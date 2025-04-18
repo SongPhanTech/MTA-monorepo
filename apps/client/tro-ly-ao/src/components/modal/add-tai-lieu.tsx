@@ -1,4 +1,5 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
+import { fetchGeneratePresignedUrl } from '@api/common/commonComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
@@ -6,17 +7,22 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
-import { Col, Divider, Form, Input, message, Modal, Row } from 'antd'
+import { Col, Divider, Form, Input, message, Modal, Progress, Row } from 'antd'
+import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type DocumentFormType = {
     type: $Enums.DocumentType
-    files: Array<{
-        url: string
-        file: File
-        body: string
-    }>
+    files: Record<
+        string,
+        {
+            url: string
+            file: File
+            body: string
+            progress?: number
+        }
+    >
 }
 const AddTaiLieu = () => {
     const { isOpen, onClose } = useDisclosure<string>({
@@ -37,15 +43,56 @@ const AddTaiLieu = () => {
             file: File
         }>
     ) => {
-        form.setFieldsValue({
-            files: files.concat(
-                values.map((item) => ({
-                    url: item.url,
-                    file: item.file,
-                    body: item.file.name,
-                }))
-            ),
-        })
+        try {
+            // form.setFieldsValue({
+            //     files: files.concat(
+            //         values.map((item) => ({
+            //             url: item.url,
+            //             file: item.file,
+            //             body: item.file.name,
+            //             progress: 0,
+            //         }))
+            //     ),
+            // })
+            await Promise.all(
+                values.map(async (file) => {
+                    const resPresignedUrl = await fetchGeneratePresignedUrl({
+                        body: {
+                            path: 'tai-lieu',
+                        },
+                    })
+                    const files = form.getFieldValue('files')
+                    form.setFieldsValue({
+                        files: files.map((item) => {
+                            if (item.url === file.url) {
+                                return {
+                                    ...item,
+                                    url: resPresignedUrl.fileName,
+                                }
+                            }
+                            return item
+                        }),
+                    })
+                    await axios.put(resPresignedUrl.url, file.file, {
+                        onUploadProgress: (progressEvent) => {
+                            const { loaded, total = 1 } = progressEvent
+                            const percent = Math.floor((loaded * 100) / total)
+                            // form.setFieldsValue({
+                            //     files: files.map((item) => {
+                            //         if (item.url === resPresignedUrl.fileName) {
+                            //             return {
+                            //                 ...item,
+                            //                 progress: percent,
+                            //             }
+                            //         }
+                            //         return item
+                            //     }),
+                            // })
+                        },
+                    })
+                })
+            )
+        } catch (error) {}
     }
 
     const onFinish = async (values: DocumentFormType) => {
@@ -70,15 +117,15 @@ const AddTaiLieu = () => {
                     }
                 })
             )
-            await createMany({
-                data: urls.map(({ fileName, url, fileType, type }) => ({
-                    uri: url,
-                    name: fileName,
-                    fileType,
-                    uploadedById: myProfile?.user.id,
-                    type,
-                })),
-            })
+            // await createMany({
+            //     data: urls.map(({ fileName, url, fileType, type }) => ({
+            //         uri: url,
+            //         name: fileName,
+            //         fileType,
+            //         uploadedById: myProfile?.user.id,
+            //         type,
+            //     })),
+            // })
             message.success('Thêm tài liệu thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -128,7 +175,7 @@ const AddTaiLieu = () => {
                         </FormItem>
                     </Col>
                     <div className="overflow-y-scroll max-h-[300px] mt-4">
-                        {files.map((file) => (
+                        {Object.entries(files).map(([key, file]) => (
                             <div
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
@@ -148,15 +195,19 @@ const AddTaiLieu = () => {
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
                                     </span>
+                                    {file.progress !== 0 &&
+                                        file.progress !== 100 && (
+                                            <Progress percent={file.progress} />
+                                        )}
                                 </div>
                                 <CloseCircleOutlined
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        form.setFieldsValue({
-                                            files: files.filter(
-                                                (item) => item.url !== file.url
-                                            ),
-                                        })
+                                        // form.setFieldsValue({
+                                        //     files: files.filter(
+                                        //         (item) => item.url !== file.url
+                                        //     ),
+                                        // })
                                     }}
                                     className="text-lg cursor-pointer"
                                 />

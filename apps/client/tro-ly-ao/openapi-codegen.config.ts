@@ -5,14 +5,14 @@ import {
 import { defineConfig } from '@openapi-codegen/cli'
 
 export default defineConfig({
-    app: {
+    common: {
         from: {
             source: 'url',
-            url: 'https://api.user.mta.swantech.vn/openapi',
+            url: 'http://localhost:3000/openapi',
         },
-        outputDir: 'src/lib/api/open-api',
+        outputDir: 'src/lib/api/common',
         to: async (context) => {
-            const filenamePrefix = 'app'
+            const filenamePrefix = 'common'
             const { schemasFiles } = await generateSchemaTypes(context, {
                 filenamePrefix,
             })

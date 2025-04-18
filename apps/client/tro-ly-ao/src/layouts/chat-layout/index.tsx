@@ -27,12 +27,6 @@ const ChatLayout = ({
         )
     })
 
-    const { data: userSessionTimeout } = useFindUniqueConfig({
-        where: {
-            key: CONFIG_KEY.USER_SESSION_TIMEOUT,
-        },
-    })
-
     const {
         token: { colorBgContainer },
     } = theme.useToken()
@@ -59,45 +53,34 @@ const ChatLayout = ({
     ]
 
     return (
-        <IdleTimerProvider
-            timeout={
-                Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000
-            }
-            onIdle={signOutAction}
-        >
-            <Layout className="h-screen">
-                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
-                    <div className="flex items-center gap-2">
-                        <Image
-                            src={logo_mta}
-                            alt="logo_mta"
-                            className="size-12"
-                        />
-                        <span className="text-lg font-bold text-primary">
-                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                        </span>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <AvatarDropdown />
-                    </div>
-                </Header>
+        <Layout className="h-screen">
+            <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
+                <div className="flex items-center gap-2">
+                    <Image src={logo_mta} alt="logo_mta" className="size-12" />
+                    <span className="text-lg font-bold text-primary">
+                        HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                    </span>
+                </div>
+                <div className="flex gap-2 items-center">
+                    <AvatarDropdown />
+                </div>
+            </Header>
 
-                <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
-                    <SiderChatLayout
-                        items={generateMenusTroLyAo(mockData)}
-                        onCollapse={handleCollapsed}
-                        collapsed={collapsed}
-                        theme={'light'}
-                    />
-                    <Layout className="overflow-hidden">
-                        <HeaderContent />
-                        <Content className="h-full overflow-y-auto p-[10px] bg-white">
-                            {children}
-                        </Content>
-                    </Layout>
+            <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
+                <SiderChatLayout
+                    items={generateMenusTroLyAo(mockData)}
+                    onCollapse={handleCollapsed}
+                    collapsed={collapsed}
+                    theme={'light'}
+                />
+                <Layout className="overflow-hidden">
+                    <HeaderContent />
+                    <Content className="h-full overflow-y-auto p-[10px] bg-white">
+                        {children}
+                    </Content>
                 </Layout>
             </Layout>
-        </IdleTimerProvider>
+        </Layout>
     )
 }
 

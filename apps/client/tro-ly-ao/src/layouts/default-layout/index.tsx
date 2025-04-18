@@ -9,6 +9,7 @@ import { useFindUniqueConfig } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
 import { SearchSystem } from '@workspace/ui'
 import { Layout, theme } from 'antd'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
@@ -24,6 +25,9 @@ const DefaultLayout = ({
             localStorage.getItem('collapsed') === 'true'
         )
     })
+
+    const { status } = useSession()
+
     const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
@@ -48,6 +52,12 @@ const DefaultLayout = ({
     useEffect(() => {
         handleCollapsed()
     }, [])
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            signIn('asgardeo')
+        }
+    }, [status])
 
     return (
         <IdleTimerProvider
