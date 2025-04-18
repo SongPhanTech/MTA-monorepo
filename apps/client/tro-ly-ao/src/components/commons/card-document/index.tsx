@@ -1,17 +1,12 @@
 import { env } from '@/env'
-import {
-    DeleteFilled,
-    FileExcelFilled,
-    FileFilled,
-    FilePdfFilled,
-    FilePptFilled,
-    FileWordFilled,
-} from '@ant-design/icons'
+import { DeleteFilled } from '@ant-design/icons'
+
 import { cn } from '@lib/utils'
 import type { Document } from '@workspace/db'
 import { Image, Popconfirm } from 'antd'
 import { useCallback, useMemo } from 'react'
-
+import ImageNext from 'next/image'
+import { FileUploadIcon } from '../upload'
 type CardDocumentProps = {
     onDelete?: () => void
     className?: string
@@ -47,30 +42,6 @@ export const CardDocument = ({
         }
         return false
     }, [fileType])
-    const IconOfFile = useMemo(() => {
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ) {
-            return FileWordFilled
-        }
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ) {
-            return FileExcelFilled
-        }
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-        ) {
-            return FilePptFilled
-        }
-        if (fileType === 'application/pdf') {
-            return FilePdfFilled
-        }
-        return FileFilled
-    }, [fileType])
 
     const getUrl = useCallback((path: string) => {
         const isAbsolutePath =
@@ -83,7 +54,7 @@ export const CardDocument = ({
         <div className="w-[150px] flex flex-col gap-2">
             <div
                 className={cn(
-                    'group relative w-[150px] h-[150px] flex justify-center border border-solid border-gray-300 rounded-md items-center',
+                    'group relative w-[150px] h-[150px] flex justify-center border border-solid border-gray-300 rounded-lg items-center',
                     className
                 )}
             >
@@ -102,7 +73,11 @@ export const CardDocument = ({
                     </Popconfirm>
                 </div>
                 {!isDisplayable ? (
-                    <IconOfFile
+                    <FileUploadIcon
+                        fileType={fileType}
+                        alt="icon-file"
+                        width={80}
+                        height={80}
                         className="cursor-pointer text-7xl text-primary"
                         onClick={(e) => {
                             e.stopPropagation()

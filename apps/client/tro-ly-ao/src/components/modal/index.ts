@@ -1,2 +1,3 @@
 import ConfirmModal from './confirm-dialog'
-export { ConfirmModal }
+import AddTaiLieu from './add-tai-lieu'
+export { ConfirmModal, AddTaiLieu }

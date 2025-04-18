@@ -1,155 +1,105 @@
 import { CardDocument } from '@components/commons/card-document'
-import FormItem from '@components/commons/form-item'
-import UploadDragAndDrop from '@components/commons/upload'
-import { DOCUMENT_TYPE } from '@constants/constants'
+import Table from '@components/commons/table'
+import AddTaiLieu from '@components/modal/add-tai-lieu'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums } from '@workspace/db'
-import {
-    useCreateManyDocument,
-    useFindManyDocument,
-    useUpdateDocument,
-} from '@workspace/db/hooks'
-import { Col, Divider, Form, message, Radio, Row, Select } from 'antd'
-import { useSession } from 'next-auth/react'
-type DocumentFormType = {
-    type: $Enums.DocumentType
-    files: Array<{
-        url: string
-        file: File
-    }>
-}
+import { useFindManyDocument, useUpdateDocument } from '@workspace/db/hooks'
+import { Tabs, type TabsProps, message } from 'antd'
+import { FileUp } from 'lucide-react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 function Page() {
     const { mutateAsync: update } = useUpdateDocument()
-    const { mutateAsync: createMany } = useCreateManyDocument()
-
-    const [form] = Form.useForm<DocumentFormType>()
-    const { data: myProfile } = useSession()
-
+    const { onOpen: openAddTaiLieu } = useDisclosure({
+        tag: AddTaiLieu.name,
+    })
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
         },
     })
 
-    const onUpload = async (
-        values: Array<{
-            url: string
-            file: File
-        }>
-    ) => {
-        try {
-            const urls = await Promise.all(
-                values.map(async (item) => {
-                    // const response = await generatePresignedUrl({
-                    //     data: {
-                    //         path: 'chat-bot',
-                    //     },
-                    // })
-                    // await fetch(response.data.url, {
-                    //     method: 'PUT',
-                    //     body: item.file,
-                    // })
-                    return {
-                        url: item.file.name,
-                        // url: response.data.fileName,
-                        fileName: item.file.name,
-                        fileType: item.file.type,
-                    }
-                })
-            )
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-    }
-
-    const onFinish = async (values: DocumentFormType) => {
-        try {
-            const urls = await Promise.all(
-                values.files.map(async (item) => {
-                    // const response = await generatePresignedUrl({
-                    //     data: {
-                    //         path: 'chat-bot',
-                    //     },
-                    // })
-                    // await fetch(response.data.url, {
-                    //     method: 'PUT',
-                    //     body: item.file,
-                    // })
-                    return {
-                        url: item.file.name,
-                        // url: response.data.fileName,
-                        fileName: item.file.name,
-                        fileType: item.file.type,
-                        type: values.type,
-                    }
-                })
-            )
-            await createMany({
-                data: urls.map(({ fileName, url, fileType, type }) => ({
-                    uri: url,
-                    name: fileName,
-                    fileType,
-                    uploadedById: myProfile?.user.id,
-                    type,
-                })),
-            })
-            message.success('Thêm tài liệu thành công')
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-    }
+    const items: TabsProps['items'] = [
+        {
+            key: '1',
+            label: 'Tài liệu',
+            children: (
+                <div className="bg-white p-4 rounded-md shadow-md">
+                    <span className="text-xl font-semibold text-gray-700">
+                        Tài liệu
+                    </span>
+                    <div className="flex flex-wrap gap-4 max-h-[100vh] overflow-y-scroll mt-4">
+                        <div
+                            onClick={openAddTaiLieu}
+                            className="text-primary border-2 border-dashed border-primary rounded-lg w-[150px] h-[150px] gap-4 flex flex-col justify-center items-center cursor-pointer hover:bg-primary/10"
+                        >
+                            <FileUp size={40} strokeWidth={1} />
+                            <span>Tải lên</span>
+                        </div>
+                        {documents.map((item) => (
+                            <CardDocument
+                                key={item.id}
+                                onDelete={async () => {
+                                    try {
+                                        await update({
+                                            where: { id: item.id },
+                                            data: {
+                                                deletedAt: new Date(),
+                                            },
+                                        })
+                                    } catch (error) {
+                                        message.error('Xóa tài liệu thất bại')
+                                    }
+                                }}
+                                {...item}
+                            />
+                        ))}
+                    </div>
+                    <div className="text-xl font-semibold text-gray-700 mt-4">
+                        Tài liệu chờ duyệt
+                    </div>
+                    <Table
+                        columns={[
+                            {
+                                title: 'Tên tài liệu',
+                            },
+                            {
+                                title: 'Loại tài liệu',
+                            },
+                            {
+                                title: 'Kích thước',
+                            },
+                            {
+                                title: 'Người tải lên',
+                            },
+                            {
+                                title: 'Ngày tải lên',
+                            },
+                            {
+                                title: 'Trạng thái',
+                            },
+                        ]}
+                    />
+                </div>
+            ),
+        },
+        {
+            key: '2',
+            label: 'Câu hỏi thường gặp',
+        },
+    ]
 
     return (
         <div>
-            <span className="text-xl font-semibold text-gray-700">
-                Thêm tài liệu
-            </span>
-            <Form
-                form={form}
-                onFinish={onFinish}
-                layout="vertical"
-                className="mt-4"
-            >
-                <Col span={12}>
-                    <FormItem form={form} name={'type'} label="Loại tài liệu">
-                        <Select
-                            defaultValue={
-                                $Enums.DocumentType.ACADEMY_INFORMATION
-                            }
-                            options={DOCUMENT_TYPE}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={24}>
-                    <FormItem form={form} name={'files'}>
-                        <UploadDragAndDrop
-                            isShowUpload={false}
-                            onUpload={onUpload}
-                        />
-                    </FormItem>
-                </Col>
-            </Form>
-            <Divider />
-            <div className="flex flex-wrap gap-4 max-h-[100vh] overflow-y-scroll mt-4">
-                {documents.map((item) => (
-                    <CardDocument
-                        key={item.id}
-                        onDelete={async () => {
-                            try {
-                                await update({
-                                    where: { id: item.id },
-                                    data: {
-                                        deletedAt: new Date(),
-                                    },
-                                })
-                            } catch (error) {
-                                message.error('Xóa tài liệu thất bại')
-                            }
-                        }}
-                        {...item}
+            <Tabs
+                defaultActiveKey="1"
+                items={items}
+                renderTabBar={(props, TabBar) => (
+                    <TabBar
+                        {...props}
+                        className="bg-white shadow-lg px-4 rounded-md"
                     />
-                ))}
-            </div>
+                )}
+            />
         </div>
     )
 }

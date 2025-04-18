@@ -97,19 +97,14 @@ const DefaultLayout = ({
                             <AvatarDropdown />
                         </div>
                     </Header>
-                    <Content className="flex flex-col gap-2 m-4 mt-1">
-                        <div
-                            style={{
-                                background: colorBgContainer,
-                            }}
-                            className={cn(
-                                'min-h-[100vh] rounded shadow p-6 pt-2',
-                                className
-                            )}
-                        >
-                            {children}
-                        </div>
-                    </Content>
+                    <div
+                        className={cn(
+                            'min-h-[100vh] rounded shadow p-4 py-2',
+                            className
+                        )}
+                    >
+                        {children}
+                    </div>
                 </Layout>
             </Layout>
         </IdleTimerProvider>

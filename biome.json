@@ -43,5 +43,12 @@
             "attributePosition": "auto",
             "bracketSpacing": true
         }
+    },
+    "linter": {
+        "rules": {
+            "a11y": {
+                "useKeyWithClickEvents": "off"
+            }
+        }
     }
 }
