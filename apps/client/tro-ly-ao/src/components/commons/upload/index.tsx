@@ -9,8 +9,14 @@ import {
     DeleteFilled,
 } from '@ant-design/icons'
 import { cn } from '@lib/utils'
-import { Image } from 'antd'
+import { Button, Divider, Image } from 'antd'
+import ImageNext from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import UploadIcon from '@assets/images/upload.svg'
+import DocxIcon from '@assets/images/docx.svg'
+import PptIcon from '@assets/images/ppt.svg'
+import TxtIcon from '@assets/images/txt.svg'
+import ExcelIcon from '@assets/images/xlsx.svg'
 
 type UploadDragAndDropWrapperProps = {
     onUpload: (
@@ -25,6 +31,48 @@ type UploadDragAndDropWrapperProps = {
     value?: string | null
     isShowUpload?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
+
+export const FileUploadIcon = ({
+    fileType,
+    ...rest
+}: {
+    fileType: string | null | undefined
+} & (typeof ImageNext)['defaultProps']) => {
+    const IconOfFile = useMemo(() => {
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ) {
+            return DocxIcon
+        }
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ) {
+            return ExcelIcon
+        }
+        if (
+            fileType ===
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        ) {
+            return PptIcon
+        }
+        if (fileType === 'application/pdf') {
+            return TxtIcon
+        }
+        return TxtIcon
+    }, [fileType])
+
+    return (
+        <ImageNext
+            src={IconOfFile}
+            width={80}
+            height={80}
+            alt="icon-file"
+            {...rest}
+        />
+    )
+}
 
 const UploadDragAndDrop = ({
     onUpload,
@@ -59,33 +107,8 @@ const UploadDragAndDrop = ({
         return false
     }, [fileType])
 
-    const IconOfFile = useMemo(() => {
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ) {
-            return FileWordFilled
-        }
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ) {
-            return FileExcelFilled
-        }
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-        ) {
-            return FilePptFilled
-        }
-        if (fileType === 'application/pdf') {
-            return FilePdfFilled
-        }
-        return FileFilled
-    }, [fileType])
-
     const onClick = () => {
-        if (imageFromValue) return
+        if (imageFromValue && !multiple) return
         const input = document.createElement('input')
         input.hidden = true
         input.multiple = !!multiple
@@ -186,7 +209,6 @@ const UploadDragAndDrop = ({
             {isShowUpload && (fileType || imageFromValue) ? (
                 <div className="flex justify-center items-center">
                     <div className="absolute flex top-1 right-2 gap-2 group-hover:visible invisible z-50">
-                        {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                         <div
                             onClick={(e) => {
                                 e.stopPropagation()
@@ -200,7 +222,7 @@ const UploadDragAndDrop = ({
                         </div>
                     </div>
                     {!isDisplayable ? (
-                        <IconOfFile />
+                        <FileUploadIcon fileType={fileType} />
                     ) : (
                         <Image
                             preview={isDisplayable}
@@ -221,12 +243,23 @@ const UploadDragAndDrop = ({
                     )}
                 </div>
             ) : (
-                <>
-                    <PlusOutlined />
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <ImageNext
+                        width={28}
+                        height={20}
+                        alt="upload"
+                        src={UploadIcon}
+                    />
                     <p className="text-sm text-gray-500 text-center p-2">
-                        {description || 'Nhấn để tải lên'}
+                        {description || 'Kéo và thả tệp vào đây'}
                     </p>
-                </>
+                    <Divider className="my-0">
+                        <span className="text-sm text-gray-500">Hoặc</span>
+                    </Divider>
+                    <Button className="text-primary border-primary font-semibold py-4">
+                        Chọn tệp
+                    </Button>
+                </div>
             )}
         </div>
     )
