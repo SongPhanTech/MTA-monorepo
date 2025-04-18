@@ -4,7 +4,6 @@ import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
-import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { Layout, theme } from 'antd'
@@ -53,7 +52,6 @@ const ChatLayout = ({
     const mockData: ConversationDataFromAPI = [
         { id: '1', label: 'Chat với khách A' },
         { id: '2', label: 'Chat nội bộ' },
-        { id: '3' },
     ]
 
     return (
@@ -63,7 +61,7 @@ const ChatLayout = ({
             }
             onIdle={signOutAction}
         >
-            <Layout style={{ minHeight: '100vh' }}>
+            <Layout className="h-screen">
                 <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
                     <div className="flex items-center gap-2">
                         <Image
@@ -80,32 +78,16 @@ const ChatLayout = ({
                     </div>
                 </Header>
 
-                <Layout hasSider style={{ paddingTop: 64 }}>
-                    {/* Sider */}
+                <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
                     <SiderChatLayout
                         items={generateMenusTroLyAo(mockData)}
                         onCollapse={handleCollapsed}
                         collapsed={collapsed}
                         theme={'light'}
                     />
-
-                    {/* Content */}
-                    <Layout
-                        style={{
-                            marginInlineStart: collapsed ? 80 : 280,
-                            transition: 'margin-inline-start 0.2s',
-                        }}
-                    >
-                        <Content className="flex flex-col gap-2 mt-[11px] mx-2">
-                            <div
-                                style={{ background: colorBgContainer }}
-                                className={cn(
-                                    'min-h-[100vh] rounded shadow p-4',
-                                    className
-                                )}
-                            >
-                                {children}
-                            </div>
+                    <Layout className="overflow-hidden">
+                        <Content className="h-full overflow-y-auto p-[10px] bg-white">
+                            {children}
                         </Content>
                     </Layout>
                 </Layout>
