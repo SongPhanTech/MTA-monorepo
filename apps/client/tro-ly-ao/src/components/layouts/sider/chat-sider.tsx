@@ -1,9 +1,10 @@
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
-import { Layout, Menu } from 'antd'
+import { Button, Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
+import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
 
 const { Sider } = Layout
 
@@ -14,10 +15,8 @@ interface SiderDefaultLayoutProps {
     onCollapse?: (collapsed: boolean) => void
 }
 
-// Chuyển đổi item sang định dạng Menu phù hợp
+// Tạo MenuItems dùng cho Ant Design <Menu />
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-    const router = useRouter()
-
     return menus.map((item) => {
         if (item.type === 'group' && item.children) {
             return {
@@ -26,45 +25,35 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
                 key: item.id,
                 children: item.children.map((child) => ({
                     key: child.path || child.id,
-                    label: (
-                        // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                                if (child.path) {
-                                    router.push(child.path)
-                                }
-                            }}
-                        >
-                            {child.label}
-                        </div>
-                    ),
+                    label: child.label,
                 })),
             }
         }
 
         return {
-            label: (
-                // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                <div
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        if (item.path) {
-                            router.push(item.path)
-                        }
-                    }}
-                >
-                    {item.label}
-                </div>
-            ),
             key: item.path || item.id,
+            label: item.label,
             icon: item.icon ? <item.icon /> : undefined,
             children: item.children ? getMenus(item.children) : undefined,
         }
     })
 }
 
-// Tìm các menu mở sẵn theo pathname
+// Tìm menu theo key để lấy path
+const findMenuItemByKey = (menus: MenuItem[], key: string): MenuItem | null => {
+    for (const item of menus) {
+        if ((item.path || item.id) === key) {
+            return item
+        }
+        if (item.children) {
+            const found = findMenuItemByKey(item.children, key)
+            if (found) return found
+        }
+    }
+    return null
+}
+
+// Tìm openKeys dựa vào path hiện tại
 const findOpenKeys = (
     menus: MenuItem[],
     currentPath: string | null
@@ -90,40 +79,45 @@ const SiderChatLayout = ({
     onCollapse,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
+    const router = useRouter()
     const [openKeys, setOpenKeys] = useState<string[]>(
         findOpenKeys(items, pathname)
     )
 
     return (
         <Sider
-            style={{
-                borderRadius: '0 5px 5px 0',
-                overflowY: 'auto',
-                height: 'calc(100vh - 64px)',
-                position: 'fixed',
-                insetInlineStart: 0,
-                top: 74,
-                bottom: 0,
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-            }}
-            collapsible
-            onCollapse={onCollapse}
             collapsed={collapsed}
             theme={theme}
             width={280}
+            className="h-full relative mr-[10px]"
         >
-            <Menu
-                theme={theme}
-                mode="inline"
-                selectedKeys={pathname ? [pathname] : []}
-                openKeys={openKeys}
-                onOpenChange={setOpenKeys}
-                items={getMenus(items)}
-                style={{
-                    background: 'transparent',
-                }}
-            />
+            <div className="overflow-y-auto h-full pb-[60px]">
+                <Menu
+                    theme={theme}
+                    mode="inline"
+                    selectedKeys={pathname ? [pathname] : []}
+                    openKeys={openKeys}
+                    onOpenChange={setOpenKeys}
+                    items={getMenus(items)}
+                    className="bg-transparent"
+                    onClick={({ key }) => {
+                        const menuItem = findMenuItemByKey(items, key)
+                        if (menuItem?.path) {
+                            router.push(menuItem.path)
+                        }
+                    }}
+                />
+            </div>
+
+            <div className="absolute bottom-0 w-full flex justify-center z-10">
+                <Button
+                    type="text"
+                    className="w-full bg-white text-primary text-lg rounded-none"
+                    onClick={() => onCollapse?.(!collapsed)}
+                >
+                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                </Button>
+            </div>
         </Sider>
     )
 }
