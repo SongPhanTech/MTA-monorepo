@@ -31,26 +31,24 @@ function HeaderContent() {
     )
 
     return (
-        <div className='h-[60px] p-[10px] mb-2 bg-white flex items-center justify-start border-primary'>
-            <div className='flex items-center gap-2'>
+        <div className="h-[60px] p-[8px] mb-2 bg-white flex items-center justify-start border-primary">
+            <div className="flex items-center gap-2">
                 {visibleList.map((item) => {
                     const isActive = item.id === activeId
                     return (
                         <Button
                             key={item.id}
+                            size="large"
                             type={isActive ? 'primary' : 'default'}
-                            className={`px-4 py-2 rounded-lg ${
-                                isActive ? 'bg-[#005f37] border-[#005f37]' : ''
-                            }`}
                             onClick={() => handleClick(item.id)}
                         >
                             {item.label}
                         </Button>
                     )
                 })}
-                  {moreList.length > 0 && (
+                {moreList.length > 0 && (
                     <Dropdown overlay={menu} trigger={['click']}>
-                        <Button icon={<UnorderedListOutlined />} />
+                        <Button icon={<UnorderedListOutlined />} size="large" />
                     </Dropdown>
                 )}
             </div>
