@@ -1,7 +1,7 @@
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import { getStorage, removeStorage, setStorage } from '@lib/storage'
 import { QueryClient } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
+import { getSession, signOut } from 'next-auth/react'
 const queryClient = new QueryClient()
 
 const fetchInstance = async (url: string, options?: RequestInit) => {
@@ -22,6 +22,7 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
         },
     }).then((res) => {
         if (res.status === 401) {
+            signOut()
             removeStorage('ACCESS_TOKEN')
             signOutAction()
         }

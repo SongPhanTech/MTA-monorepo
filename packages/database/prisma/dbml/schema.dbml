@@ -284,6 +284,8 @@ Table Subject {
   SubjectGroup SubjectGroup [not null]
   subjectGroupId String [not null]
   curriculumVersionSubject CurriculumVersionSubject [not null]
+  prerequisiteSubject PrerequisiteSubject [not null]
+  coRequisiteSubject CoRequisiteSubject [not null]
 }
 
 Table CurriculumVersionSubject {
@@ -302,6 +304,34 @@ Table CurriculumVersionSubject {
   infomation String
   documentPath String
   renderPath String
+  coRequisiteSubject CoRequisiteSubject [not null]
+  prerequisiteSubject PrerequisiteSubject [not null]
+}
+
+Table PrerequisiteSubject {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  CurriculumVersionSubject CurriculumVersionSubject [not null]
+  curriculumVersionSubjectId String [not null]
+  Subject Subject [not null]
+  subjectId String [not null]
+}
+
+Table CoRequisiteSubject {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  CurriculumVersionSubject CurriculumVersionSubject [not null]
+  curriculumVersionSubjectId String [not null]
+  Subject Subject [not null]
+  subjectId String [not null]
 }
 
 Table TrainingObjectType {
@@ -579,6 +609,7 @@ Table Document {
   status DocumentStatus [not null, default: 'PENDING']
   uri String
   fileType String
+  fileSize Int
   type DocumentType [not null]
   reason String
   uploadedBy User [not null]
@@ -931,6 +962,14 @@ Ref: CurriculumVersionSubject.curriculumVersionId > CurriculumVersion.id
 Ref: CurriculumVersionSubject.subjectId > Subject.id
 
 Ref: CurriculumVersionSubject.traningBlockId > TrainingBlock.id
+
+Ref: PrerequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
+
+Ref: PrerequisiteSubject.subjectId > Subject.id
+
+Ref: CoRequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
+
+Ref: CoRequisiteSubject.subjectId > Subject.id
 
 Ref: UserProfile.userId > User.id
 

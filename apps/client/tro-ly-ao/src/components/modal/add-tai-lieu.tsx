@@ -36,7 +36,9 @@ const AddTaiLieu = () => {
 
     const [form] = Form.useForm<DocumentFormType>()
 
-    const files = Form.useWatch('files', form) || []
+    const files = Form.useWatch('files', form) || {}
+    console.log('files', files)
+
     const onUpload = async (
         values: Array<{
             url: string
@@ -44,89 +46,76 @@ const AddTaiLieu = () => {
         }>
     ) => {
         try {
-            // form.setFieldsValue({
-            //     files: files.concat(
-            //         values.map((item) => ({
-            //             url: item.url,
-            //             file: item.file,
-            //             body: item.file.name,
-            //             progress: 0,
-            //         }))
-            //     ),
-            // })
+            const valuesWithId = values.map((item) => ({
+                ...item,
+                id: crypto.randomUUID(),
+                body: '',
+            }))
+
+            form.setFieldsValue({
+                files: {
+                    ...files,
+                    ...valuesWithId.reduce(
+                        (prev, item) => ({
+                            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+                            ...prev,
+                            [item.id]: {
+                                ...item,
+                                body: '',
+                                progress: 0,
+                            },
+                        }),
+                        {}
+                    ),
+                },
+            })
             await Promise.all(
-                values.map(async (file) => {
+                valuesWithId.map(async (file) => {
                     const resPresignedUrl = await fetchGeneratePresignedUrl({
                         body: {
                             path: 'tai-lieu',
                         },
                     })
-                    const files = form.getFieldValue('files')
-                    form.setFieldsValue({
-                        files: files.map((item) => {
-                            if (item.url === file.url) {
-                                return {
-                                    ...item,
-                                    url: resPresignedUrl.fileName,
-                                }
-                            }
-                            return item
-                        }),
-                    })
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
                             const { loaded, total = 1 } = progressEvent
                             const percent = Math.floor((loaded * 100) / total)
-                            // form.setFieldsValue({
-                            //     files: files.map((item) => {
-                            //         if (item.url === resPresignedUrl.fileName) {
-                            //             return {
-                            //                 ...item,
-                            //                 progress: percent,
-                            //             }
-                            //         }
-                            //         return item
-                            //     }),
-                            // })
+                            form.setFieldsValue({
+                                files: {
+                                    ...form.getFieldValue('files'),
+                                    [file.id]: {
+                                        ...file,
+                                        url: resPresignedUrl.fileName,
+                                        progress: percent,
+                                    },
+                                },
+                            })
                         },
                     })
                 })
             )
-        } catch (error) {}
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
     const onFinish = async (values: DocumentFormType) => {
         try {
-            const urls = await Promise.all(
-                values.files.map(async (item) => {
-                    // const response = await generatePresignedUrl({
-                    //     data: {
-                    //         path: 'chat-bot',
-                    //     },
-                    // })
-                    // await fetch(response.data.url, {
-                    //     method: 'PUT',
-                    //     body: item.file,
-                    // })
-                    return {
-                        url: item.file.name,
-                        // url: response.data.fileName,
-                        fileName: item.file.name,
-                        fileType: item.file.type,
+            await createMany({
+                data: Object.values(values.files).map(
+                    ({ body, file, url }) => ({
+                        uri: url,
+                        title: file.name,
+                        fileType: file.type,
+                        uploadedById: myProfile?.user.user_id,
                         type: values.type,
-                    }
-                })
-            )
-            // await createMany({
-            //     data: urls.map(({ fileName, url, fileType, type }) => ({
-            //         uri: url,
-            //         name: fileName,
-            //         fileType,
-            //         uploadedById: myProfile?.user.id,
-            //         type,
-            //     })),
-            // })
+                        body,
+                        fileSize: file.size,
+                    })
+                ),
+            })
             message.success('Thêm tài liệu thành công')
+            onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -139,6 +128,7 @@ const AddTaiLieu = () => {
             okText="Đồng ý"
             cancelText="Hủy"
             onCancel={onClose}
+            onOk={form.submit}
         >
             <div className="flex gap-4 justify-between">
                 <Form
@@ -147,7 +137,8 @@ const AddTaiLieu = () => {
                     layout="vertical"
                     className={cn('mt-4', selectedFile ? 'w-2/5' : 'w-full')}
                     initialValues={{
-                        files: [],
+                        files: {},
+                        type: $Enums.DocumentType.ACADEMY_INFORMATION,
                     }}
                 >
                     <Col span={24}>
@@ -203,11 +194,10 @@ const AddTaiLieu = () => {
                                 <CloseCircleOutlined
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        // form.setFieldsValue({
-                                        //     files: files.filter(
-                                        //         (item) => item.url !== file.url
-                                        //     ),
-                                        // })
+                                        delete files[key]
+                                        form.setFieldsValue({
+                                            files,
+                                        })
                                     }}
                                     className="text-lg cursor-pointer"
                                 />

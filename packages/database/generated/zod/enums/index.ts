@@ -26,6 +26,8 @@ export * from './CurriculumVersionScalarFieldEnum.schema';
 export * from './SubjectGroupScalarFieldEnum.schema';
 export * from './SubjectScalarFieldEnum.schema';
 export * from './CurriculumVersionSubjectScalarFieldEnum.schema';
+export * from './PrerequisiteSubjectScalarFieldEnum.schema';
+export * from './CoRequisiteSubjectScalarFieldEnum.schema';
 export * from './TrainingObjectTypeScalarFieldEnum.schema';
 export * from './TrainingTypeScalarFieldEnum.schema';
 export * from './TrainingLevelScalarFieldEnum.schema';

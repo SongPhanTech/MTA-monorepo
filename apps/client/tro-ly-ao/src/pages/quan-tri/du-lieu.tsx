@@ -2,6 +2,7 @@ import { CardDocument } from '@components/commons/card-document'
 import Table from '@components/commons/table'
 import AddTaiLieu from '@components/modal/add-tai-lieu'
 import DefaultLayout from '@layouts/default-layout'
+import { $Enums } from '@workspace/db'
 import { useFindManyDocument, useUpdateDocument } from '@workspace/db/hooks'
 import { Tabs, type TabsProps, message } from 'antd'
 import { FileUp } from 'lucide-react'
@@ -15,6 +16,18 @@ function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
+        },
+        where: {},
+    })
+
+    const { data: documentsPendingOrDeny = [] } = useFindManyDocument({
+        include: {
+            uploadedBy: true,
+        },
+        where: {
+            status: {
+                in: [$Enums.DocumentStatus.PENDING, $Enums.DocumentStatus.DENY],
+            },
         },
     })
 
@@ -61,23 +74,30 @@ function Page() {
                         columns={[
                             {
                                 title: 'Tên tài liệu',
+                                dataIndex: 'title',
                             },
                             {
                                 title: 'Loại tài liệu',
+                                dataIndex: 'type',
                             },
                             {
                                 title: 'Kích thước',
+                                dataIndex: 'fileSize',
                             },
                             {
                                 title: 'Người tải lên',
+                                dataIndex: 'uploadedBy',
                             },
                             {
                                 title: 'Ngày tải lên',
+                                dataIndex: 'createdAt',
                             },
                             {
                                 title: 'Trạng thái',
+                                dataIndex: 'status',
                             },
                         ]}
+                        data={documentsPendingOrDeny}
                     />
                 </div>
             ),

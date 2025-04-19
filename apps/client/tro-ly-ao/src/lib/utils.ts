@@ -8,6 +8,10 @@ const getPageCount = (totalItems: number, itemsPerPage: number) => {
     return Math.ceil(totalItems / itemsPerPage)
 }
 
+const uuid = () => {
+    return crypto.randomUUID()
+}
+
 const formatDate = (
     date: string | Date | Dayjs,
     unit?: 'Day' | 'Month' | 'Year'

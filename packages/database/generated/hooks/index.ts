@@ -25,6 +25,8 @@ export * from './curriculum-version';
 export * from './subject-group';
 export * from './subject';
 export * from './curriculum-version-subject';
+export * from './prerequisite-subject';
+export * from './co-requisite-subject';
 export * from './training-object-type';
 export * from './training-type';
 export * from './training-level';
