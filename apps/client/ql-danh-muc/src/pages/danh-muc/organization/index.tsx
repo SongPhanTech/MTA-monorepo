@@ -27,6 +27,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { convertToTree, searchTree, searchTree2 } from '@/utils/convertOrganizationToTree'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -35,16 +36,23 @@ export default function Page() {
 
     const { data = [], refetch } = useFindManyOrganization({
         where: {
-            name: {
-                contains: searchText,
-            },
+            // name: {
+            //     contains: searchText,
+            // },
+            // parentId: null
         },
         include: {
             type: true,
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
+        take: 10000,
+        skip: (currentPage - 1) * 10000,
     })
+
+    
+    // const filteredData = searchTree2(data, searchText);
+    // const convert_data = convertToTree(filteredData)
+    const convert_data1 = convertToTree(data)
+    const convert_data = searchTree(convert_data1, searchText)
 
     const { data: count } = useCountOrganization()
 
@@ -129,15 +137,15 @@ export default function Page() {
                 <Col span={24}>
                     <Table
                         columns={[
-                            {
-                                title: 'STT',
-                                width: 20,
-                                align: 'center',
-                                render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
+                            // {
+                            //     title: 'STT',
+                            //     width: 20,
+                            //     align: 'center',
+                            //     render: (_, __, index) =>
+                            //         index +
+                            //         1 +
+                            //         (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            // },
                             {
                                 title: 'Mã đơn vị',
                                 dataIndex: 'code',
@@ -181,13 +189,14 @@ export default function Page() {
                                 ),
                             },
                         ]}
-                        data={data}
+                        data={convert_data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            // onShowSizeChange: setNumberOfPages,
+                            showSizeChanger: false,
                         }}
                     />
                 </Col>
