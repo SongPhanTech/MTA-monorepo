@@ -51,7 +51,7 @@ const PutOrganizationModal = () => {
                         code: output.code,
                         name: output.name,
                         description: output.description,
-                        parentId: output.parentId,
+                        parentId: output?.parentId,
                     },
                     where: {
                         id,
@@ -66,7 +66,7 @@ const PutOrganizationModal = () => {
                         code: output.code,
                         name: output.name,
                         description: output.description,
-                        parentId: output.parentId,
+                        parentId: output?.parentId,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -135,7 +135,6 @@ const PutOrganizationModal = () => {
                     form={form}
                     name="parentId"
                     label="Đơn vị cấp trên"
-                    required
                 >
                     <Select
                         placeholder="Chọn đơn vị cấp trên"
