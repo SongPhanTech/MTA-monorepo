@@ -472,26 +472,60 @@ model Subject {
   SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
   subjectGroupId           String
   curriculumVersionSubject CurriculumVersionSubject[]
+  prerequisiteSubject      PrerequisiteSubject[]
+  coRequisiteSubject       CoRequisiteSubject[]
 
   @@schema("ql-dao-tao")
 }
 
 model CurriculumVersionSubject {
-  id                  String            @id() @default(cuid())
+  id                  String                @id() @default(cuid())
   code                String?
-  description         String?           @db.Text()
+  description         String?               @db.Text()
   deletedAt           DateTime?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt()
-  CurriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt()
+  CurriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId String
-  Subject             Subject           @relation(fields: [subjectId], references: [id])
+  Subject             Subject               @relation(fields: [subjectId], references: [id])
   subjectId           String
-  TraningBlock        TrainingBlock?    @relation(fields: [traningBlockId], references: [id])
+  TraningBlock        TrainingBlock?        @relation(fields: [traningBlockId], references: [id])
   traningBlockId      String?
   infomation          String?
   documentPath        String?
   renderPath          String?
+  coRequisiteSubject  CoRequisiteSubject[]
+  prerequisiteSubject PrerequisiteSubject[]
+
+  @@schema("ql-dao-tao")
+}
+
+model PrerequisiteSubject {
+  id                         String                   @id() @default(cuid())
+  code                       String?
+  description                String?                  @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                 @default(now())
+  updatedAt                  DateTime                 @updatedAt()
+  CurriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
+  curriculumVersionSubjectId String
+  Subject                    Subject                  @relation(fields: [subjectId], references: [id])
+  subjectId                  String
+
+  @@schema("ql-dao-tao")
+}
+
+model CoRequisiteSubject {
+  id                         String                   @id() @default(cuid())
+  code                       String?
+  description                String?                  @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                 @default(now())
+  updatedAt                  DateTime                 @updatedAt()
+  CurriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
+  curriculumVersionSubjectId String
+  Subject                    Subject                  @relation(fields: [subjectId], references: [id])
+  subjectId                  String
 
   @@schema("ql-dao-tao")
 }
@@ -804,6 +838,7 @@ model Document {
   status       DocumentStatus @default(PENDING)
   uri          String?
   fileType     String?
+  fileSize     Int?
   type         DocumentType
   reason       String?
   uploadedBy   User           @relation("DocumentUploaded", fields: [uploadedById], references: [id])

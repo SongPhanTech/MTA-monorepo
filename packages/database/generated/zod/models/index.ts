@@ -25,6 +25,8 @@ export * from './CurriculumVersion.schema';
 export * from './SubjectGroup.schema';
 export * from './Subject.schema';
 export * from './CurriculumVersionSubject.schema';
+export * from './PrerequisiteSubject.schema';
+export * from './CoRequisiteSubject.schema';
 export * from './TrainingObjectType.schema';
 export * from './TrainingType.schema';
 export * from './TrainingLevel.schema';

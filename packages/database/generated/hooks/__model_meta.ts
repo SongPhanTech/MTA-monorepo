@@ -1241,6 +1241,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'Subject',
+                }, prerequisiteSubject: {
+                    name: "prerequisiteSubject",
+                    type: "PrerequisiteSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'Subject',
+                }, coRequisiteSubject: {
+                    name: "coRequisiteSubject",
+                    type: "CoRequisiteSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'Subject',
                 },
             }
             , uniqueConstraints: {
@@ -1329,6 +1341,142 @@ const metadata = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
+                }, coRequisiteSubject: {
+                    name: "coRequisiteSubject",
+                    type: "CoRequisiteSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'CurriculumVersionSubject',
+                }, prerequisiteSubject: {
+                    name: "prerequisiteSubject",
+                    type: "PrerequisiteSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'CurriculumVersionSubject',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        prerequisiteSubject: {
+            name: 'PrerequisiteSubject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, CurriculumVersionSubject: {
+                    name: "CurriculumVersionSubject",
+                    type: "CurriculumVersionSubject",
+                    isDataModel: true,
+                    backLink: 'prerequisiteSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionSubjectId" },
+                }, curriculumVersionSubjectId: {
+                    name: "curriculumVersionSubjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'CurriculumVersionSubject',
+                }, Subject: {
+                    name: "Subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    backLink: 'prerequisiteSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectId" },
+                }, subjectId: {
+                    name: "subjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'Subject',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        coRequisiteSubject: {
+            name: 'CoRequisiteSubject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, CurriculumVersionSubject: {
+                    name: "CurriculumVersionSubject",
+                    type: "CurriculumVersionSubject",
+                    isDataModel: true,
+                    backLink: 'coRequisiteSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionSubjectId" },
+                }, curriculumVersionSubjectId: {
+                    name: "curriculumVersionSubjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'CurriculumVersionSubject',
+                }, Subject: {
+                    name: "Subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    backLink: 'coRequisiteSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectId" },
+                }, subjectId: {
+                    name: "subjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'Subject',
                 },
             }
             , uniqueConstraints: {
@@ -2556,6 +2704,10 @@ const metadata = {
                 }, fileType: {
                     name: "fileType",
                     type: "String",
+                    isOptional: true,
+                }, fileSize: {
+                    name: "fileSize",
+                    type: "Int",
                     isOptional: true,
                 }, type: {
                     name: "type",
