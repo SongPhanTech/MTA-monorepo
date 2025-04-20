@@ -11,6 +11,7 @@ import {
     IdcardOutlined,
     MessageOutlined,
 } from '@ant-design/icons'
+import {Home} from "lucide-react"
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 interface MenuItem {

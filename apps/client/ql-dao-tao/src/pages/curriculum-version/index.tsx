@@ -268,7 +268,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                         </Col>
                     </Row>
                 </Col>
-                <Col span={24}>
+                { curriculumInfo && count === 0 ? <Col span={24}><Flex justify='center'>Không có dữ liệu</Flex></Col> : <Col span={24}>
                     <Table
                         columns={[
                             {
@@ -387,7 +387,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
-                </Col>
+                </Col>}
             </Row>
         </div>
     )
