@@ -3,7 +3,10 @@ import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutSubjectModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
+import {
+    DEFAULT_PAGINATE_SIZE,
+    SUBJECT_EQUIVALENT_TYPE,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { SchoolYear } from '@workspace/db'
@@ -40,8 +43,8 @@ export default function SubjectPage() {
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         managementOrganizationId: undefined,
-        name: ''
-    });
+        name: '',
+    })
     const { data = [], refetch } = useFindManySubject({
         where: {
             name: {
@@ -51,7 +54,7 @@ export default function SubjectPage() {
         },
         include: {
             ManagementOrganization: true,
-            SubjectGroup: true
+            SubjectGroup: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -96,29 +99,30 @@ export default function SubjectPage() {
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
-            const today = new Date();
+            const today = new Date()
             const currentSchoolYear = dataSchoolYear.find((year) => {
-                const start = new Date(year.startDate);
-                const end = year.endDate ? new Date(year.endDate) : undefined;
+                const start = new Date(year.startDate)
+                const end = year.endDate ? new Date(year.endDate) : undefined
                 if (end) {
-                    return today >= start && today <= end;
+                    return today >= start && today <= end
                 }
-                return today >= start;
-            });
+                return today >= start
+            })
             if (currentSchoolYear) {
                 setFilters((prev: any) => ({
                     ...prev,
                     schoolYearId: currentSchoolYear.id,
-                }));
+                }))
             }
         }
-    }, [dataSchoolYear]);
+    }, [dataSchoolYear])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization({
             take: 1000,
@@ -133,12 +137,11 @@ export default function SubjectPage() {
     )
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
-
-    };
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -153,12 +156,19 @@ export default function SubjectPage() {
                                 <Input
                                     allowClear
                                     onPressEnter={(e) => {
-                                        const value = e.currentTarget.value?.trim();
-                                        handleFilterChange('name', value);
+                                        const value =
+                                            e.currentTarget.value?.trim()
+                                        handleFilterChange('name', value)
                                     }}
                                     onChange={(e) => {
-                                        if (!e.target.value || e.target.value === "") {
-                                            handleFilterChange('name', undefined);
+                                        if (
+                                            !e.target.value ||
+                                            e.target.value === ''
+                                        ) {
+                                            handleFilterChange(
+                                                'name',
+                                                undefined
+                                            )
                                         }
                                     }}
                                 />
@@ -166,10 +176,10 @@ export default function SubjectPage() {
                         </Col>
                         <Col span={8}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Đơn vị phụ trách</label>
                                 <TreeSelect
-                                    className='w-[200px]'
+                                    className="w-[200px]"
                                     allowClear
                                     showSearch
                                     treeDefaultExpandAll
@@ -179,7 +189,12 @@ export default function SubjectPage() {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'managementOrganizationId',
+                                            val
+                                        )
+                                    }
                                 />
                             </Flex>
 
@@ -226,46 +241,49 @@ export default function SubjectPage() {
                             {
                                 title: 'Loại môn học tương đương',
                                 dataIndex: 'subjectEquivalentType',
-                                render: (value: any) => SUBJECT_EQUIVALENT_TYPE[value as keyof typeof SUBJECT_EQUIVALENT_TYPE],
+                                render: (value: any) =>
+                                    SUBJECT_EQUIVALENT_TYPE[
+                                        value as keyof typeof SUBJECT_EQUIVALENT_TYPE
+                                    ],
                             },
                             {
                                 title: 'Số tín chỉ',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'credit',
                             },
                             {
                                 title: 'Số tiết',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'period',
                             },
                             {
                                 title: 'Số tiết LT',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfTheory',
                             },
                             {
                                 title: 'Số tiết TH',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfPractice',
                             },
                             {
                                 title: 'Số tiết tự học',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfSelfStudy',
                             },
                             {
                                 title: 'Số tiết thực tập',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfInternship',
                             },
                             {
                                 title: 'Số tiết đồ án',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfProject',
                             },
                             {
                                 title: 'Số tiết khác',
-                                align: "center",
+                                align: 'center',
                                 dataIndex: 'numberOfOther',
                             },
                             {

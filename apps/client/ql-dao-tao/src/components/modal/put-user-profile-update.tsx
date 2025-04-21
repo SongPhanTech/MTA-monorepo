@@ -46,11 +46,7 @@ dayjs.locale('vi')
 export type PutUserProfile = UserProfile
 const PutUserProfileUpdateModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<any>({
+    const { isOpen, onClose, input } = useDisclosure<any>({
         tag: PutUserProfileUpdateModal.name,
         onClose: form.resetFields,
     })
@@ -139,7 +135,10 @@ const PutUserProfileUpdateModal = () => {
                         positionCPVName: output.positionCPVName,
                         organizationName: output.organizationName,
                         organizationCPVName: output.organizationCPVName,
-                        userTypeId: userTypeData?.find((type: any) => type.code === code)?.id ?? undefined,
+                        userTypeId:
+                            userTypeData?.find(
+                                (type: any) => type.code === code
+                            )?.id ?? undefined,
                         userId: output.userId,
                         priorityObjectId: output.priorityObjectId,
                         registrationAreaId: output.registrationAreaId,
@@ -188,7 +187,9 @@ const PutUserProfileUpdateModal = () => {
                         positionCPVName: output.positionCPVName,
                         organizationName: output.organizationName,
                         organizationCPVName: output.organizationCPVName,
-                        userTypeId: userTypeData?.find((type: any) => type.code === code)!.id,
+                        userTypeId: userTypeData?.find(
+                            (type: any) => type.code === code
+                        )!.id,
                         userId: output.userId,
                         priorityObjectId: output.priorityObjectId,
                         registrationAreaId: output.registrationAreaId,
@@ -252,8 +253,8 @@ const PutUserProfileUpdateModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                        ? 'Thêm mới sinh viên'
-                        : 'Thêm mới học viên'
+                      ? 'Thêm mới sinh viên'
+                      : 'Thêm mới học viên'
             }
             className="w-[70vw]"
             layout="horizontal"
@@ -294,7 +295,7 @@ const PutUserProfileUpdateModal = () => {
                                         required
                                         className="mb-0"
                                     >
-                                        <Input placeholder='Nhập mã' />
+                                        <Input placeholder="Nhập mã" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>

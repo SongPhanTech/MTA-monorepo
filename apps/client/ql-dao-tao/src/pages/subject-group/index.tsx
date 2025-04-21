@@ -40,8 +40,8 @@ export default function SubjectGroupPage() {
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         managementOrganizationId: undefined,
-        name: ''
-    });
+        name: '',
+    })
     const { data = [], refetch } = useFindManySubjectGroup({
         where: {
             name: {
@@ -95,29 +95,30 @@ export default function SubjectGroupPage() {
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
-            const today = new Date();
+            const today = new Date()
             const currentSchoolYear = dataSchoolYear.find((year) => {
-                const start = new Date(year.startDate);
-                const end = year.endDate ? new Date(year.endDate) : undefined;
+                const start = new Date(year.startDate)
+                const end = year.endDate ? new Date(year.endDate) : undefined
                 if (end) {
-                    return today >= start && today <= end;
+                    return today >= start && today <= end
                 }
-                return today >= start;
-            });
+                return today >= start
+            })
             if (currentSchoolYear) {
                 setFilters((prev: any) => ({
                     ...prev,
                     schoolYearId: currentSchoolYear.id,
-                }));
+                }))
             }
         }
-    }, [dataSchoolYear]);
+    }, [dataSchoolYear])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization({
             take: 1000,
@@ -132,12 +133,11 @@ export default function SubjectGroupPage() {
     )
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
-
-    };
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -152,12 +152,19 @@ export default function SubjectGroupPage() {
                                 <Input
                                     allowClear
                                     onPressEnter={(e) => {
-                                        const value = e.currentTarget.value?.trim();
-                                        handleFilterChange('name', value);
+                                        const value =
+                                            e.currentTarget.value?.trim()
+                                        handleFilterChange('name', value)
                                     }}
                                     onChange={(e) => {
-                                        if (!e.target.value || e.target.value === "") {
-                                            handleFilterChange('name', undefined);
+                                        if (
+                                            !e.target.value ||
+                                            e.target.value === ''
+                                        ) {
+                                            handleFilterChange(
+                                                'name',
+                                                undefined
+                                            )
                                         }
                                     }}
                                 />
@@ -165,10 +172,10 @@ export default function SubjectGroupPage() {
                         </Col>
                         <Col span={8}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Đơn vị phụ trách</label>
                                 <TreeSelect
-                                    className='w-[200px]'
+                                    className="w-[200px]"
                                     allowClear
                                     showSearch
                                     treeDefaultExpandAll
@@ -178,7 +185,12 @@ export default function SubjectGroupPage() {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'managementOrganizationId',
+                                            val
+                                        )
+                                    }
                                 />
                             </Flex>
 

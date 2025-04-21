@@ -93,14 +93,15 @@ const PutCurriculumModal = () => {
                         name: output.name,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         trainingObjectTypeId: output.trainingObjectTypeId,
                         trainingTimeId: output.trainingTimeId,
                         trainingLevelId: output.trainingLevelId,
                         trainingMajorId: output.trainingMajorId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
-                        renderPath: output.renderPath
+                        renderPath: output.renderPath,
                     },
                     where: {
                         id,
@@ -113,14 +114,15 @@ const PutCurriculumModal = () => {
                         name: output.name,
                         startDate: output.startDate,
                         endDate: output.endDate,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         trainingObjectTypeId: output.trainingObjectTypeId,
                         trainingTimeId: output.trainingTimeId,
                         trainingLevelId: output.trainingLevelId,
                         trainingMajorId: output.trainingMajorId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
-                        renderPath: output.renderPath
+                        renderPath: output.renderPath,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -158,11 +160,20 @@ const PutCurriculumModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa chương trình đào tạo' : 'Thêm mới chương trình đào tạo'}
+            title={
+                id
+                    ? 'Chỉnh sửa chương trình đào tạo'
+                    : 'Thêm mới chương trình đào tạo'
+            }
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên chương trình đào tạo" required>
+                <FormItem
+                    form={form}
+                    name="name"
+                    label="Tên chương trình đào tạo"
+                    required
+                >
                     <Input placeholder="Nhập tên chương trình đào tạo" />
                 </FormItem>
             </Col>
@@ -277,17 +288,30 @@ const PutCurriculumModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="infomation" label="Thông tin" required>
+                <FormItem
+                    form={form}
+                    name="infomation"
+                    label="Thông tin"
+                    required
+                >
                     <Input.TextArea placeholder="Nhập thông tin" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="documentPath" label="Đường dẫn tài liệu">
+                <FormItem
+                    form={form}
+                    name="documentPath"
+                    label="Đường dẫn tài liệu"
+                >
                     <Input placeholder="Nhập đường dẫn tài liệu" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="renderPath" label="Đường dẫn tài liệu kết xuất">
+                <FormItem
+                    form={form}
+                    name="renderPath"
+                    label="Đường dẫn tài liệu kết xuất"
+                >
                     <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
                 </FormItem>
             </Col>

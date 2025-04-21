@@ -2,10 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    Curriculum,
-    CurriculumVersion,
-} from '@workspace/db'
+import type { Curriculum, CurriculumVersion } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
     useFindUniqueCurriculumVersion,
@@ -42,8 +39,10 @@ const PutCurriculumVersionModal = () => {
             take: 1000,
             skip: 0,
         })
-    const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
-    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
+    const { mutateAsync: createCurriculumVersion } =
+        useCreateCurriculumVersion()
+    const { mutateAsync: updateCurriculumVersion } =
+        useUpdateCurriculumVersion()
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -57,7 +56,7 @@ const PutCurriculumVersionModal = () => {
                         curriculumId: output.curriculumId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
-                        renderPath: output.renderPath
+                        renderPath: output.renderPath,
                     },
                     where: {
                         id,
@@ -73,7 +72,7 @@ const PutCurriculumVersionModal = () => {
                         curriculumId: output.curriculumId,
                         infomation: output.infomation,
                         documentPath: output.documentPath,
-                        renderPath: output.renderPath
+                        renderPath: output.renderPath,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -110,11 +109,20 @@ const PutCurriculumVersionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa phiên bản chương trình đào tạo' : 'Thêm mới phiên bản chương trình đào tạo'}
+            title={
+                id
+                    ? 'Chỉnh sửa phiên bản chương trình đào tạo'
+                    : 'Thêm mới phiên bản chương trình đào tạo'
+            }
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên phiên bản" required>
+                <FormItem
+                    form={form}
+                    name="name"
+                    label="Tên phiên bản"
+                    required
+                >
                     <Input placeholder="Nhập tên phiên bản" />
                 </FormItem>
             </Col>
@@ -127,14 +135,12 @@ const PutCurriculumVersionModal = () => {
                 >
                     <Select
                         placeholder="Chọn chương trình đào tạo"
-                        options={curriculumData.map(
-                            (i: Curriculum) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={curriculumData.map((i: Curriculum) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>
@@ -154,17 +160,30 @@ const PutCurriculumVersionModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="infomation" label="Thông tin" required>
+                <FormItem
+                    form={form}
+                    name="infomation"
+                    label="Thông tin"
+                    required
+                >
                     <Input.TextArea placeholder="Nhập thông tin" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="documentPath" label="Đường dẫn tài liệu">
+                <FormItem
+                    form={form}
+                    name="documentPath"
+                    label="Đường dẫn tài liệu"
+                >
                     <Input placeholder="Nhập đường dẫn tài liệu" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="renderPath" label="Đường dẫn tài liệu kết xuất">
+                <FormItem
+                    form={form}
+                    name="renderPath"
+                    label="Đường dẫn tài liệu kết xuất"
+                >
                     <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
                 </FormItem>
             </Col>

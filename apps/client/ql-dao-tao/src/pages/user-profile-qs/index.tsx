@@ -65,7 +65,7 @@ export default function UserProfilePageQs() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState({
         searchText: '',
-    });
+    })
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
@@ -74,9 +74,9 @@ export default function UserProfilePageQs() {
             },
             UserType: {
                 is: {
-                    code: "HV",
+                    code: 'HV',
                 },
-            }
+            },
         },
         include: {
             UserType: true,
@@ -95,28 +95,36 @@ export default function UserProfilePageQs() {
             },
             UserType: {
                 is: {
-                    code: "HV",
+                    code: 'HV',
                 },
-            }
+            },
         },
     })
 
-    const debouncedRefetch = useCallback(_.debounce(() => {
-        refetch();
-    }, 500), []);
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
     const { onOpen, onClose } = useDisclosure<any>({
         tag: PutUserProfileModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<any>({
-        tag: PutUploadProfileModal.name,
-    })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>({
-        tag: PutUserProfileUpdateModal.name,
-    })
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<any>(
+        {
+            tag: PutUploadProfileModal.name,
+        }
+    )
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
+        useDisclosure<string>({
+            tag: PutUpdateProfileModal.name,
+        })
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>(
+        {
+            tag: PutUserProfileUpdateModal.name,
+        }
+    )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -124,7 +132,7 @@ export default function UserProfilePageQs() {
         onOpen({ id: null, code: 'HV' })
     }
     const handleModalUpload = (type: string) => {
-        if (type === "upload") {
+        if (type === 'upload') {
             onOpenUpload('HV')
         } else {
             onOpenUpdateFile('HV')
@@ -368,7 +376,10 @@ export default function UserProfilePageQs() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpenUpdate.bind(null, { id: id, code: 'HV' })}
+                                                onClick={onOpenUpdate.bind(
+                                                    null,
+                                                    { id: id, code: 'HV' }
+                                                )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>

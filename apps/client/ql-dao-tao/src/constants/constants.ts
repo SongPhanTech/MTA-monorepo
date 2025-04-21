@@ -10,14 +10,15 @@ const TRAINING_COURSE_STATUS = {
     SUSPEND: 'Tạm dừng',
     CANCEL: 'Hủy bỏ',
 }
-const SUBJECT_EQUIVALENT_TYPE = { // loại môn học tương đương
-  NONE: "Không tương đương",
-  OneByOne: "Tương đương 1-1",
-  TwoByOne: "Hai môn tương đương 1",
-  ThreeByOne: "Ba môn tương đương 1",
-  FourByOne: "Bốn môn tương đương 1",
-  OneByTwo: "Một môn tương đương hai",
-  OneByThree: "Một môn tương đương ba",
+const SUBJECT_EQUIVALENT_TYPE = {
+    // loại môn học tương đương
+    NONE: 'Không tương đương',
+    OneByOne: 'Tương đương 1-1',
+    TwoByOne: 'Hai môn tương đương 1',
+    ThreeByOne: 'Ba môn tương đương 1',
+    FourByOne: 'Bốn môn tương đương 1',
+    OneByTwo: 'Một môn tương đương hai',
+    OneByThree: 'Một môn tương đương ba',
 }
 
 const GENDER_MEAN = {
@@ -43,5 +44,5 @@ export {
     TRAINING_COURSE_STATUS,
     GENDER_MEAN,
     GENDER_LIST,
-    SUBJECT_EQUIVALENT_TYPE
+    SUBJECT_EQUIVALENT_TYPE,
 }

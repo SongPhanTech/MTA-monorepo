@@ -14,9 +14,17 @@ import {
     useFindManyTrainingType,
     useFindManyTrainingObjectType,
     useFindManyTrainingLevel,
-    useFindManySchoolYear
+    useFindManySchoolYear,
 } from '@workspace/db/hooks'
-import { TrainingCourse, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, TrainingCourseStatus } from '@workspace/db'
+import {
+    TrainingCourse,
+    SchoolYear,
+    TrainingForm,
+    TrainingLevel,
+    TrainingType,
+    TrainingObjectType,
+    TrainingCourseStatus,
+} from '@workspace/db'
 
 import {
     Button,
@@ -59,25 +67,39 @@ export default function TrainingCoursePage() {
         trainingObjectTypeId: undefined,
         status: undefined,
         startDate: undefined,
-        endDate: undefined
-    });
+        endDate: undefined,
+    })
 
     const [dataToView, setDataToView] = useState<any>([])
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
-            ...(filters.code && filters.code !== "" ? { code: { contains: filters.code } } : {}),
-            ...(filters.trainingFormId ? { trainingFormId: filters.trainingFormId } : {}),
-            ...(filters.trainingTypeId ? { trainingTypeId: filters.trainingTypeId } : {}),
-            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
-            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
+            ...(filters.name && filters.name !== ''
+                ? { name: { contains: filters.name } }
+                : {}),
+            ...(filters.code && filters.code !== ''
+                ? { code: { contains: filters.code } }
+                : {}),
+            ...(filters.trainingFormId
+                ? { trainingFormId: filters.trainingFormId }
+                : {}),
+            ...(filters.trainingTypeId
+                ? { trainingTypeId: filters.trainingTypeId }
+                : {}),
+            ...(filters.trainingLevelId
+                ? { trainingLevelId: filters.trainingLevelId }
+                : {}),
+            ...(filters.trainingObjectTypeId
+                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+                : {}),
             ...(filters.status ? { status: filters.status } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
         include: {
             TrainingForm: true,
@@ -94,19 +116,33 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
-            ...(filters.code && filters.code !== "" ? { code: { contains: filters.code } } : {}),
-            ...(filters.trainingFormId ? { trainingFormId: filters.trainingFormId } : {}),
-            ...(filters.trainingTypeId ? { trainingTypeId: filters.trainingTypeId } : {}),
-            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
-            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
+            ...(filters.name && filters.name !== ''
+                ? { name: { contains: filters.name } }
+                : {}),
+            ...(filters.code && filters.code !== ''
+                ? { code: { contains: filters.code } }
+                : {}),
+            ...(filters.trainingFormId
+                ? { trainingFormId: filters.trainingFormId }
+                : {}),
+            ...(filters.trainingTypeId
+                ? { trainingTypeId: filters.trainingTypeId }
+                : {}),
+            ...(filters.trainingLevelId
+                ? { trainingLevelId: filters.trainingLevelId }
+                : {}),
+            ...(filters.trainingObjectTypeId
+                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+                : {}),
             ...(filters.status ? { status: filters.status } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -164,25 +200,28 @@ export default function TrainingCoursePage() {
             skip: 0,
         })
     const handleFilterChange = (key: any, value: any) => {
-        if (key !== "time") {
+        if (key !== 'time') {
             setFilters((prev) => {
-                const newFilters = { ...prev, [key]: value };
-                debouncedRefetch();
-                return newFilters;
-            });
+                const newFilters = { ...prev, [key]: value }
+                debouncedRefetch()
+                return newFilters
+            })
         } else {
             setFilters((prev) => {
                 const newFilters = {
                     ...prev,
                     startDate: value?.startDate ?? undefined,
-                    endDate: value?.endDate ?? undefined
-                };
-                debouncedRefetch();
-                return newFilters;
-            });
+                    endDate: value?.endDate ?? undefined,
+                }
+                debouncedRefetch()
+                return newFilters
+            })
         }
-    };
-    async function handleStatusChange(id: string, newStatus: TrainingCourseStatus) {
+    }
+    async function handleStatusChange(
+        id: string,
+        newStatus: TrainingCourseStatus
+    ) {
         try {
             showSpinner()
             await updateTrainingCourse({
@@ -190,7 +229,7 @@ export default function TrainingCoursePage() {
                     id,
                 },
                 data: {
-                    status: newStatus
+                    status: newStatus,
                 },
             })
         } catch (error) {
@@ -198,22 +237,25 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-    const options = Object.entries(statusOptions).map(([value, { label, color }]) => ({
-        value,
-        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-    }));
+    const options = Object.entries(statusOptions).map(
+        ([value, { label, color }]) => ({
+            value,
+            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+        })
+    )
     const filterRow = {
         isFilterRow: true,
         key: 'filter',
-    };
+    }
     useEffect(() => {
-        const dataWithFilter = [filterRow, ...data];
+        const dataWithFilter = [filterRow, ...data]
         setDataToView(dataWithFilter)
     }, [data])
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -224,23 +266,31 @@ export default function TrainingCoursePage() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={6}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Năm học:</label>
                                 <Select
                                     className="w-[70%]"
-                                    placeholder='Chọn năm học'
+                                    placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map((i: SchoolYear) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                            startDate: i.startDate,
-                                            endDate: i.endDate
+                                    options={dataSchoolYear.map(
+                                        (i: SchoolYear) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                                startDate: i.startDate,
+                                                endDate: i.endDate,
+                                            }
                                         }
-                                    })}
+                                    )}
                                     // value={filters.schoolYearId}
-                                    onChange={(value: number | null, option: any) => {
-                                        handleFilterChange("time", option ?? undefined)
+                                    onChange={(
+                                        value: number | null,
+                                        option: any
+                                    ) => {
+                                        handleFilterChange(
+                                            'time',
+                                            option ?? undefined
+                                        )
                                     }}
                                 />
                             </Flex>
@@ -267,11 +317,12 @@ export default function TrainingCoursePage() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, record, index) => {
-                                    if (record.isFilterRow) return '';
+                                    if (record.isFilterRow) return ''
                                     return (
                                         index +
-                                        (currentPage - 1) * DEFAULT_PAGINATE_SIZE
-                                    );
+                                        (currentPage - 1) *
+                                            DEFAULT_PAGINATE_SIZE
+                                    )
                                 },
                             },
                             {
@@ -286,18 +337,28 @@ export default function TrainingCoursePage() {
                                                 // placeholder="Nhập mã khóa"
                                                 allowClear
                                                 onPressEnter={(e) => {
-                                                    const value = e.currentTarget.value?.trim();
-                                                    handleFilterChange('code', value);
+                                                    const value =
+                                                        e.currentTarget.value?.trim()
+                                                    handleFilterChange(
+                                                        'code',
+                                                        value
+                                                    )
                                                 }}
                                                 onChange={(e) => {
-                                                    if (!e.target.value || e.target.value === "") {
-                                                        handleFilterChange('code', undefined);
+                                                    if (
+                                                        !e.target.value ||
+                                                        e.target.value === ''
+                                                    ) {
+                                                        handleFilterChange(
+                                                            'code',
+                                                            undefined
+                                                        )
                                                     }
                                                 }}
                                             />
-                                        );
+                                        )
                                     }
-                                    return value;
+                                    return value
                                 },
                             },
                             {
@@ -311,18 +372,28 @@ export default function TrainingCoursePage() {
                                                 // placeholder="Nhập tên khóa"
                                                 allowClear
                                                 onPressEnter={(e) => {
-                                                    const value = e.currentTarget.value?.trim();
-                                                    handleFilterChange('name', value);
+                                                    const value =
+                                                        e.currentTarget.value?.trim()
+                                                    handleFilterChange(
+                                                        'name',
+                                                        value
+                                                    )
                                                 }}
                                                 onChange={(e) => {
-                                                    if (!e.target.value || e.target.value === "") {
-                                                        handleFilterChange('name', undefined);
+                                                    if (
+                                                        !e.target.value ||
+                                                        e.target.value === ''
+                                                    ) {
+                                                        handleFilterChange(
+                                                            'name',
+                                                            undefined
+                                                        )
                                                     }
                                                 }}
                                             />
-                                        );
+                                        )
                                     }
-                                    return value;
+                                    return value
                                 },
                             },
                             {
@@ -333,18 +404,25 @@ export default function TrainingCoursePage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn loại hình đào tạo"
-                                                options={trainingTypeData.map((i: TrainingType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingTypeId', val)}
+                                                options={trainingTypeData.map(
+                                                    (i: TrainingType) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingTypeId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -355,18 +433,27 @@ export default function TrainingCoursePage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn đối tượng đào tạo"
-                                                options={trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingObjectTypeId', val)}
+                                                options={trainingObjectTypeData.map(
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingObjectTypeId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -377,18 +464,25 @@ export default function TrainingCoursePage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn hình thức đào tạo"
-                                                options={trainingFormData.map((i: TrainingForm) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingFormId', val)}
+                                                options={trainingFormData.map(
+                                                    (i: TrainingForm) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingFormId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -398,60 +492,89 @@ export default function TrainingCoursePage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn trình độ đào tạo"
-                                                options={trainingLevelData.map((i: TrainingForm) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingLevelId', val)}
+                                                options={trainingLevelData.map(
+                                                    (i: TrainingForm) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingLevelId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                render: ({ startDate }) => startDate ?
-                                    dayjs(startDate).format('DD/MM/YYYY') : "",
+                                render: ({ startDate }) =>
+                                    startDate
+                                        ? dayjs(startDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái',
                                 width: 130,
                                 render: (record: any) => {
                                     if (record.isFilterRow) {
-                                        return <Select
-                                            className='w-[155px]'
-                                            onChange={(val) => handleFilterChange('status', val)}
-                                            options={Object.entries(statusOptions).map(([value, { label, color }]) => ({
-                                                value,
-                                                label, // hiển thị trong dropdown
-                                            }))
-                                            }
-                                            allowClear
-                                        // style={{ width: 180 }}
-                                        />
-                                    } else return (
-                                        <Select
-                                            className='w-[155px]'
-                                            value={record.status}
-                                            onChange={(newStatus) => handleStatusChange(record.id, newStatus as TrainingCourseStatus)}
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-
-                                        />
-                                    )
-                                }
+                                        return (
+                                            <Select
+                                                className="w-[155px]"
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'status',
+                                                        val
+                                                    )
+                                                }
+                                                options={Object.entries(
+                                                    statusOptions
+                                                ).map(
+                                                    ([
+                                                        value,
+                                                        { label, color },
+                                                    ]) => ({
+                                                        value,
+                                                        label, // hiển thị trong dropdown
+                                                    })
+                                                )}
+                                                allowClear
+                                                // style={{ width: 180 }}
+                                            />
+                                        )
+                                    } else
+                                        return (
+                                            <Select
+                                                className="w-[155px]"
+                                                value={record.status}
+                                                onChange={(newStatus) =>
+                                                    handleStatusChange(
+                                                        record.id,
+                                                        newStatus as TrainingCourseStatus
+                                                    )
+                                                }
+                                                options={options}
+                                                optionLabelProp="label"
+                                                // style={{ width: 180 }}
+                                                bordered={false}
+                                                showSearch={false}
+                                            />
+                                        )
+                                },
                             },
                             {
                                 title: 'Mô tả',
@@ -463,24 +586,29 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 render: (_, { id }) => {
                                     if (id) {
-                                        return (<Row className="justify-center gap-2">
-                                            <Tooltip
-                                                title="Xem chi tiết"
-                                                placement="leftTop"
-                                            >
-                                                <EyeOutlined
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                <Tooltip
+                                                    title="Xem chi tiết"
+                                                    placement="leftTop"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={onOpen.bind(
+                                                            null,
+                                                            id
+                                                        )}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Tooltip>
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDelete(id),
+                                                    }}
                                                 />
-                                            </Tooltip>
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDelete(id),
-                                                }}
-                                            />
-                                        </Row>)
-                                    } else return ""
+                                            </Row>
+                                        )
+                                    } else return ''
                                 },
                             },
                         ]}
@@ -495,10 +623,16 @@ export default function TrainingCoursePage() {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                         expandable={{
-                            expandedRowRender: (record) => <div style={{ maxWidth: '100%' }}>
-                                <FixedClassPage key={record.id} trainingCourse={record} />
-                            </div>,
-                            rowExpandable: (record) => !(record.isFilterRow === true), // điều kiện nào đó
+                            expandedRowRender: (record) => (
+                                <div style={{ maxWidth: '100%' }}>
+                                    <FixedClassPage
+                                        key={record.id}
+                                        trainingCourse={record}
+                                    />
+                                </div>
+                            ),
+                            rowExpandable: (record) =>
+                                !(record.isFilterRow === true), // điều kiện nào đó
                         }}
                     />
                 </Col>

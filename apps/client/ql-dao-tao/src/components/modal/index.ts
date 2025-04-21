@@ -30,5 +30,5 @@ export {
     PutCurriculumVersionModal,
     PutCurriculumModal,
     PutSubjectGroupModal,
-    PutSubjectModal
+    PutSubjectModal,
 }
