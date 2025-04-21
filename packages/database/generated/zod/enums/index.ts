@@ -47,6 +47,7 @@ export * from './UserScalarFieldEnum.schema';
 export * from './GroupScalarFieldEnum.schema';
 export * from './RoleScalarFieldEnum.schema';
 export * from './PermissionScalarFieldEnum.schema';
+export * from './ChatBotConfigScalarFieldEnum.schema';
 export * from './DocumentScalarFieldEnum.schema';
 export * from './FAQScalarFieldEnum.schema';
 export * from './PromptScalarFieldEnum.schema';

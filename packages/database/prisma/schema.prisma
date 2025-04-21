@@ -857,6 +857,19 @@ model Permission {
   @@schema("ql-nguoi-dung")
 }
 
+model ChatBotConfig {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  value       String    @db.Text()
+
+  @@schema("tro-ly-ao")
+}
+
 model Document {
   id           String         @id() @default(cuid())
   code         String?

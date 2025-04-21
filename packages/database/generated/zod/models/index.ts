@@ -46,6 +46,7 @@ export * from './User.schema';
 export * from './Group.schema';
 export * from './Role.schema';
 export * from './Permission.schema';
+export * from './ChatBotConfig.schema';
 export * from './Document.schema';
 export * from './FAQ.schema';
 export * from './Prompt.schema';

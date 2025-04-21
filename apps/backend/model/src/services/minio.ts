@@ -72,10 +72,11 @@ export class MinIOService {
 
     async generatePresignedUrl({
         path: folder,
+        extension,
     }: PresignedUrlDto): Promise<UrlDto> {
         const uuid = randomUUIDv7('base64')
         const dateFolder = dayjs().format('YYYY-MM-DD')
-        const path = `${folder}/${dateFolder}/${uuid}`
+        const path = `${folder}/${dateFolder}/${uuid}${extension ? `.${extension}` : ''}`
         const url = await this.minioClient.presignedPutObject(
             this.bucketName,
             path,

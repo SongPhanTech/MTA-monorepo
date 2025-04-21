@@ -1,9 +1,18 @@
 import { CardDocument } from '@components/commons/card-document'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import AddTaiLieu from '@components/modal/add-tai-lieu'
+import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
+import { formatDateReadable, formatNiceBytes } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
-import { useFindManyDocument, useUpdateDocument } from '@workspace/db/hooks'
+import {
+    useDeleteDocument,
+    useFindManyDocument,
+    useUpdateDocument,
+} from '@workspace/db/hooks'
 import { Tabs, type TabsProps, message } from 'antd'
 import { FileUp } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -17,7 +26,9 @@ function Page() {
         include: {
             uploadedBy: true,
         },
-        where: {},
+        where: {
+            status: $Enums.DocumentStatus.APPROVE,
+        },
     })
 
     const { data: documentsPendingOrDeny = [] } = useFindManyDocument({
@@ -30,6 +41,8 @@ function Page() {
             },
         },
     })
+
+    const { mutateAsync: deleteDocument } = useDeleteDocument()
 
     const items: TabsProps['items'] = [
         {
@@ -75,26 +88,86 @@ function Page() {
                             {
                                 title: 'Tên tài liệu',
                                 dataIndex: 'title',
+                                className: 'cursor-pointer',
+                                onCell: (item) => {
+                                    return {
+                                        onClick: () => {
+                                            window.open(
+                                                getMinioUrl(item.uri),
+                                                '_blank'
+                                            )
+                                        },
+                                    }
+                                },
                             },
                             {
                                 title: 'Loại tài liệu',
                                 dataIndex: 'type',
+                                render: (value) => {
+                                    return DOCUMENT_TYPE.find(
+                                        (item) => item.value === value
+                                    )?.label
+                                },
                             },
                             {
                                 title: 'Kích thước',
                                 dataIndex: 'fileSize',
+                                render: (value) => formatNiceBytes(`${value}`),
                             },
                             {
                                 title: 'Người tải lên',
                                 dataIndex: 'uploadedBy',
+                                render: (value) => value.name,
                             },
                             {
                                 title: 'Ngày tải lên',
                                 dataIndex: 'createdAt',
+                                render: (value) => formatDateReadable(value),
                             },
                             {
                                 title: 'Trạng thái',
                                 dataIndex: 'status',
+                                render: (value) => {
+                                    if (
+                                        value === $Enums.DocumentStatus.PENDING
+                                    ) {
+                                        return 'Chờ duyệt'
+                                    }
+                                    if (value === $Enums.DocumentStatus.DENY) {
+                                        return 'Từ chối'
+                                    }
+                                    return 'Không xác định'
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                align: 'center',
+                                width: 100,
+                                render: (_, record) => {
+                                    return (
+                                        <div className="flex gap-4 justify-center">
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: async () => {
+                                                        try {
+                                                            await deleteDocument(
+                                                                {
+                                                                    where: {
+                                                                        id: record.id,
+                                                                    },
+                                                                }
+                                                            )
+                                                        } catch (error) {
+                                                            message.error(
+                                                                'Xóa tài liệu thất bại'
+                                                            )
+                                                        }
+                                                    },
+                                                }}
+                                            />
+                                        </div>
+                                    )
+                                },
                             },
                         ]}
                         data={documentsPendingOrDeny}

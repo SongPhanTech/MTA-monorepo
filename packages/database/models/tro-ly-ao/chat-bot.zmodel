@@ -1,6 +1,12 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 
+model ChatBotConfig extends Base {
+    name  String
+    value String @db.Text
+    @@schema("tro-ly-ao")
+}
+
 model Document extends Base {
     title        String?
     body         String?        @db.Text

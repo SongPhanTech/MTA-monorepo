@@ -46,6 +46,7 @@ export * from './user';
 export * from './group';
 export * from './role';
 export * from './permission';
+export * from './chat-bot-config';
 export * from './document';
 export * from './faq';
 export * from './prompt';
