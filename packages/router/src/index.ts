@@ -342,6 +342,13 @@ const NAVIGATION: NavigationType = {
                 description: 'Quản lý lớp biên chế',
             },
             {
+                id: 'user-profile-lecture',
+                label: 'Quản lý hồ sơ giảng viên',
+                icon: IdcardOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_LECTURE,
+                description: 'Quản lý hồ sơ giảng viên',
+            },
+            {
                 id: 'user-profile-qs',
                 label: 'Quản lý hồ sơ học viên',
                 icon: IdcardOutlined,

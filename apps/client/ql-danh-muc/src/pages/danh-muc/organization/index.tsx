@@ -9,6 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountOrganization,
     useFindManyOrganization,
+    useFindManyUserProfile,
     useUpdateOrganization,
     useUpdateUser,
 } from '@workspace/db/hooks'
@@ -25,7 +26,7 @@ import {
 } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { convertToTree, searchTree, searchTree2 } from '@/utils/convertOrganizationToTree'
 
@@ -35,28 +36,18 @@ export default function Page() {
     const [searchText, setSearchText] = useState<string>('')
 
     const { data = [], refetch } = useFindManyOrganization({
-        where: {
-            // name: {
-            //     contains: searchText,
-            // },
-            // parentId: null
-        },
-        include: {
-            type: true,
-        },
         take: 10000,
-        skip: (currentPage - 1) * 10000,
+        skip: 0,
     })
 
-    
-    // const filteredData = searchTree2(data, searchText);
-    // const convert_data = convertToTree(filteredData)
-    const convert_data1 = convertToTree(data)
-    const convert_data = searchTree(convert_data1, searchText)
+    const tree_data = convertToTree(data)
+    const convert_data = searchTree(tree_data, searchText)  
 
     const { data: count } = useCountOrganization()
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
+    
+
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutOrganizationModal.name,
     })
@@ -137,15 +128,7 @@ export default function Page() {
                 <Col span={24}>
                     <Table
                         columns={[
-                            // {
-                            //     title: 'STT',
-                            //     width: 20,
-                            //     align: 'center',
-                            //     render: (_, __, index) =>
-                            //         index +
-                            //         1 +
-                            //         (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            // },
+
                             {
                                 title: 'Mã đơn vị',
                                 dataIndex: 'code',
@@ -189,7 +172,12 @@ export default function Page() {
                                 ),
                             },
                         ]}
+           
                         data={convert_data}
+                        
+                        expandable={{
+                            defaultExpandedRowKeys: ['root'],
+                        }}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
@@ -198,7 +186,7 @@ export default function Page() {
                             // onShowSizeChange: setNumberOfPages,
                             showSizeChanger: false,
                         }}
-                    />
+                    /> 
                 </Col>
             </Row>
         </div>
