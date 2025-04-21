@@ -41,6 +41,7 @@ export * from './training-rank';
 export * from './training-kpi';
 export * from './user-profile';
 export * from './fixed-class-student';
+export * from './organization-user';
 export * from './user';
 export * from './group';
 export * from './role';

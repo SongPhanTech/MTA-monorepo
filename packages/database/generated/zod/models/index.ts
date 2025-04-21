@@ -41,6 +41,7 @@ export * from './TrainingRank.schema';
 export * from './TrainingKPI.schema';
 export * from './UserProfile.schema';
 export * from './FixedClassStudent.schema';
+export * from './OrganizationUser.schema';
 export * from './User.schema';
 export * from './Group.schema';
 export * from './Role.schema';
