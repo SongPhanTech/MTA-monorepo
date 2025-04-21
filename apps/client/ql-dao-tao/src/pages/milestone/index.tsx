@@ -37,7 +37,7 @@ export default function MilestonePage() {
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         schoolYearId: undefined,
-    });
+    })
     const { data = [], refetch } = useFindManyMilestone({
         where: {
             name: {
@@ -91,29 +91,30 @@ export default function MilestonePage() {
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
-            const today = new Date();
+            const today = new Date()
             const currentSchoolYear = dataSchoolYear.find((year) => {
-                const start = new Date(year.startDate);
-                const end = year.endDate ? new Date(year.endDate) : undefined;
+                const start = new Date(year.startDate)
+                const end = year.endDate ? new Date(year.endDate) : undefined
                 if (end) {
-                    return today >= start && today <= end;
+                    return today >= start && today <= end
                 }
-                return today >= start;
-            });
+                return today >= start
+            })
             if (currentSchoolYear) {
                 setFilters((prev: any) => ({
                     ...prev,
                     schoolYearId: currentSchoolYear.id,
-                }));
+                }))
             }
         }
-    }, [dataSchoolYear]);
+    }, [dataSchoolYear])
 
     return (
         <div>
@@ -137,24 +138,26 @@ export default function MilestonePage() {
                         </Col>
                         <Col span={6}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Năm học:</label>
                                 <Select
                                     className="w-[70%]"
-                                    placeholder='Chọn năm học'
+                                    placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map((i: SchoolYear) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name
+                                    options={dataSchoolYear.map(
+                                        (i: SchoolYear) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
                                         }
-                                    })}
+                                    )}
                                     value={filters.schoolYearId}
                                     onChange={(value: number | null) => {
                                         setFilters((prev: any) => ({
                                             ...prev,
                                             schoolYearId: value ?? undefined,
-                                        }));
+                                        }))
                                     }}
                                 />
                             </Flex>

@@ -44,7 +44,8 @@ const PutSubjectModal = () => {
                 await updateSubject({
                     data: {
                         name: output.name,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         subjectEquivalentType: output.subjectEquivalentType,
                         credit: +output.credit,
                         period: +output.period,
@@ -55,7 +56,6 @@ const PutSubjectModal = () => {
                         numberOfInternship: +output.numberOfInternship,
                         numberOfOther: +output.numberOfOther,
                         subjectGroupId: output.subjectGroupId,
-
                     },
                     where: {
                         id,
@@ -66,7 +66,8 @@ const PutSubjectModal = () => {
                 await createSubject({
                     data: {
                         name: output.name,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         subjectEquivalentType: output.subjectEquivalentType,
                         credit: +output.credit,
                         period: +output.period,
@@ -153,9 +154,7 @@ const PutSubjectModal = () => {
                     form={form}
                     name="subjectGroupId"
                     label="Nhóm môn học"
-                    normalize={(value) =>
-                        value === undefined ? null : value
-                    }
+                    normalize={(value) => (value === undefined ? null : value)}
                     required
                 >
                     <Select
@@ -164,7 +163,7 @@ const PutSubjectModal = () => {
                         options={subjectGroupData.map((item: SubjectGroup) => {
                             return {
                                 value: item.id,
-                                label: item.name
+                                label: item.name,
                             }
                         })}
                     />
@@ -175,40 +174,30 @@ const PutSubjectModal = () => {
                     form={form}
                     name="subjectEquivalentType"
                     label="Loại môn học tương đương"
-                    normalize={(value) =>
-                        value === undefined ? null : value
-                    }
+                    normalize={(value) => (value === undefined ? null : value)}
                     required
                 >
                     <Select
                         allowClear
                         placeholder="Chọn loại môn học tương đương"
-                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(([key, value_]) => {
-                            return {
-                                label: value_,
-                                value: key
-
+                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(
+                            ([key, value_]) => {
+                                return {
+                                    label: value_,
+                                    value: key,
+                                }
                             }
-                        })
-                        }
+                        )}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="credit"
-                    label="Số tín chỉ"
-                    required>
+                <FormItem form={form} name="credit" label="Số tín chỉ" required>
                     <Input placeholder="Nhập số tín chỉ" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="period"
-                    label="Số tiết"
-                    required>
+                <FormItem form={form} name="period" label="Số tiết" required>
                     <Input placeholder="Nhập số tiết" />
                 </FormItem>
             </Col>
@@ -217,7 +206,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfTheory"
                     label="Số tiết lý thuyết"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết lý thuyết" />
                 </FormItem>
             </Col>
@@ -226,7 +216,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfPractice"
                     label="Số tiết thực hành"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết thực hành" />
                 </FormItem>
             </Col>
@@ -235,7 +226,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfSelfStudy"
                     label="Số tiết tự học"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết tự học" />
                 </FormItem>
             </Col>
@@ -244,7 +236,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfProject"
                     label="Số tiết đồ án"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết đồ án" />
                 </FormItem>
             </Col>
@@ -253,7 +246,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfInternship"
                     label="Số tiết thực tập"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết thực tập" />
                 </FormItem>
             </Col>
@@ -262,7 +256,8 @@ const PutSubjectModal = () => {
                     form={form}
                     name="numberOfOther"
                     label="Số tiết khác"
-                    required>
+                    required
+                >
                     <Input placeholder="Nhập số tiết khác" />
                 </FormItem>
             </Col>

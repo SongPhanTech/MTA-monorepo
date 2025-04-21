@@ -28,15 +28,11 @@ import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutUserProfileModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<any>({
+    const { isOpen, onClose, input } = useDisclosure<any>({
         tag: PutUserProfileModal.name,
         onClose: form.resetFields,
     })
-    const { id, code } = input ?? {};
+    const { id, code } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [], refetch: refetchFixedClassData } =
@@ -73,7 +69,10 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: userTypeData?.find((type: any) => type.code === code)?.id ?? undefined
+                        userTypeId:
+                            userTypeData?.find(
+                                (type: any) => type.code === code
+                            )?.id ?? undefined,
                         // fixedClass: output.fixedClass
                     },
                     where: {
@@ -92,7 +91,9 @@ const PutUserProfileModal = () => {
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
                         phoneNumber: output.phoneNumber,
-                        userTypeId: userTypeData?.find((type: any) => type.code === code)!.id
+                        userTypeId: userTypeData?.find(
+                            (type: any) => type.code === code
+                        )!.id,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -134,20 +135,14 @@ const PutUserProfileModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                        ? 'Thêm mới sinh viên'
-                        : 'Thêm mới học viên'
+                      ? 'Thêm mới sinh viên'
+                      : 'Thêm mới học viên'
             }
-
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã"
-                    required
-                >
-                    <Input placeholder='Nhập mã' />
+                <FormItem form={form} name="code" label="Mã" required>
+                    <Input placeholder="Nhập mã" />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -179,12 +174,7 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="firstName"
-                    label="Tên"
-                    required
-                >
+                <FormItem form={form} name="firstName" label="Tên" required>
                     <Input placeholder="Nhập tên" />
                 </FormItem>
             </Col>
@@ -217,20 +207,12 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="phoneNumber"
-                    label="Số điện thoại"
-                >
+                <FormItem form={form} name="phoneNumber" label="Số điện thoại">
                     <Input placeholder="Nhập số điện thoại" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="homeTown"
-                    label="Quê quán"
-                >
+                <FormItem form={form} name="homeTown" label="Quê quán">
                     <Input placeholder="Nhập quê quán" />
                 </FormItem>
             </Col>

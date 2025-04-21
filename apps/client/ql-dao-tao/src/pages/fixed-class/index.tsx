@@ -62,8 +62,8 @@ export default function FixedClassPage({ trainingCourse }: any) {
         include: {
             fixedClassStudent: {
                 include: {
-                    UserProfile: true
-                }
+                    UserProfile: true,
+                },
             },
             ManagementOrganization: true,
             TrainingCourse: true,
@@ -80,10 +80,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
             skip: 0,
         })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } = useFindManyTrainingCourse({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            take: 1000,
+            skip: 0,
+        })
     const { data: count } = useCountFixedClass({
         where: {
             name: {
@@ -211,11 +212,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
                 </Menu.Item>
             ))}
         </Menu>
-    );
-    const treeData = buildOrgTree(manageOrgData);
+    )
+    const treeData = buildOrgTree(manageOrgData)
     const renderExpandedRow = useCallback((record: any) => {
-        return <OptionsPage key={record.id} fixedClass={record} />;
-    }, []);
+        return <OptionsPage key={record.id} fixedClass={record} />
+    }, [])
 
     return (
         <div>
@@ -239,31 +240,30 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 />
                             </Form.Item>
                         </Col>
-                        {!trainingCourse && <Col span={4}>
-                            <Form.Item
-                                name="trainingCourseId"
-                                label="Khóa"
-                            >
-                                <Select
-                                    placeholder="Chọn khóa"
-                                    options={trainingCourseData.map(
-                                        (i: TrainingCourse) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
+                        {!trainingCourse && (
+                            <Col span={4}>
+                                <Form.Item name="trainingCourseId" label="Khóa">
+                                    <Select
+                                        placeholder="Chọn khóa"
+                                        options={trainingCourseData.map(
+                                            (i: TrainingCourse) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }
                                             }
+                                        )}
+                                        onChange={(val) =>
+                                            handleFilterChange(
+                                                'trainingCourseId',
+                                                val
+                                            )
                                         }
-                                    )}
-                                    onChange={(val) =>
-                                        handleFilterChange(
-                                            'trainingCourseId',
-                                            val
-                                        )
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>}
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                        )}
                         <Col span={8}>
                             <Form.Item
                                 name="managementOrganizationId"

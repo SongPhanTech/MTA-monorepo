@@ -44,23 +44,27 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         name: '',
         startDate: undefined,
         endDate: undefined,
-        curriculumId: curriculumInfo ? curriculumInfo.id : undefined
-    });
+        curriculumId: curriculumInfo ? curriculumInfo.id : undefined,
+    })
     const { data = [], refetch } = useFindManyCurriculumVersion({
         where: {
             name: {
                 contains: filters.name,
             },
-            ...(filters.curriculumId ? { curriculumId: filters.curriculumId } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.curriculumId
+                ? { curriculumId: filters.curriculumId }
+                : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
         include: {
-            Curriculum: true
+            Curriculum: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -74,13 +78,17 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
             name: {
                 contains: searchText,
             },
-            ...(filters.curriculumId ? { curriculumId: filters.curriculumId } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.curriculumId
+                ? { curriculumId: filters.curriculumId }
+                : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -94,7 +102,8 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
+    const { mutateAsync: updateCurriculumVersion } =
+        useUpdateCurriculumVersion()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -103,7 +112,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -111,33 +120,35 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
-    const { data: dataCurriculum = [], refetch: refetchCurriculum } = useFindManyCurriculum({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: dataCurriculum = [], refetch: refetchCurriculum } =
+        useFindManyCurriculum({
+            take: 1000,
+            skip: 0,
+        })
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
-            const today = new Date();
+            const today = new Date()
             const currentSchoolYear = dataSchoolYear.find((year) => {
-                const start = new Date(year.startDate);
-                const end = year.endDate ? new Date(year.endDate) : undefined;
+                const start = new Date(year.startDate)
+                const end = year.endDate ? new Date(year.endDate) : undefined
                 if (end) {
-                    return today >= start && today <= end;
+                    return today >= start && today <= end
                 }
-                return today >= start;
-            });
+                return today >= start
+            })
             if (currentSchoolYear) {
                 setFilters((prev: any) => ({
                     ...prev,
                     schoolYearId: currentSchoolYear.id,
-                }));
+                }))
             }
         }
-    }, [dataSchoolYear]);
+    }, [dataSchoolYear])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -146,24 +157,24 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         []
     )
     const handleFilterChange = (key: any, value: any) => {
-        if (key !== "time") {
+        if (key !== 'time') {
             setFilters((prev) => {
-                const newFilters = { ...prev, [key]: value };
-                debouncedRefetch();
-                return newFilters;
-            });
+                const newFilters = { ...prev, [key]: value }
+                debouncedRefetch()
+                return newFilters
+            })
         } else {
             setFilters((prev) => {
                 const newFilters = {
                     ...prev,
                     startDate: value?.startDate ?? undefined,
-                    endDate: value?.endDate ?? undefined
-                };
-                debouncedRefetch();
-                return newFilters;
-            });
+                    endDate: value?.endDate ?? undefined,
+                }
+                debouncedRefetch()
+                return newFilters
+            })
         }
-    };
+    }
     async function handleStatusChange(id: string, newStatus: CurriculumStatus) {
         try {
             showSpinner()
@@ -172,7 +183,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                     id,
                 },
                 data: {
-                    status: newStatus
+                    status: newStatus,
                 },
             })
         } catch (error) {
@@ -180,10 +191,12 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         }
         hideSpinner()
     }
-    const options = Object.entries(statusOptions).map(([value, { label, color }]) => ({
-        value,
-        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-    }));
+    const options = Object.entries(statusOptions).map(
+        ([value, { label, color }]) => ({
+            value,
+            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+        })
+    )
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -199,12 +212,19 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                     id="search"
                                     allowClear
                                     onPressEnter={(e) => {
-                                        const value = e.currentTarget.value?.trim();
-                                        handleFilterChange('name', value);
+                                        const value =
+                                            e.currentTarget.value?.trim()
+                                        handleFilterChange('name', value)
                                     }}
                                     onChange={(e) => {
-                                        if (!e.target.value || e.target.value === "") {
-                                            handleFilterChange('name', undefined);
+                                        if (
+                                            !e.target.value ||
+                                            e.target.value === ''
+                                        ) {
+                                            handleFilterChange(
+                                                'name',
+                                                undefined
+                                            )
                                         }
                                     }}
                                     placeholder="Tìm kiếm theo tên,..."
@@ -212,52 +232,69 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Năm học:</label>
                                 <Select
                                     className="w-[70%]"
-                                    placeholder='Chọn năm học'
+                                    placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map((i: SchoolYear) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                            startDate: i.startDate,
-                                            endDate: i.endDate
+                                    options={dataSchoolYear.map(
+                                        (i: SchoolYear) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                                startDate: i.startDate,
+                                                endDate: i.endDate,
+                                            }
                                         }
-                                    })}
+                                    )}
                                     // value={filters.schoolYearId}
-                                    onChange={(value: number | null, option: any) => {
-                                        handleFilterChange("time", option ?? undefined)
+                                    onChange={(
+                                        value: number | null,
+                                        option: any
+                                    ) => {
+                                        handleFilterChange(
+                                            'time',
+                                            option ?? undefined
+                                        )
                                     }}
                                 />
                             </Flex>
 
                             {/* </Form.Item> */}
                         </Col>
-                        {!curriculumInfo && <Col span={6}>
-                            <Flex justify='space-between' align='center'>
-                                <label>CTĐT:</label>
-                                <Select
-                                    className="w-[70%]"
-                                    placeholder='Chọn chương trình đào tạo'
-                                    allowClear
-                                    options={dataCurriculum.map((i: Curriculum) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    // value={filters.schoolYearId}
-                                    onChange={(value: number | null, option: any) => {
-                                        handleFilterChange("curriculumId", value)
-                                    }}
-                                />
-                            </Flex>
+                        {!curriculumInfo && (
+                            <Col span={6}>
+                                <Flex justify="space-between" align="center">
+                                    <label>CTĐT:</label>
+                                    <Select
+                                        className="w-[70%]"
+                                        placeholder="Chọn chương trình đào tạo"
+                                        allowClear
+                                        options={dataCurriculum.map(
+                                            (i: Curriculum) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }
+                                            }
+                                        )}
+                                        // value={filters.schoolYearId}
+                                        onChange={(
+                                            value: number | null,
+                                            option: any
+                                        ) => {
+                                            handleFilterChange(
+                                                'curriculumId',
+                                                value
+                                            )
+                                        }}
+                                    />
+                                </Flex>
 
-                            {/* </Form.Item> */}
-                        </Col>
-                        }
+                                {/* </Form.Item> */}
+                            </Col>
+                        )}
                         {/* Thêm mới */}
                         <Col span={6}>
                             <Flex justify="end">
@@ -288,8 +325,8 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 title: 'CTĐT',
                                 dataIndex: 'Curriculum',
                                 width: 120,
-                                render: (value: any, record: any) => value?.name ? value?.name : ""
-
+                                render: (value: any, record: any) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -300,32 +337,48 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                             {
                                 title: 'Ngày kết thúc',
                                 // dataIndex: 'endDate',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Tài liệu kết xuất',
-                                render: ({ documentPath }) => documentPath ?
-                                    <a
-                                        href={documentPath}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ color: "blue", textDecoration: "underline" }}
-                                    >
-                                        Xem thêm
-                                    </a> : "",
+                                render: ({ documentPath }) =>
+                                    documentPath ? (
+                                        <a
+                                            href={documentPath}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                color: 'blue',
+                                                textDecoration: 'underline',
+                                            }}
+                                        >
+                                            Xem thêm
+                                        </a>
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'Tài liệu kết xuất',
-                                render: ({ renderPath }) => renderPath ?
-                                    <a
-                                        href={renderPath}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ color: "blue", textDecoration: "underline" }}
-                                    >
-                                        Xem thêm
-                                    </a> : "",
+                                render: ({ renderPath }) =>
+                                    renderPath ? (
+                                        <a
+                                            href={renderPath}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                color: 'blue',
+                                                textDecoration: 'underline',
+                                            }}
+                                        >
+                                            Xem thêm
+                                        </a>
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'Thông tin',
@@ -338,18 +391,22 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 render: (record: any) => {
                                     return (
                                         <Select
-                                            className='w-[155px]'
+                                            className="w-[155px]"
                                             value={record.status}
-                                            onChange={(newStatus) => handleStatusChange(record.id, newStatus as CurriculumStatus)}
+                                            onChange={(newStatus) =>
+                                                handleStatusChange(
+                                                    record.id,
+                                                    newStatus as CurriculumStatus
+                                                )
+                                            }
                                             options={options}
                                             optionLabelProp="label"
                                             // style={{ width: 180 }}
                                             bordered={false}
                                             showSearch={false}
-
                                         />
                                     )
-                                }
+                                },
                             },
                             {
                                 title: 'Thao tác',

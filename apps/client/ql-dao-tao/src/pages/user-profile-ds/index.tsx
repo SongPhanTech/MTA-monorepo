@@ -1,8 +1,18 @@
-import { DownCircleFilled, DownloadOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons'
+import {
+    DownCircleFilled,
+    DownloadOutlined,
+    EyeOutlined,
+    UploadOutlined,
+} from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutUpdateProfileModal, PutUploadProfileModal, PutUserProfileModal, PutUserProfileUpdateModal } from '@components/modal'
+import {
+    PutUpdateProfileModal,
+    PutUploadProfileModal,
+    PutUserProfileModal,
+    PutUserProfileUpdateModal,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -15,9 +25,17 @@ import {
     useFindManyTrainingObjectType,
     useFindManyTrainingLevel,
     useFindManyUserType,
-    useFindManyTemplateFile
+    useFindManyTemplateFile,
 } from '@workspace/db/hooks'
-import type { UserProfile, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, UserType } from '@workspace/db'
+import type {
+    UserProfile,
+    SchoolYear,
+    TrainingForm,
+    TrainingLevel,
+    TrainingType,
+    TrainingObjectType,
+    UserType,
+} from '@workspace/db'
 
 import {
     Button,
@@ -47,7 +65,7 @@ export default function UserProfilePageDs() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState({
         searchText: '',
-    });
+    })
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
@@ -56,9 +74,9 @@ export default function UserProfilePageDs() {
             },
             UserType: {
                 is: {
-                    code: "SV",
+                    code: 'SV',
                 },
-            }
+            },
         },
         include: {
             UserType: true,
@@ -68,8 +86,7 @@ export default function UserProfilePageDs() {
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-    });
-
+    })
 
     const { data: count } = useCountUserProfile({
         where: {
@@ -78,28 +95,35 @@ export default function UserProfilePageDs() {
             },
             UserType: {
                 is: {
-                    code: "SV",
+                    code: 'SV',
                 },
-            }
+            },
         },
     })
 
-    const debouncedRefetch = useCallback(_.debounce(() => {
-        refetch();
-    }, 500), []);
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
     const { onOpen, onClose } = useDisclosure<any>({
         tag: PutUserProfileModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
-    })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>({
-        tag: PutUserProfileUpdateModal.name,
-    })
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
+        useDisclosure<string>({
+            tag: PutUploadProfileModal.name,
+        })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
+        useDisclosure<string>({
+            tag: PutUpdateProfileModal.name,
+        })
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>(
+        {
+            tag: PutUserProfileUpdateModal.name,
+        }
+    )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -107,7 +131,7 @@ export default function UserProfilePageDs() {
         onOpen({ id: null, code: 'SV' })
     }
     const handleModalUpload = (type: string) => {
-        if (type === "upload") {
+        if (type === 'upload') {
             onOpenUpload('SV')
         } else {
             onOpenUpdateFile('SV')
@@ -122,7 +146,7 @@ export default function UserProfilePageDs() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date()
+                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -130,33 +154,35 @@ export default function UserProfilePageDs() {
         }
         hideSpinner()
     }
-    const { data: userTypeData = [], refetch: refetchUserType } = useFindManyUserType({
-        take: 1000,
-        skip: 0,
-    });
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile({
-        take: 1000,
-        skip: 0,
-    });
+    const { data: userTypeData = [], refetch: refetchUserType } =
+        useFindManyUserType({
+            take: 1000,
+            skip: 0,
+        })
+    const { data: templateFile = [], refetch: refetchTemplateFile } =
+        useFindManyTemplateFile({
+            take: 1000,
+            skip: 0,
+        })
 
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value };
-            debouncedRefetch();
-            return newFilters;
-        });
-    };
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
 
     const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find(item => item.code === type)
+        const fileRecord = templateFile?.find((item) => item.code === type)
         const fileLink = fileRecord ? fileRecord.path : null
         if (fileLink) {
-            const link = document.createElement('a');
-            link.href = fileLink;
-            link.setAttribute('download', '');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const link = document.createElement('a')
+            link.href = fileLink
+            link.setAttribute('download', '')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
         }
     }
 
@@ -187,23 +213,23 @@ export default function UserProfilePageDs() {
     ]
     const menuDownload = (
         <Menu>
-            {itemsDownload.map(item => (
+            {itemsDownload.map((item) => (
                 <Menu.Item key={item.key} onClick={item.onClick}>
                     {item.label}
                 </Menu.Item>
             ))}
         </Menu>
-    );
+    )
 
     const menuUpload = (
         <Menu>
-            {itemsUpload.map(item => (
+            {itemsUpload.map((item) => (
                 <Menu.Item key={item.key} onClick={item.onClick}>
                     {item.label}
                 </Menu.Item>
             ))}
         </Menu>
-    );
+    )
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -221,15 +247,29 @@ export default function UserProfilePageDs() {
 
                                 {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
                                 <>
-                                    <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                        <Button className="ml-4" type="primary" icon={<DownloadOutlined />}>
+                                    <Dropdown
+                                        overlay={menuDownload}
+                                        trigger={['hover']}
+                                    >
+                                        <Button
+                                            className="ml-4"
+                                            type="primary"
+                                            icon={<DownloadOutlined />}
+                                        >
                                             Tải file mẫu
                                         </Button>
                                     </Dropdown>
                                 </>
                                 <>
-                                    <Dropdown overlay={menuUpload} trigger={['hover']}>
-                                        <Button className="ml-4" type="primary" icon={<UploadOutlined />}>
+                                    <Dropdown
+                                        overlay={menuUpload}
+                                        trigger={['hover']}
+                                    >
+                                        <Button
+                                            className="ml-4"
+                                            type="primary"
+                                            icon={<UploadOutlined />}
+                                        >
                                             Nhập file
                                         </Button>
                                     </Dropdown>
@@ -243,7 +283,12 @@ export default function UserProfilePageDs() {
                             <Form.Item label="Tìm kiếm" name="searchText">
                                 <Input
                                     id="search"
-                                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -279,12 +324,13 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
-                                align: "center"
+                                align: 'center',
                             },
                             {
                                 title: 'Họ và tên',
                                 // dataIndex: 'name',
-                                render: ({ firstName, lastName }: any) => `${lastName}` + ' ' + `${firstName}`
+                                render: ({ firstName, lastName }: any) =>
+                                    `${lastName}` + ' ' + `${firstName}`,
                             },
                             // {
                             //     title: 'Đối tượng',
@@ -300,7 +346,10 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Giới tính',
                                 // dataIndex: 'gender',
-                                render: ({ gender }) => GENDER_MEAN[gender as keyof typeof GENDER_MEAN],
+                                render: ({ gender }) =>
+                                    GENDER_MEAN[
+                                        gender as keyof typeof GENDER_MEAN
+                                    ],
                             },
                             {
                                 title: 'Số CCCD',
@@ -321,7 +370,10 @@ export default function UserProfilePageDs() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpenUpdate.bind(null, { id: id, code: 'SV' })}
+                                                onClick={onOpenUpdate.bind(
+                                                    null,
+                                                    { id: id, code: 'SV' }
+                                                )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>
@@ -345,7 +397,6 @@ export default function UserProfilePageDs() {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
-                       
                     />
                 </Col>
             </Row>
