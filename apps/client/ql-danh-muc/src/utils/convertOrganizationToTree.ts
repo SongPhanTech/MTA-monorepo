@@ -1,34 +1,38 @@
 export const convertToTree = (flatData: any) => {
-    const map = new Map()
-    const treeData: any[] = []
+  const map = new Map();
+  const treeData: any[] = [];
 
-    flatData.forEach((item: any) => {
-        const node = {
-            key: item.id,
-            id: item.id,
-            code: item.code,
-            name: item.name,
-            address: item.address,
-            type: item.type?.name || null,
-            children: [],
-        }
-        map.set(item.id, node)
-    })
+  flatData.forEach((item: any, index: any) => {
+    const node = {
+      key: item.id,
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      address: item.address,
+      type: item.type?.name || null,
+      children: []
+    };
+    map.set(item.id, node);
+  });
 
-    flatData.forEach((item: any) => {
-        const node = map.get(item.id)
-        if (item.parentId === null) {
-            // This is a root node
-            treeData.push(node)
-        } else {
-            const parentNode = map.get(item.parentId)
-            if (parentNode) {
-                parentNode.children.push(node)
-            }
-        }
-    })
+  flatData.forEach((item : any) => {
+    const node = map.get(item.id);
+    if (item.parentId === null || item.parentId === "0") {
+      // This is a root node
+      const node_root = {
+        ...node,
+        key: "root"
+      }
+      treeData.push(node_root);
+    } else {
+      const parentNode = map.get(item.parentId);
+      if (parentNode) {
+        parentNode.children.push(node);
+      }
+    }
+  });
 
-    return treeData
+  return treeData;
 }
 
 export const searchTree = (data: any, searchText: any) => {
