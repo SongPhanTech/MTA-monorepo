@@ -2,7 +2,7 @@ import '../base'
 import '../ql-nguoi-dung/user'
 
 model ChatBotConfig extends Base {
-    name  String
+    name  String @unique
     value String @db.Text
     @@schema("tro-ly-ao")
 }

@@ -385,14 +385,14 @@ const NAVIGATION: NavigationType = {
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.SUBJECT_GROUP,
                     },
-                     {
+                    {
                         id: 'subject',
                         label: 'Môn học',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.SUBJECT,
                     },
-                ]
-            }
+                ],
+            },
         ],
         label: 'Quản lý đào tạo',
     },

@@ -27,7 +27,11 @@ import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { convertToTree, searchTree, searchTree2 } from '@/utils/convertOrganizationToTree'
+import {
+    convertToTree,
+    searchTree,
+    searchTree2,
+} from '@/utils/convertOrganizationToTree'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -48,7 +52,6 @@ export default function Page() {
         skip: (currentPage - 1) * 10000,
     })
 
-    
     // const filteredData = searchTree2(data, searchText);
     // const convert_data = convertToTree(filteredData)
     const convert_data1 = convertToTree(data)

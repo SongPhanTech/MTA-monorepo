@@ -864,7 +864,7 @@ model ChatBotConfig {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  name        String
+  name        String    @unique()
   value       String    @db.Text()
 
   @@schema("tro-ly-ao")

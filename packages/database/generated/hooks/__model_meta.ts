@@ -2799,6 +2799,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
                 },
             }
             ,

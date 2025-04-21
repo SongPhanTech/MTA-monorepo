@@ -28675,6 +28675,9 @@
           "id": {
             "type": "string"
           },
+          "name": {
+            "type": "string"
+          },
           "AND": {
             "oneOf": [
               {
@@ -28766,16 +28769,6 @@
               {
                 "type": "string",
                 "format": "date-time"
-              }
-            ]
-          },
-          "name": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
-              },
-              {
-                "type": "string"
               }
             ]
           },
