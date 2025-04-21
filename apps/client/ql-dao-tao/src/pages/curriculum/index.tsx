@@ -16,9 +16,19 @@ import {
     useFindManyTrainingLevel,
     useFindManySchoolYear,
     useFindManyOrganization,
-    useFindManyTrainingMajor
+    useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import { Curriculum, SchoolYear, TrainingForm, TrainingLevel, TrainingType, TrainingObjectType, CurriculumStatus, TrainingTime, TrainingMajor } from '@workspace/db'
+import {
+    Curriculum,
+    SchoolYear,
+    TrainingForm,
+    TrainingLevel,
+    TrainingType,
+    TrainingObjectType,
+    CurriculumStatus,
+    TrainingTime,
+    TrainingMajor,
+} from '@workspace/db'
 
 import {
     Button,
@@ -32,7 +42,7 @@ import {
     Tag,
     Tooltip,
     message,
-    TreeSelect
+    TreeSelect,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -64,33 +74,49 @@ export default function CurriculumPage() {
         status: undefined,
         startDate: undefined,
         endDate: undefined,
-        trainingMajorId: undefined
-    });
+        trainingMajorId: undefined,
+    })
 
     const [dataToView, setDataToView] = useState<any>([])
     const { data = [], refetch } = useFindManyCurriculum({
         where: {
-            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
-            ...(filters.infomation && filters.infomation !== "" ? { infomation: { contains: filters.infomation } } : {}),
-            ...(filters.managementOrganizationId ? { managementOrganizationId: filters.managementOrganizationId } : {}),
-            ...(filters.trainingTimeId ? { trainingTimeId: filters.trainingTimeId } : {}),
-            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
-            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
-            ...(filters.trainingMajorId ? { trainingMajorId: filters.trainingMajorId } : {}),
+            ...(filters.name && filters.name !== ''
+                ? { name: { contains: filters.name } }
+                : {}),
+            ...(filters.infomation && filters.infomation !== ''
+                ? { infomation: { contains: filters.infomation } }
+                : {}),
+            ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
+                : {}),
+            ...(filters.trainingTimeId
+                ? { trainingTimeId: filters.trainingTimeId }
+                : {}),
+            ...(filters.trainingLevelId
+                ? { trainingLevelId: filters.trainingLevelId }
+                : {}),
+            ...(filters.trainingObjectTypeId
+                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+                : {}),
+            ...(filters.trainingMajorId
+                ? { trainingMajorId: filters.trainingMajorId }
+                : {}),
             ...(filters.status ? { status: filters.status } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
         include: {
             ManagementOrganization: true,
             TrainingLevel: true,
             TrainingObjectType: true,
             TraingTime: true,
-            TrainingMajor: true
+            TrainingMajor: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -101,20 +127,36 @@ export default function CurriculumPage() {
 
     const { data: count } = useCountCurriculum({
         where: {
-            ...(filters.name && filters.name !== "" ? { name: { contains: filters.name } } : {}),
-            ...(filters.infomation && filters.infomation !== "" ? { infomation: { contains: filters.infomation } } : {}),
-            ...(filters.managementOrganizationId ? { managementOrganizationId: filters.managementOrganizationId } : {}),
-            ...(filters.trainingTimeId ? { trainingTimeId: filters.trainingTimeId } : {}),
-            ...(filters.trainingLevelId ? { trainingLevelId: filters.trainingLevelId } : {}),
-            ...(filters.trainingObjectTypeId ? { trainingObjectTypeId: filters.trainingObjectTypeId } : {}),
-            ...(filters.trainingMajorId ? { trainingMajorId: filters.trainingMajorId } : {}),
+            ...(filters.name && filters.name !== ''
+                ? { name: { contains: filters.name } }
+                : {}),
+            ...(filters.infomation && filters.infomation !== ''
+                ? { infomation: { contains: filters.infomation } }
+                : {}),
+            ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
+                : {}),
+            ...(filters.trainingTimeId
+                ? { trainingTimeId: filters.trainingTimeId }
+                : {}),
+            ...(filters.trainingLevelId
+                ? { trainingLevelId: filters.trainingLevelId }
+                : {}),
+            ...(filters.trainingObjectTypeId
+                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+                : {}),
+            ...(filters.trainingMajorId
+                ? { trainingMajorId: filters.trainingMajorId }
+                : {}),
             ...(filters.status ? { status: filters.status } : {}),
-            ...(filters.startDate && filters.endDate ? {
-                startDate: {
-                    gte: new Date(filters.startDate),
-                    lte: new Date(filters.endDate),
-                }
-            } : {}),
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -172,24 +214,24 @@ export default function CurriculumPage() {
             skip: 0,
         })
     const handleFilterChange = (key: any, value: any) => {
-        if (key !== "time") {
+        if (key !== 'time') {
             setFilters((prev) => {
-                const newFilters = { ...prev, [key]: value };
-                debouncedRefetch();
-                return newFilters;
-            });
+                const newFilters = { ...prev, [key]: value }
+                debouncedRefetch()
+                return newFilters
+            })
         } else {
             setFilters((prev) => {
                 const newFilters = {
                     ...prev,
                     startDate: value?.startDate ?? undefined,
-                    endDate: value?.endDate ?? undefined
-                };
-                debouncedRefetch();
-                return newFilters;
-            });
+                    endDate: value?.endDate ?? undefined,
+                }
+                debouncedRefetch()
+                return newFilters
+            })
         }
-    };
+    }
     async function handleStatusChange(id: string, newStatus: CurriculumStatus) {
         try {
             showSpinner()
@@ -198,7 +240,7 @@ export default function CurriculumPage() {
                     id,
                 },
                 data: {
-                    status: newStatus
+                    status: newStatus,
                 },
             })
         } catch (error) {
@@ -206,22 +248,25 @@ export default function CurriculumPage() {
         }
         hideSpinner()
     }
-    const options = Object.entries(statusOptions).map(([value, { label, color }]) => ({
-        value,
-        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-    }));
+    const options = Object.entries(statusOptions).map(
+        ([value, { label, color }]) => ({
+            value,
+            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+        })
+    )
     const filterRow = {
         isFilterRow: true,
         key: 'filter',
-    };
+    }
     useEffect(() => {
-        const dataWithFilter = [filterRow, ...data];
+        const dataWithFilter = [filterRow, ...data]
         setDataToView(dataWithFilter)
     }, [data])
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear({
-        take: 1000,
-        skip: 0,
-    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
+        useFindManySchoolYear({
+            take: 1000,
+            skip: 0,
+        })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization({
             take: 1000,
@@ -239,23 +284,31 @@ export default function CurriculumPage() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={6}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify='space-between' align='center'>
+                            <Flex justify="space-between" align="center">
                                 <label>Năm học:</label>
                                 <Select
                                     className="w-[70%]"
-                                    placeholder='Chọn năm học'
+                                    placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map((i: SchoolYear) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                            startDate: i.startDate,
-                                            endDate: i.endDate
+                                    options={dataSchoolYear.map(
+                                        (i: SchoolYear) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                                startDate: i.startDate,
+                                                endDate: i.endDate,
+                                            }
                                         }
-                                    })}
+                                    )}
                                     // value={filters.schoolYearId}
-                                    onChange={(value: number | null, option: any) => {
-                                        handleFilterChange("time", option ?? undefined)
+                                    onChange={(
+                                        value: number | null,
+                                        option: any
+                                    ) => {
+                                        handleFilterChange(
+                                            'time',
+                                            option ?? undefined
+                                        )
                                     }}
                                 />
                             </Flex>
@@ -282,11 +335,12 @@ export default function CurriculumPage() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, record, index) => {
-                                    if (record.isFilterRow) return '';
+                                    if (record.isFilterRow) return ''
                                     return (
                                         index +
-                                        (currentPage - 1) * DEFAULT_PAGINATE_SIZE
-                                    );
+                                        (currentPage - 1) *
+                                            DEFAULT_PAGINATE_SIZE
+                                    )
                                 },
                             },
                             {
@@ -301,18 +355,28 @@ export default function CurriculumPage() {
                                                 // placeholder="Nhập mã khóa"
                                                 allowClear
                                                 onPressEnter={(e) => {
-                                                    const value = e.currentTarget.value?.trim();
-                                                    handleFilterChange('name', value);
+                                                    const value =
+                                                        e.currentTarget.value?.trim()
+                                                    handleFilterChange(
+                                                        'name',
+                                                        value
+                                                    )
                                                 }}
                                                 onChange={(e) => {
-                                                    if (!e.target.value || e.target.value === "") {
-                                                        handleFilterChange('name', undefined);
+                                                    if (
+                                                        !e.target.value ||
+                                                        e.target.value === ''
+                                                    ) {
+                                                        handleFilterChange(
+                                                            'name',
+                                                            undefined
+                                                        )
                                                     }
                                                 }}
                                             />
-                                        );
+                                        )
                                     }
-                                    return value;
+                                    return value
                                 },
                             },
                             {
@@ -333,7 +397,7 @@ export default function CurriculumPage() {
                                             //     allowClear
                                             // />
                                             <TreeSelect
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 allowClear
                                                 showSearch
                                                 treeDefaultExpandAll
@@ -341,13 +405,20 @@ export default function CurriculumPage() {
                                                 filterTreeNode={(input, node) =>
                                                     (node.title as string)
                                                         .toLowerCase()
-                                                        .includes(input.toLowerCase())
+                                                        .includes(
+                                                            input.toLowerCase()
+                                                        )
                                                 }
-                                                onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'managementOrganizationId',
+                                                        val
+                                                    )
+                                                }
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -358,17 +429,26 @@ export default function CurriculumPage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
-                                                options={trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingObjectTypeId', val)}
+                                                className="w-[110px]"
+                                                options={trainingObjectTypeData.map(
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingObjectTypeId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -379,18 +459,25 @@ export default function CurriculumPage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn hình thức đào tạo"
-                                                options={trainingLevelData.map((i: TrainingLevel) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingFormId', val)}
+                                                options={trainingLevelData.map(
+                                                    (i: TrainingLevel) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingFormId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -400,18 +487,25 @@ export default function CurriculumPage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[110px]'
+                                                className="w-[110px]"
                                                 // placeholder="Chọn trình độ đào tạo"
-                                                options={trainingTimeData.map((i: TrainingTime) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingLevelId', val)}
+                                                options={trainingTimeData.map(
+                                                    (i: TrainingTime) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingLevelId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
@@ -421,53 +515,78 @@ export default function CurriculumPage() {
                                     if (record.isFilterRow) {
                                         return (
                                             <Select
-                                                className='w-[130px]'
+                                                className="w-[130px]"
                                                 // placeholder="Chọn trình độ đào tạo"
-                                                options={trainingMajorData.map((i: TrainingMajor) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                onChange={(val) => handleFilterChange('trainingMajorId', val)}
+                                                options={trainingMajorData.map(
+                                                    (i: TrainingMajor) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingMajorId',
+                                                        val
+                                                    )
+                                                }
                                                 allowClear
                                             />
-                                        );
+                                        )
                                     }
-                                    return value?.name ? value?.name : "";
+                                    return value?.name ? value?.name : ''
                                 },
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                render: ({ startDate }) => startDate ?
-                                    dayjs(startDate).format('DD/MM/YYYY') : "",
+                                render: ({ startDate }) =>
+                                    startDate
+                                        ? dayjs(startDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                render: ({ endDate }) => endDate ?
-                                    dayjs(endDate).format('DD/MM/YYYY') : "",
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Tài liệu',
-                                render: ({ documentPath }) => documentPath ?
-                                    <a
-                                        href={documentPath}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ color: "blue", textDecoration: "underline" }}
-                                    >
-                                        Xem thêm
-                                    </a> : "",
+                                render: ({ documentPath }) =>
+                                    documentPath ? (
+                                        <a
+                                            href={documentPath}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                color: 'blue',
+                                                textDecoration: 'underline',
+                                            }}
+                                        >
+                                            Xem thêm
+                                        </a>
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'Tài liệu kết xuất',
-                                render: ({ renderPath }) => renderPath ?
-                                    <a
-                                        href={renderPath}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ color: "blue", textDecoration: "underline" }}
-                                    >
-                                        Xem thêm
-                                    </a> : "",
+                                render: ({ renderPath }) =>
+                                    renderPath ? (
+                                        <a
+                                            href={renderPath}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                color: 'blue',
+                                                textDecoration: 'underline',
+                                            }}
+                                        >
+                                            Xem thêm
+                                        </a>
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'Thông tin',
@@ -480,18 +599,28 @@ export default function CurriculumPage() {
                                                 // placeholder="Nhập tên khóa"
                                                 allowClear
                                                 onPressEnter={(e) => {
-                                                    const value = e.currentTarget.value?.trim();
-                                                    handleFilterChange('infomation', value);
+                                                    const value =
+                                                        e.currentTarget.value?.trim()
+                                                    handleFilterChange(
+                                                        'infomation',
+                                                        value
+                                                    )
                                                 }}
                                                 onChange={(e) => {
-                                                    if (!e.target.value || e.target.value === "") {
-                                                        handleFilterChange('infomation', undefined);
+                                                    if (
+                                                        !e.target.value ||
+                                                        e.target.value === ''
+                                                    ) {
+                                                        handleFilterChange(
+                                                            'infomation',
+                                                            undefined
+                                                        )
                                                     }
                                                 }}
                                             />
-                                        );
+                                        )
                                     }
-                                    return value;
+                                    return value
                                 },
                             },
                             {
@@ -499,31 +628,49 @@ export default function CurriculumPage() {
                                 width: 130,
                                 render: (record: any) => {
                                     if (record.isFilterRow) {
-                                        return <Select
-                                            className='w-[155px]'
-                                            onChange={(val) => handleFilterChange('status', val)}
-                                            options={Object.entries(statusOptions).map(([value, { label, color }]) => ({
-                                                value,
-                                                label, // hiển thị trong dropdown
-                                            }))
-                                            }
-                                            allowClear
-                                        // style={{ width: 180 }}
-                                        />
-                                    } else return (
-                                        <Select
-                                            className='w-[155px]'
-                                            value={record.status}
-                                            onChange={(newStatus) => handleStatusChange(record.id, newStatus as CurriculumStatus)}
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-
-                                        />
-                                    )
-                                }
+                                        return (
+                                            <Select
+                                                className="w-[155px]"
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'status',
+                                                        val
+                                                    )
+                                                }
+                                                options={Object.entries(
+                                                    statusOptions
+                                                ).map(
+                                                    ([
+                                                        value,
+                                                        { label, color },
+                                                    ]) => ({
+                                                        value,
+                                                        label, // hiển thị trong dropdown
+                                                    })
+                                                )}
+                                                allowClear
+                                                // style={{ width: 180 }}
+                                            />
+                                        )
+                                    } else
+                                        return (
+                                            <Select
+                                                className="w-[155px]"
+                                                value={record.status}
+                                                onChange={(newStatus) =>
+                                                    handleStatusChange(
+                                                        record.id,
+                                                        newStatus as CurriculumStatus
+                                                    )
+                                                }
+                                                options={options}
+                                                optionLabelProp="label"
+                                                // style={{ width: 180 }}
+                                                bordered={false}
+                                                showSearch={false}
+                                            />
+                                        )
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -531,24 +678,29 @@ export default function CurriculumPage() {
                                 align: 'center',
                                 render: (_, { id }) => {
                                     if (id) {
-                                        return (<Row className="justify-center gap-2">
-                                            <Tooltip
-                                                title="Xem chi tiết"
-                                                placement="leftTop"
-                                            >
-                                                <EyeOutlined
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                <Tooltip
+                                                    title="Xem chi tiết"
+                                                    placement="leftTop"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={onOpen.bind(
+                                                            null,
+                                                            id
+                                                        )}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Tooltip>
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDelete(id),
+                                                    }}
                                                 />
-                                            </Tooltip>
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDelete(id),
-                                                }}
-                                            />
-                                        </Row>)
-                                    } else return ""
+                                            </Row>
+                                        )
+                                    } else return ''
                                 },
                             },
                         ]}
@@ -563,10 +715,16 @@ export default function CurriculumPage() {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                         expandable={{
-                            expandedRowRender: (record) => <div style={{ maxWidth: '100%' }}>
-                                <CurriculumVersionPage key={record.id} curriculumInfo={record} />
-                            </div>,
-                            rowExpandable: (record) => !(record.isFilterRow === true), // điều kiện nào đó
+                            expandedRowRender: (record) => (
+                                <div style={{ maxWidth: '100%' }}>
+                                    <CurriculumVersionPage
+                                        key={record.id}
+                                        curriculumInfo={record}
+                                    />
+                                </div>
+                            ),
+                            rowExpandable: (record) =>
+                                !(record.isFilterRow === true), // điều kiện nào đó
                         }}
                     />
                 </Col>

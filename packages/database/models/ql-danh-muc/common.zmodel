@@ -43,6 +43,8 @@ model AcademicRankType extends Base {
 model Position extends Base {
   name String
   @@schema("ql-danh-muc")
+
+	organizationUser OrganizationUser[]
 }
 
 // chức vụ Đảng
@@ -75,4 +77,6 @@ model Organization extends Base {
 
   subjectGroup SubjectGroup[]
   @@schema("ql-danh-muc")
+
+	organizationUser OrganizationUser[]
 }

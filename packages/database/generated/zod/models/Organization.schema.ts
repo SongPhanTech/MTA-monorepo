@@ -26,6 +26,7 @@ const relationSchema = z.object({
     fixedClass: z.array(z.unknown()).optional(),
     subject: z.array(z.unknown()).optional(),
     subjectGroup: z.array(z.unknown()).optional(),
+    organizationUser: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

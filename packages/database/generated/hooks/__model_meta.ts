@@ -304,6 +304,12 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, organizationUser: {
+                    name: "organizationUser",
+                    type: "OrganizationUser",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'position',
                 },
             }
             , uniqueConstraints: {
@@ -489,6 +495,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'ManagementOrganization',
+                }, organizationUser: {
+                    name: "organizationUser",
+                    type: "OrganizationUser",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'organization',
                 },
             }
             , uniqueConstraints: {
@@ -2087,6 +2099,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'UserType',
+                }, avaratar: {
+                    name: "avaratar",
+                    type: "String",
+                    isOptional: true,
                 }, firstName: {
                     name: "firstName",
                     type: "String",
@@ -2289,6 +2305,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'UserProfile',
+                }, organizationUser: {
+                    name: "organizationUser",
+                    type: "OrganizationUser",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'userProfile',
                 },
             }
             , uniqueConstraints: {
@@ -2355,6 +2377,86 @@ const metadata = {
                     type: "DateTime",
                     isOptional: true,
                     attributes: [{ "name": "@updatedAt", "args": [] }],
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        organizationUser: {
+            name: 'OrganizationUser', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'organizationUser',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, organization: {
+                    name: "organization",
+                    type: "Organization",
+                    isDataModel: true,
+                    backLink: 'organizationUser',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "organizationId" },
+                }, position: {
+                    name: "position",
+                    type: "Position",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'organizationUser',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "positionId" },
+                }, positionId: {
+                    name: "positionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'position',
+                }, status: {
+                    name: "status",
+                    type: "OrganizationUserStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
                 },
             }
             , uniqueConstraints: {
@@ -2653,6 +2755,53 @@ const metadata = {
                 }, name_permissionType: {
                     name: "name_permissionType",
                     fields: ["name", "permissionType"]
+                },
+            }
+            ,
+        }
+        ,
+        chatBotConfig: {
+            name: 'ChatBotConfig', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "String",
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
                 },
             }
             ,

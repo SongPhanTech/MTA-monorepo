@@ -40,7 +40,8 @@ const PutSubjectGroupModal = () => {
                 await updateSubjectGroup({
                     data: {
                         name: output.name,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         infomation: output.infomation,
                     },
                     where: {
@@ -52,7 +53,8 @@ const PutSubjectGroupModal = () => {
                 await createSubjectGroup({
                     data: {
                         name: output.name,
-                        managementOrganizationId: output.managementOrganizationId,
+                        managementOrganizationId:
+                            output.managementOrganizationId,
                         infomation: output.infomation,
                     },
                 })
@@ -96,7 +98,12 @@ const PutSubjectGroupModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên nhóm môn học" required>
+                <FormItem
+                    form={form}
+                    name="name"
+                    label="Tên nhóm môn học"
+                    required
+                >
                     <Input placeholder="Nhập tên nhóm môn học" />
                 </FormItem>
             </Col>

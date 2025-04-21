@@ -5,7 +5,7 @@ import useSpinner from '@hooks/spinner'
 import type { UserType } from '@workspace/db'
 import { useFindManyUserType } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -45,7 +45,10 @@ const PutUploadProfileModal = () => {
             const formData = new FormData()
             formData.append('file', output.file)
             formData.append('type', typeId)
-            const res = await fetchUploadFile(formData, "api/UserProfile/upload-excel-create-user-profile")
+            const res = await fetchUploadFile(
+                formData,
+                'api/UserProfile/upload-excel-create-user-profile'
+            )
             const data = await res.json()
             if (res.ok) {
                 message.success('Tải lên thành công!')
@@ -71,7 +74,11 @@ const PutUploadProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={code === 'HV' ? "Tải file nhập thông tin học viên" : "Tải file nhập thông tin sinh viên"}
+            title={
+                code === 'HV'
+                    ? 'Tải file nhập thông tin học viên'
+                    : 'Tải file nhập thông tin sinh viên'
+            }
             className="w-[30vw]"
         >
             {/* <Col span={24}>
