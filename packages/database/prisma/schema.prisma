@@ -69,6 +69,15 @@ enum FixedClassStudentStatus {
   @@schema("ql-nguoi-dung")
 }
 
+enum OrganizationUserStatus {
+  ACTIVE
+  INACTIVE
+  ON_HOLD
+  TERMINATED
+
+  @@schema("ql-nguoi-dung")
+}
+
 enum UserRole {
   ADMIN
   USER
@@ -234,13 +243,14 @@ model AcademicRankType {
 }
 
 model Position {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+  id               String             @id() @default(cuid())
+  code             String?
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
+  name             String
+  organizationUser OrganizationUser[]
 
   @@schema("ql-danh-muc")
 }
@@ -271,24 +281,25 @@ model OrganizationType {
 }
 
 model Organization {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String           @unique()
-  type           OrganizationType @relation(fields: [typeId], references: [id])
-  typeId         String
-  parent         Organization?    @relation("ParentChild", fields: [organizationId], references: [id])
-  parentId       String?
-  children       Organization[]   @relation("ParentChild")
-  address        String?
-  curriculum     Curriculum[]
-  fixedClass     FixedClass[]
-  subject        Subject[]
-  subjectGroup   SubjectGroup[]
-  organizationId String?
+  id               String             @id() @default(cuid())
+  code             String?
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
+  name             String             @unique()
+  type             OrganizationType   @relation(fields: [typeId], references: [id])
+  typeId           String
+  parent           Organization?      @relation("ParentChild", fields: [organizationId], references: [id])
+  parentId         String?
+  children         Organization[]     @relation("ParentChild")
+  address          String?
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
+  subject          Subject[]
+  subjectGroup     SubjectGroup[]
+  organizationUser OrganizationUser[]
+  organizationId   String?
 
   @@schema("ql-danh-muc")
 }
@@ -694,6 +705,7 @@ model UserProfile {
   userId                 String?             @unique()
   UserType               UserType            @relation(fields: [userTypeId], references: [id])
   userTypeId             String
+  avaratar               String?
   firstName              String
   lastName               String
   dateOfBirth            DateTime?
@@ -737,6 +749,7 @@ model UserProfile {
   organizationName       String?
   organizationCPVName    String?
   fixedClassStudent      FixedClassStudent[]
+  organizationUser       OrganizationUser[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -752,6 +765,24 @@ model FixedClassStudent {
   deletedAt     DateTime?
   createdAt     DateTime                @default(now())
   updatedAt     DateTime?               @updatedAt()
+
+  @@schema("ql-nguoi-dung")
+}
+
+model OrganizationUser {
+  id             String                 @id() @default(cuid())
+  code           String?
+  description    String?                @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt()
+  userProfileId  String
+  userProfile    UserProfile            @relation(fields: [userProfileId], references: [id])
+  organizationId String
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+  position       Position?              @relation(fields: [positionId], references: [id])
+  positionId     String?
+  status         OrganizationUserStatus @default(ACTIVE)
 
   @@schema("ql-nguoi-dung")
 }

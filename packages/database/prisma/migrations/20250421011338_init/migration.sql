@@ -29,6 +29,9 @@ CREATE TYPE "ql-dao-tao"."CurriculumVersionSubjectType" AS ENUM ('NONE', 'MANDAT
 CREATE TYPE "ql-nguoi-dung"."FixedClassStudentStatus" AS ENUM ('ENROLLED', 'GRADUATED', 'DEFERRED_STUDY', 'SUSPENDED_STUDY', 'WITHDRAWN', 'TRANSFERRED', 'PENDING_GRADUATION_REVIEW', 'ACADEMIC_SUSPENSION');
 
 -- CreateEnum
+CREATE TYPE "ql-nguoi-dung"."OrganizationUserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'ON_HOLD', 'TERMINATED');
+
+-- CreateEnum
 CREATE TYPE "ql-nguoi-dung"."UserRole" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
@@ -569,6 +572,7 @@ CREATE TABLE "ql-nguoi-dung"."UserProfile" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT,
     "userTypeId" TEXT NOT NULL,
+    "avaratar" TEXT,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "dateOfBirth" TIMESTAMP(3),
@@ -622,6 +626,22 @@ CREATE TABLE "ql-nguoi-dung"."FixedClassStudent" (
     "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "FixedClassStudent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-nguoi-dung"."OrganizationUser" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userProfileId" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "positionId" TEXT,
+    "status" "ql-nguoi-dung"."OrganizationUserStatus" NOT NULL DEFAULT 'ACTIVE',
+
+    CONSTRAINT "OrganizationUser_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -1083,6 +1103,15 @@ ALTER TABLE "ql-nguoi-dung"."FixedClassStudent" ADD CONSTRAINT "FixedClassStuden
 
 -- AddForeignKey
 ALTER TABLE "ql-nguoi-dung"."FixedClassStudent" ADD CONSTRAINT "FixedClassStudent_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "ql-nguoi-dung"."UserProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-nguoi-dung"."OrganizationUser" ADD CONSTRAINT "OrganizationUser_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "ql-nguoi-dung"."UserProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-nguoi-dung"."OrganizationUser" ADD CONSTRAINT "OrganizationUser_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "ql-danh-muc"."Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-nguoi-dung"."OrganizationUser" ADD CONSTRAINT "OrganizationUser_positionId_fkey" FOREIGN KEY ("positionId") REFERENCES "ql-danh-muc"."Position"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tro-ly-ao"."Document" ADD CONSTRAINT "Document_uploadedById_fkey" FOREIGN KEY ("uploadedById") REFERENCES "ql-nguoi-dung"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

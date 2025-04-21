@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
+    avaratar: z.string().nullish(),
     firstName: z.string(),
     lastName: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -57,6 +58,7 @@ const relationSchema = z.object({
     Religion: z.record(z.unknown()).optional(),
     Ethnicity: z.record(z.unknown()).optional(),
     fixedClassStudent: z.array(z.unknown()).optional(),
+    organizationUser: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -100,6 +102,7 @@ export const UserProfilePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date(),
+    avaratar: z.string().nullish(),
     firstName: z.string(),
     lastName: z.string(),
     dateOfBirth: z.coerce.date().nullish(),

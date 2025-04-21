@@ -16,6 +16,10 @@ const baseSchema = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    organizationUser: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `Position` schema excluding foreign keys and relations.
@@ -26,7 +30,7 @@ export const PositionScalarSchema = baseSchema;
 /**
  * `Position` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const PositionSchema = PositionScalarSchema;
+export const PositionSchema = PositionScalarSchema.merge(relationSchema.partial());
 
 
 /**
