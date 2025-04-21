@@ -1,6 +1,6 @@
 # MTA monorepo
 
-## Tech stack
+## ✏️Tech stack
 
 Auth: Asgardeo, WSO2
 Validation: Zod
@@ -9,19 +9,19 @@ ORM: Prisma, Zenstack
 Backend: Hono, Bun, OpenTelemetry
 Frontend: React, Nextjs, Tailwindcss, Antd, Tanstack Query
 
-## Yêu cầu
+## ✏️Yêu cầu
 
 - NodeJS v20.18.x
 - pnpm : <https://pnpm.io/installation>
 - bun: <https://bun.sh/>
 
-## Cài đặt thu viên
+## ✏️Cài đặt thu viên
 
 ```bash
 pnpm i
 ```
 
-## Cập nhật CSDL: packages/database
+## ✏️Cập nhật CSDL: packages/database
 
 **Note**: Before you edit or add schema in `zmodel` folder, pull the latest changes from GitHub and run `pnpm migrate dev` (on local db)
 
@@ -33,23 +33,23 @@ pnpm i
 6. You can use `pnpm prisma studio` to open Prisma Studio(web app for managing databases)
 7. Make sure your model changes is OK before pushing to GitHub
 
-## Get started
+## ✏️Get started
 
 `pnpm generate` (this will run all `generate` scripts in all packages)
 Important part: `generate` scripts in `packages/database` is need for zenstack and prisma to work
 
-## Sinh lại đường dẫn router:  packages/router/src/index.ts
+## ✏️Sinh lại đường dẫn router:  packages/router/src/index.ts
 
 `cd MTA-monorepo; pnpm router:generate`
 
-## Phát triển client
+## ✏️Phát triển client
 
 - Ví dụ: Quản lý người dùng
 
 `cd apps/client/ql-nguoi-dung`
 `pnpm dev`
 
-## Phát triển backend
+## ✏️Phát triển backend
 
 - Ví dụ: Quản lý người dùng
 
@@ -70,6 +70,55 @@ cd packages/database
 pnpm prisma migrate dev
 ```
 
-## build docker
+## ✏️Build docker
 
 Check Makefile to see example of build docker
+
+
+## ✏️Quy Ước Viết Code Frontend (Next.js)
+Quy ước viết code dành cho team FE nhằm đồng bộ cách viết code, đặt tên file, thư mục, comp và biến
+
+## 1. Quy Tắc Đặt Tên Thư Mục, File, Component
+
+### 1.1 Tên Page và Router
+- Dùng **kebab-case**, tiếng Việt **không dấu**.
+- Tên rõ nghĩa, diễn tả mục đích trang hoặc chức năng.
+- Ví dụ:
+  - `pages/ql-mon-hoc`
+  - `pages/chi-tiet-nguoi-dung`
+
+### 1.2 Tên Modal, Component Có Chức Năng Riêng
+- Tên theo **kebab-case**, phản ánh rõ ngữ cảnh sử dụng.
+- Ví dụ:
+  - `put-modal-ql-mon-hoc`
+  - `them-modal-nguoi-dung`
+
+### 1.3 Component Đặc trưng
+- Giữ nguyên tên tiếng Anh với những component phổ biến như:
+  - `Button`, `WrapperModal`, `Input`, v.v...
+- KHÔNG đổi tên thành tiếng Việt như `Nut`, `BocModal`,...
+
+### 1.4 Component Biến Thể → Tạo Thư Mục Riêng
+- Component có nhiều phiên bản hay ngữ cảnh khác nhau cần tách folder riêng.
+- Ví dụ:
+  ```
+  components/
+    button-them-nguoi-dung/
+      index.tsx
+    put-modal-ql-mon-hoc/
+      index.tsx
+  ```
+
+## 2. Quy Tắc Đặt Tên Biến
+
+- Viết theo **camelCase**, dùng **tiếng Việt không dấu**.
+- Tên rõ nghĩa, viết tắt thì ghi chú luôn 1 chỗ để đỡ gây khó đoán .
+- Component trong code viết theo PascalCase: `PutModalQLMonHoc` (file tương ứng: `put-modal-ql-mon-hoc/index.tsx`)
+
+### Ví dụ:
+```ts
+const danhSachMonHoc = [] // (Ghi rõ cũng đc)
+const DSSinhVienDS = [] // (Danh sách sinh viên dân sự) tuỳ cách viết tắt, nhưng nhớ ghi chú nhé
+const loading = true // Đặc trưng, có thể dùng tiếng Anh khi quá phổ biến
+const [isOpenModal, setIsOpenModal] = useState() // Đặc trưng, có thể dùng tiếng Anh khi quá phổ biến
+```
