@@ -1,13 +1,12 @@
 {
-  "name": "@backend/ql-danh-muc",
+  "name": "@backend/be-ql-danh-muc",
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "build": "bun build.ts",
     "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
     "postcompile": "rm -f .*.bun-build",
-    "start": "bun dist/index.js",
-    "generate": "bun --bun orval"
+    "start": "bun dist/index.js"
   },
   "dependencies": {
     "@hono/oidc-auth": "^1.4.1",

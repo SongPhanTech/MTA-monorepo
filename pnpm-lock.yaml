@@ -28,7 +28,7 @@ importers:
         specifier: 5.7.3
         version: 5.7.3
 
-  apps/backend/model:
+  apps/backend/be-model:
     dependencies:
       '@hono/oidc-auth':
         specifier: ^1.4.1
@@ -68,7 +68,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/typescript-config
 
-  apps/backend/ql-danh-muc:
+  apps/backend/be-ql-danh-muc:
     dependencies:
       '@hono/oidc-auth':
         specifier: ^1.4.1
@@ -120,7 +120,7 @@ importers:
         specifier: ^7.5.0
         version: 7.5.0(openapi-types@12.1.3)
 
-  apps/backend/ql-dao-tao:
+  apps/backend/be-ql-dao-tao:
     dependencies:
       '@hono/oidc-auth':
         specifier: ^1.4.1
@@ -184,7 +184,7 @@ importers:
         specifier: ^7.5.0
         version: 7.5.0(openapi-types@12.1.3)
 
-  apps/backend/ql-nguoi-dung:
+  apps/backend/be-ql-nguoi-dung:
     dependencies:
       '@hono/oidc-auth':
         specifier: ^1.4.1
@@ -8873,7 +8873,7 @@ snapshots:
     dependencies:
       '@stoplight/json': 3.21.7
       '@stoplight/path': 1.3.2
-      '@stoplight/types': 13.6.0
+      '@stoplight/types': 13.20.0
       '@types/urijs': 1.19.25
       dependency-graph: 0.11.0
       fast-memoize: 2.5.2

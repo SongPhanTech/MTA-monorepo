@@ -10,8 +10,8 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
 
-import ISConfig from './api/is/configs'
-import API from './api/index'
+import API from './apii/index'
+import ISConfig from './apii/is/configs'
 
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
@@ -50,6 +50,7 @@ app.use('*', checkIp)
 
 setupOpenApi(app)
 
+// TODO:
 // Update: Bật lại khi release
 // setupAuth(app)
 
