@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import type React from 'react'
+import { useRef } from 'react'
 import { Column } from '@ant-design/plots'
 
 interface ChartProps {
@@ -39,15 +40,15 @@ const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
         xField: 'letter',
         yField: 'frequency',
         tooltip: {
-            formatter: (datum: any) => {
+            formatter: (datum: { letter: string; frequency: number }) => {
                 console.log('datum in tooltip:', datum)
-                if (datum && datum.frequency) {
+                if (datum?.frequency) {
                     return { name: 'Số lượng', value: datum.frequency }
                 }
                 return { name: 'Số lượng', value: 'N/A' }
             },
         },
-        onReady: (chart: any) => {
+        onReady: (chart: import('@ant-design/plots').Plot) => {
             try {
                 const { height } = chart._container.getBoundingClientRect()
                 const tooltipItem =

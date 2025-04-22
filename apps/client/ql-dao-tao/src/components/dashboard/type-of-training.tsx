@@ -1,12 +1,14 @@
-import React, { useRef } from 'react'
+import type React from 'react'
+import { useRef } from 'react'
 import { Column } from '@ant-design/plots'
+import type { Plot } from '@ant-design/plots'
 
 interface ChartProps {
     className?: string
 }
 
 const TypeOfTraining: React.FC<ChartProps> = ({ className }) => {
-    const chartRef = useRef<any>(null)
+    const chartRef = useRef<Plot | null>(null)
 
     const dataFake = [
         { type: 'Đại học', category: 'Quân sự', count: 500 },
@@ -27,7 +29,7 @@ const TypeOfTraining: React.FC<ChartProps> = ({ className }) => {
         style: {
             inset: 5,
         },
-        onReady: (chart: any) => {
+        onReady: (chart: Plot) => {
             chartRef.current = chart
             try {
                 chart.on('afterrender', () => {

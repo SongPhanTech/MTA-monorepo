@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import type React from 'react'
+import { useRef } from 'react'
 import { Column } from '@ant-design/plots'
 
 interface ChartProps {
@@ -6,7 +7,7 @@ interface ChartProps {
 }
 
 const StaffLevel: React.FC<ChartProps> = ({ className }) => {
-    const chartRef = useRef<any>(null)
+    const chartRef = useRef<React.MutableRefObject<typeof Column | null>>(null)
 
     const dataFake = [
         { name: 'Cử nhân', count: 50 },

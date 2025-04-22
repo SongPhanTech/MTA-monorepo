@@ -2,7 +2,16 @@ import React from 'react'
 import { Card, Alert, Space } from 'antd'
 import { NotificationOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-const fakeData: any = [
+interface NotificationData {
+    ID: number
+    title: string
+    content: string
+    type: 'IMPORTANT' | 'NOTICE'
+    createdAt: string
+    updatedAt: string
+}
+
+const fakeData: NotificationData[] = [
     {
         ID: 1,
         title: 'Đề nghị bổ nhiệm chức vụ',
@@ -57,9 +66,9 @@ function Notification() {
         >
             <Space direction="vertical">
                 {fakeData?.length > 0 &&
-                    fakeData?.map((item: any) => {
+                    fakeData?.map((item: NotificationData) => {
                         return (
-                            <Link key={item.id} href={`#`}>
+                            <Link key={item.ID} href="#">
                                 <Alert
                                     showIcon
                                     icon={<NotificationOutlined />}
