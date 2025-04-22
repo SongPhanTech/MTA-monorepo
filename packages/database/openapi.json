@@ -1959,7 +1959,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Semester"
@@ -2219,7 +2219,7 @@
           "trainingTypeId": {
             "type": "string"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevel"
           },
           "trainingLevelId": {
@@ -2251,7 +2251,7 @@
           "trainingObjectTypeId",
           "trainingType",
           "trainingTypeId",
-          "TrainingLevel",
+          "trainingLevel",
           "trainingLevelId",
           "trainingForm",
           "trainingFormId",
@@ -2576,7 +2576,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/Curriculum"
           },
           "curriculumId": {
@@ -2626,7 +2626,7 @@
           "name",
           "status",
           "startDate",
-          "Curriculum",
+          "curriculum",
           "curriculumId"
         ]
       },
@@ -3893,7 +3893,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserType"
           },
           "userTypeId": {
@@ -4340,7 +4340,7 @@
           "id",
           "createdAt",
           "updatedAt",
-          "UserType",
+          "userType",
           "userTypeId",
           "firstName",
           "lastName"
@@ -10586,7 +10586,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterListRelationFilter"
           },
           "milestone": {
@@ -10652,7 +10652,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterOrderByRelationAggregateInput"
           },
           "milestone": {
@@ -10795,7 +10795,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterListRelationFilter"
           },
           "milestone": {
@@ -12274,7 +12274,7 @@
               }
             ]
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TrainingLevelScalarRelationFilter"
@@ -12378,7 +12378,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeOrderByWithRelationInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelOrderByWithRelationInput"
           },
           "trainingForm": {
@@ -12594,7 +12594,7 @@
               }
             ]
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TrainingLevelScalarRelationFilter"
@@ -14547,7 +14547,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/CurriculumScalarRelationFilter"
@@ -14656,7 +14656,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/CurriculumOrderByWithRelationInput"
           },
           "curriculumVersionSubject": {
@@ -14858,7 +14858,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/CurriculumScalarRelationFilter"
@@ -23575,7 +23575,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/UserTypeScalarRelationFilter"
@@ -24082,7 +24082,7 @@
           "user": {
             "$ref": "#/components/schemas/UserOrderByWithRelationInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeOrderByWithRelationInput"
           },
           "priorityObject": {
@@ -24730,7 +24730,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/UserTypeScalarRelationFilter"
@@ -39520,7 +39520,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterCreateNestedManyWithoutSchoolYearInput"
           },
           "milestone": {
@@ -39642,7 +39642,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterUpdateManyWithoutSchoolYearNestedInput"
           },
           "milestone": {
@@ -40677,7 +40677,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeCreateNestedOneWithoutTrainingCourseInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelCreateNestedOneWithoutTrainingCourseInput"
           },
           "trainingForm": {
@@ -40692,7 +40692,7 @@
           "startDate",
           "trainingObjectType",
           "trainingType",
-          "TrainingLevel",
+          "trainingLevel",
           "trainingForm"
         ]
       },
@@ -40822,7 +40822,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
           "trainingForm": {
@@ -42052,7 +42052,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/CurriculumCreateNestedOneWithoutCurriculumVersionInput"
           },
           "curriculumVersionSubject": {
@@ -42062,7 +42062,7 @@
         "required": [
           "name",
           "startDate",
-          "Curriculum"
+          "curriculum"
         ]
       },
       "CurriculumVersionUpdateInput": {
@@ -42224,7 +42224,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput"
           },
           "curriculumVersionSubject": {
@@ -48170,7 +48170,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -48198,7 +48198,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUpdateInput": {
@@ -48710,7 +48710,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -90165,7 +90165,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterCreateNestedManyWithoutSchoolYearInput"
           }
         },
@@ -90237,7 +90237,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterUncheckedCreateNestedManyWithoutSchoolYearInput"
           }
         },
@@ -90431,7 +90431,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterUpdateManyWithoutSchoolYearNestedInput"
           }
         }
@@ -90546,7 +90546,7 @@
               }
             ]
           },
-          "Semesters": {
+          "semesters": {
             "$ref": "#/components/schemas/SemesterUncheckedUpdateManyWithoutSchoolYearNestedInput"
           }
         }
@@ -92321,7 +92321,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeCreateNestedOneWithoutTrainingCourseInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelCreateNestedOneWithoutTrainingCourseInput"
           },
           "trainingForm": {
@@ -92333,7 +92333,7 @@
           "startDate",
           "trainingObjectType",
           "trainingType",
-          "TrainingLevel",
+          "trainingLevel",
           "trainingForm"
         ]
       },
@@ -92997,7 +92997,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
           "trainingForm": {
@@ -100402,14 +100402,14 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/CurriculumCreateNestedOneWithoutCurriculumVersionInput"
           }
         },
         "required": [
           "name",
           "startDate",
-          "Curriculum"
+          "curriculum"
         ]
       },
       "CurriculumVersionUncheckedCreateWithoutCurriculumVersionSubjectInput": {
@@ -101394,7 +101394,7 @@
               }
             ]
           },
-          "Curriculum": {
+          "curriculum": {
             "$ref": "#/components/schemas/CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput"
           }
         }
@@ -104871,7 +104871,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeCreateNestedOneWithoutTrainingCourseInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelCreateNestedOneWithoutTrainingCourseInput"
           },
           "trainingForm": {
@@ -104885,7 +104885,7 @@
           "name",
           "startDate",
           "trainingType",
-          "TrainingLevel",
+          "trainingLevel",
           "trainingForm"
         ]
       },
@@ -105715,7 +105715,7 @@
           "trainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelCreateNestedOneWithoutTrainingCourseInput"
           },
           "trainingForm": {
@@ -105729,7 +105729,7 @@
           "name",
           "startDate",
           "trainingObjectType",
-          "TrainingLevel",
+          "trainingLevel",
           "trainingForm"
         ]
       },
@@ -106665,7 +106665,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeCreateNestedOneWithoutTrainingCourseInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelCreateNestedOneWithoutTrainingCourseInput"
           },
           "fixedClass": {
@@ -106677,7 +106677,7 @@
           "startDate",
           "trainingObjectType",
           "trainingType",
-          "TrainingLevel"
+          "trainingLevel"
         ]
       },
       "TrainingCourseUncheckedCreateWithoutTrainingFormInput": {
@@ -111703,7 +111703,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -111728,7 +111728,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutFixedClassStudentInput": {
@@ -113036,7 +113036,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -114030,7 +114030,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -114055,7 +114055,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutOrganizationUserInput": {
@@ -115431,7 +115431,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -117289,7 +117289,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -117317,7 +117317,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutUserInput": {
@@ -127810,7 +127810,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "registrationArea": {
@@ -127835,7 +127835,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutPriorityObjectInput": {
@@ -128768,7 +128768,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -128793,7 +128793,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutRegistrationAreaInput": {
@@ -129726,7 +129726,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -129751,7 +129751,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutNationalityInput": {
@@ -130684,7 +130684,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -130709,7 +130709,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutReligionInput": {
@@ -131642,7 +131642,7 @@
           "user": {
             "$ref": "#/components/schemas/UserCreateNestedOneWithoutUserProfileInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeCreateNestedOneWithoutUserProfileInput"
           },
           "priorityObject": {
@@ -131667,7 +131667,7 @@
         "required": [
           "firstName",
           "lastName",
-          "UserType"
+          "userType"
         ]
       },
       "UserProfileUncheckedCreateWithoutEthnicityInput": {
@@ -142661,7 +142661,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
           "trainingForm": {
@@ -143758,7 +143758,7 @@
           "trainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
           "trainingForm": {
@@ -145495,7 +145495,7 @@
           "trainingType": {
             "$ref": "#/components/schemas/TrainingTypeUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "$ref": "#/components/schemas/TrainingLevelUpdateOneRequiredWithoutTrainingCourseNestedInput"
           },
           "fixedClass": {
@@ -150428,7 +150428,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -156805,7 +156805,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "registrationArea": {
@@ -158938,7 +158938,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -161071,7 +161071,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -163204,7 +163204,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -165337,7 +165337,7 @@
           "user": {
             "$ref": "#/components/schemas/UserUpdateOneWithoutUserProfileNestedInput"
           },
-          "UserType": {
+          "userType": {
             "$ref": "#/components/schemas/UserTypeUpdateOneRequiredWithoutUserProfileNestedInput"
           },
           "priorityObject": {
@@ -169173,7 +169173,7 @@
       "SchoolYearInclude": {
         "type": "object",
         "properties": {
-          "Semesters": {
+          "semesters": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -169258,7 +169258,7 @@
               }
             ]
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -169423,7 +169423,7 @@
       "CurriculumVersionInclude": {
         "type": "object",
         "properties": {
-          "Curriculum": {
+          "curriculum": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -169878,7 +169878,7 @@
               }
             ]
           },
-          "UserType": {
+          "userType": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -170535,7 +170535,7 @@
       "SchoolYearCountOutputTypeSelect": {
         "type": "object",
         "properties": {
-          "Semesters": {
+          "semesters": {
             "type": "boolean"
           },
           "milestone": {
@@ -171509,7 +171509,7 @@
           "endDate": {
             "type": "boolean"
           },
-          "Semesters": {
+          "semesters": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -171690,7 +171690,7 @@
           "trainingTypeId": {
             "type": "boolean"
           },
-          "TrainingLevel": {
+          "trainingLevel": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -171978,7 +171978,7 @@
           "endDate": {
             "type": "boolean"
           },
-          "Curriculum": {
+          "curriculum": {
             "oneOf": [
               {
                 "type": "boolean"
@@ -172908,7 +172908,7 @@
           "userId": {
             "type": "boolean"
           },
-          "UserType": {
+          "userType": {
             "oneOf": [
               {
                 "type": "boolean"

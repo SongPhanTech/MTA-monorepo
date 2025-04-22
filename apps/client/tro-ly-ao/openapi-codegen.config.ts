@@ -8,7 +8,7 @@ export default defineConfig({
     common: {
         from: {
             source: 'url',
-            url: 'http://localhost:3000/openapi',
+            url: 'https://api.model.mta.swantech.vn/openapi',
         },
         outputDir: 'src/lib/api/common',
         to: async (context) => {
