@@ -3,7 +3,7 @@ REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
 SERVER := local
-COMPOSE_CMD := docker compose -f docker-compose.mta.yml up
+COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
 
 # Package Names

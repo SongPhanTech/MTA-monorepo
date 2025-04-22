@@ -21,7 +21,7 @@ Table Commune {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  Province Province [not null]
+  province Province [not null]
   provinceId String [not null]
 
   indexes {
@@ -145,7 +145,7 @@ Table Semester {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  SchoolYear SchoolYear [not null]
+  schoolYear SchoolYear [not null]
   schoolYearId String [not null]
   startDate DateTime [not null]
   endDate DateTime
@@ -162,7 +162,7 @@ Table Milestone {
   period String
   startDate DateTime [not null]
   endDate DateTime [not null]
-  SchoolYear SchoolYear [not null]
+  schoolYear SchoolYear [not null]
   schoolYearId String [not null]
 }
 
@@ -176,13 +176,13 @@ Table TrainingCourse {
   name String [not null]
   startDate DateTime [not null]
   endDate DateTime
-  TrainingObjectType TrainingObjectType [not null]
+  trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
-  TrainingType TrainingType [not null]
+  trainingType TrainingType [not null]
   trainingTypeId String [not null]
   TrainingLevel TrainingLevel [not null]
   trainingLevelId String [not null]
-  TrainingForm TrainingForm [not null]
+  trainingForm TrainingForm [not null]
   trainingFormId String [not null]
   status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
@@ -196,9 +196,9 @@ Table FixedClass {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  TrainingCourse TrainingCourse
+  trainingCourse TrainingCourse
   trainingCourseId String
-  ManagementOrganization Organization
+  managementOrganization Organization
   managementOrganizationId String
   classSize Int [not null, default: 0]
   fixedClassStudent FixedClassStudent [not null]
@@ -215,17 +215,17 @@ Table Curriculum {
   status CurriculumStatus [not null, default: 'ACTIVE']
   startDate DateTime [not null]
   endDate DateTime
-  ManagementOrganization Organization [not null]
+  managementOrganization Organization [not null]
   managementOrganizationId String [not null]
-  TrainingObjectType TrainingObjectType [not null]
+  trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
-  TrainingLevel TrainingLevel [not null]
+  trainingLevel TrainingLevel [not null]
   trainingLevelId String [not null]
-  TraingTime TrainingTime [not null]
+  trainingTime TrainingTime [not null]
   trainingTimeId String [not null]
-  TrainingMajor TrainingMajor [not null]
+  trainingMajor TrainingMajor [not null]
   trainingMajorId String [not null]
-  infomation String [not null]
+  information String [not null]
   documentPath String
   renderPath String
   curriculumVersion CurriculumVersion [not null]
@@ -244,7 +244,7 @@ Table CurriculumVersion {
   endDate DateTime
   Curriculum Curriculum [not null]
   curriculumId String [not null]
-  infomation String
+  information String
   documentPath String
   renderPath String
   curriculumVersionSubject CurriculumVersionSubject [not null]
@@ -258,10 +258,10 @@ Table SubjectGroup {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  ManagementOrganization Organization [not null]
+  managementOrganization Organization [not null]
   managementOrganizationId String [not null]
-  infomation String
-  Subject Subject [not null]
+  information String
+  subject Subject [not null]
 }
 
 Table Subject {
@@ -281,9 +281,9 @@ Table Subject {
   numberOfProject Int [not null, default: 0]
   numberOfInternship Int [not null, default: 0]
   numberOfOther Int [not null, default: 0]
-  ManagementOrganization Organization [not null]
+  managementOrganization Organization [not null]
   managementOrganizationId String [not null]
-  SubjectGroup SubjectGroup [not null]
+  subjectGroup SubjectGroup [not null]
   subjectGroupId String [not null]
   curriculumVersionSubject CurriculumVersionSubject [not null]
   prerequisiteSubject PrerequisiteSubject [not null]
@@ -297,13 +297,13 @@ Table CurriculumVersionSubject {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  CurriculumVersion CurriculumVersion [not null]
+  curriculumVersion CurriculumVersion [not null]
   curriculumVersionId String [not null]
-  Subject Subject [not null]
+  subject Subject [not null]
   subjectId String [not null]
-  TraningBlock TrainingBlock
-  traningBlockId String
-  infomation String
+  trainingBlock TrainingBlock
+  trainingBlockId String
+  information String
   documentPath String
   renderPath String
   coRequisiteSubject CoRequisiteSubject [not null]
@@ -317,9 +317,9 @@ Table PrerequisiteSubject {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  CurriculumVersionSubject CurriculumVersionSubject [not null]
+  curriculumVersionSubject CurriculumVersionSubject [not null]
   curriculumVersionSubjectId String [not null]
-  Subject Subject [not null]
+  subject Subject [not null]
   subjectId String [not null]
 }
 
@@ -330,9 +330,9 @@ Table CoRequisiteSubject {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  CurriculumVersionSubject CurriculumVersionSubject [not null]
+  curriculumVersionSubject CurriculumVersionSubject [not null]
   curriculumVersionSubjectId String [not null]
-  Subject Subject [not null]
+  subject Subject [not null]
   subjectId String [not null]
 }
 
@@ -476,7 +476,7 @@ Table UserProfile {
   userId String [unique]
   UserType UserType [not null]
   userTypeId String [not null]
-  avaratar String
+  avatar String
   firstName String [not null]
   lastName String [not null]
   dateOfBirth DateTime
@@ -485,15 +485,15 @@ Table UserProfile {
   idCardNumber String
   idCardDate DateTime
   officerNumber String
-  PriorityObject PriorityObject
+  priorityObject PriorityObject
   priorityObjectId String
-  RegistrationArea RegistrationArea
+  registrationArea RegistrationArea
   registrationAreaId String
-  Nationality Nationality
+  nationality Nationality
   nationalityId String
-  Religion Religion
+  religion Religion
   religionId String
-  Ethnicity Ethnicity
+  ethnicity Ethnicity
   ethnicityId String
   gender Gender
   permanentAddress String
@@ -527,7 +527,7 @@ Table FixedClassStudent {
   id String [pk]
   fixedClass FixedClass [not null]
   fixedClassId String [not null]
-  UserProfile UserProfile [not null]
+  userProfile UserProfile [not null]
   userProfileId String [not null]
   status FixedClassStudentStatus [not null, default: 'ENROLLED']
   description String
@@ -861,10 +861,10 @@ Enum SubjectEquivalentType {
 }
 
 Enum CurriculumVersionSubjectType {
-  NONE
-  MANDATORY
-  OPTIONAL
-  ELECTIVE
+  None
+  Mandatory
+  Optional
+  Elective
 }
 
 Enum FixedClassStudentStatus {
@@ -999,7 +999,7 @@ Ref: CurriculumVersionSubject.curriculumVersionId > CurriculumVersion.id
 
 Ref: CurriculumVersionSubject.subjectId > Subject.id
 
-Ref: CurriculumVersionSubject.traningBlockId > TrainingBlock.id
+Ref: CurriculumVersionSubject.trainingBlockId > TrainingBlock.id
 
 Ref: PrerequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
 

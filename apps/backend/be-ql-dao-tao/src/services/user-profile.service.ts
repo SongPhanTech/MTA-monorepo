@@ -1,5 +1,5 @@
-import { prisma } from '../..'
 import * as XLSX from 'xlsx'
+import { prisma } from '..'
 
 function splitFullName(fullName: string) {
     if (!fullName || typeof fullName !== 'string')
@@ -40,7 +40,7 @@ function parseDate(input: any): Date | null {
     }
     return date
 }
-const uploadFileUserProfile = async (context: any): Promise<any> => {
+export const uploadFileUserProfile = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
     const typeUser = body.type
     const file = body.file
@@ -129,7 +129,7 @@ const uploadFileUserProfile = async (context: any): Promise<any> => {
     }
 }
 
-const updateFileUserProfile = async (context: any): Promise<any> => {
+export const updateFileUserProfile = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
     const file = body.file
     console.log(file)
@@ -278,8 +278,4 @@ const updateFileUserProfile = async (context: any): Promise<any> => {
         console.error('Error processing Excel file:', error)
         return context.json({ error: 'Failed to process Excel file' }, 400)
     }
-}
-export default {
-    uploadFileUserProfile,
-    updateFileUserProfile,
 }

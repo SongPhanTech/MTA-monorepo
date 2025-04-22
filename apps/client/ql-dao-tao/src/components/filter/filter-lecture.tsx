@@ -31,8 +31,10 @@ export type FilterProps = {
 }
 
 interface Props {
-    onFilterChange: any
-    onSearchChange: any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  onFilterChange: any;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  onSearchChange: any;
 }
 const options = [
     {
@@ -41,10 +43,10 @@ const options = [
     },
 ]
 
-const FilterDropdown = (props: Props) => {
-    const { onFilterChange, onSearchChange } = props
-    const [form] = Form.useForm<FilterProps>()
-    const [open, setOpen] = useState(false)
+const FilterLecture = (props: Props) => {
+  const { onFilterChange, onSearchChange } = props;
+  const [form] = Form.useForm<FilterProps>();
+  const [open, setOpen] = useState(false);
 
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -172,49 +174,4 @@ const FilterDropdown = (props: Props) => {
         </div>
     )
 
-    return (
-        <Flex>
-            <Input
-                placeholder="Nhập tên giảng viên..."
-                style={{ width: 300, marginRight: 8 }}
-                prefix={
-                    <Search
-                        size={15}
-                        style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                    />
-                }
-                allowClear
-                onChange={(e) => onSearchChange('searchText', e.target.value)}
-            />
-            <Popover
-                content={filterContent}
-                trigger="click"
-                open={open}
-                onOpenChange={handleOpenChange}
-                placement="bottomRight"
-                align={{
-                    offset: [100, 0],
-                }}
-                arrow={false}
-                overlayStyle={{
-                    width: 450,
-                }}
-                overlayInnerStyle={{
-                    padding: 0,
-                }}
-                destroyTooltipOnHide
-            >
-                <Button
-                    icon={<FilterOutlined />}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                />
-            </Popover>
-        </Flex>
-    )
-}
-
-export default FilterDropdown
+export default FilterLecture;

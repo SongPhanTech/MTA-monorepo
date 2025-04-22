@@ -26,9 +26,7 @@ const uploadExcelCreateFixedClass = createRoute({
     responses: {
         200: {
             content: {
-                'application/json': {
-                    schema: z.array(z.any()),
-                },
+                'application/json': { schema: z.array(z.any()) },
             },
             description: 'Tải danh sách thành công',
         },
@@ -51,7 +49,17 @@ const classDivision = createRoute({
                 'multipart/form-data': {
                     schema: z
                         .object({
-                            file: z.any(), // file uploadƯ
+                            file: z
+                                .instanceof(Blob)
+                                .refine(
+                                    (file) =>
+                                        file.type ===
+                                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                                )
+                                .openapi({
+                                    type: 'string',
+                                    format: 'binary',
+                                }),
                         })
                         .openapi('classDivision'),
                 },
@@ -107,8 +115,21 @@ const exportDocxListStudentFixedClass = createRoute({
     },
 })
 
-export default {
-    uploadExcelCreateFixedClass,
-    classDivision,
-    exportDocxListStudentFixedClass,
-}
+const app = new OpenAPIHono({ strict: false })
+
+app.openapi(uploadExcelCreateFixedClass, async (c) => {
+    const body = c.req.valid('form')
+
+    const data = await fixedClassService.uploadExcelCreateFixedClass(c)
+    return data
+})
+
+app.openapi(classDivision, async (c) => {
+    const data = await fixedClassService.classDivision(c)
+    return data
+})
+
+app.openapi(exportDocxListStudentFixedClass, async (c) => {
+    const data = await fixedClassService.exportFixedClassByCourse(c)
+    return data
+})

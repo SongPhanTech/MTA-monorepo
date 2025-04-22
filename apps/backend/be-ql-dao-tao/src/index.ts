@@ -10,8 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
 
-import API from './apii/index'
-import ISConfig from './apii/is/configs'
+import API from './api/user-profile'
 
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
@@ -55,7 +54,6 @@ setupOpenApi(app)
 // setupAuth(app)
 
 app.route('/api', API)
-app.route('/api/is', ISConfig)
 
 app.use(
     '/api/model/*',
