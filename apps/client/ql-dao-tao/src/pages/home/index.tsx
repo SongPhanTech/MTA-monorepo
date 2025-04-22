@@ -12,7 +12,7 @@ function Page() {
     return (
         <div>
             <Row gutter={[8, 8]}>
-                <Col span={18}>
+                <Col xs={24} lg={18}>
                     <div className="bg-white rounded shadow h-96 flex flex-col">
                         <div className="p-4">
                             <Title level={4}>Thống kê đối tượng đào tạo</Title>
@@ -22,7 +22,7 @@ function Page() {
                         </div>
                     </div>
                 </Col>
-                <Col span={6}>
+                <Col xs={24} lg={6}>
                     <div className="bg-white rounded shadow h-96 flex flex-col">
                         <div className="p-4">
                             <Title level={4}>Thông báo</Title>
@@ -32,9 +32,10 @@ function Page() {
                         </div>
                     </div>
                 </Col>
-                <Col span={18}>
+
+                <Col xs={24} lg={18}>
                     <Row gutter={[8, 8]}>
-                        <Col span={12}>
+                        <Col xs={24} md={12}>
                             <div className="bg-white rounded shadow h-96 flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
@@ -47,7 +48,7 @@ function Page() {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} md={12}>
                             <div className="bg-white rounded shadow h-96 flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
@@ -75,7 +76,7 @@ function Page() {
                         </Col>
                     </Row>
                 </Col>
-                <Col span={6}>
+                <Col xs={24} lg={6}>
                     <div className="bg-white rounded shadow h-full flex flex-col">
                         <div className="p-4">
                             <Title level={4}>Tin tức</Title>
@@ -91,6 +92,7 @@ function Page() {
 }
 
 export default Page
+
 Page.getLayout = function getLayout(page: React.ReactElement) {
     return <DashboardLayout>{page}</DashboardLayout>
 }
