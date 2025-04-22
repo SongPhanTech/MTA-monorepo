@@ -104,7 +104,16 @@ const DashboardLayout = ({
                             <AvatarDropdown />
                         </div>
                     </Header>
-                    <Content className="mx-2">{children}</Content>
+                    <Content className="mx-2">
+                        {/* <div
+                            className={cn(
+                                'min-h-[calc(100vh-64px-24px)] rounded-lg',
+                                className
+                            )}
+                        > */}
+                        {children}
+                        {/* </div> */}
+                    </Content>
                 </Layout>
             </Layout>
         </IdleTimerProvider>

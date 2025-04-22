@@ -62,7 +62,7 @@ function Page() {
                             </div>
                         </Col>
                         <Col span={24}>
-                            <div className="bg-white rounded shadow h-96 flex flex-col">
+                            <div className="bg-white rounded shadow h-full flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
                                         Thống kê số lượng giảng viên theo đầu
