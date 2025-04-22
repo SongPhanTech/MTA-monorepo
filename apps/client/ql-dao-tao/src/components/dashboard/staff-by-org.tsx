@@ -1,7 +1,11 @@
 import React, { useRef } from 'react'
 import { Column } from '@ant-design/plots'
 
-const StaffByOrg = () => {
+interface ChartProps {
+    className?: string
+}
+
+const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
     const chartRef = useRef(null)
 
     const data = [
@@ -35,13 +39,12 @@ const StaffByOrg = () => {
         xField: 'letter',
         yField: 'frequency',
         tooltip: {
-            // Tùy chỉnh tooltip để hiển thị "Số lượng"
             formatter: (datum: any) => {
-                console.log('datum in tooltip:', datum) // Kiểm tra giá trị của datum
+                console.log('datum in tooltip:', datum)
                 if (datum && datum.frequency) {
-                    return { name: 'Số lượng', value: datum.frequency } // Hiển thị "Số lượng" và giá trị 'frequency'
+                    return { name: 'Số lượng', value: datum.frequency }
                 }
-                return { name: 'Số lượng', value: 'N/A' } // Trường hợp không có dữ liệu
+                return { name: 'Số lượng', value: 'N/A' }
             },
         },
         onReady: (chart: any) => {
@@ -67,7 +70,11 @@ const StaffByOrg = () => {
         },
     }
 
-    return <Column {...config} />
+    return (
+        <div className={className}>
+            <Column {...config} />
+        </div>
+    )
 }
 
 export default StaffByOrg
