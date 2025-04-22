@@ -10,16 +10,26 @@ type TableProps<T> = {
     data?: T[]
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
-    }
+    },
+    onRowClick?: (record: T) => void,
+    expandable?: TableAntdProps<T>['expandable'],
+    rowKey?: string,
+    id?: string
 } & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
     columns = [],
     data,
     pagination,
+    onRowClick,
+    expandable,
+    rowKey,
+    id
 }: TableProps<T>) => {
     return (
         <TableAntd
+            id={id}
+            rowKey={rowKey}
             className="mt-4"
             columns={columns.map((column) => ({
                 ...column,
@@ -27,6 +37,7 @@ const Table = <T extends Record<string, unknown>>({
                     column.key ||
                     (column as unknown as { dataIndex: string }).dataIndex,
             }))}
+            scroll={{ x: 'max-content' }}
             bordered
             dataSource={data}
             locale={{
@@ -39,11 +50,21 @@ const Table = <T extends Record<string, unknown>>({
                     labelRender: ({ value }) => `${value} / trang`,
                     optionRender: (oriOption) => `${oriOption.value} / trang`,
                 },
+                showTotal: (total, range) =>
+                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                 ...pagination,
                 onShowSizeChange(current, size) {
                     pagination?.onShowSizeChange?.(size)
                 },
             }}
+            expandable={expandable}
+            onRow={(record) => ({
+                onClick: () => {
+                    if (onRowClick) {
+                        onRowClick(record);
+                    }
+                },
+            })}
         />
     )
 }

@@ -3,17 +3,23 @@ REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
 SERVER := local
-COMPOSE_CMD := docker compose up
+COMPOSE_CMD := docker compose -f docker-compose.mta.yml up
 IMG_PREFIX := mta-
 
 # Package Names
-PKG_MODEL := model
+PKG_BE_MODEL := be-model
+PKG_BE_USER := be-ql-nguoi-dung
+PKG_BE_CATEGORIES := be-ql-danh-muc
+PKG_BE_DAO_TAO := be-ql-dao-tao
+
 PKG_CATEGORIES := ql-danh-muc
-PKG_TRAINING := ql-dao-tao
+PKG_DAO_TAO := ql-dao-tao
 PKG_USER := ql-nguoi-dung
+PKG_AI := ql-tro-ly-ao
 
 # Maps for build types (backend/frontend)
-PKGS := $(PKG_MODEL) $(PKG_CATEGORIES) $(PKG_TRAINING) $(PKG_USER)
+BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_USER) $(PKG_BE_CATEGORIES) $(PKG_BE_DAO_TAO)
+FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI)
 
 # Targets
 .PHONY: all clean push deploy release \
@@ -21,36 +27,40 @@ PKGS := $(PKG_MODEL) $(PKG_CATEGORIES) $(PKG_TRAINING) $(PKG_USER)
 
 help:
 	@echo "Available targets:"
-	@echo "  build-be-$(PKG_MODEL)"
-	@echo "  build-be-$(PKG_CATEGORIES)"
-	@echo "  build-be-$(PKG_TRAINING)"
-	@echo "  build-be-$(PKG_USER)"
-	@echo "  build-fe-$(PKG_MODEL)"
-	@echo "  build-fe-$(PKG_CATEGORIES)"
-	@echo "  build-fe-$(PKG_TRAINING)"
-	@echo "  build-fe-$(PKG_USER)"
+	@echo "  all-$(PKG_BE_MODEL)"
+	@echo "  all-$(PKG_BE_USER)"
+	@echo "  all-$(PKG_BE_CATEGORIES)"
+	@echo "  all-$(PKG_BE_DAO_TAO)"
+	@echo "  all-$(PKG_CATEGORIES)"
+	@echo "  all-$(PKG_DAO_TAO)"
+	@echo "  all-$(PKG_USER)"
+	@echo "  all-$(PKG_AI)"
 
 # Pattern rule: build-<name>
-build-be-%:
-	$(MAKE) _build-be PACKAGE=$*
-
-build-fe-%:
-	$(MAKE) _build-fe PACKAGE=$*
+build-%:
+	@echo "Target: $*"
+	@echo "BE_PKGS: $(BE_PKGS)"
+	@echo "FE_PKGS: $(FE_PKGS)"
+	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
+		echo "Matched BE → building backend"; \
+		$(MAKE) _build-be PACKAGE=$*; \
+	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
+		echo "Matched FE → building frontend"; \
+		$(MAKE) _build-fe PACKAGE=$*; \
+	else \
+		echo "Unknown package '$*'. Must be one of: $(BE_PKGS) $(FE_PKGS)"; \
+		exit 1; \
+	fi
 
 # Pattern rule: all-<name> = build + push + deploy
-all-be-%: build-be-%
-	docker push $(REGISTRY)/$(IMG_PREFIX)-be-$*:$(DEV_TAG)
-	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)-be-$* -d"
-
-all-fe-%: build-fe-%
-	docker push $(REGISTRY)/$(IMG_PREFIX)-fe-$*:$(DEV_TAG)
-	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)-fe-$* -d"
+all-%: build-%
+	docker push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)
+	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"
 
 # Internal backend build
 _build-be:
 	docker build -f Dockerfile.backend --platform linux/amd64 \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
-		--build-arg FILTER=@backend/${PACKAGE} \
 		--build-arg PACKAGE=${PACKAGE} \
 		. --output type=docker
 
@@ -58,7 +68,6 @@ _build-be:
 _build-fe:
 	docker build --platform linux/amd64 \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
-		--build-arg FILTER=@client/${PACKAGE} \
 		--build-arg PACKAGE=${PACKAGE} \
 		.
 
@@ -74,7 +83,7 @@ release:
 ifndef PACKAGE
 	$(error PACKAGE is not set. Use 'make release PACKAGE=<package-name>')
 endif
-	docker build -f Dockerfile.backend --platform linux/amd64 -t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG) .
+	docker build -t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG) .
 	docker push $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(RELEASE_TAG)
 	ssh $(SERVER) "cd docker-compose && $(COMPOSE_CMD) $(IMG_PREFIX)${PACKAGE} -d"
 

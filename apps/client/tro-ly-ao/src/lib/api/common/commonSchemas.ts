@@ -4,18 +4,19 @@
  * @version 1.0.0
  */
 export type UrlDto = {
-  url: string;
-  fileName: string;
-};
+    url: string
+    fileName: string
+}
 
 export type PresignedUrlDto = {
-  path: string;
-};
+    path: string
+    extension: string
+}
 
 export type BucketItemDto = {
-  name?: string;
-  size?: number;
-  etag?: string;
-  prefix?: string;
-  lastModified?: string;
-};
+    name?: string
+    size?: number
+    etag?: string
+    prefix?: string
+    lastModified?: string
+}

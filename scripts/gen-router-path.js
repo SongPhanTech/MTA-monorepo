@@ -20,8 +20,7 @@ const cleanPath = (path = '') => {
 }
 
 const cleanRouter = (router = '') => {
-    const r = router.replace('/index.tsx', '')
-        .replaceAll('.tsx', '')
+    const r = router.replace('/index.tsx', '').replaceAll('.tsx', '')
 
     return r === '' ? '/' : r
 }

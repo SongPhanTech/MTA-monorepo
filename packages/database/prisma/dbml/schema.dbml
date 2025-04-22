@@ -77,6 +77,7 @@ Table Position {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  organizationUser OrganizationUser [not null]
 }
 
 Table PositionCPV {
@@ -118,6 +119,7 @@ Table Organization {
   fixedClass FixedClass [not null]
   subject Subject [not null]
   subjectGroup SubjectGroup [not null]
+  organizationUser OrganizationUser [not null]
   organizationId String
 }
 
@@ -474,6 +476,7 @@ Table UserProfile {
   userId String [unique]
   UserType UserType [not null]
   userTypeId String [not null]
+  avaratar String
   firstName String [not null]
   lastName String [not null]
   dateOfBirth DateTime
@@ -517,6 +520,7 @@ Table UserProfile {
   organizationName String
   organizationCPVName String
   fixedClassStudent FixedClassStudent [not null]
+  organizationUser OrganizationUser [not null]
 }
 
 Table FixedClassStudent {
@@ -530,6 +534,22 @@ Table FixedClassStudent {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
+}
+
+Table OrganizationUser {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userProfileId String [not null]
+  userProfile UserProfile [not null]
+  organizationId String [not null]
+  organization Organization [not null]
+  position Position
+  positionId String
+  status OrganizationUserStatus [not null, default: 'ACTIVE']
 }
 
 Table User {
@@ -595,6 +615,17 @@ Table Permission {
   indexes {
     (name, permissionType) [unique]
   }
+}
+
+Table ChatBotConfig {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  value String [not null]
 }
 
 Table Document {
@@ -847,6 +878,13 @@ Enum FixedClassStudentStatus {
   ACADEMIC_SUSPENSION
 }
 
+Enum OrganizationUserStatus {
+  ACTIVE
+  INACTIVE
+  ON_HOLD
+  TERMINATED
+}
+
 Enum UserRole {
   ADMIN
   USER
@@ -988,6 +1026,12 @@ Ref: UserProfile.ethnicityId > Ethnicity.id
 Ref: FixedClassStudent.fixedClassId > FixedClass.id
 
 Ref: FixedClassStudent.userProfileId > UserProfile.id
+
+Ref: OrganizationUser.userProfileId > UserProfile.id
+
+Ref: OrganizationUser.organizationId > Organization.id
+
+Ref: OrganizationUser.positionId > Position.id
 
 Ref: Document.uploadedById > User.id
 

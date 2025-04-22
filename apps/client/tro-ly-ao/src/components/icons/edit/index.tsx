@@ -8,7 +8,7 @@ const EditIcon = (props: EditIconProps) => {
     return (
         <Tooltip title="Chỉnh sửa" placement="leftTop">
             <EditOutlined
-                className="text-sm text-orange-500 cursor-pointer"
+                className="text-orange-500 cursor-pointer"
                 {...props}
             />
         </Tooltip>

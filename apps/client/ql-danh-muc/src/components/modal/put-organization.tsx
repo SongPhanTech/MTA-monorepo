@@ -131,11 +131,7 @@ const PutOrganizationModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="parentId"
-                    label="Đơn vị cấp trên"
-                >
+                <FormItem form={form} name="parentId" label="Đơn vị cấp trên">
                     <Select
                         placeholder="Chọn đơn vị cấp trên"
                         options={organizations.map((i: Organization) => {

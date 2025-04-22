@@ -7,9 +7,8 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
-import { Col, Divider, Form, Input, message, Modal, Progress, Row } from 'antd'
+import { Col, Form, Input, Modal, Progress, message } from 'antd'
 import axios from 'axios'
-import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type DocumentFormType = {
@@ -29,7 +28,6 @@ const AddTaiLieu = () => {
         tag: AddTaiLieu.name,
     })
     const { mutateAsync: createMany } = useCreateManyDocument()
-    const { data: myProfile } = useSession()
 
     const [selectedFile, setSelectedFile] =
         useState<DocumentFormType['files'][0]>()
@@ -37,7 +35,6 @@ const AddTaiLieu = () => {
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
-    console.log('files', files)
 
     const onUpload = async (
         values: Array<{
@@ -74,6 +71,7 @@ const AddTaiLieu = () => {
                     const resPresignedUrl = await fetchGeneratePresignedUrl({
                         body: {
                             path: 'tai-lieu',
+                            extension: file.file.name.split('.').pop() || '',
                         },
                     })
                     await axios.put(resPresignedUrl.url, file.file, {
@@ -107,7 +105,6 @@ const AddTaiLieu = () => {
                         uri: url,
                         title: file.name,
                         fileType: file.type,
-                        uploadedById: myProfile?.user.user_id,
                         type: values.type,
                         body,
                         fileSize: file.size,
