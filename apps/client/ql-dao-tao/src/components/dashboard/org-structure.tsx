@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import type React from 'react'
+import { useState, useEffect } from 'react'
 import { Pie } from '@ant-design/plots'
 
-const PieChart = () => {
-    const [data, setData] = useState<any>([])
+interface ChartProps {
+    className?: string
+}
+
+const PieChart: React.FC<ChartProps> = ({ className }) => {
+    interface DataItem {
+        type: string
+        value: number
+    }
+
+    const [data, setData] = useState<DataItem[]>([])
 
     useEffect(() => {
         setTimeout(() => {
@@ -23,14 +33,17 @@ const PieChart = () => {
         },
         legend: {
             color: {
-                title: false,
                 position: 'right',
-                rowPadding: 5,
+                // rowPadding: 4,
             },
         },
     }
 
-    return <Pie {...config} />
+    return (
+        <div className={className}>
+            <Pie {...config} />
+        </div>
+    )
 }
 
 export default PieChart

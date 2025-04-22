@@ -10,7 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
 
-import API from './api/index'
+import API from './api/user-profile'
 
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'

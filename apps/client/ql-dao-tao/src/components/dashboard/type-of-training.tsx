@@ -1,10 +1,15 @@
-import React, { useEffect, useRef } from 'react'
+import type React from 'react'
+import { useRef } from 'react'
 import { Column } from '@ant-design/plots'
+import type { Plot } from '@ant-design/plots'
 
-const TypeOfTraining = () => {
-    const chartRef = useRef<any>(null)
+interface ChartProps {
+    className?: string
+}
 
-    // Fake data cho các loại hình đào tạo và 2 cột Quân sự, Dân sự
+const TypeOfTraining: React.FC<ChartProps> = ({ className }) => {
+    const chartRef = useRef<Plot | null>(null)
+
     const dataFake = [
         { type: 'Đại học', category: 'Quân sự', count: 500 },
         { type: 'Đại học', category: 'Dân sự', count: 1000 },
@@ -16,19 +21,18 @@ const TypeOfTraining = () => {
 
     const config = {
         data: dataFake,
-        xField: 'type', // Loại hình đào tạo (Đại học, Thạc sĩ, Tiến sĩ)
-        yField: 'count', // Số lượng
-        colorField: 'category', // Phân biệt màu sắc theo Quân sự và Dân sự
-        group: true, // Nhóm các cột theo loại hình đào tạo
-        color: ['#1890FF', '#FF7A45'], // Chỉnh màu cho Quân sự và Dân sự
+        xField: 'type',
+        yField: 'count',
+        colorField: 'category',
+        group: true,
+        color: ['#1890FF', '#FF7A45'],
         style: {
             inset: 5,
         },
-        onReady: (chart: any) => {
+        onReady: (chart: Plot) => {
             chartRef.current = chart
             try {
                 chart.on('afterrender', () => {
-                    // Có thể thay đổi logic sau khi vẽ biểu đồ ở đây
                     chart.emit('legend:filter', {
                         data: { channel: 'color', values: ['Quân sự'] },
                     })
@@ -39,7 +43,11 @@ const TypeOfTraining = () => {
         },
     }
 
-    return <Column {...config} />
+    return (
+        <div className={className}>
+            <Column {...config} />
+        </div>
+    )
 }
 
 export default TypeOfTraining

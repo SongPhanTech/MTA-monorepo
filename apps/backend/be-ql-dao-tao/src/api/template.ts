@@ -1,4 +1,5 @@
 // import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+// import { getBufferFromUrl } from '../services/template.service'
 
 // const uploadExcelCreateFixedClass = createRoute({
 //     operationId: 'uploadExcelCreateFixedClass',
@@ -12,10 +13,15 @@
 //         body: {
 //             content: {
 //                 'multipart/form-data': {
-//                     schema: z.object({
-//                         file: z.any(), // file upload
-//                         trainingCourseId: z.string() // loại thông tin
-//                     }).openapi('uploadExcelCreateFixedClass'),
+//                     schema: z
+//                         .object({
+//                             file: z.instanceof(File).openapi({
+//                                 type: 'string',
+//                                 format: 'binary',
+//                             }),
+//                             trainingCourseId: z.string(), // loại thông tin
+//                         })
+//                         .openapi('uploadExcelCreateFixedClass'),
 //                 },
 //             },
 //         },
@@ -24,8 +30,8 @@
 //         200: {
 //             content: {
 //                 'application/json': {
-//                     schema: z.array(z.any())
-//                 }
+//                     schema: z.array(z.any()),
+//                 },
 //             },
 //             description: 'Tải danh sách thành công',
 //         },
@@ -35,8 +41,10 @@
 //     },
 // })
 
-// export default
-// {
-//     uploadExcelCreateFixedClass,
+// const app = new OpenAPIHono({ strict: false })
+// app.openapi(uploadExcelCreateFixedClass, async (c) => {
+//     const data = await getBufferFromUrl(c)
+//     return data
+// })
 
-// }
+// export default app

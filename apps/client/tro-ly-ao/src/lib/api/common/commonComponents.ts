@@ -3,171 +3,160 @@
  *
  * @version 1.0.0
  */
-import * as reactQuery from '@tanstack/react-query'
-import { useCommonContext, CommonContext } from './commonContext'
-import type * as Fetcher from './commonFetcher'
-import { commonFetch } from './commonFetcher'
-import type * as Schemas from './commonSchemas'
+import * as reactQuery from "@tanstack/react-query";
+import { useCommonContext, CommonContext } from "./commonContext";
+import type * as Fetcher from "./commonFetcher";
+import { commonFetch } from "./commonFetcher";
+import type * as Schemas from "./commonSchemas";
 
-export type GeneratePresignedUrlError = Fetcher.ErrorWrapper<undefined>
+export type GeneratePresignedUrlError = Fetcher.ErrorWrapper<undefined>;
 
 export type GeneratePresignedUrlVariables = {
-    body: Schemas.PresignedUrlDto
-} & CommonContext['fetcherOptions']
+  body: Schemas.PresignedUrlDto;
+} & CommonContext["fetcherOptions"];
 
 export const fetchGeneratePresignedUrl = (
-    variables: GeneratePresignedUrlVariables,
-    signal?: AbortSignal
+  variables: GeneratePresignedUrlVariables,
+  signal?: AbortSignal,
 ) =>
-    commonFetch<
-        Schemas.UrlDto,
-        GeneratePresignedUrlError,
-        Schemas.PresignedUrlDto,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/minio/generate-presigned-url',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  commonFetch<
+    Schemas.UrlDto,
+    GeneratePresignedUrlError,
+    Schemas.PresignedUrlDto,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/minio/generate-presigned-url",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 export const useGeneratePresignedUrl = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            Schemas.UrlDto,
-            GeneratePresignedUrlError,
-            GeneratePresignedUrlVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.UrlDto,
+      GeneratePresignedUrlError,
+      GeneratePresignedUrlVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useCommonContext()
-    return reactQuery.useMutation<
-        Schemas.UrlDto,
-        GeneratePresignedUrlError,
-        GeneratePresignedUrlVariables
-    >({
-        mutationFn: (variables: GeneratePresignedUrlVariables) =>
-            fetchGeneratePresignedUrl({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    Schemas.UrlDto,
+    GeneratePresignedUrlError,
+    GeneratePresignedUrlVariables
+  >({
+    mutationFn: (variables: GeneratePresignedUrlVariables) =>
+      fetchGeneratePresignedUrl({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type ListObjectsQueryParams = {
-    path?: string
-    startAfter?: string
-    limit: number
-}
+  path?: string;
+  startAfter?: string;
+  limit: number;
+};
 
-export type ListObjectsError = Fetcher.ErrorWrapper<undefined>
+export type ListObjectsError = Fetcher.ErrorWrapper<undefined>;
 
-export type ListObjectsResponse = Schemas.BucketItemDto[]
+export type ListObjectsResponse = Schemas.BucketItemDto[];
 
 export type ListObjectsVariables = {
-    queryParams: ListObjectsQueryParams
-} & CommonContext['fetcherOptions']
+  queryParams: ListObjectsQueryParams;
+} & CommonContext["fetcherOptions"];
 
 export const fetchListObjects = (
-    variables: ListObjectsVariables,
-    signal?: AbortSignal
+  variables: ListObjectsVariables,
+  signal?: AbortSignal,
 ) =>
-    commonFetch<
-        ListObjectsResponse,
-        ListObjectsError,
-        undefined,
-        {},
-        ListObjectsQueryParams,
-        {}
-    >({ url: '/api/minio', method: 'get', ...variables, signal })
+  commonFetch<
+    ListObjectsResponse,
+    ListObjectsError,
+    undefined,
+    {},
+    ListObjectsQueryParams,
+    {}
+  >({ url: "/api/minio", method: "get", ...variables, signal });
 
-export const useListObjects = <TData = ListObjectsResponse>(
-    variables: ListObjectsVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            ListObjectsResponse,
-            ListObjectsError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+export const useListObjects = <TData = ListObjectsResponse,>(
+  variables: ListObjectsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<ListObjectsResponse, ListObjectsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } =
-        useCommonContext(options)
-    return reactQuery.useQuery<ListObjectsResponse, ListObjectsError, TData>({
-        queryKey: queryKeyFn({
-            path: '/api/minio',
-            operationId: 'listObjects',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchListObjects({ ...fetcherOptions, ...variables }, signal),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
+  return reactQuery.useQuery<ListObjectsResponse, ListObjectsError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/minio",
+      operationId: "listObjects",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchListObjects({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type PresignedGetObjectQueryParams = {
-    objectName: string
-}
+  objectName: string;
+};
 
-export type PresignedGetObjectError = Fetcher.ErrorWrapper<undefined>
+export type PresignedGetObjectError = Fetcher.ErrorWrapper<undefined>;
 
 export type PresignedGetObjectVariables = {
-    queryParams: PresignedGetObjectQueryParams
-} & CommonContext['fetcherOptions']
+  queryParams: PresignedGetObjectQueryParams;
+} & CommonContext["fetcherOptions"];
 
 export const fetchPresignedGetObject = (
-    variables: PresignedGetObjectVariables,
-    signal?: AbortSignal
+  variables: PresignedGetObjectVariables,
+  signal?: AbortSignal,
 ) =>
-    commonFetch<
-        Schemas.UrlDto,
-        PresignedGetObjectError,
-        undefined,
-        {},
-        PresignedGetObjectQueryParams,
-        {}
-    >({ url: '/api/minio/presigned-url', method: 'get', ...variables, signal })
+  commonFetch<
+    Schemas.UrlDto,
+    PresignedGetObjectError,
+    undefined,
+    {},
+    PresignedGetObjectQueryParams,
+    {}
+  >({ url: "/api/minio/presigned-url", method: "get", ...variables, signal });
 
-export const usePresignedGetObject = <TData = Schemas.UrlDto>(
-    variables: PresignedGetObjectVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            Schemas.UrlDto,
-            PresignedGetObjectError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
+  variables: PresignedGetObjectVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.UrlDto, PresignedGetObjectError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } =
-        useCommonContext(options)
-    return reactQuery.useQuery<Schemas.UrlDto, PresignedGetObjectError, TData>({
-        queryKey: queryKeyFn({
-            path: '/api/minio/presigned-url',
-            operationId: 'presignedGetObject',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchPresignedGetObject(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
+  return reactQuery.useQuery<Schemas.UrlDto, PresignedGetObjectError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/minio/presigned-url",
+      operationId: "presignedGetObject",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchPresignedGetObject({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type QueryOperation =
-    | {
-          path: '/api/minio'
-          operationId: 'listObjects'
-          variables: ListObjectsVariables
-      }
-    | {
-          path: '/api/minio/presigned-url'
-          operationId: 'presignedGetObject'
-          variables: PresignedGetObjectVariables
-      }
+  | {
+      path: "/api/minio";
+      operationId: "listObjects";
+      variables: ListObjectsVariables;
+    }
+  | {
+      path: "/api/minio/presigned-url";
+      operationId: "presignedGetObject";
+      variables: PresignedGetObjectVariables;
+    };

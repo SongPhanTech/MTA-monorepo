@@ -1,65 +1,98 @@
-import DefaultLayout from '@layouts/default-layout'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-    Typography,
-} from 'antd'
-const { Title } = Typography
-import _ from 'lodash'
-import PieChart from '@components/dashboard/org-structure'
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
+import PieChart from '@components/dashboard/org-structure'
+import StaffByOrg from '@components/dashboard/staff-by-org'
 import StaffLevel from '@components/dashboard/staff-level'
 import TypeOfTraining from '@components/dashboard/type-of-training'
-import StaffByOrg from '@components/dashboard/staff-by-org'
-function Home() {
+import DashboardLayout from '@layouts/dashboard-layout'
+import { Col, Row, Typography } from 'antd'
+const { Title } = Typography
+
+function Page() {
     return (
-        <DefaultLayout className="p-0">
-            <Row gutter={[16, 16]} className="p-4 h-[650px]">
-                <Col span={12}>
-                    <Title level={4}>Thống kê đối tượng đào tạo</Title>
-                    <PieChart />
+        <div>
+            <Row gutter={[8, 8]}>
+                <Col xs={24} lg={18}>
+                    <div className="bg-white rounded shadow h-96 flex flex-col">
+                        <div className="p-4">
+                            <Title level={4}>Thống kê đối tượng đào tạo</Title>
+                        </div>
+                        <div className="flex-1">
+                            <PieChart className="h-full" />
+                        </div>
+                    </div>
                 </Col>
-                <Col span={6}>
-                    <Title level={4}>Tin tức</Title>
-                    <News />
+                <Col xs={24} lg={6}>
+                    <div className="bg-white rounded shadow h-96 flex flex-col">
+                        <div className="p-4">
+                            <Title level={4}>Thông báo</Title>
+                        </div>
+                        <div className="flex-1 overflow-y-auto mb-2 p-2">
+                            <Notifications />
+                        </div>
+                    </div>
                 </Col>
-                <Col span={6}>
-                    <Title level={4}>Thông báo</Title>
-                    <Notifications />
+
+                <Col xs={24} lg={18}>
+                    <Row gutter={[8, 8]}>
+                        <Col xs={24} md={12}>
+                            <div className="bg-white rounded shadow h-96 flex flex-col">
+                                <div className="p-4">
+                                    <Title level={4}>
+                                        Thống kê số lượng giảng viên theo trình
+                                        độ
+                                    </Title>
+                                </div>
+                                <div className="flex-1">
+                                    <StaffLevel className="h-full" />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <div className="bg-white rounded shadow h-96 flex flex-col">
+                                <div className="p-4">
+                                    <Title level={4}>
+                                        Thống kê số lượng học viên theo loại
+                                        hình đào tạo
+                                    </Title>
+                                </div>
+                                <div className="flex-1">
+                                    <TypeOfTraining className="h-full" />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={24}>
+                            <div className="bg-white rounded shadow h-full flex flex-col">
+                                <div className="p-4">
+                                    <Title level={4}>
+                                        Thống kê số lượng giảng viên theo đầu
+                                        mối
+                                    </Title>
+                                </div>
+                                <div className="flex-1">
+                                    <StaffByOrg />
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col xs={24} lg={6}>
+                    <div className="bg-white rounded shadow h-full flex flex-col">
+                        <div className="p-4">
+                            <Title level={4}>Tin tức</Title>
+                        </div>
+                        <div className="flex-1 p-2">
+                            <News />
+                        </div>
+                    </div>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} className="p-4">
-                <Col span={12}>
-                    <Title level={4}>
-                        Thống kê số lượng giảng viên theo trình độ
-                    </Title>
-                    <StaffLevel />
-                </Col>
-                <Col span={12}>
-                    <Title level={4}>
-                        Thống kê số lượng học viên theo loại hình đào tạo
-                    </Title>
-                    <TypeOfTraining />
-                </Col>
-            </Row>
-            <Row gutter={[16, 16]} className="p-4">
-                <Col span={24}>
-                    <Title level={4}>
-                        Thống kê số lượng giảng viên theo đầu mối
-                    </Title>
-                    <StaffByOrg />
-                </Col>
-            </Row>
-        </DefaultLayout>
+        </div>
     )
 }
 
-export default Home
+export default Page
+
+Page.getLayout = function getLayout(page: React.ReactElement) {
+    return <DashboardLayout>{page}</DashboardLayout>
+}

@@ -2,10 +2,12 @@ import axios from 'axios'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
 import * as XLSX from 'xlsx'
-import { prisma } from '../..'
+import { prisma } from '..'
 import { CreateFilledTemplateDto } from '../dto/template.dto'
 
-const getBufferFromUrl = async (templateCode: string): Promise<Buffer> => {
+export const getBufferFromUrl = async (
+    templateCode: string
+): Promise<Buffer> => {
     const templateFile = await prisma.templateFile.findFirst({
         where: { code: templateCode }, // Tìm kiếm lớp biên chế
     })
@@ -24,15 +26,10 @@ const getBufferFromUrl = async (templateCode: string): Promise<Buffer> => {
     }
 }
 
-const getCurrentDateForReport = () => {
+export const getCurrentDateForReport = () => {
     const currentDate = new Date()
     const date = String(currentDate.getDate()).padStart(2, '0')
     const month = String(currentDate.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
     const year = currentDate.getFullYear()
     return { date, month, year }
-}
-
-export default {
-    getBufferFromUrl,
-    getCurrentDateForReport,
 }

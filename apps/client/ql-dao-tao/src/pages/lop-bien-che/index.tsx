@@ -346,7 +346,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             },
                             {
                                 title: 'Đơn vị quản lý',
-                                dataIndex: 'ManagementOrganization',
+                                dataIndex: 'managementOrganization',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

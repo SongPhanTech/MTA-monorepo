@@ -53,8 +53,8 @@ export default function SubjectPage() {
             managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
-            ManagementOrganization: true,
-            SubjectGroup: true,
+            managementOrganization: true,
+            subjectGroup: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -228,13 +228,13 @@ export default function SubjectPage() {
                             },
                             {
                                 title: 'Nhóm môn học',
-                                dataIndex: 'SubjectGroup',
+                                dataIndex: 'subjectGroup',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'ManagementOrganization',
+                                dataIndex: 'managementOrganization',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

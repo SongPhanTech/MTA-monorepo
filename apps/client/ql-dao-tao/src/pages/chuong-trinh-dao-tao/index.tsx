@@ -381,7 +381,7 @@ export default function CurriculumPage() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'ManagementOrganization',
+                                dataIndex: 'managementOrganization',
                                 width: 150,
                                 render: (value: any, record: any) => {
                                     if (record.isFilterRow) {
