@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Pie } from '@ant-design/plots'
 
-const PieChart = () => {
+interface ChartProps {
+    className?: string
+}
+
+const PieChart: React.FC<ChartProps> = ({ className }) => {
     const [data, setData] = useState<any>([])
 
     useEffect(() => {
@@ -23,14 +27,17 @@ const PieChart = () => {
         },
         legend: {
             color: {
-                title: false,
                 position: 'right',
-                rowPadding: 5,
+                // rowPadding: 4,
             },
         },
     }
 
-    return <Pie {...config} />
+    return (
+        <div className={className}>
+            <Pie {...config} />
+        </div>
+    )
 }
 
 export default PieChart

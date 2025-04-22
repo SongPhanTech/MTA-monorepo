@@ -17,7 +17,10 @@ const { Header, Content } = Layout
 const DashboardLayout = ({
     children,
     className,
-}: { children: ReactNode; className?: string }) => {
+}: {
+    children: ReactNode
+    className?: string
+}) => {
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -56,7 +59,11 @@ const DashboardLayout = ({
             }
             onIdle={signOutAction}
         >
-            <Layout style={{ minHeight: '100vh' }} hasSider className='bg-blue-50'>
+            <Layout
+                style={{ minHeight: '100vh' }}
+                hasSider
+                className="bg-blue-50"
+            >
                 <SiderDefaultLayout
                     logo1={
                         <Image
@@ -97,11 +104,7 @@ const DashboardLayout = ({
                             <AvatarDropdown />
                         </div>
                     </Header>
-                    <Content className="mx-2">
-                        <div>
-                            {children}
-                        </div>
-                    </Content>
+                    <Content className="mx-2">{children}</Content>
                 </Layout>
             </Layout>
         </IdleTimerProvider>

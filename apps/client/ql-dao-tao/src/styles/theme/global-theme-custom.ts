@@ -1,4 +1,4 @@
-import { Header } from "antd/es/layout/layout"
+import { Header } from 'antd/es/layout/layout'
 
 const lightThemeCustom = {
     token: {
@@ -19,7 +19,7 @@ const lightThemeCustom = {
         Layout: {
             bodyBg: '#F3F6FB',
             headerPadding: '0 20px',
-        }
+        },
     },
 }
 
