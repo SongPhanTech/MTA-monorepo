@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import type React from 'react'
+import { useState, useEffect } from 'react'
 import { Pie } from '@ant-design/plots'
 
 interface ChartProps {
@@ -6,7 +7,12 @@ interface ChartProps {
 }
 
 const PieChart: React.FC<ChartProps> = ({ className }) => {
-    const [data, setData] = useState<any>([])
+    interface DataItem {
+        type: string
+        value: number
+    }
+
+    const [data, setData] = useState<DataItem[]>([])
 
     useEffect(() => {
         setTimeout(() => {
