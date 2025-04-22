@@ -31,10 +31,10 @@ export type FilterProps = {
 }
 
 interface Props {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  onFilterChange: any;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  onSearchChange: any;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    onFilterChange: any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    onSearchChange: any
 }
 const options = [
     {
@@ -44,9 +44,9 @@ const options = [
 ]
 
 const FilterLecture = (props: Props) => {
-  const { onFilterChange, onSearchChange } = props;
-  const [form] = Form.useForm<FilterProps>();
-  const [open, setOpen] = useState(false);
+    const { onFilterChange, onSearchChange } = props
+    const [form] = Form.useForm<FilterProps>()
+    const [open, setOpen] = useState(false)
 
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -174,4 +174,15 @@ const FilterLecture = (props: Props) => {
         </div>
     )
 
-export default FilterLecture;
+    return (
+        <Popover
+            content={filterContent}
+            trigger="click"
+            open={open}
+            onOpenChange={handleOpenChange}
+        >
+            <Button icon={<FilterOutlined />}>Bộ lọc</Button>
+        </Popover>
+    )
+}
+export default FilterLecture
