@@ -8,7 +8,7 @@ model SchoolYear extends Base {
   name      String
   startDate DateTime
   endDate   DateTime?
-  Semesters Semester[]
+  semesters Semester[]
   milestone Milestone[]
   @@schema("ql-dao-tao")
 }
@@ -16,7 +16,7 @@ model SchoolYear extends Base {
 // kỳ học
 model Semester extends Base {
   name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
   endDate      DateTime?
@@ -29,7 +29,7 @@ model Milestone extends Base {
   period       String? // Thời gian thực hiện
   startDate    DateTime
   endDate      DateTime
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   @@schema("ql-dao-tao")
 }
@@ -47,13 +47,13 @@ model TrainingCourse extends Base {
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
-  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
+  trainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
   trainingTypeId       String
-  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId      String
-  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
+  trainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
   trainingFormId       String
   status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
@@ -63,10 +63,10 @@ model TrainingCourse extends Base {
 model FixedClass extends Base {
   name                     String
 
-  TrainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id]) // Khóa học
   trainingCourseId         String?
 
-  ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String?
 
   classSize                Int                 @default(0) // sĩ số
@@ -87,19 +87,19 @@ model Curriculum extends Base {
   status                   CurriculumStatus    @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   startDate                DateTime
   endDate                  DateTime?
-  ManagementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
-  TrainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId     String
-  TrainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId          String
-  TraingTime               TrainingTime        @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
+  trainingTime             TrainingTime        @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
   trainingTimeId           String
 
-  TrainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
+  trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
   trainingMajorId          String
 
-  infomation               String   //Thông tin
+  information              String   //Thông tin
   documentPath             String?  // Đường dẫn tài liệu
   renderPath               String?  // Đường dẫn tài liệu kết xuất
 
@@ -113,10 +113,10 @@ model CurriculumVersion extends Base {
   status                   CurriculumStatus           @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   startDate                DateTime
   endDate                  DateTime?
-  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
+  curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
   curriculumId             String
 
-  infomation               String?   //Thông tin
+  information              String?   //Thông tin
   documentPath             String?  // Đường dẫn tài liệu
   renderPath               String?  // Đường dẫn tài liệu kết xuất
 
@@ -129,11 +129,11 @@ model CurriculumVersion extends Base {
 model SubjectGroup extends Base {
   name                     String
 
-  ManagementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
-  infomation               String?   //Thông tin
+  information              String?   //Thông tin
 
-  Subject                  Subject[]
+  subject                  Subject[]
   @@schema("ql-dao-tao")
 }
 
@@ -161,66 +161,66 @@ model Subject extends Base {
   numberOfInternship       Int                        @default(0)   // số tiết thực tập
   numberOfOther            Int                        @default(0)    // số tiết khác
 
-  ManagementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
 
-  SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
+  subjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
   subjectGroupId           String
 
   curriculumVersionSubject CurriculumVersionSubject[]
   @@schema("ql-dao-tao")
 
-	prerequisiteSubject PrerequisiteSubject[]
-	coRequisiteSubject CoRequisiteSubject[]
+  prerequisiteSubject      PrerequisiteSubject[]
+  coRequisiteSubject       CoRequisiteSubject[]
 }
 
 enum CurriculumVersionSubjectType { // loại môn học
-  NONE // không xác định
-  MANDATORY // bắt buộc
-  OPTIONAL // tự chọn
-  ELECTIVE // tự chọn tự do
+  None // không xác định
+  Mandatory // bắt buộc
+  Optional // tự chọn
+  Elective // tự chọn tự do
   @@schema("ql-dao-tao")
 }
 
 // môn học chương trình
 model CurriculumVersionSubject extends Base {
-  CurriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id]) // Chương trình giảng dạy
+  curriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id]) // Chương trình giảng dạy
   curriculumVersionId String
 
-  Subject             Subject           @relation(fields: [subjectId], references: [id])
+  subject             Subject               @relation(fields: [subjectId], references: [id])
   subjectId           String
 
-  TraningBlock        TrainingBlock?    @relation(fields: [traningBlockId], references: [id]) // Khối kiến thức
-  traningBlockId      String?
+  trainingBlock       TrainingBlock?        @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
+  trainingBlockId     String?
 
-  infomation          String?   //Thông tin
+  information         String?   //Thông tin
   documentPath        String?  // Đường dẫn tài liệu
   renderPath          String?  // Đường dẫn tài liệu kết xuất
   @@schema("ql-dao-tao")
 
-	coRequisiteSubject CoRequisiteSubject[]
+  coRequisiteSubject  CoRequisiteSubject[]
 
-	prerequisiteSubject PrerequisiteSubject[]
+  prerequisiteSubject PrerequisiteSubject[]
 }
 
 // Môn học tiên quyết
 model PrerequisiteSubject extends Base {
-  CurriculumVersionSubject CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
+  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
   curriculumVersionSubjectId String
 
-  Subject                   Subject @relation(fields: [subjectId], references: [id]) // Môn học
-  subjectId                 String
+  subject                    Subject                  @relation(fields: [subjectId], references: [id]) // Môn học
+  subjectId                  String
 
   @@schema("ql-dao-tao")
 }
 
 // Môn học song hành
 model CoRequisiteSubject extends Base {
-  CurriculumVersionSubject CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
+  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id]) // Môn học chương trình
   curriculumVersionSubjectId String
 
-  Subject                   Subject @relation(fields: [subjectId], references: [id]) // Môn học
-  subjectId                 String
+  subject                    Subject                  @relation(fields: [subjectId], references: [id]) // Môn học
+  subjectId                  String
 
   @@schema("ql-dao-tao")
 }

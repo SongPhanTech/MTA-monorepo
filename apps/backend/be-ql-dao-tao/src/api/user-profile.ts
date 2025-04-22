@@ -1,4 +1,8 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import {
+    updateFileUserProfile,
+    uploadFileUserProfile,
+} from '../services/user-profile.service'
 
 const uploadExcelCreateUserProfile = createRoute({
     operationId: 'uploadExcelCreateUserProfile',
@@ -59,20 +63,20 @@ const uploadExcelUpdateUserProfile = createRoute({
     },
     responses: {
         200: {
-            content: {
-                'application/json': {
-                    schema: z.array(z.any()),
-                },
-            },
+            content: { 'application/json': { schema: z.array(z.any()) } },
             description: 'Tải danh sách thành công',
         },
-        400: {
-            description: 'Invalid file upload',
-        },
+        400: { description: 'Invalid file upload' },
     },
 })
 
-export default {
-    uploadExcelCreateUserProfile,
-    uploadExcelUpdateUserProfile,
-}
+const app = new OpenAPIHono({ strict: false })
+
+app.openapi(uploadExcelCreateUserProfile, async (c) => {
+    const data = await uploadFileUserProfile(c)
+    return data
+}).openapi(uploadExcelUpdateUserProfile, async (c) => {
+    const data = await updateFileUserProfile(c)
+    return data
+})
+export default app

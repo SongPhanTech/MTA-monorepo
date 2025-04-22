@@ -1,10 +1,9 @@
-import { prisma } from '../..'
 import * as XLSX from 'xlsx'
-import templateService from './template.service'
+import { prisma } from '..'
+import { getBufferFromUrl, getCurrentDateForReport } from './template.service'
 
-import { promises as fs } from 'fs'
-import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
+import PizZip from 'pizzip'
 
 const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
     const body = await context.req.parseBody() // Parse multipart form data
@@ -88,7 +87,7 @@ const uploadExcelCreateFixedClass = async (context: any): Promise<any> => {
                                 code: row[2], // Mã lớp
                                 classSize: (() => {
                                     console.log('row[3]', row[3], row[0])
-                                    const size = parseInt(row[3], 10)
+                                    const size = Number.parseInt(row[3], 10)
                                     return isNaN(size) ? 0 : size
                                 })(), // Sĩ số converted to int
                             },
@@ -268,8 +267,7 @@ const exportFixedClassByCourse = async (context: any): Promise<any> => {
         headers: {
             'Content-Type':
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'Content-Disposition':
-                'attachment; filename="DSLop_' + fixedClass.name + '.docx"',
+            'Content-Disposition': `attachment; filename="DSLop_${fixedClass.name}.docx"`,
         },
     })
 }
