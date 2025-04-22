@@ -221,7 +221,7 @@ const exportFixedClassByCourse = async (context: any): Promise<any> => {
         console.log('Không tìm thấy lớp biên chế nào', fixedClassId)
         return 404
     }
-    const { date, month, year } = templateService.getCurrentDateForReport()
+    const { date, month, year } = getCurrentDateForReport()
     // console.log("fixedClass", date, month, year, fixedClass.name);
     // dạng bảng
 

@@ -15,7 +15,10 @@
 //                 'multipart/form-data': {
 //                     schema: z
 //                         .object({
-//                             file: z.any(), // file upload
+//                             file: z.instanceof(File).openapi({
+//                                 type: 'string',
+//                                 format: 'binary',
+//                             }),
 //                             trainingCourseId: z.string(), // loại thông tin
 //                         })
 //                         .openapi('uploadExcelCreateFixedClass'),
