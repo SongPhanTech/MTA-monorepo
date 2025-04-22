@@ -314,7 +314,7 @@ model SchoolYear {
   name        String
   startDate   DateTime
   endDate     DateTime?
-  Semesters   Semester[]
+  semesters   Semester[]
   milestone   Milestone[]
 
   @@schema("ql-dao-tao")
@@ -367,7 +367,7 @@ model TrainingCourse {
   trainingObjectTypeId String
   trainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId       String
-  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
+  trainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String
   trainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String
@@ -435,7 +435,7 @@ model CurriculumVersion {
   status                   CurriculumStatus           @default(ACTIVE)
   startDate                DateTime
   endDate                  DateTime?
-  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
+  curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
   curriculumId             String
   information              String?
   documentPath             String?
@@ -703,7 +703,7 @@ model UserProfile {
   updatedAt              DateTime            @updatedAt()
   user                   User?               @relation(fields: [userId], references: [id])
   userId                 String?             @unique()
-  UserType               UserType            @relation(fields: [userTypeId], references: [id])
+  userType               UserType            @relation(fields: [userTypeId], references: [id])
   userTypeId             String
   avatar                 String?
   firstName              String

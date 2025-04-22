@@ -133,7 +133,7 @@ Table SchoolYear {
   name String [not null]
   startDate DateTime [not null]
   endDate DateTime
-  Semesters Semester [not null]
+  semesters Semester [not null]
   milestone Milestone [not null]
 }
 
@@ -180,7 +180,7 @@ Table TrainingCourse {
   trainingObjectTypeId String [not null]
   trainingType TrainingType [not null]
   trainingTypeId String [not null]
-  TrainingLevel TrainingLevel [not null]
+  trainingLevel TrainingLevel [not null]
   trainingLevelId String [not null]
   trainingForm TrainingForm [not null]
   trainingFormId String [not null]
@@ -242,7 +242,7 @@ Table CurriculumVersion {
   status CurriculumStatus [not null, default: 'ACTIVE']
   startDate DateTime [not null]
   endDate DateTime
-  Curriculum Curriculum [not null]
+  curriculum Curriculum [not null]
   curriculumId String [not null]
   information String
   documentPath String
@@ -474,7 +474,7 @@ Table UserProfile {
   updatedAt DateTime [not null]
   user User
   userId String [unique]
-  UserType UserType [not null]
+  userType UserType [not null]
   userTypeId String [not null]
   avatar String
   firstName String [not null]
