@@ -1,3 +1,5 @@
+import { Header } from 'antd/es/layout/layout'
+
 const lightThemeCustom = {
     token: {
         colorPrimary: '#005f37',
@@ -13,6 +15,10 @@ const lightThemeCustom = {
             itemSelectedColor: '#fff',
             itemSelectedBg: '#005f37',
             subMenuItemSelectedColor: '#005f37',
+        },
+        Layout: {
+            bodyBg: '#F3F6FB',
+            headerPadding: '0 20px',
         },
     },
 }
