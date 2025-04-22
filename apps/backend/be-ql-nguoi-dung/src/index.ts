@@ -6,6 +6,7 @@ import type { Context } from 'hono'
 import { contextStorage, getContext } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
+import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry, collectDefaultMetrics } from 'prom-client'
@@ -101,6 +102,8 @@ app.onError((err, c) => {
 
     return c.json({ message: err.message }, 500)
 })
+
+showRoutes(app, { verbose: true })
 
 export default {
     fetch: app.fetch,

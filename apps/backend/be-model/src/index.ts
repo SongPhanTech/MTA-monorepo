@@ -5,11 +5,13 @@ import type { Context } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
+import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+
+import MinIOApp from './api/minio'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
-import MinIOApp from './api/minio'
 import { setupOpenApi } from './utils/openapi'
 
 export const prisma = new PrismaClient()
@@ -64,6 +66,8 @@ app.onError((err, c) => {
 
     return c.json({ message: err.message }, 500)
 })
+
+showRoutes(app, { verbose: true })
 
 export default {
     fetch: app.fetch,

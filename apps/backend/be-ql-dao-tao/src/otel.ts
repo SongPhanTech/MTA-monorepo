@@ -26,11 +26,11 @@ if (baseUrl && username && password) {
 
     const provider = new WebTracerProvider({
         resource: new Resource({
-            'service.name': 'be-ql-dao-tao',
+            'service.name': 'mta-be-ql-dao-tao',
         }),
         spanProcessors: [
             new SimpleSpanProcessor(traceExporter),
-            // new SimpleSpanProcessor(new ConsoleSpanExporter()),
+            new SimpleSpanProcessor(new ConsoleSpanExporter()),
         ],
     })
 
