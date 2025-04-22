@@ -216,7 +216,6 @@ export default function SchoolYearPage({
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                         onRowClick={(record) => {
-                            console.log(record, 'nè he')
                             setSelectedSchoolYear(record)
                         }}
                     />
