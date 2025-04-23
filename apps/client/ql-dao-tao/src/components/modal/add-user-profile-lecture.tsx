@@ -59,7 +59,9 @@ const AddUserProfileLecture = () => {
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function onOk(output?: PutUserProfile) {
-        console.log(userTypeData?.find((type: any) => type.code === code))
+        console.log('userTypeData', userTypeData)
+        console.log('code', code)
+        // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
         // const resPresignedUrl = await fetchGeneratePresignedUrl({
         //   body: {

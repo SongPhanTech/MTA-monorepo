@@ -6,7 +6,7 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["he-thong", "ql-danh-muc", "ql-nguoi-dung", "ql-dao-tao", "tro-ly-ao"]
+  schemas  = ["he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
 }
 
 generator client {
@@ -166,7 +166,20 @@ enum TemplateFileType {
   @@schema("ql-danh-muc")
 }
 
-model Province {
+model Config {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  key         String    @unique()
+  value       String
+
+  @@schema("he-thong")
+}
+
+model SurveyObjectType {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
@@ -174,12 +187,12 @@ model Province {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-  Commune     Commune[]
+  survey      Survey[]
 
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
-model Commune {
+model SurveyTopic {
   id          String    @id() @default(cuid())
   code        String?
   description String?   @db.Text()
@@ -187,121 +200,74 @@ model Commune {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-  province    Province  @relation(fields: [provinceId], references: [id])
-  provinceId  String
+  survey      Survey[]
 
-  @@unique([name, provinceId])
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
-model Level {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+model SurveyQuestionType {
+  id             String           @id() @default(cuid())
+  code           String?
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt()
+  name           String
+  surveyQuestion SurveyQuestion[]
 
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
-model Rank {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model AcademicDegreeType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model AcademicRankType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model Position {
-  id               String             @id() @default(cuid())
+model Survey {
+  id               String           @id() @default(cuid())
   code             String?
-  description      String?            @db.Text()
+  description      String?          @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt()
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt()
   name             String
-  organizationUser OrganizationUser[]
+  startDate        DateTime
+  endDate          DateTime?
+  surveyObjectType SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
+  surveyObjectId   String
+  surveyTopic      SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId    String
+  surveyQuestion   SurveyQuestion[]
 
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
-model PositionCPV {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+model SurveyQuestion {
+  id                   String             @id() @default(cuid())
+  code                 String?
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt()
+  name                 String
+  surveyQuestionType   SurveyQuestionType @relation(fields: [surveyQuestionTypeId], references: [id])
+  surveyQuestionTypeId String
+  survey               Survey             @relation(fields: [surveyId], references: [id])
+  surveyId             String
+  surveyAnswer         SurveyAnswer[]
 
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
-model OrganizationType {
-  id            String         @id() @default(cuid())
-  code          String?
-  description   String?        @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt()
-  name          String
-  organizations Organization[]
-
-  @@schema("ql-danh-muc")
-}
-
-model Organization {
-  id               String             @id() @default(cuid())
+model SurveyAnswer {
+  id               String         @id() @default(cuid())
   code             String?
-  description      String?            @db.Text()
+  description      String?        @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt()
-  name             String             @unique()
-  type             OrganizationType   @relation(fields: [typeId], references: [id])
-  typeId           String
-  parent           Organization?      @relation("ParentChild", fields: [organizationId], references: [id])
-  parentId         String?
-  children         Organization[]     @relation("ParentChild")
-  address          String?
-  curriculum       Curriculum[]
-  fixedClass       FixedClass[]
-  subject          Subject[]
-  subjectGroup     SubjectGroup[]
-  organizationUser OrganizationUser[]
-  organizationId   String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt()
+  answer           String?
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
+  userAnswered     User?          @relation("SurveyAnswer", fields: [userId], references: [id])
+  userId           String?
 
-  @@schema("ql-danh-muc")
+  @@schema("khao-thi")
 }
 
 model SchoolYear {
@@ -490,18 +456,19 @@ model Subject {
 }
 
 model CurriculumVersionSubject {
-  id                  String                @id() @default(cuid())
+  id                  String                       @id() @default(cuid())
   code                String?
-  description         String?               @db.Text()
+  description         String?                      @db.Text()
   deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt()
-  curriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id])
+  createdAt           DateTime                     @default(now())
+  updatedAt           DateTime                     @updatedAt()
+  curriculumVersion   CurriculumVersion            @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId String
-  subject             Subject               @relation(fields: [subjectId], references: [id])
+  subject             Subject                      @relation(fields: [subjectId], references: [id])
   subjectId           String
-  trainingBlock       TrainingBlock?        @relation(fields: [trainingBlockId], references: [id])
+  trainingBlock       TrainingBlock?               @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId     String?
+  type                CurriculumVersionSubjectType @default(None)
   information         String?
   documentPath        String?
   renderPath          String?
@@ -694,6 +661,144 @@ model TrainingKPI {
   @@schema("ql-danh-muc")
 }
 
+model Province {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  Commune     Commune[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Commune {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  province    Province  @relation(fields: [provinceId], references: [id])
+  provinceId  String
+
+  @@unique([name, provinceId])
+  @@schema("ql-danh-muc")
+}
+
+model Level {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model Rank {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicDegreeType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicRankType {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model Position {
+  id               String             @id() @default(cuid())
+  code             String?
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
+  name             String
+  organizationUser OrganizationUser[]
+
+  @@schema("ql-danh-muc")
+}
+
+model PositionCPV {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model OrganizationType {
+  id            String         @id() @default(cuid())
+  code          String?
+  description   String?        @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  name          String
+  organizations Organization[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Organization {
+  id               String             @id() @default(cuid())
+  code             String?
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
+  name             String             @unique()
+  type             OrganizationType   @relation(fields: [typeId], references: [id])
+  typeId           String
+  parent           Organization?      @relation("ParentChild", fields: [organizationId], references: [id])
+  parentId         String?
+  children         Organization[]     @relation("ParentChild")
+  address          String?
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
+  subject          Subject[]
+  subjectGroup     SubjectGroup[]
+  organizationUser OrganizationUser[]
+  organizationId   String?
+
+  @@schema("ql-danh-muc")
+}
+
 model UserProfile {
   id                     String              @id() @default(cuid())
   code                   String?
@@ -809,6 +914,7 @@ model User {
   documentApproved Document[]     @relation("DocumentApproved")
   fAQUploaded      FAQ[]          @relation("FAQUploaded")
   fAQApproved      FAQ[]          @relation("FAQApproved")
+  surveyAnswered   SurveyAnswer[] @relation("SurveyAnswer")
 
   @@schema("ql-nguoi-dung")
 }
@@ -1052,33 +1158,6 @@ model UserType {
   @@schema("ql-danh-muc")
 }
 
-model BlockedIp {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  ipAddress   String    @unique()
-  reason      String?   @db.Text()
-  expiresAt   DateTime?
-
-  @@schema("ql-nguoi-dung")
-}
-
-model Config {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  key         String    @unique()
-  value       String
-
-  @@schema("he-thong")
-}
-
 model TemplateFile {
   id          String            @id() @default(cuid())
   code        String?
@@ -1093,4 +1172,18 @@ model TemplateFile {
   numberField Int?              @default(0)
 
   @@schema("ql-danh-muc")
+}
+
+model BlockedIp {
+  id          String    @id() @default(cuid())
+  code        String?
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  ipAddress   String    @unique()
+  reason      String?   @db.Text()
+  expiresAt   DateTime?
+
+  @@schema("ql-nguoi-dung")
 }

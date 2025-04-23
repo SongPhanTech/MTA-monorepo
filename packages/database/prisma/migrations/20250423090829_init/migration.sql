@@ -2,6 +2,9 @@
 CREATE SCHEMA IF NOT EXISTS "he-thong";
 
 -- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "khao-thi";
+
+-- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "ql-danh-muc";
 
 -- CreateSchema
@@ -23,7 +26,7 @@ CREATE TYPE "ql-dao-tao"."CurriculumStatus" AS ENUM ('ACTIVE', 'INACTIVATED');
 CREATE TYPE "ql-dao-tao"."SubjectEquivalentType" AS ENUM ('NONE', 'OneByOne', 'TwoByOne', 'ThreeByOne', 'FourByOne', 'OneByTwo', 'OneByThree');
 
 -- CreateEnum
-CREATE TYPE "ql-dao-tao"."CurriculumVersionSubjectType" AS ENUM ('NONE', 'MANDATORY', 'OPTIONAL', 'ELECTIVE');
+CREATE TYPE "ql-dao-tao"."CurriculumVersionSubjectType" AS ENUM ('None', 'Mandatory', 'Optional', 'Elective');
 
 -- CreateEnum
 CREATE TYPE "ql-nguoi-dung"."FixedClassStudentStatus" AS ENUM ('ENROLLED', 'GRADUATED', 'DEFERRED_STUDY', 'SUSPENDED_STUDY', 'WITHDRAWN', 'TRANSFERRED', 'PENDING_GRADUATION_REVIEW', 'ACADEMIC_SUSPENSION');
@@ -59,20 +62,21 @@ CREATE TYPE "ql-danh-muc"."Gender" AS ENUM ('Male', 'Female');
 CREATE TYPE "ql-danh-muc"."TemplateFileType" AS ENUM ('UPLOAD', 'DOWNLOAD', 'LOGS');
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."Province" (
+CREATE TABLE "he-thong"."Config" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
 
-    CONSTRAINT "Province_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Config_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."Commune" (
+CREATE TABLE "khao-thi"."SurveyObjectType" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
@@ -80,13 +84,12 @@ CREATE TABLE "ql-danh-muc"."Commune" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
-    "provinceId" TEXT NOT NULL,
 
-    CONSTRAINT "Commune_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SurveyObjectType_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."Level" (
+CREATE TABLE "khao-thi"."SurveyTopic" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
@@ -95,11 +98,11 @@ CREATE TABLE "ql-danh-muc"."Level" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "Level_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SurveyTopic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."Rank" (
+CREATE TABLE "khao-thi"."SurveyQuestionType" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
@@ -108,11 +111,11 @@ CREATE TABLE "ql-danh-muc"."Rank" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "Rank_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SurveyQuestionType_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."AcademicDegreeType" (
+CREATE TABLE "khao-thi"."Survey" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
@@ -120,12 +123,16 @@ CREATE TABLE "ql-danh-muc"."AcademicDegreeType" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3),
+    "surveyObjectId" TEXT NOT NULL,
+    "surveyTopicId" TEXT NOT NULL,
 
-    CONSTRAINT "AcademicDegreeType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Survey_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."AcademicRankType" (
+CREATE TABLE "khao-thi"."SurveyQuestion" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
@@ -133,64 +140,25 @@ CREATE TABLE "ql-danh-muc"."AcademicRankType" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
+    "surveyQuestionTypeId" TEXT NOT NULL,
+    "surveyId" TEXT NOT NULL,
 
-    CONSTRAINT "AcademicRankType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SurveyQuestion_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ql-danh-muc"."Position" (
+CREATE TABLE "khao-thi"."SurveyAnswer" (
     "id" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
     "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
+    "answer" TEXT,
+    "surveyQuestionId" TEXT NOT NULL,
+    "userId" TEXT,
 
-    CONSTRAINT "Position_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ql-danh-muc"."PositionCPV" (
-    "id" TEXT NOT NULL,
-    "code" TEXT,
-    "description" TEXT,
-    "deletedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "PositionCPV_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ql-danh-muc"."OrganizationType" (
-    "id" TEXT NOT NULL,
-    "code" TEXT,
-    "description" TEXT,
-    "deletedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "OrganizationType_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ql-danh-muc"."Organization" (
-    "id" TEXT NOT NULL,
-    "code" TEXT,
-    "description" TEXT,
-    "deletedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-    "typeId" TEXT NOT NULL,
-    "parentId" TEXT,
-    "address" TEXT,
-    "organizationId" TEXT,
-
-    CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SurveyAnswer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -294,7 +262,7 @@ CREATE TABLE "ql-dao-tao"."Curriculum" (
     "trainingLevelId" TEXT NOT NULL,
     "trainingTimeId" TEXT NOT NULL,
     "trainingMajorId" TEXT NOT NULL,
-    "infomation" TEXT NOT NULL,
+    "information" TEXT NOT NULL,
     "documentPath" TEXT,
     "renderPath" TEXT,
 
@@ -314,7 +282,7 @@ CREATE TABLE "ql-dao-tao"."CurriculumVersion" (
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3),
     "curriculumId" TEXT NOT NULL,
-    "infomation" TEXT,
+    "information" TEXT,
     "documentPath" TEXT,
     "renderPath" TEXT,
 
@@ -331,7 +299,7 @@ CREATE TABLE "ql-dao-tao"."SubjectGroup" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "managementOrganizationId" TEXT NOT NULL,
-    "infomation" TEXT,
+    "information" TEXT,
 
     CONSTRAINT "SubjectGroup_pkey" PRIMARY KEY ("id")
 );
@@ -370,8 +338,9 @@ CREATE TABLE "ql-dao-tao"."CurriculumVersionSubject" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "curriculumVersionId" TEXT NOT NULL,
     "subjectId" TEXT NOT NULL,
-    "traningBlockId" TEXT,
-    "infomation" TEXT,
+    "trainingBlockId" TEXT,
+    "type" "ql-dao-tao"."CurriculumVersionSubjectType" NOT NULL DEFAULT 'None',
+    "information" TEXT,
     "documentPath" TEXT,
     "renderPath" TEXT,
 
@@ -563,6 +532,141 @@ CREATE TABLE "ql-danh-muc"."TrainingKPI" (
 );
 
 -- CreateTable
+CREATE TABLE "ql-danh-muc"."Province" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Province_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."Commune" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+    "provinceId" TEXT NOT NULL,
+
+    CONSTRAINT "Commune_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."Level" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Level_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."Rank" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Rank_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."AcademicDegreeType" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "AcademicDegreeType_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."AcademicRankType" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "AcademicRankType_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."Position" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Position_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."PositionCPV" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "PositionCPV_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."OrganizationType" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "OrganizationType_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-danh-muc"."Organization" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+    "typeId" TEXT NOT NULL,
+    "parentId" TEXT,
+    "address" TEXT,
+    "organizationId" TEXT,
+
+    CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ql-nguoi-dung"."UserProfile" (
     "id" TEXT NOT NULL,
     "code" TEXT,
@@ -572,7 +676,7 @@ CREATE TABLE "ql-nguoi-dung"."UserProfile" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT,
     "userTypeId" TEXT NOT NULL,
-    "avaratar" TEXT,
+    "avatar" TEXT,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "dateOfBirth" TIMESTAMP(3),
@@ -702,6 +806,20 @@ CREATE TABLE "ql-nguoi-dung"."Permission" (
     "disabled" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Permission_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tro-ly-ao"."ChatBotConfig" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+
+    CONSTRAINT "ChatBotConfig_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -885,35 +1003,6 @@ CREATE TABLE "ql-danh-muc"."UserType" (
 );
 
 -- CreateTable
-CREATE TABLE "ql-nguoi-dung"."BlockedIp" (
-    "id" TEXT NOT NULL,
-    "code" TEXT,
-    "description" TEXT,
-    "deletedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "ipAddress" TEXT NOT NULL,
-    "reason" TEXT,
-    "expiresAt" TIMESTAMP(3),
-
-    CONSTRAINT "BlockedIp_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "he-thong"."Config" (
-    "id" TEXT NOT NULL,
-    "code" TEXT,
-    "description" TEXT,
-    "deletedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "key" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
-
-    CONSTRAINT "Config_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "ql-danh-muc"."TemplateFile" (
     "id" TEXT NOT NULL,
     "code" TEXT,
@@ -928,6 +1017,21 @@ CREATE TABLE "ql-danh-muc"."TemplateFile" (
     "numberField" INTEGER DEFAULT 0,
 
     CONSTRAINT "TemplateFile_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ql-nguoi-dung"."BlockedIp" (
+    "id" TEXT NOT NULL,
+    "code" TEXT,
+    "description" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "ipAddress" TEXT NOT NULL,
+    "reason" TEXT,
+    "expiresAt" TIMESTAMP(3),
+
+    CONSTRAINT "BlockedIp_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -955,6 +1059,9 @@ CREATE TABLE "ql-nguoi-dung"."_PermissionToRole" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Config_key_key" ON "he-thong"."Config"("key");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Commune_name_provinceId_key" ON "ql-danh-muc"."Commune"("name", "provinceId");
 
 -- CreateIndex
@@ -979,13 +1086,13 @@ CREATE UNIQUE INDEX "User_phone_key" ON "ql-nguoi-dung"."User"("phone");
 CREATE UNIQUE INDEX "Permission_name_permissionType_key" ON "ql-nguoi-dung"."Permission"("name", "permissionType");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BlockedIp_ipAddress_key" ON "ql-nguoi-dung"."BlockedIp"("ipAddress");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Config_key_key" ON "he-thong"."Config"("key");
+CREATE UNIQUE INDEX "ChatBotConfig_name_key" ON "tro-ly-ao"."ChatBotConfig"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TemplateFile_path_key" ON "ql-danh-muc"."TemplateFile"("path");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "BlockedIp_ipAddress_key" ON "ql-nguoi-dung"."BlockedIp"("ipAddress");
 
 -- CreateIndex
 CREATE INDEX "_GroupToUser_B_index" ON "ql-nguoi-dung"."_GroupToUser"("B");
@@ -997,13 +1104,22 @@ CREATE INDEX "_GroupToRole_B_index" ON "ql-nguoi-dung"."_GroupToRole"("B");
 CREATE INDEX "_PermissionToRole_B_index" ON "ql-nguoi-dung"."_PermissionToRole"("B");
 
 -- AddForeignKey
-ALTER TABLE "ql-danh-muc"."Commune" ADD CONSTRAINT "Commune_provinceId_fkey" FOREIGN KEY ("provinceId") REFERENCES "ql-danh-muc"."Province"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_surveyObjectId_fkey" FOREIGN KEY ("surveyObjectId") REFERENCES "khao-thi"."SurveyObjectType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-danh-muc"."Organization" ADD CONSTRAINT "Organization_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "ql-danh-muc"."OrganizationType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "khao-thi"."Survey" ADD CONSTRAINT "Survey_surveyTopicId_fkey" FOREIGN KEY ("surveyTopicId") REFERENCES "khao-thi"."SurveyTopic"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-danh-muc"."Organization" ADD CONSTRAINT "Organization_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "ql-danh-muc"."Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "khao-thi"."SurveyQuestion" ADD CONSTRAINT "SurveyQuestion_surveyQuestionTypeId_fkey" FOREIGN KEY ("surveyQuestionTypeId") REFERENCES "khao-thi"."SurveyQuestionType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."SurveyQuestion" ADD CONSTRAINT "SurveyQuestion_surveyId_fkey" FOREIGN KEY ("surveyId") REFERENCES "khao-thi"."Survey"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."SurveyAnswer" ADD CONSTRAINT "SurveyAnswer_surveyQuestionId_fkey" FOREIGN KEY ("surveyQuestionId") REFERENCES "khao-thi"."SurveyQuestion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "khao-thi"."SurveyAnswer" ADD CONSTRAINT "SurveyAnswer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "ql-nguoi-dung"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."Semester" ADD CONSTRAINT "Semester_schoolYearId_fkey" FOREIGN KEY ("schoolYearId") REFERENCES "ql-dao-tao"."SchoolYear"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1063,7 +1179,7 @@ ALTER TABLE "ql-dao-tao"."CurriculumVersionSubject" ADD CONSTRAINT "CurriculumVe
 ALTER TABLE "ql-dao-tao"."CurriculumVersionSubject" ADD CONSTRAINT "CurriculumVersionSubject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "ql-dao-tao"."Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ql-dao-tao"."CurriculumVersionSubject" ADD CONSTRAINT "CurriculumVersionSubject_traningBlockId_fkey" FOREIGN KEY ("traningBlockId") REFERENCES "ql-danh-muc"."TrainingBlock"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ql-dao-tao"."CurriculumVersionSubject" ADD CONSTRAINT "CurriculumVersionSubject_trainingBlockId_fkey" FOREIGN KEY ("trainingBlockId") REFERENCES "ql-danh-muc"."TrainingBlock"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."PrerequisiteSubject" ADD CONSTRAINT "PrerequisiteSubject_curriculumVersionSubjectId_fkey" FOREIGN KEY ("curriculumVersionSubjectId") REFERENCES "ql-dao-tao"."CurriculumVersionSubject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1076,6 +1192,15 @@ ALTER TABLE "ql-dao-tao"."CoRequisiteSubject" ADD CONSTRAINT "CoRequisiteSubject
 
 -- AddForeignKey
 ALTER TABLE "ql-dao-tao"."CoRequisiteSubject" ADD CONSTRAINT "CoRequisiteSubject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "ql-dao-tao"."Subject"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-danh-muc"."Commune" ADD CONSTRAINT "Commune_provinceId_fkey" FOREIGN KEY ("provinceId") REFERENCES "ql-danh-muc"."Province"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-danh-muc"."Organization" ADD CONSTRAINT "Organization_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "ql-danh-muc"."OrganizationType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ql-danh-muc"."Organization" ADD CONSTRAINT "Organization_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "ql-danh-muc"."Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ql-nguoi-dung"."UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "ql-nguoi-dung"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

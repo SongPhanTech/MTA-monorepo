@@ -2,7 +2,18 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
-Table Province {
+Table Config {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  key String [unique, not null]
+  value String [not null]
+}
+
+Table SurveyObjectType {
   id String [pk]
   code String
   description String
@@ -10,10 +21,10 @@ Table Province {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  Commune Commune [not null]
+  survey Survey [not null]
 }
 
-Table Commune {
+Table SurveyTopic {
   id String [pk]
   code String
   description String
@@ -21,15 +32,10 @@ Table Commune {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  province Province [not null]
-  provinceId String [not null]
-
-  indexes {
-    (name, provinceId) [unique]
-  }
+  survey Survey [not null]
 }
 
-Table Level {
+Table SurveyQuestionType {
   id String [pk]
   code String
   description String
@@ -37,9 +43,10 @@ Table Level {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  surveyQuestion SurveyQuestion [not null]
 }
 
-Table Rank {
+Table Survey {
   id String [pk]
   code String
   description String
@@ -47,9 +54,16 @@ Table Rank {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  surveyObjectType SurveyObjectType [not null]
+  surveyObjectId String [not null]
+  surveyTopic SurveyTopic [not null]
+  surveyTopicId String [not null]
+  surveyQuestion SurveyQuestion [not null]
 }
 
-Table AcademicDegreeType {
+Table SurveyQuestion {
   id String [pk]
   code String
   description String
@@ -57,70 +71,25 @@ Table AcademicDegreeType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  surveyQuestionType SurveyQuestionType [not null]
+  surveyQuestionTypeId String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
+  surveyAnswer SurveyAnswer [not null]
 }
 
-Table AcademicRankType {
+Table SurveyAnswer {
   id String [pk]
   code String
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table Position {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  organizationUser OrganizationUser [not null]
-}
-
-Table PositionCPV {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table OrganizationType {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  organizations Organization [not null]
-}
-
-Table Organization {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [unique, not null]
-  type OrganizationType [not null]
-  typeId String [not null]
-  parent Organization
-  parentId String
-  children Organization [not null]
-  address String
-  curriculum Curriculum [not null]
-  fixedClass FixedClass [not null]
-  subject Subject [not null]
-  subjectGroup SubjectGroup [not null]
-  organizationUser OrganizationUser [not null]
-  organizationId String
+  answer String
+  surveyQuestion SurveyQuestion [not null]
+  surveyQuestionId String [not null]
+  userAnswered User
+  userId String
 }
 
 Table SchoolYear {
@@ -303,6 +272,7 @@ Table CurriculumVersionSubject {
   subjectId String [not null]
   trainingBlock TrainingBlock
   trainingBlockId String
+  type CurriculumVersionSubjectType [not null, default: 'None']
   information String
   documentPath String
   renderPath String
@@ -465,6 +435,127 @@ Table TrainingKPI {
   name String [not null]
 }
 
+Table Province {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  Commune Commune [not null]
+}
+
+Table Commune {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  province Province [not null]
+  provinceId String [not null]
+
+  indexes {
+    (name, provinceId) [unique]
+  }
+}
+
+Table Level {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table Rank {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table AcademicDegreeType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table AcademicRankType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table Position {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  organizationUser OrganizationUser [not null]
+}
+
+Table PositionCPV {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table OrganizationType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  organizations Organization [not null]
+}
+
+Table Organization {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  type OrganizationType [not null]
+  typeId String [not null]
+  parent Organization
+  parentId String
+  children Organization [not null]
+  address String
+  curriculum Curriculum [not null]
+  fixedClass FixedClass [not null]
+  subject Subject [not null]
+  subjectGroup SubjectGroup [not null]
+  organizationUser OrganizationUser [not null]
+  organizationId String
+}
+
 Table UserProfile {
   id String [pk]
   code String
@@ -574,6 +665,7 @@ Table User {
   documentApproved Document [not null]
   fAQUploaded FAQ [not null]
   fAQApproved FAQ [not null]
+  surveyAnswered SurveyAnswer [not null]
 }
 
 Table Group {
@@ -786,29 +878,6 @@ Table UserType {
   userProfile UserProfile [not null]
 }
 
-Table BlockedIp {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  ipAddress String [unique, not null]
-  reason String
-  expiresAt DateTime
-}
-
-Table Config {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  key String [unique, not null]
-  value String [not null]
-}
-
 Table TemplateFile {
   id String [pk]
   code String
@@ -821,6 +890,18 @@ Table TemplateFile {
   fileType TemplateFileType
   extensions String
   numberField Int [default: 0]
+}
+
+Table BlockedIp {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ipAddress String [unique, not null]
+  reason String
+  expiresAt DateTime
 }
 
 Table GroupToUser {
@@ -955,11 +1036,17 @@ Enum TemplateFileType {
   LOGS
 }
 
-Ref: Commune.provinceId > Province.id
+Ref: Survey.surveyObjectId > SurveyObjectType.id
 
-Ref: Organization.typeId > OrganizationType.id
+Ref: Survey.surveyTopicId > SurveyTopic.id
 
-Ref: Organization.organizationId - Organization.id
+Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+
+Ref: SurveyQuestion.surveyId > Survey.id
+
+Ref: SurveyAnswer.surveyQuestionId > SurveyQuestion.id
+
+Ref: SurveyAnswer.userId > User.id
 
 Ref: Semester.schoolYearId > SchoolYear.id
 
@@ -1008,6 +1095,12 @@ Ref: PrerequisiteSubject.subjectId > Subject.id
 Ref: CoRequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
 
 Ref: CoRequisiteSubject.subjectId > Subject.id
+
+Ref: Commune.provinceId > Province.id
+
+Ref: Organization.typeId > OrganizationType.id
+
+Ref: Organization.organizationId - Organization.id
 
 Ref: UserProfile.userId > User.id
 

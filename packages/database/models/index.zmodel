@@ -1,10 +1,17 @@
+import './he-thong/config'
+
+import './khao-thi/survey'
+
+import './ql-danh-muc/categories'
 import './ql-danh-muc/common'
 import './ql-danh-muc/edu'
-import './ql-danh-muc/user'
+import './ql-danh-muc/template-file'
+
 import './ql-dao-tao/plan-training'
-import './ql-nguoi-dung/profile'
+
 import './ql-nguoi-dung/blocked-ip'
 import './ql-nguoi-dung/feedback'
+import './ql-nguoi-dung/profile'
 import './ql-nguoi-dung/user'
-import './he-thong/config'
-import './he-thong/template-file'
+
+import './tro-ly-ao/chat-bot'
