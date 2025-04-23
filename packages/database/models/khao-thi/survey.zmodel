@@ -1,0 +1,78 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-nguoi-dung/profile'
+import '../ql-nguoi-dung/user'
+
+
+// đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
+model SurveyObjectType extends Base {
+  name String
+
+  @@schema("khao-thi")
+
+	survey Survey[]
+}
+
+// chủ đề khảo sát (Đánh giá giảng viên, đánh giá cơ sở vật chất,...)
+model SurveyTopic extends Base {
+  name String
+
+  @@schema("khao-thi")
+
+	survey Survey[]
+}
+
+// Loại câu hỏi khảo sát (Trắc nghiệm, ý kiến,...)
+model SurveyQuestionType extends Base {
+  name String
+
+  @@schema("khao-thi")
+
+	surveyQuestion SurveyQuestion[]
+}
+
+// đợt khảo sát
+model Survey extends Base {
+  name           String
+  startDate      DateTime
+  endDate        DateTime?
+  
+  surveyObjectType   SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
+  surveyObjectId String
+
+  surveyTopic      SurveyTopic @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId String
+
+  @@schema("khao-thi")
+
+	surveyQuestion SurveyQuestion[]
+}
+
+// câu hỏi khảo sát
+model SurveyQuestion extends Base {
+  name String
+
+  surveyQuestionType SurveyQuestionType @relation(fields: [surveyQuestionTypeId], references: [id])
+  surveyQuestionTypeId String
+
+  survey Survey @relation(fields: [surveyId], references: [id])
+  surveyId String
+
+  @@schema("khao-thi")
+
+	surveyAnswer SurveyAnswer[]
+}
+
+// trả lời khảo sát
+model SurveyAnswer extends Base {
+  answer String?
+
+  surveyQuestion SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
+
+  userAnswered User? @relation("SurveyAnswer", fields: [userId], references: [id])
+  userId String?
+
+  @@schema("khao-thi")
+}
+
