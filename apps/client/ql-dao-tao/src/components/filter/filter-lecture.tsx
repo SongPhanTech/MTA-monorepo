@@ -194,9 +194,6 @@ const FilterLecture = (props: Props) => {
                 open={open}
                 onOpenChange={handleOpenChange}
                 placement="bottomRight"
-                align={{
-                    offset: [100, 0],
-                }}
                 arrow={false}
                 overlayStyle={{
                     width: 450,
@@ -205,6 +202,9 @@ const FilterLecture = (props: Props) => {
                     padding: 0,
                 }}
                 destroyTooltipOnHide
+                align={{
+                    offset: [100, 0], // Di chuyển popup sang trái 300px
+                }}
             >
                 <Button
                     icon={<FilterOutlined />}

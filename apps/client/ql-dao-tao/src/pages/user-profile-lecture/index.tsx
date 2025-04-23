@@ -11,6 +11,7 @@ import {
     PutUploadProfileModal,
     PutUserProfileUpdateModal,
     PutUserProfileLectureModal,
+    AddUserProfileLecture,
 } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -53,10 +54,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterLecture from '../../components/filter/filter-lecture'
 import type { FilterProps } from '../../components/filter/filter-lecture'
+import { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
+import { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 type Filter = FilterProps & {
     searchText: string
 }
 dayjs.locale('vi')
+
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -69,13 +73,10 @@ export default function UserProfilePageLecture() {
         ethnicityId: null,
     })
 
-    const { data: organiztion_data = [], refetch: refetch_organization } =
-        useFindManyOrganization({
-            take: 10000,
-            skip: 0,
-        })
+    const { data: organization_data = [], refetch: refetch_organization } =
+        useFindManyOrganization()
 
-    const tree_organization = convertToTree(organiztion_data)
+    const tree_organization = convertToTree(organization_data)
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
@@ -130,9 +131,14 @@ export default function UserProfilePageLecture() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<any>({
+    const { onOpen, onClose } = useDisclosure<PutUserProfileLectureProps>({
         tag: PutUserProfileLectureModal.name,
     })
+
+    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
+        useDisclosure<AddUserProfileLectureProps>({
+            tag: AddUserProfileLecture.name,
+        })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
         useDisclosure<string>({
@@ -142,16 +148,11 @@ export default function UserProfilePageLecture() {
         useDisclosure<string>({
             tag: PutUpdateProfileModal.name,
         })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>(
-        {
-            tag: PutUserProfileUpdateModal.name,
-        }
-    )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({ id: null, code: 'GV' })
+        onOpenModalAdd({ id: null, code: 'GV' })
     }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
@@ -166,8 +167,8 @@ export default function UserProfilePageLecture() {
             tree_organization,
             idOrganization
         )
-        const listChidlrenOrganizationId = children.map((item: any) => item.id)
-        setOrganizationIds(listChidlrenOrganizationId)
+        const listChildrenOrganizationId = children.map((item: any) => item.id)
+        setOrganizationIds(listChildrenOrganizationId)
     }
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function handleDelete(id: string) {
@@ -441,13 +442,10 @@ export default function UserProfilePageLecture() {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpenUpdate.bind(
-                                                    null,
-                                                    {
-                                                        id: id,
-                                                        code: 'SV',
-                                                    }
-                                                )}
+                                                onClick={onOpen.bind(id, {
+                                                    id: id,
+                                                    code: 'GV',
+                                                })}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>

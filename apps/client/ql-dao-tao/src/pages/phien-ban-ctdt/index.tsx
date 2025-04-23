@@ -361,7 +361,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                             : '',
                                 },
                                 {
-                                    title: 'Tài liệu kết xuất',
+                                    title: 'Tài liệu',
                                     render: ({ documentPath }) =>
                                         documentPath ? (
                                             <a

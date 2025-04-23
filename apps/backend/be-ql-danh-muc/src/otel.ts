@@ -23,7 +23,7 @@ const traceExporter = new OTLPTraceExporter({
 
 const provider = new WebTracerProvider({
     resource: new Resource({
-        'service.name': 'ql-nguoi-dung-backend',
+        'service.name': 'mta-be-ql-danh-muc',
     }),
     spanProcessors: [
         new SimpleSpanProcessor(traceExporter),
