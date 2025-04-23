@@ -303,6 +303,7 @@ Table CurriculumVersionSubject {
   subjectId String [not null]
   trainingBlock TrainingBlock
   trainingBlockId String
+  type CurriculumVersionSubjectType [not null, default: 'None']
   information String
   documentPath String
   renderPath String
@@ -574,6 +575,7 @@ Table User {
   documentApproved Document [not null]
   fAQUploaded FAQ [not null]
   fAQApproved FAQ [not null]
+  surveyAnswered SurveyAnswer [not null]
 }
 
 Table Group {
@@ -718,6 +720,85 @@ Table Feedback {
   satisfaction Satisfaction [not null]
   user User [not null]
   userId String [not null]
+}
+
+Table SurveyObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  survey Survey [not null]
+}
+
+Table SurveyTopic {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  survey Survey [not null]
+}
+
+Table SurveyQuestionType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  surveyQuestion SurveyQuestion [not null]
+}
+
+Table Survey {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  surveyObjectType SurveyObjectType [not null]
+  surveyObjectId String [not null]
+  surveyTopic SurveyTopic [not null]
+  surveyTopicId String [not null]
+  surveyQuestion SurveyQuestion [not null]
+}
+
+Table SurveyQuestion {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  surveyQuestionType SurveyQuestionType [not null]
+  surveyQuestionTypeId String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
+  surveyAnswer SurveyAnswer [not null]
+}
+
+Table SurveyAnswer {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  answer String
+  surveyQuestion SurveyQuestion [not null]
+  surveyQuestionId String [not null]
+  userAnswered User
+  userId String
 }
 
 Table PriorityObject {
@@ -1046,3 +1127,15 @@ Ref: Conversation.userId > User.id
 Ref: Message.conversationId > Conversation.id
 
 Ref: Feedback.userId > User.id
+
+Ref: Survey.surveyObjectId > SurveyObjectType.id
+
+Ref: Survey.surveyTopicId > SurveyTopic.id
+
+Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+
+Ref: SurveyQuestion.surveyId > Survey.id
+
+Ref: SurveyAnswer.surveyQuestionId > SurveyQuestion.id
+
+Ref: SurveyAnswer.userId > User.id
