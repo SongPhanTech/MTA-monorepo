@@ -11,7 +11,7 @@ model Province extends Base {
 
 model Commune extends Base {
   name       String
-  Province   Province @relation(fields: [provinceId], references: [id])
+  province   Province @relation(fields: [provinceId], references: [id])
   provinceId String
   @@unique([name, provinceId])
   @@schema("ql-danh-muc")
@@ -41,10 +41,10 @@ model AcademicRankType extends Base {
 
 // chức vụ
 model Position extends Base {
-  name String
+  name             String
   @@schema("ql-danh-muc")
 
-	organizationUser OrganizationUser[]
+  organizationUser OrganizationUser[]
 }
 
 // chức vụ Đảng
@@ -62,21 +62,21 @@ model OrganizationType extends Base {
 
 // đơn vị
 model Organization extends Base {
-  name         String           @unique
-  type         OrganizationType @relation(fields: [typeId], references: [id])
-  typeId       String
-  parent       Organization?    @relation("ParentChild")
-  parentId     String?
-  children     Organization[]   @relation("ParentChild")
-  address      String?
+  name             String             @unique
+  type             OrganizationType   @relation(fields: [typeId], references: [id])
+  typeId           String
+  parent           Organization?      @relation("ParentChild")
+  parentId         String?
+  children         Organization[]     @relation("ParentChild")
+  address          String?
 
-  curriculum   Curriculum[]
-  fixedClass   FixedClass[]
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
 
-  subject      Subject[]
+  subject          Subject[]
 
-  subjectGroup SubjectGroup[]
+  subjectGroup     SubjectGroup[]
   @@schema("ql-danh-muc")
 
-	organizationUser OrganizationUser[]
+  organizationUser OrganizationUser[]
 }

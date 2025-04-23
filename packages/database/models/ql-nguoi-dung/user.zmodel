@@ -2,6 +2,7 @@ import '../base'
 import '../tro-ly-ao/chat-bot'
 import 'feedback'
 import 'profile'
+import '../khao-thi/survey'
 
 model User extends Base {
   email            String         @unique @email
@@ -20,6 +21,8 @@ model User extends Base {
   documentApproved Document[]     @relation("DocumentApproved")
   fAQUploaded      FAQ[]          @relation("FAQUploaded")
   fAQApproved      FAQ[]          @relation("FAQApproved")
+  surveyAnswered   SurveyAnswer[] @relation("SurveyAnswer")
+
 
   @@schema("ql-nguoi-dung")
 }

@@ -48,10 +48,10 @@ enum SubjectEquivalentType {
 }
 
 enum CurriculumVersionSubjectType {
-  NONE
-  MANDATORY
-  OPTIONAL
-  ELECTIVE
+  None
+  Mandatory
+  Optional
+  Elective
 
   @@schema("ql-dao-tao")
 }
@@ -187,7 +187,7 @@ model Commune {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-  Province    Province  @relation(fields: [provinceId], references: [id])
+  province    Province  @relation(fields: [provinceId], references: [id])
   provinceId  String
 
   @@unique([name, provinceId])
@@ -314,7 +314,7 @@ model SchoolYear {
   name        String
   startDate   DateTime
   endDate     DateTime?
-  Semesters   Semester[]
+  semesters   Semester[]
   milestone   Milestone[]
 
   @@schema("ql-dao-tao")
@@ -328,7 +328,7 @@ model Semester {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
   name         String
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
   endDate      DateTime?
@@ -347,7 +347,7 @@ model Milestone {
   period       String?
   startDate    DateTime
   endDate      DateTime
-  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
 
   @@schema("ql-dao-tao")
@@ -363,13 +363,13 @@ model TrainingCourse {
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  TrainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
-  TrainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
+  trainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId       String
-  TrainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
+  trainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String
-  TrainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
+  trainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String
   status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
@@ -385,9 +385,9 @@ model FixedClass {
   createdAt                DateTime            @default(now())
   updatedAt                DateTime            @updatedAt()
   name                     String
-  TrainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
-  ManagementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String?
   classSize                Int                 @default(0)
   fixedClassStudent        FixedClassStudent[]
@@ -406,17 +406,17 @@ model Curriculum {
   status                   CurriculumStatus    @default(ACTIVE)
   startDate                DateTime
   endDate                  DateTime?
-  ManagementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
-  TrainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
-  TrainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id])
+  trainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId          String
-  TraingTime               TrainingTime        @relation(fields: [trainingTimeId], references: [id])
+  trainingTime             TrainingTime        @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId           String
-  TrainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
+  trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId          String
-  infomation               String
+  information              String
   documentPath             String?
   renderPath               String?
   curriculumVersion        CurriculumVersion[]
@@ -435,9 +435,9 @@ model CurriculumVersion {
   status                   CurriculumStatus           @default(ACTIVE)
   startDate                DateTime
   endDate                  DateTime?
-  Curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
+  curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
   curriculumId             String
-  infomation               String?
+  information              String?
   documentPath             String?
   renderPath               String?
   curriculumVersionSubject CurriculumVersionSubject[]
@@ -453,10 +453,10 @@ model SubjectGroup {
   createdAt                DateTime     @default(now())
   updatedAt                DateTime     @updatedAt()
   name                     String
-  ManagementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
-  infomation               String?
-  Subject                  Subject[]
+  information              String?
+  subject                  Subject[]
 
   @@schema("ql-dao-tao")
 }
@@ -478,9 +478,9 @@ model Subject {
   numberOfProject          Int                        @default(0)
   numberOfInternship       Int                        @default(0)
   numberOfOther            Int                        @default(0)
-  ManagementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
-  SubjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
+  subjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
   subjectGroupId           String
   curriculumVersionSubject CurriculumVersionSubject[]
   prerequisiteSubject      PrerequisiteSubject[]
@@ -496,13 +496,13 @@ model CurriculumVersionSubject {
   deletedAt           DateTime?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt()
-  CurriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId String
-  Subject             Subject               @relation(fields: [subjectId], references: [id])
+  subject             Subject               @relation(fields: [subjectId], references: [id])
   subjectId           String
-  TraningBlock        TrainingBlock?        @relation(fields: [traningBlockId], references: [id])
-  traningBlockId      String?
-  infomation          String?
+  trainingBlock       TrainingBlock?        @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId     String?
+  information         String?
   documentPath        String?
   renderPath          String?
   coRequisiteSubject  CoRequisiteSubject[]
@@ -518,9 +518,9 @@ model PrerequisiteSubject {
   deletedAt                  DateTime?
   createdAt                  DateTime                 @default(now())
   updatedAt                  DateTime                 @updatedAt()
-  CurriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
+  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
   curriculumVersionSubjectId String
-  Subject                    Subject                  @relation(fields: [subjectId], references: [id])
+  subject                    Subject                  @relation(fields: [subjectId], references: [id])
   subjectId                  String
 
   @@schema("ql-dao-tao")
@@ -533,9 +533,9 @@ model CoRequisiteSubject {
   deletedAt                  DateTime?
   createdAt                  DateTime                 @default(now())
   updatedAt                  DateTime                 @updatedAt()
-  CurriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
+  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
   curriculumVersionSubjectId String
-  Subject                    Subject                  @relation(fields: [subjectId], references: [id])
+  subject                    Subject                  @relation(fields: [subjectId], references: [id])
   subjectId                  String
 
   @@schema("ql-dao-tao")
@@ -703,9 +703,9 @@ model UserProfile {
   updatedAt              DateTime            @updatedAt()
   user                   User?               @relation(fields: [userId], references: [id])
   userId                 String?             @unique()
-  UserType               UserType            @relation(fields: [userTypeId], references: [id])
+  userType               UserType            @relation(fields: [userTypeId], references: [id])
   userTypeId             String
-  avaratar               String?
+  avatar                 String?
   firstName              String
   lastName               String
   dateOfBirth            DateTime?
@@ -714,15 +714,15 @@ model UserProfile {
   idCardNumber           String?
   idCardDate             DateTime?
   officerNumber          String?
-  PriorityObject         PriorityObject?     @relation(fields: [priorityObjectId], references: [id])
+  priorityObject         PriorityObject?     @relation(fields: [priorityObjectId], references: [id])
   priorityObjectId       String?
-  RegistrationArea       RegistrationArea?   @relation(fields: [registrationAreaId], references: [id])
+  registrationArea       RegistrationArea?   @relation(fields: [registrationAreaId], references: [id])
   registrationAreaId     String?
-  Nationality            Nationality?        @relation(fields: [nationalityId], references: [id])
+  nationality            Nationality?        @relation(fields: [nationalityId], references: [id])
   nationalityId          String?
-  Religion               Religion?           @relation(fields: [religionId], references: [id])
+  religion               Religion?           @relation(fields: [religionId], references: [id])
   religionId             String?
-  Ethnicity              Ethnicity?          @relation(fields: [ethnicityId], references: [id])
+  ethnicity              Ethnicity?          @relation(fields: [ethnicityId], references: [id])
   ethnicityId            String?
   gender                 Gender?
   permanentAddress       String?
@@ -758,7 +758,7 @@ model FixedClassStudent {
   id            String                  @id() @default(cuid())
   fixedClass    FixedClass              @relation(fields: [fixedClassId], references: [id])
   fixedClassId  String
-  UserProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
+  userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
   userProfileId String
   status        FixedClassStudentStatus @default(ENROLLED)
   description   String?                 @db.Text()

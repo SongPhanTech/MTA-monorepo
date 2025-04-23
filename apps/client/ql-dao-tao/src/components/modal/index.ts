@@ -34,5 +34,5 @@ export {
     PutSubjectGroupModal,
     PutSubjectModal,
     PutUserProfileLectureModal,
-    AddUserProfileLecture
+    AddUserProfileLecture,
 }

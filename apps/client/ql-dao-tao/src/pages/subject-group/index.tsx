@@ -224,7 +224,7 @@ export default function SubjectGroupPage() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'ManagementOrganization',
+                                dataIndex: 'managementOrganization',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

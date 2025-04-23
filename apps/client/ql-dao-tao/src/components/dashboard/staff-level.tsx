@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import type React from 'react'
+import { useRef } from 'react'
 import { Column } from '@ant-design/plots'
 
-const StaffLevel = () => {
-    const chartRef = useRef<any>(null)
+interface ChartProps {
+    className?: string
+}
+
+const StaffLevel: React.FC<ChartProps> = ({ className }) => {
+    const chartRef = useRef<React.MutableRefObject<typeof Column | null>>(null)
 
     const dataFake = [
         { name: 'Cử nhân', count: 50 },
@@ -23,7 +28,11 @@ const StaffLevel = () => {
         },
     }
 
-    return <Column {...config} />
+    return (
+        <div className={className}>
+            <Column {...config} />
+        </div>
+    )
 }
 
 export default StaffLevel

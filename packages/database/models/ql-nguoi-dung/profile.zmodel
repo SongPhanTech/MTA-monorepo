@@ -7,9 +7,9 @@ import '../ql-dao-tao/plan-training'
 model UserProfile extends Base {
   user                   User?               @relation(fields: [userId], references: [id])
   userId                 String?             @unique
-  UserType               UserType            @relation(fields: [userTypeId], references: [id]) // loại đối tượng
+  userType               UserType            @relation(fields: [userTypeId], references: [id]) // loại đối tượng
   userTypeId             String
-  avaratar               String?             // đường dẫn ảnh đại diện
+  avatar                 String?             // đường dẫn ảnh đại diện
 
   // Thông tin cá nhân
   firstName              String
@@ -21,15 +21,15 @@ model UserProfile extends Base {
   idCardDate             DateTime? // ngày cấp
   officerNumber          String? // số hiệu sĩ quan
 
-  PriorityObject         PriorityObject?     @relation(fields: [priorityObjectId], references: [id]) // đối tượng ưu tiên
+  priorityObject         PriorityObject?     @relation(fields: [priorityObjectId], references: [id]) // đối tượng ưu tiên
   priorityObjectId       String?
-  RegistrationArea       RegistrationArea?   @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
+  registrationArea       RegistrationArea?   @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
   registrationAreaId     String?
-  Nationality            Nationality?        @relation(fields: [nationalityId], references: [id]) // quốc tịch
+  nationality            Nationality?        @relation(fields: [nationalityId], references: [id]) // quốc tịch
   nationalityId          String?
-  Religion               Religion?           @relation(fields: [religionId], references: [id]) // tôn giáo
+  religion               Religion?           @relation(fields: [religionId], references: [id]) // tôn giáo
   religionId             String?
-  Ethnicity              Ethnicity?          @relation(fields: [ethnicityId], references: [id]) // dân tộc
+  ethnicity              Ethnicity?          @relation(fields: [ethnicityId], references: [id]) // dân tộc
   ethnicityId            String?
   gender                 Gender?
   permanentAddress       String? // địa chỉ thường trú
@@ -53,7 +53,6 @@ model UserProfile extends Base {
   enlistmentDate         DateTime? // ngày nhập ngũ
   dischargeDate          DateTime? // ngày xuất ngũ
   
-
   // thông tin thay đổi (có bảng lịch sử riêng)
   rankName               String? // cấp bậc hàm
   educationLevel         String? // trình độ học vấn
@@ -65,10 +64,9 @@ model UserProfile extends Base {
   organizationCPVName    String? // nơi sinh hoạt Đảng
 
   fixedClassStudent      FixedClassStudent[]
+  organizationUser       OrganizationUser[]
 
   @@schema("ql-nguoi-dung")
-
-	organizationUser OrganizationUser[]
 }
 
 
@@ -89,7 +87,7 @@ model FixedClassStudent {
   id            String                  @id @default(cuid())
   fixedClass    FixedClass              @relation(fields: [fixedClassId], references: [id])
   fixedClassId  String
-  UserProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
+  userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
   userProfileId String
   status        FixedClassStudentStatus @default(ENROLLED)
   description   String?                 @db.Text
@@ -110,14 +108,13 @@ enum OrganizationUserStatus {
 }
 
 model OrganizationUser extends Base {
-  userProfileId                  String
-  userProfile                    UserProfile  @relation(fields: [userProfileId], references: [id])
-  organizationId                 String
-  organization                   Organization @relation(fields: [organizationId], references: [id])
-  position                       Position?    @relation(fields: [positionId], references: [id])
-  positionId                     String?
-  status                         OrganizationUserStatus @default(ACTIVE)
+  userProfileId  String
+  userProfile    UserProfile            @relation(fields: [userProfileId], references: [id])
+  organizationId String
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+  position       Position?              @relation(fields: [positionId], references: [id])
+  positionId     String?
+  status         OrganizationUserStatus @default(ACTIVE)
 
   @@schema("ql-nguoi-dung")
-
 }

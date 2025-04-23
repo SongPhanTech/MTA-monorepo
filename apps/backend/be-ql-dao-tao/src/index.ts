@@ -6,13 +6,13 @@ import type { Context } from 'hono'
 import { contextStorage, getContext } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { csrf } from 'hono/csrf'
+import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import { Registry, collectDefaultMetrics } from 'prom-client'
+import { Registry } from 'prom-client'
 
-import API from './api/index'
+import UserProfileApp from './api/user-profile'
 
-import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -53,7 +53,7 @@ setupOpenApi(app)
 // Update: Bật lại khi release
 // setupAuth(app)
 
-app.route('/api', API)
+app.route('/api', UserProfileApp)
 
 app.use(
     '/api/model/*',
@@ -101,6 +101,8 @@ app.onError((err, c) => {
 
     return c.json({ message: err.message }, 500)
 })
+
+showRoutes(app, { verbose: true })
 
 export default {
     fetch: app.fetch,
