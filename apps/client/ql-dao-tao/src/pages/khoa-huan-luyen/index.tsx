@@ -3,20 +3,15 @@ import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingCourseModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
-    useFindManyTrainingForm,
     useUpdateTrainingCourse,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManySchoolYear,
 } from '@workspace/db/hooks'
-import {
+import type {
     TrainingCourse,
     SchoolYear,
     TrainingForm,
@@ -46,21 +41,26 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/fixed-class'
+import FixedClassPage from '@pages/lop-bien-che'
+import { FilterKhoa } from '@components/filter'
 // const { Option } = Select;
-
-const statusOptions = {
-    ACTIVE: { label: 'Đang hoạt động', color: 'green' },
-    COMPLETED: { label: 'Hoàn thành', color: 'blue' },
-    SUSPEND: { label: 'Tạm dừng', color: 'orange' },
-    CANCEL: { label: 'Hủy bỏ', color: 'red' },
+interface FilterProps {
+    searchText: string | null
+    trainingFormId: string | undefined
+    trainingTypeId: string | undefined
+    trainingLevelId: string | undefined
+    trainingObjectTypeId: string | undefined
+    status: string | undefined
+    startDate: string | undefined
+    endDate: string | undefined
+    schoolYearId: string | undefined
 }
+
 export default function TrainingCoursePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState({
-        name: '',
-        code: '',
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
         trainingFormId: undefined,
         trainingTypeId: undefined,
         trainingLevelId: undefined,
@@ -68,16 +68,17 @@ export default function TrainingCoursePage() {
         status: undefined,
         startDate: undefined,
         endDate: undefined,
+        schoolYearId: undefined,
     })
 
-    const [dataToView, setDataToView] = useState<any>([])
+    const [dataToView, setDataToView] = useState<TrainingCourse[]>([])
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            ...(filters.name && filters.name !== ''
-                ? { name: { contains: filters.name } }
+            ...(filters.searchText && filters.searchText !== ''
+                ? { name: { contains: filters.searchText } }
                 : {}),
-            ...(filters.code && filters.code !== ''
-                ? { code: { contains: filters.code } }
+            ...(filters.searchText && filters.searchText !== ''
+                ? { code: { contains: filters.searchText } }
                 : {}),
             ...(filters.trainingFormId
                 ? { trainingFormId: filters.trainingFormId }
@@ -91,7 +92,9 @@ export default function TrainingCoursePage() {
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
-            ...(filters.status ? { status: filters.status } : {}),
+            ...(filters.status
+                ? { status: filters.status as TrainingCourseStatus }
+                : {}),
             ...(filters.startDate && filters.endDate
                 ? {
                       startDate: {
@@ -116,11 +119,11 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            ...(filters.name && filters.name !== ''
-                ? { name: { contains: filters.name } }
+            ...(filters.searchText && filters.searchText !== ''
+                ? { name: { contains: filters.searchText } }
                 : {}),
-            ...(filters.code && filters.code !== ''
-                ? { code: { contains: filters.code } }
+            ...(filters.searchText && filters.searchText !== ''
+                ? { code: { contains: filters.searchText } }
                 : {}),
             ...(filters.trainingFormId
                 ? { trainingFormId: filters.trainingFormId }
@@ -134,7 +137,9 @@ export default function TrainingCoursePage() {
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
-            ...(filters.status ? { status: filters.status } : {}),
+            ...(filters.status
+                ? { status: filters.status as TrainingCourseStatus }
+                : {}),
             ...(filters.startDate && filters.endDate
                 ? {
                       startDate: {
@@ -178,40 +183,23 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-    const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm({
-            take: 1000,
-            skip: 0,
-        })
 
-    const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType({
-            take: 1000,
-            skip: 0,
-        })
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel({
-            take: 1000,
-            skip: 0,
-        })
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
-            take: 1000,
-            skip: 0,
-        })
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (
+        key: string,
+        value: string | { startDate?: string; endDate?: string }
+    ) => {
         if (key !== 'time') {
             setFilters((prev) => {
                 const newFilters = { ...prev, [key]: value }
                 debouncedRefetch()
                 return newFilters
             })
-        } else {
-            setFilters((prev) => {
+        } else if (typeof value === 'object' && value !== null) {
+            setFilters((prev: FilterProps) => {
                 const newFilters = {
                     ...prev,
-                    startDate: value?.startDate ?? undefined,
-                    endDate: value?.endDate ?? undefined,
+                    startDate: value.startDate ?? undefined,
+                    endDate: value.endDate ?? undefined,
                 }
                 debouncedRefetch()
                 return newFilters
@@ -237,65 +225,27 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-    const options = Object.entries(statusOptions).map(
+    const options = Object.entries(KHOA_HL_STATUS).map(
         ([value, { label, color }]) => ({
             value,
             label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
         })
     )
-    const filterRow = {
-        isFilterRow: true,
-        key: 'filter',
-    }
-    useEffect(() => {
-        const dataWithFilter = [filterRow, ...data]
-        setDataToView(dataWithFilter)
-    }, [data])
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear({
-            take: 1000,
-            skip: 0,
-        })
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Khóa
+                Khóa huấn luyện
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
-                            {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify="space-between" align="center">
-                                <label>Năm học:</label>
-                                <Select
-                                    className="w-[70%]"
-                                    placeholder="Chọn năm học"
-                                    allowClear
-                                    options={dataSchoolYear.map(
-                                        (i: SchoolYear) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                                startDate: i.startDate,
-                                                endDate: i.endDate,
-                                            }
-                                        }
-                                    )}
-                                    // value={filters.schoolYearId}
-                                    onChange={(
-                                        value: number | null,
-                                        option: any
-                                    ) => {
-                                        handleFilterChange(
-                                            'time',
-                                            option ?? undefined
-                                        )
-                                    }}
-                                />
-                            </Flex>
-
-                            {/* </Form.Item> */}
+                        <Col span={12}>
+                            <FilterKhoa
+                                filters={filters}
+                                setFilters={setFilters}
+                                debouncedRefetch={debouncedRefetch}
+                            />
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -316,202 +266,47 @@ export default function TrainingCoursePage() {
                                 title: 'STT',
                                 width: 20,
                                 align: 'center',
-                                render: (_, record, index) => {
-                                    if (record.isFilterRow) return ''
-                                    return (
-                                        index +
-                                        (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE
-                                    )
-                                },
+                                render: (_, record, index) =>
+                                    index +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã khóa',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 100,
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Input
-                                                // placeholder="Nhập mã khóa"
-                                                allowClear
-                                                onPressEnter={(e) => {
-                                                    const value =
-                                                        e.currentTarget.value?.trim()
-                                                    handleFilterChange(
-                                                        'code',
-                                                        value
-                                                    )
-                                                }}
-                                                onChange={(e) => {
-                                                    if (
-                                                        !e.target.value ||
-                                                        e.target.value === ''
-                                                    ) {
-                                                        handleFilterChange(
-                                                            'code',
-                                                            undefined
-                                                        )
-                                                    }
-                                                }}
-                                            />
-                                        )
-                                    }
-                                    return value
-                                },
+                                // width: 100,
                             },
                             {
                                 title: 'Tên khóa',
                                 dataIndex: 'name',
-                                width: 100,
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Input
-                                                // placeholder="Nhập tên khóa"
-                                                allowClear
-                                                onPressEnter={(e) => {
-                                                    const value =
-                                                        e.currentTarget.value?.trim()
-                                                    handleFilterChange(
-                                                        'name',
-                                                        value
-                                                    )
-                                                }}
-                                                onChange={(e) => {
-                                                    if (
-                                                        !e.target.value ||
-                                                        e.target.value === ''
-                                                    ) {
-                                                        handleFilterChange(
-                                                            'name',
-                                                            undefined
-                                                        )
-                                                    }
-                                                }}
-                                            />
-                                        )
-                                    }
-                                    return value
-                                },
+                                // width: 100,
                             },
                             {
                                 title: 'Loại hình đào tạo',
                                 dataIndex: 'TrainingType',
                                 width: 150,
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Select
-                                                className="w-[110px]"
-                                                // placeholder="Chọn loại hình đào tạo"
-                                                options={trainingTypeData.map(
-                                                    (i: TrainingType) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'trainingTypeId',
-                                                        val
-                                                    )
-                                                }
-                                                allowClear
-                                            />
-                                        )
-                                    }
-                                    return value?.name ? value?.name : ''
-                                },
+                                render: (value: TrainingType) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'TrainingObjectType',
                                 width: 120,
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Select
-                                                className="w-[110px]"
-                                                // placeholder="Chọn đối tượng đào tạo"
-                                                options={trainingObjectTypeData.map(
-                                                    (
-                                                        i: TrainingObjectType
-                                                    ) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'trainingObjectTypeId',
-                                                        val
-                                                    )
-                                                }
-                                                allowClear
-                                            />
-                                        )
-                                    }
-                                    return value?.name ? value?.name : ''
-                                },
+                                render: (value: TrainingObjectType) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Hình thức đào tạo',
                                 dataIndex: 'TrainingForm',
                                 width: 120,
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Select
-                                                className="w-[110px]"
-                                                // placeholder="Chọn hình thức đào tạo"
-                                                options={trainingFormData.map(
-                                                    (i: TrainingForm) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'trainingFormId',
-                                                        val
-                                                    )
-                                                }
-                                                allowClear
-                                            />
-                                        )
-                                    }
-                                    return value?.name ? value?.name : ''
-                                },
+                                render: (value: TrainingForm) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Trình độ đào tạo',
                                 dataIndex: 'TrainingLevel',
-                                render: (value: any, record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Select
-                                                className="w-[110px]"
-                                                // placeholder="Chọn trình độ đào tạo"
-                                                options={trainingLevelData.map(
-                                                    (i: TrainingForm) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'trainingLevelId',
-                                                        val
-                                                    )
-                                                }
-                                                allowClear
-                                            />
-                                        )
-                                    }
-                                    return value?.name ? value?.name : ''
-                                },
+                                render: (value: TrainingLevel) =>
+                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -530,50 +325,24 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Trạng thái',
                                 width: 130,
-                                render: (record: any) => {
-                                    if (record.isFilterRow) {
-                                        return (
-                                            <Select
-                                                className="w-[155px]"
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'status',
-                                                        val
-                                                    )
-                                                }
-                                                options={Object.entries(
-                                                    statusOptions
-                                                ).map(
-                                                    ([
-                                                        value,
-                                                        { label, color },
-                                                    ]) => ({
-                                                        value,
-                                                        label, // hiển thị trong dropdown
-                                                    })
-                                                )}
-                                                allowClear
-                                                // style={{ width: 180 }}
-                                            />
-                                        )
-                                    } else
-                                        return (
-                                            <Select
-                                                className="w-[155px]"
-                                                value={record.status}
-                                                onChange={(newStatus) =>
-                                                    handleStatusChange(
-                                                        record.id,
-                                                        newStatus as TrainingCourseStatus
-                                                    )
-                                                }
-                                                options={options}
-                                                optionLabelProp="label"
-                                                // style={{ width: 180 }}
-                                                bordered={false}
-                                                showSearch={false}
-                                            />
-                                        )
+                                render: (record: TrainingCourse) => {
+                                    return (
+                                        <Select
+                                            className="w-[155px]"
+                                            value={record.status}
+                                            onChange={(newStatus) =>
+                                                handleStatusChange(
+                                                    record.id,
+                                                    newStatus as TrainingCourseStatus
+                                                )
+                                            }
+                                            options={options}
+                                            optionLabelProp="label"
+                                            // style={{ width: 180 }}
+                                            bordered={false}
+                                            showSearch={false}
+                                        />
+                                    )
                                 },
                             },
                             {
@@ -608,11 +377,12 @@ export default function TrainingCoursePage() {
                                                 />
                                             </Row>
                                         )
-                                    } else return ''
+                                    }
+                                    return ''
                                 },
                             },
                         ]}
-                        data={dataToView}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
@@ -623,7 +393,9 @@ export default function TrainingCoursePage() {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                         expandable={{
-                            expandedRowRender: (record) => (
+                            expandedRowRender: (
+                                record: Partial<TrainingCourse>
+                            ) => (
                                 <div style={{ maxWidth: '100%' }}>
                                     <FixedClassPage
                                         key={record.id}
@@ -631,8 +403,8 @@ export default function TrainingCoursePage() {
                                     />
                                 </div>
                             ),
-                            rowExpandable: (record) =>
-                                !(record.isFilterRow === true), // điều kiện nào đó
+                            // rowExpandable: (record: any) =>
+                            //     !(record.isFilterRow === true), // điều kiện nào đó
                         }}
                     />
                 </Col>

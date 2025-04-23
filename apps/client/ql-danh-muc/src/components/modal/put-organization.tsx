@@ -32,10 +32,7 @@ const PutOrganizationModal = () => {
         skip: 0,
     })
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()

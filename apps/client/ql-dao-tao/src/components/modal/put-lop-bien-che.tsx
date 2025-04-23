@@ -34,22 +34,13 @@ const PutFixedClassModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingCourse()
 
     const { data: organizations = [], refetch: refetchFixedClasss } =
-        useFindManyFixedClass({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyFixedClass()
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()

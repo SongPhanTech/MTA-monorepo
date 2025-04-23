@@ -51,8 +51,8 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterDropdown from './filter'
-import { FilterProps } from './filter'
+import FilterLecture from '../../components/filter/filter-lecture'
+import type { FilterProps } from '../../components/filter/filter-lecture'
 type Filter = FilterProps & {
     searchText: string
 }
@@ -161,14 +161,12 @@ export default function UserProfilePageLecture() {
         }
     }
 
-    const handleSelectOrganization = (idOrganization: any) => {
+    const handleSelectOrganization = (idOrganization: string) => {
         const children = getAllChildrenByParentId(
             tree_organization,
             idOrganization
         )
         const listChidlrenOrganizationId = children.map((item: any) => item.id)
-        console.log(children)
-        console.log(listChidlrenOrganizationId)
         setOrganizationIds(listChidlrenOrganizationId)
     }
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -189,17 +187,11 @@ export default function UserProfilePageLecture() {
         hideSpinner()
     }
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
 
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -289,34 +281,31 @@ export default function UserProfilePageLecture() {
                                 </Button>
 
                                 {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <>
-                                    <Dropdown
-                                        overlay={menuDownload}
-                                        trigger={['hover']}
+                                <Dropdown
+                                    overlay={menuDownload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        className="ml-4"
+                                        type="primary"
+                                        icon={<DownloadOutlined />}
                                     >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<DownloadOutlined />}
-                                        >
-                                            Tải file mẫu
-                                        </Button>
-                                    </Dropdown>
-                                </>
-                                <>
-                                    <Dropdown
-                                        overlay={menuUpload}
-                                        trigger={['hover']}
+                                        Tải file mẫu
+                                    </Button>
+                                </Dropdown>
+
+                                <Dropdown
+                                    overlay={menuUpload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        className="ml-4"
+                                        type="primary"
+                                        icon={<UploadOutlined />}
                                     >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<UploadOutlined />}
-                                        >
-                                            Nhập file
-                                        </Button>
-                                    </Dropdown>
-                                </>
+                                        Nhập file
+                                    </Button>
+                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>
@@ -336,7 +325,7 @@ export default function UserProfilePageLecture() {
                         {/* Search and filter row */}
                         <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
                             <Col span={24}>
-                                <FilterDropdown
+                                <FilterLecture
                                     onSearchChange={handleFilterChange}
                                     onFilterChange={handleAdvancedFilter}
                                 />
@@ -410,7 +399,8 @@ export default function UserProfilePageLecture() {
                             {
                                 title: 'Họ và tên',
                                 // dataIndex: 'name',
-                                render: ({ firstName, lastName }: any) =>
+                                render: ({ firstName, lastName }) =>
+                                    // biome-ignore lint/style/useTemplate: <explanation>
                                     `${lastName}` + ' ' + `${firstName}`,
                             },
                             // {

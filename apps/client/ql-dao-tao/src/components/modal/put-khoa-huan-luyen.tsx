@@ -43,32 +43,17 @@ const PutTrainingCourseModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingForm()
 
     const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingType()
     const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingObjectType()
 
     const { data: organizations = [], refetch: refetchTrainingCourses } =
-        useFindManyTrainingCourse({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingCourse()
 
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()

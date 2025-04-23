@@ -6,7 +6,7 @@ import { PutMilestoneModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { SchoolYear } from '@workspace/db'
+import type { SchoolYear } from '@workspace/db'
 import {
     useCountMilestone,
     useFindManyMilestone,
@@ -92,10 +92,7 @@ export default function MilestonePage() {
         hideSpinner()
     }
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManySchoolYear()
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()

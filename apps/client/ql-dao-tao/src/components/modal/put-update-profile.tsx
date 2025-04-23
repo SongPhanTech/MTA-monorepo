@@ -32,10 +32,7 @@ const PutUpdateProfileModal = () => {
         setTypeId(type?.id ?? undefined)
     }, [code])
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
 
     async function onOk(output?: PutUpdateProfile) {
         if (!output) return

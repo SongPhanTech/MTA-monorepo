@@ -35,10 +35,7 @@ const PutCurriculumVersionModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: curriculumData = [], refetch: refetchCurriculum } =
-        useFindManyCurriculum({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyCurriculum()
     const { mutateAsync: createCurriculumVersion } =
         useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } =

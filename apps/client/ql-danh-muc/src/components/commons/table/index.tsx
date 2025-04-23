@@ -10,10 +10,10 @@ type TableProps<T> = {
     data?: T[]
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
-    },
-    onRowClick?: (record: T) => void,
-    expandable?: TableAntdProps<T>['expandable'],
-    rowKey?: string,
+    }
+    onRowClick?: (record: T) => void
+    expandable?: TableAntdProps<T>['expandable']
+    rowKey?: string
     id?: string
 } & TableAntdProps
 
@@ -24,7 +24,7 @@ const Table = <T extends Record<string, unknown>>({
     onRowClick,
     expandable,
     rowKey,
-    id
+    id,
 }: TableProps<T>) => {
     return (
         <TableAntd
@@ -61,7 +61,7 @@ const Table = <T extends Record<string, unknown>>({
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {
-                        onRowClick(record);
+                        onRowClick(record)
                     }
                 },
             })}

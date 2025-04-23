@@ -10,7 +10,7 @@ import {
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, Organization } from '@workspace/db'
+import type { TrainingCourse, Organization, FixedClass } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
@@ -40,7 +40,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
-import OptionsPage from '@pages/lop-bien-che/options'
+import OptionsPage from '@components/sub-pages/options'
 
 export default function FixedClassPage({ trainingCourse }: any) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -75,16 +75,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingCourse()
     const { data: count } = useCountFixedClass({
         where: {
             name: {
@@ -148,10 +142,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
         })
     }
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
     const handleDownloadTemplate = (type: string) => {
         const fileRecord = templateFile?.find((item) => item.code === type)
         const fileLink = fileRecord ? fileRecord.path : null
@@ -214,7 +205,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
         </Menu>
     )
     const treeData = buildOrgTree(manageOrgData)
-    const renderExpandedRow = useCallback((record: any) => {
+    const renderExpandedRow = useCallback((record: FixedClass) => {
         return <OptionsPage key={record.id} fixedClass={record} />
     }, [])
 

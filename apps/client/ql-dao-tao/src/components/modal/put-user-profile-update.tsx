@@ -54,44 +54,23 @@ const PutUserProfileUpdateModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
-        useFindManyPriorityObject({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyPriorityObject()
     const { data: registrationAreaData = [], refetch: refetchRe } =
-        useFindManyRegistrationArea({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyRegistrationArea()
     const { data: nationalityData = [], refetch: refetchNa } =
-        useFindManyNationality({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyNationality()
 
     const { data: religionData = [], refetch: refetchReli } =
-        useFindManyReligion({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyReligion()
 
     const { data: ethnicityData = [], refetch: refetchEth } =
-        useFindManyEthnicity({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyEthnicity()
 
     const { data: fixedClassData = [], refetch: refetchFix } =
-        useFindManyReligion({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyReligion()
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()

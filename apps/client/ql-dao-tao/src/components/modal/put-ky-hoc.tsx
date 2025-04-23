@@ -36,10 +36,7 @@ const PutSemesterModal = () => {
         skip: 0,
     })
     const { data: organizations = [], refetch: refetchSemesters } =
-        useFindManySemester({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManySemester()
 
     const { mutateAsync: createSemester } = useCreateSemester()
     const { mutateAsync: updateSemester } = useUpdateSemester()

@@ -1,5 +1,5 @@
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
-import { QueryOperation } from './commonComponents'
+import type { QueryOperation } from './commonComponents'
 
 export type CommonContext = {
     fetcherOptions: {

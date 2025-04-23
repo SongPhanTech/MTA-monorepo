@@ -33,10 +33,7 @@ const PutUploadProfileModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return

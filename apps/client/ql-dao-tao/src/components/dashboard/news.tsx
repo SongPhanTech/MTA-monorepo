@@ -132,7 +132,11 @@ function News() {
                                             )}
                                         </span>
                                         <br />
-                                        <a href={item?.link} target="_blank">
+                                        <a
+                                            href={item?.link}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
                                             Xem thêm
                                         </a>
                                     </div>

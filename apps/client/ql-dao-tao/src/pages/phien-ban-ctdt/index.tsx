@@ -3,10 +3,15 @@ import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutCurriculumVersionModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { CTDT_STATUS, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { Curriculum, CurriculumStatus, SchoolYear } from '@workspace/db'
+import type {
+    Curriculum,
+    CurriculumStatus,
+    CurriculumVersion,
+    SchoolYear,
+} from '@workspace/db'
 import {
     useCountCurriculumVersion,
     useFindManyCurriculum,
@@ -32,15 +37,18 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-const statusOptions = {
-    ACTIVE: { label: 'Đang hoạt động', color: 'green' },
-    INACTIVATED: { label: 'Không hoạt động', color: 'red' },
+
+interface FilterProps {
+    name: string | undefined
+    startDate: string | undefined
+    endDate: string | undefined
+    curriculumId: string | undefined
 }
 export default function CurriculumVersionPage({ curriculumInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<FilterProps>({
         name: '',
         startDate: undefined,
         endDate: undefined,
@@ -121,15 +129,9 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         hideSpinner()
     }
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManySchoolYear()
     const { data: dataCurriculum = [], refetch: refetchCurriculum } =
-        useFindManyCurriculum({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyCurriculum()
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()
@@ -142,7 +144,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                 return today >= start
             })
             if (currentSchoolYear) {
-                setFilters((prev: any) => ({
+                setFilters((prev: FilterProps) => ({
                     ...prev,
                     schoolYearId: currentSchoolYear.id,
                 }))
@@ -156,7 +158,10 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         }, 500),
         []
     )
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (
+        key: string,
+        value: string | { startDate?: string; endDate?: string } | undefined
+    ) => {
         if (key !== 'time') {
             setFilters((prev) => {
                 const newFilters = { ...prev, [key]: value }
@@ -164,17 +169,20 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                 return newFilters
             })
         } else {
-            setFilters((prev) => {
-                const newFilters = {
-                    ...prev,
-                    startDate: value?.startDate ?? undefined,
-                    endDate: value?.endDate ?? undefined,
-                }
-                debouncedRefetch()
-                return newFilters
-            })
+            if (typeof value === 'object' && value !== null) {
+                setFilters((prev) => {
+                    const newFilters = {
+                        ...prev,
+                        startDate: value.startDate ?? undefined,
+                        endDate: value.endDate ?? undefined,
+                    }
+                    debouncedRefetch()
+                    return newFilters
+                })
+            }
         }
     }
+
     async function handleStatusChange(id: string, newStatus: CurriculumStatus) {
         try {
             showSpinner()
@@ -191,7 +199,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
         }
         hideSpinner()
     }
-    const options = Object.entries(statusOptions).map(
+    const options = Object.entries(CTDT_STATUS).map(
         ([value, { label, color }]) => ({
             value,
             label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
@@ -233,6 +241,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                         </Col>
                         <Col span={6}>
                             <Flex justify="space-between" align="center">
+                                {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                                 <label>Năm học:</label>
                                 <Select
                                     className="w-[70%]"
@@ -266,6 +275,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                         {!curriculumInfo && (
                             <Col span={6}>
                                 <Flex justify="space-between" align="center">
+                                    {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
                                     <label>CTĐT:</label>
                                     <Select
                                         className="w-[70%]"
@@ -281,7 +291,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                         )}
                                         // value={filters.schoolYearId}
                                         onChange={(
-                                            value: number | null,
+                                            value: string | undefined,
                                             option: any
                                         ) => {
                                             handleFilterChange(
@@ -305,146 +315,158 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                         </Col>
                     </Row>
                 </Col>
-                { curriculumInfo && count === 0 ? <Col span={24}><Flex justify='center'>Không có dữ liệu</Flex></Col> : <Col span={24}>
-                    <Table
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 20,
-                                align: 'center',
-                                render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Nội dung',
-                                dataIndex: 'name',
-                            },
-                            {
-                                title: 'CTĐT',
-                                dataIndex: 'Curriculum',
-                                width: 120,
-                                render: (value: any, record: any) =>
-                                    value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Ngày bắt đầu',
-                                // dataIndex: 'startDate',
-                                render: ({ startDate }) =>
-                                    dayjs(startDate).format('DD/MM/YYYY'),
-                            },
-                            {
-                                title: 'Ngày kết thúc',
-                                // dataIndex: 'endDate',
-                                render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Tài liệu kết xuất',
-                                render: ({ documentPath }) =>
-                                    documentPath ? (
-                                        <a
-                                            href={documentPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
-                            {
-                                title: 'Tài liệu kết xuất',
-                                render: ({ renderPath }) =>
-                                    renderPath ? (
-                                        <a
-                                            href={renderPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
-                            {
-                                title: 'Thông tin',
-                                dataIndex: 'infomation',
-                                // width: 100,
-                            },
-                            {
-                                title: 'Trạng thái',
-                                width: 130,
-                                render: (record: any) => {
-                                    return (
-                                        <Select
-                                            className="w-[155px]"
-                                            value={record.status}
-                                            onChange={(newStatus) =>
-                                                handleStatusChange(
-                                                    record.id,
-                                                    newStatus as CurriculumStatus
-                                                )
-                                            }
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-                                        />
-                                    )
+                {curriculumInfo && count === 0 ? (
+                    <Col span={24}>
+                        <Flex justify="center">Không có dữ liệu</Flex>
+                    </Col>
+                ) : (
+                    <Col span={24}>
+                        <Table
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 20,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        index +
+                                        1 +
+                                        (currentPage - 1) *
+                                            DEFAULT_PAGINATE_SIZE,
                                 },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
+                                {
+                                    title: 'Nội dung',
+                                    dataIndex: 'name',
+                                },
+                                {
+                                    title: 'CTĐT',
+                                    dataIndex: 'Curriculum',
+                                    width: 120,
+                                    render: (value: Curriculum) =>
+                                        value?.name ? value?.name : '',
+                                },
+                                {
+                                    title: 'Ngày bắt đầu',
+                                    // dataIndex: 'startDate',
+                                    render: ({ startDate }) =>
+                                        dayjs(startDate).format('DD/MM/YYYY'),
+                                },
+                                {
+                                    title: 'Ngày kết thúc',
+                                    // dataIndex: 'endDate',
+                                    render: ({ endDate }) =>
+                                        endDate
+                                            ? dayjs(endDate).format(
+                                                  'DD/MM/YYYY'
+                                              )
+                                            : '',
+                                },
+                                {
+                                    title: 'Tài liệu kết xuất',
+                                    render: ({ documentPath }) =>
+                                        documentPath ? (
+                                            <a
+                                                href={documentPath}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    color: 'blue',
+                                                    textDecoration: 'underline',
+                                                }}
+                                            >
+                                                Xem thêm
+                                            </a>
+                                        ) : (
+                                            ''
+                                        ),
+                                },
+                                {
+                                    title: 'Tài liệu kết xuất',
+                                    render: ({ renderPath }) =>
+                                        renderPath ? (
+                                            <a
+                                                href={renderPath}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    color: 'blue',
+                                                    textDecoration: 'underline',
+                                                }}
+                                            >
+                                                Xem thêm
+                                            </a>
+                                        ) : (
+                                            ''
+                                        ),
+                                },
+                                {
+                                    title: 'Thông tin',
+                                    dataIndex: 'infomation',
+                                    // width: 100,
+                                },
+                                {
+                                    title: 'Trạng thái',
+                                    width: 130,
+                                    render: (record: CurriculumVersion) => {
+                                        return (
+                                            <Select
+                                                className="w-[155px]"
+                                                value={record.status}
+                                                onChange={(newStatus) =>
+                                                    handleStatusChange(
+                                                        record.id,
+                                                        newStatus as CurriculumStatus
+                                                    )
+                                                }
+                                                options={options}
+                                                optionLabelProp="label"
+                                                // style={{ width: 180 }}
+                                                bordered={false}
+                                                showSearch={false}
                                             />
-                                        </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
-                                            }}
-                                        />
-                                    </Row>
-                                ),
-                            },
-                        ]}
-                        data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
-                    />
-                </Col>}
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Thao tác',
+                                    width: 100,
+                                    align: 'center',
+                                    render: (_, { id }) => (
+                                        <Row className="justify-center gap-2">
+                                            <Tooltip
+                                                title="Xem chi tiết"
+                                                placement="leftTop"
+                                            >
+                                                <EyeOutlined
+                                                    onClick={onOpen.bind(
+                                                        null,
+                                                        id
+                                                    )}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDelete(id),
+                                                }}
+                                            />
+                                        </Row>
+                                    ),
+                                },
+                            ]}
+                            data={data}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
+                                onChange: setCurrentPage,
+                                onShowSizeChange: setNumberOfPages,
+                                showTotal: (total, range) =>
+                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                            }}
+                        />
+                    </Col>
+                )}
             </Row>
         </div>
     )

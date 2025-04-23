@@ -96,10 +96,7 @@ export default function SubjectGroupPage() {
         hideSpinner()
     }
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManySchoolYear()
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()
@@ -120,10 +117,7 @@ export default function SubjectGroupPage() {
         }
     }, [dataSchoolYear])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
     const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(
         _.debounce(() => {

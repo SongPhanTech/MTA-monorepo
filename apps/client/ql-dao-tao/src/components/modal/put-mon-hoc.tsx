@@ -103,16 +103,10 @@ const PutSubjectModal = () => {
         }
     }, [level])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } =
-        useFindManySubjectGroup({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManySubjectGroup()
     return (
         <PutFormModal
             open={isOpen}

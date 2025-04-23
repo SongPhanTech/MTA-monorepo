@@ -108,7 +108,7 @@ function generatePassword(length = 12): string {
 }
 function buildOrgTree(
     list: Array<{ id: string; name: string; parentId: string | null }>,
-    parentId: string = '0'
+    parentId = '0'
 ): Array<{ title: string; value: string; children: any[] }> {
     return list
         .filter((item) => (item.parentId ?? '0') === parentId)

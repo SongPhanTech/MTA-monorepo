@@ -175,14 +175,48 @@ const FilterLecture = (props: Props) => {
     )
 
     return (
-        <Popover
-            content={filterContent}
-            trigger="click"
-            open={open}
-            onOpenChange={handleOpenChange}
-        >
-            <Button icon={<FilterOutlined />}>Bộ lọc</Button>
-        </Popover>
+        <Flex>
+            <Input
+                placeholder="Nhập tên giảng viên..."
+                style={{ width: 300, marginRight: 8 }}
+                prefix={
+                    <Search
+                        size={15}
+                        style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                    />
+                }
+                allowClear
+                onChange={(e) => onSearchChange('searchText', e.target.value)}
+            />
+            <Popover
+                content={filterContent}
+                trigger="click"
+                open={open}
+                onOpenChange={handleOpenChange}
+                placement="bottomRight"
+                align={{
+                    offset: [100, 0],
+                }}
+                arrow={false}
+                overlayStyle={{
+                    width: 450,
+                }}
+                overlayInnerStyle={{
+                    padding: 0,
+                }}
+                destroyTooltipOnHide
+            >
+                <Button
+                    icon={<FilterOutlined />}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                />
+            </Popover>
+        </Flex>
     )
 }
+
 export default FilterLecture

@@ -36,6 +36,18 @@ const GENDER_LIST = [
         id: 'Female',
     },
 ]
+
+const CTDT_STATUS = {
+    ACTIVE: { label: 'Đang hoạt động', color: 'green' },
+    INACTIVATED: { label: 'Không hoạt động', color: 'red' },
+}
+
+const KHOA_HL_STATUS = {
+    ACTIVE: { label: 'Đang hoạt động', color: 'green' },
+    COMPLETED: { label: 'Hoàn thành', color: 'blue' },
+    SUSPEND: { label: 'Tạm dừng', color: 'orange' },
+    CANCEL: { label: 'Hủy bỏ', color: 'red' },
+}
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -45,4 +57,6 @@ export {
     GENDER_MEAN,
     GENDER_LIST,
     SUBJECT_EQUIVALENT_TYPE,
+    CTDT_STATUS,
+    KHOA_HL_STATUS,
 }

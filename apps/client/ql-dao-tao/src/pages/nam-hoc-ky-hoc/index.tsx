@@ -13,8 +13,8 @@ import {
 } from 'antd'
 const { Title } = Typography
 import _ from 'lodash'
-import SchoolYearPage from './schoolyear'
-import SemesterPage from './semester'
+import SchoolYearPage from '../../components/sub-pages/schoolyear'
+import SemesterPage from '../../components/sub-pages/semester'
 import { useState } from 'react'
 function Home() {
     const [selectedSchoolYear, setSelectedSchoolYear] = useState<any>()

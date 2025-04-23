@@ -19,23 +19,10 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountUserProfile,
     useFindManyUserProfile,
-    useFindManyTrainingForm,
     useUpdateUserProfile,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
     useFindManyUserType,
     useFindManyTemplateFile,
 } from '@workspace/db/hooks'
-import type {
-    UserProfile,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
-    UserType,
-} from '@workspace/db'
 
 import {
     Button,
@@ -56,8 +43,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
-import Select from '@components/commons/select'
+import { FilterHocVien } from '@components/filter'
 
 dayjs.locale('vi')
 export default function UserProfilePageQs() {
@@ -107,24 +93,29 @@ export default function UserProfilePageQs() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<any>({
+    const { onOpen, onClose } = useDisclosure<{
+        tag?: string
+        id: string | null
+        code: string
+    }>({
         tag: PutUserProfileModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<any>(
-        {
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
+        useDisclosure<string>({
             tag: PutUploadProfileModal.name,
-        }
-    )
+        })
     const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
         useDisclosure<string>({
             tag: PutUpdateProfileModal.name,
         })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>(
-        {
-            tag: PutUserProfileUpdateModal.name,
-        }
-    )
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
+        tag?: string
+        id: string | null
+        code: string
+    }>({
+        tag: PutUserProfileUpdateModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -156,17 +147,14 @@ export default function UserProfilePageQs() {
         hideSpinner()
     }
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
 
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (
+        key: string,
+        value: string | { startDate?: string; endDate?: string }
+    ) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -238,79 +226,51 @@ export default function UserProfilePageQs() {
             </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-
-                                {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <>
-                                    <Dropdown
-                                        overlay={menuDownload}
-                                        trigger={['hover']}
-                                    >
+                            <Flex>
+                                <Col span={8} className="pl-0">
+                                    <FilterHocVien
+                                        handleFilterChange={handleFilterChange}
+                                        filters={filters}
+                                        setFilters={setFilters}
+                                    />
+                                </Col>
+                                <Col span={16}>
+                                    <Flex justify="end">
                                         <Button
-                                            className="ml-4"
+                                            onClick={handleModal}
                                             type="primary"
-                                            icon={<DownloadOutlined />}
                                         >
-                                            Tải file mẫu
+                                            Thêm mới
                                         </Button>
-                                    </Dropdown>
-                                </>
-                                <>
-                                    <Dropdown
-                                        overlay={menuUpload}
-                                        trigger={['hover']}
-                                    >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<UploadOutlined />}
+                                        <Dropdown
+                                            overlay={menuDownload}
+                                            trigger={['hover']}
                                         >
-                                            Nhập file
-                                        </Button>
-                                    </Dropdown>
-                                </>
+                                            <Button
+                                                className="ml-4"
+                                                type="primary"
+                                                icon={<DownloadOutlined />}
+                                            >
+                                                Tải file mẫu
+                                            </Button>
+                                        </Dropdown>
+                                        <Dropdown
+                                            overlay={menuUpload}
+                                            trigger={['hover']}
+                                        >
+                                            <Button
+                                                className="ml-4"
+                                                type="primary"
+                                                icon={<UploadOutlined />}
+                                            >
+                                                Nhập file
+                                            </Button>
+                                        </Dropdown>
+                                    </Flex>
+                                </Col>
                             </Flex>
-                        </Col>
-                    </Row>
-                    {/* Row ô tìm kiếm */}
-                    <Row gutter={[16, 16]}>
-                        <Col span={6}>
-                            <Form.Item label="Tìm kiếm" name="searchText">
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Tìm kiếm theo tên,..."
-                                />
-                            </Form.Item>
-                        </Col>
-
-                        <Col span={8}>
-                            <Form.Item label="Đối tượng" name="trainingForm">
-                                <Select
-                                    placeholder="Chọn đối tượng"
-                                    options={userTypeData.map(
-                                        (i: UserType) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
-                                    onChange={(val) =>
-                                        handleFilterChange('userTypeId', val)
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
                         </Col>
                     </Row>
                 </Col>
@@ -334,7 +294,9 @@ export default function UserProfilePageQs() {
                             {
                                 title: 'Họ và tên',
                                 // dataIndex: 'name',
+                                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                                 render: ({ firstName, lastName }: any) =>
+                                    // biome-ignore lint/style/useTemplate: <explanation>
                                     `${lastName}` + ' ' + `${firstName}`,
                             },
                             {

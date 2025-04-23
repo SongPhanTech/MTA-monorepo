@@ -50,36 +50,18 @@ const PutCurriculumModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingForm()
 
     const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingObjectType()
     const { data: trainingTimeData = [], refetch: refetchTrainingTime } =
-        useFindManyTrainingTime({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingTime()
     const { data: trainingMajorData = [], refetch: refetchTrainingMajor } =
-        useFindManyTrainingMajor({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingMajor()
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
 
     const { mutateAsync: createCurriculum } = useCreateCurriculum()
     const { mutateAsync: updateCurriculum } = useUpdateCurriculum()

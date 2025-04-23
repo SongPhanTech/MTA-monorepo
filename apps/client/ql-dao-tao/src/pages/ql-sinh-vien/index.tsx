@@ -58,6 +58,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
+import { FilterSinhVien } from '@components/filter'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -107,7 +108,11 @@ export default function UserProfilePageDs() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<any>({
+    const { onOpen, onClose } = useDisclosure<{
+        tag?: string
+        id: string | null
+        code: string
+    }>({
         tag: PutUserProfileModal.name,
     })
 
@@ -119,11 +124,13 @@ export default function UserProfilePageDs() {
         useDisclosure<string>({
             tag: PutUpdateProfileModal.name,
         })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<any>(
-        {
-            tag: PutUserProfileUpdateModal.name,
-        }
-    )
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
+        tag?: string
+        id: string | null
+        code: string
+    }>({
+        tag: PutUserProfileUpdateModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -155,17 +162,14 @@ export default function UserProfilePageDs() {
         hideSpinner()
     }
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
 
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (
+        key: string,
+        value: string | { startDate?: string; endDate?: string }
+    ) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -240,73 +244,52 @@ export default function UserProfilePageDs() {
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                            <Flex>
+                                <Col span={8} className="pl-0">
+                                    <FilterSinhVien
+                                        handleFilterChange={handleFilterChange}
+                                        filters={filters}
+                                        setFilters={setFilters}
+                                    />
+                                </Col>
+                                <Col span={16}>
+                                    <Flex justify="end">
+                                        <Button
+                                            onClick={handleModal}
+                                            type="primary"
+                                        >
+                                            Thêm mới
+                                        </Button>
 
-                                {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <>
-                                    <Dropdown
-                                        overlay={menuDownload}
-                                        trigger={['hover']}
-                                    >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<DownloadOutlined />}
+                                        {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
+                                        <Dropdown
+                                            overlay={menuDownload}
+                                            trigger={['hover']}
                                         >
-                                            Tải file mẫu
-                                        </Button>
-                                    </Dropdown>
-                                </>
-                                <>
-                                    <Dropdown
-                                        overlay={menuUpload}
-                                        trigger={['hover']}
-                                    >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<UploadOutlined />}
+                                            <Button
+                                                className="ml-4"
+                                                type="primary"
+                                                icon={<DownloadOutlined />}
+                                            >
+                                                Tải file mẫu
+                                            </Button>
+                                        </Dropdown>
+                                        <Dropdown
+                                            overlay={menuUpload}
+                                            trigger={['hover']}
                                         >
-                                            Nhập file
-                                        </Button>
-                                    </Dropdown>
-                                </>
+                                            <Button
+                                                className="ml-4"
+                                                type="primary"
+                                                icon={<UploadOutlined />}
+                                            >
+                                                Nhập file
+                                            </Button>
+                                        </Dropdown>
+                                    </Flex>
+                                </Col>
                             </Flex>
                         </Col>
-                    </Row>
-                    {/* Row ô tìm kiếm */}
-                    <Row gutter={[16, 16]}>
-                        <Col span={6}>
-                            <Form.Item label="Tìm kiếm" name="searchText">
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
-                                    }
-                                    placeholder="Tìm kiếm theo tên,..."
-                                />
-                            </Form.Item>
-                        </Col>
-
-                        {/* <Col span={8}>
-                            <Form.Item label="Đối tượng" name="trainingForm">
-                                <Select
-                                    placeholder="Chọn đối tượng"
-                                    options={userTypeData.map((i: UserType) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    onChange={(val) => handleFilterChange('userTypeId', val)}
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col> */}
                     </Row>
                 </Col>
                 <Col span={24}>
@@ -328,9 +311,11 @@ export default function UserProfilePageDs() {
                             },
                             {
                                 title: 'Họ và tên',
-                                // dataIndex: 'name',
-                                render: ({ firstName, lastName }: any) =>
-                                    `${lastName}` + ' ' + `${firstName}`,
+                                render: ({
+                                    firstName,
+                                    lastName,
+                                }: { firstName: string; lastName: string }) =>
+                                    `${lastName} ${firstName}`,
                             },
                             // {
                             //     title: 'Đối tượng',

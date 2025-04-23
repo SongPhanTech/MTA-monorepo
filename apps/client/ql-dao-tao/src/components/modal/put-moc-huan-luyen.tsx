@@ -36,10 +36,7 @@ const PutMilestoneModal = () => {
         skip: 0,
     })
     const { data: organizations = [], refetch: refetchMilestones } =
-        useFindManyMilestone({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyMilestone()
 
     const { mutateAsync: createMilestone } = useCreateMilestone()
     const { mutateAsync: updateMilestone } = useUpdateMilestone()

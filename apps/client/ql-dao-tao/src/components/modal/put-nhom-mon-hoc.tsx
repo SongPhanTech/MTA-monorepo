@@ -81,10 +81,7 @@ const PutSubjectGroupModal = () => {
         }
     }, [level])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyOrganization()
     const treeData = buildOrgTree(manageOrgData)
 
     return (
