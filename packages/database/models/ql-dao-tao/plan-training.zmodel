@@ -184,15 +184,16 @@ enum CurriculumVersionSubjectType { // loại môn học
 
 // môn học chương trình
 model CurriculumVersionSubject extends Base {
-  curriculumVersion   CurriculumVersion     @relation(fields: [curriculumVersionId], references: [id]) // Chương trình giảng dạy
+  curriculumVersion   CurriculumVersion            @relation(fields: [curriculumVersionId], references: [id]) // Chương trình giảng dạy
   curriculumVersionId String
 
-  subject             Subject               @relation(fields: [subjectId], references: [id])
+  subject             Subject                      @relation(fields: [subjectId], references: [id])
   subjectId           String
 
-  trainingBlock       TrainingBlock?        @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
+  trainingBlock       TrainingBlock?               @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
   trainingBlockId     String?
 
+  type                CurriculumVersionSubjectType @default(None) // loại môn học
   information         String?   //Thông tin
   documentPath        String?  // Đường dẫn tài liệu
   renderPath          String?  // Đường dẫn tài liệu kết xuất
