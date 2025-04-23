@@ -362,13 +362,13 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_DS,
                 description: 'Quản lý hồ sơ sinh viên',
             },
-            {
-                id: 'teacher-profile-management',
-                label: 'Quản lý hồ sơ giáo viên',
-                icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.TEACHER_PROFILE_MANAGEMENT,
-                description: 'Quản lý hồ sơ giáo viên',
-            },
+            // {
+            //     id: 'teacher-profile-management',
+            //     label: 'Quản lý hồ sơ giáo viên',
+            //     icon: IdcardOutlined,
+            //     path: ROUTER_PATH.QL_DAO_TAO.TEACHER_PROFILE_MANAGEMENT,
+            //     description: 'Quản lý hồ sơ giáo viên',
+            // },
             {
                 id: 'chuong-trinh-dao-tao',
                 label: 'Quản lý chương trình đào tạo',
