@@ -28,10 +28,11 @@ export type TerminateSessionBySessionId = {};
 
 export type User = {
   id: string;
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.703Z
+   * @default 2025-04-22T07:55:14.925Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -49,10 +50,11 @@ export type User = {
 
 export type UserCreate = {
   id?: string;
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.704Z
+   * @default 2025-04-22T07:55:14.926Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -71,10 +73,11 @@ export type UserCreate = {
 };
 
 export type UserUpdate = {
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.704Z
+   * @default 2025-04-22T07:55:14.927Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -99,10 +102,11 @@ export type PaginationQuery = {
 export type ListOfundefined = PaginationQuery & {
   data: {
     id: string;
+    code?: string | null;
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-04-10T16:00:51.704Z
+     * @default 2025-04-22T07:55:14.927Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -118,6 +122,12 @@ export type ListOfundefined = PaginationQuery & {
     role?: string | null;
     groups?: (void | null)[];
     feedback?: (void | null)[];
+    userProfile?: (void | null)[];
+    conversation?: (void | null)[];
+    documentUploaded?: (void | null)[];
+    documentApproved?: (void | null)[];
+    fAQUploaded?: (void | null)[];
+    fAQApproved?: (void | null)[];
     accountLocked?: boolean;
   }[];
   count: number;
@@ -125,10 +135,11 @@ export type ListOfundefined = PaginationQuery & {
 
 export type Group = {
   id: string;
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.705Z
+   * @default 2025-04-22T07:55:14.928Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -137,10 +148,11 @@ export type Group = {
 
 export type GroupCreate = {
   id?: string;
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.705Z
+   * @default 2025-04-22T07:55:14.928Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -151,10 +163,11 @@ export type GroupCreate = {
 
 export type GroupUpdate = {
   id?: string;
+  code?: string | null;
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-10T16:00:51.705Z
+   * @default 2025-04-22T07:55:14.928Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;

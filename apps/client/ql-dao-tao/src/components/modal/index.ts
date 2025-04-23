@@ -15,6 +15,7 @@ import PutCurriculumModal from './put-curriculum'
 import PutSubjectGroupModal from './put-subject-group'
 import PutSubjectModal from './put-subject'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
+import AddUserProfileLecture from './add-user-profile-lecture'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -33,4 +34,5 @@ export {
     PutSubjectGroupModal,
     PutSubjectModal,
     PutUserProfileLectureModal,
+    AddUserProfileLecture
 }

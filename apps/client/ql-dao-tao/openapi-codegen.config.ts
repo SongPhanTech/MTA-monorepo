@@ -22,4 +22,21 @@ export default defineConfig({
             })
         },
     },
+    model: {
+        from: {
+            source: 'url',
+            url: 'https://api.model.mta.swantech.vn/openapi',
+        },
+        outputDir: 'src/lib/api/model',
+        to: async (context) => {
+            const filenamePrefix = 'model'
+            const { schemasFiles } = await generateSchemaTypes(context, {
+                filenamePrefix,
+            })
+            await generateReactQueryComponents(context, {
+                filenamePrefix,
+                schemasFiles,
+            })
+        },
+    },
 })
