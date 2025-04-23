@@ -1,6 +1,6 @@
 import '../base'
 import '../ql-nguoi-dung/user'
-import '../ql-danh-muc/user'
+import '../ql-danh-muc/categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/plan-training'
 
