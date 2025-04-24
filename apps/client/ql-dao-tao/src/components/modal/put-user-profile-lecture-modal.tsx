@@ -31,8 +31,21 @@ import {
     useFindManyNationality,
     useFindManyReligion,
     useFindManyEthnicity,
+    useFindManyOrganizationUser,
+    useUpdateOrganizationUser,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Tabs, Collapse, Row, Button } from 'antd'
+import {
+    Col,
+    Form,
+    Input,
+    message,
+    Tabs,
+    Collapse,
+    Row,
+    Button,
+    Tooltip,
+    Flex,
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -42,12 +55,17 @@ import { GENDER_LIST } from '@constants/constants'
 import { Upload } from 'antd'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import Table from '@components/commons/table'
+import { PutOrganizationUser } from '@components/modal'
+import { PutOrganizationUserProps } from './put-organization-user'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const { TabPane } = Tabs
 const { Panel } = Collapse
 import 'dayjs/locale/vi'
+import { EyeOutlined } from '@ant-design/icons'
+import DeleteIcon from '@components/icons/delete'
 dayjs.locale('vi')
 // export type PutUserProfile = UserProfile;
 export type PutUserProfile = UserProfile & {
@@ -64,6 +82,14 @@ const PutUserProfileLectureModal = () => {
             tag: PutUserProfileLectureModal.name,
             onClose: form.resetFields,
         })
+
+    const {
+        onOpen: onOpenModalOganizationUser,
+        onClose: onCloseModalOganizationUser,
+    } = useDisclosure<PutOrganizationUserProps>({
+        tag: PutOrganizationUser.name,
+    })
+
     const { id, code } = input ?? { id: null, code: '' }
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -86,138 +112,146 @@ const PutUserProfileLectureModal = () => {
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyReligion()
 
+    const {
+        data: organizationUserData = [],
+        refetch: refetchOrganizationUser,
+    } = useFindManyOrganizationUser({
+        where: {
+            userProfileId: id || undefined,
+        },
+    })
+
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function onOk(output?: PutUserProfile) {
         if (!output) return
 
-        const resPresignedUrl = await fetchGeneratePresignedUrl({
-            body: {
-                path: 'avatar',
-                extension: fileList[0].name.split('.').pop() ?? '',
-            },
-        })
-        const res = await fetch(resPresignedUrl.url, {
-            method: 'PUT',
-            body: fileList[0].originFileObj,
-        })
-        console.log('res', res)
-        // try {
-        //   showSpinner();
-        //   if (id) {
-        //     await updateUserProfile({
-        //       data: {
-        //         code: output.code,
-        //         firstName: output.firstName,
-        //         lastName: output.lastName,
-        //         dateOfBirth: output.dateOfBirth,
-        //         placeOfBirth: output.placeOfBirth,
-        //         homeTown: output.homeTown,
-        //         idCardNumber: output.idCardNumber,
-        //         idCardDate: output.idCardDate,
-        //         officerNumber: output.officerNumber,
-        //         gender: output.gender,
-        //         permanentAddress: output.permanentAddress,
-        //         temporaryAddress: output.temporaryAddress,
-        //         contactAddress: output.contactAddress,
-        //         phoneNumber: output.phoneNumber,
-        //         email: output.email,
-        //         parentPhoneNumber: output.parentPhoneNumber,
-        //         parentName: output.parentName,
-        //         unionDate: output.unionDate,
-        //         unionPlace: output.unionPlace,
-        //         CPVJoinDate: output.CPVJoinDate,
-        //         officialCPVDate: output.officialCPVDate,
-        //         CPVJoinPlace: output.CPVJoinPlace,
-        //         tenureDate: output.tenureDate,
-        //         enlistmentDate: output.enlistmentDate,
-        //         dischargeDate: output.dischargeDate,
-        //         rankName: output.rankName,
-        //         educationLevel: output.educationLevel,
-        //         academicDegreeTypeName: output.academicDegreeTypeName,
-        //         academicRankTypeName: output.academicRankTypeName,
-        //         positionName: output.positionName,
-        //         positionCPVName: output.positionCPVName,
-        //         organizationName: output.organizationName,
-        //         organizationCPVName: output.organizationCPVName,
-        //         userTypeId:
-        //           userTypeData?.find((type: any) => type.code === code)?.id ??
-        //           undefined,
-        //         userId: output.userId,
-        //         priorityObjectId: output.priorityObjectId,
-        //         registrationAreaId: output.registrationAreaId,
-        //         nationalityId: output.nationalityId,
-        //         religionId: output.religionId,
-        //         ethnicityId: output.ethnicityId,
-        //       },
-        //       where: {
-        //         id,
-        //       },
-        //     });
-        //     message.success("Cập nhật thành công");
-        //   } else {
-        //     await createUserProfile({
-        //       data: {
-        //         code: output.code,
-        //         firstName: output.firstName,
-        //         lastName: output.lastName,
-        //         dateOfBirth: output.dateOfBirth,
-        //         placeOfBirth: output.placeOfBirth,
-        //         homeTown: output.homeTown,
-        //         idCardNumber: output.idCardNumber,
-        //         idCardDate: output.idCardDate,
-        //         officerNumber: output.officerNumber,
-        //         gender: output.gender,
-        //         permanentAddress: output.permanentAddress,
-        //         temporaryAddress: output.temporaryAddress,
-        //         contactAddress: output.contactAddress,
-        //         phoneNumber: output.phoneNumber,
-        //         email: output.email,
-        //         parentPhoneNumber: output.parentPhoneNumber,
-        //         parentName: output.parentName,
-        //         unionDate: output.unionDate,
-        //         unionPlace: output.unionPlace,
-        //         CPVJoinDate: output.CPVJoinDate,
-        //         officialCPVDate: output.officialCPVDate,
-        //         CPVJoinPlace: output.CPVJoinPlace,
-        //         tenureDate: output.tenureDate,
-        //         enlistmentDate: output.enlistmentDate,
-        //         dischargeDate: output.dischargeDate,
-        //         rankName: output.rankName,
-        //         educationLevel: output.educationLevel,
-        //         academicDegreeTypeName: output.academicDegreeTypeName,
-        //         academicRankTypeName: output.academicRankTypeName,
-        //         positionName: output.positionName,
-        //         positionCPVName: output.positionCPVName,
-        //         organizationName: output.organizationName,
-        //         organizationCPVName: output.organizationCPVName,
-        //         userTypeId: userTypeData?.find((type: any) => type.code === code)!
-        //           .id,
-        //         userId: output.userId,
-        //         priorityObjectId: output.priorityObjectId,
-        //         registrationAreaId: output.registrationAreaId,
-        //         nationalityId: output.nationalityId,
-        //         religionId: output.religionId,
-        //         ethnicityId: output.ethnicityId,
-        //       },
-        //     });
-        //     message.success("Thêm mới thành công");
-        //   }
-        //   // refetch() lại danh sách level
-        //   queryClient.invalidateQueries({
-        //     queryKey: ["UserProfile"],
-        //   });
-        //   onClose();
-        // } catch (error) {
-        //   message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại");
-        // }
+        // const resPresignedUrl = await fetchGeneratePresignedUrl({
+        //   body: {
+        //     path: "avatar",
+        //     extension: fileList[0].name.split(".").pop() ?? "",
+        //   },
+        // });
+        // const res = await fetch(resPresignedUrl.url, {
+        //   method: "PUT",
+        //   body: fileList[0].originFileObj,
+        // });
+        // console.log("res", res);
+        try {
+            showSpinner()
+            if (id) {
+                await updateUserProfile({
+                    data: {
+                        code: output.code,
+                        firstName: output.firstName,
+                        lastName: output.lastName,
+                        dateOfBirth: output.dateOfBirth,
+                        placeOfBirth: output.placeOfBirth,
+                        homeTown: output.homeTown,
+                        idCardNumber: output.idCardNumber,
+                        idCardDate: output.idCardDate,
+                        officerNumber: output.officerNumber,
+                        gender: output.gender,
+                        permanentAddress: output.permanentAddress,
+                        temporaryAddress: output.temporaryAddress,
+                        contactAddress: output.contactAddress,
+                        phoneNumber: output.phoneNumber,
+                        email: output.email,
+                        parentPhoneNumber: output.parentPhoneNumber,
+                        parentName: output.parentName,
+                        unionDate: output.unionDate,
+                        unionPlace: output.unionPlace,
+                        CPVJoinDate: output.CPVJoinDate,
+                        officialCPVDate: output.officialCPVDate,
+                        CPVJoinPlace: output.CPVJoinPlace,
+                        tenureDate: output.tenureDate,
+                        enlistmentDate: output.enlistmentDate,
+                        dischargeDate: output.dischargeDate,
+                        rankName: output.rankName,
+                        educationLevel: output.educationLevel,
+                        academicDegreeTypeName: output.academicDegreeTypeName,
+                        academicRankTypeName: output.academicRankTypeName,
+                        positionName: output.positionName,
+                        positionCPVName: output.positionCPVName,
+                        organizationName: output.organizationName,
+                        organizationCPVName: output.organizationCPVName,
+                        userTypeId:
+                            userTypeData?.find(
+                                (type: any) => type.code === code
+                            )?.id ?? undefined,
+                        userId: output.userId,
+                        priorityObjectId: output.priorityObjectId,
+                        registrationAreaId: output.registrationAreaId,
+                        nationalityId: output.nationalityId,
+                        religionId: output.religionId,
+                        ethnicityId: output.ethnicityId,
+                    },
+                    where: {
+                        id,
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await createUserProfile({
+                    data: {
+                        code: output.code,
+                        firstName: output.firstName,
+                        lastName: output.lastName,
+                        dateOfBirth: output.dateOfBirth,
+                        placeOfBirth: output.placeOfBirth,
+                        homeTown: output.homeTown,
+                        idCardNumber: output.idCardNumber,
+                        idCardDate: output.idCardDate,
+                        officerNumber: output.officerNumber,
+                        gender: output.gender,
+                        permanentAddress: output.permanentAddress,
+                        temporaryAddress: output.temporaryAddress,
+                        contactAddress: output.contactAddress,
+                        phoneNumber: output.phoneNumber,
+                        email: output.email,
+                        parentPhoneNumber: output.parentPhoneNumber,
+                        parentName: output.parentName,
+                        unionDate: output.unionDate,
+                        unionPlace: output.unionPlace,
+                        CPVJoinDate: output.CPVJoinDate,
+                        officialCPVDate: output.officialCPVDate,
+                        CPVJoinPlace: output.CPVJoinPlace,
+                        tenureDate: output.tenureDate,
+                        enlistmentDate: output.enlistmentDate,
+                        dischargeDate: output.dischargeDate,
+                        rankName: output.rankName,
+                        educationLevel: output.educationLevel,
+                        academicDegreeTypeName: output.academicDegreeTypeName,
+                        academicRankTypeName: output.academicRankTypeName,
+                        positionName: output.positionName,
+                        positionCPVName: output.positionCPVName,
+                        organizationName: output.organizationName,
+                        organizationCPVName: output.organizationCPVName,
+                        userTypeId: userTypeData?.find(
+                            (type: any) => type.code === code
+                        )!.id,
+                        userId: output.userId,
+                        priorityObjectId: output.priorityObjectId,
+                        registrationAreaId: output.registrationAreaId,
+                        nationalityId: output.nationalityId,
+                        religionId: output.religionId,
+                        ethnicityId: output.ethnicityId,
+                    },
+                })
+                message.success('Thêm mới thành công')
+            }
+            // refetch() lại danh sách level
+            queryClient.invalidateQueries({
+                queryKey: ['UserProfile'],
+            })
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
         hideSpinner()
     }
 
     const { data: level } = useFindUniqueUserProfile(
-        //{
-        // where: { id },
-        // }
         id
             ? {
                   where: {
@@ -276,6 +310,23 @@ const PutUserProfileLectureModal = () => {
 
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList.slice(-1))
+    }
+
+    async function handleDeleteOrganizationUser(id: string) {
+        try {
+            showSpinner()
+            await useUpdateOrganizationUser({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
     }
 
     return (
@@ -871,6 +922,70 @@ const PutUserProfileLectureModal = () => {
                         </Col>
                     </Row>
                 </TabPane>
+                {/* <TabPane tab="Đơn vị" key="4">
+          <Flex justify="end">
+            <Button
+              onClick={() =>
+                onOpenModalOganizationUser({ id: id || "", action: "add" })
+              }
+              type="primary"
+            >
+              Thêm mới
+            </Button>
+          </Flex>
+          <Table
+            columns={[
+              {
+                title: "STT",
+                width: 20,
+                align: "center",
+                render: (_, __, index) => index + 1,
+              },
+              {
+                title: "Tên đơn vị",
+                dataIndex: "code",
+              },
+              {
+                title: "Vị trí công tác",
+                dataIndex: "name",
+              },
+              {
+                title: "Trạng thái",
+                dataIndex: "name",
+              },
+              {
+                title: "Thao tác",
+                width: 100,
+                align: "center",
+                render: (_, { id }) => (
+                  <Row className="justify-center gap-2">
+                    <Tooltip title="Xem chi tiết" placement="leftTop">
+                      <EyeOutlined
+                        onClick={onOpenModalOganizationUser.bind(null, {
+                          id: id || "",
+                          action: "edit",
+                        })}
+                        className="text-sm text-blue-700 cursor-pointer"
+                      />
+                    </Tooltip>
+                    <DeleteIcon
+                      popConfirm={{
+                        onConfirm: () => handleDeleteOrganizationUser(id),
+                      }}
+                    />
+                  </Row>
+                ),
+              },
+            ]}
+            data={[]}
+            pagination={{
+              current: 1,
+              pageSize: 10000,
+              showSizeChanger: false,
+              showTotal: () => null,
+            }}
+          />
+        </TabPane> */}
             </Tabs>
         </PutFormModal>
     )
