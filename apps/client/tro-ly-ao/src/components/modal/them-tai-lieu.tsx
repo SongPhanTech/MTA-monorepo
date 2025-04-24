@@ -20,12 +20,13 @@ type DocumentFormType = {
             file: File
             body: string
             progress?: number
+            timeLeft?: number
         }
     >
 }
-const AddTaiLieu = () => {
+const ThemTaiLieu = () => {
     const { isOpen, onClose } = useDisclosure<string>({
-        tag: AddTaiLieu.name,
+        tag: ThemTaiLieu.name,
     })
     const { mutateAsync: createMany } = useCreateManyDocument()
 
@@ -76,7 +77,11 @@ const AddTaiLieu = () => {
                     })
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
-                            const { loaded, total = 1 } = progressEvent
+                            const {
+                                loaded,
+                                total = 1,
+                                estimated = 0,
+                            } = progressEvent
                             const percent = Math.floor((loaded * 100) / total)
                             form.setFieldsValue({
                                 files: {
@@ -85,6 +90,7 @@ const AddTaiLieu = () => {
                                         ...file,
                                         url: resPresignedUrl.fileName,
                                         progress: percent,
+                                        timeLeft: estimated,
                                     },
                                 },
                             })
@@ -167,7 +173,11 @@ const AddTaiLieu = () => {
                             <div
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
-                                className="flex items-center gap-2 mt-2 border border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100"
+                                className={cn(
+                                    'flex items-center gap-2 mt-2 border border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
+                                    selectedFile?.url === file.url &&
+                                        'bg-gray-100 border-primary'
+                                )}
                             >
                                 <FileUploadIcon
                                     fileType={file.file.type}
@@ -182,7 +192,15 @@ const AddTaiLieu = () => {
                                     </div>
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
+                                        {!!file.timeLeft && !!file.progress && (
+                                            <span className="text-gray-400 text-sm">
+                                                {` - ${Math.floor(
+                                                    file.timeLeft
+                                                )} giây`}
+                                            </span>
+                                        )}
                                     </span>
+
                                     {file.progress !== 0 &&
                                         file.progress !== 100 && (
                                             <Progress percent={file.progress} />
@@ -202,14 +220,20 @@ const AddTaiLieu = () => {
                         ))}
                     </div>
                 </Form>
-                {selectedFile && (
-                    <div className={cn('flex flex-col gap-2 w-3/5')}>
-                        <span>
-                            Xem trước tài liệu: {selectedFile.file.name}
-                        </span>
+                {!!selectedFile && (
+                    <div className={cn('flex flex-col gap-2 w-3/5 pt-4')}>
+                        <div className="flex items-center gap-2 cursor-pointer justify-between">
+                            <span>Xem trước tài liệu</span>
+                            <CloseCircleOutlined
+                                onClick={() => {
+                                    setSelectedFile(undefined)
+                                }}
+                                className="text-base cursor-pointer"
+                            />
+                        </div>
                         <Input.TextArea
                             value={selectedFile.body}
-                            className="mt-4 h-full"
+                            className="h-full"
                         />
                     </div>
                 )}
@@ -218,4 +242,4 @@ const AddTaiLieu = () => {
     )
 }
 
-export default AddTaiLieu
+export default ThemTaiLieu

@@ -11,27 +11,32 @@ type TableProps<T> = {
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
     }
-} & TableAntdProps
+} & Omit<TableAntdProps<T>, 'columns'>
 
-const Table = <T extends Record<string, unknown>>({
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const Table = <T extends Record<PropertyKey, any>>({
     columns = [],
     data,
     pagination,
+    ...rest
 }: TableProps<T>) => {
     return (
-        <TableAntd
+        <TableAntd<T>
             className="mt-4"
-            columns={columns.map((column) => ({
-                ...column,
-                key:
-                    column.key ||
-                    (column as unknown as { dataIndex: string }).dataIndex,
-            }))}
             bordered
             dataSource={data}
             locale={{
                 emptyText: <Empty description="Không có dữ liệu" />,
             }}
+            {...rest}
+            columns={columns.map((column) => ({
+                ...column,
+                key:
+                    column.key ||
+                    (column as unknown as { dataIndex: string }).dataIndex,
+                dataIndex: (column as unknown as { dataIndex: string })
+                    .dataIndex,
+            }))}
             pagination={{
                 position: ['bottomRight'],
                 defaultPageSize: DEFAULT_PAGINATE_SIZE,

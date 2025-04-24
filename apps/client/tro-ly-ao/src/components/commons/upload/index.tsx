@@ -1,22 +1,15 @@
 import { env } from '@/env'
-import {
-    FileExcelFilled,
-    FileFilled,
-    FilePdfFilled,
-    FilePptFilled,
-    FileWordFilled,
-    PlusOutlined,
-    DeleteFilled,
-} from '@ant-design/icons'
+import { DeleteFilled } from '@ant-design/icons'
+import DocxIcon from '@assets/images/docx.svg'
+import PptIcon from '@assets/images/ppt.svg'
+import TxtIcon from '@assets/images/txt.svg'
+import UploadIcon from '@assets/images/upload.svg'
+import ExcelIcon from '@assets/images/xlsx.svg'
+import PdfIcon from '@assets/images/pdf.svg'
 import { cn } from '@lib/utils'
 import { Button, Divider, Image } from 'antd'
 import ImageNext from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import UploadIcon from '@assets/images/upload.svg'
-import DocxIcon from '@assets/images/docx.svg'
-import PptIcon from '@assets/images/ppt.svg'
-import TxtIcon from '@assets/images/txt.svg'
-import ExcelIcon from '@assets/images/xlsx.svg'
 
 type UploadDragAndDropWrapperProps = {
     onUpload: (
@@ -58,7 +51,7 @@ export const FileUploadIcon = ({
             return PptIcon
         }
         if (fileType === 'application/pdf') {
-            return TxtIcon
+            return PdfIcon
         }
         return TxtIcon
     }, [fileType])
