@@ -446,28 +446,10 @@ const NAVIGATION: NavigationType = {
                 icon: SettingOutlined,
                 children: [
                     {
-                        id: 'dot-khao-sat',
-                        label: 'Đợt khảo sát',
+                        id: 'thiet-lap-chung',
+                        label: 'Thiết lập chung',
                         path: ROUTER_PATH.KHAO_THI
-                            .THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                    },
-                    {
-                        id: 'chu-de-khao-sat',
-                        label: 'Chủ đề khảo sát',
-                        path: ROUTER_PATH.KHAO_THI
-                            .THIET_LAP_KHAO_SAT_CHU_DE_KHAO_SAT,
-                    },
-                    {
-                        id: 'doi-tuong-khao-sat',
-                        label: 'Đối tượng khảo sát',
-                        path: ROUTER_PATH.KHAO_THI
-                            .THIET_LAP_KHAO_SAT_DOI_TUONG_KHAO_SAT,
-                    },
-                    {
-                        id: 'loai-cau-hoi-khao-sat',
-                        label: 'Loại câu hỏi khảo sát',
-                        path: ROUTER_PATH.KHAO_THI
-                            .THIET_LAP_KHAO_SAT_LOAI_CAU_HOI_KHAO_SAT,
+                            .THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                     },
                     {
                         id: 'cau-hoi-khao-sat',
