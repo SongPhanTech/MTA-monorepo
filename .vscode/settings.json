@@ -1,6 +1,7 @@
 {
   "editor.defaultFormatter": "biomejs.biome",
   "cSpell.words": [
+    "Docxtemplater",
     "SCIM"
   ],
   "[json]": {

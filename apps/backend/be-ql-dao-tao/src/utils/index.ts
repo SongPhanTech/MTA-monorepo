@@ -40,3 +40,11 @@ export function parseDate(input?: number | string | Date): Date | null {
 
     return null
 }
+
+export const getCurrentDateForReport = () => {
+    const currentDate = new Date()
+    const date = String(currentDate.getDate()).padStart(2, '0')
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
+    const year = currentDate.getFullYear()
+    return { date, month, year }
+}
