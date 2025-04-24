@@ -10,6 +10,7 @@ import {
     TeamOutlined,
     IdcardOutlined,
     MessageOutlined,
+    FileTextOutlined,
 } from '@ant-design/icons'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
@@ -433,6 +434,36 @@ const NAVIGATION: NavigationType = {
                 label: 'Trợ lý ảo',
                 icon: MessageOutlined,
                 path: ROUTER_PATH.TRO_LY_AO.INDEX,
+            },
+        ],
+    },
+    KHAO_THI: {
+        label: 'Khảo thí',
+        menus: [
+            {
+                id: 'thiet-lap-khao-sat',
+                label: 'Thiết lập khảo sát',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        id: 'thiet-lap-chung',
+                        label: 'Thiết lập chung',
+                        path: ROUTER_PATH.KHAO_THI
+                            .THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                    },
+                    {
+                        id: 'cau-hoi-khao-sat',
+                        label: 'Câu hỏi khảo sát',
+                        path: ROUTER_PATH.KHAO_THI
+                            .THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                    },
+                ],
+            },
+            {
+                id: 'tra-loi-khao-sat',
+                label: 'Trả lời khảo sát',
+                icon: FileTextOutlined,
+                path: ROUTER_PATH.KHAO_THI.TRA_LOI_KHAO_SAT,
             },
         ],
     },
