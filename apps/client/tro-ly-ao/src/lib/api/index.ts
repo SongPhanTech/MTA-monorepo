@@ -22,7 +22,6 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
         },
     }).then((res) => {
         if (res.status === 401) {
-            signOut()
             removeStorage('ACCESS_TOKEN')
             signOutAction()
         }

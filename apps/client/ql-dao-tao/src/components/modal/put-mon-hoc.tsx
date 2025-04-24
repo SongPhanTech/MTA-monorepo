@@ -10,9 +10,9 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Steps, TreeSelect } from 'antd'
 import DatePicker from '@components/commons/date-picker'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
 export type PutSubjectFormType = Subject
@@ -20,6 +20,8 @@ import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 import Select from '@components/commons/select'
 import { SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
+import MonHocTienQuyetPage from '@components/sub-pages/mon-hoc-tien-quyet'
+import MonHocSongHanhPage from '@components/sub-pages/mon-hoc-song-hanh'
 
 dayjs.locale('vi')
 const PutSubjectModal = () => {
@@ -107,6 +109,29 @@ const PutSubjectModal = () => {
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } =
         useFindManySubjectGroup()
+    const [current, setCurrent] = useState(0)
+
+    const next = () => setCurrent(current + 1)
+    const prev = () => setCurrent(current - 1)
+    const steps = [
+        {
+            title: 'Thông tin chung',
+            content: 'First-content',
+        },
+        {
+            title: 'Môn học tiên quyết',
+            content: 'Second-content',
+        },
+        {
+            title: 'Môn học song hành',
+            content: 'Third-content',
+        },
+    ]
+    const onChange = (value: number) => {
+        setCurrent(value)
+    }
+    const items = steps.map((item) => ({ key: item.title, title: item.title }))
+
     return (
         <PutFormModal
             open={isOpen}
@@ -117,144 +142,187 @@ const PutSubjectModal = () => {
             title={id ? 'Chỉnh sửa môn học' : 'Thêm mới môn học'}
             className="w-[40vw]"
         >
-            <Col span={12}>
-                <FormItem form={form} name="name" label="Tên môn học" required>
-                    <Input placeholder="Nhập tên môn học" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="managementOrganizationId"
-                    label="Đơn vị phụ trách"
-                    required
-                >
-                    <TreeSelect
-                        placeholder="Chọn đơn vị phụ trách"
-                        allowClear
-                        showSearch
-                        treeDefaultExpandAll
-                        treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                        }
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="subjectGroupId"
-                    label="Nhóm môn học"
-                    normalize={(value) => (value === undefined ? null : value)}
-                    required
-                >
-                    <Select
-                        allowClear
-                        placeholder="Chọn nhóm môn học"
-                        options={subjectGroupData.map((item: SubjectGroup) => {
-                            return {
-                                value: item.id,
-                                label: item.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="subjectEquivalentType"
-                    label="Loại môn học tương đương"
-                    normalize={(value) => (value === undefined ? null : value)}
-                    required
-                >
-                    <Select
-                        allowClear
-                        placeholder="Chọn loại môn học tương đương"
-                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(
-                            ([key, value_]) => {
-                                return {
-                                    label: value_,
-                                    value: key,
+            {id && (
+                <Steps
+                    current={current}
+                    onChange={onChange}
+                    items={items}
+                    className="mb-4"
+                />
+            )}
+            {(!id || current === 0) && (
+                <>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="name"
+                            label="Tên môn học"
+                            required
+                        >
+                            <Input placeholder="Nhập tên môn học" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="managementOrganizationId"
+                            label="Đơn vị phụ trách"
+                            required
+                        >
+                            <TreeSelect
+                                placeholder="Chọn đơn vị phụ trách"
+                                allowClear
+                                showSearch
+                                treeDefaultExpandAll
+                                treeData={treeData}
+                                filterTreeNode={(input, node) =>
+                                    (node.title as string)
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
                                 }
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="subjectGroupId"
+                            label="Nhóm môn học"
+                            normalize={(value) =>
+                                value === undefined ? null : value
                             }
-                        )}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="credit" label="Số tín chỉ" required>
-                    <Input placeholder="Nhập số tín chỉ" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="period" label="Số tiết" required>
-                    <Input placeholder="Nhập số tiết" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfTheory"
-                    label="Số tiết lý thuyết"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết lý thuyết" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfPractice"
-                    label="Số tiết thực hành"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết thực hành" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfSelfStudy"
-                    label="Số tiết tự học"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết tự học" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfProject"
-                    label="Số tiết đồ án"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết đồ án" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfInternship"
-                    label="Số tiết thực tập"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết thực tập" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfOther"
-                    label="Số tiết khác"
-                    required
-                >
-                    <Input placeholder="Nhập số tiết khác" />
-                </FormItem>
-            </Col>
+                            required
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn nhóm môn học"
+                                options={subjectGroupData.map(
+                                    (item: SubjectGroup) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
+                                    }
+                                )}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="subjectEquivalentType"
+                            label="Loại môn học tương đương"
+                            normalize={(value) =>
+                                value === undefined ? null : value
+                            }
+                            required
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn loại môn học tương đương"
+                                options={Object.entries(
+                                    SUBJECT_EQUIVALENT_TYPE
+                                ).map(([key, value_]) => {
+                                    return {
+                                        label: value_,
+                                        value: key,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="credit"
+                            label="Số tín chỉ"
+                            required
+                        >
+                            <Input placeholder="Nhập số tín chỉ" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="period"
+                            label="Số tiết"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfTheory"
+                            label="Số tiết lý thuyết"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết lý thuyết" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfPractice"
+                            label="Số tiết thực hành"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết thực hành" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfSelfStudy"
+                            label="Số tiết tự học"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết tự học" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfProject"
+                            label="Số tiết đồ án"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết đồ án" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfInternship"
+                            label="Số tiết thực tập"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết thực tập" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="numberOfOther"
+                            label="Số tiết khác"
+                            required
+                        >
+                            <Input placeholder="Nhập số tiết khác" />
+                        </FormItem>
+                    </Col>
+                </>
+            )}
+            {id && current === 1 && (
+                <div className="w-full">
+                    <MonHocTienQuyetPage subjectId={id} />
+                </div>
+            )}
+            {id && current === 2 && (
+                <div className="w-full">
+                    <MonHocSongHanhPage subjectId={subjectId} />
+                </div>
+            )}
         </PutFormModal>
     )
 }

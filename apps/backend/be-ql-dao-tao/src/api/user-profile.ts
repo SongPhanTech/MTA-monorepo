@@ -4,6 +4,7 @@ import { UserProfileScalarSchema } from '@workspace/db/zod/models'
 import { HTTPException } from 'hono/http-exception'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { parseDate, splitFullName } from '../utils'
 import { ListOf } from '../zod/base'
 
@@ -19,15 +20,9 @@ const uploadExcelCreateUserProfile = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z
-                        .object({
-                            file: z.instanceof(File).openapi({
-                                type: 'string',
-                                format: 'binary',
-                            }),
-                            type: z.string(), // loại thông tin
-                        })
-                        .openapi('uploadExcelCreateUserProfile'),
+                    schema: UploadExcelModel.extend({
+                        type: z.string(), // loại thông tin
+                    }).openapi('uploadExcelCreateUserProfile'),
                 },
             },
         },
@@ -63,14 +58,9 @@ const uploadExcelUpdateUserProfile = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z
-                        .object({
-                            file: z.instanceof(File).openapi({
-                                type: 'string',
-                                format: 'binary',
-                            }),
-                        })
-                        .openapi('uploadExcelUpdateUserProfile'),
+                    schema: UploadExcelModel.openapi(
+                        'uploadExcelUpdateUserProfile'
+                    ),
                 },
             },
         },
@@ -100,21 +90,13 @@ const app = new OpenAPIHono({ strict: false })
 app.openapi(uploadExcelCreateUserProfile, async (c) => {
     const { file, type } = c.req.valid('form')
 
-    const allowedExtensions = ['.xls', '.xlsx']
-    if (
-        !allowedExtensions.some((ext) => file.name.toLowerCase().endsWith(ext))
-    ) {
-        return c.json({ message: 'Định dạng file không hỗ trợ' }, 400)
-    }
-    const fileSize = file.size // Kích thước file trong byte
-    const maxFileSize = 50 * 1024 * 1024 // 50MB
-    if (fileSize > maxFileSize) {
+    if (file.size > 50 * 1024 * 1024) {
         return c.json({ message: 'File vượt quá 50MB' }, 400)
     }
 
-    // Đọc file Excel
+    // Tìm kiếm UserType của Sinh viên
     const userType = await prisma.userType.findFirst({
-        where: { code: type }, // Tìm kiếm UserType của Sinh viên
+        where: { code: type },
     })
 
     if (!userType) {
@@ -167,15 +149,7 @@ app.openapi(uploadExcelCreateUserProfile, async (c) => {
 app.openapi(uploadExcelUpdateUserProfile, async (c) => {
     const { file } = c.req.valid('form')
 
-    const allowedExtensions = ['.xls', '.xlsx']
-    if (
-        !allowedExtensions.some((ext) => file.name.toLowerCase().endsWith(ext))
-    ) {
-        return c.json({ message: 'File không hỗ trợ' }, 400)
-    }
-    const fileSize = file.size // Kích thước file trong byte
-    const maxFileSize = 50 * 1024 * 1024 // 50MB
-    if (fileSize > maxFileSize) {
+    if (file.size > 50 * 1024 * 1024) {
         return c.json({ message: 'File vượt quá 50MB' }, 400)
     }
 

@@ -46,7 +46,7 @@ export default function MilestonePage() {
             schoolYearId: filters.schoolYearId,
         },
         include: {
-            SchoolYear: true,
+            schoolYear: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -118,7 +118,7 @@ export default function MilestonePage() {
             <Divider orientation="left" orientationMargin={0}>
                 Mốc huấn luyện
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         {/* Tìm kiếm */}
@@ -193,7 +193,7 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Năm học',
-                                dataIndex: 'SchoolYear',
+                                dataIndex: 'schoolYear',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

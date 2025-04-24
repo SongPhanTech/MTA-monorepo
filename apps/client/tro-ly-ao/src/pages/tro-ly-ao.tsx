@@ -70,8 +70,8 @@ export default function TroLyAo() {
                                     style={{
                                         backgroundColor:
                                             msg.role === 'user'
-                                                ? '#005f37'
-                                                : '#005f37',
+                                                ? '#028850'
+                                                : '#028850',
                                     }}
                                 />
                                 <div

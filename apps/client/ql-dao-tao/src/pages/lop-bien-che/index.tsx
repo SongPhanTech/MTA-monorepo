@@ -62,11 +62,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
         include: {
             fixedClassStudent: {
                 include: {
-                    UserProfile: true,
+                    userProfile: true,
                 },
             },
-            ManagementOrganization: true,
-            TrainingCourse: true,
+            managementOrganization: true,
+            trainingCourse: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -214,7 +214,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
             <Divider orientation="left" orientationMargin={0}>
                 Lớp biên chế
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={6}>
@@ -331,7 +331,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             },
                             {
                                 title: 'Khóa',
-                                dataIndex: 'TrainingCourse',
+                                dataIndex: 'trainingCourse',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

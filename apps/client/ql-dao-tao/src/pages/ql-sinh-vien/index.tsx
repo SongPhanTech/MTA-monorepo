@@ -239,7 +239,7 @@ export default function UserProfilePageDs() {
             <Divider orientation="left" orientationMargin={0}>
                 Sinh viên
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">

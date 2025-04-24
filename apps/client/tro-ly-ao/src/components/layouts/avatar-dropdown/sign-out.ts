@@ -33,9 +33,7 @@ const signOutAction = () => {
     formDom.appendChild(button)
     document.body.appendChild(formDom)
     button.click()
-    signOut({
-        redirect: false,
-    })
+    signOut()
     formDom.remove()
 }
 

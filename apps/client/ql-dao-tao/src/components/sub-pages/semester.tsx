@@ -46,7 +46,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
             createdAt: 'desc',
         },
         include: {
-            SchoolYear: true,
+            schoolYear: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -96,7 +96,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
             <Divider orientation="left" orientationMargin={0}>
                 {`${selectedSchoolYear ? `Học kỳ (${selectedSchoolYear.name})` : 'Học kỳ'}`}
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top">
                         {/* Tìm kiếm */}
@@ -144,7 +144,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             },
                             {
                                 title: 'Năm học',
-                                dataIndex: 'SchoolYear',
+                                dataIndex: 'schoolYear',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

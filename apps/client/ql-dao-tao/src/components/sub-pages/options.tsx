@@ -10,12 +10,7 @@ import { useEffect } from 'react'
 export default function OptionsPage({ fixedClass }: any) {
     const fixedClassId = fixedClass.id
 
-    const { data = [], refetch } = useFindManyFixedClassStudent({
-        take: 1000,
-        skip: 0,
-    })
-
-    console.log(data) // Log data trả về
+    const { data = [], refetch } = useFindManyFixedClassStudent()
 
     const { data: count } = useCountFixedClassStudent({
         where: {

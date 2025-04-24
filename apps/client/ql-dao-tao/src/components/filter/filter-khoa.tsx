@@ -86,7 +86,6 @@ const FilterKhoa = (props: Props) => {
         useFindManySchoolYear()
 
     const handleApply = () => {
-        console.log('filters', form.getFieldsValue())
         const values = form.getFieldsValue()
         const schoolYearId = values.schoolYearId
         const selectedSchool = dataSchoolYear.find(
@@ -307,7 +306,7 @@ const FilterKhoa = (props: Props) => {
                 }}
             >
                 <Button onClick={handleReset} style={{ background: '#f5f5f5' }}>
-                    Bỏ lọc
+                    Làm mới
                 </Button>
                 <Space>
                     <Button onClick={handleCancel}>Hủy</Button>

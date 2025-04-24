@@ -71,7 +71,6 @@ export default function TrainingCoursePage() {
         schoolYearId: undefined,
     })
 
-    const [dataToView, setDataToView] = useState<TrainingCourse[]>([])
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
             ...(filters.searchText && filters.searchText !== ''
@@ -105,10 +104,10 @@ export default function TrainingCoursePage() {
                 : {}),
         },
         include: {
-            TrainingForm: true,
-            TrainingLevel: true,
-            TrainingType: true,
-            TrainingObjectType: true,
+            trainingForm: true,
+            trainingLevel: true,
+            trainingType: true,
+            trainingObjectType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -237,7 +236,7 @@ export default function TrainingCoursePage() {
             <Divider orientation="left" orientationMargin={0}>
                 Khóa huấn luyện
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
@@ -268,7 +267,8 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 render: (_, record, index) =>
                                     index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
+                                    1,
                             },
                             {
                                 title: 'Mã khóa',
@@ -283,28 +283,28 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Loại hình đào tạo',
-                                dataIndex: 'TrainingType',
+                                dataIndex: 'trainingType',
                                 width: 150,
                                 render: (value: TrainingType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
-                                dataIndex: 'TrainingObjectType',
+                                dataIndex: 'trainingObjectType',
                                 width: 120,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Hình thức đào tạo',
-                                dataIndex: 'TrainingForm',
+                                dataIndex: 'trainingForm',
                                 width: 120,
                                 render: (value: TrainingForm) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Trình độ đào tạo',
-                                dataIndex: 'TrainingLevel',
+                                dataIndex: 'trainingLevel',
                                 render: (value: TrainingLevel) =>
                                     value?.name ? value?.name : '',
                             },

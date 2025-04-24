@@ -23,8 +23,8 @@ import {
     message,
     Row,
     Upload,
-    UploadFile,
-    UploadProps,
+    type UploadFile,
+    type UploadProps,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

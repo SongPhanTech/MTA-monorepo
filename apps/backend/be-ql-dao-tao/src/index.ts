@@ -11,8 +11,9 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 
+import FixedClassApp from './api/fixed-class'
 import UserProfileApp from './api/user-profile'
-
+import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -36,6 +37,7 @@ app.use(
         origin: [
             'http://localhost:3000',
             'https://user.mta.swantech.vn',
+            'https://daotao.mta.swantech.vn',
             'https://*.swantech.vn',
         ],
         credentials: true,
@@ -49,11 +51,10 @@ app.use('*', checkIp)
 
 setupOpenApi(app)
 
-// TODO:
-// Update: Bật lại khi release
-// setupAuth(app)
+setupAuth(app)
 
 app.route('/api', UserProfileApp)
+app.route('/api/fixed-class', FixedClassApp)
 
 app.use(
     '/api/model/*',

@@ -58,14 +58,14 @@ export default function UserProfilePageQs() {
             firstName: {
                 contains: filters.searchText,
             },
-            UserType: {
+            userType: {
                 is: {
                     code: 'HV',
                 },
             },
         },
         include: {
-            UserType: true,
+            userType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -79,7 +79,7 @@ export default function UserProfilePageQs() {
             firstName: {
                 contains: filters.searchText,
             },
-            UserType: {
+            userType: {
                 is: {
                     code: 'HV',
                 },
@@ -224,7 +224,7 @@ export default function UserProfilePageQs() {
             <Divider orientation="left" orientationMargin={0}>
                 Học viên
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
@@ -301,7 +301,7 @@ export default function UserProfilePageQs() {
                             },
                             {
                                 title: 'Đối tượng',
-                                dataIndex: 'UserType',
+                                dataIndex: 'userType',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },

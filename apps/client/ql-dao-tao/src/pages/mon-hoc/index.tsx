@@ -141,7 +141,7 @@ export default function SubjectPage() {
             <Divider orientation="left" orientationMargin={0}>
                 Môn học
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         {/* Tìm kiếm */}
@@ -171,11 +171,12 @@ export default function SubjectPage() {
                         <Col span={8}>
                             {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
                             <Flex justify="space-between" align="center">
-                                <label>Đơn vị phụ trách</label>
+                                <p>Đơn vị phụ trách</p>
                                 <TreeSelect
                                     className="w-[200px]"
                                     allowClear
                                     showSearch
+                                    placeholder="Chọn đơn vị phụ trách"
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>

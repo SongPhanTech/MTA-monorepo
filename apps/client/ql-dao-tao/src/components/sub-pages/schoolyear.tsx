@@ -110,7 +110,7 @@ export default function SchoolYearPage({
             <Divider orientation="left" orientationMargin={0}>
                 Năm học
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top">
                         {/* Tìm kiếm */}

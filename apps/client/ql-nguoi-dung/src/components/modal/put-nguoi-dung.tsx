@@ -139,7 +139,7 @@ const PutNguoiDungModal = () => {
                             {!!id && (
                                 <Tooltip title={'Đổi mật khẩu'}>
                                     <EditFilled
-                                        style={{ color: '#005f37' }}
+                                        style={{ color: '#028850' }}
                                         onClick={() =>
                                             setIsAllowEditPassword(
                                                 (prev) => !prev

@@ -62,8 +62,8 @@ const PutUploadDivisionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title="Tải file nhập thông tin học viên"
-            className="w-[30vw]"
+            title="Tải file xếp lớp"
+            className="w-[25vw]"
         >
             <Col span={24}>
                 <FormItem

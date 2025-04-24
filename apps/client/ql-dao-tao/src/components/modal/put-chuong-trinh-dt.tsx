@@ -81,7 +81,7 @@ const PutCurriculumModal = () => {
                         trainingTimeId: output.trainingTimeId,
                         trainingLevelId: output.trainingLevelId,
                         trainingMajorId: output.trainingMajorId,
-                        infomation: output.infomation,
+                        information: output.information,
                         documentPath: output.documentPath,
                         renderPath: output.renderPath,
                     },
@@ -102,7 +102,7 @@ const PutCurriculumModal = () => {
                         trainingTimeId: output.trainingTimeId,
                         trainingLevelId: output.trainingLevelId,
                         trainingMajorId: output.trainingMajorId,
-                        infomation: output.infomation,
+                        information: output.information,
                         documentPath: output.documentPath,
                         renderPath: output.renderPath,
                     },
@@ -272,7 +272,7 @@ const PutCurriculumModal = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
-                    name="infomation"
+                    name="information"
                     label="Thông tin"
                     required
                 >

@@ -54,10 +54,11 @@ const getColorByIndex = (index: number) => {
     return colors[index % colors.length]
 }
 
-const formatNiceBytes = (x: string) => {
+const formatNiceBytes = (x: string | number | null) => {
+    if (!x) return '0 kB'
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     let l = 0
-    let n = Number.parseInt(x, 10) || 0
+    let n = Number.parseInt(`${x}`, 10) || 0
     while (n >= 1024 && ++l) {
         n = n / 1024
     }

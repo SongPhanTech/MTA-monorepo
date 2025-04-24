@@ -16,6 +16,7 @@ import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutSubjectModal from './put-mon-hoc'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import AddUserProfileLecture from './add-user-profile-lecture'
+import PutMonHocChuongTrinhModal from './put-mon-hoc-chuong-trinh'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -35,4 +36,5 @@ export {
     PutSubjectModal,
     PutUserProfileLectureModal,
     AddUserProfileLecture,
+    PutMonHocChuongTrinhModal,
 }

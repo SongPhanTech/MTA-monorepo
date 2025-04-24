@@ -72,7 +72,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                 : {}),
         },
         include: {
-            Curriculum: true,
+            curriculum: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -210,7 +210,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
             <Divider orientation="left" orientationMargin={0}>
                 Phiên bản chương trình đào tạo
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         {/* Tìm kiếm */}
@@ -339,19 +339,20 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 },
                                 {
                                     title: 'CTĐT',
-                                    dataIndex: 'Curriculum',
-                                    width: 120,
+                                    dataIndex: 'curriculum',
+                                    width: 150,
                                     render: (value: Curriculum) =>
                                         value?.name ? value?.name : '',
                                 },
                                 {
                                     title: 'Ngày bắt đầu',
-                                    // dataIndex: 'startDate',
+                                    align: 'center',
                                     render: ({ startDate }) =>
                                         dayjs(startDate).format('DD/MM/YYYY'),
                                 },
                                 {
                                     title: 'Ngày kết thúc',
+                                    align: 'center',
                                     // dataIndex: 'endDate',
                                     render: ({ endDate }) =>
                                         endDate
@@ -362,6 +363,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 },
                                 {
                                     title: 'Tài liệu',
+                                    align: 'center',
                                     render: ({ documentPath }) =>
                                         documentPath ? (
                                             <a
@@ -381,6 +383,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 },
                                 {
                                     title: 'Tài liệu kết xuất',
+                                    align: 'center',
                                     render: ({ renderPath }) =>
                                         renderPath ? (
                                             <a

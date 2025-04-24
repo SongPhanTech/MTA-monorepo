@@ -110,11 +110,11 @@ export default function CurriculumPage() {
                 : {}),
         },
         include: {
-            ManagementOrganization: true,
-            TrainingLevel: true,
-            TrainingObjectType: true,
-            TraingTime: true,
-            TrainingMajor: true,
+            managementOrganization: true,
+            trainingLevel: true,
+            trainingObjectType: true,
+            trainingTime: true,
+            trainingMajor: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -220,7 +220,7 @@ export default function CurriculumPage() {
             <Divider orientation="left" orientationMargin={0}>
                 Chương trình đào tạo
             </Divider>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={6}>
@@ -256,13 +256,14 @@ export default function CurriculumPage() {
                                 align: 'center',
                                 render: (_, record, index) =>
                                     index +
+                                    1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Nội dung',
                                 dataIndex: 'name',
                                 align: 'center',
-                                width: 100,
+                                width: 150,
                             },
                             {
                                 title: 'Đơn vị phụ trách',
@@ -273,27 +274,27 @@ export default function CurriculumPage() {
                             },
                             {
                                 title: 'Đối tượng đào tạo',
-                                dataIndex: 'TrainingObjectType',
+                                dataIndex: 'trainingObjectType',
                                 width: 120,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Bậc đào tạo',
-                                dataIndex: 'TrainingLevel',
+                                dataIndex: 'trainingLevel',
                                 width: 120,
                                 render: (value: TrainingLevel) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Thời gian',
-                                dataIndex: 'TraingTime',
+                                dataIndex: 'trainingTime',
                                 render: (value: TrainingTime) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Chuyên ngành',
-                                dataIndex: 'TrainingMajor',
+                                dataIndex: 'trainingMajor',
                                 render: (value: TrainingMajor) =>
                                     value?.name ? value?.name : '',
                             },
