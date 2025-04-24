@@ -74,11 +74,7 @@ const PutUploadProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                code === 'HV'
-                    ? 'Tải file nhập thông tin học viên'
-                    : 'Tải file nhập thông tin sinh viên'
-            }
+            title={'Tải file nhập thông tin'}
             className="w-[30vw]"
         >
             {/* <Col span={24}>

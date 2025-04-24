@@ -8,6 +8,12 @@ export interface TreeNodeOrganization extends Record<string, unknown> {
     address: string
     children: TreeNodeOrganization[]
 }
+
+export interface TreeNodeType {
+    value: string
+    title: React.ReactNode
+    children?: TreeNodeType[]
+}
 export const convertToTree = (flatData: Organization[]) => {
     const map = new Map()
     const treeData: TreeNodeOrganization[] = []
@@ -19,6 +25,8 @@ export const convertToTree = (flatData: Organization[]) => {
             code: item.code,
             name: item.name,
             address: item.address,
+            value: item.id,
+            label: item.id,
             // type: item.type?.name || null,
             children: [],
         }
@@ -34,6 +42,34 @@ export const convertToTree = (flatData: Organization[]) => {
                 key: 'root',
             }
             treeData.push(node_root)
+        } else {
+            const parentNode = map.get(item.parentId)
+            if (parentNode) {
+                parentNode.children.push(node)
+            }
+        }
+    })
+
+    return treeData
+}
+
+export const convertToTreeSelect = (flatData: Organization[]) => {
+    const map = new Map()
+    const treeData: TreeNodeType[] = []
+
+    flatData.forEach((item: Organization, index: number) => {
+        const node = {
+            value: item.id,
+            title: item.name,
+            children: [],
+        }
+        map.set(item.id, node)
+    })
+
+    flatData.forEach((item: Organization) => {
+        const node = map.get(item.id)
+        if (item.parentId === null || item.parentId === '0') {
+            treeData.push(node)
         } else {
             const parentNode = map.get(item.parentId)
             if (parentNode) {

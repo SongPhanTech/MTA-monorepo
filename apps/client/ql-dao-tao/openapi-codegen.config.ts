@@ -5,12 +5,12 @@ import {
 import { defineConfig } from '@openapi-codegen/cli'
 
 export default defineConfig({
-    app: {
+    daoTao: {
         from: {
             source: 'url',
             url: 'https://api.user.mta.swantech.vn/openapi',
         },
-        outputDir: 'src/lib/api/open-api',
+        outputDir: 'src/lib/api/dao-tao',
         to: async (context) => {
             const filenamePrefix = 'app'
             const { schemasFiles } = await generateSchemaTypes(context, {

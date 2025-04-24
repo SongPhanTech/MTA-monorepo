@@ -63,17 +63,17 @@ const AddUserProfileLecture = () => {
         console.log('code', code)
         // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
-        // const resPresignedUrl = await fetchGeneratePresignedUrl({
-        //   body: {
-        //     path: "avatar",
-        //     extension: fileList[0].name.split(".").pop() ?? "",
-        //   },
-        // });
-        // const res = await fetch(resPresignedUrl.url, {
-        //   method: "PUT",
-        //   body: fileList[0].originFileObj,
-        // });
-        // console.log("check res", res);
+        const resPresignedUrl = await fetchGeneratePresignedUrl({
+            body: {
+                path: 'avatar',
+                extension: fileList[0].name.split('.').pop() ?? '',
+            },
+        })
+        const res = await fetch(resPresignedUrl.url, {
+            method: 'PUT',
+            body: fileList[0].originFileObj,
+        })
+        console.log('check res', res)
         try {
             showSpinner()
             if (id) {
@@ -82,6 +82,7 @@ const AddUserProfileLecture = () => {
                         code: output.code,
                         firstName: output.firstName,
                         lastName: output.lastName,
+                        avatar: res.url,
                         gender: output.gender,
                         dateOfBirth: output.dateOfBirth,
                         homeTown: output.homeTown,
@@ -104,6 +105,7 @@ const AddUserProfileLecture = () => {
                         firstName: output.firstName,
                         lastName: output.lastName,
                         gender: output.gender,
+                        avatar: res.url,
                         dateOfBirth: output.dateOfBirth,
                         homeTown: output.homeTown,
                         idCardNumber: output.idCardNumber,
