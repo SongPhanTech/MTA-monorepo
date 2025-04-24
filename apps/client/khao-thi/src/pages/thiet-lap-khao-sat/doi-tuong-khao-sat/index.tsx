@@ -1,6 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 function Page() {
-    return <div>Thiet lap khao thi</div>
+    return <div>Đối tượng khảo sát</div>
 }
 
 export default Page

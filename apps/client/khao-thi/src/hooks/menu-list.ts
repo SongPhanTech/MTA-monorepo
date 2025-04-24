@@ -53,7 +53,7 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
 
-    const menus = NAVIGATION.TRO_LY_AO.menus.filter((menu) => {
+    const menus = NAVIGATION.KHAO_THI.menus.filter((menu) => {
         // if (menu.children) {
         //     return menu.children.some((child) => permissionNames.includes(child.id))
         // }
