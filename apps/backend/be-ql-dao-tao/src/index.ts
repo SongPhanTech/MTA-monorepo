@@ -5,7 +5,6 @@ import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
 import { contextStorage, getContext } from 'hono/context-storage'
 import { cors } from 'hono/cors'
-import { csrf } from 'hono/csrf'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
@@ -44,7 +43,6 @@ app.use(
     })
 )
 
-app.use(csrf())
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
