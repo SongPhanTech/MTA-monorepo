@@ -347,7 +347,7 @@ const NAVIGATION: NavigationType = {
                 id: 'user-profile-lecture',
                 label: 'Quản lý hồ sơ giảng viên',
                 icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_LECTURE,
+                path: ROUTER_PATH.QL_DAO_TAO.QL_GIANG_VIEN,
                 description: 'Quản lý hồ sơ giảng viên',
             },
             {
