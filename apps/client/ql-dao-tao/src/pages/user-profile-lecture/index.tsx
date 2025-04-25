@@ -20,6 +20,7 @@ import {
     convertToTree,
     getAllChildrenByParentId,
 } from '@/utils/convertOrganizationToTree'
+import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 import {
     useCountUserProfile,
     useFindManyUserProfile,
@@ -56,6 +57,7 @@ import FilterLecture from '../../components/filter/filter-lecture'
 import type { FilterProps } from '../../components/filter/filter-lecture'
 import { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
 import { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
+import { record } from 'zod'
 type Filter = FilterProps & {
     searchText: string
 }
@@ -65,6 +67,7 @@ export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [organizationIds, setOrganizationIds] = useState<string[]>([])
+    const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
         priorityObjectId: null,
@@ -96,14 +99,14 @@ export default function UserProfilePageLecture() {
                 ? { ethnicityId: filters.ethnicityId }
                 : {}),
 
-            UserType: {
+            userType: {
                 is: {
                     code: 'GV',
                 },
             },
         },
         include: {
-            UserType: true,
+            userType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -117,7 +120,7 @@ export default function UserProfilePageLecture() {
             firstName: {
                 contains: filters.searchText,
             },
-            UserType: {
+            userType: {
                 is: {
                     code: 'GV',
                 },
@@ -260,11 +263,13 @@ export default function UserProfilePageLecture() {
 
     const handleAdvancedFilter = (values: FilterProps) => {
         const newFilters = { ...filters, ...values }
-        // setFilters((prev) => {
-        //   const newFilters = { ...prev, values };
-        //   return newFilters;
-        // });
         setFilters(newFilters)
+    }
+
+    const handleRowOrganizationClick = (record: TreeNodeOrganization) => {
+        console.log('record', record)
+        setSelectedRowId(record.id)
+        handleSelectOrganization(record.id)
     }
     return (
         <div>
@@ -275,7 +280,13 @@ export default function UserProfilePageLecture() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
+                        <Col span={10}>
+                            <FilterLecture
+                                onSearchChange={handleFilterChange}
+                                onFilterChange={handleAdvancedFilter}
+                            />
+                        </Col>
+                        <Col span={14}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -311,28 +322,16 @@ export default function UserProfilePageLecture() {
                         </Col>
                     </Row>
                     {/* Row ô tìm kiếm */}
-                    <Row gutter={[16, 16]}>
-                        {/* <Col span={6}>
-              <Form.Item label="Tìm kiếm" name="searchText">
-                <Input
-                  id="search"
-                  onChange={(e) =>
-                    handleFilterChange("searchText", e.target.value)
-                  }
-                  placeholder="Tìm kiếm theo tên,..."
+                    {/* <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+              <Col span={24}>
+                <FilterLecture
+                  onSearchChange={handleFilterChange}
+                  onFilterChange={handleAdvancedFilter}
                 />
-              </Form.Item>
-            </Col> */}
-                        {/* Search and filter row */}
-                        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-                            <Col span={24}>
-                                <FilterLecture
-                                    onSearchChange={handleFilterChange}
-                                    onFilterChange={handleAdvancedFilter}
-                                />
-                            </Col>
-                        </Row>
-                    </Row>
+              </Col>
+            </Row>
+          </Row> */}
                 </Col>
                 <Col span={7}>
                     <Table
@@ -345,35 +344,20 @@ export default function UserProfilePageLecture() {
                                 title: 'Tên đơn vị',
                                 dataIndex: 'name',
                             },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={() =>
-                                                    handleSelectOrganization(id)
-                                                }
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
-                                    </Row>
-                                ),
-                            },
                         ]}
                         data={tree_organization}
                         expandable={{
                             defaultExpandedRowKeys: ['root'],
                         }}
+                        onRowClick={(record) =>
+                            handleRowOrganizationClick(
+                                record as TreeNodeOrganization
+                            )
+                        }
+                        selectedRow={selectedRowId}
                         pagination={{
                             current: 1,
                             pageSize: 10000,
-                            // total: count,
                             onChange: setCurrentPage,
                             showSizeChanger: false,
                             showTotal: () => null,
@@ -393,22 +377,15 @@ export default function UserProfilePageLecture() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã cán bộ/giảng viên',
+                                title: 'Mã giảng viên',
                                 dataIndex: 'code',
                                 align: 'center',
                             },
                             {
                                 title: 'Họ và tên',
-                                // dataIndex: 'name',
                                 render: ({ firstName, lastName }) =>
-                                    // biome-ignore lint/style/useTemplate: <explanation>
                                     `${lastName}` + ' ' + `${firstName}`,
                             },
-                            // {
-                            //     title: 'Đối tượng',
-                            //     dataIndex: 'UserType',
-                            //     render: (value) => value?.name ? value?.name : ""
-                            // },
                             {
                                 title: 'Ngày sinh',
                                 // dataIndex: 'startDate',
@@ -416,20 +393,12 @@ export default function UserProfilePageLecture() {
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
-                                title: 'Giới tính',
-                                // dataIndex: 'gender',
-                                render: ({ gender }) =>
-                                    GENDER_MEAN[
-                                        gender as keyof typeof GENDER_MEAN
-                                    ],
+                                title: 'Cập bậc hàm',
+                                dataIndex: 'rankName',
                             },
                             {
-                                title: 'Số CCCD',
-                                dataIndex: 'idCardNumber',
-                            },
-                            {
-                                title: 'Số điện thoại',
-                                dataIndex: 'phoneNumber',
+                                title: 'Đơn vị',
+                                dataIndex: 'organizationName',
                             },
                             {
                                 title: 'Thao tác',
@@ -466,8 +435,6 @@ export default function UserProfilePageLecture() {
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

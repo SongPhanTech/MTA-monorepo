@@ -1,3 +1,4 @@
+import { fetchInstance } from '..'
 import { ModelContext } from './modelContext'
 import { API_BASE_URL_MINION } from '@constants/constants'
 const baseUrl = API_BASE_URL_MINION
@@ -57,7 +58,7 @@ export async function modelFetch<
             delete requestHeaders['Content-Type']
         }
 
-        const response = await window.fetch(
+        const response = await fetchInstance(
             `${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
             {
                 signal,

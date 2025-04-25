@@ -70,11 +70,7 @@ const PutUpdateProfileModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                code === 'HV'
-                    ? 'Tải file cập nhật thông tin học viên'
-                    : 'Tải file cập nhật thông tin sinh viên'
-            }
+            title={'Tải file cập nhật thông tin'}
             className="w-[30vw]"
         >
             {/* <Col span={24}>

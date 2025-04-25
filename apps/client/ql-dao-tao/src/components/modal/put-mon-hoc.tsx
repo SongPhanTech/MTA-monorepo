@@ -320,7 +320,7 @@ const PutSubjectModal = () => {
             )}
             {id && current === 2 && (
                 <div className="w-full">
-                    <MonHocSongHanhPage subjectId={subjectId} />
+                    <MonHocSongHanhPage subjectId={id} />
                 </div>
             )}
         </PutFormModal>

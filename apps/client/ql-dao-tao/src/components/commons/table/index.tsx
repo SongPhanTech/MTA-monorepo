@@ -15,6 +15,7 @@ type TableProps<T> = {
     expandable?: TableAntdProps<T>['expandable']
     rowKey?: string
     id?: string
+    selectedRow?: string | null
 } & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
@@ -25,6 +26,7 @@ const Table = <T extends Record<string, unknown>>({
     expandable,
     rowKey,
     id,
+    selectedRow,
 }: TableProps<T>) => {
     return (
         <TableAntd
@@ -64,6 +66,8 @@ const Table = <T extends Record<string, unknown>>({
                         onRowClick(record)
                     }
                 },
+                style: { cursor: 'pointer' },
+                className: record.id === selectedRow ? 'bg-blue-100' : '',
             })}
         />
     )

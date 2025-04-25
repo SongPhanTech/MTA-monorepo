@@ -3,63 +3,77 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type {
-    CoRequisiteSubject,
+    CurriculumVersionSubject,
     Subject,
+    SubjectGroup,
+    TrainingBlock,
 } from '@workspace/db'
 import {
-    useCreateCoRequisiteSubject,
+    useCreateCurriculumVersionSubject,
+    useCreateSubject,
     useFindManyOrganization,
     useFindManySubject,
     useFindManySubjectGroup,
     useFindManyTrainingBlock,
-    useFindUniqueCoRequisiteSubject,
-    useUpdateCoRequisiteSubject,
+    useFindUniqueCurriculumVersionSubject,
+    useFindUniqueSubject,
+    useUpdateCurriculumVersionSubject,
+    useUpdateSubject,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, TreeSelect } from 'antd'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
-export type PutCoRequisiteSubject = CoRequisiteSubject
+export type PutCurriculumVersionSubject = CurriculumVersionSubject
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 import Select from '@components/commons/select'
+import {
+    LOAI_MON_HOC_CTDT,
+    SUBJECT_EQUIVALENT_TYPE,
+} from '@constants/constants'
 
 dayjs.locale('vi')
-const PutMonHocSongHanhModal = () => {
-    const [form] = Form.useForm<PutCoRequisiteSubject>()
+const PutMonHocChuongTrinhModal = () => {
+    const [form] = Form.useForm<PutCurriculumVersionSubject>()
     const { isOpen, onClose, input } = useDisclosure<{
-        curriculumVersionSubjectId?: string | null | undefined
+        curriculumVersionId?: string | null | undefined
         id?: string | null
     }>({
-        tag: PutMonHocSongHanhModal.name,
+        tag: PutMonHocChuongTrinhModal.name,
         onClose: form.resetFields,
     })
-    let curriculumVersionSubjectId: string | null | undefined
+    let curriculumVersionId: string | null | undefined
     let id: string | null | undefined
 
     if (input) {
-        curriculumVersionSubjectId = input.curriculumVersionSubjectId
+        curriculumVersionId = input.curriculumVersionId
         id = input.id
     }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createCoRequisiteSubject } =
-        useCreateCoRequisiteSubject()
-    const { mutateAsync: updateCoRequisiteSubject } =
-        useUpdateCoRequisiteSubject()
+    const { mutateAsync: createCurriculumVersionSubject } =
+        useCreateCurriculumVersionSubject()
+    const { mutateAsync: updateCurrriculumVersionSubject } =
+        useUpdateCurriculumVersionSubject()
     const { data: subjectData, refetch: refetchSubject } = useFindManySubject()
-    useFindManyTrainingBlock()
-    async function onOk(output?: PutCoRequisiteSubject) {
+    const { data: trainingBlockData, refetch: refetchTrainingBlockData } =
+        useFindManyTrainingBlock()
+    async function onOk(output?: PutCurriculumVersionSubject) {
         if (!output) return
         try {
             showSpinner()
             if (id) {
-                await updateCoRequisiteSubject({
+                await updateCurrriculumVersionSubject({
                     data: {
-                        curriculumVersionSubjectId:
-                            curriculumVersionSubjectId || undefined,
+                        curriculumVersionId: curriculumVersionId || undefined,
                         subjectId: output.subjectId,
+                        trainingBlockId: output.trainingBlockId,
+                        type: output.type,
+                        information: output.information,
+                        documentPath: output.documentPath,
+                        renderPath: output.renderPath,
                     },
                     where: {
                         id,
@@ -67,11 +81,16 @@ const PutMonHocSongHanhModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createCoRequisiteSubject({
+                await createCurriculumVersionSubject({
                     data: {
                         // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                        curriculumVersionSubjectId: curriculumVersionSubjectId!,
+                        curriculumVersionId: curriculumVersionId!,
                         subjectId: output.subjectId,
+                        trainingBlockId: output.trainingBlockId,
+                        type: output.type,
+                        information: output.information,
+                        documentPath: output.documentPath,
+                        renderPath: output.renderPath,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -87,7 +106,7 @@ const PutMonHocSongHanhModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueCoRequisiteSubject({
+    const { data: level } = useFindUniqueCurriculumVersionSubject({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -110,8 +129,8 @@ const PutMonHocSongHanhModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa môn học song hành'
-                    : 'Thêm mới môn học song hành'
+                    ? 'Chỉnh sửa môn học chương trình'
+                    : 'Thêm mới môn học chương trình'
             }
             className="w-[40vw]"
         >
@@ -135,8 +154,83 @@ const PutMonHocSongHanhModal = () => {
                     />
                 </FormItem>
             </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="type"
+                    label="Loại môn học"
+                    normalize={(value) => (value === undefined ? null : value)}
+                    required
+                >
+                    <Select
+                        allowClear
+                        placeholder="Chọn loại môn học"
+                        options={Object.entries(LOAI_MON_HOC_CTDT).map(
+                            ([key, value_]) => {
+                                return {
+                                    label: value_,
+                                    value: key,
+                                }
+                            }
+                        )}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingBlockId"
+                    label="Khối kiến thức"
+                    normalize={(value) => (value === undefined ? null : value)}
+                    // required
+                >
+                    <Select
+                        allowClear
+                        placeholder="Chọn khối kiến thức"
+                        options={trainingBlockData?.map(
+                            (item: TrainingBlock) => {
+                                return {
+                                    value: item.id,
+                                    label: item.name,
+                                }
+                            }
+                        )}
+                    />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="information"
+                    label="Thông tin"
+                    // required
+                >
+                    <Input placeholder="Nhập thông tin" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="documentPath"
+                    label="Đường dẫn tài liệu"
+                    // required
+                >
+                    <Input placeholder="Nhập đường dẫn tài liệu" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="renderPath"
+                    label="Đường dẫn tài liệu kết xuất"
+                    // required
+                >
+                    <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }
 
-export default PutMonHocSongHanhModal
+export default PutMonHocChuongTrinhModal
