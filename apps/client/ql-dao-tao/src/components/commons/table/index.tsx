@@ -16,6 +16,8 @@ type TableProps<T> = {
     rowKey?: string
     id?: string
     selectedRow?: string | null
+    scrollable?: boolean
+    maxHeight?: number
 } & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
@@ -27,19 +29,21 @@ const Table = <T extends Record<string, unknown>>({
     rowKey,
     id,
     selectedRow,
+    scrollable,
+    maxHeight,
 }: TableProps<T>) => {
     return (
         <TableAntd
             id={id}
             rowKey={rowKey}
-            className="mt-4"
+            className="mt-4 custom-scrollbar"
             columns={columns.map((column) => ({
                 ...column,
                 key:
                     column.key ||
                     (column as unknown as { dataIndex: string }).dataIndex,
             }))}
-            scroll={{ x: 'max-content' }}
+            scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
             bordered
             dataSource={data}
             locale={{

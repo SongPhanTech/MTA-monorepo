@@ -58,6 +58,7 @@ import type { FilterProps } from '../../components/filter/filter-lecture'
 import { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
 import { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import { record } from 'zod'
+import { OrganizationUserStatus } from '@workspace/db'
 type Filter = FilterProps & {
     searchText: string
 }
@@ -86,6 +87,7 @@ export default function UserProfilePageLecture() {
             firstName: {
                 contains: filters.searchText,
             },
+            //   ...filters,
             ...(filters.priorityObjectId
                 ? { priorityObjectId: filters.priorityObjectId }
                 : {}),
@@ -98,7 +100,16 @@ export default function UserProfilePageLecture() {
             ...(filters.ethnicityId
                 ? { ethnicityId: filters.ethnicityId }
                 : {}),
-
+            ...(organizationIds && organizationIds.length > 0
+                ? {
+                      organizationUser: {
+                          some: {
+                              organizationId: { in: organizationIds },
+                              status: OrganizationUserStatus.ACTIVE,
+                          },
+                      },
+                  }
+                : {}),
             userType: {
                 is: {
                     code: 'GV',
@@ -267,9 +278,13 @@ export default function UserProfilePageLecture() {
     }
 
     const handleRowOrganizationClick = (record: TreeNodeOrganization) => {
-        console.log('record', record)
-        setSelectedRowId(record.id)
-        handleSelectOrganization(record.id)
+        if (selectedRowId === record.id) {
+            setSelectedRowId(null)
+            setOrganizationIds([])
+        } else {
+            setSelectedRowId(record.id)
+            handleSelectOrganization(record.id)
+        }
     }
     return (
         <div>
@@ -362,6 +377,8 @@ export default function UserProfilePageLecture() {
                             showSizeChanger: false,
                             showTotal: () => null,
                         }}
+                        scrollable={true}
+                        maxHeight={430}
                     />
                 </Col>
                 <Col span={17}>
@@ -436,6 +453,8 @@ export default function UserProfilePageLecture() {
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
                         }}
+                        // maxHeight={430}
+                        // scrollable={true}
                     />
                 </Col>
             </Row>

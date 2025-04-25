@@ -37,6 +37,24 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         }
     }
 
+    const filterTreeNode = (inputValue: string, treeNode: any) => {
+        const title = treeNode.title?.toLowerCase() || ''
+        const searchTerm = inputValue.toLowerCase()
+        let titleIndex = 0
+        for (let i = 0; i < searchTerm.length; i++) {
+            const charToFind = searchTerm[i]
+            const foundIndex = title.indexOf(charToFind, titleIndex)
+
+            if (foundIndex < 0) {
+                return false
+            }
+
+            titleIndex = foundIndex + 1
+        }
+
+        return true
+    }
+
     return (
         <TreeSelectAnt
             showSearch
@@ -49,6 +67,8 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
             onChange={handleChange}
             treeData={treeData}
             onPopupScroll={handlePopupScroll}
+            filterTreeNode={filterTreeNode}
+            treeNodeFilterProp="title"
         />
     )
 }
