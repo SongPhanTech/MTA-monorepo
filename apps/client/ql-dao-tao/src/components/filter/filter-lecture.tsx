@@ -20,6 +20,12 @@ import {
 } from '@ant-design/icons'
 import { X, Search } from 'lucide-react'
 import Select from '@components/commons/select'
+import {
+    useFindManyNationality,
+    useFindManyPriorityObject,
+    useFindManyReligion,
+    useFindManyEthnicity,
+} from '@workspace/db/hooks'
 
 const { Text } = Typography
 
@@ -67,6 +73,15 @@ const FilterLecture = (props: Props) => {
         setOpen(false)
     }
 
+    const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
+        useFindManyPriorityObject()
+    const { data: nationalityData = [], refetch: refetchNationality } =
+        useFindManyNationality()
+    const { data: religionData = [], refetch: refetchReligion } =
+        useFindManyReligion()
+    const { data: ethnicityData = [], refetch: refetchEthnicity } =
+        useFindManyEthnicity()
+
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
             <div
@@ -102,7 +117,12 @@ const FilterLecture = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn đối tượng ưu tiên"
-                                    options={options}
+                                    options={priorityObjectData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -116,7 +136,12 @@ const FilterLecture = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn quốc tịch"
-                                    options={options}
+                                    options={nationalityData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -130,7 +155,12 @@ const FilterLecture = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn tôn giáo"
-                                    options={options}
+                                    options={religionData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -144,7 +174,12 @@ const FilterLecture = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn dân tộc"
-                                    options={options}
+                                    options={ethnicityData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
+                                    })}
                                 />
                             </Form.Item>
                         </Col>

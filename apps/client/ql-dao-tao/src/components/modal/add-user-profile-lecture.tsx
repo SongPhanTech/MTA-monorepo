@@ -15,6 +15,9 @@ import {
     useFindManyTrainingCourse,
     useFindManyFixedClass,
     useFindManyUserType,
+    useFindManyOrganization,
+    useFindManyPosition,
+    useCreateOrganizationUser,
 } from '@workspace/db/hooks'
 import {
     Col,
@@ -35,6 +38,9 @@ import { GENDER_LIST } from '@constants/constants'
 export type PutUserProfile = UserProfile
 import 'dayjs/locale/vi'
 import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import { getMinioUrl } from '@workspace/constant'
+import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
+import TreeSelect from '@components/commons/tree-select/TreeSelect'
 export interface AddUserProfileLectureProps {
     id: string | null
     code: string
@@ -51,73 +57,109 @@ const AddUserProfileLecture = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
+    const { data: organizations = [], refetch: refetchOrganization } =
+        useFindManyOrganization()
+    const { data: positions = [], refetch: refetchPosition } =
+        useFindManyPosition()
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
     async function onOk(output?: PutUserProfile) {
-        console.log('userTypeData', userTypeData)
-        console.log('code', code)
         // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
-        const resPresignedUrl = await fetchGeneratePresignedUrl({
-            body: {
-                path: 'avatar',
-                extension: fileList[0].name.split('.').pop() ?? '',
-            },
-        })
-        const res = await fetch(resPresignedUrl.url, {
-            method: 'PUT',
-            body: fileList[0].originFileObj,
-        })
-        console.log('check res', res)
+
         try {
             showSpinner()
-            if (id) {
-                await updateUserProfile({
-                    data: {
-                        code: output.code,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        avatar: res.url,
-                        gender: output.gender,
-                        dateOfBirth: output.dateOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        phoneNumber: output.phoneNumber,
-                        userTypeId:
-                            userTypeData?.find(
-                                (type: any) => type.code === code
-                            )?.id ?? undefined,
-                    },
-                    where: {
-                        id,
+            let fileName
+            if (fileList.length > 0) {
+                const resPresignedUrl = await fetchGeneratePresignedUrl({
+                    body: {
+                        path: 'avatar',
+                        extension: fileList[0].name.split('.').pop() ?? '',
                     },
                 })
-                message.success('Cập nhật thành công')
-            } else {
-                await createUserProfile({
-                    data: {
-                        code: output.code,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        gender: output.gender,
-                        avatar: res.url,
-                        dateOfBirth: output.dateOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        phoneNumber: output.phoneNumber,
-                        userTypeId: userTypeData?.find(
-                            (type: any) => type.code === code
-                        )!.id,
-                    },
+                await fetch(resPresignedUrl.url, {
+                    method: 'PUT',
+                    body: fileList[0].originFileObj,
                 })
-                message.success('Thêm mới thành công')
+                fileName = resPresignedUrl.fileName
             }
-            // refetch() lại danh sách level
+            //do model PutUserProfile k co organizationId nen su dung organizationName cho FormItem
+            const organizaiontName = organizations.find(
+                (org) => org.id === output.organizationName
+            )?.name
+            const positionName = positions.find(
+                (pos) => pos.id === output.positionName
+            )?.name
+            const userProfile = await createUserProfile({
+                data: {
+                    code: output.code,
+                    firstName: output.firstName,
+                    lastName: output.lastName,
+                    gender: output.gender,
+                    avatar: fileName ? fileName : undefined,
+                    dateOfBirth: output.dateOfBirth,
+                    homeTown: output.homeTown,
+                    idCardNumber: output.idCardNumber,
+                    phoneNumber: output.phoneNumber,
+                    userTypeId: userTypeData?.find(
+                        (type: any) => type.code === code
+                    )!.id,
+                    organizationName: organizaiontName,
+                    positionName: positionName,
+                },
+            })
+
+            // tao lich su don vi chuc vu
+            if (output.organizationName && output.positionName && userProfile) {
+                await createOrganizationUser({
+                    data: {
+                        userProfileId: userProfile.id,
+                        organizationId: output.organizationName,
+                        positionId: output.positionName,
+                    },
+                })
+            }
+            message.success('Thêm mới thành công')
+            //   await updateUserProfile({
+            //     data: {
+            //       code: output.code,
+            //       firstName: output.firstName,
+            //       lastName: output.lastName,
+            //       avatar: res.url,
+            //       gender: output.gender,
+            //       dateOfBirth: output.dateOfBirth,
+            //       homeTown: output.homeTown,
+            //       idCardNumber: output.idCardNumber,
+            //       phoneNumber: output.phoneNumber,
+            //       userTypeId:
+            //         userTypeData?.find((type: any) => type.code === code)?.id ??
+            //         undefined,
+            //     },
+            //     where: {
+            //       id,
+            //     },
+            //   });
+            //   message.success("Cập nhật thành công");
+            // } else {
+            //   await createUserProfile({
+            //     data: {
+            //       code: output.code,
+            //       firstName: output.firstName,
+            //       lastName: output.lastName,
+            //       gender: output.gender,
+            //       avatar: res.url,
+            //       dateOfBirth: output.dateOfBirth,
+            //       homeTown: output.homeTown,
+            //       idCardNumber: output.idCardNumber,
+            //       phoneNumber: output.phoneNumber,
+            //       userTypeId: userTypeData?.find((type: any) => type.code === code)!
+            //         .id,
+            //     },
+            //   });
+            //   message.success("Thêm mới thành công");
             queryClient.invalidateQueries({
                 queryKey: ['UserProfile'],
             })
@@ -172,6 +214,9 @@ const AddUserProfileLecture = () => {
         setFileList(newFileList.slice(-1))
     }
 
+    // function chuyển URL thàng File object
+    // const url = getMinioUrl("mta/avatar/2025-04-25/AZZrsTrpcAC/tYMsebjNMw==.jpg");
+    // console.log("url", url);
     return (
         <PutFormModal
             open={isOpen}
@@ -241,6 +286,42 @@ const AddUserProfileLecture = () => {
                     <Input placeholder="Nhập tên" />
                 </FormItem>
             </Col>
+
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="positionName"
+                    label="Chức vụ"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn chức vụ"
+                        options={
+                            positions
+                                ? positions.map((i: any) => {
+                                      return {
+                                          value: i.id,
+                                          label: i.name,
+                                      }
+                                  })
+                                : []
+                        }
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="organizationName"
+                    label="Chọn đơn vị"
+                    required
+                >
+                    <TreeSelect
+                        placeholder="Chọn đơn vị"
+                        treeData={convertToTreeSelect(organizations || [])}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
@@ -262,16 +343,6 @@ const AddUserProfileLecture = () => {
                             }
                         })}
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="idCardNumber" label="Số CCCD">
-                    <Input placeholder="Nhập số CCCD" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="phoneNumber" label="Số điện thoại">
-                    <Input placeholder="Nhập số điện thoại" />
                 </FormItem>
             </Col>
             <Col span={12}>

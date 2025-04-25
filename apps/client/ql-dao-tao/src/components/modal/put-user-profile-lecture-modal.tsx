@@ -58,6 +58,7 @@ import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 import Table from '@components/commons/table'
 import { PutOrganizationUser } from '@components/modal'
 import { PutOrganizationUserProps } from './put-organization-user'
+import { getMinioUrl } from '@workspace/constant'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -125,24 +126,27 @@ const PutUserProfileLectureModal = () => {
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function onOk(output?: PutUserProfile) {
         if (!output) return
-
-        // const resPresignedUrl = await fetchGeneratePresignedUrl({
-        //   body: {
-        //     path: "avatar",
-        //     extension: fileList[0].name.split(".").pop() ?? "",
-        //   },
-        // });
-        // const res = await fetch(resPresignedUrl.url, {
-        //   method: "PUT",
-        //   body: fileList[0].originFileObj,
-        // });
-        // console.log("res", res);
+        let fileName
+        if (fileList.length > 0) {
+            const resPresignedUrl = await fetchGeneratePresignedUrl({
+                body: {
+                    path: 'avatar',
+                    extension: fileList[0].name.split('.').pop() ?? '',
+                },
+            })
+            const res = await fetch(resPresignedUrl.url, {
+                method: 'PUT',
+                body: fileList[0].originFileObj,
+            })
+            fileName = resPresignedUrl.fileName
+        }
         try {
             showSpinner()
             if (id) {
                 await updateUserProfile({
                     data: {
                         code: output.code,
+                        avatar: fileName ? fileName : undefined,
                         firstName: output.firstName,
                         lastName: output.lastName,
                         dateOfBirth: output.dateOfBirth,
@@ -251,7 +255,7 @@ const PutUserProfileLectureModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueUserProfile(
+    const { data: userProfile } = useFindUniqueUserProfile(
         id
             ? {
                   where: {
@@ -266,33 +270,51 @@ const PutUserProfileLectureModal = () => {
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if (level) {
+        if (userProfile) {
             form.setFieldsValue({
-                ...level,
-                dateOfBirth: level.dateOfBirth
-                    ? dayjs(level.dateOfBirth)
+                ...userProfile,
+                dateOfBirth: userProfile.dateOfBirth
+                    ? dayjs(userProfile.dateOfBirth)
                     : null,
-                idCardDate: level.idCardDate ? dayjs(level.idCardDate) : null,
-                unionDate: level.unionDate ? dayjs(level.unionDate) : null,
-                CPVJoinDate: level.CPVJoinDate
-                    ? dayjs(level.CPVJoinDate)
+                idCardDate: userProfile.idCardDate
+                    ? dayjs(userProfile.idCardDate)
                     : null,
-                officialCPVDate: level.officialCPVDate
-                    ? dayjs(level.officialCPVDate)
+                unionDate: userProfile.unionDate
+                    ? dayjs(userProfile.unionDate)
                     : null,
-                tenureDate: level.tenureDate ? dayjs(level.tenureDate) : null,
-                enlistmentDate: level.enlistmentDate
-                    ? dayjs(level.enlistmentDate)
+                CPVJoinDate: userProfile.CPVJoinDate
+                    ? dayjs(userProfile.CPVJoinDate)
                     : null,
-                dischargeDate: level.dischargeDate
-                    ? dayjs(level.dischargeDate)
+                officialCPVDate: userProfile.officialCPVDate
+                    ? dayjs(userProfile.officialCPVDate)
+                    : null,
+                tenureDate: userProfile.tenureDate
+                    ? dayjs(userProfile.tenureDate)
+                    : null,
+                enlistmentDate: userProfile.enlistmentDate
+                    ? dayjs(userProfile.enlistmentDate)
+                    : null,
+                dischargeDate: userProfile.dischargeDate
+                    ? dayjs(userProfile.dischargeDate)
                     : null,
             })
+            if (userProfile.avatar) {
+                console.log(getMinioUrl(userProfile.avatar))
+                setAvatar([
+                    {
+                        uid: '-1',
+                        name: 'avatar.png',
+                        status: 'done',
+                        url: getMinioUrl(userProfile.avatar),
+                    },
+                ])
+            }
         }
-    }, [level])
+    }, [userProfile])
 
     //upload file
     const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
 
     const beforeUpload = (file: File) => {
         const fileURL = URL.createObjectURL(file)
@@ -310,23 +332,6 @@ const PutUserProfileLectureModal = () => {
 
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList.slice(-1))
-    }
-
-    async function handleDeleteOrganizationUser(id: string) {
-        try {
-            showSpinner()
-            await useUpdateOrganizationUser({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
     }
 
     return (
@@ -369,30 +374,33 @@ const PutUserProfileLectureModal = () => {
                                         >
                                             <Upload
                                                 listType="picture-card"
-                                                fileList={fileList}
+                                                // fileList={fileList}
+                                                fileList={
+                                                    avatar.length > 0
+                                                        ? avatar
+                                                        : fileList
+                                                }
                                                 onChange={onChange}
                                                 beforeUpload={beforeUpload}
                                                 onRemove={() => {
                                                     setFileList([])
-                                                    //   form.setFields([
-                                                    //     {
-                                                    //       name: "file",
-                                                    //       value: undefined,
-                                                    //       errors: [], // Clear any previous errors
-                                                    //     },
-                                                    //   ]);
+                                                    setAvatar([])
                                                     return true
                                                 }}
                                             >
-                                                {fileList.length < 1 && (
-                                                    <p
-                                                        style={{
-                                                            fontSize: '0.65rem',
-                                                        }}
-                                                    >
-                                                        + Tải ảnh lên
-                                                    </p>
-                                                )}
+                                                {avatar.length > 0 ||
+                                                fileList.length > 0
+                                                    ? ''
+                                                    : fileList.length < 1 && (
+                                                          <p
+                                                              style={{
+                                                                  fontSize:
+                                                                      '0.65rem',
+                                                              }}
+                                                          >
+                                                              + Tải ảnh lên
+                                                          </p>
+                                                      )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -433,7 +441,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập tên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col span={8}>
                                             <FormItem
                                                 form={form}
                                                 name="dateOfBirth"
@@ -446,7 +454,7 @@ const PutUserProfileLectureModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col span={8}>
                                             <FormItem
                                                 form={form}
                                                 name="placeOfBirth"
@@ -454,6 +462,16 @@ const PutUserProfileLectureModal = () => {
                                                 className="mb-0"
                                             >
                                                 <Input placeholder="Nhập nơi sinh" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="organizationName"
+                                                label="Đơn vị"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập đơn vị" />
                                             </FormItem>
                                         </Col>
                                     </Row>
