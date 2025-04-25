@@ -18,6 +18,8 @@ import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import AddUserProfileLecture from './add-user-profile-lecture'
 import PutOrganizationUser from './put-organization-user'
 import PutMonHocChuongTrinhModal from './put-mon-hoc-chuong-trinh'
+import PutMonHocTienQuyetModal from './put-mon-hoc-tien-quyet'
+import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -39,4 +41,6 @@ export {
     AddUserProfileLecture,
     PutOrganizationUser,
     PutMonHocChuongTrinhModal,
+    PutMonHocTienQuyetModal,
+    PutMonHocSongHanhModal,
 }

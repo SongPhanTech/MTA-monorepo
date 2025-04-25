@@ -2,7 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutSemesterModal } from '@components/modal'
+import { PutMonHocTienQuyetModal, PutSemesterModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -11,6 +11,7 @@ import {
     useCountSemester,
     useFindManyPrerequisiteSubject,
     useFindManySemester,
+    useUpdatePrerequisiteSubject,
     useUpdateSemester,
 } from '@workspace/db/hooks'
 import {
@@ -31,9 +32,11 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type Props = {
-    subjectId: string
+    curriculumVersionSubjectId: string
 }
-export default function MonHocTienQuyetPage({ subjectId }: Props) {
+export default function MonHocTienQuyetPage({
+    curriculumVersionSubjectId,
+}: Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -43,8 +46,8 @@ export default function MonHocTienQuyetPage({ subjectId }: Props) {
             // name: {
             //     contains: searchText,
             // },
-            subjectId: {
-                equals: subjectId,
+            curriculumVersionSubjectId: {
+                equals: curriculumVersionSubjectId,
             },
         },
         include: {
@@ -57,33 +60,38 @@ export default function MonHocTienQuyetPage({ subjectId }: Props) {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-
     const { data: count } = useCountPrerequisiteSubject({
         where: {
             // name: {
             //     contains: searchText,
             // },
-            subjectId: {
-                equals: subjectId,
+            curriculumVersionSubjectId: {
+                equals: curriculumVersionSubjectId,
             },
         },
     })
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutSemesterModal.name,
+    const { onOpen, onClose } = useDisclosure<{
+        curriculumVersionSubjectId?: string | null | undefined // môn học chương trình
+        id?: string | null
+    }>({
+        tag: PutMonHocTienQuyetModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        onOpen({
+            curriculumVersionSubjectId,
+        })
     }
-    const { mutateAsync: updateSemester } = useUpdateSemester()
+    const { mutateAsync: updatePrerequisiteSubject } =
+        useUpdatePrerequisiteSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateSemester({
+            await updatePrerequisiteSubject({
                 where: {
                     id,
                 },
@@ -117,7 +125,6 @@ export default function MonHocTienQuyetPage({ subjectId }: Props) {
                                 />
                             </Form.Item>
                         </Col>
-
                         {/* Thêm mới */}
                         <Col span={12}>
                             <Flex justify="end">
@@ -140,36 +147,11 @@ export default function MonHocTienQuyetPage({ subjectId }: Props) {
                                     1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            // {
-                            //     title: 'Mã học kỳ',
-                            //     dataIndex: 'code',
-                            // },
                             {
-                                title: 'Tên học kỳ',
-                                dataIndex: 'name',
-                            },
-                            {
-                                title: 'Năm học',
-                                dataIndex: 'schoolYear',
+                                title: 'Tên môn học tiên quyết',
+                                dataIndex: 'subject',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Ngày bắt đầu',
-                                // dataIndex: 'startDate',
-                                render: ({ startDate }) =>
-                                    dayjs(startDate).format('DD/MM/YYYY'),
-                            },
-                            {
-                                title: 'Ngày kết thúc',
-                                render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
                             },
                             {
                                 title: 'Thao tác',
@@ -182,7 +164,10 @@ export default function MonHocTienQuyetPage({ subjectId }: Props) {
                                             placement="leftTop"
                                         >
                                             <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
+                                                onClick={onOpen.bind(
+                                                    curriculumVersionSubjectId,
+                                                    id
+                                                )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip>

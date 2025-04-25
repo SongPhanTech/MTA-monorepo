@@ -42,7 +42,7 @@ dayjs.locale('vi')
 const PutMonHocTienQuyetModal = () => {
     const [form] = Form.useForm<PutPrerequisiteSubject>()
     const { isOpen, onClose, input } = useDisclosure<{
-        curriculumVersionSubjectId?: string | null | undefined
+        curriculumVersionSubjectId?: string | null | undefined // môn học chương trình
         id?: string | null
     }>({
         tag: PutMonHocTienQuyetModal.name,
@@ -50,7 +50,7 @@ const PutMonHocTienQuyetModal = () => {
     })
     let curriculumVersionSubjectId: string | null | undefined
     let id: string | null | undefined
-
+    console.log('curriculumVersionSubjectId', curriculumVersionSubjectId)
     if (input) {
         curriculumVersionSubjectId = input.curriculumVersionSubjectId
         id = input.id
@@ -126,9 +126,9 @@ const PutMonHocTienQuyetModal = () => {
                     ? 'Chỉnh sửa môn học tiên quyết'
                     : 'Thêm mới môn học tiên quyết'
             }
-            className="w-[40vw]"
+            className="w-[35vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="subjectId"
