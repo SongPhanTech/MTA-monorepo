@@ -36,21 +36,12 @@ const PutUserProfileModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [], refetch: refetchFixedClassData } =
-        useFindManyFixedClass({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyFixedClass()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTrainingCourse()
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()

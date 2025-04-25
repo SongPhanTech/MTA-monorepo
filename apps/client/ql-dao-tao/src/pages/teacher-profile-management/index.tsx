@@ -140,15 +140,9 @@ export default function UserProfilePageQs() {
         hideSpinner()
     }
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
 
     const handleFilterChange = (key: any, value: any) => {
         setFilters((prev) => {

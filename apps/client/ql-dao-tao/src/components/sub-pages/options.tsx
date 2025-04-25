@@ -1,0 +1,27 @@
+import UserProfilePageDs from '@pages/ql-sinh-vien'
+import type { FixedClass } from '@workspace/db'
+import {
+    useCountFixedClassStudent,
+    useFindManyFixedClassStudent,
+} from '@workspace/db/hooks'
+import { Flex } from 'antd'
+import { useEffect } from 'react'
+
+export default function OptionsPage({ fixedClass }: any) {
+    const fixedClassId = fixedClass.id
+
+    const { data = [], refetch } = useFindManyFixedClassStudent()
+
+    const { data: count } = useCountFixedClassStudent({
+        where: {
+            fixedClassId: fixedClassId,
+        },
+    })
+
+    useEffect(() => {
+        // refetch();
+    }, [fixedClassId]) // chỉ gọi lại khi fixedClassId thay đổi
+    if (count === 0) {
+        return <Flex justify="center">Không có dữ liệu</Flex>
+    } else return <UserProfilePageDs />
+}

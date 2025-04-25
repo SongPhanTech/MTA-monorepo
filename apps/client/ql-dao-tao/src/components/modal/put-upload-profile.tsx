@@ -8,9 +8,6 @@ import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
 import { fetchUploadFile } from '@api/userProfile'
 export type PutUploadProfile = {
     file: File
@@ -21,22 +18,26 @@ const PutUploadProfileModal = () => {
         isOpen,
         onClose,
         input: code,
-    } = useDisclosure<any>({
+    } = useDisclosure<{
+        tag: string
+        input?: string
+    }>({
         tag: PutUploadProfileModal.name,
         onClose: form.resetFields,
     })
-    const [typeId, setTypeId] = useState<any>()
+    const [typeId, setTypeId] = useState<string>()
     useEffect(() => {
-        const type = userTypeData?.find((item: any) => item.code === code)
+        const type = userTypeData?.find(
+            (item: UserType) =>
+                code !== null && code !== undefined && item.code === code.input
+        )
+
         setTypeId(type?.id ?? undefined)
     }, [code])
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return
@@ -44,7 +45,10 @@ const PutUploadProfileModal = () => {
             showSpinner()
             const formData = new FormData()
             formData.append('file', output.file)
-            formData.append('type', typeId)
+            // formData.append('type', typeId)
+            if (typeId !== undefined) {
+                formData.append('type', typeId)
+            }
             const res = await fetchUploadFile(
                 formData,
                 'api/UserProfile/upload-excel-create-user-profile'

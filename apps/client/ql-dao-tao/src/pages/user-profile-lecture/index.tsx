@@ -191,15 +191,9 @@ export default function UserProfilePageLecture() {
         hideSpinner()
     }
     const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile({
-            take: 1000,
-            skip: 0,
-        })
+        useFindManyTemplateFile()
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -299,34 +293,31 @@ export default function UserProfilePageLecture() {
                                 </Button>
 
                                 {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <>
-                                    <Dropdown
-                                        overlay={menuDownload}
-                                        trigger={['hover']}
+                                <Dropdown
+                                    overlay={menuDownload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        className="ml-4"
+                                        type="primary"
+                                        icon={<DownloadOutlined />}
                                     >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<DownloadOutlined />}
-                                        >
-                                            Tải file mẫu
-                                        </Button>
-                                    </Dropdown>
-                                </>
-                                <>
-                                    <Dropdown
-                                        overlay={menuUpload}
-                                        trigger={['hover']}
+                                        Tải file mẫu
+                                    </Button>
+                                </Dropdown>
+
+                                <Dropdown
+                                    overlay={menuUpload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        className="ml-4"
+                                        type="primary"
+                                        icon={<UploadOutlined />}
                                     >
-                                        <Button
-                                            className="ml-4"
-                                            type="primary"
-                                            icon={<UploadOutlined />}
-                                        >
-                                            Nhập file
-                                        </Button>
-                                    </Dropdown>
-                                </>
+                                        Nhập file
+                                    </Button>
+                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>

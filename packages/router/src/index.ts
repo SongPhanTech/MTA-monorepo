@@ -12,6 +12,7 @@ import {
     MessageOutlined,
     FileTextOutlined,
 } from '@ant-design/icons'
+import { Home } from 'lucide-react'
 import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 interface MenuItem {
@@ -318,28 +319,28 @@ const NAVIGATION: NavigationType = {
                 id: 'schoolyear-semester',
                 label: 'Năm học, kỳ học',
                 icon: ScheduleOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.SCHOOLYEAR_SEMESTER,
+                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
                 description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'milestone',
                 label: 'Mốc huấn luyện',
                 icon: ClockCircleOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.MILESTONE,
+                path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                 description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'traning-course',
                 label: 'Quản lý khóa',
                 icon: BookOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.TRAINING_COURSE,
+                path: ROUTER_PATH.QL_DAO_TAO.KHOA_HUAN_LUYEN,
                 description: 'Quản lý khóa',
             },
             {
                 id: 'fixed-class',
                 label: 'Quản lý lớp biên chế',
                 icon: TeamOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.FIXED_CLASS,
+                path: ROUTER_PATH.QL_DAO_TAO.LOP_BIEN_CHE,
                 description: 'Quản lý lớp biên chế',
             },
             {
@@ -353,14 +354,14 @@ const NAVIGATION: NavigationType = {
                 id: 'user-profile-qs',
                 label: 'Quản lý hồ sơ học viên',
                 icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_QS,
+                path: ROUTER_PATH.QL_DAO_TAO.QL_HOC_VIEN,
                 description: 'Quản lý hồ sơ học viên',
             },
             {
                 id: 'user-profile-ds',
                 label: 'Quản lý hồ sơ sinh viên',
                 icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.USER_PROFILE_DS,
+                path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
                 description: 'Quản lý hồ sơ sinh viên',
             },
             // {
@@ -379,25 +380,25 @@ const NAVIGATION: NavigationType = {
                         id: 'curriculumn',
                         label: 'Chương trình đào tạo',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM,
+                        path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO,
                     },
                     {
                         id: 'curriculumn-version',
                         label: 'Phiên bản chương trình đào tạo',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.CURRICULUM_VERSION,
+                        path: ROUTER_PATH.QL_DAO_TAO.PHIEN_BAN_CTDT,
                     },
                     {
                         id: 'subject-group',
                         label: 'Nhóm môn học',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.SUBJECT_GROUP,
+                        path: ROUTER_PATH.QL_DAO_TAO.NHOM_MON_HOC,
                     },
                     {
                         id: 'subject',
                         label: 'Môn học',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.SUBJECT,
+                        path: ROUTER_PATH.QL_DAO_TAO.MON_HOC,
                     },
                 ],
             },
