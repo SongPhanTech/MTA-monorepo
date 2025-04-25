@@ -4,14 +4,17 @@ import { FixedClassScalarSchema } from '@workspace/db/zod/models'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
 import { read, utils } from 'xlsx'
+
 import { prisma } from '..'
+import { StudentInfo, StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import {
-    type StudentInfo,
-    listStudentInfo,
-} from '../services/fixed-class.service'
+import { listStudentInfo } from '../services/fixed-class.service'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
+import {
+    SerializedFieldsSchema,
+    serializeZodSchema,
+} from '../utils/serialize-zod'
 import { ListOf } from '../zod/base'
 
 const uploadExcelCreateFixedClass = createRoute({
@@ -80,6 +83,24 @@ const classDivision = createRoute({
         },
         400: {
             description: 'Invalid file upload',
+        },
+    },
+})
+
+const docxListStudentFixedClassLabels = createRoute({
+    operationId: 'docxListStudentFixedClassLabels',
+    path: '/docx-list-student-fixed-class-labels',
+    summary: 'Xuất file docx danh sách sinh viên trong lớp biên chế',
+    tags: ['FixedClass'],
+    method: 'get',
+    responses: {
+        200: {
+            description: 'Các trường thông tin của lớp biên chế',
+            content: {
+                'application/json': {
+                    schema: SerializedFieldsSchema,
+                },
+            },
         },
     },
 })
@@ -263,10 +284,15 @@ app.openapi(classDivision, async (c) => {
     return c.json(data, 200)
 })
 
+app.openapi(docxListStudentFixedClassLabels, async (c) => {
+    const data = serializeZodSchema(StudentTemplateData)
+    return c.json(data, 200)
+})
+
 app.openapi(exportDocxListStudentFixedClass, async (c) => {
     const { fixedClassId } = c.req.valid('query')
-    const content = await listStudentInfo(fixedClassId)
-    const fixedClass = await prisma.fixedClass.findFirst({
+    const student = await listStudentInfo(fixedClassId)
+    const fixedClass = await prisma.fixedClass.findUnique({
         where: { id: fixedClassId }, // Tìm kiếm lớp biên chế
     })
     if (!fixedClass) {
@@ -278,20 +304,13 @@ app.openapi(exportDocxListStudentFixedClass, async (c) => {
 
     const { date, month, year } = getCurrentDateForReport()
 
-    // dạng bảng
-    const templateData = {
-        fields: [date, month, year, fixedClass.name],
-        cellValues: {
-            sheet: content.map((item: StudentInfo) => ({
-                A: item.stt,
-                B: item.code,
-                C: item.name,
-                D: item.DoB,
-                E: item.HomeTown,
-            })),
-        },
+    const templateData: StudentTemplateData = {
+        date,
+        month,
+        year,
+        className: fixedClass.name,
+        student,
     }
-    // console.log("templateData", templateData);
 
     const docxBuffer = await getBufferFromUrl('LIST_STUDENT_FIXCLASS')
     const templateZip = new PizZip(docxBuffer)
@@ -299,21 +318,8 @@ app.openapi(exportDocxListStudentFixedClass, async (c) => {
         paragraphLoop: true,
         linebreaks: true,
     })
-    const fillData = templateData.fields.reduce(
-        (obj, value, index) => {
-            obj[index + 1] = value
-            return obj
-        },
-        {} as Record<number, string | number>
-    )
 
-    const tableData = templateData.cellValues
-    const data = {
-        ...fillData,
-        ...tableData,
-    }
-
-    const reportDocx = document.render(data)
+    const reportDocx = document.render(templateData)
     return c.body(reportDocx.getZip().generate({ type: 'nodebuffer' }), 200, {
         'Content-Type':
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
