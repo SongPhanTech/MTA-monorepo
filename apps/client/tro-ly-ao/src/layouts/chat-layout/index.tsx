@@ -6,12 +6,15 @@ import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { CONFIG_KEY } from '@workspace/constant'
-import { useFindUniqueConfig } from '@workspace/db/hooks'
+import {
+    useFindManyConversation,
+    useFindUniqueConfig,
+} from '@workspace/db/hooks'
 import { Layout, theme } from 'antd'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
-import { signIn, useSession } from 'next-auth/react'
 
 const { Header, Content } = Layout
 
@@ -29,7 +32,7 @@ const ChatLayout = ({
         )
     })
 
-    const { status } = useSession()
+    const { status, data: userInfo } = useSession()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
@@ -50,7 +53,6 @@ const ChatLayout = ({
         }
     }
 
-    // Load collapsed state on mount
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCollapsed()
@@ -63,13 +65,28 @@ const ChatLayout = ({
         }
     }, [status])
 
-    const mockData: ConversationDataFromAPI = [
-        { id: '1', label: 'Create HTML Game Environment' },
-        { id: '2', label: 'Apply to Leave for Emergency' },
-        { id: '3', label: 'What is UI UX Design?' },
-        { id: '4', label: 'Create POS System' },
-        { id: '5', label: 'Develop E-commerce Website' },
-    ]
+    const { data: conversation } = useFindManyConversation({
+        where: {
+            // userId: userInfo?.user?.user_id || '',
+            userId: 'cm9tpyicp0000s401big8i0s9',
+        },
+        include: {
+            message: true,
+        },
+    })
+    // const mockData: ConversationDataFromAPI = [
+    //     { id: '1', label: 'Create HTML Game Environment' },
+    //     { id: '2', label: 'Apply to Leave for Emergency' },
+    //     { id: '3', label: 'What is UI UX Design?' },
+    //     { id: '4', label: 'Create POS System' },
+    //     { id: '5', label: 'Develop E-commerce Website' },
+    // ]
+    const conversationMenuList: ConversationDataFromAPI = (
+        conversation || []
+    ).map((item) => ({
+        id: item.id,
+        label: item.message?.[0]?.content || 'Không có nội dung',
+    }))
 
     return (
         <IdleTimerProvider
@@ -81,7 +98,11 @@ const ChatLayout = ({
             <Layout className="h-screen">
                 <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
                     <div className="flex items-center gap-2">
-                        <Image src={logo_mta} alt="logo_mta" className="size-12" />
+                        <Image
+                            src={logo_mta}
+                            alt="logo_mta"
+                            className="size-12"
+                        />
                         <span className="text-lg font-bold text-primary">
                             HỌC VIỆN KỸ THUẬT QUÂN SỰ
                         </span>
@@ -93,7 +114,7 @@ const ChatLayout = ({
 
                 <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
                     <SiderChatLayout
-                        items={generateMenusTroLyAo(mockData)}
+                        items={generateMenusTroLyAo(conversationMenuList)}
                         onCollapse={handleCollapsed}
                         collapsed={collapsed}
                         theme={'light'}
