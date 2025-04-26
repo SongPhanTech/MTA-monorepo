@@ -1,31 +1,77 @@
 import {
-    AudioOutlined,
     MoreOutlined,
     RobotOutlined,
     SendOutlined,
     UserOutlined,
 } from '@ant-design/icons'
 import ChatLayout from '@layouts/chat-layout'
-import { Avatar, Button, List } from 'antd'
+import { MessageSender } from '@workspace/db'
+import { useCreateConversation } from '@workspace/db/hooks'
+import { Avatar, Button, List, message, Spin } from 'antd'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 export default function TroLyAo() {
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            role: 'assistant',
-            content: 'Xin chào! Tôi có thể giúp gì cho bạn hôm nay?',
-        },
-    ])
-    const [input, setInput] = useState('')
-    const scrollRef = useRef<HTMLDivElement>(null)
+    const router = useRouter()
+    const { id: conversationId } = router.query
 
-    const handleSend = () => {
+    const scrollRef = useRef<HTMLDivElement>(null)
+    const { mutateAsync: createConversation } = useCreateConversation()
+
+    const [messages, setMessages] = useState<
+        { id: number; role: string; content: string }[]
+    >([])
+    const [input, setInput] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [currentConversationId, setCurrentConversationId] = useState<
+        string | undefined
+    >(conversationId as string)
+
+    const handleSend = async () => {
         if (!input.trim()) return
-        const newMessage = { id: Date.now(), role: 'user', content: input }
-        setMessages([...messages, newMessage])
+
+        const newMessage = { id: Date.now(), role: 'USER', content: input }
+        setMessages((prev) => [...prev, newMessage])
         setInput('')
+
+        try {
+            setLoading(true)
+
+            if (!currentConversationId) {
+                setCurrentConversationId('creating')
+
+                const res = await createConversation({
+                    data: {
+                        userId: 'cm9tpyicp0000s401big8i0s9',
+                        message: {
+                            create: [
+                                {
+                                    content: input,
+                                    sender: MessageSender.USER,
+                                },
+                            ],
+                        },
+                    },
+                })
+
+                const newId = res?.id
+                if (newId) {
+                    setCurrentConversationId(newId)
+                    router.push(`/hoi-thoai/${newId}`)
+                } else {
+                    throw new Error('Không lấy được ID cuộc trò chuyện mới')
+                }
+            } else {
+                // TODO: call API gửi message tiếp vào conversation cũ (nếu có)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+            setCurrentConversationId(undefined)
+        } finally {
+            setLoading(false)
+        }
     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -44,12 +90,19 @@ export default function TroLyAo() {
             >
                 <List
                     dataSource={messages}
+                    locale={{
+                        emptyText: (
+                            <div className="text-center text-gray-500 mt-10">
+                                <p>Bạn có thể hỏi bất cứ điều gì.</p>
+                            </div>
+                        ),
+                    }}
                     renderItem={(msg) => (
                         <List.Item
                             key={msg.id}
                             style={{
                                 justifyContent:
-                                    msg.role === 'user'
+                                    msg.role === 'USER'
                                         ? 'flex-end'
                                         : 'flex-start',
                                 border: 'none',
@@ -57,26 +110,21 @@ export default function TroLyAo() {
                             }}
                         >
                             <div
-                                className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                                className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
                             >
                                 <Avatar
                                     icon={
-                                        msg.role === 'user' ? (
+                                        msg.role === 'USER' ? (
                                             <UserOutlined />
                                         ) : (
                                             <RobotOutlined />
                                         )
                                     }
-                                    style={{
-                                        backgroundColor:
-                                            msg.role === 'user'
-                                                ? '#028850'
-                                                : '#028850',
-                                    }}
+                                    style={{ backgroundColor: '#028850' }}
                                 />
                                 <div
                                     className={`px-4 py-2 rounded-xl max-w-xs break-words ${
-                                        msg.role === 'user'
+                                        msg.role === 'USER'
                                             ? 'bg-[#BEDACE] text-black rounded-br-none'
                                             : 'bg-[#D5DAE7] text-black rounded-bl-none'
                                     }`}
@@ -107,9 +155,18 @@ export default function TroLyAo() {
                             <Button
                                 onClick={handleSend}
                                 className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
-                            >
-                                <SendOutlined className="text-white text-[16px]" />
-                            </Button>
+                                loading={loading}
+                                icon={
+                                    loading ? (
+                                        <Spin
+                                            className="text-white"
+                                            size="small"
+                                        />
+                                    ) : (
+                                        <SendOutlined className="text-white text-[16px]" />
+                                    )
+                                }
+                            />
                         </div>
                     </div>
                 </div>
