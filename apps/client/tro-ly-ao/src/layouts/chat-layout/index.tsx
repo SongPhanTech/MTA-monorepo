@@ -6,11 +6,16 @@ import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { CONFIG_KEY } from '@workspace/constant'
-import { useFindUniqueConfig } from '@workspace/db/hooks'
+import {
+    useFindManyConversation,
+    useFindUniqueConfig,
+} from '@workspace/db/hooks'
 import { Layout, theme } from 'antd'
+import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+
 const { Header, Content } = Layout
 
 const ChatLayout = ({
@@ -27,6 +32,14 @@ const ChatLayout = ({
         )
     })
 
+    const { status, data: userInfo } = useSession()
+
+    const { data: userSessionTimeout } = useFindUniqueConfig({
+        where: {
+            key: CONFIG_KEY.USER_SESSION_TIMEOUT,
+        },
+    })
+
     const {
         token: { colorBgContainer },
     } = theme.useToken()
@@ -39,48 +52,82 @@ const ChatLayout = ({
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCollapsed()
     }, [])
 
-    const mockData: ConversationDataFromAPI = [
-        { id: '1', label: 'Create HTML Game Environment' },
-        { id: '2', label: 'Apply to Leave for Emergency' },
-        { id: '3', label: 'What is UI UX Design?' },
-        { id: '4', label: 'Create POS System' },
-        { id: '5', label: 'Develop E-commerce Website' },
-    ]
+    // Auto sign in if not authenticated
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            signIn('asgardeo')
+        }
+    }, [status])
+
+    const { data: conversation } = useFindManyConversation({
+        where: {
+            // userId: userInfo?.user?.user_id || '',
+            userId: 'cm9tpyicp0000s401big8i0s9',
+        },
+        include: {
+            message: true,
+        },
+    })
+    // const mockData: ConversationDataFromAPI = [
+    //     { id: '1', label: 'Create HTML Game Environment' },
+    //     { id: '2', label: 'Apply to Leave for Emergency' },
+    //     { id: '3', label: 'What is UI UX Design?' },
+    //     { id: '4', label: 'Create POS System' },
+    //     { id: '5', label: 'Develop E-commerce Website' },
+    // ]
+    const conversationMenuList: ConversationDataFromAPI = (
+        conversation || []
+    ).map((item) => ({
+        id: item.id,
+        label: item.message?.[0]?.content || 'Không có nội dung',
+    }))
 
     return (
-        <Layout className="h-screen">
-            <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
-                <div className="flex items-center gap-2">
-                    <Image src={logo_mta} alt="logo_mta" className="size-12" />
-                    <span className="text-lg font-bold text-primary">
-                        HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                    </span>
-                </div>
-                <div className="flex gap-2 items-center">
-                    <AvatarDropdown />
-                </div>
-            </Header>
+        <IdleTimerProvider
+            timeout={
+                Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000
+            }
+            onIdle={signOutAction}
+        >
+            <Layout className="h-screen">
+                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
+                    <div className="flex items-center gap-2">
+                        <Image
+                            src={logo_mta}
+                            alt="logo_mta"
+                            className="size-12"
+                        />
+                        <span className="text-lg font-bold text-primary">
+                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                        </span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <AvatarDropdown />
+                    </div>
+                </Header>
 
-            <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
-                <SiderChatLayout
-                    items={generateMenusTroLyAo(mockData)}
-                    onCollapse={handleCollapsed}
-                    collapsed={collapsed}
-                    theme={'light'}
-                />
-                <Layout className="overflow-hidden">
-                    <HeaderContent />
-                    <Content className="h-full overflow-y-auto p-[10px] bg-white">
-                        {children}
-                    </Content>
+                <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
+                    <SiderChatLayout
+                        items={generateMenusTroLyAo(conversationMenuList)}
+                        onCollapse={handleCollapsed}
+                        collapsed={collapsed}
+                        theme={'light'}
+                    />
+                    <Layout className="overflow-hidden">
+                        <HeaderContent />
+                        <Content className="h-full overflow-y-auto p-[10px] bg-white">
+                            {children}
+                        </Content>
+                    </Layout>
                 </Layout>
             </Layout>
-        </Layout>
+        </IdleTimerProvider>
     )
 }
 
