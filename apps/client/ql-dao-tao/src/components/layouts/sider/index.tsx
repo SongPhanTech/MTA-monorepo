@@ -88,6 +88,7 @@ const SiderDefaultLayout = ({
                 {collapsed ? logo1 : logo2}
             </div>
             <Menu
+                className="pb-20"
                 theme={'light'}
                 mode="inline"
                 selectedKeys={pathname ? [pathname] : []}
