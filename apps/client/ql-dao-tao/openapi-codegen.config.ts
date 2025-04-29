@@ -8,11 +8,11 @@ export default defineConfig({
     daoTao: {
         from: {
             source: 'url',
-            url: 'https://api.user.mta.swantech.vn/openapi',
+            url: 'https://api.daotao.mta.swantech.vn/openapi',
         },
         outputDir: 'src/lib/api/dao-tao',
         to: async (context) => {
-            const filenamePrefix = 'app'
+            const filenamePrefix = 'daotao'
             const { schemasFiles } = await generateSchemaTypes(context, {
                 filenamePrefix,
             })
