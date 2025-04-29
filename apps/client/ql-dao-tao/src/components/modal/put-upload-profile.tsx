@@ -9,6 +9,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { fetchUploadFile } from '@api/userProfile'
+import { fetchUploadExcelCreateUserProfile } from '@api/dao-tao/daotaoComponents'
 export type PutUploadProfile = {
     file: File
 }
@@ -18,10 +19,7 @@ const PutUploadProfileModal = () => {
         isOpen,
         onClose,
         input: code,
-    } = useDisclosure<{
-        tag: string
-        input?: string
-    }>({
+    } = useDisclosure<string>({
         tag: PutUploadProfileModal.name,
         onClose: form.resetFields,
     })
@@ -29,9 +27,8 @@ const PutUploadProfileModal = () => {
     useEffect(() => {
         const type = userTypeData?.find(
             (item: UserType) =>
-                code !== null && code !== undefined && item.code === code.input
+                code !== null && code !== undefined && item.code === code
         )
-
         setTypeId(type?.id ?? undefined)
     }, [code])
     const { showSpinner, hideSpinner } = useSpinner()
@@ -43,22 +40,35 @@ const PutUploadProfileModal = () => {
         if (!output) return
         try {
             showSpinner()
+            const fileList = output.file
+            const file = Array.isArray(fileList)
+                ? fileList[0]?.originFileObj
+                : null
             const formData = new FormData()
-            formData.append('file', output.file)
-            // formData.append('type', typeId)
+
+            formData.append('file', file)
             if (typeId !== undefined) {
                 formData.append('type', typeId)
             }
-            const res = await fetchUploadFile(
-                formData,
-                'api/UserProfile/upload-excel-create-user-profile'
-            )
-            const data = await res.json()
-            if (res.ok) {
-                message.success('Tải lên thành công!')
-            } else {
-                message.error(data.message || 'Tải lên thất bại!')
-            }
+            // const res = await fetchUploadFile(
+            //   formData,
+            //   "api/UserProfile/upload-excel-create-user-profile"
+            // );
+            // const data = await res.json();
+            // console.log(res.ok);
+            // if (res.ok) {
+            //   message.success("Tải lên thành công!");
+            // } else {
+            //   message.error(data.message || "Tải lên thất bại!");
+            // }
+            const response = await fetchUploadExcelCreateUserProfile({
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            console.log(response)
+            message.success('Tải lên thành công!')
 
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

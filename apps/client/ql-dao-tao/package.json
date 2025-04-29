@@ -9,7 +9,7 @@
 		"lint": "biome lint --write --verbose",
 		"format": "biome format --write --verbose",
 		"generate": "patch-package && pnpm generate:openapi",
-		"generate:openapi": "openapi-codegen gen app && openapi-codegen gen model"
+		"generate:openapi": "openapi-codegen gen daoTao"
 	},
 	"dependencies": {
 		"@ant-design/cssinjs": "^1.22.1",
@@ -61,6 +61,7 @@
 		"@types/react-dom": "18.3.2",
 		"@types/react-image-fallback": "^8.0.6",
 		"@workspace/biome-config": "workspace:*",
+		"@workspace/libs": "workspace:*",
 		"autoprefixer": "^10.4.20",
 		"cross-env": "^7.0.3",
 		"crypto-browserify": "^3.12.1",

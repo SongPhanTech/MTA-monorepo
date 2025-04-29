@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/libs",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./api/*": "./src/api/*.ts"
+  },
+  "scripts": {
+    "generate": "orval"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "5.5.4",
+    "orval": "^7.7.0",
+    "@workspace/typescript-config": "workspace:*",
+    "@workspace/biome-config": "workspace:*"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.69.0",
+		"@workspace/db": "workspace:*"
+  }
+}

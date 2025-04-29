@@ -13,7 +13,7 @@ export const fetchUploadFile = async (formData: FormData, url: string) => {
     }
 
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/${url}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL_NO_AUTH}/${url}`,
         {
             method: 'POST',
             headers: {
