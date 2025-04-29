@@ -50,24 +50,25 @@ const PutUploadProfileModal = () => {
             if (typeId !== undefined) {
                 formData.append('type', typeId)
             }
-            const res = await fetchUploadFile(
-                formData,
-                'api/UserProfile/upload-excel-create-user-profile'
-            )
-            const data = await res.json()
-            if (res.ok) {
-                message.success('Tải lên thành công!')
-            } else {
-                message.error(data.message || 'Tải lên thất bại!')
-            }
-            // const response = await fetchUploadExcelCreateUserProfile({
-            //   body: formData,
-            //   headers: {
-            //     "Content-Type": "multipart/form-data",
-            //   },
-            // });
-            // console.log(response);
-            // message.success("Tải lên thành công!");
+            // const res = await fetchUploadFile(
+            //   formData,
+            //   "api/UserProfile/upload-excel-create-user-profile"
+            // );
+            // const data = await res.json();
+            // console.log(res.ok);
+            // if (res.ok) {
+            //   message.success("Tải lên thành công!");
+            // } else {
+            //   message.error(data.message || "Tải lên thất bại!");
+            // }
+            const response = await fetchUploadExcelCreateUserProfile({
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            console.log(response)
+            message.success('Tải lên thành công!')
 
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
