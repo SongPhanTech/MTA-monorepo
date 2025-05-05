@@ -23,6 +23,7 @@ type DocumentFormType = {
             body: string
             progress?: number
             timeLeft?: number
+            id: string
         }
     >
 }
@@ -182,6 +183,7 @@ const ThemTaiLieu = () => {
                         <FormItem form={form} name={'files'}>
                             <UploadDragAndDrop
                                 multiple
+                                accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
                                 className="w-full h-[165px]"
                                 isShowUpload={false}
                                 onUpload={onUpload}
@@ -229,6 +231,9 @@ const ThemTaiLieu = () => {
                                 <CloseCircleOutlined
                                     onClick={(e) => {
                                         e.stopPropagation()
+                                        if (key === selectedFile?.id) {
+                                            setSelectedFile(undefined)
+                                        }
                                         delete files[key]
                                         form.setFieldsValue({
                                             files,
