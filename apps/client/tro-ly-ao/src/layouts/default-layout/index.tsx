@@ -66,27 +66,26 @@ const DefaultLayout = ({
             }
             onIdle={signOutAction}
         >
-            <Layout style={{ minHeight: '100vh' }} hasSider>
-                <SiderDefaultLayout
-                    logo1={
+            <Layout className="h-[100px]">
+                <Header className="fixed z-50 top-0 left-0 right-0 justify-between flex items-center bg-white shadow m-4 rounded-xl px-4">
+                    <div className="flex items-center gap-4">
                         <Image
                             src={logo_mta}
                             alt="logo k01"
-                            className="size-12"
+                            className="w-10 h-10"
                         />
-                    }
-                    logo2={
-                        <div className="flex items-center justify-center flex-col text-center">
-                            <Image
-                                src={logo_mta}
-                                alt="logo k01"
-                                className="w-12 h-12 mb-2"
-                            />
-                            <span className="text-base font-bold color text-primary">
-                                HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                            </span>
-                        </div>
-                    }
+                        <span className="text-lg font-bold text-primary">
+                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                        </span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <SearchSystem />
+                        <AvatarDropdown />
+                    </div>
+                </Header>
+            </Layout>
+            <Layout hasSider>
+                <SiderDefaultLayout
                     items={menus}
                     onCollapse={handleCollapsed}
                     collapsed={collapsed}
@@ -94,22 +93,13 @@ const DefaultLayout = ({
                 />
                 <Layout
                     style={{
-                        marginInlineStart: collapsed ? 80 : 280, // Điều chỉnh margin theo trạng thái collapsed
+                        marginInlineStart: collapsed ? 80 + 16 : 280 + 16, // Điều chỉnh margin theo trạng thái collapsed
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="pl-6 justify-between flex items-center pr-6 bg-white border-2 border-b-primary shadow m-4 rounded">
-                        <span className="text-lg font-bold text-primary">
-                            PHÂN HỆ QUẢN LÝ NGƯỜI DÙNG
-                        </span>
-                        <div className="flex gap-2 items-center">
-                            <SearchSystem />
-                            <AvatarDropdown />
-                        </div>
-                    </Header>
                     <div
                         className={cn(
-                            'min-h-[100vh] rounded shadow p-4 py-2',
+                            'min-h-[100vh] rounded p-4 pb-2 pt-0',
                             className
                         )}
                     >
