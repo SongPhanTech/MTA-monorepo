@@ -16,7 +16,7 @@ import { Avatar, Button, Dropdown, List, Menu, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-
+import { fetchHoiDapHoiDapPost } from '@api/chat/chatComponents'
 export default function Page() {
     // Hooks
     const router = useRouter()
@@ -65,6 +65,13 @@ export default function Page() {
                         },
                     },
                 })
+                const response = await fetchHoiDapHoiDapPost({
+                    queryParams: {
+                        prompt: input,
+                        conversation_id: id as string
+                    }
+                })
+                // console.log("fetch hoi dap post", response)
             } else {
                 // Nếu chưa có conversation ➔ Create mới
                 const res = await createConversation({
