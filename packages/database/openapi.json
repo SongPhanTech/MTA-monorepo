@@ -1028,13 +1028,14 @@
         "type": "string",
         "enum": [
           "id",
-          "fixedClassId",
-          "userProfileId",
-          "status",
+          "code",
           "description",
           "deletedAt",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "fixedClassId",
+          "userProfileId",
+          "status"
         ]
       },
       "OrganizationUserScalarFieldEnum": {
@@ -4978,20 +4979,15 @@
           "id": {
             "type": "string"
           },
-          "fixedClass": {
-            "$ref": "#/components/schemas/FixedClass"
-          },
-          "fixedClassId": {
-            "type": "string"
-          },
-          "userProfile": {
-            "$ref": "#/components/schemas/UserProfile"
-          },
-          "userProfileId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -5019,25 +5015,34 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "fixedClass": {
+            "$ref": "#/components/schemas/FixedClass"
+          },
+          "fixedClassId": {
+            "type": "string"
+          },
+          "userProfile": {
+            "$ref": "#/components/schemas/UserProfile"
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "fixedClass",
           "fixedClassId",
           "userProfile",
           "userProfileId",
-          "status",
-          "createdAt"
+          "status"
         ]
       },
       "OrganizationUser": {
@@ -29403,33 +29408,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "userProfileId": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "string"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
-              },
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "null"
               }
             ]
           },
@@ -29474,14 +29462,41 @@
           "updatedAt": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/DateTimeNullableFilter"
+                "$ref": "#/components/schemas/DateTimeFilter"
               },
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "null"
+                "type": "string"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           },
@@ -29513,14 +29528,15 @@
           "id": {
             "$ref": "#/components/schemas/SortOrder"
           },
-          "fixedClassId": {
-            "$ref": "#/components/schemas/SortOrder"
-          },
-          "userProfileId": {
-            "$ref": "#/components/schemas/SortOrder"
-          },
-          "status": {
-            "$ref": "#/components/schemas/SortOrder"
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SortOrder"
+              },
+              {
+                "$ref": "#/components/schemas/SortOrderInput"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -29546,14 +29562,16 @@
             "$ref": "#/components/schemas/SortOrder"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SortOrder"
-              },
-              {
-                "$ref": "#/components/schemas/SortOrderInput"
-              }
-            ]
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "fixedClassId": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "userProfileId": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SortOrder"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassOrderByWithRelationInput"
@@ -29601,33 +29619,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "userProfileId": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "string"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
-              },
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "null"
               }
             ]
           },
@@ -29672,14 +29673,41 @@
           "updatedAt": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/DateTimeNullableFilter"
+                "$ref": "#/components/schemas/DateTimeFilter"
               },
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "null"
+                "type": "string"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           },
@@ -29750,33 +29778,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+                "$ref": "#/components/schemas/StringNullableWithAggregatesFilter"
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "userProfileId": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringWithAggregatesFilter"
               },
               {
-                "type": "string"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusWithAggregatesFilter"
-              },
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "null"
               }
             ]
           },
@@ -29821,14 +29832,41 @@
           "updatedAt": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/DateTimeNullableWithAggregatesFilter"
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
               },
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
               },
               {
-                "type": "null"
+                "type": "string"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusWithAggregatesFilter"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           }
@@ -55407,8 +55445,15 @@
           "id": {
             "type": "string"
           },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -55436,15 +55481,11 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassCreateNestedOneWithoutFixedClassStudentInput"
@@ -55471,13 +55512,16 @@
               }
             ]
           },
-          "status": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -55526,10 +55570,17 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           },
@@ -55547,14 +55598,15 @@
           "id": {
             "type": "string"
           },
-          "fixedClassId": {
-            "type": "string"
-          },
-          "userProfileId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -55582,15 +55634,17 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "fixedClassId": {
+            "type": "string"
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
@@ -55611,13 +55665,16 @@
               }
             ]
           },
-          "status": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -55666,10 +55723,17 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -100047,8 +100111,15 @@
           "id": {
             "type": "string"
           },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -100076,15 +100147,11 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           },
           "userProfile": {
             "$ref": "#/components/schemas/UserProfileCreateNestedOneWithoutFixedClassStudentInput"
@@ -100100,11 +100167,15 @@
           "id": {
             "type": "string"
           },
-          "userProfileId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -100132,15 +100203,14 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
@@ -101002,33 +101072,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/StringFilter"
+                "$ref": "#/components/schemas/StringNullableFilter"
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "userProfileId": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "string"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
-              },
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "null"
               }
             ]
           },
@@ -101073,14 +101126,41 @@
           "updatedAt": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/DateTimeNullableFilter"
+                "$ref": "#/components/schemas/DateTimeFilter"
               },
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
               },
               {
-                "type": "null"
+                "type": "string"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           }
@@ -121241,8 +121321,15 @@
           "id": {
             "type": "string"
           },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -121270,15 +121357,11 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           },
           "fixedClass": {
             "$ref": "#/components/schemas/FixedClassCreateNestedOneWithoutFixedClassStudentInput"
@@ -121294,11 +121377,15 @@
           "id": {
             "type": "string"
           },
-          "fixedClassId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -121326,15 +121413,14 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "fixedClassId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
@@ -149012,11 +149098,15 @@
           "id": {
             "type": "string"
           },
-          "userProfileId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -149044,15 +149134,14 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
@@ -149072,13 +149161,16 @@
               }
             ]
           },
-          "status": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -149127,10 +149219,17 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           },
@@ -149152,23 +149251,16 @@
               }
             ]
           },
-          "userProfileId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "type": "null"
               }
             ]
           },
@@ -149217,10 +149309,27 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "type": "string"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -149239,23 +149348,16 @@
               }
             ]
           },
-          "userProfileId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "type": "null"
               }
             ]
           },
@@ -149304,10 +149406,27 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "type": "string"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -162355,11 +162474,15 @@
           "id": {
             "type": "string"
           },
-          "fixedClassId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -162387,15 +162510,14 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "fixedClassId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           }
         },
         "required": [
@@ -162481,13 +162603,16 @@
               }
             ]
           },
-          "status": {
+          "code": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "type": "string"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
               }
             ]
           },
@@ -162536,10 +162661,17 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           },
@@ -162561,23 +162693,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "type": "null"
               }
             ]
           },
@@ -162626,10 +162751,27 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "type": "string"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -162648,23 +162790,16 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
               },
               {
-                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
+                "type": "null"
               }
             ]
           },
@@ -162713,10 +162848,27 @@
                 "format": "date-time"
               },
               {
-                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "type": "string"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumFixedClassStudentStatusFieldUpdateOperationsInput"
               }
             ]
           }
@@ -188873,6 +189025,21 @@
           "id": {
             "type": "boolean"
           },
+          "code": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "boolean"
+          },
           "fixedClass": {
             "oneOf": [
               {
@@ -188900,18 +189067,6 @@
             "type": "boolean"
           },
           "status": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "boolean"
-          },
-          "deletedAt": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "boolean"
-          },
-          "updatedAt": {
             "type": "boolean"
           }
         }
@@ -194463,13 +194618,7 @@
           "id": {
             "type": "boolean"
           },
-          "fixedClassId": {
-            "type": "boolean"
-          },
-          "userProfileId": {
-            "type": "boolean"
-          },
-          "status": {
+          "code": {
             "type": "boolean"
           },
           "description": {
@@ -194482,6 +194631,15 @@
             "type": "boolean"
           },
           "updatedAt": {
+            "type": "boolean"
+          },
+          "fixedClassId": {
+            "type": "boolean"
+          },
+          "userProfileId": {
+            "type": "boolean"
+          },
+          "status": {
             "type": "boolean"
           },
           "_all": {
@@ -194495,13 +194653,7 @@
           "id": {
             "type": "boolean"
           },
-          "fixedClassId": {
-            "type": "boolean"
-          },
-          "userProfileId": {
-            "type": "boolean"
-          },
-          "status": {
+          "code": {
             "type": "boolean"
           },
           "description": {
@@ -194514,6 +194666,15 @@
             "type": "boolean"
           },
           "updatedAt": {
+            "type": "boolean"
+          },
+          "fixedClassId": {
+            "type": "boolean"
+          },
+          "userProfileId": {
+            "type": "boolean"
+          },
+          "status": {
             "type": "boolean"
           }
         }
@@ -194524,13 +194685,7 @@
           "id": {
             "type": "boolean"
           },
-          "fixedClassId": {
-            "type": "boolean"
-          },
-          "userProfileId": {
-            "type": "boolean"
-          },
-          "status": {
+          "code": {
             "type": "boolean"
           },
           "description": {
@@ -194543,6 +194698,15 @@
             "type": "boolean"
           },
           "updatedAt": {
+            "type": "boolean"
+          },
+          "fixedClassId": {
+            "type": "boolean"
+          },
+          "userProfileId": {
+            "type": "boolean"
+          },
+          "status": {
             "type": "boolean"
           }
         }
@@ -202612,14 +202776,15 @@
           "id": {
             "type": "string"
           },
-          "fixedClassId": {
-            "type": "string"
-          },
-          "userProfileId": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FixedClassStudentStatus"
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "description": {
             "oneOf": [
@@ -202647,15 +202812,17 @@
             "format": "date-time"
           },
           "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
+            "type": "string",
+            "format": "date-time"
+          },
+          "fixedClassId": {
+            "type": "string"
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FixedClassStudentStatus"
           },
           "_count": {
             "oneOf": [
@@ -202690,10 +202857,11 @@
         },
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "fixedClassId",
           "userProfileId",
-          "status",
-          "createdAt"
+          "status"
         ]
       },
       "AggregateOrganizationUser": {
@@ -216625,13 +216793,7 @@
           "id": {
             "type": "integer"
           },
-          "fixedClassId": {
-            "type": "integer"
-          },
-          "userProfileId": {
-            "type": "integer"
-          },
-          "status": {
+          "code": {
             "type": "integer"
           },
           "description": {
@@ -216646,19 +216808,29 @@
           "updatedAt": {
             "type": "integer"
           },
+          "fixedClassId": {
+            "type": "integer"
+          },
+          "userProfileId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
         },
         "required": [
           "id",
-          "fixedClassId",
-          "userProfileId",
-          "status",
+          "code",
           "description",
           "deletedAt",
           "createdAt",
           "updatedAt",
+          "fixedClassId",
+          "userProfileId",
+          "status",
           "_all"
         ]
       },
@@ -216672,6 +216844,59 @@
               },
               {
                 "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
               }
             ]
           },
@@ -216702,49 +216927,6 @@
               },
               {
                 "$ref": "#/components/schemas/FixedClassStudentStatus"
-              }
-            ]
-          },
-          "description": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "deletedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ]
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
               }
             ]
           }
@@ -216763,33 +216945,13 @@
               }
             ]
           },
-          "fixedClassId": {
+          "code": {
             "oneOf": [
               {
                 "type": "null"
               },
               {
                 "type": "string"
-              }
-            ]
-          },
-          "userProfileId": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "status": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           },
@@ -216833,6 +216995,36 @@
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "fixedClassId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "userProfileId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/FixedClassStudentStatus"
               }
             ]
           }
