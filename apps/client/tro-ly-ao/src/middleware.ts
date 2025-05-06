@@ -3,9 +3,9 @@ import { ROUTER_PATH } from '@workspace/router'
 import { type NextRequest, NextResponse } from 'next/server'
 export default async function middleware(req: NextRequest) {
     const session = await auth()
-    if (!session) {
+    if (!session && req.nextUrl.pathname !== ROUTER_PATH.TRO_LY_AO.INDEX) {
         return NextResponse.rewrite(
-            new URL(ROUTER_PATH.QL_NGUOI_DUNG.INDEX, req.url)
+            new URL(ROUTER_PATH.TRO_LY_AO.INDEX, req.url)
         )
     }
     return NextResponse.next()
