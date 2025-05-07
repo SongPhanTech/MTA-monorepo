@@ -4,6 +4,7 @@ import {
     SendOutlined,
     UserOutlined,
 } from '@ant-design/icons'
+import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
@@ -84,16 +85,13 @@ export default function TroLyAo() {
     return (
         <div className="relative h-100vh flex flex-col">
             {/* Chat Area */}
-            <div
-                ref={scrollRef}
-                className="flex-1 overflow-y-auto max-h-[calc(100vh-64px)] pr-2 pb-10"
-            >
+            <div ref={scrollRef} className="flex-1 overflow-y-auto pr-2 pb-10">
                 <List
                     dataSource={messages}
                     locale={{
                         emptyText: (
                             <div className="text-center text-gray-500 mt-10">
-                                <p>Bạn có thể hỏi bất cứ điều gì.</p>
+                                <p>Hãy đặt câu hỏi cho tôi !</p>
                             </div>
                         ),
                     }}
@@ -138,39 +136,12 @@ export default function TroLyAo() {
             </div>
 
             {/* Input Box */}
-            <div className="fixed bottom-0 left-0 w-full px-0 mb-4">
-                <div className="max-w-4xl mx-auto px-4 pb-4">
-                    <div className="rounded-3xl border flex items-center gap-1 px-3 py-2 shadow bg-white">
-                        <input
-                            className="flex-1 outline-none border-none text-base"
-                            placeholder="Hỏi bất kỳ điều gì"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        />
-                        <div className="flex items-center gap-1">
-                            <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
-                                <MoreOutlined className="text-[18px]" />
-                            </Button>
-                            <Button
-                                onClick={handleSend}
-                                className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
-                                loading={loading}
-                                icon={
-                                    loading ? (
-                                        <Spin
-                                            className="text-white"
-                                            size="small"
-                                        />
-                                    ) : (
-                                        <SendOutlined className="text-white text-[16px]" />
-                                    )
-                                }
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ChatInput
+                input={input}
+                loading={loading}
+                onInputChange={setInput}
+                onSend={handleSend}
+            />
         </div>
     )
 }
