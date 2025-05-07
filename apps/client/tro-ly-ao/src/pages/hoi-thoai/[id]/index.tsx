@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { fetchHoiDapHoiDapPost } from '@api/chat/chatComponents'
+import ChatInput from '@components/commons/input-chat-bot'
 export default function Page() {
     // Hooks
     const router = useRouter()
@@ -68,8 +69,8 @@ export default function Page() {
                 const response = await fetchHoiDapHoiDapPost({
                     queryParams: {
                         prompt: input,
-                        conversation_id: id as string
-                    }
+                        conversation_id: id as string,
+                    },
                 })
                 // console.log("fetch hoi dap post", response)
             } else {
@@ -132,109 +133,63 @@ export default function Page() {
 
     // Render
     return (
-        <div className="relative h-100vh flex flex-col">
+        <div className="flex flex-col h-full">
             {/* Chat Area */}
-            <div
-                ref={scrollRef}
-                className="flex-1 overflow-y-auto max-h-[calc(100vh-64px)] pr-2 pb-10"
-            >
-                <List
-                    dataSource={messages}
-                    renderItem={(msg) => (
-                        <List.Item
-                            key={msg.id}
-                            style={{
-                                justifyContent:
-                                    msg.role === 'USER'
-                                        ? 'flex-end'
-                                        : 'flex-start',
-                                border: 'none',
-                                padding: '8px 0',
-                            }}
-                        >
-                            <div
-                                className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
-                            >
-                                <Avatar
-                                    icon={
-                                        msg.role === 'USER' ? (
-                                            <UserOutlined />
-                                        ) : (
-                                            <RobotOutlined />
-                                        )
-                                    }
-                                    style={{ backgroundColor: '#028850' }}
-                                />
-                                <div
-                                    className={`px-4 py-2 rounded-xl max-w-xs break-words ${
+            <div ref={scrollRef} className="flex-1 overflow-y-auto pr-2 pb-10">
+                {messages.length === 0 ? (
+                    <div className="flex-1" />
+                ) : (
+                    <List
+                        dataSource={messages}
+                        renderItem={(msg) => (
+                            <List.Item
+                                key={msg.id}
+                                style={{
+                                    justifyContent:
                                         msg.role === 'USER'
-                                            ? 'bg-[#BEDACE] text-black rounded-br-none'
-                                            : 'bg-[#D5DAE7] text-black rounded-bl-none'
-                                    }`}
+                                            ? 'flex-end'
+                                            : 'flex-start',
+                                    border: 'none',
+                                    padding: '8px 0',
+                                }}
+                            >
+                                <div
+                                    className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
                                 >
-                                    {msg.content}
+                                    <Avatar
+                                        icon={
+                                            msg.role === 'USER' ? (
+                                                <UserOutlined />
+                                            ) : (
+                                                <RobotOutlined />
+                                            )
+                                        }
+                                        style={{ backgroundColor: '#028850' }}
+                                    />
+                                    <div
+                                        className={`px-4 py-2 rounded-xl max-w-xs break-words ${
+                                            msg.role === 'USER'
+                                                ? 'bg-[#BEDACE] text-black rounded-br-none'
+                                                : 'bg-[#D5DAE7] text-black rounded-bl-none'
+                                        }`}
+                                    >
+                                        {msg.content}
+                                    </div>
                                 </div>
-                            </div>
-                        </List.Item>
-                    )}
-                />
+                            </List.Item>
+                        )}
+                    />
+                )}
             </div>
 
             {/* Input Box */}
-            <div className="fixed bottom-0 left-0 w-full px-0 mb-4">
-                <div className="max-w-4xl mx-auto px-4 pb-4">
-                    <div className="rounded-3xl border flex items-center gap-1 px-3 py-2 shadow bg-white">
-                        <input
-                            className="flex-1 outline-none border-none text-base"
-                            placeholder="Hỏi bất kỳ điều gì"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        />
-                        <div className="flex items-center gap-1">
-                            <Dropdown
-                                trigger={['click']}
-                                overlay={
-                                    <Menu
-                                        items={[
-                                            {
-                                                key: 'delete',
-                                                label: (
-                                                    <span
-                                                        className="text-red-500"
-                                                        onClick={handleDelete}
-                                                    >
-                                                        Xoá hội thoại
-                                                    </span>
-                                                ),
-                                            },
-                                        ]}
-                                    />
-                                }
-                            >
-                                <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
-                                    <MoreOutlined className="text-[18px]" />
-                                </Button>
-                            </Dropdown>
-                            <Button
-                                onClick={handleSend}
-                                className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
-                                loading={loading}
-                                icon={
-                                    loading ? (
-                                        <Spin
-                                            className="text-white"
-                                            size="small"
-                                        />
-                                    ) : (
-                                        <SendOutlined className="text-white text-[16px]" />
-                                    )
-                                }
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ChatInput
+                input={input}
+                loading={loading}
+                onInputChange={setInput}
+                onSend={handleSend}
+                onDelete={handleDelete}
+            />
         </div>
     )
 }
