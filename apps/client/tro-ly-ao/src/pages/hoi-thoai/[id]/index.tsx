@@ -4,7 +4,6 @@ import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import {
-    useCreateConversation,
     useDeleteConversation,
     useFindManyMessage,
     useUpdateConversation,
@@ -14,12 +13,10 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 export default function Page() {
-    // Hooks
     const router = useRouter()
     const { id } = router.query
     const scrollRef = useRef<HTMLDivElement>(null)
 
-    const { mutateAsync: createConversation } = useCreateConversation()
     const { mutateAsync: updateConversation } = useUpdateConversation()
     const { mutateAsync: deleteConversation } = useDeleteConversation()
     const { data: messageList } = useFindManyMessage({
@@ -28,39 +25,28 @@ export default function Page() {
         },
     })
 
-    // States
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<
         { id: number; role: string; content: string }[]
     >([])
     const [botTyping, setBotTyping] = useState(false)
-    // Functions
-    const handleSend = async () => {
-        if (!input.trim()) return
+    const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false)
 
-        const newMessage = { id: Date.now(), role: 'USER', content: input }
+    const sendMessage = async (text: string) => {
+        const newMessage = { id: Date.now(), role: 'USER', content: text }
         setMessages((prev) => [...prev, newMessage])
-        setInput('')
         setBotTyping(true)
+        setLoading(true)
 
         try {
-            setLoading(true)
-
-            if (!id) {
-                message.error('Cuộc trò chuyện không tồn tại.')
-                setBotTyping(false)
-                return
-            }
-
-            // Cập nhật conversation
             await updateConversation({
                 where: { id: id as string },
                 data: {
                     message: {
                         create: [
                             {
-                                content: input,
+                                content: text,
                                 sender: MessageSender.USER,
                             },
                         ],
@@ -68,16 +54,14 @@ export default function Page() {
                 },
             })
 
-            // Gọi API để lấy stream
             const response = await fetchHoiDap({
-                prompt: input,
+                prompt: text,
                 type_data: 'GENERAL_ADMISSIONS_INFORMATION',
                 conversation_id: id as string,
             })
 
             if (!response.body) {
                 message.error('Không có nội dung phản hồi')
-                setBotTyping(false)
                 return
             }
 
@@ -91,33 +75,34 @@ export default function Page() {
                 { id: botId, role: 'BOT', content: '' },
             ])
 
-            try {
-                while (true) {
-                    const { value, done } = await reader.read()
-                    if (done) break
+            while (true) {
+                const { value, done } = await reader.read()
+                if (done) break
 
-                    const chunk = decoder.decode(value, { stream: true })
-                    botText += chunk
+                const chunk = decoder.decode(value, { stream: true })
+                botText += chunk
 
-                    setMessages((prev) =>
-                        prev.map((msg) =>
-                            msg.id === botId
-                                ? { ...msg, content: botText }
-                                : msg
-                        )
+                setMessages((prev) =>
+                    prev.map((msg) =>
+                        msg.id === botId ? { ...msg, content: botText } : msg
                     )
-                }
-            } finally {
-                setBotTyping(false) // Dừng trạng thái typing
+                )
             }
         } catch (err) {
             console.error(err)
-            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-            setBotTyping(false)
+            message.error('Đã xảy ra lỗi khi gửi tin nhắn')
         } finally {
+            setBotTyping(false)
             setLoading(false)
         }
     }
+
+    const handleSend = async () => {
+        if (!input.trim() || !id) return
+        await sendMessage(input)
+        setInput('')
+    }
+
     const handleDelete = async () => {
         if (!id) return
 
@@ -133,7 +118,7 @@ export default function Page() {
             setLoading(false)
         }
     }
-    // Effects
+
     useEffect(() => {
         if (messageList) {
             const mappedMessages = messageList.map((msg) => ({
@@ -151,6 +136,28 @@ export default function Page() {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight
         }
     }, [messages])
+
+    // Gửi initialMessage nếu có trong URL
+    const initialSentRef = useRef(false)
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        const msg = router.query.initialMessage as string
+
+        if (id && msg && !initialSentRef.current) {
+            initialSentRef.current = true // ✅ flag đảm bảo chỉ gọi 1 lần
+            sendMessage(msg)
+
+            const { initialMessage: _, ...rest } = router.query
+            router.replace(
+                { pathname: router.pathname, query: rest },
+                undefined,
+                {
+                    shallow: true,
+                }
+            )
+        }
+    }, [id, router.query])
 
     // Render
     return (
