@@ -382,12 +382,12 @@ const NAVIGATION: NavigationType = {
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO,
                     },
-                    {
-                        id: 'curriculumn-version',
-                        label: 'Phiên bản chương trình đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.PHIEN_BAN_CTDT,
-                    },
+                    // {
+                    //     id: 'curriculumn-version',
+                    //     label: 'Phiên bản chương trình đào tạo',
+                    //     icon: PieChartOutlined,
+                    //     path: ROUTER_PATH.QL_DAO_TAO.PHIEN_BAN_CTDT,
+                    // },
                     {
                         id: 'subject-group',
                         label: 'Nhóm môn học',

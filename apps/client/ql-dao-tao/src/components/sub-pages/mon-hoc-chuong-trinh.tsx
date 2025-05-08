@@ -1,4 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -31,6 +31,8 @@ import _ from 'lodash'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { getMinioUrl } from '@workspace/constant'
+
 type Props = {
     // data?: CurriculumVersionSubject[]
     curriculumVersionId?: string
@@ -108,7 +110,7 @@ export default function MonHocChuongTrinhPage({
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Danh sách môn học
+                Danh sách môn học chương trình
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -168,46 +170,7 @@ export default function MonHocChuongTrinhPage({
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
-                            {
-                                title: 'Tài liệu',
-                                align: 'center',
-                                render: ({ documentPath }) =>
-                                    documentPath ? (
-                                        <a
-                                            href={documentPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
-                            {
-                                title: 'Tài liệu kết xuất',
-                                align: 'center',
-                                render: ({ renderPath }) =>
-                                    renderPath ? (
-                                        <a
-                                            href={renderPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
+
                             {
                                 title: 'Thông tin',
                                 dataIndex: 'infomation',
@@ -217,8 +180,39 @@ export default function MonHocChuongTrinhPage({
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, documentPath }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip
+                                            title="Tải file"
+                                            placement="leftTop"
+                                        >
+                                            <a
+                                                href={
+                                                    documentPath
+                                                        ? getMinioUrl(
+                                                              documentPath
+                                                          )
+                                                        : '#'
+                                                }
+                                                // target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={
+                                                    documentPath
+                                                        ? 'text-sm text-blue-700 cursor-pointer'
+                                                        : 'text-sm text-gray-400 cursor-not-allowed'
+                                                }
+                                                style={
+                                                    documentPath
+                                                        ? {}
+                                                        : {
+                                                              pointerEvents:
+                                                                  'none',
+                                                          }
+                                                }
+                                            >
+                                                <CloudDownloadOutlined />
+                                            </a>
+                                        </Tooltip>
                                         <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
