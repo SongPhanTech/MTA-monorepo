@@ -326,7 +326,7 @@ const FilterKhoa = (props: Props) => {
                     // onChange={(e) =>
                     //     handleFilterChange('searchText', e.target.value)
                     // }
-                    placeholder="Nhập mã, tên khóa..."
+                    placeholder="Tìm kiếm"
                     style={{
                         width: 300,
                         marginRight: 8,

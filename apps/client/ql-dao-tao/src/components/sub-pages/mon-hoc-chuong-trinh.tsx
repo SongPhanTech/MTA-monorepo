@@ -123,7 +123,7 @@ export default function MonHocChuongTrinhPage({
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -173,7 +173,7 @@ export default function MonHocChuongTrinhPage({
 
                             {
                                 title: 'Thông tin',
-                                dataIndex: 'infomation',
+                                dataIndex: 'information',
                                 // width: 100,
                             },
                             {

@@ -13,7 +13,11 @@ import {
     PutUserProfileModal,
     PutUserProfileUpdateModal,
 } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
+import {
+    DEFAULT_PAGINATE_SIZE,
+    GENDER_MEAN,
+    TRANG_THAI_HOC_VIEN,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -22,6 +26,7 @@ import {
     useUpdateUserProfile,
     useFindManyUserType,
     useFindManyTemplateFile,
+    useCheckFixedClassStudent,
 } from '@workspace/db/hooks'
 
 import {
@@ -35,6 +40,7 @@ import {
     Menu,
     Row,
     Space,
+    Tag,
     Tooltip,
     message,
 } from 'antd'
@@ -44,6 +50,8 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { FilterHocVien } from '@components/filter'
+import Select from '@components/commons/select'
+import { FixedClassStudentStatus, UserProfile } from '@workspace/db'
 
 dayjs.locale('vi')
 export default function UserProfilePageQs() {
@@ -66,6 +74,11 @@ export default function UserProfilePageQs() {
         },
         include: {
             userType: true,
+            fixedClassStudent: {
+                include: {
+                    fixedClass: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -130,6 +143,7 @@ export default function UserProfilePageQs() {
         }
     }
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    // const { mutateAsync: updateFixedClassStudent } = useFixedClass()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -219,6 +233,32 @@ export default function UserProfilePageQs() {
             ))}
         </Menu>
     )
+    async function handleStatusChange(
+        id: string,
+        newStatus: FixedClassStudentStatus
+    ) {
+        try {
+            showSpinner()
+            await updateTrainingCourse({
+                where: {
+                    id,
+                },
+                data: {
+                    status: newStatus,
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const options = Object.entries(TRANG_THAI_HOC_VIEN).map(
+        ([value, { label, color }]) => ({
+            value,
+            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+        })
+    )
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -293,6 +333,7 @@ export default function UserProfilePageQs() {
                             },
                             {
                                 title: 'Họ và tên',
+                                align: 'center',
                                 // dataIndex: 'name',
                                 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                                 render: ({ firstName, lastName }: any) =>
@@ -301,18 +342,21 @@ export default function UserProfilePageQs() {
                             },
                             {
                                 title: 'Đối tượng',
+                                align: 'center',
                                 dataIndex: 'userType',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày sinh',
+                                align: 'center',
                                 // dataIndex: 'startDate',
                                 render: ({ dateOfBirth }) =>
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Giới tính',
+                                align: 'center',
                                 // dataIndex: 'gender',
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
@@ -320,12 +364,40 @@ export default function UserProfilePageQs() {
                                     ],
                             },
                             {
-                                title: 'Số CCCD',
-                                dataIndex: 'idCardNumber',
+                                title: 'Lớp',
+                                align: 'center',
+                                dataIndex: 'fixedClassStudent',
+                                render: (value) =>
+                                    value?.length > 0
+                                        ? value[0]?.fixedClass?.name
+                                        : 'Chưa phân lớp',
                             },
                             {
-                                title: 'Số điện thoại',
-                                dataIndex: 'phoneNumber',
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 130,
+                                render: (record: UserProfile) => {
+                                    return (
+                                        <Select
+                                            className="w-[155px]"
+                                            value={
+                                                record?.fixedClassStudent[0]
+                                                    .status
+                                            }
+                                            // onChange={(newStatus) =>
+                                            //     handleStatusChange(
+                                            //         record.id,
+                                            //         newStatus as FixedClassStudentStatus
+                                            //     )
+                                            // }
+                                            options={options}
+                                            optionLabelProp="label"
+                                            // style={{ width: 180 }}
+                                            bordered={false}
+                                            showSearch={false}
+                                        />
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',

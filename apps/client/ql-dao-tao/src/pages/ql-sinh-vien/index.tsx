@@ -13,7 +13,11 @@ import {
     PutUserProfileModal,
     PutUserProfileUpdateModal,
 } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
+import {
+    DEFAULT_PAGINATE_SIZE,
+    GENDER_MEAN,
+    TRANG_THAI_HOC_VIEN,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -48,6 +52,7 @@ import {
     Menu,
     Row,
     Space,
+    Tag,
     Tooltip,
     message,
 } from 'antd'
@@ -234,6 +239,13 @@ export default function UserProfilePageDs() {
             ))}
         </Menu>
     )
+    const options = Object.entries(TRANG_THAI_HOC_VIEN).map(
+        ([value, { label, color }]) => ({
+            value,
+            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+        })
+    )
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -311,6 +323,7 @@ export default function UserProfilePageDs() {
                             },
                             {
                                 title: 'Họ và tên',
+                                align: 'center',
                                 render: ({
                                     firstName,
                                     lastName,
@@ -324,12 +337,14 @@ export default function UserProfilePageDs() {
                             // },
                             {
                                 title: 'Ngày sinh',
+                                align: 'center',
                                 // dataIndex: 'startDate',
                                 render: ({ dateOfBirth }) =>
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Giới tính',
+                                align: 'center',
                                 // dataIndex: 'gender',
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
@@ -337,12 +352,40 @@ export default function UserProfilePageDs() {
                                     ],
                             },
                             {
-                                title: 'Số CCCD',
-                                dataIndex: 'idCardNumber',
+                                title: 'Lớp',
+                                align: 'center',
+                                dataIndex: 'fixedClassStudent',
+                                render: (value) =>
+                                    value?.length > 0
+                                        ? value[0]?.fixedClass?.name
+                                        : 'Chưa phân lớp',
                             },
                             {
-                                title: 'Số điện thoại',
-                                dataIndex: 'phoneNumber',
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 130,
+                                render: (record: UserProfile) => {
+                                    return (
+                                        <Select
+                                            className="w-[155px]"
+                                            value={
+                                                record?.fixedClassStudent[0]
+                                                    .status
+                                            }
+                                            // onChange={(newStatus) =>
+                                            //     handleStatusChange(
+                                            //         record.id,
+                                            //         newStatus as FixedClassStudentStatus
+                                            //     )
+                                            // }
+                                            options={options}
+                                            optionLabelProp="label"
+                                            // style={{ width: 180 }}
+                                            bordered={false}
+                                            showSearch={false}
+                                        />
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',

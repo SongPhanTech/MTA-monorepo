@@ -128,7 +128,7 @@ const PutTrainingCourseModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
-            className="w-[30vw]"
+            className="w-[35vw]"
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã khóa" required>

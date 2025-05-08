@@ -109,7 +109,7 @@ const PutMilestoneModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa mốc huấn luyện' : 'Thêm mới mốc huấn luyện'}
-            className="w-[30vw]"
+            className="w-[35vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Nội dung" required>
@@ -117,8 +117,8 @@ const PutMilestoneModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="period" label="Thời gian" required>
-                    <Input placeholder="Nhập thời gian" />
+                <FormItem form={form} name="period" label="Số tiết" required>
+                    <Input placeholder="Nhập số tiết" />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -139,7 +139,7 @@ const PutMilestoneModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="startDate"
@@ -149,7 +149,7 @@ const PutMilestoneModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="endDate"

@@ -107,7 +107,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -140,22 +140,25 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             // },
                             {
                                 title: 'Tên học kỳ',
+                                align: 'center',
                                 dataIndex: 'name',
                             },
                             {
                                 title: 'Năm học',
+                                align: 'center',
                                 dataIndex: 'schoolYear',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                // dataIndex: 'startDate',
+                                align: 'center',
                                 render: ({ startDate }) =>
                                     dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
+                                align: 'center',
                                 render: ({ endDate }) =>
                                     endDate
                                         ? dayjs(endDate).format('DD/MM/YYYY')
@@ -163,6 +166,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             },
                             {
                                 title: 'Mô tả',
+                                align: 'center',
                                 dataIndex: 'description',
                             },
                             {
