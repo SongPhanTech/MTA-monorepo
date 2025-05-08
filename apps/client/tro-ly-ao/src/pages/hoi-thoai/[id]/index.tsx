@@ -1,5 +1,5 @@
 import { fetchHoiDap } from '@/api/hoi-dap'
-import { RobotOutlined, UserOutlined } from '@ant-design/icons'
+import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { DocumentType, MessageSender } from '@workspace/db'
@@ -8,7 +8,7 @@ import {
     useFindManyMessage,
     useUpdateConversation,
 } from '@workspace/db/hooks'
-import { Avatar, List, Spin, message } from 'antd'
+import { Avatar, Button, List, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import type React from 'react'
@@ -201,9 +201,29 @@ export default function Page() {
                                                     : 'bg-[#D5DAE7] text-black rounded-bl-none'
                                             }`}
                                         >
-                                            <ReactMarkdown>
-                                                {msg.content}
-                                            </ReactMarkdown>
+                                            <div className="relative group">
+                                                <ReactMarkdown>
+                                                    {msg.content}
+                                                </ReactMarkdown>
+                                                <Button
+                                                    size="small"
+                                                    icon={<CopyOutlined />}
+                                                    className={`absolute bottom-0 ${
+                                                        msg.role === 'USER'
+                                                            ? 'right-0'
+                                                            : 'left-0'
+                                                    } opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-primary text-white`}
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(
+                                                            msg.content
+                                                        )
+                                                        message.success(
+                                                            'Đã sao chép nội dung!'
+                                                        )
+                                                    }}
+                                                    type="text"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </List.Item>
