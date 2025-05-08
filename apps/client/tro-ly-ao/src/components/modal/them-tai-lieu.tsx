@@ -1,10 +1,12 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
 import { fetchGeneratePresignedUrl } from '@api/common/commonComponents'
+import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, Progress, message } from 'antd'
@@ -21,6 +23,7 @@ type DocumentFormType = {
             body: string
             progress?: number
             timeLeft?: number
+            id: string
         }
     >
 }
@@ -28,6 +31,7 @@ const ThemTaiLieu = () => {
     const { isOpen, onClose } = useDisclosure<string>({
         tag: ThemTaiLieu.name,
     })
+
     const { mutateAsync: createMany } = useCreateManyDocument()
 
     const [selectedFile, setSelectedFile] =
@@ -96,6 +100,25 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
+                    const resReaderDocument =
+                        await fetchReadDocumentContentDocumentDocumentReaderGet(
+                            {
+                                queryParams: {
+                                    uri_file: getMinioUrl(
+                                        resPresignedUrl.fileName
+                                    ),
+                                },
+                            }
+                        )
+                    form.setFieldsValue({
+                        files: {
+                            ...form.getFieldValue('files'),
+                            [file.id]: {
+                                ...file,
+                                body: resReaderDocument.body,
+                            },
+                        },
+                    })
                 })
             )
         } catch (error) {
@@ -162,6 +185,7 @@ const ThemTaiLieu = () => {
                         <FormItem form={form} name={'files'}>
                             <UploadDragAndDrop
                                 multiple
+                                accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
                                 className="w-full h-[165px]"
                                 isShowUpload={false}
                                 onUpload={onUpload}
@@ -209,6 +233,9 @@ const ThemTaiLieu = () => {
                                 <CloseCircleOutlined
                                     onClick={(e) => {
                                         e.stopPropagation()
+                                        if (key === selectedFile?.id) {
+                                            setSelectedFile(undefined)
+                                        }
                                         delete files[key]
                                         form.setFieldsValue({
                                             files,

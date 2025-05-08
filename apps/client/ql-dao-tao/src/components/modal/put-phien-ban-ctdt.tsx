@@ -6,6 +6,7 @@ import type {
     CurriculumVersionSubject,
     Curriculum,
     CurriculumVersion,
+    $Enums,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
@@ -15,7 +16,16 @@ import {
     useUpdateCurriculumVersion,
     useFindManyCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect, Steps } from 'antd'
+import {
+    Col,
+    Form,
+    Input,
+    message,
+    TreeSelect,
+    Steps,
+    Upload,
+    Button,
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -26,9 +36,20 @@ import { buildOrgTree } from '@lib/utils'
 
 import 'dayjs/locale/vi'
 import MonHocChuongTrinhPage from '@components/sub-pages/mon-hoc-chuong-trinh'
+import { UploadIcon } from 'lucide-react'
+import { UploadOutlined } from '@ant-design/icons'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import axios from 'axios'
+import { getMinioUrl } from '@workspace/constant'
+import type { UploadFile } from 'antd/es/upload/interface'
+
 dayjs.locale('vi')
+type PutPutCurriculumVersionFile = PutCurriculumVersion & {
+    file: File[]
+}
+
 const PutCurriculumVersionModal = () => {
-    const [form] = Form.useForm<PutCurriculumVersion>()
+    const [form] = Form.useForm<PutPutCurriculumVersionFile>()
     const {
         isOpen,
         onClose,
@@ -46,8 +67,19 @@ const PutCurriculumVersionModal = () => {
         useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } =
         useUpdateCurriculumVersion()
-    async function onOk(output?: PutCurriculumVersion) {
+    async function onOk(output?: PutPutCurriculumVersionFile) {
         if (!output) return
+        if (!output.file || output.file.length === 0) {
+            message.error('Vui lòng chọn một file để tải lên.')
+            return
+        }
+        const uploadFile = output.file[0] as UploadFile
+
+        if (!uploadFile.originFileObj) {
+            message.error('Tệp tải lên không hợp lệ.')
+            return
+        }
+
         try {
             showSpinner()
             if (id) {
@@ -126,7 +158,92 @@ const PutCurriculumVersionModal = () => {
         setCurrent(value)
     }
     const items = steps.map((item) => ({ key: item.title, title: item.title }))
+    const file = Form.useWatch('file', form) || {}
 
+    const onUpload = async (
+        values: Array<{
+            url: string
+            file: File
+        }>
+    ) => {
+        try {
+            const valuesWithId = values.map((item) => ({
+                ...item,
+                id: crypto.randomUUID(),
+                body: '',
+            }))
+
+            form.setFieldsValue({
+                file: {
+                    ...file,
+                    ...valuesWithId.reduce(
+                        (prev, item) => ({
+                            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+                            ...prev,
+                            [item.id]: {
+                                ...item,
+                                body: '',
+                                progress: 0,
+                            },
+                        }),
+                        {}
+                    ),
+                },
+            })
+            await Promise.all(
+                valuesWithId.map(async (file) => {
+                    const resPresignedUrl = await fetchGeneratePresignedUrl({
+                        body: {
+                            path: 'tai-lieu',
+                            extension: file.file.name.split('.').pop() || '',
+                        },
+                    })
+                    await axios.put(resPresignedUrl.url, file.file, {
+                        onUploadProgress: (progressEvent) => {
+                            const {
+                                loaded,
+                                total = 1,
+                                estimated = 0,
+                            } = progressEvent
+                            const percent = Math.floor((loaded * 100) / total)
+                            form.setFieldsValue({
+                                file: {
+                                    ...form.getFieldValue('file'),
+                                    [file.id]: {
+                                        ...file,
+                                        url: resPresignedUrl.fileName,
+                                        progress: percent,
+                                        timeLeft: estimated,
+                                    },
+                                },
+                            })
+                        },
+                    })
+                    const resReaderDocument =
+                        await fetchReadDocumentContentDocumentDocumentReaderGet(
+                            {
+                                queryParams: {
+                                    uri_file: getMinioUrl(
+                                        resPresignedUrl.fileName
+                                    ),
+                                },
+                            }
+                        )
+                    form.setFieldsValue({
+                        file: {
+                            ...form.getFieldValue('file'),
+                            [file.id]: {
+                                ...file,
+                                body: resReaderDocument.body,
+                            },
+                        },
+                    })
+                })
+            )
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
     return (
         <PutFormModal
             open={isOpen}
@@ -231,6 +348,42 @@ const PutCurriculumVersionModal = () => {
                             label="Đường dẫn tài liệu kết xuất"
                         >
                             <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="file"
+                            label="File chương trình chi tiết"
+                            // required
+                            valuePropName="fileList"
+                            getValueFromEvent={(e) => {
+                                return Array.isArray(e) ? e : e?.fileList
+                            }}
+                        >
+                            <Upload
+                                beforeUpload={(file) => {
+                                    const isAllowedType =
+                                        file.type === 'application/pdf' ||
+                                        file.type === 'application/msword' || // .doc
+                                        file.type ===
+                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+
+                                    if (!isAllowedType) {
+                                        message.error(
+                                            'Chỉ được phép tải lên file Word (.doc, .docx) hoặc PDF (.pdf)'
+                                        )
+                                        return Upload.LIST_IGNORE
+                                    }
+                                    return false // Không upload tự động
+                                }}
+                                maxCount={1}
+                                accept=".doc,.docx,.pdf"
+                            >
+                                <Button icon={<UploadOutlined />}>
+                                    Chọn file Word hoặc PDF
+                                </Button>
+                            </Upload>
                         </FormItem>
                     </Col>
                 </>

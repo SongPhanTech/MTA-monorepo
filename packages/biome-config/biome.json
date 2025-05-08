@@ -8,7 +8,8 @@
             ".next/**/*",
             "generated/**/*",
             "open-api/**/*",
-            "*.json"
+            "*.json",
+            "lib/api/**/*"
         ]
     },
     "vcs": {

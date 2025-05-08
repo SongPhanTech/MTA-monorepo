@@ -1,6 +1,4 @@
 import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useUpdateDocument } from '@workspace/db/hooks'

@@ -28,11 +28,7 @@ const PromptQuestionAnswer = ({ label, type }: PromptQuestionAnswerType) => {
                 <Input.TextArea placeholder="Nhập mẫu prompt" rows={4} />
             </FormItem>
             <div className="flex justify-end">
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="bg-blue-500 text-white"
-                >
+                <Button type="primary" htmlType="submit">
                     Lưu
                 </Button>
             </div>
@@ -46,7 +42,10 @@ function Page() {
             <span className="text-xl font-semibold text-gray-700">
                 Thiết lập Prompt
             </span>
-            <Row gutter={[16, 16]} className="mt-4">
+            <Row
+                gutter={[16, 16]}
+                className="mt-4 bg-white p-4 rounded-md shadow-sm"
+            >
                 {DOCUMENT_TYPE.map((item) => (
                     <Col span={12} key={item.value}>
                         <PromptQuestionAnswer

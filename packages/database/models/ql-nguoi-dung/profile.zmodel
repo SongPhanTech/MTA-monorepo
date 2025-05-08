@@ -83,17 +83,12 @@ enum FixedClassStudentStatus {
 }
 
 // học viên - lớp biên chế
-model FixedClassStudent {
-  id            String                  @id @default(cuid())
+model FixedClassStudent extends Base {
   fixedClass    FixedClass              @relation(fields: [fixedClassId], references: [id])
   fixedClassId  String
   userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
   userProfileId String
   status        FixedClassStudentStatus @default(ENROLLED)
-  description   String?                 @db.Text
-  deletedAt     DateTime?
-  createdAt     DateTime                @default(now())
-  updatedAt     DateTime?               @updatedAt
   @@schema("ql-nguoi-dung")
 }
 

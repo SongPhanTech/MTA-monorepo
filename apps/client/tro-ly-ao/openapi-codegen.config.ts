@@ -22,4 +22,38 @@ export default defineConfig({
             })
         },
     },
+    qa: {
+        from: {
+            source: 'url',
+            url: 'http://117.4.240.104:8010/openapi.json',
+        },
+        outputDir: 'src/lib/api/qa',
+        to: async (context) => {
+            const filenamePrefix = 'qa'
+            const { schemasFiles } = await generateSchemaTypes(context, {
+                filenamePrefix,
+            })
+            await generateReactQueryComponents(context, {
+                filenamePrefix,
+                schemasFiles,
+            })
+        },
+    },
+    chat: {
+        from: {
+            source: 'url',
+            url: 'http://117.4.240.104:8011/openapi.json',
+        },
+        outputDir: 'src/lib/api/chat',
+        to: async (context) => {
+            const filenamePrefix = 'chat'
+            const { schemasFiles } = await generateSchemaTypes(context, {
+                filenamePrefix,
+            })
+            await generateReactQueryComponents(context, {
+                filenamePrefix,
+                schemasFiles,
+            })
+        },
+    },
 })

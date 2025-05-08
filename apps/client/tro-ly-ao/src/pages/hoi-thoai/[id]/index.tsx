@@ -8,10 +8,11 @@ import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import {
     useCreateConversation,
+    useDeleteConversation,
     useFindManyMessage,
     useUpdateConversation,
 } from '@workspace/db/hooks'
-import { Avatar, Button, List, Spin, message } from 'antd'
+import { Avatar, Button, Dropdown, List, Menu, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -24,6 +25,7 @@ export default function Page() {
 
     const { mutateAsync: createConversation } = useCreateConversation()
     const { mutateAsync: updateConversation } = useUpdateConversation()
+    const { mutateAsync: deleteConversation } = useDeleteConversation()
     const { data: messageList } = useFindManyMessage({
         where: { conversationId: id as string },
     })
@@ -87,7 +89,21 @@ export default function Page() {
             setLoading(false)
         }
     }
+    const handleDelete = async () => {
+        if (!id) return
 
+        try {
+            setLoading(true)
+            await deleteConversation({ where: { id: id as string } })
+            message.success('Đã xóa cuộc trò chuyện')
+            router.push('/tro-ly-ao')
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+        } finally {
+            setLoading(false)
+        }
+    }
     // Effects
     useEffect(() => {
         if (messageList) {
@@ -169,9 +185,30 @@ export default function Page() {
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         />
                         <div className="flex items-center gap-1">
-                            <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
-                                <MoreOutlined className="text-[18px]" />
-                            </Button>
+                            <Dropdown
+                                trigger={['click']}
+                                overlay={
+                                    <Menu
+                                        items={[
+                                            {
+                                                key: 'delete',
+                                                label: (
+                                                    <span
+                                                        className="text-red-500"
+                                                        onClick={handleDelete}
+                                                    >
+                                                        Xoá hội thoại
+                                                    </span>
+                                                ),
+                                            },
+                                        ]}
+                                    />
+                                }
+                            >
+                                <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
+                                    <MoreOutlined className="text-[18px]" />
+                                </Button>
+                            </Dropdown>
                             <Button
                                 onClick={handleSend}
                                 className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"

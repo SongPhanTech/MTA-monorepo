@@ -12,8 +12,6 @@ interface SiderDefaultLayoutProps {
     theme: 'light' | 'dark'
     items: MenuItem[]
     onCollapse?: (collapsed: boolean) => void
-    logo1: React.ReactNode
-    logo2: React.ReactNode
 }
 
 // Chuyển đổi item sang định dạng Menu phù hợp
@@ -88,34 +86,25 @@ const SiderDefaultLayout = ({
     theme,
     items,
     onCollapse,
-    logo1,
-    logo2,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
     const [openKeys, setOpenKeys] = useState<string[]>(
         findOpenKeys(items, pathname)
     )
-
     return (
         <Sider
             style={{
-                overflow: 'auto',
-                height: '100vh',
+                height: '90vh',
                 position: 'fixed',
-                insetInlineStart: 0,
-                top: 0,
-                bottom: 0,
-                scrollbarWidth: 'none',
+                overflow: 'hidden',
             }}
+            className="rounded-xl ml-4"
             collapsible
             onCollapse={onCollapse}
             collapsed={collapsed}
             theme={theme}
             width={280}
         >
-            <div className="flex items-center justify-center my-3">
-                {collapsed ? logo1 : logo2}
-            </div>
             <Menu
                 theme={theme}
                 mode="inline"

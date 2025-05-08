@@ -18,8 +18,5 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[sql]": {
-    "editor.defaultFormatter": "mtxr.sqltools"
   }
 }

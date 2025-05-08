@@ -1,6 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
 import { Button, Col, Form, Input, InputNumber, Row } from 'antd'
+import { ArrowLeftIcon } from 'lucide-react'
 
 // Mâu tham số cho LLM
 type ParamsType = {
@@ -17,14 +18,17 @@ function Page() {
 
     return (
         <div>
-            <span className="text-xl font-semibold text-gray-700">
-                Thiết lập tham số
-            </span>
+            <div className="flex items-center gap-2 mb-4 bg-white p-2 px-4 rounded-md shadow-sm">
+                <ArrowLeftIcon size={20} />
+                <span className="text-xl font-semibold text-gray-700">
+                    Thiết lập tham số
+                </span>
+            </div>
             <Form
                 form={form}
                 onFinish={onFinish}
                 layout="horizontal"
-                className="mt-4"
+                className="mt-4 bg-white p-4 rounded-md shadow-sm"
             >
                 <Row gutter={[12, 12]}>
                     <Col span={12}>
@@ -78,7 +82,11 @@ function Page() {
                         </FormItem>
                     </Col>
                 </Row>
-                <Button htmlType="submit">Lưu</Button>
+                <Col span={24} className="flex justify-end">
+                    <Button type="primary" htmlType="submit">
+                        Lưu
+                    </Button>
+                </Col>
             </Form>
         </div>
     )
