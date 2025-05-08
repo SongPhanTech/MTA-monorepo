@@ -1,6 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Form, Input, InputNumber, Row } from 'antd'
+import { Button, Col, Form, InputNumber, Row } from 'antd'
 import { ArrowLeftIcon } from 'lucide-react'
 
 // Mâu tham số cho LLM

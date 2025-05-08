@@ -23,6 +23,7 @@ type DocumentFormType = {
             body: string
             progress?: number
             timeLeft?: number
+            similar?: number
             id: string
         }
     >
@@ -41,6 +42,7 @@ const ThemTaiLieu = () => {
 
     const files = Form.useWatch('files', form) || {}
     const type = Form.useWatch('type', form) || {}
+    const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const onUpload = async (
         values: Array<{
@@ -94,7 +96,7 @@ const ThemTaiLieu = () => {
                                     [file.id]: {
                                         ...file,
                                         url: resPresignedUrl.fileName,
-                                        progress: percent,
+                                        progress: Math.min(percent, 90),
                                         timeLeft: estimated,
                                     },
                                 },
@@ -105,9 +107,7 @@ const ThemTaiLieu = () => {
                         await fetchReadDocumentContentDocumentDocumentReaderGet(
                             {
                                 queryParams: {
-                                    uri_file: getMinioUrl(
-                                        resPresignedUrl.fileName
-                                    ),
+                                    uri_file: resPresignedUrl.fileName,
                                     type,
                                 },
                             }
@@ -118,6 +118,14 @@ const ThemTaiLieu = () => {
                             [file.id]: {
                                 ...file,
                                 body: resReaderDocument.body,
+                                similar:
+                                    resReaderDocument.document_simmilar &&
+                                    resReaderDocument.document_simmilar.length >
+                                        0
+                                        ? resReaderDocument.document_simmilar[0]
+                                              .score
+                                        : 0,
+                                progress: 100,
                             },
                         },
                     })
@@ -128,8 +136,34 @@ const ThemTaiLieu = () => {
         }
     }
 
+    const bgColorSimilar = (similar: number) => {
+        if (similar > 0.8) {
+            return 'bg-red-500'
+        }
+        if (similar > 0.5) {
+            return 'bg-yellow-500'
+        }
+        return 'bg-green-500'
+    }
+
     const onFinish = async (values: DocumentFormType) => {
         try {
+            if (
+                Object.values(values.files).some(
+                    (file) => file.similar && file.similar > 0.8
+                )
+            ) {
+                const confirmed = await modalThemTaiLieu.confirm({
+                    title: 'Xác nhận thêm tài liệu tương đồng',
+                    content:
+                        'Bạn có chắc chắn muốn thêm tài liệu đã trùng lặp không?',
+                    okText: 'Đồng ý',
+                    cancelText: 'Hủy',
+                })
+                if (!confirmed) {
+                    return
+                }
+            }
             await createMany({
                 data: Object.values(values.files).map(
                     ({ body, file, url }) => ({
@@ -156,8 +190,14 @@ const ThemTaiLieu = () => {
             okText="Đồng ý"
             cancelText="Hủy"
             onCancel={onClose}
+            okButtonProps={{
+                disabled:
+                    Object.keys(files).length === 0 ||
+                    Object.values(files).some((file) => file.progress !== 100),
+            }}
             onOk={form.submit}
         >
+            {contextConfirmThemTaiLieu}
             <div className="flex gap-4 justify-between">
                 <Form
                     form={form}
@@ -200,11 +240,23 @@ const ThemTaiLieu = () => {
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
                                 className={cn(
-                                    'flex items-center gap-2 mt-2 border border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
+                                    'flex items-center gap-2 mt-2 border relative border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
                                     selectedFile?.url === file.url &&
                                         'bg-gray-100 border-primary'
                                 )}
                             >
+                                {!!file.similar && (
+                                    <span
+                                        className={cn(
+                                            'text-xs absolute right-2 -top-2 text-white px-1 rounded',
+                                            bgColorSimilar(file.similar)
+                                        )}
+                                    >
+                                        {`  ${Math.floor(
+                                            file.similar * 100
+                                        )} % tương đồng`}
+                                    </span>
+                                )}
                                 <FileUploadIcon
                                     fileType={file.file.type}
                                     width={40}
@@ -218,6 +270,7 @@ const ThemTaiLieu = () => {
                                     </div>
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
+
                                         {!!file.timeLeft && !!file.progress && (
                                             <span className="text-gray-400 text-sm">
                                                 {` - ${Math.floor(
