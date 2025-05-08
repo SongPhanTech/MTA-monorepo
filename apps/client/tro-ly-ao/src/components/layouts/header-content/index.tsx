@@ -1,17 +1,15 @@
 import { UnorderedListOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Menu } from 'antd'
 import { useState } from 'react'
+import AI_TYPES from '@constants/ai_types' // thay đường dẫn đúng với project của bạn
 
 function HeaderContent() {
     const [activeId, setActiveId] = useState<string | null>(null)
 
-    const listAI = [
-        { id: '1', label: 'AI Chat' },
-        { id: '2', label: 'AI Text Generator' },
-        { id: '3', label: 'AI Text to Speech' },
-        { id: '4', label: 'AI Image Generator' },
-        { id: '5', label: 'AI Voice Cloner' },
-    ]
+    const listAI = AI_TYPES.map((item) => ({
+        id: item.key,
+        label: item.label,
+    }))
 
     const visibleList = listAI.slice(0, 3)
     const moreList = listAI.slice(3)

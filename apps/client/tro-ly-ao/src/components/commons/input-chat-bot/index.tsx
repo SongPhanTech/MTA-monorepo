@@ -1,7 +1,8 @@
 import { MoreOutlined, SendOutlined } from '@ant-design/icons'
 import { Dropdown, Button, Menu, Spin } from 'antd'
 import { useRouter } from 'next/router'
-import React from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 interface ChatInputProps {
     input: string
@@ -20,22 +21,55 @@ export default function ChatInput({
 }: ChatInputProps) {
     const router = useRouter()
     const isTroLyAo = router.pathname === '/tro-ly-ao'
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+    // Hàm tự động điều chỉnh chiều cao của textarea
+    const resizeTextarea = useCallback(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto'
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+        }
+    }, [])
+
+    useEffect(() => {
+        resizeTextarea()
+    }, [resizeTextarea])
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault()
+            onSend()
+        } else if (e.key === 'Enter' && e.shiftKey) {
+            e.preventDefault()
+            const cursorPosition = e.currentTarget.selectionStart
+            const newValue = `${input.slice(0, cursorPosition)}\n${input.slice(cursorPosition)}`
+            onInputChange(newValue)
+            setTimeout(() => resizeTextarea(), 0)
+        }
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        onInputChange(e.target.value)
+    }
+
     return (
         <div className="sticky bottom-0 z-10 px-4">
             {/* Background fade mờ lên trên */}
             <div className="absolute left-0 right-0 bottom-full h-8 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none" />
 
             <div className="max-w-4xl mx-auto px-4 pb-4">
-                <div className="rounded-3xl border flex items-center gap-1 px-3 py-2 shadow bg-white">
-                    <input
-                        className="px-4 flex-1 outline-none border-none text-base bg-transparent"
+                <div className="rounded-3xl border flex flex-col gap-2 px-3 py-2 shadow bg-white">
+                    <textarea
+                        ref={textareaRef}
+                        className="px-3 py-1 outline-none border-none text-base bg-transparent resize-none min-h-[32px] max-h-[160px] w-full"
                         placeholder="Hỏi bất kỳ điều gì ..."
                         value={input}
-                        onChange={(e) => onInputChange(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && onSend()}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
                     />
-                    <div className="flex items-center gap-1">
-                        {!isTroLyAo && (
+                    <div className="flex justify-between items-center px-1">
+                        {!isTroLyAo ? (
                             <Dropdown
                                 trigger={['click']}
                                 overlay={
@@ -60,6 +94,8 @@ export default function ChatInput({
                                     <MoreOutlined className="text-[18px]" />
                                 </Button>
                             </Dropdown>
+                        ) : (
+                            <div />
                         )}
                         <Button
                             onClick={onSend}
