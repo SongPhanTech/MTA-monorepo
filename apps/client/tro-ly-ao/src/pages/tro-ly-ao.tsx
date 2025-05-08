@@ -1,24 +1,14 @@
-import { RobotOutlined, UserOutlined } from '@ant-design/icons'
-import ChatInput from '@components/commons/input-chat-bot'
 import AI_TYPES from '@constants/ai_types'
 import ChatLayout from '@layouts/chat-layout'
-import { cn } from '@lib/utils'
 import { MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import {
-    Avatar,
-    Button,
-    Card,
-    Col,
-    List,
-    message,
-    Row,
-    Spin,
     Typography,
+    message
 } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 const { Title } = Typography
 export default function TroLyAo() {
     const router = useRouter()
