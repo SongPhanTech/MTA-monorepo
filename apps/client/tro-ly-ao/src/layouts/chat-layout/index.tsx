@@ -13,6 +13,7 @@ import {
 import { Layout, theme } from 'antd'
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 
@@ -25,6 +26,7 @@ const ChatLayout = ({
     children: ReactNode
     className?: string
 }) => {
+    const router = useRouter()
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -120,7 +122,7 @@ const ChatLayout = ({
                         theme={'light'}
                     />
                     <Layout className="overflow-hidden">
-                        {/* <HeaderContent /> */}
+                        {router.pathname !== '/tro-ly-ao' && <HeaderContent />}
                         <Content className="h-full p-[10px] bg-white">
                             {children}
                         </Content>
