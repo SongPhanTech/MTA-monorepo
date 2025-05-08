@@ -1,21 +1,20 @@
 import {
     ApartmentOutlined,
-    PieChartOutlined,
-    SettingOutlined,
-    UserOutlined,
-    ScheduleOutlined,
-    HomeOutlined,
-    ClockCircleOutlined,
     BookOutlined,
-    TeamOutlined,
+    ClockCircleOutlined,
+    HomeOutlined,
     IdcardOutlined,
     MessageOutlined,
     FileTextOutlined,
     ReadOutlined,
+    PieChartOutlined,
+    ScheduleOutlined,
+    SettingOutlined,
+    TeamOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
-import { Home } from 'lucide-react'
-import * as ROUTER_PATH from '../generated/router.json'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
+import ROUTER_PATH from '../generated/router'
 interface MenuItem {
     id: string
     label: React.ReactNode
@@ -446,6 +445,6 @@ const NAVIGATION: NavigationType = {
         ],
     },
 }
-export type { MenuItem, NavigationType }
 export { ROUTER_PATH }
+export type { MenuItem, NavigationType }
 export default NAVIGATION

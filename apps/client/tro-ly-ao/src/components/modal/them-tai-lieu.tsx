@@ -40,6 +40,7 @@ const ThemTaiLieu = () => {
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
+    const type = Form.useWatch('type', form) || {}
 
     const onUpload = async (
         values: Array<{
@@ -107,6 +108,7 @@ const ThemTaiLieu = () => {
                                     uri_file: getMinioUrl(
                                         resPresignedUrl.fileName
                                     ),
+                                    type,
                                 },
                             }
                         )

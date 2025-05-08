@@ -12,8 +12,16 @@ const IndexPage: NextPage = () => {
         } else if (status === 'authenticated') {
             const firstMenu = menus.flat()
             console.log('check menus', menus)
-            if (firstMenu.length > 0 && firstMenu[0].path) {
+            if (firstMenu.length > 0) {
+                // window.location.href = firstMenu[0].path
+                console.log(
+                    firstMenu[0].path
+                        ? firstMenu[0].path
+                        : firstMenu[0].children?.[0]?.path || ''
+                )
                 window.location.href = firstMenu[0].path
+                    ? firstMenu[0].path
+                    : firstMenu[0].children?.[0]?.path || ''
             }
         }
     }, [status, menus])

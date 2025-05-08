@@ -11,6 +11,7 @@ import type * as Schemas from "./qaSchemas";
 
 export type ReadDocumentContentDocumentDocumentReaderGetQueryParams = {
   uri_file: string;
+  type: Schemas.DocumentType;
 };
 
 export type ReadDocumentContentDocumentDocumentReaderGetError =

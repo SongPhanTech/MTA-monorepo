@@ -6,10 +6,10 @@ import { useMemo } from 'react'
 
 type CanProps = {
     children: React.ReactNode
-    I: keyof typeof ROUTER_PATH.QL_NGUOI_DUNG
+    I: keyof typeof ROUTER_PATH.KHAO_THI
     a: $Enums.PermissionType
 }
-const menus = NAVIGATION.QL_NGUOI_DUNG.menus.flatMap((menu) => {
+const menus = NAVIGATION.KHAO_THI.menus.flatMap((menu) => {
     if (menu.children) {
         return menu.children.map((child) => ({
             id: child.id,

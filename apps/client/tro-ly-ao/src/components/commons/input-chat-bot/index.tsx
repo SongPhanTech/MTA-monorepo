@@ -1,5 +1,6 @@
 import { MoreOutlined, SendOutlined } from '@ant-design/icons'
 import { Dropdown, Button, Menu, Spin } from 'antd'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 interface ChatInputProps {
@@ -17,6 +18,8 @@ export default function ChatInput({
     onSend,
     onDelete,
 }: ChatInputProps) {
+    const router = useRouter()
+    const isTroLyAo = router.pathname === '/tro-ly-ao'
     return (
         <div className="sticky bottom-0 z-10 px-4">
             {/* Background fade mờ lên trên */}
@@ -32,30 +35,32 @@ export default function ChatInput({
                         onKeyDown={(e) => e.key === 'Enter' && onSend()}
                     />
                     <div className="flex items-center gap-1">
-                        <Dropdown
-                            trigger={['click']}
-                            overlay={
-                                <Menu
-                                    items={[
-                                        {
-                                            key: 'delete',
-                                            label: (
-                                                <span
-                                                    className="text-red-500"
-                                                    onClick={onDelete}
-                                                >
-                                                    Xoá hội thoại
-                                                </span>
-                                            ),
-                                        },
-                                    ]}
-                                />
-                            }
-                        >
-                            <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
-                                <MoreOutlined className="text-[18px]" />
-                            </Button>
-                        </Dropdown>
+                        {!isTroLyAo && (
+                            <Dropdown
+                                trigger={['click']}
+                                overlay={
+                                    <Menu
+                                        items={[
+                                            {
+                                                key: 'delete',
+                                                label: (
+                                                    <span
+                                                        className="text-red-500"
+                                                        onClick={onDelete}
+                                                    >
+                                                        Xoá hội thoại
+                                                    </span>
+                                                ),
+                                            },
+                                        ]}
+                                    />
+                                }
+                            >
+                                <Button className="bg-gray-100 p-0 w-8 h-8 rounded-full flex items-center justify-center">
+                                    <MoreOutlined className="text-[18px]" />
+                                </Button>
+                            </Dropdown>
+                        )}
                         <Button
                             onClick={onSend}
                             className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
