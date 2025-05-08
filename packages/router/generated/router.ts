@@ -1,0 +1,73 @@
+export default {
+  "KHAO_THI": {
+    "INDEX": "/",
+    "THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/cau-hoi-khao-sat",
+    "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
+    "TRA_LOI_KHAO_SAT": "/tra-loi-khao-sat"
+  },
+  "QL_DANH_MUC": {
+    "DANH_MUC_DAO_TAO_STUDY_RANK": "/danh-muc-dao-tao/study-rank",
+    "DANH_MUC_DAO_TAO_TRAINING_KPI": "/danh-muc-dao-tao/training-kpi",
+    "DANH_MUC_DAO_TAO_TRAINING_LEVEL": "/danh-muc-dao-tao/training-level",
+    "DANH_MUC_DAO_TAO_TRAINING_LOCATION": "/danh-muc-dao-tao/training-location",
+    "DANH_MUC_DAO_TAO_TRAINING_RANK": "/danh-muc-dao-tao/training-rank",
+    "DANH_MUC_DAO_TAO_TRAINING_TYPE": "/danh-muc-dao-tao/training-type",
+    "DANH_MUC_DAO_TAO_TRANINING_BLOCK": "/danh-muc-dao-tao/tranining-block",
+    "DANH_MUC_DAO_TAO_TRANINING_FIELD": "/danh-muc-dao-tao/tranining-field",
+    "DANH_MUC_DAO_TAO_TRANINING_FORM": "/danh-muc-dao-tao/tranining-form",
+    "DANH_MUC_DAO_TAO_TRANINING_MAJOR": "/danh-muc-dao-tao/tranining-major",
+    "DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE": "/danh-muc-dao-tao/tranining-object-type",
+    "DANH_MUC_DAO_TAO_TRANINING_TIME": "/danh-muc-dao-tao/tranining-time",
+    "DANH_MUC_HO_SO_ETHNICITY": "/danh-muc-ho-so/ethnicity",
+    "DANH_MUC_HO_SO_NATIONALITY": "/danh-muc-ho-so/nationality",
+    "DANH_MUC_HO_SO_PRIORITY_OBJECT": "/danh-muc-ho-so/priority-object",
+    "DANH_MUC_HO_SO_REGISTRATION_AREA": "/danh-muc-ho-so/registration-area",
+    "DANH_MUC_HO_SO_RELIGION": "/danh-muc-ho-so/religion",
+    "DANH_MUC_HO_SO_USER_TYPE": "/danh-muc-ho-so/user-type",
+    "DANH_MUC_ACADEMIC_DEGREE_TYPE": "/danh-muc/academic-degree-type",
+    "DANH_MUC_ACADEMIC_RANK_TYPE": "/danh-muc/academic-rank-type",
+    "DANH_MUC_LEVEL": "/danh-muc/level",
+    "DANH_MUC_ORGANIZATION_TYPE": "/danh-muc/organization-type",
+    "DANH_MUC_ORGANIZATION": "/danh-muc/organization",
+    "DANH_MUC_POSITION": "/danh-muc/position",
+    "DANH_MUC_RANK": "/danh-muc/rank",
+    "HOME": "/home",
+    "INDEX": "/"
+  },
+  "QL_DAO_TAO": {
+    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "HOME": "/home",
+    "INDEX": "/",
+    "KHOA_HUAN_LUYEN": "/khoa-huan-luyen",
+    "LOP_BIEN_CHE": "/lop-bien-che",
+    "MOC_HUAN_LUYEN": "/moc-huan-luyen",
+    "MON_HOC": "/mon-hoc",
+    "NAM_HOC_KY_HOC": "/nam-hoc-ky-hoc",
+    "NHOM_MON_HOC": "/nhom-mon-hoc",
+    "PHIEN_BAN_CTDT": "/phien-ban-ctdt",
+    "QL_GIANG_VIEN": "/ql-giang-vien",
+    "QL_HOC_VIEN": "/ql-hoc-vien",
+    "QL_SINH_VIEN": "/ql-sinh-vien",
+    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management"
+  },
+  "QL_NGUOI_DUNG": {
+    "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
+    "GIOI_HAN_DIA_CHI_MANG": "/gioi-han-dia-chi-mang",
+    "HOME": "/home",
+    "INDEX": "/",
+    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
+    "NGUOI_DUNG_DANH_SACH": "/nguoi-dung/danh-sach",
+    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
+    "NGUOI_DUNG_QUYEN_CO_BAN": "/nguoi-dung/quyen-co-ban",
+    "NGUOI_DUNG_VAI_TRO": "/nguoi-dung/vai-tro"
+  },
+  "TRO_LY_AO": {
+    "HOI_THOAI_ID": "/hoi-thoai/[id]",
+    "INDEX": "/",
+    "QUAN_TRI_CAU_HINH_PROMT": "/quan-tri/cau-hinh/promt",
+    "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
+    "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
+    "QUAN_TRI": "/quan-tri",
+    "TRO_LY_AO": "/tro-ly-ao"
+  }
+}

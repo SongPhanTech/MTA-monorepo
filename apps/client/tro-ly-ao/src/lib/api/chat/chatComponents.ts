@@ -16,9 +16,6 @@ export type HoiDapHoiDapPostError = Fetcher.ErrorWrapper<{
 
 export type HoiDapHoiDapPostVariables = ChatContext["fetcherOptions"];
 
-/**
- * Lay prompt mau
- */
 export const fetchHoiDapHoiDapPost = (
   variables: HoiDapHoiDapPostVariables,
   signal?: AbortSignal,
@@ -30,9 +27,6 @@ export const fetchHoiDapHoiDapPost = (
     signal,
   });
 
-/**
- * Lay prompt mau
- */
 export const useHoiDapHoiDapPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<

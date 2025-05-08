@@ -47,6 +47,7 @@ export type ValidationError = {
 export type SrcRoutersDocumentDocumentReaderResponse = {
   body?: string;
   message?: string;
+  document_simmilar?: any[];
 };
 
 export type SrcRoutersUtilDocumentReaderResponse = {
