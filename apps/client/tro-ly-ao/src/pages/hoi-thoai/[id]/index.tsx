@@ -12,6 +12,7 @@ import { Avatar, List, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import type React from 'react'
+import ReactMarkdown from 'react-markdown'
 
 export default function Page() {
     const router = useRouter()
@@ -199,9 +200,10 @@ export default function Page() {
                                                     ? 'bg-[#BEDACE] text-black rounded-br-none'
                                                     : 'bg-[#D5DAE7] text-black rounded-bl-none'
                                             }`}
-                                            style={{ whiteSpace: 'pre-wrap' }}
                                         >
-                                            {msg.content}
+                                            <ReactMarkdown>
+                                                {msg.content}
+                                            </ReactMarkdown>
                                         </div>
                                     </div>
                                 </List.Item>
