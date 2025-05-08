@@ -20,6 +20,7 @@ import PutOrganizationUser from './put-organization-user'
 import PutMonHocChuongTrinhModal from './put-mon-hoc-chuong-trinh'
 import PutMonHocTienQuyetModal from './put-mon-hoc-tien-quyet'
 import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
+import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -43,4 +44,5 @@ export {
     PutMonHocChuongTrinhModal,
     PutMonHocTienQuyetModal,
     PutMonHocSongHanhModal,
+    ThongTinBaoCaoModal,
 }
