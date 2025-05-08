@@ -1,4 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -37,6 +37,8 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
+import { DownloadCloud } from 'lucide-react'
+import { getMinioUrl } from '@workspace/constant'
 
 interface FilterProps {
     name: string | undefined
@@ -340,67 +342,27 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 {
                                     title: 'CTĐT',
                                     dataIndex: 'curriculum',
-                                    width: 150,
+                                    // width: 150,
                                     render: (value: Curriculum) =>
                                         value?.name ? value?.name : '',
                                 },
-                                {
-                                    title: 'Ngày bắt đầu',
-                                    align: 'center',
-                                    render: ({ startDate }) =>
-                                        dayjs(startDate).format('DD/MM/YYYY'),
-                                },
-                                {
-                                    title: 'Ngày kết thúc',
-                                    align: 'center',
-                                    // dataIndex: 'endDate',
-                                    render: ({ endDate }) =>
-                                        endDate
-                                            ? dayjs(endDate).format(
-                                                  'DD/MM/YYYY'
-                                              )
-                                            : '',
-                                },
-                                {
-                                    title: 'Tài liệu',
-                                    align: 'center',
-                                    render: ({ documentPath }) =>
-                                        documentPath ? (
-                                            <a
-                                                href={documentPath}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                style={{
-                                                    color: 'blue',
-                                                    textDecoration: 'underline',
-                                                }}
-                                            >
-                                                Xem thêm
-                                            </a>
-                                        ) : (
-                                            ''
-                                        ),
-                                },
-                                {
-                                    title: 'Tài liệu kết xuất',
-                                    align: 'center',
-                                    render: ({ renderPath }) =>
-                                        renderPath ? (
-                                            <a
-                                                href={renderPath}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                style={{
-                                                    color: 'blue',
-                                                    textDecoration: 'underline',
-                                                }}
-                                            >
-                                                Xem thêm
-                                            </a>
-                                        ) : (
-                                            ''
-                                        ),
-                                },
+                                // {
+                                //     title: 'Ngày bắt đầu',
+                                //     align: 'center',
+                                //     render: ({ startDate }) =>
+                                //         dayjs(startDate).format('DD/MM/YYYY'),
+                                // },
+                                // {
+                                //     title: 'Ngày kết thúc',
+                                //     align: 'center',
+                                //     // dataIndex: 'endDate',
+                                //     render: ({ endDate }) =>
+                                //         endDate
+                                //             ? dayjs(endDate).format(
+                                //                   'DD/MM/YYYY'
+                                //               )
+                                //             : '',
+                                // },
                                 {
                                     title: 'Thông tin',
                                     dataIndex: 'infomation',
@@ -433,8 +395,39 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                     title: 'Thao tác',
                                     width: 100,
                                     align: 'center',
-                                    render: (_, { id }) => (
+                                    render: (_, { id, documentPath }) => (
                                         <Row className="justify-center gap-2">
+                                            <Tooltip
+                                                title="Tải file"
+                                                placement="leftTop"
+                                            >
+                                                <a
+                                                    href={
+                                                        documentPath
+                                                            ? getMinioUrl(
+                                                                  documentPath
+                                                              )
+                                                            : '#'
+                                                    }
+                                                    // target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={
+                                                        documentPath
+                                                            ? 'text-sm text-blue-700 cursor-pointer'
+                                                            : 'text-sm text-gray-400 cursor-not-allowed'
+                                                    }
+                                                    style={
+                                                        documentPath
+                                                            ? {}
+                                                            : {
+                                                                  pointerEvents:
+                                                                      'none',
+                                                              }
+                                                    }
+                                                >
+                                                    <CloudDownloadOutlined />
+                                                </a>
+                                            </Tooltip>
                                             <Tooltip
                                                 title="Xem chi tiết"
                                                 placement="leftTop"
@@ -475,6 +468,6 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
     )
 }
 
-CurriculumVersionPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
-}
+// CurriculumVersionPage.getLayout = function getLayout(page: React.ReactElement) {
+//     return <DefaultLayout>{page}</DefaultLayout>
+// }

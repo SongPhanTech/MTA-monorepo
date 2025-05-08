@@ -2,23 +2,21 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingCourse, UserType } from '@workspace/db'
-import {
-    useFindManyTrainingCourse,
-    useFindManyUserType,
-} from '@workspace/db/hooks'
+import type { TrainingCourse } from '@workspace/db'
+import { useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
+import type { UploadFile } from 'antd/es/upload/interface'
 import { fetchUploadFile } from '@api/userProfile'
+
 export type PutUploadFixedClass = {
     trainingCourseId: string
-    file: File
+    file: UploadFile<any>[]
 }
+
 const PutUploadFixedClassModal = () => {
     const [form] = Form.useForm<PutUploadFixedClass>()
     const {
@@ -31,36 +29,48 @@ const PutUploadFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: trainingCourseData = [], refetch: refetchUserType } =
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse()
 
     async function onOk(output?: PutUploadFixedClass) {
         if (!output) return
+        if (!output.file || output.file.length === 0) {
+            message.error('Vui lòng chọn một file để tải lên.')
+            return
+        }
+        const uploadFile = output.file[0]
+
+        if (!uploadFile.originFileObj) {
+            message.error('Tệp tải lên không hợp lệ.')
+            return
+        }
+
         try {
             showSpinner()
+
             const formData = new FormData()
-            formData.append('file', output.file)
+            formData.append('file', uploadFile.originFileObj as File)
             formData.append('trainingCourseId', output.trainingCourseId)
+
             const res = await fetchUploadFile(
                 formData,
-                'api/FixedClass/upload-excel-create-fixed-class'
+                'api/fixed-class/FixedClass/upload-excel-create-fixed-class'
             )
             const data = await res.json()
+
             if (res.ok) {
                 message.success('Tải lên thành công!')
             } else {
                 message.error(data.message || 'Tải lên thất bại!')
             }
 
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['FixedClass'],
-            })
+            queryClient.invalidateQueries({ queryKey: ['FixedClass'] })
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (
@@ -69,7 +79,7 @@ const PutUploadFixedClassModal = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            maskClosable={true}
+            maskClosable
             title="Tải file nhập danh sách lớp biên chế"
             className="w-[30vw]"
         >
@@ -82,12 +92,12 @@ const PutUploadFixedClassModal = () => {
                 >
                     <Select
                         placeholder="Chọn khóa"
-                        options={trainingCourseData.map((i: TrainingCourse) => {
-                            return {
+                        options={trainingCourseData.map(
+                            (i: TrainingCourse) => ({
                                 value: i.id,
                                 label: i.name,
-                            }
-                        })}
+                            })
+                        )}
                     />
                 </FormItem>
             </Col>
@@ -99,14 +109,26 @@ const PutUploadFixedClassModal = () => {
                     label="Tệp Excel"
                     required
                     valuePropName="fileList"
-                    getValueFromEvent={(e) => {
-                        return Array.isArray(e) ? e : e?.fileList
-                    }}
+                    getValueFromEvent={(e) =>
+                        Array.isArray(e) ? e : e?.fileList
+                    }
                 >
                     <Upload
-                        beforeUpload={() => false} // Không upload ngay, chỉ chọn file
-                        maxCount={1} // Chỉ cho chọn 1 file
-                        accept=".xlsx,.xls" // Chỉ chấp nhận file Excel
+                        beforeUpload={(file) => {
+                            const isExcel =
+                                file.type ===
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                                file.type === 'application/vnd.ms-excel'
+                            if (!isExcel) {
+                                message.error(
+                                    'Chỉ được phép tải lên file Excel (.xlsx, .xls)'
+                                )
+                                return Upload.LIST_IGNORE
+                            }
+                            return false // Không upload tự động
+                        }}
+                        maxCount={1}
+                        accept=".xlsx,.xls"
                     >
                         <Button icon={<UploadOutlined />}>
                             Chọn file Excel

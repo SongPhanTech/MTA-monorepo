@@ -43,7 +43,8 @@ const Table = <T extends Record<string, unknown>>({
                     column.key ||
                     (column as unknown as { dataIndex: string }).dataIndex,
             }))}
-            scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
+            // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
+            scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
             bordered
             dataSource={data}
             locale={{

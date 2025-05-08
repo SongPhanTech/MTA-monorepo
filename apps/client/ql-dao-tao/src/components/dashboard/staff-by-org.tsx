@@ -41,7 +41,6 @@ const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
         yField: 'frequency',
         tooltip: {
             formatter: (datum: { letter: string; frequency: number }) => {
-                console.log('datum in tooltip:', datum)
                 if (datum?.frequency) {
                     return { name: 'Số lượng', value: datum.frequency }
                 }

@@ -4,24 +4,24 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersionSubject,
-    PrerequisiteSubject,
+    CoRequisiteSubject,
     Subject,
     SubjectGroup,
     TrainingBlock,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersionSubject,
-    useCreatePrerequisiteSubject,
+    useCreateCoRequisiteSubject,
     useCreateSubject,
     useFindManyOrganization,
     useFindManySubject,
     useFindManySubjectGroup,
     useFindManyTrainingBlock,
     useFindUniqueCurriculumVersionSubject,
-    useFindUniquePrerequisiteSubject,
+    useFindUniqueCoRequisiteSubject,
     useFindUniqueSubject,
     useUpdateCurriculumVersionSubject,
-    useUpdatePrerequisiteSubject,
+    useUpdateCoRequisiteSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, TreeSelect } from 'antd'
@@ -29,7 +29,7 @@ import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
-export type PutPrerequisiteSubject = PrerequisiteSubject
+export type PutCoRequisiteSubject = CoRequisiteSubject
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 import Select from '@components/commons/select'
@@ -40,7 +40,7 @@ import {
 
 dayjs.locale('vi')
 const PutMonHocSongHanhModal = () => {
-    const [form] = Form.useForm<PutPrerequisiteSubject>()
+    const [form] = Form.useForm<PutCoRequisiteSubject>()
     const { isOpen, onClose, input } = useDisclosure<{
         curriculumVersionSubjectId?: string | null | undefined
         id?: string | null
@@ -57,18 +57,18 @@ const PutMonHocSongHanhModal = () => {
     }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createPrerequisiteSubject } =
-        useCreatePrerequisiteSubject()
-    const { mutateAsync: updatePrerequisiteSubject } =
-        useUpdatePrerequisiteSubject()
+    const { mutateAsync: createCoRequisiteSubject } =
+        useCreateCoRequisiteSubject()
+    const { mutateAsync: updateCoRequisiteSubject } =
+        useUpdateCoRequisiteSubject()
     const { data: subjectData, refetch: refetchSubject } = useFindManySubject()
     useFindManyTrainingBlock()
-    async function onOk(output?: PutPrerequisiteSubject) {
+    async function onOk(output?: PutCoRequisiteSubject) {
         if (!output) return
         try {
             showSpinner()
             if (id) {
-                await updatePrerequisiteSubject({
+                await updateCoRequisiteSubject({
                     data: {
                         curriculumVersionSubjectId:
                             curriculumVersionSubjectId || undefined,
@@ -80,7 +80,7 @@ const PutMonHocSongHanhModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createPrerequisiteSubject({
+                await createCoRequisiteSubject({
                     data: {
                         // biome-ignore lint/style/noNonNullAssertion: <explanation>
                         curriculumVersionSubjectId: curriculumVersionSubjectId!,
@@ -91,7 +91,7 @@ const PutMonHocSongHanhModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['CurriculumnVersionSubject'],
+                queryKey: ['CoRequisiteSubject'],
             })
             onClose()
         } catch (error) {
@@ -100,7 +100,7 @@ const PutMonHocSongHanhModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniquePrerequisiteSubject({
+    const { data: level } = useFindUniqueCoRequisiteSubject({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

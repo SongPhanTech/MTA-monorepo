@@ -104,7 +104,9 @@ const ThemTaiLieu = () => {
                         await fetchReadDocumentContentDocumentDocumentReaderGet(
                             {
                                 queryParams: {
-                                    uri_file: resPresignedUrl.fileName,
+                                    uri_file: getMinioUrl(
+                                        resPresignedUrl.fileName
+                                    ),
                                 },
                             }
                         )

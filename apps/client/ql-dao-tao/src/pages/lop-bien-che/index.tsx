@@ -66,7 +66,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
                 },
             },
             managementOrganization: true,
-            trainingCourse: true,
+            trainingCourse: {
+                include: {
+                    trainingObjectType: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -342,6 +346,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                     value?.name ? value?.name : '',
                             },
                             {
+                                title: 'Quân số',
+                                dataIndex: 'classSize',
+                                align: 'center',
+                            },
+                            {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
                             },
@@ -380,15 +389,18 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
-                        // expandable={{
-                        //     expandedRowRender: (record) => <OptionsPage
-                        //         className="sub-table [&_.ant-table-tbody>tr:hover]:bg-blue-50"
-                        //         key={record.id}
-                        //         fixedClass={record} />
-                        //     // rowExpandable: (record) => !!record.description,
-                        // }}
                         expandable={{
-                            expandedRowRender: renderExpandedRow,
+                            // expandedRowRender: renderExpandedRow,
+                            expandedRowRender: (
+                                record: Partial<FixedClass>
+                            ) => (
+                                <div style={{ maxWidth: '100%' }}>
+                                    <OptionsPage
+                                        key={record.id}
+                                        fixedClass={record}
+                                    />
+                                </div>
+                            ),
                         }}
                     />
                 </Col>

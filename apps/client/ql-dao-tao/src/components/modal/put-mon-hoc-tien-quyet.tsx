@@ -50,7 +50,6 @@ const PutMonHocTienQuyetModal = () => {
     })
     let curriculumVersionSubjectId: string | null | undefined
     let id: string | null | undefined
-    console.log('curriculumVersionSubjectId', curriculumVersionSubjectId)
     if (input) {
         curriculumVersionSubjectId = input.curriculumVersionSubjectId
         id = input.id
@@ -91,7 +90,7 @@ const PutMonHocTienQuyetModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['CurriculumnVersionSubject'],
+                queryKey: ['PrerequisiteSubject'],
             })
             onClose()
         } catch (error) {

@@ -20,7 +20,16 @@ import {
     useUpdateCurriculumVersionSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Steps, TreeSelect } from 'antd'
+import {
+    Button,
+    Col,
+    Form,
+    Input,
+    message,
+    Steps,
+    TreeSelect,
+    Upload,
+} from 'antd'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -36,10 +45,16 @@ import {
 import MonHocTienQuyetPage from '@components/sub-pages/mon-hoc-tien-quyet'
 import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
 import MonHocSongHanhPage from '@components/sub-pages/mon-hoc-song-hanh'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import axios from 'axios'
+import { UploadOutlined } from '@ant-design/icons'
 
 dayjs.locale('vi')
+type PutCurriculumVersionSubjectFile = PutCurriculumVersionSubject & {
+    file: File[]
+}
 const PutMonHocChuongTrinhModal = () => {
-    const [form] = Form.useForm<PutCurriculumVersionSubject>()
+    const [form] = Form.useForm<PutCurriculumVersionSubjectFile>()
     const { isOpen, onClose, input } = useDisclosure<{
         curriculumVersionId?: string | null | undefined
         id?: string | null
@@ -63,7 +78,7 @@ const PutMonHocChuongTrinhModal = () => {
     const { data: subjectData, refetch: refetchSubject } = useFindManySubject()
     const { data: trainingBlockData, refetch: refetchTrainingBlockData } =
         useFindManyTrainingBlock()
-    async function onOk(output?: PutCurriculumVersionSubject) {
+    async function onOk(output?: PutCurriculumVersionSubjectFile) {
         if (!output) return
         try {
             showSpinner()
@@ -158,7 +173,7 @@ const PutMonHocChuongTrinhModal = () => {
                     ? 'Chỉnh sửa môn học chương trình'
                     : 'Thêm mới môn học chương trình'
             }
-            className="w-[50vw]"
+            className="w-[40vw]"
         >
             {id && (
                 <Steps
@@ -170,7 +185,7 @@ const PutMonHocChuongTrinhModal = () => {
             )}
             {(!id || current === 0) && (
                 <>
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem
                             form={form}
                             name="subjectId"
@@ -192,7 +207,7 @@ const PutMonHocChuongTrinhModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem
                             form={form}
                             name="type"
@@ -216,7 +231,7 @@ const PutMonHocChuongTrinhModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem
                             form={form}
                             name="trainingBlockId"
@@ -240,7 +255,7 @@ const PutMonHocChuongTrinhModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <FormItem
                             form={form}
                             name="information"
@@ -250,24 +265,105 @@ const PutMonHocChuongTrinhModal = () => {
                             <Input placeholder="Nhập thông tin" />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <FormItem form={form} name="documentPath">
+                        <Input type="hidden" />
+                    </FormItem>
+                    <FormItem form={form} name="renderPath">
+                        <Input type="hidden" />
+                    </FormItem>
+                    <Col span={24}>
                         <FormItem
                             form={form}
-                            name="documentPath"
-                            label="Đường dẫn tài liệu"
+                            name="file"
+                            label="Tệp tài liệu"
                             // required
+                            valuePropName="fileList"
+                            getValueFromEvent={(e) =>
+                                Array.isArray(e) ? e : e?.fileList
+                            }
                         >
-                            <Input placeholder="Nhập đường dẫn tài liệu" />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="renderPath"
-                            label="Đường dẫn tài liệu kết xuất"
-                            // required
-                        >
-                            <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
+                            <Upload
+                                maxCount={1}
+                                accept=".doc,.docx,.pdf"
+                                customRequest={async ({
+                                    file,
+                                    onSuccess,
+                                    onError,
+                                    onProgress,
+                                }) => {
+                                    try {
+                                        const extension =
+                                            file.name.split('.').pop() || ''
+                                        const id = crypto.randomUUID()
+
+                                        // Gọi API lấy presigned URL
+                                        const resPresignedUrl =
+                                            await fetchGeneratePresignedUrl({
+                                                body: {
+                                                    path: 'mon-hoc-chuong-trinh',
+                                                    extension,
+                                                },
+                                            })
+
+                                        // Upload file lên MinIO
+                                        await axios.put(
+                                            resPresignedUrl.url,
+                                            file,
+                                            {
+                                                headers: {
+                                                    'Content-Type': file.type,
+                                                },
+                                                onUploadProgress: (
+                                                    progressEvent
+                                                ) => {
+                                                    const {
+                                                        loaded,
+                                                        total = 1,
+                                                    } = progressEvent
+                                                    const percent = Math.floor(
+                                                        (loaded * 100) / total
+                                                    )
+                                                    onProgress?.({ percent })
+                                                },
+                                            }
+                                        )
+                                        form.setFieldsValue({
+                                            documentPath:
+                                                resPresignedUrl.fileName,
+                                            renderPath: resPresignedUrl.url,
+                                        })
+                                        console.log(
+                                            resPresignedUrl.fileName,
+                                            'nè'
+                                        )
+                                        onSuccess?.('OK')
+                                    } catch (err) {
+                                        console.error('Upload thất bại:', err)
+                                        message.error('Tải tệp lên thất bại')
+                                        onError?.(err)
+                                    }
+                                }}
+                                beforeUpload={(file) => {
+                                    const isAcceptedType =
+                                        file.type ===
+                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || // .docx
+                                        file.type === 'application/msword' || // .doc
+                                        file.type === 'application/pdf' // .pdf
+
+                                    if (!isAcceptedType) {
+                                        message.error(
+                                            'Chỉ được phép tải lên file Word hoặc PDF (.doc, .docx, .pdf)'
+                                        )
+                                        return Upload.LIST_IGNORE
+                                    }
+
+                                    return true // Cho phép upload tiếp
+                                }}
+                            >
+                                <Button icon={<UploadOutlined />}>
+                                    Chọn file Word/PDF
+                                </Button>
+                            </Upload>
                         </FormItem>
                     </Col>
                 </>
