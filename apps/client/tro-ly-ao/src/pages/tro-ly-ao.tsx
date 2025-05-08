@@ -59,7 +59,12 @@ export default function TroLyAo() {
                 const newId = res?.id
                 if (newId) {
                     setCurrentConversationId(newId)
-                    router.push(`/hoi-thoai/${newId}`)
+
+                    // 🔁 Chuyển sang trang hội thoại mới, truyền message ban đầu qua query
+                    router.push({
+                        pathname: `/hoi-thoai/${newId}`,
+                        query: { initialMessage: input },
+                    })
                 } else {
                     throw new Error('Không lấy được ID cuộc trò chuyện mới')
                 }
