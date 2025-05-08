@@ -69,11 +69,11 @@ export default function Page() {
 
     const handleSend = async () => {
         if (!input.trim() || !id) return
-    
+
         const currentInput = input
-        setInput('') 
-    
-        await sendMessage(currentInput) 
+        setInput('')
+
+        await sendMessage(currentInput)
     }
 
     const handleDelete = async () => {
@@ -194,6 +194,7 @@ export default function Page() {
                                                 ? 'bg-[#BEDACE] text-black rounded-br-none'
                                                 : 'bg-[#D5DAE7] text-black rounded-bl-none'
                                         }`}
+                                        style={{ whiteSpace: 'pre-wrap' }}
                                     >
                                         {msg.content}
                                     </div>
