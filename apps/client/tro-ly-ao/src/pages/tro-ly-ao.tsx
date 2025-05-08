@@ -1,14 +1,9 @@
-import {
-    MoreOutlined,
-    RobotOutlined,
-    SendOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
-import { Avatar, Button, List, message, Spin } from 'antd'
+import { Avatar, List, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
