@@ -1,6 +1,23 @@
 import KhaoSatLayout from '@layouts/khao-sat-layout'
-import { Button, Card, Checkbox, Input, Radio, Space, Typography } from 'antd'
+import {
+    Button,
+    Card,
+    Checkbox,
+    Input,
+    message,
+    Radio,
+    Space,
+    Typography,
+} from 'antd'
 import { useState } from 'react'
+import {
+    useFindManySurveyQuestion,
+    useCreateManySurveyAnswer,
+} from '@workspace/db/hooks'
+import { SurveyQuestion } from '@workspace/db'
+import useSpinner from '@hooks/spinner'
+import { ROUTER_PATH } from '@workspace/router'
+import { useRouter } from 'next/router'
 
 const { Title } = Typography
 
@@ -31,115 +48,79 @@ const fakeSurvey: Question[] = [
         type: 'text',
         question: 'Bạn có góp ý gì cho sản phẩm không?',
     },
-    {
-        id: 'q4',
-        type: 'single',
-        question: 'Bạn sử dụng hệ điều hành nào?',
-        options: ['Windows', 'macOS', 'Linux', 'Khác'],
-    },
-    {
-        id: 'q5',
-        type: 'multiple',
-        question: 'Bạn sử dụng trình duyệt nào?',
-        options: ['Chrome', 'Firefox', 'Safari', 'Edge'],
-    },
-    {
-        id: 'q6',
-        type: 'text',
-        question: 'Bạn mong muốn cải tiến nào trong giao diện?',
-    },
-    {
-        id: 'q7',
-        type: 'single',
-        question: 'Bạn sử dụng điện thoại hãng nào?',
-        options: ['Apple', 'Samsung', 'Xiaomi', 'Khác'],
-    },
-    {
-        id: 'q8',
-        type: 'multiple',
-        question: 'Bạn quan tâm đến chủ đề nào?',
-        options: ['Công nghệ', 'Sức khỏe', 'Giáo dục', 'Tài chính'],
-    },
-    {
-        id: 'q9',
-        type: 'text',
-        question: 'Bạn đánh giá thế nào về trải nghiệm người dùng?',
-    },
-    {
-        id: 'q10',
-        type: 'single',
-        question: 'Bạn có sẵn sàng giới thiệu sản phẩm này không?',
-        options: ['Có', 'Không', 'Còn phân vân'],
-    },
-    {
-        id: 'q11',
-        type: 'multiple',
-        question: 'Bạn sử dụng mạng xã hội nào?',
-        options: ['Facebook', 'Instagram', 'Twitter', 'TikTok'],
-    },
-    {
-        id: 'q12',
-        type: 'text',
-        question: 'Điều gì khiến bạn quay lại sử dụng sản phẩm?',
-    },
-    {
-        id: 'q13',
-        type: 'single',
-        question: 'Bạn đánh giá hiệu năng sản phẩm thế nào?',
-        options: ['Tốt', 'Trung bình', 'Kém'],
-    },
-    {
-        id: 'q14',
-        type: 'multiple',
-        question: 'Bạn sử dụng dịch vụ nào của chúng tôi?',
-        options: ['Website', 'Mobile App', 'Hỗ trợ khách hàng', 'Blog'],
-    },
-    {
-        id: 'q15',
-        type: 'text',
-        question: 'Bạn có gặp lỗi nào trong quá trình sử dụng không?',
-    },
-    {
-        id: 'q16',
-        type: 'single',
-        question: 'Bạn sử dụng sản phẩm bao lâu rồi?',
-        options: ['< 1 tháng', '1-6 tháng', '6-12 tháng', '> 1 năm'],
-    },
-    {
-        id: 'q17',
-        type: 'multiple',
-        question: 'Bạn biết đến sản phẩm qua đâu?',
-        options: ['Bạn bè', 'Quảng cáo', 'Tìm kiếm Google', 'Mạng xã hội'],
-    },
-    {
-        id: 'q18',
-        type: 'text',
-        question: 'Bạn mong muốn tính năng nào trong tương lai?',
-    },
-    {
-        id: 'q19',
-        type: 'single',
-        question: 'Bạn đánh giá độ ổn định của sản phẩm ra sao?',
-        options: ['Rất ổn định', 'Ổn định', 'Không ổn định'],
-    },
-    {
-        id: 'q20',
-        type: 'text',
-        question: 'Ý kiến tổng thể của bạn về sản phẩm là gì?',
-    },
+    // ... các câu hỏi khác giữ nguyên
 ]
 
 function SurveyPage() {
+    // Thay đổi cấu trúc của answers thành mảng
     const [answers, setAnswers] = useState<
-        Record<string, string | string[] | undefined>
-    >({})
+        Array<{
+            surveyQuestionId: string
+            answer: string | string[]
+        }>
+    >([])
 
-    const handleChange = (id: string, value: string | string[] | undefined) => {
-        setAnswers((prev) => ({ ...prev, [id]: value }))
+    const { data = [], refetch } = useFindManySurveyQuestion()
+    const { mutateAsync: createMany } = useCreateManySurveyAnswer()
+    const router = useRouter()
+
+    const questions = data.map((item: SurveyQuestion) => {
+        return {
+            id: item.id,
+            type: 'text',
+            question: item.name,
+            options: ['Rất ổn định', 'Ổn định', 'Không ổn định'],
+        }
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleChange = (id: string, value: string | string[]) => {
+        const existingAnswerIndex = answers.findIndex(
+            (a) => a.surveyQuestionId === id
+        )
+
+        if (existingAnswerIndex !== -1) {
+            setAnswers((prev) => {
+                const newAnswers = [...prev]
+                newAnswers[existingAnswerIndex] = {
+                    surveyQuestionId: id,
+                    answer: value,
+                }
+                return newAnswers
+            })
+        } else {
+            setAnswers((prev) => [
+                ...prev,
+                {
+                    surveyQuestionId: id,
+                    answer: value,
+                },
+            ])
+        }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log('User Answers:', answers)
+        try {
+            showSpinner()
+            await createMany({
+                data: answers.map((item) => {
+                    return {
+                        ...item,
+                        answer: Array.isArray(item.answer)
+                            ? item.answer.join(',')
+                            : item.answer,
+                        userId: 'cm9tpyicp0000s401big8i0s9',
+                    }
+                }),
+            })
+
+            message.success('Nộp khảo sát thành công')
+            router.push(ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG)
+        } catch (error) {
+            message.error('Nộp khảo sát thất bại')
+        }
+        hideSpinner()
     }
 
     return (
@@ -181,50 +162,57 @@ function SurveyPage() {
                             cảm ơn!
                         </Typography.Paragraph>
                     </div>
-                    {fakeSurvey.map((q, index) => (
-                        <div key={q.id}>
-                            <Title level={5} className="text-primary">
-                                {index + 1}. {q.question}
-                            </Title>
-                            {q.type === 'single' && q.options && (
-                                <Radio.Group
-                                    onChange={(e) =>
-                                        handleChange(q.id, e.target.value)
-                                    }
-                                    value={
-                                        answers[q.id] as string[] | undefined
-                                    }
-                                >
-                                    <Space direction="vertical">
-                                        {q.options.map((opt) => (
-                                            <Radio key={opt} value={opt}>
-                                                {opt}
-                                            </Radio>
-                                        ))}
-                                    </Space>
-                                </Radio.Group>
-                            )}
-                            {q.type === 'multiple' && q.options && (
-                                <Checkbox.Group
-                                    options={q.options}
-                                    value={
-                                        answers[q.id] as string[] | undefined
-                                    }
-                                    onChange={(val) => handleChange(q.id, val)}
-                                />
-                            )}
-                            {q.type === 'text' && (
-                                <Input.TextArea
-                                    rows={4}
-                                    placeholder="Nhập câu trả lời của bạn..."
-                                    value={answers[q.id]}
-                                    onChange={(e) =>
-                                        handleChange(q.id, e.target.value)
-                                    }
-                                />
-                            )}
-                        </div>
-                    ))}
+                    {questions.map((q, index) => {
+                        // Tìm câu trả lời hiện tại của câu hỏi này (nếu có)
+                        const currentAnswer = answers.find(
+                            (a) => a.surveyQuestionId === q.id
+                        )
+
+                        return (
+                            <div key={q.id}>
+                                <Title level={5} className="text-primary">
+                                    {index + 1}. {q.question}
+                                </Title>
+                                {q.type === 'single' && q.options && (
+                                    <Radio.Group
+                                        onChange={(e) =>
+                                            handleChange(q.id, e.target.value)
+                                        }
+                                        value={currentAnswer?.answer as string}
+                                    >
+                                        <Space direction="vertical">
+                                            {q.options.map((opt) => (
+                                                <Radio key={opt} value={opt}>
+                                                    {opt}
+                                                </Radio>
+                                            ))}
+                                        </Space>
+                                    </Radio.Group>
+                                )}
+                                {q.type === 'multiple' && q.options && (
+                                    <Checkbox.Group
+                                        options={q.options}
+                                        value={
+                                            currentAnswer?.answer as string[]
+                                        }
+                                        onChange={(val) =>
+                                            handleChange(q.id, val)
+                                        }
+                                    />
+                                )}
+                                {q.type === 'text' && (
+                                    <Input.TextArea
+                                        rows={4}
+                                        placeholder="Nhập câu trả lời của bạn..."
+                                        value={currentAnswer?.answer as string}
+                                        onChange={(e) =>
+                                            handleChange(q.id, e.target.value)
+                                        }
+                                    />
+                                )}
+                            </div>
+                        )
+                    })}
                     <Button type="primary" onClick={handleSubmit}>
                         Gửi phản hồi
                     </Button>

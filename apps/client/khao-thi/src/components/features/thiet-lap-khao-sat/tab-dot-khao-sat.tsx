@@ -1,65 +1,144 @@
 import Table, { type TableParamsAntdType } from '@components/commons/table'
-import { Button, Col, Flex, Form, Input, Row, Tag } from 'antd'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import {
+    useCountSurvey,
+    useFindManySurvey,
+    useUpdateSurvey,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tag,
+    Tooltip,
+} from 'antd'
 import _ from 'lodash'
-import { useMemo, useState } from 'react'
-
+import { useCallback, useMemo, useState } from 'react'
+import { PutSurveyModal } from '@components/modal'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import useSpinner from '@hooks/spinner'
+import { EyeOutlined } from '@ant-design/icons'
+import DeleteIcon from '@components/icons/delete'
+import dayjs from 'dayjs'
+import FilterSurvey, {
+    FilterSurveyProps,
+} from '@components/filter/filter-survey'
+type Filter = FilterSurveyProps & {
+    searchText: string
+}
 function TabDotKhaoSat() {
-    const [tableParams, setTableParams] = useState<TableParamsAntdType>({
-        pagination: {
-            current: 1,
-            pageSize: 10,
-            total: 100,
-        },
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [searchText, setSearchText] = useState<string>('')
+    const [filters, setFilters] = useState<Filter>({
+        searchText: '',
+        surveyObjectTypeId: null,
+        surveyTopicId: null,
+        startDate: null,
+        endDate: null,
     })
-    const [filters, setFilters] = useState({
-        search: '',
-        status: null,
-    })
-    const handleTableChange = (pagination: TableParamsAntdType) => {
-        setTableParams((prev) => ({
-            ...prev,
-            pagination: { ...prev.pagination, ...pagination },
-        }))
-    }
-    // const { onOpen, onClose } = useDisclosure()
-    const handleSearchChange = useMemo(
-        () =>
-            _.debounce((value: string) => {
-                setFilters((prev) => ({ ...prev, search: value }))
-                setTableParams((prev) => ({
-                    ...prev,
-                    pagination: { ...prev.pagination, current: 1 },
-                }))
-            }, 500),
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
         []
     )
-    const handleModal = () => {
-        // onOpen()
+    const handleAdvancedFilter = (values: FilterSurveyProps) => {
+        const newFilters = { ...filters, ...values }
+        setFilters(newFilters)
     }
-    const data = useMemo(() => {
-        const totalItems = 100
-        const start =
-            (tableParams.pagination.current - 1) *
-            tableParams.pagination.pageSize
-        return Array.from(
-            { length: tableParams.pagination.pageSize },
-            (_, index) => {
-                const i = start + index + 1
-                return {
-                    key: i,
-                    name: `Đợt khảo sát ${i}`,
-                    startDate: `2024-01-${(i % 28) + 1}`,
-                    endDate: `2024-02-${(i % 28) + 1}`,
-                    trang_thai: i % 2 === 0,
-                }
-            }
-        )
-    }, [tableParams])
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const { data = [], refetch } = useFindManySurvey({
+        where: {
+            name: {
+                contains: filters.searchText,
+            },
+            ...(filters.startDate && filters.endDate
+                ? {
+                      startDate: {
+                          gte: new Date(filters.startDate),
+                          lte: new Date(filters.endDate),
+                      },
+                  }
+                : {}),
+            ...(filters.surveyObjectTypeId
+                ? { surveyObjectId: filters.surveyObjectTypeId }
+                : {}),
+            ...(filters.surveyTopicId
+                ? { surveyTopicId: filters.surveyTopicId }
+                : {}),
+        },
+        include: {
+            surveyObjectType: true,
+            surveyTopic: true,
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count } = useCountSurvey()
+
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutSurveyModal.name,
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpen()
+    }
+    const { mutateAsync: updateSurvey } = useUpdateSurvey()
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSurvey({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
     return (
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Flex
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={10}>
+                            <FilterSurvey
+                                onSearchChange={handleFilterChange}
+                                onFilterChange={handleAdvancedFilter}
+                            />
+                        </Col>
+                        <Col span={14}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                    {/* <Flex
                         justify="space-between"
                         align="center"
                         wrap="wrap"
@@ -74,7 +153,7 @@ function TabDotKhaoSat() {
                                 id="search"
                                 style={{ width: 300 }}
                                 onChange={(e) =>
-                                    handleSearchChange(e.target.value)
+                                    debouncedSearchText(e.target.value)
                                 }
                                 placeholder="Tìm kiếm ..."
                             />
@@ -83,7 +162,7 @@ function TabDotKhaoSat() {
                         <Button onClick={handleModal} type="primary">
                             Thêm mới
                         </Button>
-                    </Flex>
+                    </Flex> */}
                 </Col>
                 <Col span={24}>
                     <Table
@@ -92,48 +171,74 @@ function TabDotKhaoSat() {
                                 title: 'STT',
                                 width: 20,
                                 align: 'center',
-                                render: (value, record, index) =>
-                                    (tableParams.pagination.current - 1) *
-                                        tableParams?.pagination?.pageSize +
+                                render: (_, __, index) =>
                                     index +
-                                    1,
+                                    1 +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên đợt khảo sát',
                                 dataIndex: 'name',
                             },
                             {
+                                title: 'Chủ đề khảo sát',
+                                render: ({ surveyTopic }) =>
+                                    surveyTopic ? surveyTopic.name : '',
+                            },
+                            {
+                                title: 'Đối tượng khảo sát',
+                                render: ({ surveyObjectType }) =>
+                                    surveyObjectType
+                                        ? surveyObjectType.name
+                                        : '',
+                            },
+                            {
                                 title: 'Ngày bắt đầu',
-                                dataIndex: 'startDate',
+                                render: ({ startDate }) =>
+                                    startDate
+                                        ? dayjs(startDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                dataIndex: 'endDate',
-                            },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'trang_thai',
-                                align: 'center',
-                                width: 150,
-                                render: (value, record) => {
-                                    return value ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
-                                    )
-                                },
+                                render: ({ endDate }) =>
+                                    endDate
+                                        ? dayjs(endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        <Tooltip
+                                            title="Xem chi tiết"
+                                            placement="leftTop"
+                                        >
+                                            <EyeOutlined
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDelete(id),
+                                            }}
+                                        />
+                                    </Row>
+                                ),
                             },
                         ]}
                         data={data}
-                        pagination={tableParams.pagination}
-                        onChange={handleTableChange}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                     />
                 </Col>
             </Row>

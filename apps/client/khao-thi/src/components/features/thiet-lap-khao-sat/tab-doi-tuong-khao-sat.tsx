@@ -1,60 +1,75 @@
-import Table, { type TableParamsAntdType } from '@components/commons/table'
-import { Button, Col, Flex, Form, Input, Row, Tag } from 'antd'
+import { EyeOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import {
+    useCountSurveyObjectType,
+    useFindManySurveyObjectType,
+    useUpdateSurveyObjectType,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tag,
+    Tooltip,
+} from 'antd'
 import _ from 'lodash'
+import DeleteIcon from '@components/icons/delete'
 import { useMemo, useState } from 'react'
+import { PutSurveyObjectTypeModal } from '@components/modal'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabDoiTuongKhaoSat() {
-    const [tableParams, setTableParams] = useState<TableParamsAntdType>({
-        pagination: {
-            current: 1,
-            pageSize: 10,
-            total: 100,
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [searchText, setSearchText] = useState<string>('')
+
+    const { data = [], refetch } = useFindManySurveyObjectType({
+        where: {
+            name: {
+                contains: searchText,
+            },
         },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
     })
-    const [filters, setFilters] = useState({
-        search: '',
-        status: null,
+
+    const { data: count } = useCountSurveyObjectType()
+
+    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutSurveyObjectTypeModal.name,
     })
-    const handleTableChange = (pagination: TableParamsAntdType) => {
-        setTableParams((prev) => ({
-            ...prev,
-            pagination: { ...prev.pagination, ...pagination },
-        }))
-    }
-    // const { onOpen, onClose } = useDisclosure()
-    const handleSearchChange = useMemo(
-        () =>
-            _.debounce((value: string) => {
-                setFilters((prev) => ({ ...prev, search: value }))
-                setTableParams((prev) => ({
-                    ...prev,
-                    pagination: { ...prev.pagination, current: 1 },
-                }))
-            }, 500),
-        []
-    )
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const handleModal = () => {
-        // onOpen()
+        onOpen()
     }
-    const data = useMemo(() => {
-        const totalItems = 100
-        const start =
-            (tableParams.pagination.current - 1) *
-            tableParams.pagination.pageSize
-        return Array.from(
-            { length: tableParams.pagination.pageSize },
-            (_, index) => {
-                const i = start + index + 1
-                return {
-                    key: i,
-                    name: `Đối tượng ${i}`,
-                    startDate: `2024-01-${(i % 28) + 1}`,
-                    endDate: `2024-02-${(i % 28) + 1}`,
-                    trang_thai: i % 2 === 0,
-                }
-            }
-        )
-    }, [tableParams])
+    const { mutateAsync: updateSurveyObjectType } = useUpdateSurveyObjectType()
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSurveyObjectType({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -74,7 +89,7 @@ function TabDoiTuongKhaoSat() {
                                 id="search"
                                 style={{ width: 300 }}
                                 onChange={(e) =>
-                                    handleSearchChange(e.target.value)
+                                    debouncedSearchText(e.target.value)
                                 }
                                 placeholder="Tìm kiếm ..."
                             />
@@ -92,40 +107,53 @@ function TabDoiTuongKhaoSat() {
                                 title: 'STT',
                                 width: 20,
                                 align: 'center',
-                                render: (value, record, index) =>
-                                    (tableParams.pagination.current - 1) *
-                                        tableParams?.pagination?.pageSize +
+                                render: (_, __, index) =>
                                     index +
-                                    1,
+                                    1 +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã đối tượng khảo sát',
+                                dataIndex: 'code',
                             },
                             {
                                 title: 'Tên đối tượng khảo sát',
                                 dataIndex: 'name',
                             },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'trang_thai',
-                                align: 'center',
-                                width: 150,
-                                render: (value, record) => {
-                                    return value ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
-                                    )
-                                },
-                            },
+
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        <Tooltip
+                                            title="Xem chi tiết"
+                                            placement="leftTop"
+                                        >
+                                            <EyeOutlined
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDelete(id),
+                                            }}
+                                        />
+                                    </Row>
+                                ),
                             },
                         ]}
                         data={data}
-                        pagination={tableParams.pagination}
-                        onChange={handleTableChange}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                     />
                 </Col>
             </Row>
