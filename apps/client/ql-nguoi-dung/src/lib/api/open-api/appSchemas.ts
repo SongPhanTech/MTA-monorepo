@@ -32,7 +32,7 @@ export type User = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.064Z
+   * @default 2025-05-09T03:24:46.098Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -54,7 +54,7 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.064Z
+   * @default 2025-05-09T03:24:46.099Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -77,7 +77,7 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.064Z
+   * @default 2025-05-09T03:24:46.100Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -106,7 +106,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-04-22T09:32:45.064Z
+     * @default 2025-05-09T03:24:46.100Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -128,6 +128,7 @@ export type ListOfundefined = PaginationQuery & {
     documentApproved?: (void | null)[];
     fAQUploaded?: (void | null)[];
     fAQApproved?: (void | null)[];
+    surveyAnswered?: (void | null)[];
     accountLocked?: boolean;
   }[];
   count: number;
@@ -139,7 +140,7 @@ export type Group = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.065Z
+   * @default 2025-05-09T03:24:46.102Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -152,7 +153,7 @@ export type GroupCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.065Z
+   * @default 2025-05-09T03:24:46.102Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -167,7 +168,7 @@ export type GroupUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-04-22T09:32:45.065Z
+   * @default 2025-05-09T03:24:46.102Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;

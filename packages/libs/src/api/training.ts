@@ -38,6 +38,10 @@ import type {
 } from './schemas'
 
 import { customTrainingFetch } from './custom-instance'
+type AwaitedInput<T> = PromiseLike<T> | T
+
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**

@@ -4,102 +4,102 @@
  * @version 1.0.0
  */
 export type PaginationQuery = {
-    page?: number
-    limit?: number | null
-}
+  page?: number;
+  limit?: number | null;
+};
 
 export type ListOfundefined = PaginationQuery & {
-    data: {
-        id: string
-        code?: string | null
-        description?: string | null
-        deletedAt?: string | null
-        /**
-         * @default 2025-04-28T15:24:35.362Z
-         */
-        createdAt?: string | null
-        updatedAt: string | null
-        avatar?: string | null
-        firstName: string
-        lastName: string
-        dateOfBirth?: string | null
-        placeOfBirth?: string | null
-        homeTown?: string | null
-        idCardNumber?: string | null
-        idCardDate?: string | null
-        officerNumber?: string | null
-        gender?: 'Male' | 'Female' | null
-        permanentAddress?: string | null
-        temporaryAddress?: string | null
-        contactAddress?: string | null
-        phoneNumber?: string | null
-        email?: string | null
-        parentPhoneNumber?: string | null
-        parentName?: string | null
-        unionDate?: string | null
-        unionPlace?: string | null
-        CPVJoinDate?: string | null
-        officialCPVDate?: string | null
-        CPVJoinPlace?: string | null
-        tenureDate?: string | null
-        enlistmentDate?: string | null
-        dischargeDate?: string | null
-        rankName?: string | null
-        educationLevel?: string | null
-        academicDegreeTypeName?: string | null
-        academicRankTypeName?: string | null
-        positionName?: string | null
-        positionCPVName?: string | null
-        organizationName?: string | null
-        organizationCPVName?: string | null
-    }[]
-    count: number
-}
+  data: {
+    id: string;
+    code?: string | null;
+    description?: string | null;
+    deletedAt?: string | null;
+    /**
+     * @default 2025-05-09T03:24:46.065Z
+     */
+    createdAt?: string | null;
+    updatedAt: string | null;
+    avatar?: string | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth?: string | null;
+    placeOfBirth?: string | null;
+    homeTown?: string | null;
+    idCardNumber?: string | null;
+    idCardDate?: string | null;
+    officerNumber?: string | null;
+    gender?: "Male" | "Female" | null;
+    permanentAddress?: string | null;
+    temporaryAddress?: string | null;
+    contactAddress?: string | null;
+    phoneNumber?: string | null;
+    email?: string | null;
+    parentPhoneNumber?: string | null;
+    parentName?: string | null;
+    unionDate?: string | null;
+    unionPlace?: string | null;
+    CPVJoinDate?: string | null;
+    officialCPVDate?: string | null;
+    CPVJoinPlace?: string | null;
+    tenureDate?: string | null;
+    enlistmentDate?: string | null;
+    dischargeDate?: string | null;
+    rankName?: string | null;
+    educationLevel?: string | null;
+    academicDegreeTypeName?: string | null;
+    academicRankTypeName?: string | null;
+    positionName?: string | null;
+    positionCPVName?: string | null;
+    organizationName?: string | null;
+    organizationCPVName?: string | null;
+  }[];
+  count: number;
+};
 
 export type UploadExcelCreateUserProfile = {
-    /**
-     * @format binary
-     */
-    file: Blob
-    type: string
-}
+  /**
+   * @format binary
+   */
+  file: Blob;
+  type: string;
+};
 
 export type UploadExcelUpdateUserProfile = {
-    /**
-     * @format binary
-     */
-    file: Blob
-}
+  /**
+   * @format binary
+   */
+  file: Blob;
+};
 
 export type UploadExcelCreateFixedClass = {
-    /**
-     * @format binary
-     */
-    file: Blob
-    trainingCourseId: string
-}
+  /**
+   * @format binary
+   */
+  file: Blob;
+  trainingCourseId: string;
+};
 
 export type ClassDivision = {
-    /**
-     * @format binary
-     */
-    file: Blob
-}
+  /**
+   * @format binary
+   */
+  file: Blob;
+};
 
 export type SerializedField = {
-    path: string
-    type: string
-    description?: string
-    items?: {
-        path: string
-        type: string
-        description?: string
-    }[]
-}
+  path: string;
+  type: string;
+  description?: string;
+  items?: {
+    path: string;
+    type: string;
+    description?: string;
+  }[];
+};
 
-export type SerializedFields = SerializedField[]
+export type SerializedFields = SerializedField[];
 
 /**
  * ID của lớp biên chế
  */
-export type FixedClassId = string
+export type FixedClassId = string;

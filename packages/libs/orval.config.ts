@@ -10,7 +10,9 @@ export default defineConfig({
             target: './src/api/user.ts',
             schemas: './src/api/schemas',
             biome: true,
+            packageJson: 'fake',
             override: {
+                query: { version: 5 },
                 mutator: {
                     path: './src/api/custom-instance.ts',
                     name: 'customUserFetch',
@@ -30,7 +32,9 @@ export default defineConfig({
             target: './src/api/model.ts',
             schemas: './src/api/schemas',
             biome: true,
+            packageJson: 'fake',
             override: {
+                query: { version: 5 },
                 mutator: {
                     path: './src/api/custom-instance.ts',
                     name: 'customModelFetch',
@@ -50,7 +54,9 @@ export default defineConfig({
             target: './src/api/training.ts',
             schemas: './src/api/schemas',
             biome: true,
+            packageJson: 'fake',
             override: {
+                query: { version: 5 },
                 mutator: {
                     path: './src/api/custom-instance.ts',
                     name: 'customTrainingFetch',
