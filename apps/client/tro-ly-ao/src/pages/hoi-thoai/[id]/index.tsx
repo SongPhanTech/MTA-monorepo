@@ -69,8 +69,11 @@ export default function Page() {
 
     const handleSend = async () => {
         if (!input.trim() || !id) return
-        await sendMessage(input)
-        setInput('')
+    
+        const currentInput = input
+        setInput('') 
+    
+        await sendMessage(currentInput) 
     }
 
     const handleDelete = async () => {
