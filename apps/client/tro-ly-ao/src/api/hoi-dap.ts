@@ -1,0 +1,25 @@
+export async function fetchHoiDap({
+    prompt,
+    type_data,
+    conversation_id,
+}: {
+    prompt: string
+    type_data: string
+    conversation_id: string
+}) {
+    const formData = new FormData()
+    formData.append('prompt', prompt)
+    formData.append('type_data', type_data)
+    formData.append('conversation_id', conversation_id)
+
+    const response = await fetch('http://117.4.240.104:8011/hoi_dap', {
+        method: 'POST',
+        body: formData,
+    })
+
+    if (!response.ok) {
+        throw new Error('Lỗi khi gọi API Hỏi Đáp')
+    }
+
+    return response // trả về response để handle stream ở ngoài
+}

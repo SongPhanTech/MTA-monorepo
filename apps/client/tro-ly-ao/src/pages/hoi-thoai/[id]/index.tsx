@@ -1,9 +1,6 @@
-import {
-    MoreOutlined,
-    RobotOutlined,
-    SendOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { fetchHoiDap } from '@/api/hoi-dap'
+import { RobotOutlined, UserOutlined } from '@ant-design/icons'
+import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
 import {
@@ -12,12 +9,10 @@ import {
     useFindManyMessage,
     useUpdateConversation,
 } from '@workspace/db/hooks'
-import { Avatar, Button, Dropdown, List, Menu, Spin, message } from 'antd'
+import { Avatar, List, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { fetchHoiDapHoiDapPost } from '@api/chat/chatComponents'
-import ChatInput from '@components/commons/input-chat-bot'
 export default function Page() {
     // Hooks
     const router = useRouter()
@@ -28,7 +23,9 @@ export default function Page() {
     const { mutateAsync: updateConversation } = useUpdateConversation()
     const { mutateAsync: deleteConversation } = useDeleteConversation()
     const { data: messageList } = useFindManyMessage({
-        where: { conversationId: id as string },
+        where: {
+            conversationId: id as string,
+        },
     })
 
     // States
@@ -37,62 +34,86 @@ export default function Page() {
     const [messages, setMessages] = useState<
         { id: number; role: string; content: string }[]
     >([])
-
+    const [botTyping, setBotTyping] = useState(false)
     // Functions
     const handleSend = async () => {
         if (!input.trim()) return
 
         const newMessage = { id: Date.now(), role: 'USER', content: input }
-
-        // Update UI immediately
-        setMessages((prevMessages) => [...prevMessages, newMessage])
+        setMessages((prev) => [...prev, newMessage])
         setInput('')
+        setBotTyping(true)
 
         try {
             setLoading(true)
 
-            if (id) {
-                // Nếu đã có conversation ➔ Update
-                await updateConversation({
-                    where: { id: id as string },
-                    data: {
-                        message: {
-                            create: [
-                                {
-                                    content: input,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
-                        },
-                    },
-                })
-                const response = await fetchHoiDapHoiDapPost({
-                    queryParams: {
-                        prompt: input,
-                        conversation_id: id as string,
-                    },
-                })
-                // console.log("fetch hoi dap post", response)
-            } else {
-                // Nếu chưa có conversation ➔ Create mới
-                const res = await createConversation({
-                    data: {
-                        userId: 'cm9tpyicp0000s401big8i0s9',
-                        message: {
-                            create: [
-                                {
-                                    content: input,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
-                        },
-                    },
-                })
-                console.log('Created conversation:', res)
+            if (!id) {
+                message.error('Cuộc trò chuyện không tồn tại.')
+                setBotTyping(false)
+                return
             }
-        } catch (error) {
-            console.error(error)
+
+            // Cập nhật conversation
+            await updateConversation({
+                where: { id: id as string },
+                data: {
+                    message: {
+                        create: [
+                            {
+                                content: input,
+                                sender: MessageSender.USER,
+                            },
+                        ],
+                    },
+                },
+            })
+
+            // Gọi API để lấy stream
+            const response = await fetchHoiDap({
+                prompt: input,
+                type_data: 'GENERAL_ADMISSIONS_INFORMATION',
+                conversation_id: id as string,
+            })
+
+            if (!response.body) {
+                message.error('Không có nội dung phản hồi')
+                setBotTyping(false)
+                return
+            }
+
+            const reader = response.body.getReader()
+            const decoder = new TextDecoder('utf-8')
+            let botText = ''
+            const botId = Date.now() + 1
+
+            setMessages((prev) => [
+                ...prev,
+                { id: botId, role: 'BOT', content: '' },
+            ])
+
+            try {
+                while (true) {
+                    const { value, done } = await reader.read()
+                    if (done) break
+
+                    const chunk = decoder.decode(value, { stream: true })
+                    botText += chunk
+
+                    setMessages((prev) =>
+                        prev.map((msg) =>
+                            msg.id === botId
+                                ? { ...msg, content: botText }
+                                : msg
+                        )
+                    )
+                }
+            } finally {
+                setBotTyping(false) // Dừng trạng thái typing
+            }
+        } catch (err) {
+            console.error(err)
             message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+            setBotTyping(false)
         } finally {
             setLoading(false)
         }
@@ -181,7 +202,15 @@ export default function Page() {
                     />
                 )}
             </div>
-
+            {(botTyping ||
+                messages.some((msg) => msg.role === 'BOT' && !msg.content)) && (
+                <div className="flex justify-center items-center gap-2 pl-4 pb-4">
+                    <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-xl max-w-xs">
+                        <Spin size="small" />{' '}
+                        <span className="ml-2">Đang trả lời...</span>
+                    </div>
+                </div>
+            )}
             {/* Input Box */}
             <ChatInput
                 input={input}
