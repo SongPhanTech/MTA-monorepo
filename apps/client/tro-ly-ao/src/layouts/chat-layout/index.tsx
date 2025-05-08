@@ -121,7 +121,7 @@ const ChatLayout = ({
                     />
                     <Layout className="overflow-hidden">
                         <HeaderContent />
-                        <Content className="h-full overflow-y-auto p-[10px] bg-white">
+                        <Content className="h-full p-[10px] bg-white">
                             {children}
                         </Content>
                     </Layout>
