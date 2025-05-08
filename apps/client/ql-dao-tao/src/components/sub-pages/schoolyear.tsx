@@ -121,7 +121,7 @@ export default function SchoolYearPage({
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -155,15 +155,18 @@ export default function SchoolYearPage({
                             {
                                 title: 'Tên năm học',
                                 dataIndex: 'name',
+                                align: 'center',
                             },
                             {
                                 title: 'Ngày bắt đầu',
+                                align: 'center',
                                 // dataIndex: 'startDate',
                                 render: ({ startDate }) =>
                                     dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
+                                align: 'center',
                                 // dataIndex: 'endDate',
                                 render: ({ endDate }) =>
                                     endDate
@@ -173,6 +176,7 @@ export default function SchoolYearPage({
                             {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
+                                align: 'center',
                             },
                             {
                                 title: 'Thao tác',

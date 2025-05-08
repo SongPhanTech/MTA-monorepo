@@ -231,7 +231,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                             e.target.value
                                         )
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -327,21 +327,25 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             },
                             {
                                 title: 'Mã lớp biên chế',
+                                align: 'center',
                                 dataIndex: 'code',
                             },
                             {
                                 title: 'Tên lớp biên chế',
+                                align: 'center',
                                 dataIndex: 'name',
                             },
                             {
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
+                                align: 'center',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
+                                align: 'center',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -353,6 +357,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
+                                align: 'center',
                             },
                             {
                                 title: 'Thao tác',

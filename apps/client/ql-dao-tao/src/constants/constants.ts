@@ -55,6 +55,41 @@ const LOAI_MON_HOC_CTDT = {
     Optional: 'Tự chọn',
     Elective: 'Tự chọn tự do',
 }
+const TRANG_THAI_HOC_VIEN = {
+    ENROLLED: {
+        label: 'Đang học',
+        color: 'green',
+    },
+    GRADUATED: {
+        label: 'Tốt nghiệp',
+        color: 'blue',
+    },
+    DEFERRED_STUDY: {
+        label: 'Bảo lưu',
+        color: 'gold',
+    },
+    SUSPENDED_STUDY: {
+        label: 'Tạm ngưng học',
+        color: 'orange',
+    },
+    WITHDRAWN: {
+        label: 'Thôi học',
+        color: 'red',
+    },
+    TRANSFERRED: {
+        label: 'Chuyển trường',
+        color: 'purple',
+    },
+    PENDING_GRADUATION_REVIEW: {
+        label: 'Chờ xét tốt nghiệp',
+        color: 'cyan',
+    },
+    ACADEMIC_SUSPENSION: {
+        label: 'Đình chỉ',
+        color: 'volcano',
+    },
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -68,4 +103,5 @@ export {
     KHOA_HL_STATUS,
     API_BASE_URL_MINION,
     LOAI_MON_HOC_CTDT,
+    TRANG_THAI_HOC_VIEN,
 }

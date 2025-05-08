@@ -129,7 +129,7 @@ export default function MilestonePage() {
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -185,27 +185,30 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Nội dung',
+                                align: 'center',
                                 dataIndex: 'name',
                             },
                             {
-                                title: 'Thời gian',
+                                title: 'Số tiết',
+                                align: 'center',
                                 dataIndex: 'period',
                             },
                             {
                                 title: 'Năm học',
+                                align: 'center',
                                 dataIndex: 'schoolYear',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                // dataIndex: 'startDate',
+                                align: 'center',
                                 render: ({ startDate }) =>
                                     dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                // dataIndex: 'endDate',
+                                align: 'center',
                                 render: ({ endDate }) =>
                                     endDate
                                         ? dayjs(endDate).format('DD/MM/YYYY')
@@ -213,6 +216,7 @@ export default function MilestonePage() {
                             },
                             {
                                 title: 'Mô tả',
+                                align: 'center',
                                 dataIndex: 'description',
                             },
                             {
