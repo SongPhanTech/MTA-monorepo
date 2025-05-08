@@ -33,6 +33,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
+import SubjectPage from '@pages/mon-hoc'
 
 export default function SubjectGroupPage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -135,7 +136,7 @@ export default function SubjectGroupPage() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Nhóm môn học
+                Môn học
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -261,6 +262,22 @@ export default function SubjectGroupPage() {
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => (
+                                // <div
+                                //     style={{
+                                //         maxWidth: '100%',
+                                //         overflowX: 'auto',
+                                //         whiteSpace: 'nowrap',
+                                //     }}
+                                // >
+                                <SubjectPage
+                                    key={record.id}
+                                    subjectInfo={record}
+                                />
+                                // </div>
+                            ),
                         }}
                     />
                 </Col>

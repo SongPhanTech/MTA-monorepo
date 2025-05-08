@@ -11,6 +11,7 @@ import {
     IdcardOutlined,
     MessageOutlined,
     FileTextOutlined,
+    ReadOutlined,
 } from '@ant-design/icons'
 import { Home } from 'lucide-react'
 import * as ROUTER_PATH from '../generated/router.json'
@@ -364,43 +365,19 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
                 description: 'Quản lý hồ sơ sinh viên',
             },
-            // {
-            //     id: 'teacher-profile-management',
-            //     label: 'Quản lý hồ sơ giáo viên',
-            //     icon: IdcardOutlined,
-            //     path: ROUTER_PATH.QL_DAO_TAO.TEACHER_PROFILE_MANAGEMENT,
-            //     description: 'Quản lý hồ sơ giáo viên',
-            // },
             {
                 id: 'chuong-trinh-dao-tao',
                 label: 'Quản lý chương trình đào tạo',
                 icon: PieChartOutlined,
-                children: [
-                    {
-                        id: 'curriculumn',
-                        label: 'Chương trình đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO,
-                    },
-                    // {
-                    //     id: 'curriculumn-version',
-                    //     label: 'Phiên bản chương trình đào tạo',
-                    //     icon: PieChartOutlined,
-                    //     path: ROUTER_PATH.QL_DAO_TAO.PHIEN_BAN_CTDT,
-                    // },
-                    {
-                        id: 'subject-group',
-                        label: 'Nhóm môn học',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.NHOM_MON_HOC,
-                    },
-                    {
-                        id: 'subject',
-                        label: 'Môn học',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.MON_HOC,
-                    },
-                ],
+                path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO,
+                description: 'Quản lý chương trình đào tạo',
+            },
+            {
+                id: 'subject-group',
+                label: 'Quản lý môn học',
+                icon: ReadOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.NHOM_MON_HOC,
+                description: 'Quản lý môn học',
             },
         ],
         label: 'Quản lý đào tạo',

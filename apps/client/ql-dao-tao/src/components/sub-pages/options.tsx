@@ -4,7 +4,7 @@ import {
     useCountFixedClassStudent,
     useFindManyFixedClassStudent,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Row, Spin, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, Row, Spin, Tooltip, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import { EyeOutlined } from '@ant-design/icons'
@@ -12,6 +12,9 @@ import { DeleteIcon } from 'lucide-react'
 import Table from '@components/commons/table'
 
 import dayjs from 'dayjs'
+import { ThongTinBaoCaoModal } from '@components/modal'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { exportHocVienLop } from '@api/userProfile'
 
 dayjs.locale('vi')
 
@@ -44,6 +47,9 @@ export default function OptionsPage({ fixedClass }: any) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: ThongTinBaoCaoModal.name,
+    })
     if (isLoading) {
         return (
             <div style={{ width: '100%' }}>
@@ -54,33 +60,58 @@ export default function OptionsPage({ fixedClass }: any) {
         )
     }
 
+    const handleModal = () => {
+        onOpen()
+    }
+
+    const handleExportFile = async () => {
+        try {
+            const blob = await exportHocVienLop(fixedClassId)
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = 'danh-sach-hoc-vien.docx' // tên file
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (error) {
+            message.error('Xuất file thất bại.')
+        }
+    }
+
     return (
         <div style={{ width: '100%', overflowX: 'hidden' }}>
             <Divider orientation="left" orientationMargin={0}>
                 {code === 'DS' ? 'Danh sách sinh viên' : 'Danh sách học viên'}
             </Divider>
             <Row gutter={[16, 0]}>
-                {/* <Col span={24}>
+                <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex>
-                                <Col span={8} className="pl-0">
+                                {/* <Col span={8} className="pl-0">
                                     <FilterSinhVien
                                         handleFilterChange={handleFilterChange}
                                         filters={filters}
                                         setFilters={setFilters}
                                     />
-                                </Col>
-                                <Col span={16}>
-                                    <Flex justify="end">
+                                </Col> */}
+                                <Col span={24}>
+                                    <Flex justify="end" className="gap-2">
                                         <Button
                                             onClick={handleModal}
                                             type="primary"
                                         >
-                                            Thêm mới
+                                            Thông tin báo cáo
                                         </Button>
-
-                                        <Dropdown
+                                        <Button
+                                            onClick={handleExportFile}
+                                            type="primary"
+                                        >
+                                            Xuất file
+                                        </Button>
+                                        {/* <Dropdown
                                             overlay={menuDownload}
                                             trigger={['hover']}
                                         >
@@ -91,8 +122,8 @@ export default function OptionsPage({ fixedClass }: any) {
                                             >
                                                 Tải file mẫu
                                             </Button>
-                                        </Dropdown>
-                                        <Dropdown
+                                        </Dropdown> */}
+                                        {/* <Dropdown
                                             overlay={menuUpload}
                                             trigger={['hover']}
                                         >
@@ -103,13 +134,13 @@ export default function OptionsPage({ fixedClass }: any) {
                                             >
                                                 Nhập file
                                             </Button>
-                                        </Dropdown>
+                                        </Dropdown> */}
                                     </Flex>
                                 </Col>
                             </Flex>
                         </Col>
                     </Row>
-                </Col> */}
+                </Col>
                 <Col span={24}>
                     <Table
                         columns={[

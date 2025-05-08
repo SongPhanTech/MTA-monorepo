@@ -421,18 +421,18 @@ export default function CurriculumPage() {
                         }}
                         expandable={{
                             expandedRowRender: (record) => (
-                                <div
-                                    style={{
-                                        maxWidth: '100vw',
-                                        overflowX: 'auto',
-                                        whiteSpace: 'nowrap',
-                                    }}
-                                >
-                                    <CurriculumVersionPage
-                                        key={record.id}
-                                        curriculumInfo={record}
-                                    />
-                                </div>
+                                // <div
+                                //     style={{
+                                //         maxWidth: '100vw',
+                                //         overflowX: 'auto',
+                                //         whiteSpace: 'nowrap',
+                                //     }}
+                                // >
+                                <CurriculumVersionPage
+                                    key={record.id}
+                                    curriculumInfo={record}
+                                />
+                                // </div>
                             ),
                         }}
                     />

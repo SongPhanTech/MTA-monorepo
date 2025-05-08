@@ -37,13 +37,14 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
 
-export default function SubjectPage() {
+export default function SubjectPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         managementOrganizationId: undefined,
         name: '',
+        subjectGroupId: subjectInfo ? subjectInfo.id : undefined,
     })
     const { data = [], refetch } = useFindManySubject({
         where: {
@@ -137,9 +138,9 @@ export default function SubjectPage() {
         })
     }
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <Divider orientation="left" orientationMargin={0}>
-                Môn học
+                Phiên bản môn học
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -218,14 +219,8 @@ export default function SubjectPage() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên môn học',
+                                title: 'Tên môn',
                                 dataIndex: 'name',
-                            },
-                            {
-                                title: 'Nhóm môn học',
-                                dataIndex: 'subjectGroup',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đơn vị phụ trách',
@@ -242,7 +237,7 @@ export default function SubjectPage() {
                                     ],
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: 'Tín chỉ',
                                 align: 'center',
                                 dataIndex: 'credit',
                             },
@@ -252,7 +247,7 @@ export default function SubjectPage() {
                                 dataIndex: 'period',
                             },
                             {
-                                title: 'Số tiết LT',
+                                title: 'Số tiết',
                                 align: 'center',
                                 dataIndex: 'numberOfTheory',
                             },
@@ -323,6 +318,6 @@ export default function SubjectPage() {
     )
 }
 
-SubjectPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
-}
+// SubjectPage.getLayout = function getLayout(page: React.ReactElement) {
+//     return <DefaultLayout>{page}</DefaultLayout>
+// }
