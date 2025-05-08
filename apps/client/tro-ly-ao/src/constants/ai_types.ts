@@ -1,4 +1,4 @@
-import { RobotOutlined, UserOutlined } from "@ant-design/icons";
+import { RobotOutlined, UserOutlined } from '@ant-design/icons'
 
 const AI_TYPES = [
     {

@@ -2,7 +2,7 @@ import { fetchHoiDap } from '@/api/hoi-dap'
 import { RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
-import { MessageSender } from '@workspace/db'
+import { DocumentType, MessageSender } from '@workspace/db'
 import {
     useDeleteConversation,
     useFindManyMessage,
@@ -10,8 +10,9 @@ import {
 } from '@workspace/db/hooks'
 import { Avatar, List, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
-import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import type React from 'react'
+
 export default function Page() {
     const router = useRouter()
     const { id } = router.query
@@ -20,18 +21,72 @@ export default function Page() {
     const { mutateAsync: updateConversation } = useUpdateConversation()
     const { mutateAsync: deleteConversation } = useDeleteConversation()
     const { data: messageList } = useFindManyMessage({
-        where: {
-            conversationId: id as string,
-        },
+        where: { conversationId: id as string },
     })
 
-    const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<
         { id: number; role: string; content: string }[]
     >([])
+    const [loading, setLoading] = useState(false)
     const [botTyping, setBotTyping] = useState(false)
-    const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false)
+
+    const documentTypeFromUrl = router.query.document_type as string | undefined
+    const isValidDocumentType = documentTypeFromUrl
+        ? Object.values(DocumentType).includes(
+              documentTypeFromUrl as DocumentType
+          )
+        : false
+    const documentType: DocumentType =
+        isValidDocumentType && documentTypeFromUrl
+            ? (documentTypeFromUrl as DocumentType)
+            : DocumentType.GENERAL_ADMISSIONS_INFORMATION
+
+    useEffect(() => {
+        if (documentTypeFromUrl && !isValidDocumentType) {
+            message.error('Trợ lý ảo không tồn tại')
+            router.replace('/tro-ly-ao')
+        }
+    }, [documentTypeFromUrl, isValidDocumentType, router])
+
+    useEffect(() => {
+        if (messageList) {
+            const mappedMessages = messageList.map((msg) => ({
+                id: Number(msg.id),
+                role: msg.sender === 'USER' ? 'USER' : 'BOT',
+                content: msg.content || '',
+            }))
+            setMessages(mappedMessages)
+        }
+    }, [messageList])
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }, [messages])
+
+    const handleSend = async () => {
+        if (!input.trim() || !id) return
+        await sendMessage(input)
+        setInput('')
+    }
+
+    const handleDelete = async () => {
+        if (!id) return
+        try {
+            setLoading(true)
+            await deleteConversation({ where: { id: id as string } })
+            message.success('Đã xóa cuộc trò chuyện')
+            router.push('/tro-ly-ao')
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const sendMessage = async (text: string) => {
         const newMessage = { id: Date.now(), role: 'USER', content: text }
@@ -56,7 +111,7 @@ export default function Page() {
 
             const response = await fetchHoiDap({
                 prompt: text,
-                type_data: 'GENERAL_ADMISSIONS_INFORMATION',
+                type_data: documentType,
                 conversation_id: id as string,
             })
 
@@ -96,70 +151,6 @@ export default function Page() {
             setLoading(false)
         }
     }
-
-    const handleSend = async () => {
-        if (!input.trim() || !id) return
-        await sendMessage(input)
-        setInput('')
-    }
-
-    const handleDelete = async () => {
-        if (!id) return
-
-        try {
-            setLoading(true)
-            await deleteConversation({ where: { id: id as string } })
-            message.success('Đã xóa cuộc trò chuyện')
-            router.push('/tro-ly-ao')
-        } catch (error) {
-            console.error(error)
-            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        if (messageList) {
-            const mappedMessages = messageList.map((msg) => ({
-                id: Number(msg.id),
-                role: msg.sender === 'USER' ? 'USER' : 'BOT',
-                content: msg.content || '',
-            }))
-            setMessages(mappedMessages)
-        }
-    }, [messageList])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-        }
-    }, [messages])
-
-    // Gửi initialMessage nếu có trong URL
-    const initialSentRef = useRef(false)
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        const msg = router.query.initialMessage as string
-
-        if (id && msg && !initialSentRef.current) {
-            initialSentRef.current = true // ✅ flag đảm bảo chỉ gọi 1 lần
-            sendMessage(msg)
-
-            const { initialMessage: _, ...rest } = router.query
-            router.replace(
-                { pathname: router.pathname, query: rest },
-                undefined,
-                {
-                    shallow: true,
-                }
-            )
-        }
-    }, [id, router.query])
-
-    // Render
     return (
         <div className="flex flex-col h-full">
             {/* Chat Area */}
