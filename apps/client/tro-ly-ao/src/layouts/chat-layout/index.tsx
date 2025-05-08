@@ -122,7 +122,7 @@ const ChatLayout = ({
                         theme={'light'}
                     />
                     <Layout className="overflow-hidden">
-                    {router.pathname !== '/tro-ly-ao' && <HeaderContent />}
+                        {router.pathname !== '/tro-ly-ao' && <HeaderContent />}
                         <Content className="h-full p-[10px] bg-white">
                             {children}
                         </Content>

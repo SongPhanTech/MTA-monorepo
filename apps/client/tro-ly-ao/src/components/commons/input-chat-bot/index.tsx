@@ -69,9 +69,10 @@ export default function ChatInput({
         <div className="sticky bottom-0 z-10 w-full">
             {/* Background fade mờ lên trên */}
             <div className="absolute left-0 right-0 bottom-full h-8 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none" />
-    
+
             <div className="w-full flex justify-center pb-4">
-                <div className="w-full max-w-7xl px-4">
+                {/* <div className="w-full max-w-7xl px-4"> */}
+                <div className="w-full max-w-4xl">
                     <div className="rounded-3xl border flex flex-col gap-2 px-3 py-2 shadow bg-white">
                         <textarea
                             ref={textareaRef}
@@ -117,7 +118,10 @@ export default function ChatInput({
                                 loading={loading}
                                 icon={
                                     loading ? (
-                                        <Spin className="text-white" size="small" />
+                                        <Spin
+                                            className="text-white"
+                                            size="small"
+                                        />
                                     ) : (
                                         <SendOutlined className="text-white text-[16px]" />
                                     )

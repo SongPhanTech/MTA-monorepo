@@ -155,72 +155,83 @@ export default function Page() {
         }
     }
     return (
-        <div className="flex flex-col h-full">
-            {/* Chat Area */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto pr-2 pb-10">
-                {messages.length === 0 ? (
-                    <div className="flex-1" />
-                ) : (
-                    <List
-                        dataSource={messages}
-                        renderItem={(msg) => (
-                            <List.Item
-                                key={msg.id}
-                                style={{
-                                    justifyContent:
-                                        msg.role === 'USER'
-                                            ? 'flex-end'
-                                            : 'flex-start',
-                                    border: 'none',
-                                    padding: '8px 0',
-                                }}
-                            >
-                                <div
-                                    className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
-                                >
-                                    <Avatar
-                                        icon={
-                                            msg.role === 'USER' ? (
-                                                <UserOutlined />
-                                            ) : (
-                                                <RobotOutlined />
-                                            )
-                                        }
-                                        style={{ backgroundColor: '#028850' }}
-                                    />
-                                    <div
-                                        className={`px-4 py-2 rounded-xl max-w-xs break-words ${
+        <div className="flex flex-col h-full items-center bg-white">
+            <div className="w-full  flex flex-col h-full px-4">
+                {/* Chat Area */}
+                <div ref={scrollRef} className="flex-1 overflow-y-auto pb-4">
+                    {messages.length === 0 ? (
+                        <div className="flex justify-center items-center h-full text-gray-400">
+                            Bắt đầu cuộc trò chuyện...
+                        </div>
+                    ) : (
+                        <List
+                            dataSource={messages}
+                            renderItem={(msg) => (
+                                <List.Item
+                                    key={msg.id}
+                                    style={{
+                                        justifyContent:
                                             msg.role === 'USER'
-                                                ? 'bg-[#BEDACE] text-black rounded-br-none'
-                                                : 'bg-[#D5DAE7] text-black rounded-bl-none'
-                                        }`}
-                                        style={{ whiteSpace: 'pre-wrap' }}
+                                                ? 'flex-end'
+                                                : 'flex-start',
+                                        border: 'none',
+                                        padding: '8px 0',
+                                    }}
+                                >
+                                    <div
+                                        className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
                                     >
-                                        {msg.content}
+                                        <Avatar
+                                            icon={
+                                                msg.role === 'USER' ? (
+                                                    <UserOutlined />
+                                                ) : (
+                                                    <RobotOutlined />
+                                                )
+                                            }
+                                            style={{
+                                                backgroundColor: '#028850',
+                                            }}
+                                        />
+                                        <div
+                                            className={`px-4 py-2 rounded-xl max-w-[80%] break-words ${
+                                                msg.role === 'USER'
+                                                    ? 'bg-[#BEDACE] text-black rounded-br-none'
+                                                    : 'bg-[#D5DAE7] text-black rounded-bl-none'
+                                            }`}
+                                            style={{ whiteSpace: 'pre-wrap' }}
+                                        >
+                                            {msg.content}
+                                        </div>
                                     </div>
-                                </div>
-                            </List.Item>
-                        )}
-                    />
-                )}
-            </div>
-            {(botTyping ||
-                messages.some((msg) => msg.role === 'BOT' && !msg.content)) && (
-                <div className="flex justify-center items-center gap-2 pl-4 pb-4">
-                    <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-xl max-w-xs">
-                        <Spin size="small" />{' '}
-                        <span className="ml-2">Đang trả lời...</span>
-                    </div>
+                                </List.Item>
+                            )}
+                        />
+                    )}
                 </div>
-            )}
-            {/* Input Box */}
-            <ChatInput
-                input={input}
-                loading={loading}
-                onInputChange={setInput}
-                onSend={handleSend}
-                onDelete={handleDelete}
-            />
+
+                {/* Typing Indicator */}
+                {(botTyping ||
+                    messages.some(
+                        (msg) => msg.role === 'BOT' && !msg.content
+                    )) && (
+                    <div className="flex justify-center items-center gap-2 pb-4">
+                        <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-xl max-w-xs">
+                            <Spin size="small" />
+                            <span className="ml-2">Đang trả lời...</span>
+                        </div>
+                    </div>
+                )}
+
+                {/* Chat Input */}
+                <ChatInput
+                    input={input}
+                    loading={loading}
+                    onInputChange={setInput}
+                    onSend={handleSend}
+                    onDelete={handleDelete}
+                />
+            </div>
         </div>
     )
 }
