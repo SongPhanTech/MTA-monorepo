@@ -26,7 +26,7 @@ import {
     useFindManyTrainingTime,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Button, Col, Form, Input, message, TreeSelect, Upload } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -34,11 +34,17 @@ import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutCurriculum = Curriculum
 import { buildOrgTree } from '@lib/utils'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 
 import 'dayjs/locale/vi'
+import axios from 'axios'
+import { UploadOutlined } from '@ant-design/icons'
 dayjs.locale('vi')
+type PutPutCurriculumFile = PutCurriculum & {
+    file: File[]
+}
 const PutCurriculumModal = () => {
-    const [form] = Form.useForm<PutCurriculum>()
+    const [form] = Form.useForm<PutPutCurriculumFile>()
     const {
         isOpen,
         onClose,
@@ -65,7 +71,7 @@ const PutCurriculumModal = () => {
 
     const { mutateAsync: createCurriculum } = useCreateCurriculum()
     const { mutateAsync: updateCurriculum } = useUpdateCurriculum()
-    async function onOk(output?: PutCurriculum) {
+    async function onOk(output?: PutPutCurriculumFile) {
         if (!output) return
         try {
             showSpinner()
@@ -279,22 +285,93 @@ const PutCurriculumModal = () => {
                     <Input.TextArea placeholder="Nhập thông tin" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <FormItem form={form} name="documentPath">
+                <Input type="hidden" />
+            </FormItem>
+            <FormItem form={form} name="renderPath">
+                <Input type="hidden" />
+            </FormItem>
+            <Col span={24}>
                 <FormItem
                     form={form}
-                    name="documentPath"
-                    label="Đường dẫn tài liệu"
+                    name="file"
+                    label="Tệp tài liệu"
+                    // required
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) =>
+                        Array.isArray(e) ? e : e?.fileList
+                    }
                 >
-                    <Input placeholder="Nhập đường dẫn tài liệu" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="renderPath"
-                    label="Đường dẫn tài liệu kết xuất"
-                >
-                    <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
+                    <Upload
+                        maxCount={1}
+                        accept=".doc,.docx,.pdf"
+                        customRequest={async ({
+                            file,
+                            onSuccess,
+                            onError,
+                            onProgress,
+                        }) => {
+                            try {
+                                const extension =
+                                    file.name.split('.').pop() || ''
+                                const id = crypto.randomUUID()
+
+                                // Gọi API lấy presigned URL
+                                const resPresignedUrl =
+                                    await fetchGeneratePresignedUrl({
+                                        body: {
+                                            path: 'phien-ban-chuong-trinh-dao-tao',
+                                            extension,
+                                        },
+                                    })
+
+                                // Upload file lên MinIO
+                                await axios.put(resPresignedUrl.url, file, {
+                                    headers: {
+                                        'Content-Type': file.type,
+                                    },
+                                    onUploadProgress: (progressEvent) => {
+                                        const { loaded, total = 1 } =
+                                            progressEvent
+                                        const percent = Math.floor(
+                                            (loaded * 100) / total
+                                        )
+                                        onProgress?.({ percent })
+                                    },
+                                })
+                                form.setFieldsValue({
+                                    documentPath: resPresignedUrl.fileName,
+                                    renderPath: resPresignedUrl.url,
+                                })
+                                console.log(resPresignedUrl.fileName, 'nè')
+                                onSuccess?.('OK')
+                            } catch (err) {
+                                console.error('Upload thất bại:', err)
+                                message.error('Tải tệp lên thất bại')
+                                onError?.(err)
+                            }
+                        }}
+                        beforeUpload={(file) => {
+                            const isAcceptedType =
+                                file.type ===
+                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || // .docx
+                                file.type === 'application/msword' || // .doc
+                                file.type === 'application/pdf' // .pdf
+
+                            if (!isAcceptedType) {
+                                message.error(
+                                    'Chỉ được phép tải lên file Word hoặc PDF (.doc, .docx, .pdf)'
+                                )
+                                return Upload.LIST_IGNORE
+                            }
+
+                            return true // Cho phép upload tiếp
+                        }}
+                    >
+                        <Button icon={<UploadOutlined />}>
+                            Chọn file Word/PDF
+                        </Button>
+                    </Upload>
                 </FormItem>
             </Col>
         </PutFormModal>

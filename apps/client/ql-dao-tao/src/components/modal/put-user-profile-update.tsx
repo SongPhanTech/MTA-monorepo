@@ -32,8 +32,8 @@ import {
     useFindManyReligion,
     useFindManyEthnicity,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Tabs, Collapse, Row } from 'antd'
-import { useEffect } from 'react'
+import { Col, Form, Input, message, Tabs, Collapse, Row, Upload } from 'antd'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
@@ -43,6 +43,10 @@ const { TabPane } = Tabs
 const { Panel } = Collapse
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
+import type { GetProp, UploadFile, UploadProps } from 'antd'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import { getMinioUrl } from '@workspace/constant'
+
 export type PutUserProfile = UserProfile
 const PutUserProfileUpdateModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
@@ -76,11 +80,27 @@ const PutUserProfileUpdateModal = () => {
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function onOk(output?: PutUserProfile) {
         if (!output) return
+        let fileName
+        if (fileList.length > 0) {
+            const resPresignedUrl = await fetchGeneratePresignedUrl({
+                body: {
+                    path: 'avatar',
+                    extension: fileList[0].name.split('.').pop() ?? '',
+                },
+            })
+            const res = await fetch(resPresignedUrl.url, {
+                method: 'PUT',
+                body: fileList[0].originFileObj,
+            })
+            console.log('đây nè', resPresignedUrl.fileName)
+            fileName = resPresignedUrl.fileName
+        }
         try {
             showSpinner()
             if (id) {
                 await updateUserProfile({
                     data: {
+                        avatar: fileName ? fileName : undefined,
                         code: output.code,
                         firstName: output.firstName,
                         lastName: output.lastName,
@@ -217,8 +237,40 @@ const PutUserProfileUpdateModal = () => {
                     ? dayjs(level.dischargeDate)
                     : null,
             })
+            if (level.avatar) {
+                console.log(getMinioUrl(level.avatar))
+                setAvatar([
+                    {
+                        uid: '-1',
+                        name: 'avatar.png',
+                        status: 'done',
+                        url: getMinioUrl(level.avatar),
+                    },
+                ])
+            }
         }
     }, [level])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
+
+    const beforeUpload = (file: File) => {
+        const fileURL = URL.createObjectURL(file)
+
+        const newFile: UploadFile = {
+            uid: Date.now().toString(),
+            name: file.name,
+            status: 'done',
+            url: fileURL,
+            originFileObj: file as any,
+        }
+        setFileList([newFile])
+        return false
+    }
+
+    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList.slice(-1))
+    }
+
     return (
         <PutFormModal
             open={isOpen}
@@ -245,113 +297,142 @@ const PutUserProfileUpdateModal = () => {
                     <Collapse defaultActiveKey={['1']} accordion>
                         <Panel header="Thông tin cá nhân" key="1">
                             <Row gutter={[16, 16]}>
-                                {/* <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="userTypeId"
-                                        label="Đối tượng"
-                                        className="mb-0"
-                                        required
+                                <Col span={4}>
+                                    <div
+                                        style={{
+                                            transform: 'scale(1.5)',
+                                            transformOrigin: 'top left',
+                                            fontSize: '0.65rem',
+                                        }}
                                     >
-                                        <Select
-                                            placeholder="Chọn đối tượng"
-                                            options={userTypeData.map(
-                                                (i: TrainingLevel) => {
-                                                    return {
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    }
+                                        <Form.Item
+                                            name={'file'}
+                                            className="mb-0"
+                                        >
+                                            <Upload
+                                                listType="picture-card"
+                                                // fileList={fileList}
+                                                fileList={
+                                                    avatar.length > 0
+                                                        ? avatar
+                                                        : fileList
                                                 }
-                                            )}
-                                        />
-                                    </FormItem>
-                                </Col> */}
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="code"
-                                        label="Mã"
-                                        required
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập mã" />
-                                    </FormItem>
+                                                onChange={onChange}
+                                                beforeUpload={beforeUpload}
+                                                onRemove={() => {
+                                                    setFileList([])
+                                                    setAvatar([])
+                                                    return true
+                                                }}
+                                            >
+                                                {avatar.length > 0 ||
+                                                fileList.length > 0
+                                                    ? ''
+                                                    : fileList.length < 1 && (
+                                                          <p
+                                                              style={{
+                                                                  fontSize:
+                                                                      '0.65rem',
+                                                              }}
+                                                          >
+                                                              + Tải ảnh lên
+                                                          </p>
+                                                      )}
+                                            </Upload>
+                                        </Form.Item>
+                                    </div>
                                 </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="lastName"
-                                        label="Họ và tên đệm"
-                                        required
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập họ và tên đệm" />
-                                    </FormItem>
+                                <Col span={20}>
+                                    <Row gutter={[10, 10]}>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="code"
+                                                label="Mã"
+                                                required
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập mã" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="lastName"
+                                                label="Họ và tên đệm"
+                                                required
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập họ và tên đệm" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="firstName"
+                                                label="Tên"
+                                                required
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập tên" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="dateOfBirth"
+                                                label="Ngày sinh"
+                                                className="mb-0"
+                                            >
+                                                <DatePicker
+                                                    format="DD/MM/YYYY"
+                                                    className="w-full"
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="placeOfBirth"
+                                                label="Nơi sinh"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập nơi sinh" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="homeTown"
+                                                label="Quê quán"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập quê quán" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="officerNumber"
+                                                label="Số hiệu sĩ quan"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập số hiệu sĩ quan" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="idCardNumber"
+                                                label="Số CCCD"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập số CCCD" />
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
                                 </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="firstName"
-                                        label="Tên"
-                                        required
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập tên" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="dateOfBirth"
-                                        label="Ngày sinh"
-                                        className="mb-0"
-                                    >
-                                        <DatePicker
-                                            format="DD/MM/YYYY"
-                                            className="w-full"
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="placeOfBirth"
-                                        label="Nơi sinh"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập nơi sinh" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="homeTown"
-                                        label="Quê quán"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập quê quán" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="officerNumber"
-                                        label="Số hiệu sĩ quan"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập số hiệu sĩ quan" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="idCardNumber"
-                                        label="Số CCCD"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập số CCCD" />
-                                    </FormItem>
-                                </Col>
+
                                 <Col span={12}>
                                     <FormItem
                                         form={form}

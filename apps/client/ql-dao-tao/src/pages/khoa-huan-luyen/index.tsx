@@ -403,8 +403,6 @@ export default function TrainingCoursePage() {
                                     />
                                 </div>
                             ),
-                            // rowExpandable: (record: any) =>
-                            //     !(record.isFilterRow === true), // điều kiện nào đó
                         }}
                     />
                 </Col>

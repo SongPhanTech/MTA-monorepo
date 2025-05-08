@@ -6,6 +6,7 @@ import type {
     CurriculumVersionSubject,
     Curriculum,
     CurriculumVersion,
+    $Enums,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
@@ -15,7 +16,16 @@ import {
     useUpdateCurriculumVersion,
     useFindManyCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect, Steps } from 'antd'
+import {
+    Col,
+    Form,
+    Input,
+    message,
+    TreeSelect,
+    Steps,
+    Upload,
+    Button,
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -26,9 +36,19 @@ import { buildOrgTree } from '@lib/utils'
 
 import 'dayjs/locale/vi'
 import MonHocChuongTrinhPage from '@components/sub-pages/mon-hoc-chuong-trinh'
+import { UploadOutlined } from '@ant-design/icons'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import axios from 'axios'
+import { getMinioUrl } from '@workspace/constant'
+import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
+
 dayjs.locale('vi')
+type PutPutCurriculumVersionFile = PutCurriculumVersion & {
+    file: File[]
+}
+
 const PutCurriculumVersionModal = () => {
-    const [form] = Form.useForm<PutCurriculumVersion>()
+    const [form] = Form.useForm<PutPutCurriculumVersionFile>()
     const {
         isOpen,
         onClose,
@@ -46,8 +66,10 @@ const PutCurriculumVersionModal = () => {
         useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } =
         useUpdateCurriculumVersion()
-    async function onOk(output?: PutCurriculumVersion) {
+    async function onOk(output?: PutPutCurriculumVersionFile) {
         if (!output) return
+        console.log(output)
+
         try {
             showSpinner()
             if (id) {
@@ -126,6 +148,58 @@ const PutCurriculumVersionModal = () => {
         setCurrent(value)
     }
     const items = steps.map((item) => ({ key: item.title, title: item.title }))
+    const file = Form.useWatch('file', form) || {}
+
+    const onUpload = async (file: { url: string; file: File }) => {
+        try {
+            const id = crypto.randomUUID()
+            const extension = file.file?.name?.split('.').pop() || ''
+
+            // Gọi API lấy presigned URL
+            const resPresignedUrl = await fetchGeneratePresignedUrl({
+                body: {
+                    path: 'tai-lieu',
+                    extension,
+                },
+            })
+
+            // Upload file lên MinIO
+            await axios.put(resPresignedUrl.url, file.file, {
+                onUploadProgress: (progressEvent) => {
+                    const { loaded, total = 1, estimated = 0 } = progressEvent
+                    const percent = Math.floor((loaded * 100) / total)
+                    form.setFieldsValue({
+                        file: {
+                            ...file,
+                            id,
+                            url: resPresignedUrl.fileName,
+                            progress: percent,
+                            timeLeft: estimated,
+                            body: '',
+                        },
+                    })
+                },
+            })
+
+            // Gọi API đọc nội dung tài liệu
+            // const resReaderDocument =
+            //     await fetchReadDocumentContentDocumentDocumentReaderGet({
+            //         queryParams: {
+            //             uri_file: getMinioUrl(resPresignedUrl.fileName),
+            //         },
+            //     })
+
+            // form.setFieldsValue({
+            //     file: {
+            //         ...form.getFieldValue('file'),
+            //         body: resReaderDocument.body,
+            //     },
+            // })
+        } catch (error) {
+            console.error('Upload error', error)
+            message.error('Upload thất bại')
+        }
+    }
 
     return (
         <PutFormModal
@@ -139,7 +213,7 @@ const PutCurriculumVersionModal = () => {
                     ? 'Chỉnh sửa phiên bản chương trình đào tạo'
                     : 'Thêm mới phiên bản chương trình đào tạo'
             }
-            className="w-[55vw]"
+            className="w-[50vw]"
         >
             {id && (
                 <Steps
@@ -215,24 +289,120 @@ const PutCurriculumVersionModal = () => {
                             <Input.TextArea placeholder="Nhập thông tin" />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
+                    <FormItem form={form} name="documentPath">
+                        <Input type="hidden" />
+                    </FormItem>
+                    <FormItem form={form} name="renderPath">
+                        <Input type="hidden" />
+                    </FormItem>
+                    <Col span={24}>
                         <FormItem
                             form={form}
-                            name="documentPath"
-                            label="Đường dẫn tài liệu"
+                            name="file"
+                            label="Tệp tài liệu"
+                            // required
+                            valuePropName="fileList"
+                            getValueFromEvent={(e) =>
+                                Array.isArray(e) ? e : e?.fileList
+                            }
                         >
-                            <Input placeholder="Nhập đường dẫn tài liệu" />
+                            <Upload
+                                maxCount={1}
+                                accept=".doc,.docx,.pdf"
+                                customRequest={async ({
+                                    file,
+                                    onSuccess,
+                                    onError,
+                                    onProgress,
+                                }) => {
+                                    try {
+                                        const extension =
+                                            file.name.split('.').pop() || ''
+                                        const id = crypto.randomUUID()
+
+                                        // Gọi API lấy presigned URL
+                                        const resPresignedUrl =
+                                            await fetchGeneratePresignedUrl({
+                                                body: {
+                                                    path: 'phien-ban-chuong-trinh-dao-tao',
+                                                    extension,
+                                                },
+                                            })
+
+                                        // Upload file lên MinIO
+                                        await axios.put(
+                                            resPresignedUrl.url,
+                                            file,
+                                            {
+                                                headers: {
+                                                    'Content-Type': file.type,
+                                                },
+                                                onUploadProgress: (
+                                                    progressEvent
+                                                ) => {
+                                                    const {
+                                                        loaded,
+                                                        total = 1,
+                                                    } = progressEvent
+                                                    const percent = Math.floor(
+                                                        (loaded * 100) / total
+                                                    )
+                                                    onProgress?.({ percent })
+                                                },
+                                            }
+                                        )
+                                        form.setFieldsValue({
+                                            documentPath:
+                                                resPresignedUrl.fileName,
+                                            renderPath: resPresignedUrl.url,
+                                        })
+                                        console.log(
+                                            resPresignedUrl.fileName,
+                                            'nè'
+                                        )
+                                        onSuccess?.('OK')
+                                    } catch (err) {
+                                        console.error('Upload thất bại:', err)
+                                        message.error('Tải tệp lên thất bại')
+                                        onError?.(err)
+                                    }
+                                }}
+                                beforeUpload={(file) => {
+                                    const isAcceptedType =
+                                        file.type ===
+                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || // .docx
+                                        file.type === 'application/msword' || // .doc
+                                        file.type === 'application/pdf' // .pdf
+
+                                    if (!isAcceptedType) {
+                                        message.error(
+                                            'Chỉ được phép tải lên file Word hoặc PDF (.doc, .docx, .pdf)'
+                                        )
+                                        return Upload.LIST_IGNORE
+                                    }
+
+                                    return true // Cho phép upload tiếp
+                                }}
+                            >
+                                <Button icon={<UploadOutlined />}>
+                                    Chọn file Word/PDF
+                                </Button>
+                            </Upload>
                         </FormItem>
                     </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="renderPath"
-                            label="Đường dẫn tài liệu kết xuất"
-                        >
-                            <Input placeholder="Nhập đường dẫn tài liệu kết xuất" />
-                        </FormItem>
-                    </Col>
+                    {/* {form.getFieldValue('documentPath') && (
+                        <div className="mt-2 text-sm text-blue-500">
+                            <a
+                                href={getMinioUrl(
+                                    form.getFieldValue('documentPath')
+                                )}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Xem tài liệu đã upload
+                            </a>
+                        </div>
+                    )} */}
                 </>
             )}
             {id && current === 1 && (

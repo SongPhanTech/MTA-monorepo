@@ -1,4 +1,8 @@
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+    CloudDownloadOutlined,
+    EyeOutlined,
+    SearchOutlined,
+} from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -45,6 +49,7 @@ import FixedClassPage from '@pages/lop-bien-che'
 import { buildOrgTree } from '@lib/utils'
 import CurriculumVersionPage from '@pages/phien-ban-ctdt'
 import { FilterChuongTrinhDT } from '@components/filter'
+import { getMinioUrl } from '@workspace/constant'
 
 interface FilterProps {
     searchText: string
@@ -263,98 +268,60 @@ export default function CurriculumPage() {
                                 title: 'Nội dung',
                                 dataIndex: 'name',
                                 align: 'center',
-                                width: 150,
+                                // width: 250,
                             },
                             {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganization',
-                                width: 150,
+                                // width: 150,
                                 render: (value: Organization) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'trainingObjectType',
-                                width: 120,
+                                // width: 120,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Bậc đào tạo',
                                 dataIndex: 'trainingLevel',
-                                width: 120,
+                                // width: 120,
                                 render: (value: TrainingLevel) =>
                                     value?.name ? value?.name : '',
                             },
-                            {
-                                title: 'Thời gian',
-                                dataIndex: 'trainingTime',
-                                render: (value: TrainingTime) =>
-                                    value?.name ? value?.name : '',
-                            },
+                            // {
+                            //     title: 'Thời gian',
+                            //     dataIndex: 'trainingTime',
+                            //     render: (value: TrainingTime) =>
+                            //         value?.name ? value?.name : '',
+                            // },
                             {
                                 title: 'Chuyên ngành',
                                 dataIndex: 'trainingMajor',
                                 render: (value: TrainingMajor) =>
                                     value?.name ? value?.name : '',
                             },
-                            {
-                                title: 'Ngày bắt đầu',
-                                render: ({ startDate }) =>
-                                    startDate
-                                        ? dayjs(startDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Ngày kết thúc',
-                                render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Tài liệu',
-                                render: ({ documentPath }) =>
-                                    documentPath ? (
-                                        <a
-                                            href={documentPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
-                            {
-                                title: 'Tài liệu kết xuất',
-                                render: ({ renderPath }) =>
-                                    renderPath ? (
-                                        <a
-                                            href={renderPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{
-                                                color: 'blue',
-                                                textDecoration: 'underline',
-                                            }}
-                                        >
-                                            Xem thêm
-                                        </a>
-                                    ) : (
-                                        ''
-                                    ),
-                            },
-                            {
-                                title: 'Thông tin',
-                                dataIndex: 'infomation',
-                                width: 100,
-                            },
+                            // {
+                            //     title: 'Ngày bắt đầu',
+                            //     render: ({ startDate }) =>
+                            //         startDate
+                            //             ? dayjs(startDate).format('DD/MM/YYYY')
+                            //             : '',
+                            // },
+                            // {
+                            //     title: 'Ngày kết thúc',
+                            //     render: ({ endDate }) =>
+                            //         endDate
+                            //             ? dayjs(endDate).format('DD/MM/YYYY')
+                            //             : '',
+                            // },
+                            // {
+                            //     title: 'Thông tin',
+                            //     dataIndex: 'infomation',
+                            //     width: 100,
+                            // },
                             {
                                 title: 'Trạng thái',
                                 width: 130,
@@ -382,10 +349,41 @@ export default function CurriculumPage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => {
+                                render: (_, { id, documentPath }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                <Tooltip
+                                                    title="Tải file"
+                                                    placement="leftTop"
+                                                >
+                                                    <a
+                                                        href={
+                                                            documentPath
+                                                                ? getMinioUrl(
+                                                                      documentPath
+                                                                  )
+                                                                : '#'
+                                                        }
+                                                        // target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={
+                                                            documentPath
+                                                                ? 'text-sm text-blue-700 cursor-pointer'
+                                                                : 'text-sm text-gray-400 cursor-not-allowed'
+                                                        }
+                                                        style={
+                                                            documentPath
+                                                                ? {}
+                                                                : {
+                                                                      pointerEvents:
+                                                                          'none',
+                                                                  }
+                                                        }
+                                                    >
+                                                        <CloudDownloadOutlined />
+                                                    </a>
+                                                </Tooltip>
                                                 <Tooltip
                                                     title="Xem chi tiết"
                                                     placement="leftTop"
@@ -423,7 +421,13 @@ export default function CurriculumPage() {
                         }}
                         expandable={{
                             expandedRowRender: (record) => (
-                                <div style={{ maxWidth: '100%' }}>
+                                <div
+                                    style={{
+                                        maxWidth: '100vw',
+                                        overflowX: 'auto',
+                                        whiteSpace: 'nowrap',
+                                    }}
+                                >
                                     <CurriculumVersionPage
                                         key={record.id}
                                         curriculumInfo={record}

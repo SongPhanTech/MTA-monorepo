@@ -56,14 +56,14 @@ export default function UserProfilePageQs() {
             firstName: {
                 contains: filters.searchText,
             },
-            UserType: {
+            userType: {
                 is: {
                     code: 'HV',
                 },
             },
         },
         include: {
-            UserType: true,
+            userType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -77,7 +77,7 @@ export default function UserProfilePageQs() {
             firstName: {
                 contains: filters.searchText,
             },
-            UserType: {
+            userType: {
                 is: {
                     code: 'HV',
                 },

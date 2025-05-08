@@ -13,7 +13,7 @@ import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { fetchUploadFile } from '@api/userProfile'
 export type PutUploadDivision = {
-    file: File
+    file: UploadFile<any>[]
 }
 const PutUploadDivisionModal = () => {
     const [form] = Form.useForm<PutUploadDivision>()
@@ -29,13 +29,23 @@ const PutUploadDivisionModal = () => {
 
     async function onOk(output?: PutUploadDivision) {
         if (!output) return
+        if (!output.file || output.file.length === 0) {
+            message.error('Vui lòng chọn một file để tải lên.')
+            return
+        }
+        const uploadFile = output.file[0]
+
+        if (!uploadFile.originFileObj) {
+            message.error('Tệp tải lên không hợp lệ.')
+            return
+        }
         try {
             showSpinner()
             const formData = new FormData()
-            formData.append('file', output.file)
+            formData.append('file', uploadFile.originFileObj as File)
             const res = await fetchUploadFile(
                 formData,
-                'api/fixClass/upload-excel-update-user-profile'
+                'api/fixed-class/upload-excel-update-user-profile '
             )
             const data = await res.json()
             if (res.ok) {
@@ -77,9 +87,21 @@ const PutUploadDivisionModal = () => {
                     }}
                 >
                     <Upload
-                        beforeUpload={() => false} // Không upload ngay, chỉ chọn file
-                        maxCount={1} // Chỉ cho chọn 1 file
-                        accept=".xlsx,.xls" // Chỉ chấp nhận file Excel
+                        beforeUpload={(file) => {
+                            const isExcel =
+                                file.type ===
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                                file.type === 'application/vnd.ms-excel'
+                            if (!isExcel) {
+                                message.error(
+                                    'Chỉ được phép tải lên file Excel (.xlsx, .xls)'
+                                )
+                                return Upload.LIST_IGNORE
+                            }
+                            return false // Không upload tự động
+                        }}
+                        maxCount={1}
+                        accept=".xlsx,.xls"
                     >
                         <Button icon={<UploadOutlined />}>
                             Chọn file Excel
