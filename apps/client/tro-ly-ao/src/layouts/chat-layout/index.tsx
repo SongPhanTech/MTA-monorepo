@@ -120,7 +120,7 @@ const ChatLayout = ({
                         theme={'light'}
                     />
                     <Layout className="overflow-hidden">
-                        <HeaderContent />
+                        {/* <HeaderContent /> */}
                         <Content className="h-full p-[10px] bg-white">
                             {children}
                         </Content>
