@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import TerserPlugin from 'terser-webpack-plugin'
 
 const nextConfig: NextConfig = {
     /* config options here */
@@ -12,6 +13,22 @@ const nextConfig: NextConfig = {
     ],
     output: 'standalone',
     crossOrigin: 'anonymous',
+    webpack: (config) => {
+        return {
+            ...config,
+            optimization: {
+                minimize: true,
+                minimizer: [
+                    new TerserPlugin({
+                        terserOptions: {
+                            keep_classnames: true,
+                            keep_fnames: true,
+                        },
+                    }),
+                ],
+            },
+        }
+    },
 }
 
 export default nextConfig

@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "generate:router": "node ./scripts/gen-router-path.mjs"
+  },
   "exports": {
     ".": "./src/index.ts"
   },

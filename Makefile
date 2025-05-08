@@ -15,7 +15,7 @@ PKG_BE_DAO_TAO := be-ql-dao-tao
 PKG_CATEGORIES := ql-danh-muc
 PKG_DAO_TAO := ql-dao-tao
 PKG_USER := ql-nguoi-dung
-PKG_AI := ql-tro-ly-ao
+PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_USER) $(PKG_BE_CATEGORIES) $(PKG_BE_DAO_TAO)

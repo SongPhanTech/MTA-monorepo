@@ -1,15 +1,14 @@
 import type { $Enums } from '@workspace/db'
 import NAVIGATION, { type ROUTER_PATH } from '@workspace/router'
-import { useAbility } from './hooks'
-import { useMenuList } from '@hooks/menu-list'
 import { useMemo } from 'react'
+import { useAbility } from './hooks'
 
 type CanProps = {
     children: React.ReactNode
-    I: keyof typeof ROUTER_PATH.QL_NGUOI_DUNG
+    I: keyof typeof ROUTER_PATH.TRO_LY_AO
     a: $Enums.PermissionType
 }
-const menus = NAVIGATION.QL_NGUOI_DUNG.menus.flatMap((menu) => {
+const menus = NAVIGATION.TRO_LY_AO.menus.flatMap((menu) => {
     if (menu.children) {
         return menu.children.map((child) => ({
             id: child.id,
