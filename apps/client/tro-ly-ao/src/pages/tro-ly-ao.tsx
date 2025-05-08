@@ -1,9 +1,4 @@
-import {
-    MoreOutlined,
-    RobotOutlined,
-    SendOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import AI_TYPES from '@constants/ai_types'
 import ChatLayout from '@layouts/chat-layout'

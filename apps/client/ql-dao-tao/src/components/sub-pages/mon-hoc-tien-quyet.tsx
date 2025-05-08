@@ -121,7 +121,7 @@ export default function MonHocTienQuyetPage({
                                     onChange={(e) =>
                                         debouncedSearchText(e.target.value)
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>

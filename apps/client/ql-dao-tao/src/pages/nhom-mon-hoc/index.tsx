@@ -216,17 +216,20 @@ export default function SubjectGroupPage() {
                             },
                             {
                                 title: 'Tên nhóm môn học',
+                                align: 'center',
                                 dataIndex: 'name',
                             },
                             {
                                 title: 'Đơn vị phụ trách',
+                                align: 'center',
                                 dataIndex: 'managementOrganization',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Thông tin',
-                                dataIndex: 'infomation',
+                                align: 'center',
+                                dataIndex: 'information',
                             },
                             {
                                 title: 'Thao tác',

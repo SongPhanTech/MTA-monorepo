@@ -221,16 +221,19 @@ export default function SubjectPage({ subjectInfo }: any) {
                             {
                                 title: 'Tên môn',
                                 dataIndex: 'name',
+                                align: 'center',
                             },
                             {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganization',
+                                align: 'center',
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Loại môn học tương đương',
                                 dataIndex: 'subjectEquivalentType',
+                                align: 'center',
                                 render: (value: any) =>
                                     SUBJECT_EQUIVALENT_TYPE[
                                         value as keyof typeof SUBJECT_EQUIVALENT_TYPE
