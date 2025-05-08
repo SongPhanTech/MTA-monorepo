@@ -237,7 +237,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                             )
                                         }
                                     }}
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -365,7 +365,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                 // },
                                 {
                                     title: 'Thông tin',
-                                    dataIndex: 'infomation',
+                                    dataIndex: 'information',
                                     // width: 100,
                                 },
                                 {

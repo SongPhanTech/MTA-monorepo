@@ -118,7 +118,7 @@ const PutSubjectModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa môn học' : 'Thêm mới môn học'}
-            className="w-[50vw]"
+            className="w-[45vw]"
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên môn học" required>

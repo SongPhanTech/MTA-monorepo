@@ -274,16 +274,16 @@ export default function TrainingCoursePage() {
                                 title: 'Mã khóa',
                                 dataIndex: 'code',
                                 align: 'center',
-                                // width: 100,
                             },
                             {
                                 title: 'Tên khóa',
                                 dataIndex: 'name',
-                                // width: 100,
+                                align: 'center',
                             },
                             {
                                 title: 'Loại hình đào tạo',
                                 dataIndex: 'trainingType',
+                                align: 'center',
                                 width: 150,
                                 render: (value: TrainingType) =>
                                     value?.name ? value?.name : '',
@@ -291,12 +291,14 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'trainingObjectType',
+                                align: 'center',
                                 width: 120,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Hình thức đào tạo',
+                                align: 'center',
                                 dataIndex: 'trainingForm',
                                 width: 120,
                                 render: (value: TrainingForm) =>
@@ -305,11 +307,14 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Trình độ đào tạo',
                                 dataIndex: 'trainingLevel',
+                                align: 'center',
+                                width: 120,
                                 render: (value: TrainingLevel) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
+                                align: 'center',
                                 render: ({ startDate }) =>
                                     startDate
                                         ? dayjs(startDate).format('DD/MM/YYYY')
@@ -317,6 +322,7 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Ngày kết thúc',
+                                align: 'center',
                                 render: ({ endDate }) =>
                                     endDate
                                         ? dayjs(endDate).format('DD/MM/YYYY')
@@ -324,6 +330,7 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Trạng thái',
+                                align: 'center',
                                 width: 130,
                                 render: (record: TrainingCourse) => {
                                     return (
@@ -347,6 +354,8 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Mô tả',
+                                width: 100,
+                                align: 'center',
                                 dataIndex: 'description',
                             },
                             {

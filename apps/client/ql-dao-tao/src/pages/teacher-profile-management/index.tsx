@@ -268,7 +268,7 @@ export default function UserProfilePageQs() {
                                             e.target.value
                                         )
                                     }
-                                    placeholder="Tìm kiếm theo tên,..."
+                                    placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
@@ -323,13 +323,13 @@ export default function UserProfilePageQs() {
                             },
                             {
                                 title: 'Ngày sinh',
-                                // dataIndex: 'startDate',
+                                align: 'center',
                                 render: ({ dateOfBirth }) =>
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Giới tính',
-                                // dataIndex: 'gender',
+                                align: 'center',
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
                                         gender as keyof typeof GENDER_MEAN
@@ -337,10 +337,12 @@ export default function UserProfilePageQs() {
                             },
                             {
                                 title: 'Số CCCD',
+                                align: 'center',
                                 dataIndex: 'idCardNumber',
                             },
                             {
                                 title: 'Số điện thoại',
+                                align: 'center',
                                 dataIndex: 'phoneNumber',
                             },
                             {
