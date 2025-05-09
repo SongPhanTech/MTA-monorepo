@@ -35,7 +35,7 @@ app.use(
         origin: [
             'http://localhost:3000',
             'https://user.mta.swantech.vn',
-            'https://am.swantech.vn/',
+            'https://am.swantech.vn',
             'https://*.swantech.vn',
         ],
         credentials: true,

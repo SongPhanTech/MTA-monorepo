@@ -37,7 +37,7 @@ app.use(
             'http://localhost:3000',
             'https://user.mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
-            'https://am.swantech.vn/',
+            'https://am.swantech.vn',
             'https://*.swantech.vn',
         ],
         credentials: true,
