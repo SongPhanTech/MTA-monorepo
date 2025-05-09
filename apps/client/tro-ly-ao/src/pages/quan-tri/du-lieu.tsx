@@ -3,6 +3,7 @@ import { CardDocument } from '@components/commons/card-document'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import { PheDuyetTaiLieu, PutCauHoi } from '@components/modal'
+import PheDuyetCauHoiThuongGap from '@components/modal/phe-duyet-cau-hoi-thuong-gap'
 import ThemTaiLieu from '@components/modal/them-tai-lieu'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
@@ -36,6 +37,10 @@ function Page() {
 
     const { onOpen: openPheDuyetTaiLieu } = useDisclosure<string>({
         tag: PheDuyetTaiLieu.name,
+    })
+
+    const { onOpen: openPheDuyetCauHoiThuongGap } = useDisclosure<string>({
+        tag: PheDuyetCauHoiThuongGap.name,
     })
 
     const { onOpen: openPutCauHoi } = useDisclosure<string>({
@@ -456,7 +461,9 @@ function Page() {
                                     onCell: (record) => ({
                                         onClick: (e) => {
                                             e.stopPropagation()
-                                            openPheDuyetTaiLieu(record.id)
+                                            openPheDuyetCauHoiThuongGap(
+                                                record.id
+                                            )
                                         },
                                     }),
                                     render: (value) => {
