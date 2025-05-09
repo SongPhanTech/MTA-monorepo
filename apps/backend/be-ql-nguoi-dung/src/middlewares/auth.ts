@@ -70,27 +70,27 @@ const oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
 
 export const setupAuth = (app: OpenAPIHono) => {
     app.use('*', async (c, next) => {
-        const token = c.req.header('Authorization')?.split('Bearer ')[1]
-        if (token) {
-            const user = await getUserByToken(token)
-
-            c.set('user', user)
-            return await next()
-        }
-
+        const origin = c.req.header()
+        console.log('origin', origin)
+        // const token = c.req.header('Authorization')?.split('Bearer ')[1]
+        // if (token) {
+        //     const user = await getUserByToken(token)
+        //     c.set('user', user)
+        //     return await next()
+        // }
+        return await next()
         // throw new HTTPException(401, { message: 'Unauthorized' })
+        // c.set('oidcClaimsHook', oidcClaimsHook)
+        // const auth = await getAuth(c)
+        // if (auth) {
+        //     const user = await getUser(auth)
 
-        c.set('oidcClaimsHook', oidcClaimsHook)
-        const auth = await getAuth(c)
-        if (auth) {
-            const user = await getUser(auth)
+        //     c.set('user', user)
+        //     return next()
+        // }
 
-            c.set('user', user)
-            return next()
-        }
-
-        const middleware = oidcAuthMiddleware()
-        return middleware(c, next)
+        // const middleware = oidcAuthMiddleware()
+        // return middleware(c, next)
     })
 
     app.get('/callback', processOAuthCallback)
