@@ -313,7 +313,7 @@ const PutCurriculumModal = () => {
                         }) => {
                             try {
                                 const extension =
-                                    file.name.split('.').pop() || ''
+                                    (file as File).name.split('.').pop() || ''
                                 const id = crypto.randomUUID()
 
                                 // Gọi API lấy presigned URL
@@ -328,7 +328,7 @@ const PutCurriculumModal = () => {
                                 // Upload file lên MinIO
                                 await axios.put(resPresignedUrl.url, file, {
                                     headers: {
-                                        'Content-Type': file.type,
+                                        'Content-Type': (file as File).type,
                                     },
                                     onUploadProgress: (progressEvent) => {
                                         const { loaded, total = 1 } =
@@ -345,7 +345,8 @@ const PutCurriculumModal = () => {
                                 })
                                 console.log(resPresignedUrl.fileName, 'nè')
                                 onSuccess?.('OK')
-                            } catch (err) {
+                                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                            } catch (err: any) {
                                 console.error('Upload thất bại:', err)
                                 message.error('Tải tệp lên thất bại')
                                 onError?.(err)

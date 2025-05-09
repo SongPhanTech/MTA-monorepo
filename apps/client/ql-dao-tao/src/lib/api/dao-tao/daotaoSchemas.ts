@@ -15,7 +15,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-05-09T03:24:46.065Z
+     * @default 2025-05-09T04:04:35.724Z
      */
     createdAt?: string | null;
     updatedAt: string | null;

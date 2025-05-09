@@ -13,13 +13,14 @@ PKG_BE_CATEGORIES := be-ql-danh-muc
 PKG_BE_DAO_TAO := be-ql-dao-tao
 
 PKG_CATEGORIES := ql-danh-muc
+PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_USER := ql-nguoi-dung
 PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_USER) $(PKG_BE_CATEGORIES) $(PKG_BE_DAO_TAO)
-FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI)
+FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI) $(PKG_KHAO_THI)
 
 # Targets
 .PHONY: all clean push deploy release \
@@ -33,8 +34,10 @@ help:
 	@echo "  all-$(PKG_BE_DAO_TAO)"
 	@echo "  all-$(PKG_CATEGORIES)"
 	@echo "  all-$(PKG_DAO_TAO)"
+	@echo "  all-$(PKG_KHAO_THI)"
 	@echo "  all-$(PKG_USER)"
 	@echo "  all-$(PKG_AI)"
+	@echo "  all-clients"
 
 # Pattern rule: build-<name>
 build-%:
@@ -52,6 +55,9 @@ build-%:
 		exit 1; \
 	fi
 
+all-clients: all-$(PKG_CATEGORIES)\
+			 all-$(PKG_USER)\
+			 all-$(PKG_AI)
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
 	docker push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)

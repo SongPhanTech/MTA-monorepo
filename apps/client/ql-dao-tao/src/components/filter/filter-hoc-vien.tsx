@@ -35,6 +35,7 @@ interface Props {
     filters: any
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     setFilters: any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     handleFilterChange: any
 }
 const options = [
@@ -59,7 +60,7 @@ const FilterHocVien = (props: Props) => {
 
     const handleApply = () => {
         console.log('filters', form.getFieldsValue())
-        onFilterChange(form.getFieldsValue())
+        // onFilterChange(form.getFieldsValue())
         setOpen(false)
     }
 

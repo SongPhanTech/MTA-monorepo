@@ -1,7 +1,7 @@
 import { fetchInstance } from '..'
 import { ModelContext } from './modelContext'
-import { API_BASE_URL_MINION } from '@constants/constants'
-const baseUrl = API_BASE_URL_MINION
+import { API_MODEL_BASE_URL } from '@constants/constants'
+const baseUrl = API_MODEL_BASE_URL
 
 export type ErrorWrapper<TError> =
     | TError
