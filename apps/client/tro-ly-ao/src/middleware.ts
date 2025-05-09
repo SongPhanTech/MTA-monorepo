@@ -3,7 +3,7 @@ import { ROUTER_PATH } from '@workspace/router'
 import { type NextRequest, NextResponse } from 'next/server'
 export default async function middleware(req: NextRequest) {
     const session = await auth()
-    if (!session && req.nextUrl.pathname !== ROUTER_PATH.TRO_LY_AO.INDEX) {
+    if (!session) {
         return NextResponse.rewrite(
             new URL(ROUTER_PATH.TRO_LY_AO.INDEX, req.url)
         )

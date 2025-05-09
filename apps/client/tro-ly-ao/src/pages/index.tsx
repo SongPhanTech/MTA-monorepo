@@ -10,21 +10,18 @@ export default function Page() {
     const router = useRouter()
     const menus = useMenuList()
     const { status } = useSession()
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
         } else if (status === 'authenticated') {
-            const firstMenu = menus.flat()
-            if (firstMenu.length > 0 && firstMenu[0].path) {
-                window.location.href = firstMenu[0].path
-            }
+            // const firstMenu = menus.flat()
+            // if (firstMenu.length > 0 && firstMenu[0].path) {
+            //     window.location.href = firstMenu[0].path
+            // }
+            router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
         }
     }, [status, menus])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
-    }, [])
 
     return <Loading />
 }
