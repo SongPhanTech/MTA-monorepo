@@ -10,14 +10,14 @@
     "generate": "orval"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "typescript": "5.5.4",
-    "orval": "^7.7.0",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "orval": "catalog:",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/biome-config": "workspace:*"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.69.0",
-		"@workspace/db": "workspace:*"
+    "@workspace/db": "workspace:*"
   }
 }

@@ -14,16 +14,16 @@
     "./hono": "./src/hono/index.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.4.1",
-    "@zenstackhq/runtime": "2.11.6",
-    "zod": "^3.24.2"
+    "@prisma/client": "catalog:",
+    "@zenstackhq/runtime": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@zenstackhq/openapi": "^2.11.6",
-    "@zenstackhq/server": "^2.11.6",
-    "@zenstackhq/tanstack-query": "^2.11.6",
-    "prisma": "^6.4.1",
-    "prisma-dbml-generator": "^0.12.0",
-    "zenstack": "2.11.6"
+    "@zenstackhq/openapi": "catalog:",
+    "@zenstackhq/server": "catalog:",
+    "@zenstackhq/tanstack-query": "catalog:",
+    "prisma": "catalog:",
+    "prisma-dbml-generator": "catalog:",
+    "zenstack": "catalog:"
   }
 }
