@@ -1,7 +1,7 @@
 import { fetchInstance } from '..'
 import { QaContext } from './qaContext'
 
-const baseUrl = 'http://117.4.240.104:8010' // TODO add your baseUrl
+const baseUrl = 'https://api.doc.chatbot.swantech.vn' // TODO add your baseUrl
 
 export type ErrorWrapper<TError> =
     | TError

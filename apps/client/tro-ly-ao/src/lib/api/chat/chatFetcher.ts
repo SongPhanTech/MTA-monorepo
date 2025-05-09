@@ -1,7 +1,7 @@
 import { fetchInstance } from '..'
 import { ChatContext } from './chatContext'
 
-const baseUrl = 'http://117.4.240.104:8011' // TODO add your baseUrl
+const baseUrl = 'https://api.chat.chatbot.swantech.vn' // TODO add your baseUrl
 
 export type ErrorWrapper<TError> =
     | TError
