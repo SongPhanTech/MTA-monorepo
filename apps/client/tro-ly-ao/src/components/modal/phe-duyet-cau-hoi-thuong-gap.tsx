@@ -1,3 +1,4 @@
+import { fetchFaqVectorizeFaqVectorizePost } from '@api/chat/chatComponents'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
@@ -37,6 +38,11 @@ const PheDuyetCauHoiThuongGap = () => {
                 },
             })
             if (values.status === $Enums.DocumentStatus.APPROVE) {
+                await fetchFaqVectorizeFaqVectorizePost({
+                    queryParams: {
+                        documentId,
+                    },
+                })
                 message.success('Phê duyệt câu hỏi thường gặp thành công')
             } else {
                 message.success('Từ chối câu hỏi thường gặp')
