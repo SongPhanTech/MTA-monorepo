@@ -12,10 +12,13 @@ export async function fetchHoiDap({
     formData.append('type_data', type_data)
     formData.append('conversation_id', conversation_id)
 
-    const response = await fetch('http://117.4.240.104:8011/hoi_dap', {
-        method: 'POST',
-        body: formData,
-    })
+    const response = await fetch(
+        'https://api.chat.chatbot.swantech.vn/hoi_dap',
+        {
+            method: 'POST',
+            body: formData,
+        }
+    )
 
     if (!response.ok) {
         throw new Error('Lỗi khi gọi API Hỏi Đáp')
