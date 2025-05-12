@@ -164,7 +164,10 @@ export default function Page() {
     return (
         <div className="flex flex-col h-full items-center bg-white">
             <div className="w-full  flex flex-col h-full px-4">
-                <div ref={scrollRef} className="flex-1 overflow-y-auto pb-4">
+                <div
+                    ref={scrollRef}
+                    className="flex-1 overflow-y-auto pb-4 no-scrollbar"
+                >
                     {messages.length === 0 ? (
                         <div className="flex justify-center items-center h-full text-gray-400">
                             Bắt đầu cuộc trò chuyện...
