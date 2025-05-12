@@ -85,7 +85,7 @@ const XuLyVanBanLayout = ({
                 </Header>
 
                 <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
-                    <Layout className="overflow-hidden">
+                    <Layout className="">
                         <HeaderContent />
                         <Content className="h-full p-[10px] bg-white">
                             {children}

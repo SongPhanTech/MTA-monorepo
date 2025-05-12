@@ -1,6 +1,6 @@
 import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
 import { readStreamToText } from '@/utils'
-import { FileSyncOutlined, CopyOutlined } from '@ant-design/icons'
+import { FileSyncOutlined, CopyOutlined, StopOutlined } from '@ant-design/icons'
 import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
 import {
     Button,
@@ -30,69 +30,87 @@ function Page() {
     const [outputText, setOutputText] = useState('')
     const [mode, setMode] = useState<Mode>('translate')
     const [loading, setLoading] = useState(false)
+    const [abortController, setAbortController] =
+        useState<AbortController | null>(null)
 
-    const handleTranslate = async () => {
+    const handleTranslate = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
             doc_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
             conversationId: 'None',
+            signal,
         })
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
 
-    const handleSummarize = async () => {
+    const handleSummarize = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
             doc_type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
             conversationId: 'None',
+            signal,
         })
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
 
-    const handleExtraction = async () => {
+    const handleExtraction = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
             doc_type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
             conversationId: 'None',
+            signal,
         })
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
 
-    const handleFixSpelling = async () => {
+    const handleFixSpelling = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
             doc_type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
             conversationId: 'None',
+            signal,
         })
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
 
     const handleProcess = async () => {
+        const controller = new AbortController()
+        setAbortController(controller)
         try {
             setLoading(true)
             let result = ''
-            if (mode === 'translate') result = await handleTranslate()
-            else if (mode === 'summarize') result = await handleSummarize()
-            else if (mode === 'extraction') result = await handleExtraction()
-            else if (mode === 'fix') result = await handleFixSpelling()
+            if (mode === 'translate')
+                result = await handleTranslate(controller.signal)
+            else if (mode === 'summarize')
+                result = await handleSummarize(controller.signal)
+            else if (mode === 'extraction')
+                result = await handleExtraction(controller.signal)
+            else if (mode === 'fix')
+                result = await handleFixSpelling(controller.signal)
 
             setOutputText(result)
             message.success('Xử lý thành công')
         } catch (error) {
-            console.error('Lỗi khi xử lý văn bản:', error)
-            setOutputText('Có lỗi xảy ra trong quá trình xử lý văn bản')
-            message.error('Xử lý thất bại')
+            if (error instanceof Error && error.name === 'AbortError') {
+                message.warning('Đã hủy xử lý văn bản')
+            } else {
+                console.error('Lỗi khi xử lý văn bản:', error)
+                setOutputText('Có lỗi xảy ra trong quá trình xử lý văn bản')
+                message.error('Xử lý thất bại')
+            }
         } finally {
             setLoading(false)
+            setAbortController(null)
         }
     }
 
     const handleCopy = (text: string) => {
-        navigator.clipboard.writeText(text)
+        navigator.clipboard
+            .writeText(text)
             .then(() => {
                 message.success('Đã sao chép nội dung!')
             })
@@ -132,6 +150,17 @@ function Page() {
                         >
                             {loading ? 'Đang xử lý...' : 'Xử lý'}
                         </Button>
+                        {loading && (
+                            <Button
+                                icon={<StopOutlined />}
+                                type="default"
+                                danger
+                                size="large"
+                                onClick={() => {
+                                    abortController?.abort()
+                                }}
+                            />
+                        )}
                     </Space>
                 </Col>
             </Row>
