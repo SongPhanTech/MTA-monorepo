@@ -98,3 +98,12 @@ select {
         --chart-5: 340 75% 55%;
     }
 }
+/* styles/globals.css hoặc tailwind.config.js nếu bạn dùng @layer utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

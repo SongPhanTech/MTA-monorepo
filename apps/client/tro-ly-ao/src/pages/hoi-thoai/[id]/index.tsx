@@ -1,4 +1,5 @@
 import { fetchHoiDap } from '@/api/hoi-dap'
+import { readStreamWithLiveUpdate } from '@/utils'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
@@ -10,8 +11,8 @@ import {
 } from '@workspace/db/hooks'
 import { Avatar, Button, List, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
 import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Page() {
@@ -31,6 +32,8 @@ export default function Page() {
     >([])
     const [loading, setLoading] = useState(false)
     const [botTyping, setBotTyping] = useState(false)
+    const [abortController, setAbortController] =
+        useState<AbortController | null>(null)
 
     const documentTypeFromUrl = router.query.document_type as string | undefined
     const isValidDocumentType = documentTypeFromUrl
@@ -113,10 +116,14 @@ export default function Page() {
                 },
             })
 
+            const newAbortController = new AbortController()
+            setAbortController(newAbortController)
+
             const response = await fetchHoiDap({
                 prompt: text,
                 type_data: documentType,
                 conversation_id: id as string,
+                signal: newAbortController.signal,
             })
 
             if (!response.body) {
@@ -124,42 +131,43 @@ export default function Page() {
                 return
             }
 
-            const reader = response.body.getReader()
-            const decoder = new TextDecoder('utf-8')
-            let botText = ''
             const botId = Date.now() + 1
-
             setMessages((prev) => [
                 ...prev,
                 { id: botId, role: 'BOT', content: '' },
             ])
 
-            while (true) {
-                const { value, done } = await reader.read()
-                if (done) break
-
-                const chunk = decoder.decode(value, { stream: true })
-                botText += chunk
-
+            await readStreamWithLiveUpdate(response.body, (chunk, fullText) => {
                 setMessages((prev) =>
                     prev.map((msg) =>
-                        msg.id === botId ? { ...msg, content: botText } : msg
+                        msg.id === botId ? { ...msg, content: fullText } : msg
                     )
                 )
-            }
+            })
         } catch (err) {
-            console.error(err)
-            message.error('Đã xảy ra lỗi khi gửi tin nhắn')
+            if (err instanceof Error && err.name === 'AbortError') {
+                message.warning('Đã hủy yêu cầu')
+            } else {
+                console.error(err)
+                message.error('Đã xảy ra lỗi khi gửi tin nhắn')
+            }
         } finally {
             setBotTyping(false)
             setLoading(false)
         }
     }
+
+    const handleStop = () => {
+        abortController?.abort()
+    }
+
     return (
         <div className="flex flex-col h-full items-center bg-white">
             <div className="w-full  flex flex-col h-full px-4">
-                {/* Chat Area */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto pb-4">
+                <div
+                    ref={scrollRef}
+                    className="flex-1 overflow-y-auto pb-4 no-scrollbar"
+                >
                     {messages.length === 0 ? (
                         <div className="flex justify-center items-center h-full text-gray-400">
                             Bắt đầu cuộc trò chuyện...
@@ -232,26 +240,25 @@ export default function Page() {
                     )}
                 </div>
 
-                {/* Typing Indicator */}
                 {(botTyping ||
                     messages.some(
                         (msg) => msg.role === 'BOT' && !msg.content
                     )) && (
                     <div className="flex justify-center items-center gap-2 pb-4">
-                        <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-xl max-w-xs">
+                        <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-md max-w-xs">
                             <Spin size="small" />
                             <span className="ml-2">Đang trả lời...</span>
                         </div>
                     </div>
                 )}
 
-                {/* Chat Input */}
                 <ChatInput
                     input={input}
                     loading={loading}
                     onInputChange={setInput}
                     onSend={handleSend}
                     onDelete={handleDelete}
+                    onStop={handleStop}
                 />
             </div>
         </div>
