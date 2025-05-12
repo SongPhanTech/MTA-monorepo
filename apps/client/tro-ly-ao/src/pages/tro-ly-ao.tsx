@@ -142,7 +142,7 @@ export default function TroLyAo() {
 
     return (
         <div className="h-full overflow-auto p-6">
-            <h2 className="text-2xl font-semibold mb-6">Chọn loại Trợ lý AI</h2>
+            {/* <h2 className="text-2xl font-semibold mb-6">Chọn loại Trợ lý AI</h2> */}
             {Object.entries(groupedAITypes).map(([group, items]) => (
                 <div key={group} className="mb-10">
                     <h3 className="text-lg font-medium text-gray-700 mb-4">
@@ -153,7 +153,7 @@ export default function TroLyAo() {
                             <div
                                 key={item.key}
                                 onClick={() => handleClick(item.key)}
-                                className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:scale-105 hover:shadow-xl"
+                                className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:shadow-xl"
                             >
                                 <div className="flex items-center gap-3 cursor-pointer">
                                     <span className="text-xl text-[#028850] group-hover:text-white transition-all duration-300">
