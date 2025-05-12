@@ -60,7 +60,6 @@ const ChatLayout = ({
         handleCollapsed()
     }, [])
 
-    // Auto sign in if not authenticated
     useEffect(() => {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
@@ -76,13 +75,6 @@ const ChatLayout = ({
             message: true,
         },
     })
-    // const mockData: ConversationDataFromAPI = [
-    //     { id: '1', label: 'Create HTML Game Environment' },
-    //     { id: '2', label: 'Apply to Leave for Emergency' },
-    //     { id: '3', label: 'What is UI UX Design?' },
-    //     { id: '4', label: 'Create POS System' },
-    //     { id: '5', label: 'Develop E-commerce Website' },
-    // ]
     const conversationMenuList: ConversationDataFromAPI = (
         conversation || []
     ).map((item) => ({

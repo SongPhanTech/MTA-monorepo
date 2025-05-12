@@ -13,10 +13,10 @@ const APPS_TYPES = [
         isShow: true,
     },
     {
-        key: 'DICH_VAN_BAN',
-        label: 'Dịch văn bản',
-        path: '/dich-van-ban',
-        isShow: false,
+        key: 'XU_LY_VAN_BAN',
+        label: 'Xử lý văn bản',
+        path: '/xu-ly-van-ban',
+        isShow: true,
     },
 ]
 export default APPS_TYPES

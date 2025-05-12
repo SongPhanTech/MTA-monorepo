@@ -54,7 +54,6 @@ const TimKiemVanBanLayout = ({
         handleCollapsed()
     }, [])
 
-    // Auto sign in if not authenticated
     useEffect(() => {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
@@ -86,12 +85,6 @@ const TimKiemVanBanLayout = ({
                 </Header>
 
                 <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
-                    {/* <SiderChatLayout
-                        items={generateMenusTroLyAo(conversationMenuList)}
-                        onCollapse={handleCollapsed}
-                        collapsed={collapsed}
-                        theme={'light'}
-                    /> */}
                     <Layout className="overflow-hidden">
                         <HeaderContent />
                         <Content className="h-full p-[10px] bg-white">
