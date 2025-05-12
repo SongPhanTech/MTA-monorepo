@@ -1,4 +1,5 @@
 import { fetchHoiDap } from '@/api/hoi-dap'
+import { readStreamWithLiveUpdate } from '@/utils'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
@@ -124,29 +125,19 @@ export default function Page() {
                 return
             }
 
-            const reader = response.body.getReader()
-            const decoder = new TextDecoder('utf-8')
-            let botText = ''
             const botId = Date.now() + 1
-
             setMessages((prev) => [
                 ...prev,
                 { id: botId, role: 'BOT', content: '' },
             ])
 
-            while (true) {
-                const { value, done } = await reader.read()
-                if (done) break
-
-                const chunk = decoder.decode(value, { stream: true })
-                botText += chunk
-
+            await readStreamWithLiveUpdate(response.body, (chunk, fullText) => {
                 setMessages((prev) =>
                     prev.map((msg) =>
-                        msg.id === botId ? { ...msg, content: botText } : msg
+                        msg.id === botId ? { ...msg, content: fullText } : msg
                     )
                 )
-            }
+            })
         } catch (err) {
             console.error(err)
             message.error('Đã xảy ra lỗi khi gửi tin nhắn')

@@ -1,8 +1,19 @@
-import { useState } from 'react'
-import type { ReactElement } from 'react'
-import { Row, Col, Select, Input, Button, Typography, Space } from 'antd'
-import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
+import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
+import { readStreamToText } from '@/utils'
 import { FileSyncOutlined } from '@ant-design/icons'
+import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
+import {
+    Button,
+    Col,
+    Input,
+    Row,
+    Select,
+    Space,
+    Typography,
+    message,
+} from 'antd'
+import type { ReactElement } from 'react'
+import { useState } from 'react'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -16,9 +27,24 @@ function Page() {
     const [mode, setMode] = useState<Mode>('translate')
 
     const handleProcess = async () => {
-        console.log('231')
+        try {
+            const response = await fetchXuLyVanBan({
+                text: inputText,
+                doc_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
+                conversationId: 'None',
+            })
+            if (!response.body) {
+                message.error('Không có nội dung phản hồi')
+                return
+            }
+            const result = await readStreamToText(response.body)
+            setOutputText(result)
+            message.success('Xử lý thành công')
+        } catch (error) {
+            console.error('Lỗi khi xử lý văn bản:', error)
+            setOutputText('Có lỗi xảy ra trong quá trình xử lý văn bản')
+        }
     }
-
     return (
         <div style={{ padding: 20 }}>
             <Row justify="center" style={{ marginBottom: 16 }}>
