@@ -1,4 +1,4 @@
-import { MoreOutlined, SendOutlined } from '@ant-design/icons'
+import { MoreOutlined, SendOutlined, StopOutlined } from '@ant-design/icons'
 import { Dropdown, Button, Menu, Spin } from 'antd'
 import { useRouter } from 'next/router'
 import { useState, useRef, useEffect } from 'react'
@@ -9,6 +9,7 @@ interface ChatInputProps {
     onInputChange: (value: string) => void
     onSend: () => void
     onDelete?: () => void
+    onStop?: () => void
 }
 
 export default function ChatInput({
@@ -17,6 +18,7 @@ export default function ChatInput({
     onInputChange,
     onSend,
     onDelete,
+    onStop,
 }: ChatInputProps) {
     const router = useRouter()
     const isTroLyAo = router.pathname === '/tro-ly-ao'
@@ -115,12 +117,20 @@ export default function ChatInput({
                             <Button
                                 onClick={onSend}
                                 className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
-                                loading={loading}
+                                // loading={loading}
                                 icon={
                                     loading ? (
-                                        <Spin
-                                            className="text-white"
-                                            size="small"
+                                        // <Spin
+                                        //     className="text-white"
+                                        //     size="small"
+                                        // />
+                                        <Button
+                                            className="p-4"
+                                            icon={<StopOutlined />}
+                                            type="primary"
+                                            shape="circle"
+                                            danger
+                                            onClick={onStop}
                                         />
                                     ) : (
                                         <SendOutlined className="text-white text-[16px]" />

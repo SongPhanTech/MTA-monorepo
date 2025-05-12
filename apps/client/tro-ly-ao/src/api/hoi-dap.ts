@@ -2,10 +2,12 @@ export async function fetchHoiDap({
     prompt,
     type_data,
     conversation_id,
+    signal, // Thêm signal ở đây
 }: {
     prompt: string
     type_data: string
     conversation_id: string
+    signal: AbortSignal
 }) {
     const formData = new FormData()
     formData.append('prompt', prompt)
@@ -17,6 +19,7 @@ export async function fetchHoiDap({
         {
             method: 'POST',
             body: formData,
+            signal: signal, // Đảm bảo fetch sử dụng signal
         }
     )
 
@@ -24,5 +27,5 @@ export async function fetchHoiDap({
         throw new Error('Lỗi khi gọi API Hỏi Đáp')
     }
 
-    return response // trả về response để handle stream ở ngoài
+    return response
 }
