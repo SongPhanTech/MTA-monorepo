@@ -1,18 +1,15 @@
 import { RobotOutlined, UserOutlined } from '@ant-design/icons'
 
 const AI_TYPES = [
+    // Thông tin học viện
     {
-        key: 'GENERAL_ADMISSIONS_INFORMATION',
-        label: 'Thông tin tuyển sinh chung',
+        key: 'ACADEMY_INFORMATION',
+        label: 'Thông tin học viện',
         icon: RobotOutlined,
-        group: 'Tuyển sinh',
+        group: 'Thông tin học viện',
     },
-    {
-        key: 'ADMISSIONS_RULES_AND_REGULATIONS',
-        label: 'Quy chế tuyển sinh',
-        icon: UserOutlined,
-        group: 'Tuyển sinh',
-    },
+
+    // Đào tạo
     {
         key: 'TRAINING_RULES_AND_REGULATIONS',
         label: 'Quy chế đào tạo',
@@ -31,12 +28,22 @@ const AI_TYPES = [
         icon: RobotOutlined,
         group: 'Đào tạo',
     },
+
+    // Tuyển sinh
     {
-        key: 'ACADEMY_INFORMATION',
-        label: 'Thông tin học viện',
+        key: 'GENERAL_ADMISSIONS_INFORMATION',
+        label: 'Thông tin tuyển sinh chung',
         icon: RobotOutlined,
-        group: 'Thông tin học viện',
+        group: 'Tuyển sinh',
     },
+    {
+        key: 'ADMISSIONS_RULES_AND_REGULATIONS',
+        label: 'Quy chế tuyển sinh',
+        icon: UserOutlined,
+        group: 'Tuyển sinh',
+    },
+
+    // Chính sách & quyền lợi
     {
         key: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS',
         label: 'Chính sách học viên quân sự',
@@ -49,12 +56,8 @@ const AI_TYPES = [
         icon: UserOutlined,
         group: 'Chính sách & quyền lợi',
     },
-    {
-        key: 'FREQUENTLY_ASKED_QUESTIONS',
-        label: 'Câu hỏi thường gặp',
-        icon: RobotOutlined,
-        group: 'Hỗ trợ & giải đáp',
-    },
+
+    // Thông tin nội bộ
     {
         key: 'PARTY_WORK_AND_POLITICAL_WORK',
         label: 'Công tác Đảng & Chính trị',
@@ -67,35 +70,21 @@ const AI_TYPES = [
         icon: UserOutlined,
         group: 'Thông tin nội bộ',
     },
+
+    // Tài liệu học thuật
     {
         key: 'IN_THE_FACULTY_HANDBOOK',
         label: 'Tài liệu khoa',
         icon: RobotOutlined,
         group: 'Tài liệu học thuật',
     },
+
+    // Hỗ trợ & giải đáp
     {
-        key: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
-        label: 'Dịch sang tiếng Việt',
+        key: 'FREQUENTLY_ASKED_QUESTIONS',
+        label: 'Câu hỏi thường gặp',
         icon: RobotOutlined,
-        group: 'Xử lý ngôn ngữ',
-    },
-    {
-        key: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
-        label: 'Phát hiện & sửa lỗi văn bản',
-        icon: RobotOutlined,
-        group: 'Xử lý ngôn ngữ',
-    },
-    {
-        key: 'EXTRACTIVE_TEXT_SUMMARIZATION',
-        label: 'Tóm tắt trích xuất',
-        icon: RobotOutlined,
-        group: 'Tóm tắt văn bản',
-    },
-    {
-        key: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
-        label: 'Tóm tắt sáng tạo',
-        icon: RobotOutlined,
-        group: 'Tóm tắt văn bản',
+        group: 'Hỗ trợ & giải đáp',
     },
 ]
 export default AI_TYPES
