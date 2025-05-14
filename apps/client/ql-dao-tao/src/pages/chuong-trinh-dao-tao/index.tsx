@@ -50,6 +50,7 @@ import { buildOrgTree } from '@lib/utils'
 import CurriculumVersionPage from '@pages/phien-ban-ctdt'
 import { FilterChuongTrinhDT } from '@components/filter'
 import { getMinioUrl } from '@workspace/constant'
+import EditIcon from '@components/icons/edit'
 
 interface FilterProps {
     searchText: string
@@ -384,7 +385,7 @@ export default function CurriculumPage() {
                                                         <CloudDownloadOutlined />
                                                     </a>
                                                 </Tooltip>
-                                                <Tooltip
+                                                {/* <Tooltip
                                                     title="Xem chi tiết"
                                                     placement="leftTop"
                                                 >
@@ -395,7 +396,14 @@ export default function CurriculumPage() {
                                                         )}
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
+                                                </Tooltip> */}
+                                                <EditIcon
+                                                    onClick={onOpen.bind(
+                                                        null,
+                                                        id
+                                                    )}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>

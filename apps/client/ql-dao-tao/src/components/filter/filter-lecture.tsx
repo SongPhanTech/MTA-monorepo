@@ -212,7 +212,7 @@ const FilterLecture = (props: Props) => {
     return (
         <Flex>
             <Input
-                placeholder="Nhập tên giảng viên..."
+                placeholder="Tìm kiếm theo tên giảng viên..."
                 style={{ width: 300, marginRight: 8 }}
                 prefix={
                     <Search

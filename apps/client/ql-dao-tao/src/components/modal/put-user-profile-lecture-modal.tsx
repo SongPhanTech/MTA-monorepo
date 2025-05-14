@@ -33,6 +33,7 @@ import {
     useFindManyEthnicity,
     useFindManyOrganizationUser,
     useUpdateOrganizationUser,
+    useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
     Col,
@@ -45,6 +46,7 @@ import {
     Button,
     Tooltip,
     Flex,
+    TreeSelect,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -59,6 +61,7 @@ import Table from '@components/commons/table'
 import { PutOrganizationUser } from '@components/modal'
 import { PutOrganizationUserProps } from './put-organization-user'
 import { getMinioUrl } from '@workspace/constant'
+import { buildOrgTree } from '@lib/utils'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -121,6 +124,10 @@ const PutUserProfileLectureModal = () => {
             userProfileId: id || undefined,
         },
     })
+    const { data: manageOrgData = [], refetch: refetchManageOrg } =
+        useFindManyOrganization()
+
+    const treeData = buildOrgTree(manageOrgData)
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -143,6 +150,9 @@ const PutUserProfileLectureModal = () => {
         try {
             showSpinner()
             if (id) {
+                const nameOrganiztion = manageOrgData.find(
+                    (organiztion) => organiztion.id == output?.organizationName
+                )?.name
                 await updateUserProfile({
                     data: {
                         code: output.code,
@@ -177,7 +187,7 @@ const PutUserProfileLectureModal = () => {
                         academicRankTypeName: output.academicRankTypeName,
                         positionName: output.positionName,
                         positionCPVName: output.positionCPVName,
-                        organizationName: output.organizationName,
+                        organizationName: nameOrganiztion,
                         organizationCPVName: output.organizationCPVName,
                         userTypeId:
                             userTypeData?.find(
@@ -471,7 +481,30 @@ const PutUserProfileLectureModal = () => {
                                                 label="Đơn vị"
                                                 className="mb-0"
                                             >
-                                                <Input placeholder="Nhập đơn vị" />
+                                                {/* <Input placeholder="Nhập đơn vị" /> */}
+                                                <TreeSelect
+                                                    placeholder="Chọn đơn vị quản lý"
+                                                    allowClear
+                                                    showSearch
+                                                    treeDefaultExpandAll
+                                                    // onChange={(val) =>
+                                                    //     handleFilterChange(
+                                                    //         'managementOrganizationId',
+                                                    //         val
+                                                    //     )
+                                                    // }
+                                                    treeData={treeData}
+                                                    filterTreeNode={(
+                                                        input,
+                                                        node
+                                                    ) =>
+                                                        (node.title as string)
+                                                            .toLowerCase()
+                                                            .includes(
+                                                                input.toLowerCase()
+                                                            )
+                                                    }
+                                                />
                                             </FormItem>
                                         </Col>
                                     </Row>
@@ -940,70 +973,6 @@ const PutUserProfileLectureModal = () => {
                         </Col>
                     </Row>
                 </TabPane>
-                {/* <TabPane tab="Đơn vị" key="4">
-          <Flex justify="end">
-            <Button
-              onClick={() =>
-                onOpenModalOganizationUser({ id: id || "", action: "add" })
-              }
-              type="primary"
-            >
-              Thêm mới
-            </Button>
-          </Flex>
-          <Table
-            columns={[
-              {
-                title: "STT",
-                width: 20,
-                align: "center",
-                render: (_, __, index) => index + 1,
-              },
-              {
-                title: "Tên đơn vị",
-                dataIndex: "code",
-              },
-              {
-                title: "Vị trí công tác",
-                dataIndex: "name",
-              },
-              {
-                title: "Trạng thái",
-                dataIndex: "name",
-              },
-              {
-                title: "Thao tác",
-                width: 100,
-                align: "center",
-                render: (_, { id }) => (
-                  <Row className="justify-center gap-2">
-                    <Tooltip title="Xem chi tiết" placement="leftTop">
-                      <EyeOutlined
-                        onClick={onOpenModalOganizationUser.bind(null, {
-                          id: id || "",
-                          action: "edit",
-                        })}
-                        className="text-sm text-blue-700 cursor-pointer"
-                      />
-                    </Tooltip>
-                    <DeleteIcon
-                      popConfirm={{
-                        onConfirm: () => handleDeleteOrganizationUser(id),
-                      }}
-                    />
-                  </Row>
-                ),
-              },
-            ]}
-            data={[]}
-            pagination={{
-              current: 1,
-              pageSize: 10000,
-              showSizeChanger: false,
-              showTotal: () => null,
-            }}
-          />
-        </TabPane> */}
             </Tabs>
         </PutFormModal>
     )

@@ -257,18 +257,8 @@ const AddUserProfileLecture = () => {
                     </div>
                 </Col>
                 <Col span={16}>
-                    <Row gutter={[0, 0]}>
-                        <Col span={24}>
-                            <FormItem
-                                form={form}
-                                name="code"
-                                label="Mã"
-                                required
-                            >
-                                <Input placeholder="Nhập mã" />
-                            </FormItem>
-                        </Col>
-                        <Col span={24}>
+                    <Row gutter={[10, 0]}>
+                        <Col span={12}>
                             <FormItem
                                 form={form}
                                 name="lastName"
@@ -278,14 +268,42 @@ const AddUserProfileLecture = () => {
                                 <Input placeholder="Nhập họ và tên đệm" />
                             </FormItem>
                         </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="firstName"
+                                label="Tên"
+                                required
+                            >
+                                <Input placeholder="Nhập tên" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="code"
+                                label="Mã"
+                                required
+                            >
+                                <Input placeholder="Nhập mã" />
+                            </FormItem>
+                        </Col>
+
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="dateOfBirth"
+                                label="Ngày sinh"
+                            >
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                />
+                            </FormItem>
+                        </Col>
                     </Row>
                 </Col>
             </Row>
-            <Col span={12}>
-                <FormItem form={form} name="firstName" label="Tên" required>
-                    <Input placeholder="Nhập tên" />
-                </FormItem>
-            </Col>
 
             <Col span={12}>
                 <FormItem
@@ -320,11 +338,6 @@ const AddUserProfileLecture = () => {
                         placeholder="Chọn đơn vị"
                         treeData={convertToTreeSelect(organizations || [])}
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>

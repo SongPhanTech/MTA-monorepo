@@ -28,6 +28,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterSurveyQuestion, {
     FilterSurveyQuestionProps,
 } from '@components/filter/filter-survey-question'
+import EditIcon from '@components/icons/edit'
 type Filter = FilterSurveyQuestionProps & {
     searchText: string
 }
@@ -195,15 +196,10 @@ function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

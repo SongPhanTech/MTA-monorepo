@@ -41,6 +41,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
 import OptionsPage from '@components/sub-pages/options'
+import EditIcon from '@components/icons/edit'
 
 export default function FixedClassPage({ trainingCourse }: any) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -82,7 +83,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
         useFindManyOrganization()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse()
+        useFindManyTrainingCourse({
+            orderBy: {
+                name: 'desc',
+            },
+        })
     const { data: count } = useCountFixedClass({
         where: {
             name: {
@@ -365,7 +370,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -373,7 +378,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

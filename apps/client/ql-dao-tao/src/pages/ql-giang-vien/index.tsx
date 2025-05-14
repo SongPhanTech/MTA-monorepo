@@ -19,6 +19,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     convertToTree,
     getAllChildrenByParentId,
+    searchTree,
 } from '@/utils/convertOrganizationToTree'
 import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 import {
@@ -59,6 +60,7 @@ import { AddUserProfileLectureProps } from '@components/modal/add-user-profile-l
 import { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import { record } from 'zod'
 import { OrganizationUserStatus } from '@workspace/db'
+import EditIcon from '@components/icons/edit'
 type Filter = FilterProps & {
     searchText: string
 }
@@ -69,6 +71,9 @@ export default function UserProfilePageLecture() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [organizationIds, setOrganizationIds] = useState<string[]>([])
     const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
+    const [searchOrganization, setSearchOrganization] = useState<string>('')
+
+    const debouncedSearchText = _.debounce(setSearchOrganization, 200)
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
         priorityObjectId: null,
@@ -81,12 +86,25 @@ export default function UserProfilePageLecture() {
         useFindManyOrganization()
 
     const tree_organization = convertToTree(organization_data)
+    const tree_search_organization = searchTree(
+        tree_organization,
+        searchOrganization
+    )
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
-            firstName: {
-                contains: filters.searchText,
-            },
+            OR: [
+                {
+                    firstName: {
+                        contains: filters.searchText,
+                    },
+                },
+                {
+                    lastName: {
+                        contains: filters.searchText,
+                    },
+                },
+            ],
             //   ...filters,
             ...(filters.priorityObjectId
                 ? { priorityObjectId: filters.priorityObjectId }
@@ -295,13 +313,23 @@ export default function UserProfilePageLecture() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={4}>
+                            <Input
+                                id="search"
+                                onChange={(e) =>
+                                    debouncedSearchText(e.target.value)
+                                }
+                                placeholder="Tìm kiếm theo tên đơn vị"
+                            />
+                        </Col>
+                        <Col span={3}></Col>
                         <Col span={10}>
                             <FilterLecture
                                 onSearchChange={handleFilterChange}
                                 onFilterChange={handleAdvancedFilter}
                             />
                         </Col>
-                        <Col span={14}>
+                        <Col span={7}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -360,7 +388,7 @@ export default function UserProfilePageLecture() {
                                 dataIndex: 'name',
                             },
                         ]}
-                        data={tree_organization}
+                        data={tree_search_organization}
                         expandable={{
                             defaultExpandedRowKeys: ['root'],
                         }}
@@ -423,18 +451,13 @@ export default function UserProfilePageLecture() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(id, {
-                                                    id: id,
-                                                    code: 'GV',
-                                                })}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
+                                        <EditIcon
+                                            onClick={onOpen.bind(id, {
+                                                id: id,
+                                                code: 'GV',
+                                            })}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>
@@ -453,8 +476,6 @@ export default function UserProfilePageLecture() {
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
                         }}
-                        // maxHeight={430}
-                        // scrollable={true}
                     />
                 </Col>
             </Row>

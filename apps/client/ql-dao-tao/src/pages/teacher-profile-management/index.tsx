@@ -42,6 +42,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '@components/icons/edit'
 
 dayjs.locale('vi')
 export default function UserProfilePageQs() {
@@ -351,7 +352,7 @@ export default function UserProfilePageQs() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -362,7 +363,14 @@ export default function UserProfilePageQs() {
                                                 )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpenUpdate.bind(null, {
+                                                id: id,
+                                                code: 'HV',
+                                            })}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

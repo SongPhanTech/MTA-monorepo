@@ -30,6 +30,7 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
+import EditIcon from '@components/icons/edit'
 
 export default function MilestonePage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -225,7 +226,7 @@ export default function MilestonePage() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -233,7 +234,11 @@ export default function MilestonePage() {
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

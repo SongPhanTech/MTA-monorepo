@@ -39,6 +39,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { DownloadCloud } from 'lucide-react'
 import { getMinioUrl } from '@workspace/constant'
+import EditIcon from '@components/icons/edit'
 
 interface FilterProps {
     name: string | undefined
@@ -428,7 +429,7 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                                     <CloudDownloadOutlined />
                                                 </a>
                                             </Tooltip>
-                                            <Tooltip
+                                            {/* <Tooltip
                                                 title="Xem chi tiết"
                                                 placement="leftTop"
                                             >
@@ -439,7 +440,11 @@ export default function CurriculumVersionPage({ curriculumInfo }: any) {
                                                     )}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
-                                            </Tooltip>
+                                            </Tooltip> */}
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () =>
