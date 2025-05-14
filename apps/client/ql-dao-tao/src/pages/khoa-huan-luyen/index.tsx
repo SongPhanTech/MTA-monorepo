@@ -43,6 +43,7 @@ import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
 import FixedClassPage from '@pages/lop-bien-che'
 import { FilterKhoa } from '@components/filter'
+import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
@@ -366,7 +367,7 @@ export default function TrainingCoursePage() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip
+                                                {/* <Tooltip
                                                     title="Xem chi tiết"
                                                     placement="leftTop"
                                                 >
@@ -377,7 +378,14 @@ export default function TrainingCoursePage() {
                                                         )}
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
+                                                </Tooltip> */}
+                                                <EditIcon
+                                                    onClick={onOpen.bind(
+                                                        null,
+                                                        id
+                                                    )}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>

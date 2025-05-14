@@ -2,6 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutEthnicityModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -99,14 +100,6 @@ export default function Page() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]}>
-                        {/* row button */}
-                        <Col span={24}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
                         {/* row filter */}
                         <Col span={6}>
                             <Form.Item label="Tìm kiếm" name="search">
@@ -118,6 +111,14 @@ export default function Page() {
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
+                        </Col>
+                        {/* row button */}
+                        <Col span={18}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
                         </Col>
                     </Row>
                 </Col>
@@ -147,15 +148,10 @@ export default function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

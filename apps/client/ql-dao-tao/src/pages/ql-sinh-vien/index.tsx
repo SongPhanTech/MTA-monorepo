@@ -64,6 +64,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
+import EditIcon from '@components/icons/edit'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -393,7 +394,7 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -404,7 +405,14 @@ export default function UserProfilePageDs() {
                                                 )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpenUpdate.bind(null, {
+                                                id: id,
+                                                code: 'SV',
+                                            })}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

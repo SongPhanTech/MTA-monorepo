@@ -30,6 +30,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '@components/icons/edit'
 
 type Props = {
     curriculumVersionSubjectId: string
@@ -159,7 +160,7 @@ export default function MonHocTienQuyetPage({
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -170,7 +171,14 @@ export default function MonHocTienQuyetPage({
                                                 )}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpen.bind(
+                                                curriculumVersionSubjectId,
+                                                id
+                                            )}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

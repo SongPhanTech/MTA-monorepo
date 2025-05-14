@@ -118,3 +118,30 @@ export const getAllChildrenByParentId = (
     if (!parentNode) return []
     return [parentNode, ...getAllDescendants(parentNode)]
 }
+
+export const searchTree = (data: any, searchText: any) => {
+    if (!searchText) return data
+
+    const search = searchText.toLowerCase()
+
+    return data
+        .map((item: any) => {
+            // Create a deep copy of the item
+            const node = { ...item }
+
+            // Check if current node matches search
+            const nodeMatches = node.name?.toLowerCase().includes(search)
+
+            // Recursively search children
+            if (node.children?.length) {
+                node.children = searchTree(node.children, searchText)
+            }
+
+            if (nodeMatches || (node.children && node.children.length > 0)) {
+                return node
+            }
+
+            return null
+        })
+        .filter(Boolean)
+}

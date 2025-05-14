@@ -13,7 +13,10 @@ const IndexPage: NextPage = () => {
             const firstMenu = menus.flat()
             console.log('check menus', menus)
             if (firstMenu.length > 0 && firstMenu[0].path) {
+                // window.location.href = firstMenu[0].path
                 window.location.href = firstMenu[0].path
+                    ? firstMenu[0].path
+                    : firstMenu[0].children?.[0]?.path || ''
             }
         }
     }, [status, menus])

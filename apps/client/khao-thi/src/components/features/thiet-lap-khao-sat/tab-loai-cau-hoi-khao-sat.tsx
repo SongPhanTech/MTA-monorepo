@@ -23,6 +23,7 @@ import DeleteIcon from '@components/icons/delete'
 import { useMemo, useState } from 'react'
 import { PutSurveyQuestionTypeModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { EditIcon } from 'lucide-react'
 
 function TabLoaiCauHoiKhaoSat() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -128,15 +129,10 @@ function TabLoaiCauHoiKhaoSat() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip>
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

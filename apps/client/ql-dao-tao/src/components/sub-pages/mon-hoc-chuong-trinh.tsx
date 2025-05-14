@@ -32,6 +32,7 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { getMinioUrl } from '@workspace/constant'
+import EditIcon from '@components/icons/edit'
 
 type Props = {
     // data?: CurriculumVersionSubject[]
@@ -213,7 +214,7 @@ export default function MonHocChuongTrinhPage({
                                                 <CloudDownloadOutlined />
                                             </a>
                                         </Tooltip>
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -228,7 +229,18 @@ export default function MonHocChuongTrinhPage({
                                                 }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={() =>
+                                                onOpen({
+                                                    curriculumVersionId:
+                                                        curriculumVersionId ||
+                                                        null,
+                                                    id: id,
+                                                })
+                                            }
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

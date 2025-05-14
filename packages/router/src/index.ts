@@ -106,13 +106,13 @@ const NAVIGATION: NavigationType = {
     },
     QL_DANH_MUC: {
         menus: [
-            {
-                id: 'home',
-                label: 'Trang chủ',
-                icon: HomeOutlined,
-                path: ROUTER_PATH.QL_DANH_MUC.HOME,
-                description: 'Thông tin trang chủ',
-            },
+            // {
+            //     id: 'home',
+            //     label: 'Trang chủ',
+            //     icon: HomeOutlined,
+            //     path: ROUTER_PATH.QL_DANH_MUC.HOME,
+            //     description: 'Thông tin trang chủ',
+            // },
             {
                 id: 'danh-muc-chung',
                 label: 'Danh mục chung',

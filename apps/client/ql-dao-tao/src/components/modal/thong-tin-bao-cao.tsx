@@ -28,9 +28,7 @@ const ThongTinBaoCaoModal = () => {
 
     const flattenSchema = (schema: any[], parentPath = ''): any[] => {
         return schema.flatMap((item, index) => {
-            const fullPath = parentPath
-                ? `${item.path}`
-                : item.path
+            const fullPath = parentPath ? `${item.path}` : item.path
             const row = {
                 key: fullPath,
                 path: fullPath,

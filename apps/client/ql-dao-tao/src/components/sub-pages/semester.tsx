@@ -27,6 +27,7 @@ import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '@components/icons/edit'
 
 export default function SemesterPage({ selectedSchoolYear }: any) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -175,7 +176,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
+                                        {/* <Tooltip
                                             title="Xem chi tiết"
                                             placement="leftTop"
                                         >
@@ -183,7 +184,11 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>
