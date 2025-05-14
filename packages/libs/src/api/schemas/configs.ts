@@ -9,8 +9,11 @@ import type { ConfigsCors } from './configsCors'
 import type { ConfigsProvisioning } from './configsProvisioning'
 
 export interface Configs {
+    /** The home realm identifier for the resident identity provider */
     homeRealmIdentifiers?: string[]
+    /** The idle session timeout in minutes */
     idleSessionTimeoutPeriod?: string
+    /** The remember me period in minutes */
     rememberMePeriod?: string
     provisioning?: ConfigsProvisioning
     authenticators?: ConfigsAuthenticatorsItem[]
