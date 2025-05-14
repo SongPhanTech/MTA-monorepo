@@ -5,19 +5,58 @@
  */
 export type SessionsByUserId = {
   userId?: string;
+  /**
+   * List of active sessions.
+   */
   sessions?: {
+    /**
+     * ID of the user of the session.
+     */
     userId?: string;
+    /**
+     * Identity provider name that the session authenticated. Will only be returned for federated authentication sessions.
+     */
     idpName?: string;
+    /**
+     * List of applications in the session.
+     */
     applications?: {
+      /**
+       * Unique ID of the application.
+       */
       id: string;
+      /**
+       * Username of the logged in user for the application.
+       */
       subject: string;
+      /**
+       * Name of the application.
+       */
       appName: string;
+      /**
+       * ID of the application.
+       */
       appId: string;
     }[];
+    /**
+     * User agent of the session.
+     */
     userAgent?: string;
+    /**
+     * IP address of the session.
+     */
     ip?: string;
+    /**
+     * Login time of the session.
+     */
     loginTime?: string;
+    /**
+     * Last access time of the session.
+     */
     lastAccessTime?: string;
+    /**
+     * ID of the session.
+     */
     id?: string;
   }[];
 };
@@ -32,7 +71,7 @@ export type User = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.587Z
+   * @default 2025-05-14T12:54:28.927Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -54,7 +93,7 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.587Z
+   * @default 2025-05-14T12:54:28.927Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -77,7 +116,7 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.588Z
+   * @default 2025-05-14T12:54:28.928Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -106,7 +145,7 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-05-09T04:04:35.588Z
+     * @default 2025-05-14T12:54:28.929Z
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -140,7 +179,7 @@ export type Group = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.588Z
+   * @default 2025-05-14T12:54:28.931Z
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -153,7 +192,7 @@ export type GroupCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.588Z
+   * @default 2025-05-14T12:54:28.931Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -168,7 +207,7 @@ export type GroupUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-05-09T04:04:35.588Z
+   * @default 2025-05-14T12:54:28.932Z
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -178,13 +217,34 @@ export type GroupUpdate = {
 };
 
 export type Configs = {
+  /**
+   * The home realm identifier for the resident identity provider
+   */
   homeRealmIdentifiers?: string[];
+  /**
+   * The idle session timeout in minutes
+   *
+   * @default 15
+   */
   idleSessionTimeoutPeriod?: string;
+  /**
+   * The remember me period in minutes
+   *
+   * @default 20160
+   */
   rememberMePeriod?: string;
   provisioning?: {
     inbound?: {
       scim?: {
+        /**
+         * User store domain name to inbound provision users and groups. This property becomes only applicable if the enableProxyMode config is set to false
+         *
+         * @default PRIMARY
+         */
         provisioningUserstore?: string;
+        /**
+         * If this property is set to true, Users/Groups are not provisioned to the user store. They are only outbound provisioned
+         */
         enableProxyMode?: boolean;
       };
     };
@@ -193,20 +253,50 @@ export type Configs = {
     id?: string;
     name?: string;
     displayName?: string;
+    /**
+     * @default true
+     */
     isEnabled?: boolean;
     type?: "LOCAL" | "REQUEST_PATH";
     tags?: string[];
     self?: string;
   }[];
   cors?: {
+    /**
+     * If true, generic HTTP requests must be allowed to pass through the filter, else, only valid and accepted CORS must be allowed (strict CORS filtering).
+     */
     allowGenericHttpRequests?: boolean;
+    /**
+     * If true the CORS valve must allow requests from any origin, else the origin whitelist must be consulted.
+     */
     allowAnyOrigin?: boolean;
+    /**
+     * If true, the CORS valve must allow requests from any origin which is a subdomain origin of the allowed origins.
+     */
     allowSubdomains?: boolean;
+    /**
+     * The supported HTTP methods. Requests for methods not included here must be refused by the CORS filter with an HTTP 405 \"Method not allowed\" response.
+     */
     supportedMethods?: string[];
+    /**
+     * If true the CORS valve must support any requested header, else the supported headers list must be consulted.
+     */
     supportAnyHeader?: boolean;
+    /**
+     * The names of the supported author request headers.
+     */
     supportedHeaders?: string[];
+    /**
+     * The non-simple response headers that the web browser should expose to the author of the CORS request.
+     */
     exposedHeaders?: string[];
+    /**
+     * Whether user credentials, such as cookies, HTTP authentication or client-side certificates, are supported.
+     */
     supportsCredentials?: boolean;
+    /**
+     * Indicates how long the results of a preflight request can be cached by the web client, in seconds. If -1 then unspecified.
+     */
     maxAge?: number;
   };
 };

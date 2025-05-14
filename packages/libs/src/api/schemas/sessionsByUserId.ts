@@ -8,5 +8,6 @@ import type { SessionsByUserIdSessionsItem } from './sessionsByUserIdSessionsIte
 
 export interface SessionsByUserId {
     userId?: string
+    /** List of active sessions. */
     sessions?: SessionsByUserIdSessionsItem[]
 }

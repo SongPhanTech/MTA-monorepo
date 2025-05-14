@@ -6,13 +6,22 @@
  */
 
 export type ConfigsCors = {
+    /** If true, generic HTTP requests must be allowed to pass through the filter, else, only valid and accepted CORS must be allowed (strict CORS filtering). */
     allowGenericHttpRequests?: boolean
+    /** If true the CORS valve must allow requests from any origin, else the origin whitelist must be consulted. */
     allowAnyOrigin?: boolean
+    /** If true, the CORS valve must allow requests from any origin which is a subdomain origin of the allowed origins. */
     allowSubdomains?: boolean
+    /** The supported HTTP methods. Requests for methods not included here must be refused by the CORS filter with an HTTP 405 \"Method not allowed\" response. */
     supportedMethods?: string[]
+    /** If true the CORS valve must support any requested header, else the supported headers list must be consulted. */
     supportAnyHeader?: boolean
+    /** The names of the supported author request headers. */
     supportedHeaders?: string[]
+    /** The non-simple response headers that the web browser should expose to the author of the CORS request. */
     exposedHeaders?: string[]
+    /** Whether user credentials, such as cookies, HTTP authentication or client-side certificates, are supported. */
     supportsCredentials?: boolean
+    /** Indicates how long the results of a preflight request can be cached by the web client, in seconds. If -1 then unspecified. */
     maxAge?: number
 }
