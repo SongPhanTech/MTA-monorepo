@@ -172,6 +172,8 @@ model Subject extends Base {
 
   prerequisiteSubject      PrerequisiteSubject[]
   coRequisiteSubject       CoRequisiteSubject[]
+
+  subjectClass             SubjectClass[]
 }
 
 enum CurriculumVersionSubjectType { // loại môn học
@@ -225,3 +227,18 @@ model CoRequisiteSubject extends Base {
 
   @@schema("ql-dao-tao")
 }
+
+// Lớp môn học
+model SubjectClass extends Base {
+  name                String
+  startDate           DateTime
+  endDate             DateTime?
+  subject             Subject               @relation(fields: [subjectId], references: [id])
+  subjectId           String
+
+  examDate            DateTime?
+  @@schema("ql-dao-tao")
+
+  subjectClassStudent SubjectClassStudent[]
+}
+
