@@ -1,11 +1,13 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
+import './common'
 
 // đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
   name           String
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+  trainingFields TrainingField[]
   @@schema("ql-danh-muc")
 }
 
@@ -39,10 +41,26 @@ model TrainingLocation extends Base {
   @@schema("ql-danh-muc")
 }
 
+//enum status ngành đào tạo
+enum TrainingFieldStatus {
+  ACTIVE 
+  IN_ACTIVE
+
+  @@schema("ql-danh-muc")
+}
+
 // ngành đào tạo
 model TrainingField extends Base {
   name String
+  codeTrainingField String @unique
+  englishName String
+  status TrainingFieldStatus @default(ACTIVE) 
+  publishDate DateTime
+	organization Organization @relation(fields: [organizationId], references: [id])
+	organizationId String
+  trainingObjectTypes TrainingObjectType[]
   @@schema("ql-danh-muc")
+
 }
 
 // chuyên ngành đào tạo

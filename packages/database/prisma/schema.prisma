@@ -56,6 +56,13 @@ enum CurriculumVersionSubjectType {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingFieldStatus {
+  ACTIVE
+  IN_ACTIVE
+
+  @@schema("ql-danh-muc")
+}
+
 enum FixedClassStudentStatus {
   ENROLLED
   GRADUATED
@@ -537,6 +544,7 @@ model TrainingObjectType {
   name           String
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+  trainingFields TrainingField[]
 
   @@schema("ql-danh-muc")
 }
@@ -594,13 +602,20 @@ model TrainingLocation {
 }
 
 model TrainingField {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+  id                  String               @id() @default(cuid())
+  code                String?
+  description         String?              @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt()
+  name                String
+  codeTrainingField   String               @unique()
+  englishName         String
+  status              TrainingFieldStatus  @default(ACTIVE)
+  publishDate         DateTime
+  organization        Organization         @relation(fields: [organizationId], references: [id])
+  organizationId      String
+  trainingObjectTypes TrainingObjectType[]
 
   @@schema("ql-danh-muc")
 }
@@ -813,6 +828,7 @@ model Organization {
   subject          Subject[]
   subjectGroup     SubjectGroup[]
   organizationUser OrganizationUser[]
+  trainingFields   TrainingField[]
   organizationId   String?
 
   @@schema("ql-danh-muc")

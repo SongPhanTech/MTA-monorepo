@@ -307,6 +307,13 @@
           "Elective"
         ]
       },
+      "TrainingFieldStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "IN_ACTIVE"
+        ]
+      },
       "Gender": {
         "type": "string",
         "enum": [
@@ -797,7 +804,12 @@
           "deletedAt",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "status",
+          "publishDate",
+          "organizationId"
         ]
       },
       "TrainingMajorScalarFieldEnum": {
@@ -3261,6 +3273,12 @@
             "items": {
               "$ref": "#/components/schemas/Curriculum"
             }
+          },
+          "trainingFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingField"
+            }
           }
         },
         "required": [
@@ -3565,13 +3583,44 @@
           },
           "name": {
             "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/Organization"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "trainingObjectTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingObjectType"
+            }
           }
         },
         "required": [
           "id",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "status",
+          "publishDate",
+          "organization",
+          "organizationId"
         ]
       },
       "TrainingMajor": {
@@ -4576,6 +4625,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OrganizationUser"
+            }
+          },
+          "trainingFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingField"
             }
           },
           "organizationId": {
@@ -18658,6 +18713,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumListRelationFilter"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldListRelationFilter"
           }
         }
       },
@@ -18711,6 +18769,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumOrderByRelationAggregateInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldOrderByRelationAggregateInput"
           }
         }
       },
@@ -18829,6 +18890,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumListRelationFilter"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldListRelationFilter"
           }
         }
       },
@@ -20691,6 +20755,70 @@
                 "type": "string"
               }
             ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "organization": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationScalarRelationFilter"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeListRelationFilter"
           }
         }
       },
@@ -20738,6 +20866,27 @@
           },
           "name": {
             "$ref": "#/components/schemas/SortOrder"
+          },
+          "codeTrainingField": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "englishName": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "publishDate": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "organizationId": {
+            "$ref": "#/components/schemas/SortOrder"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationOrderByWithRelationInput"
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeOrderByRelationAggregateInput"
           }
         }
       },
@@ -20745,6 +20894,9 @@
         "type": "object",
         "properties": {
           "id": {
+            "type": "string"
+          },
+          "codeTrainingField": {
             "type": "string"
           },
           "AND": {
@@ -20850,6 +21002,60 @@
                 "type": "string"
               }
             ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "organization": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationScalarRelationFilter"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationWhereInput"
+              }
+            ]
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeListRelationFilter"
           }
         }
       },
@@ -20961,6 +21167,57 @@
             ]
           },
           "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringWithAggregatesFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusWithAggregatesFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeWithAggregatesFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/StringWithAggregatesFilter"
@@ -27246,6 +27503,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserListRelationFilter"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldListRelationFilter"
           }
         }
       },
@@ -27350,6 +27610,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserOrderByRelationAggregateInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldOrderByRelationAggregateInput"
           }
         }
       },
@@ -27545,6 +27808,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserListRelationFilter"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldListRelationFilter"
           }
         }
       },
@@ -49134,6 +49400,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutTrainingObjectTypesInput"
           }
         },
         "required": [
@@ -49230,6 +49499,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutTrainingObjectTypesNestedInput"
           }
         }
       },
@@ -50564,10 +50836,33 @@
           },
           "name": {
             "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutTrainingFieldsInput"
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedManyWithoutTrainingFieldsInput"
           }
         },
         "required": [
-          "name"
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate",
+          "organization"
         ]
       },
       "TrainingFieldUpdateInput": {
@@ -50654,6 +50949,53 @@
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneRequiredWithoutTrainingFieldsNestedInput"
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithoutTrainingFieldsNestedInput"
           }
         }
       },
@@ -50704,10 +51046,30 @@
           },
           "name": {
             "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organizationId": {
+            "type": "string"
           }
         },
         "required": [
-          "name"
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate",
+          "organizationId"
         ]
       },
       "TrainingFieldUpdateManyMutationInput": {
@@ -50792,6 +51154,47 @@
               },
               {
                 "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           }
@@ -55135,6 +55538,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -55276,6 +55682,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -66772,6 +67181,20 @@
           }
         }
       },
+      "TrainingFieldListRelationFilter": {
+        "type": "object",
+        "properties": {
+          "every": {
+            "$ref": "#/components/schemas/TrainingFieldWhereInput"
+          },
+          "some": {
+            "$ref": "#/components/schemas/TrainingFieldWhereInput"
+          },
+          "none": {
+            "$ref": "#/components/schemas/TrainingFieldWhereInput"
+          }
+        }
+      },
       "TrainingCourseOrderByRelationAggregateInput": {
         "type": "object",
         "properties": {
@@ -66785,6 +67208,105 @@
         "properties": {
           "_count": {
             "$ref": "#/components/schemas/SortOrder"
+          }
+        }
+      },
+      "TrainingFieldOrderByRelationAggregateInput": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "$ref": "#/components/schemas/SortOrder"
+          }
+        }
+      },
+      "EnumTrainingFieldStatusFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingObjectTypeListRelationFilter": {
+        "type": "object",
+        "properties": {
+          "every": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereInput"
+          },
+          "some": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereInput"
+          },
+          "none": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereInput"
+          }
+        }
+      },
+      "TrainingObjectTypeOrderByRelationAggregateInput": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "$ref": "#/components/schemas/SortOrder"
+          }
+        }
+      },
+      "EnumTrainingFieldStatusWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
           }
         }
       },
@@ -77884,6 +78406,59 @@
           }
         }
       },
+      "TrainingFieldCreateNestedManyWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
       "TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput": {
         "type": "object",
         "properties": {
@@ -77990,6 +78565,59 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/CurriculumWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUncheckedCreateNestedManyWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
                 }
               }
             ]
@@ -78290,6 +78918,150 @@
           }
         }
       },
+      "TrainingFieldUpdateManyWithoutTrainingObjectTypesNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
       "TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput": {
         "type": "object",
         "properties": {
@@ -78578,6 +79350,150 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/CurriculumScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateManyWithoutTrainingObjectTypesNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutTrainingObjectTypesInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutTrainingObjectTypesInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
                 }
               }
             ]
@@ -79796,6 +80712,466 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/TrainingCourseScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "OrganizationCreateNestedOneWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutTrainingFieldsInput"
+          },
+          "connect": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          }
+        }
+      },
+      "TrainingObjectTypeCreateNestedManyWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "EnumTrainingFieldStatusFieldUpdateOperationsInput": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          }
+        }
+      },
+      "OrganizationUpdateOneRequiredWithoutTrainingFieldsNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "$ref": "#/components/schemas/OrganizationCreateOrConnectWithoutTrainingFieldsInput"
+          },
+          "upsert": {
+            "$ref": "#/components/schemas/OrganizationUpsertWithoutTrainingFieldsInput"
+          },
+          "connect": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateToOneWithWhereWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingObjectTypeUpdateManyWithoutTrainingFieldsNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithWhereWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithWhereWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithWhereWithoutTrainingFieldsInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithWhereWithoutTrainingFieldsInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
                 }
               }
             ]
@@ -81456,6 +82832,62 @@
           }
         }
       },
+      "TrainingFieldCreateNestedManyWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInputEnvelope"
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
       "OrganizationUncheckedCreateNestedManyWithoutParentInput": {
         "type": "object",
         "properties": {
@@ -81786,6 +83218,62 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/OrganizationUserWhereUniqueInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInputEnvelope"
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
                 }
               }
             ]
@@ -82768,6 +84256,153 @@
           }
         }
       },
+      "TrainingFieldUpdateManyWithoutOrganizationNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInputEnvelope"
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
       "OrganizationUncheckedUpdateManyWithoutParentNestedInput": {
         "type": "object",
         "properties": {
@@ -83644,6 +85279,153 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/OrganizationUserScalarWhereInput"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+                }
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "connectOrCreate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateOrConnectWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "upsert": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpsertWithWhereUniqueWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "createMany": {
+            "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInputEnvelope"
+          },
+          "set": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "disconnect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "delete": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "connect": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+                }
+              }
+            ]
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateWithWhereUniqueWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "updateMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldUpdateManyWithWhereWithoutOrganizationInput"
+                }
+              }
+            ]
+          },
+          "deleteMany": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
                 }
               }
             ]
@@ -94543,6 +96325,75 @@
           }
         }
       },
+      "NestedEnumTrainingFieldStatusFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
+              }
+            ]
+          }
+        }
+      },
+      "NestedEnumTrainingFieldStatusWithAggregatesFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "notIn": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldStatus"
+            }
+          },
+          "not": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusWithAggregatesFilter"
+              }
+            ]
+          },
+          "_count": {
+            "$ref": "#/components/schemas/NestedIntFilter"
+          },
+          "_min": {
+            "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/NestedEnumTrainingFieldStatusFilter"
+          }
+        }
+      },
       "NestedEnumGenderNullableFilter": {
         "type": "object",
         "properties": {
@@ -101930,6 +103781,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutTrainingObjectTypesInput"
           }
         },
         "required": [
@@ -101986,6 +103840,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutTrainingObjectTypesInput"
           }
         },
         "required": [
@@ -102721,6 +104578,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutTrainingObjectTypesNestedInput"
           }
         }
       },
@@ -102811,6 +104671,9 @@
           },
           "curriculum": {
             "$ref": "#/components/schemas/CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutTrainingObjectTypesNestedInput"
           }
         }
       },
@@ -104019,6 +105882,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -104121,6 +105987,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -104841,6 +106710,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -104992,6 +106864,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -105299,6 +107174,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -105401,6 +107279,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -105480,6 +107361,9 @@
           },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutTrainingObjectTypesInput"
           }
         },
         "required": [
@@ -105536,6 +107420,9 @@
           },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutTrainingObjectTypesInput"
           }
         },
         "required": [
@@ -106394,6 +108281,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -106545,6 +108435,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -106688,6 +108581,9 @@
           },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutTrainingObjectTypesNestedInput"
           }
         }
       },
@@ -106778,6 +108674,9 @@
           },
           "TrainingCourse": {
             "$ref": "#/components/schemas/TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutTrainingObjectTypesNestedInput"
           }
         }
       },
@@ -109035,6 +110934,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -109137,6 +111039,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -109588,6 +111493,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -109739,6 +111647,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -110136,6 +112047,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -110238,6 +112152,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -111366,6 +113283,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -111517,6 +113437,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -118724,6 +120647,174 @@
           "data"
         ]
       },
+      "TrainingFieldCreateWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutTrainingFieldsInput"
+          }
+        },
+        "required": [
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate",
+          "organization"
+        ]
+      },
+      "TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organizationId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate",
+          "organizationId"
+        ]
+      },
+      "TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
       "TrainingCourseUpsertWithWhereUniqueWithoutTrainingObjectTypeInput": {
         "type": "object",
         "properties": {
@@ -119307,6 +121398,253 @@
               },
               {
                 "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUpsertWithWhereUniqueWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateWithoutTrainingObjectTypesInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "update",
+          "create"
+        ]
+      },
+      "TrainingFieldUpdateWithWhereUniqueWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithoutTrainingObjectTypesInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateWithoutTrainingObjectTypesInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingFieldUpdateManyWithWhereWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyMutationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutTrainingObjectTypesInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingFieldScalarWhereInput": {
+        "type": "object",
+        "properties": {
+          "AND": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+                }
+              }
+            ]
+          },
+          "OR": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+            }
+          },
+          "NOT": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+                }
+              }
+            ]
+          },
+          "id": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFilter"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
               }
             ]
           }
@@ -120555,6 +122893,911 @@
           "where",
           "data"
         ]
+      },
+      "OrganizationCreateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeCreateNestedOneWithoutOrganizationsInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedOneWithoutChildrenInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationCreateNestedManyWithoutParentInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "fixedClass": {
+            "$ref": "#/components/schemas/FixedClassCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/SubjectCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "subjectGroup": {
+            "$ref": "#/components/schemas/SubjectGroupCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "organizationUser": {
+            "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ]
+      },
+      "OrganizationUncheckedCreateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedCreateNestedManyWithoutParentInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "fixedClass": {
+            "$ref": "#/components/schemas/FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "subjectGroup": {
+            "$ref": "#/components/schemas/SubjectGroupUncheckedCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "organizationUser": {
+            "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          }
+        },
+        "required": [
+          "name",
+          "typeId"
+        ]
+      },
+      "OrganizationCreateOrConnectWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
+      "TrainingObjectTypeCreateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "TrainingCourse": {
+            "$ref": "#/components/schemas/TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumCreateNestedManyWithoutTrainingObjectTypeInput"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "TrainingCourse": {
+            "$ref": "#/components/schemas/TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
+      "OrganizationUpsertWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutTrainingFieldsInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          },
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereInput"
+          }
+        },
+        "required": [
+          "update",
+          "create"
+        ]
+      },
+      "OrganizationUpdateToOneWithWhereWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/OrganizationWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrganizationUpdateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationUncheckedUpdateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "OrganizationUpdateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrganizationTypeUpdateOneRequiredWithoutOrganizationsNestedInput"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneWithoutChildrenNestedInput"
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUpdateManyWithoutParentNestedInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "fixedClass": {
+            "$ref": "#/components/schemas/FixedClassUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/SubjectUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "subjectGroup": {
+            "$ref": "#/components/schemas/SubjectGroupUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "organizationUser": {
+            "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          }
+        }
+      },
+      "OrganizationUncheckedUpdateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "typeId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "$ref": "#/components/schemas/OrganizationUncheckedUpdateManyWithoutParentNestedInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "fixedClass": {
+            "$ref": "#/components/schemas/FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "subjectGroup": {
+            "$ref": "#/components/schemas/SubjectGroupUncheckedUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "organizationUser": {
+            "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          }
+        }
+      },
+      "TrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeCreateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "update",
+          "create"
+        ]
+      },
+      "TrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingObjectTypeWhereUniqueInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateWithoutTrainingFieldsInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingObjectTypeUpdateManyWithWhereWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyMutationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldsInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingObjectTypeScalarWhereInput": {
+        "type": "object",
+        "properties": {
+          "AND": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+                }
+              }
+            ]
+          },
+          "OR": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+            }
+          },
+          "NOT": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingObjectTypeScalarWhereInput"
+                }
+              }
+            ]
+          },
+          "id": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringNullableFilter"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeNullableFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DateTimeFilter"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StringFilter"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
       },
       "CurriculumCreateWithoutTrainingMajorInput": {
         "type": "object",
@@ -122773,6 +126016,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -122874,6 +126120,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -123387,6 +126636,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -123489,6 +126741,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -123606,6 +126861,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -123701,6 +126959,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedCreateNestedManyWithoutOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -124794,6 +128055,196 @@
           "data"
         ]
       },
+      "TrainingFieldCreateWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeCreateNestedManyWithoutTrainingFieldsInput"
+          }
+        },
+        "required": [
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate"
+        ]
+      },
+      "TrainingFieldUncheckedCreateWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput"
+          }
+        },
+        "required": [
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate"
+        ]
+      },
+      "TrainingFieldCreateOrConnectWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "create"
+        ]
+      },
+      "TrainingFieldCreateManyOrganizationInputEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInput"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrainingFieldCreateManyOrganizationInput"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
       "OrganizationTypeUpsertWithoutOrganizationsInput": {
         "type": "object",
         "properties": {
@@ -125205,6 +128656,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -125356,6 +128810,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -125954,6 +129411,83 @@
               },
               {
                 "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingFieldUpsertWithWhereUniqueWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "update": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithoutOrganizationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateWithoutOrganizationInput"
+              }
+            ]
+          },
+          "create": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldCreateWithoutOrganizationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedCreateWithoutOrganizationInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "update",
+          "create"
+        ]
+      },
+      "TrainingFieldUpdateWithWhereUniqueWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateWithoutOrganizationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateWithoutOrganizationInput"
+              }
+            ]
+          }
+        },
+        "required": [
+          "where",
+          "data"
+        ]
+      },
+      "TrainingFieldUpdateManyWithWhereWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/TrainingFieldScalarWhereInput"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldUpdateManyMutationInput"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationInput"
               }
             ]
           }
@@ -135561,6 +139095,9 @@
           },
           "subjectGroup": {
             "$ref": "#/components/schemas/SubjectGroupCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -135663,6 +139200,9 @@
           },
           "subjectGroup": {
             "$ref": "#/components/schemas/SubjectGroupUncheckedCreateNestedManyWithoutManagementOrganizationInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput"
           }
         },
         "required": [
@@ -137194,6 +140734,9 @@
           },
           "subjectGroup": {
             "$ref": "#/components/schemas/SubjectGroupUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -137345,6 +140888,9 @@
           },
           "subjectGroup": {
             "$ref": "#/components/schemas/SubjectGroupUncheckedUpdateManyWithoutManagementOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -163713,6 +167259,413 @@
           }
         }
       },
+      "TrainingFieldUpdateWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationUpdateOneRequiredWithoutTrainingFieldsNestedInput"
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateManyWithoutTrainingObjectTypesInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          }
+        }
+      },
       "TrainingCourseCreateManyTrainingTypeInput": {
         "type": "object",
         "properties": {
@@ -165967,6 +169920,279 @@
               },
               {
                 "$ref": "#/components/schemas/EnumTrainingCourseStatusFieldUpdateOperationsInput"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingObjectTypeUpdateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "TrainingCourse": {
+            "$ref": "#/components/schemas/TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput"
+          }
+        }
+      },
+      "TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "TrainingCourse": {
+            "$ref": "#/components/schemas/TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput"
+          },
+          "curriculum": {
+            "$ref": "#/components/schemas/CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput"
+          }
+        }
+      },
+      "TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldsInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
               }
             ]
           }
@@ -168761,6 +172987,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -168905,6 +173134,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -169502,6 +173734,75 @@
           "userProfileId"
         ]
       },
+      "TrainingFieldCreateManyOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "publishDate"
+        ]
+      },
       "OrganizationUpdateWithoutParentInput": {
         "type": "object",
         "properties": {
@@ -169633,6 +173934,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -169774,6 +174078,9 @@
           },
           "organizationUser": {
             "$ref": "#/components/schemas/OrganizationUserUncheckedUpdateManyWithoutOrganizationNestedInput"
+          },
+          "trainingFields": {
+            "$ref": "#/components/schemas/TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput"
           }
         }
       },
@@ -171990,6 +176297,396 @@
               },
               {
                 "$ref": "#/components/schemas/EnumOrganizationUserStatusFieldUpdateOperationsInput"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldUpdateWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeUpdateManyWithoutTrainingFieldsNestedInput"
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "trainingObjectTypes": {
+            "$ref": "#/components/schemas/TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput"
+          }
+        }
+      },
+      "TrainingFieldUncheckedUpdateManyWithoutOrganizationInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/NullableStringFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/NullableDateTimeFieldUpdateOperationsInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/StringFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              },
+              {
+                "$ref": "#/components/schemas/EnumTrainingFieldStatusFieldUpdateOperationsInput"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "$ref": "#/components/schemas/DateTimeFieldUpdateOperationsInput"
               }
             ]
           }
@@ -195024,6 +199721,16 @@
               }
             ]
           },
+          "trainingFields": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldFindManyArgs"
+              }
+            ]
+          },
           "_count": {
             "oneOf": [
               {
@@ -195116,6 +199823,41 @@
               },
               {
                 "$ref": "#/components/schemas/TrainingFormCountOutputTypeDefaultArgs"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingFieldInclude": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationDefaultArgs"
+              }
+            ]
+          },
+          "trainingObjectTypes": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeFindManyArgs"
+              }
+            ]
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldCountOutputTypeDefaultArgs"
               }
             ]
           }
@@ -195366,6 +200108,16 @@
               },
               {
                 "$ref": "#/components/schemas/OrganizationUserFindManyArgs"
+              }
+            ]
+          },
+          "trainingFields": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldFindManyArgs"
               }
             ]
           },
@@ -196181,6 +200933,9 @@
           },
           "curriculum": {
             "type": "boolean"
+          },
+          "trainingFields": {
+            "type": "boolean"
           }
         }
       },
@@ -196207,6 +200962,14 @@
         "type": "object",
         "properties": {
           "trainingCourse": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TrainingFieldCountOutputTypeSelect": {
+        "type": "object",
+        "properties": {
+          "trainingObjectTypes": {
             "type": "boolean"
           }
         }
@@ -196278,6 +201041,9 @@
             "type": "boolean"
           },
           "organizationUser": {
+            "type": "boolean"
+          },
+          "trainingFields": {
             "type": "boolean"
           }
         }
@@ -196555,6 +201321,14 @@
         "properties": {
           "select": {
             "$ref": "#/components/schemas/TrainingFormCountOutputTypeSelect"
+          }
+        }
+      },
+      "TrainingFieldCountOutputTypeDefaultArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/TrainingFieldCountOutputTypeSelect"
           }
         }
       },
@@ -198127,6 +202901,16 @@
               }
             ]
           },
+          "trainingFields": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldFindManyArgs"
+              }
+            ]
+          },
           "_count": {
             "oneOf": [
               {
@@ -198336,6 +203120,51 @@
           },
           "name": {
             "type": "boolean"
+          },
+          "codeTrainingField": {
+            "type": "boolean"
+          },
+          "englishName": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "publishDate": {
+            "type": "boolean"
+          },
+          "organization": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/OrganizationDefaultArgs"
+              }
+            ]
+          },
+          "organizationId": {
+            "type": "boolean"
+          },
+          "trainingObjectTypes": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingObjectTypeFindManyArgs"
+              }
+            ]
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldCountOutputTypeDefaultArgs"
+              }
+            ]
           }
         }
       },
@@ -198972,6 +203801,16 @@
               },
               {
                 "$ref": "#/components/schemas/OrganizationUserFindManyArgs"
+              }
+            ]
+          },
+          "trainingFields": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldFindManyArgs"
               }
             ]
           },
@@ -203181,6 +208020,21 @@
           "name": {
             "type": "boolean"
           },
+          "codeTrainingField": {
+            "type": "boolean"
+          },
+          "englishName": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "publishDate": {
+            "type": "boolean"
+          },
+          "organizationId": {
+            "type": "boolean"
+          },
           "_all": {
             "type": "boolean"
           }
@@ -203209,6 +208063,21 @@
           },
           "name": {
             "type": "boolean"
+          },
+          "codeTrainingField": {
+            "type": "boolean"
+          },
+          "englishName": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "publishDate": {
+            "type": "boolean"
+          },
+          "organizationId": {
+            "type": "boolean"
           }
         }
       },
@@ -203234,6 +208103,21 @@
             "type": "boolean"
           },
           "name": {
+            "type": "boolean"
+          },
+          "codeTrainingField": {
+            "type": "boolean"
+          },
+          "englishName": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "publishDate": {
+            "type": "boolean"
+          },
+          "organizationId": {
             "type": "boolean"
           }
         }
@@ -210912,6 +215796,22 @@
           "name": {
             "type": "string"
           },
+          "codeTrainingField": {
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TrainingFieldStatus"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "organizationId": {
+            "type": "string"
+          },
           "_count": {
             "oneOf": [
               {
@@ -210947,7 +215847,12 @@
           "id",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "codeTrainingField",
+          "englishName",
+          "status",
+          "publishDate",
+          "organizationId"
         ]
       },
       "AggregateTrainingMajor": {
@@ -223417,6 +228322,21 @@
           "name": {
             "type": "integer"
           },
+          "codeTrainingField": {
+            "type": "integer"
+          },
+          "englishName": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "publishDate": {
+            "type": "integer"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -223429,6 +228349,11 @@
           "createdAt",
           "updatedAt",
           "name",
+          "codeTrainingField",
+          "englishName",
+          "status",
+          "publishDate",
+          "organizationId",
           "_all"
         ]
       },
@@ -223507,6 +228432,57 @@
                 "type": "string"
               }
             ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         }
       },
@@ -223577,6 +228553,57 @@
             ]
           },
           "name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "codeTrainingField": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "englishName": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TrainingFieldStatus"
+              }
+            ]
+          },
+          "publishDate": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "organizationId": {
             "oneOf": [
               {
                 "type": "null"
@@ -241025,6 +246052,9 @@
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
           },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
+          },
           "data": {
             "$ref": "#/components/schemas/TrainingFieldCreateInput"
           },
@@ -241070,6 +246100,9 @@
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
           },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
+          },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
           },
@@ -241084,6 +246117,9 @@
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
           },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
+          },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereInput"
           },
@@ -241097,6 +246133,9 @@
         "properties": {
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
+          },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
           },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereInput"
@@ -241115,6 +246154,9 @@
         "properties": {
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
+          },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
           },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
@@ -241155,6 +246197,9 @@
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
           },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
+          },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
           },
@@ -241177,6 +246222,9 @@
         "properties": {
           "select": {
             "$ref": "#/components/schemas/TrainingFieldSelect"
+          },
+          "include": {
+            "$ref": "#/components/schemas/TrainingFieldInclude"
           },
           "where": {
             "$ref": "#/components/schemas/TrainingFieldWhereUniqueInput"
