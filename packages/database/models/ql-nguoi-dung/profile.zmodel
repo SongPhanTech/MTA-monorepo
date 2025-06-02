@@ -91,7 +91,6 @@ model FixedClassStudent extends Base {
   userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
   userProfileId String
   status        FixedClassStudentStatus @default(ENROLLED)
-  @@schema("ql-nguoi-dung")
   @@schema("ql-dao-tao")
 }
 
@@ -108,7 +107,6 @@ model SubjectClassStudent extends Base {
   finalScore      Float?  // điểm thi
 
 
-  @@schema("ql-nguoi-dung")
   @@schema("ql-dao-tao")
 }
 

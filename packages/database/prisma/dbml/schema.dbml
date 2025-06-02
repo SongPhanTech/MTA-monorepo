@@ -257,6 +257,7 @@ Table Subject {
   curriculumVersionSubject CurriculumVersionSubject [not null]
   prerequisiteSubject PrerequisiteSubject [not null]
   coRequisiteSubject CoRequisiteSubject [not null]
+  subjectClass SubjectClass [not null]
 }
 
 Table CurriculumVersionSubject {
@@ -304,6 +305,22 @@ Table CoRequisiteSubject {
   curriculumVersionSubjectId String [not null]
   subject Subject [not null]
   subjectId String [not null]
+}
+
+Table SubjectClass {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  subject Subject [not null]
+  subjectId String [not null]
+  examDate DateTime
+  subjectClassStudent SubjectClassStudent [not null]
 }
 
 Table TrainingObjectType {
@@ -612,6 +629,7 @@ Table UserProfile {
   organizationCPVName String
   fixedClassStudent FixedClassStudent [not null]
   organizationUser OrganizationUser [not null]
+  subjectClassStudent SubjectClassStudent [not null]
 }
 
 Table FixedClassStudent {
@@ -626,6 +644,22 @@ Table FixedClassStudent {
   userProfile UserProfile [not null]
   userProfileId String [not null]
   status FixedClassStudentStatus [not null, default: 'ENROLLED']
+}
+
+Table SubjectClassStudent {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  subjectClass SubjectClass [not null]
+  subjectClassId String [not null]
+  userProfile UserProfile [not null]
+  userProfileId String [not null]
+  attendanceScore Float
+  midtermScore Float
+  finalScore Float
 }
 
 Table OrganizationUser {
@@ -1097,6 +1131,8 @@ Ref: CoRequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
 
 Ref: CoRequisiteSubject.subjectId > Subject.id
 
+Ref: SubjectClass.subjectId > Subject.id
+
 Ref: Commune.provinceId > Province.id
 
 Ref: Organization.typeId > OrganizationType.id
@@ -1120,6 +1156,10 @@ Ref: UserProfile.ethnicityId > Ethnicity.id
 Ref: FixedClassStudent.fixedClassId > FixedClass.id
 
 Ref: FixedClassStudent.userProfileId > UserProfile.id
+
+Ref: SubjectClassStudent.subjectClassId > SubjectClass.id
+
+Ref: SubjectClassStudent.userProfileId > UserProfile.id
 
 Ref: OrganizationUser.userProfileId > UserProfile.id
 
