@@ -36,6 +36,8 @@ export default {
   },
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "DANH_MUC_NGANH": "/danh-muc/danh-muc-nganh",
+    "DANH_MUC_CHUYEN_NGANH": "/danh-muc/danh-muc-chuyen-nganh",
     "HOME": "/home",
     "INDEX": "/",
     "KHOA_HUAN_LUYEN": "/khoa-huan-luyen",

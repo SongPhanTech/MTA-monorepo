@@ -545,6 +545,7 @@ model TrainingObjectType {
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
   trainingFields TrainingField[]
+  trainingMajors TrainingMajor[]
 
   @@schema("ql-danh-muc")
 }
@@ -602,33 +603,45 @@ model TrainingLocation {
 }
 
 model TrainingField {
-  id                  String               @id() @default(cuid())
-  code                String?
-  description         String?              @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt()
-  name                String
-  codeTrainingField   String               @unique()
-  englishName         String
-  status              TrainingFieldStatus  @default(ACTIVE)
-  publishDate         DateTime
-  organization        Organization         @relation(fields: [organizationId], references: [id])
-  organizationId      String
-  trainingObjectTypes TrainingObjectType[]
+  id                   String               @id() @default(cuid())
+  code                 String?
+  description          String?              @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt()
+  name                 String
+  codeTrainingField    String               @unique()
+  englishName          String
+  status               TrainingFieldStatus  @default(ACTIVE)
+  publishDate          DateTime
+  organization         Organization         @relation(fields: [organizationId], references: [id])
+  organizationId       String
+  trainingObjectTypes  TrainingObjectType[]
+  trainingObjectTypeId String
 
   @@schema("ql-danh-muc")
 }
 
 model TrainingMajor {
-  id          String       @id() @default(cuid())
-  code        String?
-  description String?      @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  name        String
-  curriculum  Curriculum[]
+  id                    String               @id() @default(cuid())
+  code                  String?
+  description           String?              @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt()
+  name                  String
+  codeTrainingMajor     String               @unique()
+  englishName           String
+  sumary                String
+  numberCreditsMajor    Int                  @default(0)
+  numberCreditsRequired Int                  @default(0)
+  numberCreditsElective Int                  @default(0)
+  status                TrainingFieldStatus  @default(ACTIVE)
+  organization          Organization         @relation(fields: [organizationId], references: [id])
+  organizationId        String
+  trainingObjectTypes   TrainingObjectType[]
+  trainingObjectTypeId  String
+  curriculum            Curriculum[]
 
   @@schema("ql-danh-muc")
 }
@@ -829,6 +842,7 @@ model Organization {
   subjectGroup     SubjectGroup[]
   organizationUser OrganizationUser[]
   trainingFields   TrainingField[]
+  trainingMajors   TrainingMajor[]
   organizationId   String?
 
   @@schema("ql-danh-muc")

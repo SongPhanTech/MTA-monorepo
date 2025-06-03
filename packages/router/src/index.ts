@@ -12,6 +12,7 @@ import {
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
+    ProductOutlined
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import ROUTER_PATH from '../generated/router'
@@ -321,6 +322,27 @@ const NAVIGATION: NavigationType = {
                 icon: ScheduleOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
                 description: 'Thông tin năm học, kỳ học',
+            },
+            {
+                id: 'category',
+                label: 'Danh mục',
+                icon: ProductOutlined,
+                children: [
+                    {
+                        id: 'danh-muc-nganh',
+                        label: 'Danh mục ngành',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NGANH,
+                        description: 'Danh mục ngành',
+                    },
+                     {
+                        id: 'danh-muc-chuyen-nganh',
+                        label: 'Danh mục chuyên ngành',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUYEN_NGANH,
+                        description: 'Danh mục chuyên ngành',
+                    }
+                ]
             },
             {
                 id: 'milestone',

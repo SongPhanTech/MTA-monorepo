@@ -8,6 +8,7 @@ model TrainingObjectType extends Base {
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
   trainingFields TrainingField[]
+  trainingMajors TrainingMajor[]
   @@schema("ql-danh-muc")
 }
 
@@ -59,6 +60,7 @@ model TrainingField extends Base {
 	organization Organization @relation(fields: [organizationId], references: [id])
 	organizationId String
   trainingObjectTypes TrainingObjectType[]
+  trainingObjectTypeId String
   @@schema("ql-danh-muc")
 
 }
@@ -66,7 +68,17 @@ model TrainingField extends Base {
 // chuyên ngành đào tạo
 model TrainingMajor extends Base {
   name       String
-
+  codeTrainingMajor String @unique
+  englishName String
+  sumary String
+  numberCreditsMajor Int @default(0) 
+  numberCreditsRequired Int @default(0) 
+  numberCreditsElective Int @default(0) 
+  status TrainingFieldStatus @default(ACTIVE) 
+  organization Organization @relation(fields: [organizationId], references: [id])
+	organizationId String
+  trainingObjectTypes TrainingObjectType[]
+  trainingObjectTypeId String
   curriculum Curriculum[]
   @@schema("ql-danh-muc")
 }

@@ -80,6 +80,8 @@ model Organization extends Base {
 
   organizationUser OrganizationUser[]
   trainingFields TrainingField[]
+  trainingMajors TrainingMajor[]
+  
   @@schema("ql-danh-muc")
 
 }
