@@ -20,14 +20,19 @@ import {
     useFindManyTrainingType,
     useFindManyTrainingObjectType,
     useFindManyTrainingLevel,
+    useFindManyOrganization
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, Switch } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
-export type PutTrainingField = TrainingField
+import TreeSelect from '@components/commons/tree-select/TreeSelect'
+import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
+export type PutTrainingField = TrainingField & {
+    trainingObjectTypeIds: string[]
+}
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingFieldModal = () => {
@@ -52,8 +57,10 @@ const PutTrainingFieldModal = () => {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-    const { data: organizations = [], refetch: refetchTrainingFields } =
-        useFindManyTrainingField()
+    const { data: organizations, refetch: refetchOrganizations } =
+        useFindManyOrganization()
+    // const { data: organizations = [], refetch: refetchTrainingFields } =
+    //     useFindManyTrainingField()
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
@@ -69,9 +76,18 @@ const PutTrainingFieldModal = () => {
                         description: output.description,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status,
+                        status: output.status ? 'ACTIVE' : 'IN_ACTIVE',
                         organizationId: output.organizationId,
-                        trainingObjectTypeId:output.trainingObjectTypeId
+                        trainingObjectTypes: {
+                            set:
+                                output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                                    trainingFieldId_trainingObjectTypeId: {
+                                        trainingFieldId: id,
+                                        trainingObjectTypeId: trainingObjectTypeId
+                                    }
+                                }))
+
+                        }
                     },
                     where: {
                         id,
@@ -86,9 +102,15 @@ const PutTrainingFieldModal = () => {
                         description: output.description,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status,
+                        status: output.status ? 'ACTIVE' : 'IN_ACTIVE',
                         organizationId: output.organizationId,
-                        trainingObjectTypeId:output.trainingObjectTypeId
+                        trainingObjectTypes: {
+                            createMany: {
+                                data: output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                                    trainingObjectTypeId
+                                }))
+                            }
+                        }
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -107,6 +129,7 @@ const PutTrainingFieldModal = () => {
     const { data: level } = useFindUniqueTrainingField({
         where: { id },
     })
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
@@ -125,10 +148,11 @@ const PutTrainingFieldModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa ngành' : 'Thêm mới ngành'}
-            className="w-[35vw]"
+            className="w-[45vw]"
+
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã ngành" required>
+                <FormItem form={form} name="codeTrainingField" label="Mã ngành" required>
                     <Input placeholder="Nhập mã ngành" />
                 </FormItem>
             </Col>
@@ -140,11 +164,22 @@ const PutTrainingFieldModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="trainingObjectTypeId"
+                    name="englishName"
+                    label="Tên tiếng anh"
+                    required
+                >
+                    <Input placeholder="Nhập tên tiếng anh" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeIds"
                     label="Đối tượng đào tạo"
                     required
                 >
                     <Select
+                        mode="multiple"
                         placeholder="Chọn đối tượng đào tạo"
                         options={trainingObjectTypeData.map(
                             (i: TrainingObjectType) => {
@@ -157,14 +192,20 @@ const PutTrainingFieldModal = () => {
                     />
                 </FormItem>
             </Col>
+
             <Col span={12}>
-           
-            </Col>
-            <Col span={12}>
-          
-            </Col>
-            <Col span={12}>
-            
+                <FormItem
+                    form={form}
+                    required
+                    name="organizationId"
+                    label="Chọn đơn vị"
+                    className="mb-2"
+                >
+                    <TreeSelect
+                        placeholder="Chọn đơn vị"
+                        treeData={convertToTreeSelect(organizations || [])}
+                    />
+                </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem
@@ -176,16 +217,21 @@ const PutTrainingFieldModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            {/* <Col span={12}>
-                <FormItem form={form} name="endDate" label="Ngày kết thúc">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
-                </FormItem>
-            </Col> */}
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
+            <Col span={24}>
+                <FormItem form={form} name="status" label="">
+                    <div className="flex items-center space-x-2">
+                        <span className="text-[#000000e0]">Đang đào tạo</span>
+                        <Switch />
+                    </div>
+                </FormItem>
+
+            </Col>
+
         </PutFormModal>
     )
 }

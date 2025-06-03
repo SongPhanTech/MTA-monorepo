@@ -333,8 +333,8 @@ Table TrainingObjectType {
   name String [not null]
   TrainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
-  trainingFields TrainingField [not null]
-  trainingMajors TrainingMajor [not null]
+  trainingMajors TrainingMajorOnTrainingObjectType [not null]
+  trainingFields TrainingFieldOnTrainingObjectType [not null]
 }
 
 Table TrainingType {
@@ -395,8 +395,24 @@ Table TrainingField {
   publishDate DateTime [not null]
   organization Organization [not null]
   organizationId String [not null]
-  trainingObjectTypes TrainingObjectType [not null]
+  trainingObjectTypes TrainingFieldOnTrainingObjectType [not null]
+}
+
+Table TrainingFieldOnTrainingObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingField TrainingField [not null]
+  trainingFieldId String [not null]
+  trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingFieldId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingMajor {
@@ -416,9 +432,25 @@ Table TrainingMajor {
   status TrainingFieldStatus [not null, default: 'ACTIVE']
   organization Organization [not null]
   organizationId String [not null]
-  trainingObjectTypes TrainingObjectType [not null]
-  trainingObjectTypeId String [not null]
+  trainingObjectTypes TrainingMajorOnTrainingObjectType [not null]
   curriculum Curriculum [not null]
+}
+
+Table TrainingMajorOnTrainingObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingMajor TrainingMajor [not null]
+  trainingMajorId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingMajorId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingBlock {
@@ -962,16 +994,6 @@ Table BlockedIp {
   expiresAt DateTime
 }
 
-Table TrainingFieldToTrainingObjectType {
-  trainingfieldsId String [ref: > TrainingField.id]
-  trainingobjecttypesId String [ref: > TrainingObjectType.id]
-}
-
-Table TrainingMajorToTrainingObjectType {
-  trainingmajorsId String [ref: > TrainingMajor.id]
-  trainingobjecttypesId String [ref: > TrainingObjectType.id]
-}
-
 Table GroupToUser {
   groupsId String [ref: > Group.id]
   usersId String [ref: > User.id]
@@ -1173,7 +1195,15 @@ Ref: SubjectClass.subjectId > Subject.id
 
 Ref: TrainingField.organizationId > Organization.id
 
+Ref: TrainingFieldOnTrainingObjectType.trainingFieldId > TrainingField.id
+
+Ref: TrainingFieldOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
+
 Ref: TrainingMajor.organizationId > Organization.id
+
+Ref: TrainingMajorOnTrainingObjectType.trainingMajorId > TrainingMajor.id
+
+Ref: TrainingMajorOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: Commune.provinceId > Province.id
 

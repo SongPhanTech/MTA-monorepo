@@ -7,8 +7,9 @@ model TrainingObjectType extends Base {
   name           String
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
-  trainingFields TrainingField[]
-  trainingMajors TrainingMajor[]
+  trainingMajors TrainingMajorOnTrainingObjectType[]
+	trainingFields TrainingFieldOnTrainingObjectType[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -17,6 +18,7 @@ model TrainingType extends Base {
   name           String
 
   trainingCourse TrainingCourse[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -26,6 +28,7 @@ model TrainingLevel extends Base {
 
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -33,6 +36,7 @@ model TrainingLevel extends Base {
 model TrainingForm extends Base {
   name           String
   trainingCourse TrainingCourse[]
+  
   @@schema("ql-danh-muc")
 }
 
@@ -59,10 +63,20 @@ model TrainingField extends Base {
   publishDate DateTime
 	organization Organization @relation(fields: [organizationId], references: [id])
 	organizationId String
-  trainingObjectTypes TrainingObjectType[]
-  trainingObjectTypeId String
-  @@schema("ql-danh-muc")
+	trainingObjectTypes TrainingFieldOnTrainingObjectType[]
 
+  @@schema("ql-danh-muc")
+}
+
+model TrainingFieldOnTrainingObjectType extends Base {
+  trainingField       TrainingField     @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId     String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingFieldId, trainingObjectTypeId])
+
+  @@schema("ql-danh-muc")
 }
 
 // chuyên ngành đào tạo
@@ -77,9 +91,20 @@ model TrainingMajor extends Base {
   status TrainingFieldStatus @default(ACTIVE) 
   organization Organization @relation(fields: [organizationId], references: [id])
 	organizationId String
-  trainingObjectTypes TrainingObjectType[]
-  trainingObjectTypeId String
+	trainingObjectTypes TrainingMajorOnTrainingObjectType[]
   curriculum Curriculum[]
+  @@schema("ql-danh-muc")
+
+}
+
+model TrainingMajorOnTrainingObjectType extends Base  {
+  trainingMajor       TrainingMajor     @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId     String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingMajorId, trainingObjectTypeId])
+
   @@schema("ql-danh-muc")
 }
 
