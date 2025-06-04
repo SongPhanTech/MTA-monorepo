@@ -1283,5 +1283,5 @@ model BlockedIp {
   reason      String?   @db.Text()
   expiresAt   DateTime?
 
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-nguoi-dung") 
 }

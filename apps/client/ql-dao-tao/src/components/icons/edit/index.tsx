@@ -1,14 +1,13 @@
 import { Tooltip } from 'antd'
-import { EditOutlined } from '@ant-design/icons'
-import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
-type EditIconProps = {} & Omit<AntdIconProps, 'ref'> &
-    React.RefAttributes<HTMLSpanElement>
+import type { LucideProps } from 'lucide-react'
+import { Pencil } from 'lucide-react'
+type EditIconProps = LucideProps
 
 const EditIcon = (props: EditIconProps) => {
     return (
         <Tooltip title="Chỉnh sửa" placement="leftTop">
-            <EditOutlined
-                className="text-sm text-orange-500 cursor-pointer"
+            <Pencil size={16} strokeWidth={1.5}
+                className="text-base text-orange-500 cursor-pointer"
                 {...props}
             />
         </Tooltip>

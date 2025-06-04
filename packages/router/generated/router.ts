@@ -35,9 +35,13 @@ export default {
     "INDEX": "/"
   },
   "QL_DAO_TAO": {
-    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "CHUONG_TRINH_DAO_TAO": "/quan-ly-chuong-trinh-dao-tao",
     "DANH_MUC_NGANH": "/danh-muc/danh-muc-nganh",
     "DANH_MUC_CHUYEN_NGANH": "/danh-muc/danh-muc-chuyen-nganh",
+    "DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
+    "KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
+    "MON_HOC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/mon-hoc-chuong-trinh-dao-tao",
+    "DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
     "HOME": "/home",
     "INDEX": "/",
     "KHOA_HUAN_LUYEN": "/khoa-huan-luyen",

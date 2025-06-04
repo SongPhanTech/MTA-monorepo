@@ -1,3 +1,4 @@
+import NAVIGATION from '@workspace/router'
 import ability from './ability'
 
 const useAbility = () => {
@@ -8,4 +9,27 @@ const useAbility = () => {
     }
 }
 
-export { useAbility }
+function getDynamicTitle(navKey: keyof typeof NAVIGATION, pathname: string): string {
+    const menus = NAVIGATION[navKey]?.menus || []
+
+    for (const menu of menus) {
+        // Không có children
+        if (!menu?.children && pathname === menu?.path) {
+            return menu?.label as string
+        }
+
+        // Có children
+        if (menu?.children) {
+            const child = menu?.children?.find(child => child?.path === pathname)
+            if (child) {
+                // return `${menu?.label} / ${child?.label}`
+                return `${child?.label}`
+            }
+        }
+    }
+
+    // Fallback
+    return NAVIGATION[navKey]?.label || 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO'
+}
+
+export { useAbility, getDynamicTitle }
