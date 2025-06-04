@@ -1,63 +1,46 @@
-import { EyeOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutTrainingCourseModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS, CTDT_STATUS } from '@constants/constants'
+import { PutKnowledgeBlock } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
     useUpdateTrainingCourse,
-    useFindManyTrainingObjectType
+    useFindManyTrainingObjectType,
+    useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
-    TrainingField,
-    TrainingFieldStatus
-} from '@workspace/db'
-import { X, Search } from 'lucide-react'
+import type { TrainingObjectType } from '@workspace/db'
+import { Search } from 'lucide-react'
 import {
     Button,
     Col,
-    Divider,
     Flex,
     Form,
     Input,
     Row,
-    Space,
-    Tag,
-    Tooltip,
     message,
 } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/lop-bien-che'
-import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null
-    trainingObjectTypeId: string | undefined
+    searchText: string | null,
+    trainingCourseId: string | null,
 }
 
-export default function TrainingCoursePage() {
+export default function KnowledgeBlock() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined
+        trainingCourseId: null,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -68,8 +51,8 @@ export default function TrainingCoursePage() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { codeTrainingField: { contains: filters.searchText } }
                 : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+            ...(filters.trainingCourseId
+                ? { trainingCourseId: filters.trainingCourseId }
                 : {}),
 
         },
@@ -90,10 +73,7 @@ export default function TrainingCoursePage() {
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? { codeTrainingField: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+                : {})
         },
     })
 
@@ -103,8 +83,8 @@ export default function TrainingCoursePage() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutTrainingCourseModal.name,
+    const { onOpen } = useDisclosure<string>({
+        tag: PutKnowledgeBlock.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -140,9 +120,58 @@ export default function TrainingCoursePage() {
         })
     }
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
+    const { data: trainingCourseData = [] } =
+        useFindManyTrainingCourse()
+
+    const dataFake = [
+    {
+        "id": 1,
+        "knowledgeBlockCode": "CHKKT",
+        "knowledgeBlockName": "Major Foundation",
+        "totalCredits": 15,
+        "totalRequiredCredits": 12,
+        "electiveCredits": 3,
+        "specializedCredits": 0,
+        "requiredSpecializedCredits": 12,
+        "order": 1
+    },
+    {
+        "id": 2,
+        "knowledgeBlockCode": "DATN",
+        "knowledgeBlockName": "Graduation Project and Internship",
+        "totalCredits": 10,
+        "totalRequiredCredits": 10,
+        "electiveCredits": 0,
+        "specializedCredits": 10,
+        "requiredSpecializedCredits": 10,
+        "order": 2
+    },
+    {
+        "id": 3,
+        "knowledgeBlockCode": "DATN",
+        "knowledgeBlockName": "Graduation Project and Internship",
+        "totalCredits": 10,
+        "totalRequiredCredits": 10,
+        "electiveCredits": 0,
+        "specializedCredits": 10,
+        "requiredSpecializedCredits": 10,
+        "order": 3
+    },
+    {
+        "id": 4,
+        "knowledgeBlockCode": "GDĐC",
+        "knowledgeBlockName": "General Education",
+        "totalCredits": 20,
+        "totalRequiredCredits": 15,
+        "electiveCredits": 5,
+        "specializedCredits": 0,
+        "requiredSpecializedCredits": 15,
+        "order": 4
+    }
+    ]
 
     return (
         <div>
@@ -159,7 +188,8 @@ export default function TrainingCoursePage() {
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
-                                            width: 300,
+                                            width: 280,
+                                            height: 40,
                                             marginRight: 8,
                                         }}
                                         prefix={
@@ -189,7 +219,66 @@ export default function TrainingCoursePage() {
                                             })
                                         )}
                                         style={{
+                                            width: 280,
+                                            height: 40,
+                                            marginRight: 8,
+                                        }}
+                                        // onChange={(val) =>
+                                        //     handleFilterChange(
+                                        //         'trainingObjectTypeId',
+                                        //         val
+                                        //     )
+                                        // }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="trainingCourseId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Khoá đào tạo"
+                                        options={trainingCourseData.map(
+                                            (i: TrainingObjectType) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            })
+                                        )}
+                                        style={{
                                             width: 300,
+                                            height: 40,
+                                            marginRight: 8,
+                                        }}
+                                        // onChange={(val) =>
+                                        //     handleFilterChange(
+                                        //         'trainingObjectTypeId',
+                                        //         val
+                                        //     )
+                                        // }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="trainingObjectId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Chương trình đào tạo"
+                                        options={trainingObjectTypeData.map(
+                                            (i: TrainingObjectType) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            })
+                                        )}
+                                        style={{
+                                            width: 280,
+                                            height: 40,
                                             marginRight: 8,
                                         }}
                                         // onChange={(val) =>
@@ -205,7 +294,7 @@ export default function TrainingCoursePage() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button onClick={handleModal} type="primary" className='h-[40px]'>
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
@@ -216,71 +305,46 @@ export default function TrainingCoursePage() {
 
                 <Col span={24}>
                     <Table
+                        scroll={{ x: 700 }}
                         rowKey="id"
                         id="training-category"
                         columns={[
                             {
-                                title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectType',
+                                title: 'Mã khối kiến thức',
+                                dataIndex: 'knowledgeBlockCode',
                                 align: 'center',
                                 width: 150,
-                                render: (value: TrainingObjectType) =>
-                                    value?.name ? value?.name : '',
                             },
                             {
-                                title: 'Khoa phụ trách',
-                                dataIndex: 'trainingObjectTypes',
-                                align: 'center',
-                                render: (value: TrainingType) =>
-                                    value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Mã ngành',
-                                dataIndex: 'codeTrainingField',
-                                align: 'left',
+                                title: 'Tên khối kiến thức',
+                                dataIndex: 'knowledgeBlockName',
                                 width: 150,
                             },
                             {
-                                title: 'Tên ngành',
-                                dataIndex: 'name',
-                                align: 'left',
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                align: 'left',
-                                dataIndex: 'englishName',
+                                title: 'Tổng tín chỉ',
+                                dataIndex: 'totalCredits',
                                 width: 150,
                             },
                             {
-                                title: 'Mô tả',
+                                title: 'Tổng tín chỉ bắt buộc',
+                                dataIndex: 'totalRequiredCredits',
                                 width: 150,
-                                align: 'center',
-                                dataIndex: 'description',
                             },
                             {
-                                title: 'Ngày ban hành',
-                                align: 'center',
+                                title: 'Số tín chỉ tự chọn',
+                                dataIndex: 'electiveCredits',
                                 width: 150,
-                                render: ({ englishName }) =>
-                                    englishName
-                                        ? dayjs(englishName).format('DD/MM/YYYY')
-                                        : '',
                             },
                             {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 130,
-                                render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
-                                    )
-                                },
+                                title: 'Số tín chỉ chuyên ngành',
+                                dataIndex: 'specializedCredits',
+                                width: 150,
                             },
-
+                            {
+                                title: 'Thứ tự',
+                                dataIndex: 'order',
+                                width: 100,
+                            },
                             {
                                 title: 'Thao tác',
                                 width: 100,
@@ -289,18 +353,6 @@ export default function TrainingCoursePage() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
                                                 <EditIcon
                                                     onClick={onOpen.bind(
                                                         null,
@@ -321,7 +373,7 @@ export default function TrainingCoursePage() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={dataFake}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
@@ -338,6 +390,6 @@ export default function TrainingCoursePage() {
     )
 }
 
-TrainingCoursePage.getLayout = function getLayout(page: React.ReactElement) {
+KnowledgeBlock.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
