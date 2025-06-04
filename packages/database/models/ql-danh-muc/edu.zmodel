@@ -1,11 +1,15 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
+import './common'
 
 // đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
   name           String
   TrainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+  trainingMajors TrainingMajorOnTrainingObjectType[]
+	trainingFields TrainingFieldOnTrainingObjectType[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -14,6 +18,7 @@ model TrainingType extends Base {
   name           String
 
   trainingCourse TrainingCourse[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -23,6 +28,7 @@ model TrainingLevel extends Base {
 
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+
   @@schema("ql-danh-muc")
 }
 
@@ -30,6 +36,7 @@ model TrainingLevel extends Base {
 model TrainingForm extends Base {
   name           String
   trainingCourse TrainingCourse[]
+  
   @@schema("ql-danh-muc")
 }
 
@@ -39,17 +46,65 @@ model TrainingLocation extends Base {
   @@schema("ql-danh-muc")
 }
 
+//enum status ngành đào tạo
+enum TrainingFieldStatus {
+  ACTIVE 
+  IN_ACTIVE
+
+  @@schema("ql-danh-muc")
+}
+
 // ngành đào tạo
 model TrainingField extends Base {
   name String
+  codeTrainingField String @unique
+  englishName String
+  status TrainingFieldStatus @default(ACTIVE) 
+  publishDate DateTime
+	organization Organization @relation(fields: [organizationId], references: [id])
+	organizationId String
+	trainingObjectTypes TrainingFieldOnTrainingObjectType[]
+
+  @@schema("ql-danh-muc")
+}
+
+model TrainingFieldOnTrainingObjectType extends Base {
+  trainingField       TrainingField     @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId     String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingFieldId, trainingObjectTypeId])
+
   @@schema("ql-danh-muc")
 }
 
 // chuyên ngành đào tạo
 model TrainingMajor extends Base {
   name       String
-
+  codeTrainingMajor String @unique
+  englishName String
+  sumary String
+  numberCreditsMajor Int @default(0) 
+  numberCreditsRequired Int @default(0) 
+  numberCreditsElective Int @default(0) 
+  status TrainingFieldStatus @default(ACTIVE) 
+  organization Organization @relation(fields: [organizationId], references: [id])
+	organizationId String
+	trainingObjectTypes TrainingMajorOnTrainingObjectType[]
   curriculum Curriculum[]
+  @@schema("ql-danh-muc")
+
+}
+
+model TrainingMajorOnTrainingObjectType extends Base  {
+  trainingMajor       TrainingMajor     @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId     String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingMajorId, trainingObjectTypeId])
+
   @@schema("ql-danh-muc")
 }
 

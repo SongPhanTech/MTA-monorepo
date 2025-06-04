@@ -333,6 +333,8 @@ Table TrainingObjectType {
   name String [not null]
   TrainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
+  trainingMajors TrainingMajorOnTrainingObjectType [not null]
+  trainingFields TrainingFieldOnTrainingObjectType [not null]
 }
 
 Table TrainingType {
@@ -387,6 +389,30 @@ Table TrainingField {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  codeTrainingField String [unique, not null]
+  englishName String [not null]
+  status TrainingFieldStatus [not null, default: 'ACTIVE']
+  publishDate DateTime [not null]
+  organization Organization [not null]
+  organizationId String [not null]
+  trainingObjectTypes TrainingFieldOnTrainingObjectType [not null]
+}
+
+Table TrainingFieldOnTrainingObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingField TrainingField [not null]
+  trainingFieldId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingFieldId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingMajor {
@@ -397,7 +423,34 @@ Table TrainingMajor {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  codeTrainingMajor String [unique, not null]
+  englishName String [not null]
+  sumary String [not null]
+  numberCreditsMajor Int [not null, default: 0]
+  numberCreditsRequired Int [not null, default: 0]
+  numberCreditsElective Int [not null, default: 0]
+  status TrainingFieldStatus [not null, default: 'ACTIVE']
+  organization Organization [not null]
+  organizationId String [not null]
+  trainingObjectTypes TrainingMajorOnTrainingObjectType [not null]
   curriculum Curriculum [not null]
+}
+
+Table TrainingMajorOnTrainingObjectType {
+  id String [pk]
+  code String
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingMajor TrainingMajor [not null]
+  trainingMajorId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingMajorId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingBlock {
@@ -570,6 +623,8 @@ Table Organization {
   subject Subject [not null]
   subjectGroup SubjectGroup [not null]
   organizationUser OrganizationUser [not null]
+  trainingFields TrainingField [not null]
+  trainingMajors TrainingMajor [not null]
   organizationId String
 }
 
@@ -983,6 +1038,11 @@ Enum CurriculumVersionSubjectType {
   Elective
 }
 
+Enum TrainingFieldStatus {
+  ACTIVE
+  IN_ACTIVE
+}
+
 Enum FixedClassStudentStatus {
   ENROLLED
   GRADUATED
@@ -1132,6 +1192,18 @@ Ref: CoRequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
 Ref: CoRequisiteSubject.subjectId > Subject.id
 
 Ref: SubjectClass.subjectId > Subject.id
+
+Ref: TrainingField.organizationId > Organization.id
+
+Ref: TrainingFieldOnTrainingObjectType.trainingFieldId > TrainingField.id
+
+Ref: TrainingFieldOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: TrainingMajor.organizationId > Organization.id
+
+Ref: TrainingMajorOnTrainingObjectType.trainingMajorId > TrainingMajor.id
+
+Ref: TrainingMajorOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: Commune.provinceId > Province.id
 
