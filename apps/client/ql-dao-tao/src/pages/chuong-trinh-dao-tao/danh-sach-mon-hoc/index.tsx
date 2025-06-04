@@ -1,50 +1,38 @@
-import { EyeOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutTrainingCourseModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS, CTDT_STATUS } from '@constants/constants'
+import { PutSubjectListModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
     useUpdateTrainingCourse,
-    useFindManyTrainingObjectType
+    useFindManyTrainingObjectType,
+    useFindManySubject
 } from '@workspace/db/hooks'
 import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
     TrainingObjectType,
-    TrainingField,
-    TrainingFieldStatus
 } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
     Button,
+    Checkbox,
     Col,
-    Divider,
     Flex,
     Form,
     Input,
     Row,
-    Space,
     Tag,
-    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/lop-bien-che'
-import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
@@ -52,7 +40,76 @@ interface FilterProps {
     trainingObjectTypeId: string | undefined
 }
 
-export default function TrainingCoursePage() {
+const fakeData = [
+    {
+        id: 1,
+        maMon: 'MH001',
+        maTKB: 'TKB001',
+        tenMonHoc: 'Toán cao cấp A1',
+        trainingObjectTypeId: 'Đại trà',
+        dvql: 'Khoa Toán',
+        stc: 3,
+        sttkb: 45,
+        stlt: 30,
+        '5': 0, // Không rõ nghĩa, nên giả định là 0
+        stth: 15,
+        dq: 1,
+        khongTD: 0,
+        svMax: 60,
+        hshp: 1.2,
+        hshp2: 1.0,
+        thi: 'Tự luận',
+        dbn: 0,
+        sdd: 3,
+        status: 'ACTIVE', // hoặc 'IN_ACTIVE'
+    },
+    {
+        id: 2,
+        maMon: 'MH002',
+        maTKB: 'TKB002',
+        tenMonHoc: 'Vật lý đại cương',
+        trainingObjectTypeId: 'CLC',
+        dvql: 'Khoa Vật Lý',
+        stc: 4,
+        sttkb: 60,
+        stlt: 40,
+        '5': 1,
+        stth: 20,
+        dq: 1,
+        khongTD: 1,
+        svMax: 50,
+        hshp: 1.5,
+        hshp2: 1.3,
+        thi: 'Trắc nghiệm',
+        dbn: 1,
+        sdd: 3,
+        status: 'IN_ACTIVE',
+    },
+    {
+        id: 3,
+        maMon: 'MH003',
+        maTKB: 'TKB003',
+        tenMonHoc: 'Lập trình cơ bản',
+        trainingObjectTypeId: 'Đại trà',
+        dvql: 'Khoa CNTT',
+        stc: 3,
+        sttkb: 45,
+        stlt: 25,
+        '5': 0,
+        stth: 20,
+        dq: 1,
+        khongTD: 0,
+        svMax: 70,
+        hshp: 1.1,
+        hshp2: 1.0,
+        thi: 'Tự luận',
+        dbn: 1,
+        sdd: 3,
+        status: 'ACTIVE',
+    },
+]
+
+export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -104,7 +161,7 @@ export default function TrainingCoursePage() {
         []
     )
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutTrainingCourseModal.name,
+        tag: PutSubjectListModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -220,56 +277,151 @@ export default function TrainingCoursePage() {
                         id="training-category"
                         columns={[
                             {
-                                title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectType',
+                                title: 'Mã',
+                                dataIndex: 'maMon',
+                                width: 130,
                                 align: 'center',
-                                width: 150,
-                                render: (value: TrainingObjectType) =>
-                                    value?.name ? value?.name : '',
+                                render: (value: any) =>
+                                    value ? value : '',
                             },
                             {
-                                title: 'Khoa phụ trách',
-                                dataIndex: 'trainingObjectTypes',
+                                title: 'Mã TKB',
+                                dataIndex: 'maTKB',
+                                width: 200,
                                 align: 'center',
-                                render: (value: TrainingType) =>
-                                    value?.name ? value?.name : '',
+                                render: (value: any) =>
+                                    value ? value : '',
                             },
                             {
-                                title: 'Mã ngành',
-                                dataIndex: 'codeTrainingField',
-                                align: 'left',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tên ngành',
-                                dataIndex: 'name',
-                                align: 'left',
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                align: 'left',
-                                dataIndex: 'englishName',
-                                width: 150,
-                            },
-                            {
-                                title: 'Mô tả',
-                                width: 150,
+                                title: 'Tên môn học',
+                                dataIndex: 'tenMonHoc',
+                                width: 200,
                                 align: 'center',
-                                dataIndex: 'description',
+                                render: (value: any) =>
+                                    value ? value : '',
                             },
                             {
-                                title: 'Ngày ban hành',
+                                title: 'ĐTĐT',
+                                dataIndex: 'trainingObjectTypeId',
+                                width: 200,
                                 align: 'center',
-                                width: 150,
-                                render: ({ englishName }) =>
-                                    englishName
-                                        ? dayjs(englishName).format('DD/MM/YYYY')
-                                        : '',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'ĐV QL',
+                                dataIndex: 'dvql',
+                                width: 140,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'STC',
+                                dataIndex: 'stc',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'STTKB',
+                                dataIndex: 'sttkb',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'STLT',
+                                dataIndex: 'stlt',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: '5',
+                                dataIndex: '5',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'STTH',
+                                dataIndex: 'stth',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'ĐQ',
+                                dataIndex: 'dq',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'Không TĐ',
+                                dataIndex: 'khongTD',
+                                width: 80,
+                                align: 'center',
+                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
+                            },
+                            {
+                                title: 'SV Max',
+                                dataIndex: 'svMax',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'HSHP',
+                                dataIndex: 'hshp',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'HSHP2',
+                                dataIndex: 'hshp2',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'Thi',
+                                dataIndex: 'thi',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
+                            },
+                            {
+                                title: 'ĐBN',
+                                dataIndex: 'dbn',
+                                width: 80,
+                                align: 'center',
+                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
+                            },
+                            {
+                                title: 'SĐĐ',
+                                dataIndex: 'sdd',
+                                width: 80,
+                                align: 'center',
+                                render: (value: any) =>
+                                    value ? value : '',
                             },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 130,
+                                width: 140,
                                 render: (value, record) => {
                                     return record?.status == 'IN_ACTIVE' ? (
                                         <Tag color="error">Không hoạt động</Tag>
@@ -280,15 +432,14 @@ export default function TrainingCoursePage() {
                                     )
                                 },
                             },
-
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 110,
                                 align: 'center',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
-                                            <Row className="justify-center gap-2">
+                                            <Row className="items-center justify-center gap-2">
                                                 {/* <Tooltip
                                                     title="Xem chi tiết"
                                                     placement="leftTop"
@@ -306,7 +457,7 @@ export default function TrainingCoursePage() {
                                                         null,
                                                         id
                                                     )}
-                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                    className="text-base text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
@@ -321,7 +472,7 @@ export default function TrainingCoursePage() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={fakeData}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
@@ -338,6 +489,6 @@ export default function TrainingCoursePage() {
     )
 }
 
-TrainingCoursePage.getLayout = function getLayout(page: React.ReactElement) {
+SubjectList.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
