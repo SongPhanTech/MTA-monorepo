@@ -66,7 +66,7 @@ model Organization extends Base {
   name             String             @unique
   type             OrganizationType   @relation(fields: [typeId], references: [id])
   typeId           String
-  parent           Organization?      @relation("ParentChild")
+  parent           Organization?      @relation("ParentChild", fields: [parentId], references: [id])
   parentId         String?
   children         Organization[]     @relation("ParentChild")
   address          String?
@@ -79,9 +79,8 @@ model Organization extends Base {
   subjectGroup     SubjectGroup[]
 
   organizationUser OrganizationUser[]
-  trainingFields TrainingField[]
-  trainingMajors TrainingMajor[]
-  
-  @@schema("ql-danh-muc")
+  trainingFields   TrainingField[]
+  trainingMajors   TrainingMajor[]
 
+  @@schema("ql-danh-muc")
 }
