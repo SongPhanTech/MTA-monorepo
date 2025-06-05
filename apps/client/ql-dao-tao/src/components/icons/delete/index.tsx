@@ -14,7 +14,9 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <Trash2 size={16} strokeWidth={1.5}
+                <Trash2
+                    size={16}
+                    strokeWidth={1.5}
                     className="text-base text-red-600 cursor-pointer"
                     {...props}
                 />

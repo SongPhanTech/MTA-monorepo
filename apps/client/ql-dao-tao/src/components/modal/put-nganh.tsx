@@ -12,7 +12,8 @@ import {
     useFindUniqueTrainingField,
     useUpdateTrainingField,
     useFindManyTrainingObjectType,
-    useFindManyOrganization
+    useFindManyTrainingLevel,
+    useFindManyOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Switch, Radio, Flex } from 'antd'
 import { useEffect } from 'react'
@@ -62,15 +63,16 @@ const PutTrainingFieldModal = () => {
                         status: output.status,
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
-                            set:
-                                output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                            set: output.trainingObjectTypeIds.map(
+                                (trainingObjectTypeId) => ({
                                     trainingFieldId_trainingObjectTypeId: {
                                         trainingFieldId: id,
-                                        trainingObjectTypeId: trainingObjectTypeId
-                                    }
-                                }))
-
-                        }
+                                        trainingObjectTypeId:
+                                            trainingObjectTypeId,
+                                    },
+                                })
+                            ),
+                        },
                     },
                     where: {
                         id,
@@ -89,11 +91,13 @@ const PutTrainingFieldModal = () => {
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
-                                    trainingObjectTypeId
-                                }))
-                            }
-                        }
+                                data: output.trainingObjectTypeIds.map(
+                                    (trainingObjectTypeId) => ({
+                                        trainingObjectTypeId,
+                                    })
+                                ),
+                            },
+                        },
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -139,10 +143,14 @@ const PutTrainingFieldModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa ngành' : 'Thêm mới ngành'}
             className="w-[45vw]"
-
         >
             <Col span={12}>
-                <FormItem form={form} name="codeTrainingField" label="Mã ngành" required>
+                <FormItem
+                    form={form}
+                    name="codeTrainingField"
+                    label="Mã ngành"
+                    required
+                >
                     <Input placeholder="Nhập mã ngành" />
                 </FormItem>
             </Col>
@@ -233,7 +241,6 @@ const PutTrainingFieldModal = () => {
                     </Radio.Group>
                 </FormItem>
             </Col>
-
         </PutFormModal>
     )
 }

@@ -3,14 +3,18 @@ import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingCourseModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS, CTDT_STATUS } from '@constants/constants'
+import {
+    DEFAULT_PAGINATE_SIZE,
+    KHOA_HL_STATUS,
+    CTDT_STATUS,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
     useUpdateTrainingCourse,
-    useFindManyTrainingObjectType
+    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import type {
     TrainingCourse,
@@ -20,7 +24,7 @@ import type {
     TrainingType,
     TrainingObjectType,
     TrainingField,
-    TrainingFieldStatus
+    TrainingFieldStatus,
 } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
@@ -57,7 +61,7 @@ export default function TrainingCoursePage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined
+        trainingObjectTypeId: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -71,10 +75,9 @@ export default function TrainingCoursePage() {
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
-
         },
         include: {
-            organization: true
+            organization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -119,7 +122,6 @@ export default function TrainingCoursePage() {
             await updateTrainingCourse({
                 where: {
                     id,
-
                 },
                 data: {
                     deletedAt: new Date(),
@@ -130,7 +132,6 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -143,7 +144,6 @@ export default function TrainingCoursePage() {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -155,7 +155,10 @@ export default function TrainingCoursePage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
+                                            handleFilterChange(
+                                                'searchText',
+                                                e.target.value
+                                            )
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -263,7 +266,9 @@ export default function TrainingCoursePage() {
                                 width: 150,
                                 render: ({ englishName }) =>
                                     englishName
-                                        ? dayjs(englishName).format('DD/MM/YYYY')
+                                        ? dayjs(englishName).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                             },
                             {
