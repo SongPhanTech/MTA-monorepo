@@ -288,9 +288,9 @@ const PutUserProfileUpdateModal = () => {
                       : 'Thêm mới học viên'
             }
             className="w-[80vw]"
-            layout="horizontal"
-            labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            wrapperCol={{ span: 16 }} // input chiếm 18 cột
+            layout="vertical"
+            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
