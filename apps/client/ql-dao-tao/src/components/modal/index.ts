@@ -22,6 +22,7 @@ import PutMonHocTienQuyetModal from './put-mon-hoc-tien-quyet'
 import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutTrainingFieldModal from './put-nganh'
+import PutTrainingMajorModal from './put-chuyen-nganh'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -46,5 +47,6 @@ export {
     PutMonHocTienQuyetModal,
     PutMonHocSongHanhModal,
     ThongTinBaoCaoModal,
-    PutTrainingFieldModal
+    PutTrainingFieldModal,
+    PutTrainingMajorModal,
 }

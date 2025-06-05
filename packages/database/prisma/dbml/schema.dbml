@@ -396,6 +396,7 @@ Table TrainingField {
   organization Organization [not null]
   organizationId String [not null]
   trainingObjectTypes TrainingFieldOnTrainingObjectType [not null]
+  trainingMajor TrainingMajor [not null]
 }
 
 Table TrainingFieldOnTrainingObjectType {
@@ -434,6 +435,8 @@ Table TrainingMajor {
   organizationId String [not null]
   trainingObjectTypes TrainingMajorOnTrainingObjectType [not null]
   curriculum Curriculum [not null]
+  trainingField TrainingField [not null]
+  trainingFieldId String [not null]
 }
 
 Table TrainingMajorOnTrainingObjectType {
@@ -1200,6 +1203,8 @@ Ref: TrainingFieldOnTrainingObjectType.trainingFieldId > TrainingField.id
 Ref: TrainingFieldOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: TrainingMajor.organizationId > Organization.id
+
+Ref: TrainingMajor.trainingFieldId > TrainingField.id
 
 Ref: TrainingMajorOnTrainingObjectType.trainingMajorId > TrainingMajor.id
 

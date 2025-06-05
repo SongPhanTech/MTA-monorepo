@@ -1,5 +1,3 @@
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingFieldModal } from '@components/modal'
@@ -9,18 +7,12 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
-    useUpdateTrainingCourse,
+    useUpdateTrainingMajor,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
     TrainingType,
     TrainingObjectType,
-    TrainingField,
-    TrainingFieldStatus
 } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
@@ -31,9 +23,7 @@ import {
     Form,
     Input,
     Row,
-    Space,
     Tag,
-    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -41,39 +31,36 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/lop-bien-che'
-import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null
+    searchText: string | undefined
     trainingObjectTypeId: string | undefined
 }
 
-export default function TrainingCoursePage() {
+export default function TrainingMajorPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId:undefined
+        trainingObjectTypeId: undefined
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+            OR:[
+                { name: { contains: filters.searchText }},
+                { codeTrainingField: { contains: filters.searchText } },
+            ],
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId: filters.trainingObjectTypeId
+                },
+            }
         },
         include: {
-         organization:true,
+         organization:true
         },
         orderBy: {
             createdAt: 'desc',
@@ -84,15 +71,15 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingField({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+             OR:[
+                { name: { contains: filters.searchText }},
+                { codeTrainingField: { contains: filters.searchText } },
+            ],
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId: filters.trainingObjectTypeId
+                },
+            }
         },
     })
 
@@ -111,11 +98,11 @@ export default function TrainingCoursePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateTrainingMajor({
                 where: {
                     id,
 
@@ -144,7 +131,7 @@ export default function TrainingCoursePage() {
     // ) {
     //     try {
     //         showSpinner()
-    //         await updateTrainingCourse({
+    //         await updateTrainingMajor({
     //             where: {
     //                 id,
     //             },
@@ -280,9 +267,9 @@ export default function TrainingCoursePage() {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
-                                render: ({ englishName }) =>
-                                    englishName
-                                        ? dayjs(englishName).format('DD/MM/YYYY')
+                                render: ({ publishDate }) =>
+                                    publishDate
+                                        ? dayjs(publishDate).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -357,6 +344,6 @@ export default function TrainingCoursePage() {
     )
 }
 
-TrainingCoursePage.getLayout = function getLayout(page: React.ReactElement) {
+TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
