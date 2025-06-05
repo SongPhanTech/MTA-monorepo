@@ -6,14 +6,9 @@ import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingCourse,
     useFindUniqueTrainingCourse,
-    useFindManyTrainingCourse,
     useUpdateTrainingCourse,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -21,6 +16,26 @@ import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
+
+const treeData = [
+  {
+    title: 'Nhóm Cơ sở',
+    value: 'nhom-co-so',
+    children: [
+      { title: 'Toán cao cấp', value: 'toan-cao-cap' },
+      { title: 'Vật lý đại cương', value: 'vat-ly-dai-cuong' },
+    ],
+  },
+  {
+    title: 'Nhóm Chuyên ngành',
+    value: 'nhom-chuyen-nganh',
+    children: [
+      { title: 'Lập trình Web', value: 'lap-trinh-web' },
+      { title: 'Cơ sở dữ liệu', value: 'csdl' },
+    ],
+  },
+];
+
 const PutVersionSubjectModal = () => {
     const [form] = Form.useForm<PutTrainingCourse>()
     const {
@@ -180,6 +195,34 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
             )}
+            <Col span={12}>
+                <Form.Item
+                name="prerequisiteSubjects"
+                label="Môn học tiên quyết"
+                >
+                    <TreeSelect
+                        treeData={treeData}
+                        treeCheckable={true}
+                        placeholder="Chọn môn học tiên quyết"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={12}>
+                <Form.Item
+                name="name"
+                label="Môn học song hành"
+                >
+                    <TreeSelect
+                        treeData={treeData}
+                        treeCheckable={true}
+                        placeholder="Chọn môn học song hành"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
