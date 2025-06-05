@@ -14,15 +14,7 @@ import {
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -31,8 +23,8 @@ import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null,
-    trainingCourseId: string | null,
+    searchText: string | null
+    trainingCourseId: string | null
 }
 
 export default function KnowledgeBlock() {
@@ -54,10 +46,9 @@ export default function KnowledgeBlock() {
             ...(filters.trainingCourseId
                 ? { trainingCourseId: filters.trainingCourseId }
                 : {}),
-
         },
         include: {
-            organization: true
+            organization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -73,7 +64,7 @@ export default function KnowledgeBlock() {
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? { codeTrainingField: { contains: filters.searchText } }
-                : {})
+                : {}),
         },
     })
 
@@ -99,7 +90,6 @@ export default function KnowledgeBlock() {
             await updateTrainingCourse({
                 where: {
                     id,
-
                 },
                 data: {
                     deletedAt: new Date(),
@@ -110,7 +100,6 @@ export default function KnowledgeBlock() {
         }
         hideSpinner()
     }
-
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -123,54 +112,56 @@ export default function KnowledgeBlock() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } =
-        useFindManyTrainingCourse()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
     const dataFake = [
-    {
-        "id": 1,
-        "knowledgeBlockCode": "CHKKT",
-        "knowledgeBlockName": "Major Foundation",
-        "totalCredits": 15,
-        "totalRequiredCredits": 12,
-        "electiveCredits": 3,
-        "specializedCredits": 0,
-        "requiredSpecializedCredits": 12,
-        "order": 1
-    },
-    {
-        "id": 2,
-        "knowledgeBlockCode": "DATN",
-        "knowledgeBlockName": "Graduation Project and Internship",
-        "totalCredits": 10,
-        "totalRequiredCredits": 10,
-        "electiveCredits": 0,
-        "specializedCredits": 10,
-        "requiredSpecializedCredits": 10,
-        "order": 2
-    },
-    {
-        "id": 3,
-        "knowledgeBlockCode": "DATN",
-        "knowledgeBlockName": "Graduation Project and Internship",
-        "totalCredits": 10,
-        "totalRequiredCredits": 10,
-        "electiveCredits": 0,
-        "specializedCredits": 10,
-        "requiredSpecializedCredits": 10,
-        "order": 3
-    },
-    {
-        "id": 4,
-        "knowledgeBlockCode": "GDĐC",
-        "knowledgeBlockName": "General Education",
-        "totalCredits": 20,
-        "totalRequiredCredits": 15,
-        "electiveCredits": 5,
-        "specializedCredits": 0,
-        "requiredSpecializedCredits": 15,
-        "order": 4
-    }
+        {
+            id: 1,
+            knowledgeBlockCode: 'CHKKT',
+            knowledgeBlockName: 'Major Foundation',
+            totalCredits: 15,
+            totalRequiredCredits: 12,
+            electiveCredits: 3,
+            specializedCredits: 0,
+            requiredSpecializedCredits: 12,
+            order: 1,
+            status: 'ACTIVE',
+        },
+        {
+            id: 2,
+            knowledgeBlockCode: 'DATN',
+            knowledgeBlockName: 'Graduation Project and Internship',
+            totalCredits: 10,
+            totalRequiredCredits: 10,
+            electiveCredits: 0,
+            specializedCredits: 10,
+            requiredSpecializedCredits: 10,
+            order: 2,
+            status: 'IN_ACTIVE',
+        },
+        {
+            id: 3,
+            knowledgeBlockCode: 'DATN',
+            knowledgeBlockName: 'Graduation Project and Internship',
+            totalCredits: 10,
+            totalRequiredCredits: 10,
+            electiveCredits: 0,
+            specializedCredits: 10,
+            requiredSpecializedCredits: 10,
+            order: 3,
+            status: 'IN_ACTIVE',
+        },
+        {
+            id: 4,
+            knowledgeBlockCode: 'GDĐC',
+            knowledgeBlockName: 'General Education',
+            totalCredits: 20,
+            totalRequiredCredits: 15,
+            electiveCredits: 5,
+            specializedCredits: 0,
+            requiredSpecializedCredits: 15,
+            order: 4,
+        },
     ]
 
     return (
@@ -180,121 +171,128 @@ export default function KnowledgeBlock() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        style={{
-                                            width: 280,
-                                            height: 40,
-                                            marginRight: 8,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingObjectId"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        style={{
-                                            width: 280,
-                                            height: 40,
-                                            marginRight: 8,
-                                        }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingCourseId"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Khoá đào tạo"
-                                        options={trainingCourseData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        style={{
-                                            width: 300,
-                                            height: 40,
-                                            marginRight: 8,
-                                        }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingObjectId"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chương trình đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        style={{
-                                            width: 280,
-                                            height: 40,
-                                            marginRight: 8,
-                                        }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
-                                        allowClear
-                                    />
-                                </Form.Item>
+                                <Col span={12}>
+                                    <Form.Item name="searchText">
+                                        <Input
+                                            id="search"
+                                            onChange={(e) =>
+                                                handleFilterChange(
+                                                    'searchText',
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Tìm kiếm"
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            prefix={
+                                                <Search
+                                                    size={15}
+                                                    style={{
+                                                        color: 'rgba(0, 0, 0, 0.25)',
+                                                    }}
+                                                />
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingObjectId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Chọn đối tượng đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            // onChange={(val) =>
+                                            //     handleFilterChange(
+                                            //         'trainingObjectTypeId',
+                                            //         val
+                                            //     )
+                                            // }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingCourseId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Khoá đào tạo"
+                                            options={trainingCourseData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            // onChange={(val) =>
+                                            //     handleFilterChange(
+                                            //         'trainingObjectTypeId',
+                                            //         val
+                                            //     )
+                                            // }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingObjectId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Chương trình đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            // onChange={(val) =>
+                                            //     handleFilterChange(
+                                            //         'trainingObjectTypeId',
+                                            //         val
+                                            //     )
+                                            // }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
                             </Flex>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary" className='h-[40px]'>
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
@@ -305,10 +303,19 @@ export default function KnowledgeBlock() {
 
                 <Col span={24}>
                     <Table
-                        scroll={{ x: 700 }}
                         rowKey="id"
                         id="training-category"
                         columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index +
+                                    1 +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
                             {
                                 title: 'Mã khối kiến thức',
                                 dataIndex: 'knowledgeBlockCode',
@@ -331,11 +338,6 @@ export default function KnowledgeBlock() {
                                 width: 150,
                             },
                             {
-                                title: 'Số tín chỉ tự chọn',
-                                dataIndex: 'electiveCredits',
-                                width: 150,
-                            },
-                            {
                                 title: 'Số tín chỉ chuyên ngành',
                                 dataIndex: 'specializedCredits',
                                 width: 150,
@@ -346,9 +348,25 @@ export default function KnowledgeBlock() {
                                 width: 100,
                             },
                             {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 140,
+                                fixed: 'right',
+                                render: (value, record) => {
+                                    return record?.status == 'IN_ACTIVE' ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (

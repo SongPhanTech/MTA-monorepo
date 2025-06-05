@@ -10,6 +10,7 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
+    useFindManySubject,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'

@@ -6,7 +6,9 @@ type EditIconProps = LucideProps
 const EditIcon = (props: EditIconProps) => {
     return (
         <Tooltip title="Chỉnh sửa" placement="leftTop">
-            <Pencil size={16} strokeWidth={1.5}
+            <Pencil
+                size={16}
+                strokeWidth={1.5}
                 className="text-base text-orange-500 cursor-pointer"
                 {...props}
             />

@@ -2,22 +2,19 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    useCreateFixedClass,
-    useUpdateFixedClass,
-} from '@workspace/db/hooks'
+import { useCreateFixedClass, useUpdateFixedClass } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
 export type PutFixedClass = {
-    name: string,
-    code: string,
-    knowledgeBlockName?: string,
-    totalCredits: string,
-    totalRequiredCredits: string,
-    electiveCredits: string,
-    specializedCredits: string,
-    requiredSpecializedCredits: string,
+    name: string
+    code: string
+    knowledgeBlockName?: string
+    totalCredits: string
+    totalRequiredCredits: string
+    electiveCredits: string
+    specializedCredits: string
+    requiredSpecializedCredits: string
     order: string
 }
 import 'dayjs/locale/vi'
@@ -61,7 +58,7 @@ const PutKnowledgeBlock = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách 
+            // refetch() lại danh sách
             queryClient.invalidateQueries({
                 queryKey: ['FixedClass'],
             })
@@ -79,7 +76,11 @@ const PutKnowledgeBlock = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khối kiến thức CTDT' : 'Thêm mới khối kiến thức CTDT'}
+            title={
+                id
+                    ? 'Chỉnh sửa khối kiến thức CTDT'
+                    : 'Thêm mới khối kiến thức CTDT'
+            }
             className="min-w-[400px] w-[500px]"
         >
             {/* <Col span={24}>
@@ -143,12 +144,7 @@ const PutKnowledgeBlock = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="order"
-                    label="Thứ tự"
-                    required
-                >
+                <FormItem form={form} name="order" label="Thứ tự" required>
                     <Input placeholder="Thứ tự" />
                 </FormItem>
             </Col>

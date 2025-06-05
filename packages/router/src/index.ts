@@ -12,7 +12,7 @@ import {
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
-    ProductOutlined
+    ProductOutlined,
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import ROUTER_PATH from '../generated/router'
@@ -335,14 +335,14 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NGANH,
                         description: 'Danh mục ngành',
                     },
-                     {
+                    {
                         id: 'danh-muc-chuyen-nganh',
                         label: 'Danh mục chuyên ngành',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUYEN_NGANH,
                         description: 'Danh mục chuyên ngành',
-                    }
-                ]
+                    },
+                ],
             },
             {
                 id: 'chuong-trinh-dao-tao-123',
@@ -352,26 +352,30 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'danh-muc-chuong-trinh-dao-tao',
                         label: 'Danh mục chương trình đào tạo',
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .DANH_MUC_CHUONG_TRINH_DAO_TAO,
                         description: 'Danh mục chương trình đào tạo',
                     },
-                     {
+                    {
                         id: 'khoi-kien-thuc-ctdt',
                         label: 'Khối kiến thức CTDT',
                         path: ROUTER_PATH.QL_DAO_TAO.KHOI_KIEN_THUC_CTDT,
                         description: 'Khối kiến thức CTDT',
-                    },{
+                    },
+                    {
                         id: 'mon-hoc-chuong-trinh-dao-tao',
                         label: 'Môn học chương trình đào tạo',
-                        path: ROUTER_PATH.QL_DAO_TAO.MON_HOC_CHUONG_TRINH_DAO_TAO,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .MON_HOC_CHUONG_TRINH_DAO_TAO,
                         description: 'Môn học chương trình đào tạo',
-                    },{
+                    },
+                    {
                         id: 'danh-sach-mon-hoc',
                         label: 'Danh sách môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_SACH_MON_HOC,
                         description: 'Danh sách môn học',
-                    }
-                ]
+                    },
+                ],
             },
             {
                 id: 'milestone',

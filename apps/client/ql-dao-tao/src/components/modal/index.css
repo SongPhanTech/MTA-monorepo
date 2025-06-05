@@ -1,0 +1,8 @@
+.ant-collapse-header {
+    flex-direction: row-reverse;
+}
+
+.ant-collapse-item {
+    border: 1px solid #d1d5db;
+    /* background: none !important; */
+}
