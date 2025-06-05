@@ -184,7 +184,7 @@ const FilterSinhVien = (props: Props) => {
                     onChange={(e) =>
                         handleFilterChange('searchText', e.target.value)
                     }
-                    placeholder="Nhập tên học viên..."
+                    placeholder="Nhập tên sinh viên..."
                     style={{
                         width: 300,
                         marginRight: 8,

@@ -287,7 +287,7 @@ const PutUserProfileUpdateModal = () => {
                       ? 'Thêm mới sinh viên'
                       : 'Thêm mới học viên'
             }
-            className="w-[70vw]"
+            className="w-[80vw]"
             layout="horizontal"
             labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             wrapperCol={{ span: 16 }} // input chiếm 18 cột
@@ -465,6 +465,66 @@ const PutUserProfileUpdateModal = () => {
                                                 }
                                             )}
                                         />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Đối tượng đào tạo"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập đối tượng đào tạo" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Lớp"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập lớp" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Khóa"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập khóa" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Ngành"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập ngành" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Chuyên ngành"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập chuyên ngành" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="permanentAddress"
+                                        label="Chương trinhg đào tạo"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập chuyên ngành đào tạo" />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>

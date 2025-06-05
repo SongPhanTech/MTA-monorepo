@@ -2,6 +2,7 @@ import {
     DownloadOutlined,
     EyeOutlined,
     UploadOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
@@ -36,6 +37,7 @@ import {
 } from '@workspace/db/hooks'
 
 import {
+    Avatar,
     Button,
     Col,
     Divider,
@@ -63,6 +65,7 @@ import { OrganizationUserStatus } from '@workspace/db'
 import EditIcon from '@components/icons/edit'
 type Filter = FilterProps & {
     searchText: string
+    organizationText: string
 }
 dayjs.locale('vi')
 
@@ -76,6 +79,7 @@ export default function UserProfilePageLecture() {
     const debouncedSearchText = _.debounce(setSearchOrganization, 200)
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
+        organizationText: '',
         priorityObjectId: null,
         nationalityId: null,
         religionId: null,
@@ -93,49 +97,66 @@ export default function UserProfilePageLecture() {
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
-            OR: [
+            AND: [
+                // Tìm kiếm theo tên giảng viên
+                ...(filters.searchText
+                    ? [
+                          {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                              ],
+                          },
+                      ]
+                    : []),
+                // Tìm kiếm theo tên đơn vị
+                ...(filters.organizationText
+                    ? [
+                          {
+                              organizationName: {
+                                  contains: filters.organizationText,
+                              },
+                          },
+                      ]
+                    : []),
+                // Các filter khác
+                ...(filters.priorityObjectId
+                    ? [{ priorityObjectId: filters.priorityObjectId }]
+                    : []),
+                ...(filters.nationalityId
+                    ? [{ nationalityId: filters.nationalityId }]
+                    : []),
+                ...(filters.religionId
+                    ? [{ religionId: filters.religionId }] // Sửa từ nationalityId
+                    : []),
+                ...(filters.ethnicityId
+                    ? [{ ethnicityId: filters.ethnicityId }]
+                    : []),
+                // Filter theo userType - luôn có
                 {
-                    firstName: {
-                        contains: filters.searchText,
-                    },
-                },
-                {
-                    lastName: {
-                        contains: filters.searchText,
+                    userType: {
+                        is: {
+                            code: 'GV',
+                        },
                     },
                 },
             ],
-            //   ...filters,
-            ...(filters.priorityObjectId
-                ? { priorityObjectId: filters.priorityObjectId }
-                : {}),
-            ...(filters.nationalityId
-                ? { nationalityId: filters.nationalityId }
-                : {}),
-            ...(filters.religionId
-                ? { nationalityId: filters.religionId }
-                : {}),
-            ...(filters.ethnicityId
-                ? { ethnicityId: filters.ethnicityId }
-                : {}),
-            ...(organizationIds && organizationIds.length > 0
-                ? {
-                      organizationUser: {
-                          some: {
-                              organizationId: { in: organizationIds },
-                              status: OrganizationUserStatus.ACTIVE,
-                          },
-                      },
-                  }
-                : {}),
-            userType: {
-                is: {
-                    code: 'GV',
-                },
-            },
         },
         include: {
             userType: true,
+            organizationUser: {
+                include: {
+                    organization: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -146,14 +167,42 @@ export default function UserProfilePageLecture() {
 
     const { data: count } = useCountUserProfile({
         where: {
-            firstName: {
-                contains: filters.searchText,
-            },
-            userType: {
-                is: {
-                    code: 'GV',
+            AND: [
+                ...(filters.searchText
+                    ? [
+                          {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                              ],
+                          },
+                      ]
+                    : []),
+                ...(filters.organizationText
+                    ? [
+                          {
+                              organizationName: {
+                                  contains: filters.organizationText,
+                              },
+                          },
+                      ]
+                    : []),
+                {
+                    userType: {
+                        is: {
+                            code: 'GV',
+                        },
+                    },
                 },
-            },
+            ],
         },
     })
 
@@ -317,7 +366,10 @@ export default function UserProfilePageLecture() {
                             <Input
                                 id="search"
                                 onChange={(e) =>
-                                    debouncedSearchText(e.target.value)
+                                    handleFilterChange(
+                                        'organizationText',
+                                        e.target.value
+                                    )
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
                             />
@@ -376,7 +428,7 @@ export default function UserProfilePageLecture() {
             </Row>
           </Row> */}
                 </Col>
-                <Col span={7}>
+                {/* <Col span={7}>
                     <Table
                         columns={[
                             {
@@ -408,47 +460,131 @@ export default function UserProfilePageLecture() {
                         scrollable={true}
                         maxHeight={430}
                     />
-                </Col>
-                <Col span={17}>
+                </Col> */}
+                <Col span={24}>
                     <Table
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 60,
                                 align: 'center',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index +
                                     1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
+                                title: 'Ảnh',
+                                dataIndex: 'avatar',
+                                align: 'center',
+                                width: 120,
+                                render: (avatar) =>
+                                    avatar ? (
+                                        <img src={avatar} alt="Avatar" />
+                                    ) : (
+                                        <UserOutlined
+                                            style={{
+                                                fontSize: 24,
+                                                color: '#999',
+                                            }}
+                                        />
+                                    ),
+                            },
+                            {
                                 title: 'Mã giảng viên',
                                 dataIndex: 'code',
                                 align: 'center',
+                                width: 120,
+                            },
+                            {
+                                title: 'SHSQ/SHQN',
+                                dataIndex: 'officerNumber',
+                                align: 'center',
+                                width: 120,
                             },
                             {
                                 title: 'Họ và tên',
                                 render: ({ firstName, lastName }) =>
                                     `${lastName}` + ' ' + `${firstName}`,
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Giới tính',
+                                align: 'center',
+                                width: 100,
+                                render: ({ gender }) =>
+                                    GENDER_MEAN[
+                                        gender as keyof typeof GENDER_MEAN
+                                    ],
                             },
                             {
                                 title: 'Ngày sinh',
-                                // dataIndex: 'startDate',
                                 render: ({ dateOfBirth }) =>
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Đơn vị',
+                                width: 150,
+                                dataIndex: 'organizationName',
+                                align: 'center',
+                            },
+                            {
+                                title: 'Học hàm',
+                                width: 100,
+                                dataIndex: 'academicDegreeTypeName',
+                                align: 'center',
+                            },
+                            {
+                                title: 'Năm HH',
+                                dataIndex: 'educationYear',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Học vị',
+                                dataIndex: 'academicRankTypeName',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Năm HV',
+                                dataIndex: 'academicYear',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Chức vụ',
+                                dataIndex: 'positionName',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Năm CV',
+                                dataIndex: 'tenureYear',
+                                align: 'center',
+                                width: 100,
                             },
                             {
                                 title: 'Cập bậc hàm',
                                 dataIndex: 'rankName',
+                                align: 'center',
+                                width: 120,
                             },
                             {
-                                title: 'Đơn vị',
-                                dataIndex: 'organizationName',
+                                title: 'Năm CB',
+                                dataIndex: 'rankYear',
+                                align: 'center',
+                                width: 100,
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
@@ -469,6 +605,7 @@ export default function UserProfilePageLecture() {
                             },
                         ]}
                         data={data}
+                        scroll={{ x: 'max-content' }}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

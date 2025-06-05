@@ -225,7 +225,7 @@ const AddUserProfileLecture = () => {
             onCancel={onClose}
             maskClosable={true}
             title={code === 'GV' ? 'Thêm mới giáo viên' : 'Thêm mới cán bộ'}
-            className="w-[30vw]"
+            className="w-[50vw]"
         >
             <Row gutter={[40, 0]}>
                 <Col span={8}>
@@ -308,6 +308,17 @@ const AddUserProfileLecture = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
+                    name="officerNumber"
+                    label="SHSQ/SHQN"
+                    required
+                >
+                    <Input placeholder="Nhập số hiệu sĩ quan / số hiệu quân nhân" />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem
+                    form={form}
                     name="positionName"
                     label="Chức vụ"
                     required
@@ -358,9 +369,71 @@ const AddUserProfileLecture = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem form={form} name="homeTown" label="Quê quán">
                     <Input placeholder="Nhập quê quán" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="academicDegreeTypeName"
+                    label="Học hàm"
+                >
+                    <Input placeholder="Nhập học hàm" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="academicDegreeTypeName"
+                    label="Năm học hàm"
+                >
+                    <Input placeholder="Nhập năm học hàm" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="academicRankTypeName"
+                    label="Học vị"
+                >
+                    <Input placeholder="Nhập học vị" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="academicDegreeTypeName"
+                    label="Năm học vị"
+                >
+                    <Input placeholder="Nhập năm học vị" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem form={form} name="positionName" label="Chức vụ">
+                    <Input placeholder="Nhập chức vụ" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem form={form} name="positionName" label="Năm chức vụ">
+                    <Input placeholder="Nhập năm chức vụ" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem form={form} name="rankName" label="Cấp bậc hàm">
+                    <Input placeholder="Nhập cấp bậc hàm" />
+                </FormItem>
+            </Col>
+
+            <Col span={8}>
+                <FormItem form={form} name="positionName" label="Năm cấp bậc">
+                    <Input placeholder="Nhập năm cấp bậc" />
                 </FormItem>
             </Col>
         </PutFormModal>

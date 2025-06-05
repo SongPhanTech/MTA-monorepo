@@ -129,7 +129,7 @@ const PutUserProfileModal = () => {
                       ? 'Thêm mới sinh viên'
                       : 'Thêm mới học viên'
             }
-            className="w-[30vw]"
+            className="w-[50vw]"
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã" required>
@@ -205,6 +205,40 @@ const PutUserProfileModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="homeTown" label="Quê quán">
                     <Input placeholder="Nhập quê quán" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="homeTown" label="Đối tượng đào tạo">
+                    <Input placeholder="Nhập đối tượng đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="homeTown" label="Lớp">
+                    <Input placeholder="Nhập lớp" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="homeTown" label="Khóa">
+                    <Input placeholder="Nhập khóa" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="homeTown" label="Ngành">
+                    <Input placeholder="Nhập nhành" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="homeTown" label="Chuyên ngành">
+                    <Input placeholder="Nhập chuyên ngành" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem
+                    form={form}
+                    name="homeTown"
+                    label="Chương trình đào tạo"
+                >
+                    <Input placeholder="Nhập chương trình đào tạo" />
                 </FormItem>
             </Col>
         </PutFormModal>

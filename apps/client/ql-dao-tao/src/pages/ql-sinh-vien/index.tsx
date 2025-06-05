@@ -30,6 +30,7 @@ import {
     useFindManyTrainingLevel,
     useFindManyUserType,
     useFindManyTemplateFile,
+    useFindManyOrganization,
 } from '@workspace/db/hooks'
 import type {
     UserProfile,
@@ -73,17 +74,32 @@ export default function UserProfilePageDs() {
     const [filters, setFilters] = useState({
         searchText: '',
     })
+    const [selectedDoiTuong, setSelectedDoiTuong] = useState<string>()
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
-            firstName: {
-                contains: filters.searchText,
-            },
+            OR: [
+                {
+                    firstName: {
+                        contains: filters.searchText,
+                    },
+                },
+                {
+                    lastName: {
+                        contains: filters.searchText,
+                    },
+                },
+            ],
             userType: {
                 is: {
                     code: 'SV',
                 },
             },
+            ...(selectedDoiTuong && {
+                organizationName: {
+                    equals: selectedDoiTuong,
+                },
+            }),
         },
         include: {
             userType: true,
@@ -97,14 +113,28 @@ export default function UserProfilePageDs() {
 
     const { data: count } = useCountUserProfile({
         where: {
-            firstName: {
-                contains: filters.searchText,
-            },
+            OR: [
+                {
+                    firstName: {
+                        contains: filters.searchText,
+                    },
+                },
+                {
+                    lastName: {
+                        contains: filters.searchText,
+                    },
+                },
+            ],
             userType: {
                 is: {
                     code: 'SV',
                 },
             },
+            ...(selectedDoiTuong && {
+                organizationName: {
+                    equals: selectedDoiTuong,
+                },
+            }),
         },
     })
 
@@ -171,6 +201,8 @@ export default function UserProfilePageDs() {
         useFindManyUserType()
     const { data: templateFile = [], refetch: refetchTemplateFile } =
         useFindManyTemplateFile()
+
+    const { data: organizationData } = useFindManyOrganization()
 
     const handleFilterChange = (
         key: string,
@@ -247,6 +279,11 @@ export default function UserProfilePageDs() {
         })
     )
 
+    const handleDoiTuongChange = (value: string) => {
+        setSelectedDoiTuong(value)
+        refetch()
+    }
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -255,52 +292,74 @@ export default function UserProfilePageDs() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
-                            <Flex>
-                                <Col span={8} className="pl-0">
-                                    <FilterSinhVien
-                                        handleFilterChange={handleFilterChange}
-                                        filters={filters}
-                                        setFilters={setFilters}
-                                    />
-                                </Col>
-                                <Col span={16}>
-                                    <Flex justify="end">
-                                        <Button
-                                            onClick={handleModal}
-                                            type="primary"
-                                        >
-                                            Thêm mới
-                                        </Button>
+                    <Row gutter={[8, 8]} align="top" justify="space-between">
+                        <Col flex="1 1">
+                            <FilterSinhVien
+                                handleFilterChange={handleFilterChange}
+                                filters={filters}
+                                setFilters={setFilters}
+                            />
+                        </Col>
+                        <Col flex="1 1" className="max-w-[350px]">
+                            <Select
+                                placeholder="Đối tượng đào tạo"
+                                style={{ width: '100%' }}
+                                options={organizationData?.map((item) => {
+                                    return {
+                                        value: item.name,
+                                        label: item.name,
+                                    }
+                                })}
+                                value={selectedDoiTuong}
+                                onChange={handleDoiTuongChange}
+                            />
+                        </Col>
+                        <Col flex="1 1" className="max-w-[350px]">
+                            <Select
+                                placeholder="Khóa đào tạo"
+                                style={{ width: '100%' }}
+                            />
+                        </Col>
+                        <Col flex="1 1">
+                            <Select
+                                placeholder="Lớp"
+                                style={{ width: '100%' }}
+                            />
+                        </Col>
 
-                                        {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                        <Dropdown
-                                            overlay={menuDownload}
-                                            trigger={['hover']}
-                                        >
-                                            <Button
-                                                className="ml-4"
-                                                type="primary"
-                                                icon={<DownloadOutlined />}
-                                            >
-                                                Tải file mẫu
-                                            </Button>
-                                        </Dropdown>
-                                        <Dropdown
-                                            overlay={menuUpload}
-                                            trigger={['hover']}
-                                        >
-                                            <Button
-                                                className="ml-4"
-                                                type="primary"
-                                                icon={<UploadOutlined />}
-                                            >
-                                                Nhập file
-                                            </Button>
-                                        </Dropdown>
-                                    </Flex>
-                                </Col>
+                        {/* Hàng chứa các button */}
+                        <Col xs={24}>
+                            <Flex
+                                justify="end"
+                                wrap="wrap"
+                                gap="8px"
+                                className="mt-1"
+                            >
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                                <Dropdown
+                                    overlay={menuDownload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        type="primary"
+                                        icon={<DownloadOutlined />}
+                                    >
+                                        Tải file mẫu
+                                    </Button>
+                                </Dropdown>
+                                <Dropdown
+                                    overlay={menuUpload}
+                                    trigger={['hover']}
+                                >
+                                    <Button
+                                        type="primary"
+                                        icon={<UploadOutlined />}
+                                    >
+                                        Nhập file
+                                    </Button>
+                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>
@@ -310,8 +369,9 @@ export default function UserProfilePageDs() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 60,
                                 align: 'center',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index +
                                     1 +
@@ -320,41 +380,46 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
+                                width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Họ và tên',
                                 align: 'center',
+                                width: 150,
                                 render: ({
                                     firstName,
                                     lastName,
                                 }: { firstName: string; lastName: string }) =>
                                     `${lastName} ${firstName}`,
                             },
-                            // {
-                            //     title: 'Đối tượng',
-                            //     dataIndex: 'UserType',
-                            //     render: (value) => value?.name ? value?.name : ""
-                            // },
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
-                                // dataIndex: 'startDate',
+                                width: 100,
                                 render: ({ dateOfBirth }) =>
                                     dayjs(dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Giới tính',
                                 align: 'center',
-                                // dataIndex: 'gender',
+                                width: 80,
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
                                         gender as keyof typeof GENDER_MEAN
                                     ],
                             },
                             {
+                                title: 'Đối tượng ĐT',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'UserType',
+                                render: (value) => value?.name || '',
+                            },
+                            {
                                 title: 'Lớp',
                                 align: 'center',
+                                width: 120,
                                 dataIndex: 'fixedClassStudent',
                                 render: (value) =>
                                     value?.length > 0
@@ -362,50 +427,36 @@ export default function UserProfilePageDs() {
                                         : 'Chưa phân lớp',
                             },
                             {
-                                title: 'Trạng thái',
+                                title: 'Khóa',
+                                align: 'center',
+                                width: 100,
+                                dataIndex: 'educationLevel',
+                            },
+                            {
+                                title: 'Ngành',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'trainingType',
+                            },
+                            {
+                                title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 130,
-                                render: (record: UserProfile) => {
-                                    return (
-                                        <Select
-                                            className="w-[155px]"
-                                            value={
-                                                record?.fixedClassStudent[0]
-                                                    .status
-                                            }
-                                            // onChange={(newStatus) =>
-                                            //     handleStatusChange(
-                                            //         record.id,
-                                            //         newStatus as FixedClassStudentStatus
-                                            //     )
-                                            // }
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-                                        />
-                                    )
-                                },
+                                dataIndex: 'trainingObjectType',
+                            },
+                            {
+                                title: 'Chương trình đào tạo',
+                                align: 'center',
+                                width: 130,
+                                dataIndex: 'trainingForm',
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {/* <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpenUpdate.bind(
-                                                    null,
-                                                    { id: id, code: 'SV' }
-                                                )}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip> */}
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,
@@ -424,6 +475,7 @@ export default function UserProfilePageDs() {
                             },
                         ]}
                         data={data}
+                        scroll={{ x: 'max-content' }}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

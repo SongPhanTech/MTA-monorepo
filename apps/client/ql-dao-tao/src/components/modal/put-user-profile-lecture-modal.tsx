@@ -360,7 +360,7 @@ const PutUserProfileLectureModal = () => {
                       ? 'Thêm mới giảng viên'
                       : 'Thêm mới cán bộ'
             }
-            className="w-[70vw]"
+            className="w-[80vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
@@ -904,6 +904,16 @@ const PutUserProfileLectureModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
+                                name="rankName"
+                                label="Năm cấp bậc hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm cấp bậc hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
                                 name="educationLevel"
                                 label="Trình độ học vấn"
                                 className="mb-0"
@@ -924,11 +934,32 @@ const PutUserProfileLectureModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
+                                name="academicDegreeTypeName"
+                                label="Năm học hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm học hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
                                 name="academicRankTypeName"
                                 label="Học vị"
                                 className="mb-0"
                             >
                                 <Input placeholder="Nhập học vị" />
+                            </FormItem>
+                        </Col>
+
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="academicRankTypeName"
+                                label="Năm học vị"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm học vị" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -939,6 +970,16 @@ const PutUserProfileLectureModal = () => {
                                 className="mb-0"
                             >
                                 <Input placeholder="Nhập chức vụ chính quyền" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="positionName"
+                                label="Năm chức vụ"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm chức vụ" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
