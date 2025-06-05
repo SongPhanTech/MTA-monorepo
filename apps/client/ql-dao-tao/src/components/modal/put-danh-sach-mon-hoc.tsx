@@ -2,30 +2,17 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingCourse,
     useFindUniqueTrainingCourse,
-    useFindManySchoolYear,
-    useFindManyTrainingCourse,
     useUpdateTrainingCourse,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse
 import 'dayjs/locale/vi'
@@ -42,18 +29,8 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm()
-
-    const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
-
-    const { data: organizations = [], refetch: refetchTrainingCourses } =
-        useFindManyTrainingCourse()
 
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
@@ -151,29 +128,17 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã"
-                >
+                <FormItem form={form} name="code" label="Mã">
                     <Input placeholder="Nhập mã" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Mã TKB"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Mã TKB">
                     <Input placeholder="Nhập mã TKB" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Tên Môn Học"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Tên Môn Học">
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
@@ -195,129 +160,86 @@ const PutSubjectListModal = () => {
                     <Input placeholder="Nhập tên tiếng anh" />
                 </FormItem>
             </Col>
+            {id && (
+                <Col span={12}>
+                    <FormItem
+                        form={form}
+                        name="trainingTypeId"
+                        label="Trạng thái"
+                    >
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            options={[
+                                { label: 'Đang hoạt động', value: 'ACTIVE' },
+                                { label: 'Ngừng đào tạo', value: 'IN_ACTIVE' },
+                            ]}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Cơ sở cấp bằng"
-                >
-                    <Input placeholder="Nhập cơ sở cấp bằng" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STC"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STC">
                     <Input placeholder="Nhập STC" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTKB"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTKB">
                     <Input placeholder="Nhập STTKB" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STLT"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STLT">
                     <Input placeholder="Nhập STLT" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTL"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTL">
                     <Input placeholder="Nhập STTL" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTH"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTH">
                     <Input placeholder="Nhập STTH" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="ĐQ"
-                >
+                <FormItem form={form} name="trainingTypeId" label="ĐQ">
                     <Input placeholder="Nhập ĐQ" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Không TD"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Không TD">
                     <Input placeholder="Nhập Không TD" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="SV Max"
-                >
+                <FormItem form={form} name="trainingTypeId" label="SV Max">
                     <Input placeholder="Nhập SV Max" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="HSHP"
-                >
+                <FormItem form={form} name="trainingTypeId" label="HSHP">
                     <Input placeholder="Nhập HSHP" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="HSHP2"
-                >
+                <FormItem form={form} name="trainingTypeId" label="HSHP2">
                     <Input placeholder="Nhập HSHP2" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Thi"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Thi">
                     <Input placeholder="Nhập hình thức thi" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="DBN"
-                >
+                <FormItem form={form} name="trainingTypeId" label="DBN">
                     <Input placeholder="Nhập DBN" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="SDD"
-                >
+                <FormItem form={form} name="trainingTypeId" label="SDD">
                     <Input placeholder="Nhập SDD" />
                 </FormItem>
             </Col>

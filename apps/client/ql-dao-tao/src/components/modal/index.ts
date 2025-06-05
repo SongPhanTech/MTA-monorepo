@@ -24,6 +24,7 @@ import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutTrainingFieldModal from './put-nganh'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutKnowledgeBlock from './put-khoi-kien-thuc-ctdt'
+import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -51,4 +52,5 @@ export {
     PutTrainingFieldModal,
     PutSubjectListModal,
     PutKnowledgeBlock,
+    PutVersionSubjectModal,
 }

@@ -10,30 +10,17 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
-    useFindManySubject
 } from '@workspace/db/hooks'
-import type {
-    TrainingObjectType,
-} from '@workspace/db'
-import { X, Search } from 'lucide-react'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
-import dayjs from 'dayjs'
+import type { TrainingObjectType } from '@workspace/db'
+import { Search } from 'lucide-react'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
+import VersionSubject from '@components/sub-pages/phien-ban-mon-hoc'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
@@ -44,68 +31,72 @@ const fakeData = [
     {
         id: 1,
         maMon: 'MH001',
-        maTKB: 'TKB001',
         tenMonHoc: 'Toán cao cấp A1',
+        dtdt: 'Đại học quân sự',
         trainingObjectTypeId: 'Đại trà',
         dvql: 'Khoa Toán',
-        stc: 3,
-        sttkb: 45,
-        stlt: 30,
-        '5': 0, // Không rõ nghĩa, nên giả định là 0
-        stth: 15,
-        dq: 1,
-        khongTD: 0,
-        svMax: 60,
-        hshp: 1.2,
-        hshp2: 1.0,
-        thi: 'Tự luận',
-        dbn: 0,
-        sdd: 3,
-        status: 'ACTIVE', // hoặc 'IN_ACTIVE'
+        status: 'ACTIVE',
+        pb: [
+            {
+                id: 1,
+                mapb: 'PB1',
+                tenPB: 'nam 2025',
+                maTKB: 'TKB001',
+                stc: 3,
+                sttkb: 45,
+                stlt: 30,
+                stth: 15,
+                svMax: 60,
+                thi: 'Tự luận',
+                dbn: 0,
+                sdd: 3,
+                hs1: 0.1,
+                hs2: 0.2,
+                hs3: 0.6,
+                status: 'ACTIVE',
+            },
+            {
+                id: 2,
+                mapb: 'PB2',
+                tenPB: 'nam 2025',
+                maTKB: 'TKB004',
+                stc: 3,
+                sttkb: 45,
+                stlt: 30,
+                stth: 15,
+                svMax: 60,
+                thi: 'Tự luận',
+                dbn: 0,
+                sdd: 3,
+                status: 'ACTIVE',
+            },
+        ],
     },
     {
         id: 2,
         maMon: 'MH002',
-        maTKB: 'TKB002',
         tenMonHoc: 'Vật lý đại cương',
         trainingObjectTypeId: 'CLC',
+        dtdt: 'Đại học quân sự',
         dvql: 'Khoa Vật Lý',
-        stc: 4,
-        sttkb: 60,
-        stlt: 40,
-        '5': 1,
-        stth: 20,
-        dq: 1,
-        khongTD: 1,
-        svMax: 50,
-        hshp: 1.5,
-        hshp2: 1.3,
-        thi: 'Trắc nghiệm',
-        dbn: 1,
-        sdd: 3,
-        status: 'IN_ACTIVE',
-    },
-    {
-        id: 3,
-        maMon: 'MH003',
-        maTKB: 'TKB003',
-        tenMonHoc: 'Lập trình cơ bản',
-        trainingObjectTypeId: 'Đại trà',
-        dvql: 'Khoa CNTT',
-        stc: 3,
-        sttkb: 45,
-        stlt: 25,
-        '5': 0,
-        stth: 20,
-        dq: 1,
-        khongTD: 0,
-        svMax: 70,
-        hshp: 1.1,
-        hshp2: 1.0,
-        thi: 'Tự luận',
-        dbn: 1,
-        sdd: 3,
         status: 'ACTIVE',
+        pb: [
+            {
+                id: 3,
+                mapb: 'PB3',
+                tenPB: 'nam 2024',
+                maTKB: 'TKB002',
+                stc: 4,
+                sttkb: 60,
+                stlt: 40,
+                stth: 20,
+                svMax: 50,
+                thi: 'Trắc nghiệm',
+                dbn: 1,
+                sdd: 3,
+                status: 'IN_ACTIVE',
+            },
+        ],
     },
 ]
 
@@ -114,7 +105,7 @@ export default function SubjectList() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined
+        trainingObjectTypeId: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -128,10 +119,9 @@ export default function SubjectList() {
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
-
         },
         include: {
-            organization: true
+            organization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -176,7 +166,6 @@ export default function SubjectList() {
             await updateTrainingCourse({
                 where: {
                     id,
-
                 },
                 data: {
                     deletedAt: new Date(),
@@ -188,7 +177,6 @@ export default function SubjectList() {
         hideSpinner()
     }
 
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -197,9 +185,8 @@ export default function SubjectList() {
         })
     }
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
-
 
     return (
         <div>
@@ -208,56 +195,63 @@ export default function SubjectList() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingObjectId"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                        }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
-                                        allowClear
-                                    />
-                                </Form.Item>
+                                <Col span={12}>
+                                    <Form.Item name="searchText">
+                                        <Input
+                                            id="search"
+                                            onChange={(e) =>
+                                                handleFilterChange(
+                                                    'searchText',
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Nhập tên ngành..."
+                                            style={{
+                                                height: 40,
+                                                marginRight: 8,
+                                            }}
+                                            prefix={
+                                                <Search
+                                                    size={15}
+                                                    style={{
+                                                        color: 'rgba(0, 0, 0, 0.25)',
+                                                    }}
+                                                />
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingObjectId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Chọn đối tượng đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                                marginRight: 8,
+                                            }}
+                                            // onChange={(val) =>
+                                            //     handleFilterChange(
+                                            //         'trainingObjectTypeId',
+                                            //         val
+                                            //     )
+                                            // }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -274,157 +268,49 @@ export default function SubjectList() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-category"
                         columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, record, index) =>
+                                    index +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
+                                    1,
+                            },
                             {
                                 title: 'Mã',
                                 dataIndex: 'maMon',
-                                width: 130,
+                                width: 100,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
                             },
                             {
-                                title: 'Mã TKB',
-                                dataIndex: 'maTKB',
-                                width: 200,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'Tên môn học',
+                                title: 'Tên Môn Học',
                                 dataIndex: 'tenMonHoc',
-                                width: 200,
+                                width: 150,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
                             },
                             {
-                                title: 'ĐTĐT',
-                                dataIndex: 'trainingObjectTypeId',
-                                width: 200,
+                                title: 'ĐTDT',
+                                dataIndex: 'dtdt',
+                                width: 150,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
                             },
+
                             {
                                 title: 'ĐV QL',
                                 dataIndex: 'dvql',
-                                width: 140,
+                                width: 150,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'STC',
-                                dataIndex: 'stc',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'STTKB',
-                                dataIndex: 'sttkb',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'STLT',
-                                dataIndex: 'stlt',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: '5',
-                                dataIndex: '5',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'STTH',
-                                dataIndex: 'stth',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'ĐQ',
-                                dataIndex: 'dq',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'Không TĐ',
-                                dataIndex: 'khongTD',
-                                width: 80,
-                                align: 'center',
-                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
-                            },
-                            {
-                                title: 'SV Max',
-                                dataIndex: 'svMax',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'HSHP',
-                                dataIndex: 'hshp',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'HSHP2',
-                                dataIndex: 'hshp2',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'Thi',
-                                dataIndex: 'thi',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
-                            },
-                            {
-                                title: 'ĐBN',
-                                dataIndex: 'dbn',
-                                width: 80,
-                                align: 'center',
-                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
-                            },
-                            {
-                                title: 'SĐĐ',
-                                dataIndex: 'sdd',
-                                width: 80,
-                                align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
                             },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 140,
-                                render: (value, record) => {
+                                width: 150,
+                                render: (record) => {
                                     return record?.status == 'IN_ACTIVE' ? (
-                                        <Tag color="error">Không hoạt động</Tag>
+                                        <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
                                         <Tag color="success">
                                             Đang hoạt động
@@ -434,30 +320,19 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 110,
+                                width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
-                                            <Row className="items-center justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
+                                            <Row className="justify-center gap-2">
                                                 <EditIcon
                                                     onClick={onOpen.bind(
                                                         null,
                                                         id
                                                     )}
-                                                    className="text-base text-blue-700 cursor-pointer"
+                                                    className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
@@ -481,6 +356,13 @@ export default function SubjectList() {
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                        expandable={{
+                            expandedRowRender: (record) => (
+                                <div style={{ maxWidth: '100%' }}>
+                                    <VersionSubject record={record} />
+                                </div>
+                            ),
                         }}
                     />
                 </Col>
