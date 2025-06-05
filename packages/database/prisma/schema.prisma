@@ -617,6 +617,7 @@ model TrainingField {
   organization        Organization                        @relation(fields: [organizationId], references: [id])
   organizationId      String
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
+  trainingMajor       TrainingMajor[]
 
   @@schema("ql-danh-muc")
 }
@@ -656,6 +657,8 @@ model TrainingMajor {
   organizationId        String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
   curriculum            Curriculum[]
+  trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId       String
 
   @@schema("ql-danh-muc")
 }
