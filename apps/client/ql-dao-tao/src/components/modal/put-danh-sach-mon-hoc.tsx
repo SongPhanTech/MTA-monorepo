@@ -2,30 +2,17 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingCourse,
     useFindUniqueTrainingCourse,
-    useFindManySchoolYear,
-    useFindManyTrainingCourse,
     useUpdateTrainingCourse,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse
 import 'dayjs/locale/vi'
@@ -42,18 +29,8 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm()
-
-    const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
-
-    const { data: organizations = [], refetch: refetchTrainingCourses } =
-        useFindManyTrainingCourse()
 
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
@@ -183,15 +160,24 @@ const PutSubjectListModal = () => {
                     <Input placeholder="Nhập tên tiếng anh" />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Cơ sở cấp bằng"
-                >
-                    <Input placeholder="Nhập cơ sở cấp bằng" />
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={12}>
+                    <FormItem
+                        form={form}
+                        name="trainingTypeId"
+                        label="Trạng thái"
+                    >
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            options={[
+                                { label: 'Đang hoạt động', value: 'ACTIVE' },
+                                { label: 'Ngừng đào tạo', value: 'IN_ACTIVE' },
+                            ]}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={12}>
                 <FormItem form={form} name="trainingTypeId" label="STC">
                     <Input placeholder="Nhập STC" />
