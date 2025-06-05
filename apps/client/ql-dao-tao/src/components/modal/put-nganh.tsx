@@ -4,25 +4,18 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type {
     TrainingField,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
     TrainingObjectType,
 } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingField,
     useFindUniqueTrainingField,
-    useFindManySchoolYear,
-    useFindManyTrainingField,
     useUpdateTrainingField,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
     useFindManyTrainingObjectType,
     useFindManyTrainingLevel,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Switch } from 'antd'
+import { Col, Form, Input, message, Switch, Radio, Flex } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -47,20 +40,11 @@ const PutTrainingFieldModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm()
-
-    const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
     const { data: organizations, refetch: refetchOrganizations } =
         useFindManyOrganization()
-    // const { data: organizations = [], refetch: refetchTrainingFields } =
-    //     useFindManyTrainingField()
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
@@ -76,7 +60,7 @@ const PutTrainingFieldModal = () => {
                         description: output.description,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status ? 'ACTIVE' : 'IN_ACTIVE',
+                        status: output.status,
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
                             set: output.trainingObjectTypeIds.map(
@@ -103,7 +87,7 @@ const PutTrainingFieldModal = () => {
                         description: output.description,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status ? 'ACTIVE' : 'IN_ACTIVE',
+                        status: output.status,
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
                             createMany: {
@@ -142,6 +126,13 @@ const PutTrainingFieldModal = () => {
             })
         }
     }, [level])
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        form.setFieldsValue({
+            status: 'ACTIVE',
+        })
+    }, [])
 
     return (
         <PutFormModal
@@ -230,11 +221,24 @@ const PutTrainingFieldModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="status" label="">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-[#000000e0]">Đang đào tạo</span>
-                        <Switch />
-                    </div>
+                <FormItem
+                    form={form}
+                    name={'status'}
+                    label="Trạng thái"
+                    required
+                >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio
+                            value={$Enums.TrainingFieldStatus.ACTIVE}
+                        >
+                            Đang hoạt động
+                        </Radio>
+                        <Radio
+                            value={$Enums.TrainingFieldStatus.IN_ACTIVE}
+                        >
+                            Ngừng hoạt động
+                        </Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
         </PutFormModal>

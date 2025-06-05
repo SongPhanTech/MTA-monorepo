@@ -64,7 +64,7 @@ model TrainingField extends Base {
 	organization Organization @relation(fields: [organizationId], references: [id])
 	organizationId String
 	trainingObjectTypes TrainingFieldOnTrainingObjectType[]
-
+  trainingMajor TrainingMajor[]
   @@schema("ql-danh-muc")
 }
 
@@ -93,8 +93,10 @@ model TrainingMajor extends Base {
 	organizationId String
 	trainingObjectTypes TrainingMajorOnTrainingObjectType[]
   curriculum Curriculum[]
-  @@schema("ql-danh-muc")
+  trainingField TrainingField @relation(fields: [trainingFieldId], references: [id])
+	trainingFieldId String
 
+  @@schema("ql-danh-muc")
 }
 
 model TrainingMajorOnTrainingObjectType extends Base  {

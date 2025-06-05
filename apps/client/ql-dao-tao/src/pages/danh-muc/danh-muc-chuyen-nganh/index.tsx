@@ -1,5 +1,3 @@
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingCourseModal } from '@components/modal'
@@ -8,21 +6,19 @@ import {
     KHOA_HL_STATUS,
     CTDT_STATUS,
 } from '@constants/constants'
+import { PutTrainingMajorModal } from '@components/modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
+    useCountTrainingMajor,
+    useFindManyTrainingMajor,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import type {
-    TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
     TrainingType,
     TrainingObjectType,
+    TrainingMajor,
     TrainingField,
     TrainingFieldStatus,
 } from '@workspace/db'
@@ -45,14 +41,11 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/lop-bien-che'
-import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null
+    searchText: string | undefined
     trainingObjectTypeId: string | undefined
 }
 
@@ -64,20 +57,21 @@ export default function TrainingCoursePage() {
         trainingObjectTypeId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data = [], refetch } = useFindManyTrainingMajor({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+            OR:[
+                { name: { contains: filters.searchText }},
+                { codeTrainingMajor: { contains: filters.searchText } },
+            ],
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId: filters.trainingObjectTypeId
+                },
+            }
         },
         include: {
-            organization: true,
+         organization:true,
+         trainingField:true
         },
         orderBy: {
             createdAt: 'desc',
@@ -86,17 +80,17 @@ export default function TrainingCoursePage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
+    const { data: count } = useCountTrainingMajor({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+             OR:[
+                { name: { contains: filters.searchText }},
+                { codeTrainingMajor: { contains: filters.searchText } },
+            ],
+            trainingObjectTypes:{
+                some:{
+                    trainingObjectTypeId: filters.trainingObjectTypeId
+                },
+            }
         },
     })
 
@@ -107,7 +101,7 @@ export default function TrainingCoursePage() {
         []
     )
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutTrainingCourseModal.name,
+        tag: PutTrainingMajorModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -209,13 +203,13 @@ export default function TrainingCoursePage() {
                                 </Form.Item>
                             </Flex>
                         </Col>
-                        {/* <Col span={6}>
+                        <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
                             </Flex>
-                        </Col> */}
+                        </Col>
                     </Row>
                 </Col>
 
@@ -224,29 +218,44 @@ export default function TrainingCoursePage() {
                         rowKey="id"
                         id="training-category"
                         columns={[
-                            {
-                                title: 'Đối tượng đào tạo',
+                             {
+                                title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectType',
-                                align: 'center',
-                                width: 150,
+                                align: 'left',
+                                width: 100,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Khoa phụ trách',
                                 dataIndex: 'trainingObjectTypes',
-                                align: 'center',
+                                align: 'left',
+                                width: 150,
                                 render: (value: TrainingType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
-                                title: 'Mã ngành',
-                                dataIndex: 'codeTrainingField',
+                                title: 'Ngành',
+                                dataIndex: 'trainingField',
+                                align: 'left',
+                                width: 100,
+                                render:(value: TrainingField) =>
+                                    value?.name ? value?.name : '',
+                            },
+                            {
+                                title: 'Mã chuyên ngành',
+                                dataIndex: 'codeTrainingMajor',
                                 align: 'left',
                                 width: 150,
                             },
+                               {
+                                title: 'Viết tắt',
+                                align: 'left',
+                                dataIndex: 'sumary',
+                                width: 100,
+                            },
                             {
-                                title: 'Tên ngành',
+                                title: 'Tên chuyên ngành',
                                 dataIndex: 'name',
                                 align: 'left',
                             },
@@ -258,20 +267,27 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Mô tả',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 dataIndex: 'description',
                             },
                             {
-                                title: 'Ngày ban hành',
-                                align: 'center',
+                                title: 'Số TC chuyên ngành',
                                 width: 150,
-                                render: ({ englishName }) =>
-                                    englishName
-                                        ? dayjs(englishName).format(
-                                              'DD/MM/YYYY'
-                                          )
-                                        : '',
+                                align: 'center',
+                                dataIndex: 'numberCreditsMajor',
+                            },
+                            {
+                                title: 'Số TC bắt buộc',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'numberCreditsRequired',
+                            },
+                            {
+                                title: 'Số TC lựa chọn',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'numberCreditsElective',
                             },
                             {
                                 title: 'Trạng thái',
