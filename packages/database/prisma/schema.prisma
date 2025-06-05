@@ -865,7 +865,7 @@ model Organization {
   name             String             @unique()
   type             OrganizationType   @relation(fields: [typeId], references: [id])
   typeId           String
-  parent           Organization?      @relation("ParentChild", fields: [organizationId], references: [id])
+  parent           Organization?      @relation("ParentChild", fields: [parentId], references: [id])
   parentId         String?
   children         Organization[]     @relation("ParentChild")
   address          String?
@@ -876,7 +876,6 @@ model Organization {
   organizationUser OrganizationUser[]
   trainingFields   TrainingField[]
   trainingMajors   TrainingMajor[]
-  organizationId   String?
 
   @@schema("ql-danh-muc")
 }
@@ -1287,5 +1286,5 @@ model BlockedIp {
   reason      String?   @db.Text()
   expiresAt   DateTime?
 
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-nguoi-dung") 
 }

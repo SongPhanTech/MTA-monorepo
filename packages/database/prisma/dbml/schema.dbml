@@ -628,7 +628,6 @@ Table Organization {
   organizationUser OrganizationUser [not null]
   trainingFields TrainingField [not null]
   trainingMajors TrainingMajor [not null]
-  organizationId String
 }
 
 Table UserProfile {
@@ -1214,7 +1213,7 @@ Ref: Commune.provinceId > Province.id
 
 Ref: Organization.typeId > OrganizationType.id
 
-Ref: Organization.organizationId - Organization.id
+Ref: Organization.parentId - Organization.id
 
 Ref: UserProfile.userId > User.id
 
