@@ -2,132 +2,102 @@ import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
 import '../ql-danh-muc/common'
+import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/student'
+import '../ql-dao-tao/lecturer'
+import '../ql-dao-tao/staff'
+import '../khao-thi/survey'
+
+enum UserType {
+  MILITARY_STUDENT // Học viên quân sự
+  CIVILIAN_STUDENT // Học viên dân sự
+  LECTURER // Giảng viên
+  STAFF // Nhân viên
+  PROFESSIONAL // Chuyên nghiệp
+  CONTRACT // Hợp đồng: Người làm việc theo hợp đồng tại các trường học, có thể là giảng viên hoặc nhân viên.
+  CIVIL_STUDENT
+  TEACHER
+  OTHER
+
+  @@schema("ql-nguoi-dung")
+}
 
 model UserProfile extends Base {
-  user                   User?                 @relation(fields: [userId], references: [id])
-  userId                 String?               @unique
-  userType               UserType              @relation(fields: [userTypeId], references: [id]) // loại đối tượng
-  userTypeId             String
-  avatar                 String?             // đường dẫn ảnh đại diện
+  user                 User?               @relation(fields: [userId], references: [id])
+  userId               String?             @unique
+  userType             UserType            @default(OTHER)
 
-  // Thông tin cá nhân
-  firstName              String
-  lastName               String
-  dateOfBirth            DateTime?  // ngày sinh
-  placeOfBirth           String? // nơi sinh
-  homeTown               String? // quê quán
-  idCardNumber           String? // số căn cước công dân
-  idCardDate             DateTime? // ngày cấp
-  officerNumber          String? // số hiệu sĩ quan
+  // general information
+  avatar               String? // đường dẫn ảnh đại diện
+  firstName            String
+  lastName             String
+  dateOfBirth          DateTime? // ngày sinh
+  placeOfBirth         String? // nơi sinh
+  homeTown             String? // quê quán
+  idCardNumber         String? // số căn cước công dân
+  idCardDate           DateTime? // ngày cấp
+  gender               Gender?
+  permanentAddress     String? // địa chỉ thường trú
+  temporaryAddress     String? // địa chỉ tạm trú
+  contactAddress       String? // địa chỉ liên hệ
+  phoneNumber          String? // số điện thoại
+  email                String? // email
+  nationality          Nationality?        @relation(fields: [nationalityId], references: [id]) // quốc tịch
+  nationalityId        String?
+  religion             Religion?           @relation(fields: [religionId], references: [id]) // tôn giáo
+  religionId           String?
+  ethnicity            Ethnicity?          @relation(fields: [ethnicityId], references: [id]) // dân tộc
+  ethnicityId          String?
+  provinceHometown     Province?           @relation(fields: [provinceHometownId], references: [id])
+  provinceHometownId   String?
+  communeHometown      Commune?            @relation(fields: [communeHometownId], references: [id])
+  communeHometownId    String?
 
-  priorityObject         PriorityObject?       @relation(fields: [priorityObjectId], references: [id]) // đối tượng ưu tiên
-  priorityObjectId       String?
-  registrationArea       RegistrationArea?     @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
-  registrationAreaId     String?
-  nationality            Nationality?          @relation(fields: [nationalityId], references: [id]) // quốc tịch
-  nationalityId          String?
-  religion               Religion?             @relation(fields: [religionId], references: [id]) // tôn giáo
-  religionId             String?
-  ethnicity              Ethnicity?            @relation(fields: [ethnicityId], references: [id]) // dân tộc
-  ethnicityId            String?
-  gender                 Gender?
-  permanentAddress       String? // địa chỉ thường trú
-  temporaryAddress       String? // địa chỉ tạm trú
-  contactAddress         String? // địa chỉ liên hệ
-  phoneNumber            String? // số điện thoại
-  email                  String? // email
-
-  parentPhoneNumber      String? // số điện thoại phụ huynh
-  parentName             String? // tên phụ huynh
-
-
+  officerNumber        String? // số hiệu sĩ quan/quân nhân
+  rank                 Rank?               @relation(fields: [rankId], references: [id])
+  rankId               String?
+  academicDegreeType   AcademicDegreeType? @relation(fields: [academicDegreeTypeId], references: [id])
+  academicDegreeTypeId String?
+  academicRankType     AcademicRankType?   @relation(fields: [academicRankTypeId], references: [id])
+  academicRankTypeId   String?
   // thông tin đoàn thể
-  unionDate              DateTime? // ngày vào Đoàn
-  unionPlace             String? // nơi vào Đoàn
+  unionDate            DateTime? // ngày vào Đoàn
+  unionPlace           String? // nơi vào Đoàn
   // ngày vào Đảng (ĐẢNG CỘNG SẢN VIỆT NAM – COMMUNIST PARTY OF VIET NAM (CPV) )
-  CPVJoinDate            DateTime? // ngày vào Đảng
-  officialCPVDate        DateTime? // ngày chính thức
-  CPVJoinPlace           String? // nơi vào Đảng
-  tenureDate             DateTime? // ngày vào biên chế
-  enlistmentDate         DateTime? // ngày nhập ngũ
-  dischargeDate          DateTime? // ngày xuất ngũ
-  
-  // thông tin thay đổi (có bảng lịch sử riêng)
-  rankName               String? // cấp bậc hàm
-  educationLevel         String? // trình độ học vấn
-  academicDegreeTypeName String? // học hàm
-  academicRankTypeName   String? // học vị
-  positionName           String? // chức vụ chính quyền
-  positionCPVName        String? // chức vụ Đảng
-  organizationName       String? // đơn vị
-  organizationCPVName    String? // nơi sinh hoạt Đảng
+  CPVJoinDate          DateTime? // ngày vào Đảng
+  officialCPVDate      DateTime? // ngày chính thức
+  CPVJoinPlace         String? // nơi vào Đảng
+  positionCPV          PositionCPV?        @relation(fields: [positionCPVId], references: [id])
+  positionCPVId        String?
+  tenureDate           DateTime? // ngày vào biên chế
+  enlistmentDate       DateTime? // ngày nhập ngũ
+  dischargeDate        DateTime? // ngày xuất ngũ
 
-  fixedClassStudent      FixedClassStudent[]
-  organizationUser       OrganizationUser[]
+  // người thân
+  familyPhone          String?
+  familyName           String?
+
+  /// hồ sơ đào tạo
+  educationAndTraining Student[]
+  /// hồ sơ giảng viên
+  lecturer             Lecturer?
+  lecturerHistory      LecturerHistory[]
+  /// hồ sơ cán bộ
+  staffs               Staff?
+  staffHistory         StaffHistory[]
 
   @@schema("ql-nguoi-dung")
-
-  subjectClassStudent    SubjectClassStudent[]
 }
-
 
 enum FixedClassStudentStatus {
-  ENROLLED  // Đang học: Sinh viên đang theo học tại trường.
-  GRADUATED  // Tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo và được công nhận tốt nghiệp.
-  DEFERRED_STUDY  // Bảo lưu: Sinh viên tạm ngưng học có lý do chính đáng.
-  SUSPENDED_STUDY  // Tạm ngưng học: Sinh viên tạm ngưng học không có lý do chính đáng.
+  ENROLLED // Đang học: Sinh viên đang theo học tại trường.
+  GRADUATED // Tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo và được công nhận tốt nghiệp.
+  DEFERRED_STUDY // Bảo lưu: Sinh viên tạm ngưng học có lý do chính đáng.
+  SUSPENDED_STUDY // Tạm ngưng học: Sinh viên tạm ngưng học không có lý do chính đáng.
   WITHDRAWN // Thôi học: Sinh viên đã ngừng học tại trường.
-  TRANSFERRED  // Chuyển trường: Sinh viên đã chuyển sang trường khác.
-  PENDING_GRADUATION_REVIEW  // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
-  ACADEMIC_SUSPENSION  // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
-  @@schema("ql-nguoi-dung")
-}
-
-// học viên - lớp biên chế
-model FixedClassStudent extends Base {
-  fixedClass    FixedClass              @relation(fields: [fixedClassId], references: [id])
-  fixedClassId  String
-  userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-  status        FixedClassStudentStatus @default(ENROLLED)
-  @@schema("ql-dao-tao")
-}
-
-// học viên - lớp môn học
-model SubjectClassStudent extends Base {
-  subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
-  subjectClassId  String
-
-  userProfile     UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
-
-  attendanceScore Float?  // điểm chuyên cần
-  midtermScore    Float?  // điểm giữa kỳ
-  finalScore      Float?  // điểm thi
-
-
-  @@schema("ql-dao-tao")
-}
-
-// người dùng - đơn vị
-
-enum OrganizationUserStatus {
-  ACTIVE   // Hoạt động: Người dùng đang hoạt động trong đơn vị.
-  INACTIVE // Không hoạt động: Người dùng không còn hoạt động trong đơn vị.
-  ON_HOLD // Tạm dừng do công tác khác (đi học, đi công tác, nghỉ phép...): Người dùng tạm thời không tham gia vào các hoạt động của đơn vị.
-  TERMINATED // Kết thúc hợp đồng: Người dùng đã kết thúc hợp đồng.
-  @@schema("ql-nguoi-dung")
-}
-
-model OrganizationUser extends Base {
-  userProfileId  String
-  userProfile    UserProfile            @relation(fields: [userProfileId], references: [id])
-  organizationId String
-  organization   Organization           @relation(fields: [organizationId], references: [id])
-  position       Position?              @relation(fields: [positionId], references: [id])
-  positionId     String?
-  status         OrganizationUserStatus @default(ACTIVE)
-
+  TRANSFERRED // Chuyển trường: Sinh viên đã chuyển sang trường khác.
+  PENDING_GRADUATION_REVIEW // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
+  ACADEMIC_SUSPENSION // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
   @@schema("ql-nguoi-dung")
 }

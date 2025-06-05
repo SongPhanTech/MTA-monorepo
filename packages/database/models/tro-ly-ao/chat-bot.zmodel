@@ -2,94 +2,94 @@ import '../base'
 import '../ql-nguoi-dung/user'
 
 model ChatBotConfig extends Base {
-    name  String @unique
-    value String @db.Text
-    @@schema("tro-ly-ao")
+  name  String @unique
+  value String @db.Text
+  @@schema("tro-ly-ao")
 }
 
 model Document extends Base {
-    title        String?
-    body         String?        @db.Text
-    status       DocumentStatus @default(PENDING)
-    uri          String?
-    fileType     String?
-    fileSize     Int?
-    type         DocumentType
-    reason       String?
-    uploadedBy   User           @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-    uploadedById String         @default(auth().id)
-    approvedBy   User?          @relation("DocumentApproved", fields: [approvedById], references: [id])
-    approvedById String?
-    @@schema("tro-ly-ao")
+  title        String?
+  body         String?        @db.Text
+  status       DocumentStatus @default(PENDING)
+  uri          String?
+  fileType     String?
+  fileSize     Int?
+  type         DocumentType
+  reason       String?
+  uploadedBy   User           @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default(auth().id)
+  approvedBy   User?          @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById String?
+  @@schema("tro-ly-ao")
 }
 
 model FAQ  extends Base {
-    question     String?
-    answer       String?
-    status       DocumentStatus @default(PENDING)
-    type         DocumentType
-    reason       String?
-    uploadedBy   User           @relation("FAQUploaded", fields: [uploadedById], references: [id])
-    uploadedById String         @default(auth().id)
-    approvedBy   User?          @relation("FAQApproved", fields: [approvedById], references: [id])
-    approvedById String?
-    @@schema("tro-ly-ao")
+  question     String?
+  answer       String?
+  status       DocumentStatus @default(PENDING)
+  type         DocumentType
+  reason       String?
+  uploadedBy   User           @relation("FAQUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default(auth().id)
+  approvedBy   User?          @relation("FAQApproved", fields: [approvedById], references: [id])
+  approvedById String?
+  @@schema("tro-ly-ao")
 }
 
 model Prompt extends Base {
-    prompt String?
-    status DocumentStatus @default(PENDING)
-    type   DocumentType
-    reason String?
-    @@schema("tro-ly-ao")
+  prompt String?
+  status DocumentStatus @default(PENDING)
+  type   DocumentType
+  reason String?
+  @@schema("tro-ly-ao")
 }
 
 model Conversation extends Base {
-    user    User?         @relation(fields: [userId], references: [id])
-    userId  String?
-    type    DocumentType?
-    message Message[]
-    @@schema("tro-ly-ao")
+  user    User?         @relation(fields: [userId], references: [id])
+  userId  String?
+  type    DocumentType?
+  message Message[]
+  @@schema("tro-ly-ao")
 }
 
 model Message extends Base {
-    conversationId String?
-    content        String?
-    sender         MessageSender
+  conversationId String?
+  content        String?
+  sender         MessageSender
 
-    conversation   Conversation? @relation(fields: [conversationId], references: [id])
-    @@schema("tro-ly-ao")
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  @@schema("tro-ly-ao")
 }
 
 enum MessageSender {
-    USER
-    BOT
-    @@schema("tro-ly-ao")
+  USER
+  BOT
+  @@schema("tro-ly-ao")
 }
 
 enum DocumentStatus {
-    PENDING
-    APPROVE
-    DENY
-    @@schema("tro-ly-ao")
+  PENDING
+  APPROVE
+  DENY
+  @@schema("tro-ly-ao")
 }
 
 enum DocumentType {
-    GENERAL_ADMISSIONS_INFORMATION
-    ADMISSIONS_RULES_AND_REGULATIONS
-    TRAINING_RULES_AND_REGULATIONS
-    EXAMINATION_RULES_AND_REGULATIONS
-    ACADEMY_INFORMATION
-    TRAINING_PROGRAMS_INFORMATION
-    REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS
-    REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS
-    FREQUENTLY_ASKED_QUESTIONS
-    PARTY_WORK_AND_POLITICAL_WORK
-    INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY
-    IN_THE_FACULTY_HANDBOOK
-    TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE
-    DETECTION_AND_CORRECTION_OF_TEXT_ERRORS
-    EXTRACTIVE_TEXT_SUMMARIZATION
-    ABSTRACTIVE_TEXT_SUMMARIZATION
-    @@schema("tro-ly-ao")
+  GENERAL_ADMISSIONS_INFORMATION
+  ADMISSIONS_RULES_AND_REGULATIONS
+  TRAINING_RULES_AND_REGULATIONS
+  EXAMINATION_RULES_AND_REGULATIONS
+  ACADEMY_INFORMATION
+  TRAINING_PROGRAMS_INFORMATION
+  REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS
+  REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS
+  FREQUENTLY_ASKED_QUESTIONS
+  PARTY_WORK_AND_POLITICAL_WORK
+  INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY
+  IN_THE_FACULTY_HANDBOOK
+  TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE
+  DETECTION_AND_CORRECTION_OF_TEXT_ERRORS
+  EXTRACTIVE_TEXT_SUMMARIZATION
+  ABSTRACTIVE_TEXT_SUMMARIZATION
+  @@schema("tro-ly-ao")
 }

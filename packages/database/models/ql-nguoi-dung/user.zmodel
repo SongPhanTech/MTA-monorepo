@@ -21,8 +21,6 @@ model User extends Base {
   documentApproved Document[]     @relation("DocumentApproved")
   fAQUploaded      FAQ[]          @relation("FAQUploaded")
   fAQApproved      FAQ[]          @relation("FAQApproved")
-  surveyAnswered   SurveyAnswer[] @relation("SurveyAnswer")
-
 
   @@schema("ql-nguoi-dung")
 }

@@ -1,17 +1,12 @@
 import '../base'
 import '../ql-nguoi-dung/profile'
-// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
-// đối tượng ưu tiên
-model PriorityObject extends Base {
-  name        String
-  userProfile UserProfile[]
-  @@schema("ql-danh-muc")
-}
+import '../ql-dao-tao/student'
 
-// khu vực đăng ký
+// khu vực đăng ký (Bắc, Trung, Nam)
 model RegistrationArea extends Base {
-  name        String
-  userProfile UserProfile[]
+  name    String
+
+  student Student[]
   @@schema("ql-danh-muc")
 }
 
@@ -31,13 +26,6 @@ model Religion extends Base {
 
 // dân tộc
 model Ethnicity extends Base {
-  name        String
-  userProfile UserProfile[]
-  @@schema("ql-danh-muc")
-}
-
-// đối tượng (sinh viên, học viên, giảng viên, cán bộ, nhân viên, người lao động, quân nhân chuyên nghiệp, ...)
-model UserType extends Base {
   name        String
   userProfile UserProfile[]
   @@schema("ql-danh-muc")
