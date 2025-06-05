@@ -10,11 +10,9 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
-    useFindManySubject
+    useFindManySubject,
 } from '@workspace/db/hooks'
-import type {
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
     Button,
@@ -114,7 +112,7 @@ export default function SubjectList() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined
+        trainingObjectTypeId: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -128,10 +126,9 @@ export default function SubjectList() {
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
-
         },
         include: {
-            organization: true
+            organization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -176,7 +173,6 @@ export default function SubjectList() {
             await updateTrainingCourse({
                 where: {
                     id,
-
                 },
                 data: {
                     deletedAt: new Date(),
@@ -187,7 +183,6 @@ export default function SubjectList() {
         }
         hideSpinner()
     }
-
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -200,7 +195,6 @@ export default function SubjectList() {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -212,7 +206,10 @@ export default function SubjectList() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
+                                            handleFilterChange(
+                                                'searchText',
+                                                e.target.value
+                                            )
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -281,142 +278,130 @@ export default function SubjectList() {
                                 dataIndex: 'maMon',
                                 width: 130,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'Mã TKB',
                                 dataIndex: 'maTKB',
                                 width: 200,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'tenMonHoc',
                                 width: 200,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectTypeId',
                                 width: 200,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'ĐV QL',
                                 dataIndex: 'dvql',
                                 width: 140,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'STC',
                                 dataIndex: 'stc',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'STTKB',
                                 dataIndex: 'sttkb',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'STLT',
                                 dataIndex: 'stlt',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: '5',
                                 dataIndex: '5',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'STTH',
                                 dataIndex: 'stth',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'ĐQ',
                                 dataIndex: 'dq',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'Không TĐ',
                                 dataIndex: 'khongTD',
                                 width: 80,
                                 align: 'center',
-                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
+                                render: (value: boolean) => (
+                                    <Checkbox checked={!!value} disabled />
+                                ),
                             },
                             {
                                 title: 'SV Max',
                                 dataIndex: 'svMax',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'HSHP',
                                 dataIndex: 'hshp',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'HSHP2',
                                 dataIndex: 'hshp2',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'Thi',
                                 dataIndex: 'thi',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'ĐBN',
                                 dataIndex: 'dbn',
                                 width: 80,
                                 align: 'center',
-                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
+                                render: (value: boolean) => (
+                                    <Checkbox checked={!!value} disabled />
+                                ),
                             },
                             {
                                 title: 'SĐĐ',
                                 dataIndex: 'sdd',
                                 width: 80,
                                 align: 'center',
-                                render: (value: any) =>
-                                    value ? value : '',
+                                render: (value: any) => (value ? value : ''),
                             },
                             {
                                 title: 'Trạng thái',

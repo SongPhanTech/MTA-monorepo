@@ -20,8 +20,8 @@ const DefaultLayout = ({
     children,
     className,
 }: { children: ReactNode; className?: string }) => {
-    const router = useRouter();
-    const currentPath = router.pathname;
+    const router = useRouter()
+    const currentPath = router.pathname
     const title = getDynamicTitle('QL_DAO_TAO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return (

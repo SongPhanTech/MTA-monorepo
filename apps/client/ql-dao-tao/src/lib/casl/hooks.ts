@@ -9,7 +9,10 @@ const useAbility = () => {
     }
 }
 
-function getDynamicTitle(navKey: keyof typeof NAVIGATION, pathname: string): string {
+function getDynamicTitle(
+    navKey: keyof typeof NAVIGATION,
+    pathname: string
+): string {
     const menus = NAVIGATION[navKey]?.menus || []
 
     for (const menu of menus) {
@@ -20,7 +23,9 @@ function getDynamicTitle(navKey: keyof typeof NAVIGATION, pathname: string): str
 
         // Có children
         if (menu?.children) {
-            const child = menu?.children?.find(child => child?.path === pathname)
+            const child = menu?.children?.find(
+                (child) => child?.path === pathname
+            )
             if (child) {
                 // return `${menu?.label} / ${child?.label}`
                 return `${child?.label}`

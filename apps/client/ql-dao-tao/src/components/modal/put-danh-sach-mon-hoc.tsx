@@ -151,29 +151,17 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã"
-                >
+                <FormItem form={form} name="code" label="Mã">
                     <Input placeholder="Nhập mã" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Mã TKB"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Mã TKB">
                     <Input placeholder="Nhập mã TKB" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Tên Môn Học"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Tên Môn Học">
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
@@ -205,119 +193,67 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STC"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STC">
                     <Input placeholder="Nhập STC" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTKB"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTKB">
                     <Input placeholder="Nhập STTKB" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STLT"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STLT">
                     <Input placeholder="Nhập STLT" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTL"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTL">
                     <Input placeholder="Nhập STTL" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="STTH"
-                >
+                <FormItem form={form} name="trainingTypeId" label="STTH">
                     <Input placeholder="Nhập STTH" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="ĐQ"
-                >
+                <FormItem form={form} name="trainingTypeId" label="ĐQ">
                     <Input placeholder="Nhập ĐQ" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Không TD"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Không TD">
                     <Input placeholder="Nhập Không TD" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="SV Max"
-                >
+                <FormItem form={form} name="trainingTypeId" label="SV Max">
                     <Input placeholder="Nhập SV Max" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="HSHP"
-                >
+                <FormItem form={form} name="trainingTypeId" label="HSHP">
                     <Input placeholder="Nhập HSHP" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="HSHP2"
-                >
+                <FormItem form={form} name="trainingTypeId" label="HSHP2">
                     <Input placeholder="Nhập HSHP2" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Thi"
-                >
+                <FormItem form={form} name="trainingTypeId" label="Thi">
                     <Input placeholder="Nhập hình thức thi" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="DBN"
-                >
+                <FormItem form={form} name="trainingTypeId" label="DBN">
                     <Input placeholder="Nhập DBN" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="SDD"
-                >
+                <FormItem form={form} name="trainingTypeId" label="SDD">
                     <Input placeholder="Nhập SDD" />
                 </FormItem>
             </Col>
