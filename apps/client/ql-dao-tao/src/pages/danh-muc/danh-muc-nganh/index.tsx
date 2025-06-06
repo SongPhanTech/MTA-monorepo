@@ -3,22 +3,20 @@ import DeleteIcon from '@components/icons/delete'
 import { PutTrainingFieldModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
-    KHOA_HL_STATUS,
-    CTDT_STATUS,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
-    useUpdateTrainingMajor,
+    useUpdateTrainingField,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import type {
     TrainingType,
     TrainingObjectType,
     TrainingField,
-    TrainingFieldStatus,
+    Organization,
 } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
@@ -45,7 +43,7 @@ interface FilterProps {
     trainingObjectTypeId: string | undefined
 }
 
-export default function TrainingMajorPage() {
+export default function TrainingFieldPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -56,8 +54,8 @@ export default function TrainingMajorPage() {
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
             OR: [
-                { name: { contains: filters.searchText } },
-                { codeTrainingField: { contains: filters.searchText } },
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { codeTrainingField: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             trainingObjectTypes: {
                 some: {
@@ -67,6 +65,11 @@ export default function TrainingMajorPage() {
         },
         include: {
             organization: true,
+            trainingObjectTypes: {
+                include: {
+                    trainingObjectType: true
+                }
+            }
         },
         orderBy: {
             createdAt: 'desc',
@@ -78,8 +81,8 @@ export default function TrainingMajorPage() {
     const { data: count } = useCountTrainingField({
         where: {
             OR: [
-                { name: { contains: filters.searchText } },
-                { codeTrainingField: { contains: filters.searchText } },
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { codeTrainingField: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             trainingObjectTypes: {
                 some: {
@@ -104,11 +107,11 @@ export default function TrainingMajorPage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
+    const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingMajor({
+            await updateTrainingField({
                 where: {
                     id,
                 },
@@ -135,7 +138,7 @@ export default function TrainingMajorPage() {
     // ) {
     //     try {
     //         showSpinner()
-    //         await updateTrainingMajor({
+    //         await updateTrainingField({
     //             where: {
     //                 id,
     //             },
@@ -154,9 +157,6 @@ export default function TrainingMajorPage() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Danh mục ngành
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -233,19 +233,30 @@ export default function TrainingMajorPage() {
                         id="training-category"
                         columns={[
                             {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index +
+                                    1 +
+                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
                                 title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectType',
+                                dataIndex: 'trainingObjectTypes',
                                 align: 'center',
                                 width: 150,
-                                render: (value: TrainingObjectType) =>
-                                    value?.name ? value?.name : '',
+                                render: (trainingObjectTypes) =>
+                                    trainingObjectTypes.map((i: TrainingObjectType & { trainingObjectType: TrainingObjectType }, index: Number) => (<span>{i?.trainingObjectType?.name}{index != trainingObjectTypes?.length - 1 && <span>, </span>}</span>))
                             },
                             {
                                 title: 'Khoa phụ trách',
-                                dataIndex: 'trainingObjectTypes',
+                                dataIndex: 'organization',
                                 align: 'center',
-                                render: (value: TrainingType) =>
-                                    value?.name ? value?.name : '',
+                                width: 150,
+                                render: (organization: Organization) =>
+                                    organization?.name ? organization?.name : '',
                             },
                             {
                                 title: 'Mã ngành',
@@ -256,6 +267,7 @@ export default function TrainingMajorPage() {
                             {
                                 title: 'Tên ngành',
                                 dataIndex: 'name',
+                                width: 200,
                                 align: 'left',
                             },
                             {
@@ -274,11 +286,11 @@ export default function TrainingMajorPage() {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
-                                render: ({ englishName }) =>
-                                    englishName
-                                        ? dayjs(englishName).format(
-                                              'DD/MM/YYYY'
-                                          )
+                                render: ({ publishDate }) =>
+                                    publishDate
+                                        ? dayjs(publishDate).format(
+                                            'DD/MM/YYYY'
+                                        )
                                         : '',
                             },
                             {
@@ -286,7 +298,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 width: 130,
                                 render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -300,6 +312,7 @@ export default function TrainingMajorPage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
@@ -353,6 +366,6 @@ export default function TrainingMajorPage() {
     )
 }
 
-TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
+TrainingFieldPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
