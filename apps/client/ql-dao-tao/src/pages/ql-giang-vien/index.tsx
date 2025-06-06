@@ -19,7 +19,6 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountUserProfile,
-    useFindManyOrganization,
     useFindManyTemplateFile,
     useFindManyUserProfile,
     useUpdateUserProfile,
@@ -70,8 +69,8 @@ export default function UserProfilePageLecture() {
         ethnicityId: null,
     })
 
-    const { data: organization_data = [], refetch: refetch_organization } =
-        useFindManyOrganization()
+    // const { data: organization_data = [], refetch: refetch_organization } =
+    //     useFindManyOrganization()
 
     // const tree_organization = convertToTree(organization_data)
     // const tree_search_organization = searchTree(
@@ -85,21 +84,21 @@ export default function UserProfilePageLecture() {
                 // Tìm kiếm theo tên giảng viên
                 ...(filters.searchText
                     ? [
-                        {
-                            OR: [
-                                {
-                                    firstName: {
-                                        contains: filters.searchText,
-                                    },
-                                },
-                                {
-                                    lastName: {
-                                        contains: filters.searchText,
-                                    },
-                                },
-                            ],
-                        },
-                    ]
+                          {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                              ],
+                          },
+                      ]
                     : []),
                 // Tìm kiếm theo tên đơn vị
 
@@ -115,7 +114,6 @@ export default function UserProfilePageLecture() {
                     ? [{ ethnicityId: filters.ethnicityId }]
                     : []),
                 // Filter theo userType - luôn có
-
             ],
         },
 
@@ -131,30 +129,30 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                        {
-                            OR: [
-                                {
-                                    firstName: {
-                                        contains: filters.searchText,
-                                    },
-                                },
-                                {
-                                    lastName: {
-                                        contains: filters.searchText,
-                                    },
-                                },
-                            ],
-                        },
-                    ]
+                          {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                              ],
+                          },
+                      ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                        {
-                            organizationName: {
-                                contains: filters.organizationText,
-                            },
-                        },
-                    ]
+                          {
+                              organizationName: {
+                                  contains: filters.organizationText,
+                              },
+                          },
+                      ]
                     : []),
                 {
                     userType: {
@@ -310,7 +308,7 @@ export default function UserProfilePageLecture() {
             setOrganizationIds([])
         } else {
             setSelectedRowId(record.id)
-            handleSelectOrganization(record.id)
+            // handleSelectOrganization(record.id)
         }
     }
     return (
@@ -476,7 +474,7 @@ export default function UserProfilePageLecture() {
                                 width: 100,
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
-                                    gender as keyof typeof GENDER_MEAN
+                                        gender as keyof typeof GENDER_MEAN
                                     ],
                             },
                             {
