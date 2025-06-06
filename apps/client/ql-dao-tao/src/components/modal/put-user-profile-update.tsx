@@ -269,13 +269,13 @@ const PutUserProfileUpdateModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                        ? 'Thêm mới sinh viên'
-                        : 'Thêm mới học viên'
+                      ? 'Thêm mới sinh viên'
+                      : 'Thêm mới học viên'
             }
             className="w-[80vw]"
             layout="vertical"
-        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -311,18 +311,18 @@ const PutUserProfileUpdateModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                    fileList.length > 0
+                                                fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                        <p
-                                                            style={{
-                                                                fontSize:
-                                                                    '0.65rem',
-                                                            }}
-                                                        >
-                                                            + Tải ảnh lên
-                                                        </p>
-                                                    )}
+                                                          <p
+                                                              style={{
+                                                                  fontSize:
+                                                                      '0.65rem',
+                                                              }}
+                                                          >
+                                                              + Tải ảnh lên
+                                                          </p>
+                                                      )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -375,11 +375,10 @@ const PutUserProfileUpdateModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-
                                     </Row>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col span={12} className="mt-2">
                                     <FormItem
                                         form={form}
                                         name="placeOfBirth"
