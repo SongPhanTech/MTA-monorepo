@@ -1,30 +1,24 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type {
-    UserProfile,
-    TrainingCourse,
-    Organization,
-    UserType,
-} from '@workspace/db'
+import type { UserProfile } from '@workspace/db'
 import {
     useCreateUserProfile,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
     useFindUniqueUserProfile,
     useUpdateUserProfile,
-    useFindManyTrainingCourse,
-    useFindManyFixedClass,
-    useFindManyUserType,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { GENDER_LIST } from '@constants/constants'
 export type PutUserProfile = UserProfile
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutUserProfileModal = () => {
     const [form] = Form.useForm<PutUserProfile>()

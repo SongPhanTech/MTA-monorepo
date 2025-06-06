@@ -1,25 +1,11 @@
+import { UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserType } from '@workspace/db'
-import { useFindManyUserType } from '@workspace/db/hooks'
-import {
-    Col,
-    Form,
-    Input,
-    message,
-    Upload,
-    Button,
-    type UploadFile,
-} from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { Button, Col, Form, Upload, type UploadFile, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { fetchUploadFile } from '@api/userProfile'
 export type PutUploadDivision = {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     file: UploadFile<any>[]

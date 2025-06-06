@@ -50,23 +50,23 @@ export default function TrainingMajorPage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId:undefined
+        trainingObjectTypeId: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
-            OR:[
-                { name: { contains: filters.searchText }},
+            OR: [
+                { name: { contains: filters.searchText } },
                 { codeTrainingField: { contains: filters.searchText } },
             ],
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId: filters.trainingObjectTypeId
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: filters.trainingObjectTypeId,
                 },
-            }
+            },
         },
         include: {
-         organization:true,
+            organization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -77,15 +77,15 @@ export default function TrainingMajorPage() {
 
     const { data: count } = useCountTrainingField({
         where: {
-             OR:[
-                { name: { contains: filters.searchText }},
+            OR: [
+                { name: { contains: filters.searchText } },
                 { codeTrainingField: { contains: filters.searchText } },
             ],
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId: filters.trainingObjectTypeId
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: filters.trainingObjectTypeId,
                 },
-            }
+            },
         },
     })
 
@@ -276,7 +276,9 @@ export default function TrainingMajorPage() {
                                 width: 150,
                                 render: ({ englishName }) =>
                                     englishName
-                                        ? dayjs(englishName).format('DD/MM/YYYY')
+                                        ? dayjs(englishName).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                             },
                             {
