@@ -18,6 +18,8 @@ import { useCallback, useState } from 'react'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import { CalendarOutlined } from '@ant-design/icons'
+import { PutOpenClassModal } from '@components/modal'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
@@ -74,6 +76,14 @@ export default function SubjectOpeningPlan() {
     )
 
     const { showSpinner, hideSpinner } = useSpinner()
+
+        const { onOpen, onClose } = useDisclosure<string>({
+            tag: PutOpenClassModal.name,
+        })
+    
+        const handleModal = () => {
+            onOpen()
+        }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
@@ -384,7 +394,10 @@ export default function SubjectOpeningPlan() {
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
-                                            <Row className="flex justify-center items-center gap-2 text-[#028850]">
+                                            <Row 
+                                                className="flex justify-center items-center gap-2 text-[#028850]"
+                                                onClick={handleModal}
+                                            >
                                                 <CalendarPlus size={16} strokeWidth={2} />
                                                 Mở Lớp
                                             </Row>

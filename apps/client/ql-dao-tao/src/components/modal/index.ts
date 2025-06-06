@@ -25,6 +25,7 @@ import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutKnowledgeBlock from './put-khoi-kien-thuc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutTrainingProgramCatalog from './put-danh-muc-dao-tao'
+import PutOpenClassModal from './put-mo-lop'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -53,4 +54,5 @@ export {
     PutKnowledgeBlock,
     PutTrainingProgramCatalog,
     PutVersionSubjectModal,
+    PutOpenClassModal,
 }

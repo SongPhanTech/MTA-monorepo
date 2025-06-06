@@ -235,11 +235,26 @@ export default function TeachingAssignment() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button
+                                    //TODO: handle export
                                     type="primary"
                                     className="h-[40px]"
                                 >
                                     <EditIcon stroke='white'/>
                                     Nhập
+                                </Button>
+                                <Button
+                                    //TODO: handle save
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
+                                    Lưu
+                                </Button>
+                                <Button
+                                    //TODO: handle cancel
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
+                                    Hủy
                                 </Button>
                             </Flex>
                         </Col>
