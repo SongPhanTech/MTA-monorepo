@@ -11,15 +11,15 @@ import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersionSubject,
-     SubjectVersion,
-     Subject,
+    SubjectVersion,
+    Subject,
     TrainingBlock,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersionSubject,
     useFindManyOrganization,
     useFindManySubjectVersion,
-     useFindManySubject,
+    useFindManySubject,
     useFindManyTrainingBlock,
     useFindUniqueCurriculumVersionSubject,
     useUpdateCurriculumVersionSubject,
@@ -58,7 +58,8 @@ const PutMonHocChuongTrinhModal = () => {
         useCreateCurriculumVersionSubject()
     const { mutateAsync: updateCurrriculumVersionSubject } =
         useUpdateCurriculumVersionSubject()
-    const { data: subjectData, refetch: refetchSubject } = useFindManySubjectVersion()
+    const { data: subjectData, refetch: refetchSubject } =
+        useFindManySubjectVersion()
     const { data: trainingBlockData, refetch: refetchTrainingBlockData } =
         useFindManyTrainingBlock()
     async function onOk(output?: PutCurriculumVersionSubjectFile) {
@@ -108,7 +109,7 @@ const PutMonHocChuongTrinhModal = () => {
     }
 
     const { data: level } = useFindUniqueCurriculumVersionSubject({
-        where: { id :id|| ''},
+        where: { id: id || '' },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -181,12 +182,14 @@ const PutMonHocChuongTrinhModal = () => {
                             <Select
                                 allowClear
                                 placeholder="Chọn môn học"
-                                options={subjectData?.map((item: SubjectVersion) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
+                                options={subjectData?.map(
+                                    (item: SubjectVersion) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
                                     }
-                                })}
+                                )}
                             />
                         </FormItem>
                     </Col>
@@ -276,7 +279,7 @@ const PutMonHocChuongTrinhModal = () => {
                                 }) => {
                                     try {
                                         const extension = ''
-                                            // file.name.split('.').pop() || ''
+                                        // file.name.split('.').pop() || ''
                                         const id = crypto.randomUUID()
 
                                         // Gọi API lấy presigned URL

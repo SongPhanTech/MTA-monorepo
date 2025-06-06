@@ -23,8 +23,8 @@ const PutUpdateProfileModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [typeId, setTypeId] = useState<any>()
-  
-    const userTypeData=$Enums.UserType
+
+    const userTypeData = $Enums.UserType
 
     async function onOk(output?: PutUpdateProfile) {
         if (!output) return
