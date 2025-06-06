@@ -5,7 +5,24 @@ import { PutMonHocSongHanhModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import {
+    useCountSemester,
+    useFindManySemester,
+    useFindManySubjectVersion,
+    useUpdateSemester,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tooltip,
+    message,
+} from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
@@ -14,6 +31,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 type Props = {
     curriculumVersionSubjectId: string
 }
+
+// TODO: fix this page
 export default function MonHocSongHanhPage({
     curriculumVersionSubjectId,
 }: Props) {
@@ -21,14 +40,11 @@ export default function MonHocSongHanhPage({
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [], refetch } = useFindManyCoRequisiteSubject({
+    const { data = [], refetch } = useFindManySubjectVersion({
         where: {
             // name: {
             //     contains: searchText,
             // },
-            curriculumVersionSubjectId: {
-                equals: curriculumVersionSubjectId,
-            },
         },
         include: {
             curriculumVersionSubject: true,
@@ -41,16 +57,7 @@ export default function MonHocSongHanhPage({
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountCoRequisiteSubject({
-        where: {
-            // name: {
-            //     contains: searchText,
-            // },
-            curriculumVersionSubjectId: {
-                equals: curriculumVersionSubjectId,
-            },
-        },
-    })
+    const count = 0
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<{
@@ -67,19 +74,19 @@ export default function MonHocSongHanhPage({
             curriculumVersionSubjectId,
         })
     }
-    const { mutateAsync: updateCoRequisiteSubject } =
-        useUpdateCoRequisiteSubject()
+    // const { mutateAsync: updateCoRequisiteSubject } =
+    //     useUpdateCoRequisiteSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateCoRequisiteSubject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
+            // await updateCoRequisiteSubject({
+            //     where: {
+            //         id,
+            //     },
+            //     data: {
+            //         deletedAt: new Date(),
+            //     },
+            // })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }

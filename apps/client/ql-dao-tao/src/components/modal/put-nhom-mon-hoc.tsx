@@ -2,47 +2,47 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-// import type { SubjectGroup } from '@workspace/db'
+import type { Subject } from '@workspace/db'
 import {
-    // useCreateSubjectGroup,
+    useCreateSubject,
     useFindManyOrganization,
-    // useFindUniqueSubjectGroup,
-    // useUpdateSubjectGroup,
+    useFindUniqueSubject,
+    useUpdateSubject,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, TreeSelect } from 'antd'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
-export type PutSubjectGroupFormType = SubjectGroup
+export type PutSubjectFormType = Subject
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 dayjs.locale('vi')
-const PutSubjectGroupModal = () => {
-    const [form] = Form.useForm<PutSubjectGroupFormType>()
+const PutSubjectModal = () => {
+    const [form] = Form.useForm<PutSubjectFormType>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSubjectGroupModal.name,
+        tag: PutSubjectModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createSubjectGroup } = useCreateSubjectGroup()
-    const { mutateAsync: updateSubjectGroup } = useUpdateSubjectGroup()
-    async function onOk(output?: PutSubjectGroupFormType) {
+    const { mutateAsync: createSubject } = useCreateSubject()
+    const { mutateAsync: updateSubject } = useUpdateSubject()
+    async function onOk(output?: PutSubjectFormType) {
         if (!output) return
         try {
             showSpinner()
             if (id) {
-                await updateSubjectGroup({
+                await updateSubject({
                     data: {
                         name: output.name,
                         managementOrganizationId:
                             output.managementOrganizationId,
-                        infomation: output.infomation,
+                        information: output.information,
                     },
                     where: {
                         id,
@@ -50,19 +50,19 @@ const PutSubjectGroupModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createSubjectGroup({
+                await createSubject({
                     data: {
                         name: output.name,
                         managementOrganizationId:
                             output.managementOrganizationId,
-                        infomation: output.infomation,
+                        information: output.information,
                     },
                 })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['SubjectGroup'],
+                queryKey: ['Subject'],
             })
             onClose()
         } catch (error) {
@@ -71,7 +71,7 @@ const PutSubjectGroupModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueSubjectGroup({
+    const { data: level } = useFindUniqueSubject({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -126,7 +126,7 @@ const PutSubjectGroupModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="infomation" label="Thông tin">
+                <FormItem form={form} name="information" label="Thông tin">
                     <Input.TextArea placeholder="Nhập thông tin" />
                 </FormItem>
             </Col>
@@ -134,4 +134,4 @@ const PutSubjectGroupModal = () => {
     )
 }
 
-export default PutSubjectGroupModal
+export default PutSubjectModal

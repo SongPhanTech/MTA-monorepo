@@ -16,8 +16,6 @@ interface SiderDefaultLayoutProps {
 
 // Chuyển đổi item sang định dạng Menu phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-    const router = useRouter()
-
     return menus.map((item) => {
         if (item.type === 'group' && item.children) {
             return {
@@ -26,40 +24,28 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
                 key: item.id,
                 children: item.children.map((child) => ({
                     key: child.path || child.id,
-                    label: (
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                                if (child.path) {
-                                    router.push(child.path)
-                                }
-                            }}
-                        >
-                            {child.label}
-                        </div>
-                    ),
+                    label: child.label,
                 })),
             }
         }
 
         return {
-            label: (
-                <div
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        if (item.path) {
-                            router.push(item.path)
-                        }
-                    }}
-                >
-                    {item.label}
-                </div>
-            ),
+            label: item.label,
             key: item.path || item.id,
             icon: item.icon ? <item.icon /> : undefined,
             children: item.children ? getMenus(item.children) : undefined,
         }
     })
+}
+
+function findItemByKey(menus: MenuItem[], key: string): MenuItem | undefined {
+    for (const item of menus) {
+        if ((item.path || item.id) === key) return item
+        if (item.children) {
+            const found = findItemByKey(item.children, key)
+            if (found) return found
+        }
+    }
 }
 
 // Tìm các menu mở sẵn theo pathname
@@ -87,6 +73,7 @@ const SiderDefaultLayout = ({
     items,
     onCollapse,
 }: SiderDefaultLayoutProps) => {
+    const router = useRouter()
     const pathname = usePathname()
     const [openKeys, setOpenKeys] = useState<string[]>(
         findOpenKeys(items, pathname)
@@ -110,10 +97,21 @@ const SiderDefaultLayout = ({
                 mode="inline"
                 selectedKeys={pathname ? [pathname] : []}
                 openKeys={openKeys}
-                onOpenChange={setOpenKeys}
+                onOpenChange={(keys) => {
+                    // Chỉ cho phép mở một menu tại một thời điểm
+                    const latestKey = keys.find(
+                        (key) => !openKeys.includes(key)
+                    )
+                    setOpenKeys(latestKey ? [latestKey] : [])
+                }}
                 items={getMenus(items)}
-                style={{
-                    background: 'transparent',
+                style={{ background: 'transparent' }}
+                onClick={({ key }) => {
+                    // tìm path tương ứng trong items
+                    const target = findItemByKey(items, key)
+                    if (target?.path) {
+                        router.push(target.path)
+                    }
                 }}
             />
         </Sider>

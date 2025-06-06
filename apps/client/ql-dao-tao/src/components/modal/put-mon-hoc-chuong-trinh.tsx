@@ -11,12 +11,14 @@ import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersionSubject,
+    SubjectVersion,
     Subject,
     TrainingBlock,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersionSubject,
     useFindManyOrganization,
+    useFindManySubjectVersion,
     useFindManySubject,
     useFindManyTrainingBlock,
     useFindUniqueCurriculumVersionSubject,
@@ -56,7 +58,8 @@ const PutMonHocChuongTrinhModal = () => {
         useCreateCurriculumVersionSubject()
     const { mutateAsync: updateCurrriculumVersionSubject } =
         useUpdateCurriculumVersionSubject()
-    const { data: subjectData, refetch: refetchSubject } = useFindManySubject()
+    const { data: subjectData, refetch: refetchSubject } =
+        useFindManySubjectVersion()
     const { data: trainingBlockData, refetch: refetchTrainingBlockData } =
         useFindManyTrainingBlock()
     async function onOk(output?: PutCurriculumVersionSubjectFile) {
@@ -106,7 +109,7 @@ const PutMonHocChuongTrinhModal = () => {
     }
 
     const { data: level } = useFindUniqueCurriculumVersionSubject({
-        where: { id },
+        where: { id: id || '' },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -118,7 +121,7 @@ const PutMonHocChuongTrinhModal = () => {
         useFindManyOrganization()
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } =
-        useFindManySubjectGroup()
+        useFindManySubjectVersion()
     const [current, setCurrent] = useState(0)
 
     const next = () => setCurrent(current + 1)
@@ -179,12 +182,14 @@ const PutMonHocChuongTrinhModal = () => {
                             <Select
                                 allowClear
                                 placeholder="Chọn môn học"
-                                options={subjectData?.map((item: Subject) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
+                                options={subjectData?.map(
+                                    (item: SubjectVersion) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
+                                        }
                                     }
-                                })}
+                                )}
                             />
                         </FormItem>
                     </Col>
@@ -273,8 +278,8 @@ const PutMonHocChuongTrinhModal = () => {
                                     onProgress,
                                 }) => {
                                     try {
-                                        const extension =
-                                            file.name.split('.').pop() || ''
+                                        const extension = ''
+                                        // file.name.split('.').pop() || ''
                                         const id = crypto.randomUUID()
 
                                         // Gọi API lấy presigned URL
@@ -292,7 +297,7 @@ const PutMonHocChuongTrinhModal = () => {
                                             file,
                                             {
                                                 headers: {
-                                                    'Content-Type': file.type,
+                                                    // 'Content-Type': file.type,
                                                 },
                                                 onUploadProgress: (
                                                     progressEvent
@@ -321,7 +326,7 @@ const PutMonHocChuongTrinhModal = () => {
                                     } catch (err) {
                                         console.error('Upload thất bại:', err)
                                         message.error('Tải tệp lên thất bại')
-                                        onError?.(err)
+                                        // onError?.(err)
                                     }
                                 }}
                                 beforeUpload={(file) => {
