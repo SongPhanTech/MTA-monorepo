@@ -54,12 +54,6 @@ const TimKiemVanBanLayout = ({
         handleCollapsed()
     }, [])
 
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn('asgardeo')
-        }
-    }, [status])
-
     return (
         <IdleTimerProvider
             timeout={

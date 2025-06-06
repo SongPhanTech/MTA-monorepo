@@ -60,12 +60,6 @@ const ChatLayout = ({
         handleCollapsed()
     }, [])
 
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn('asgardeo')
-        }
-    }, [status])
-
     const { data: conversation } = useFindManyConversation({
         where: {
             // userId: userInfo?.user?.user_id || '',
