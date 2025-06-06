@@ -107,6 +107,14 @@ const PutUserProfileLectureModal = () => {
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyReligion()
 
+    const {
+        data: organizationUserData = [],
+        refetch: refetchOrganizationUser,
+    } = useFindManyOrganizationUser({
+        where: {
+            userProfileId: id || undefined,
+        },
+    })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
 
@@ -226,15 +234,15 @@ const PutUserProfileLectureModal = () => {
     const { data: userProfile } = useFindUniqueUserProfile(
         id
             ? {
-                  where: {
-                      id: id,
-                  },
-              }
+                where: {
+                    id: id,
+                },
+            }
             : {
-                  where: {
-                      id: '',
-                  },
-              }
+                where: {
+                    id: '',
+                },
+            }
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -315,13 +323,13 @@ const PutUserProfileLectureModal = () => {
                         ? 'Chỉnh sửa giảng viên'
                         : 'Chỉnh sửa cán bộ'
                     : code === 'GV'
-                      ? 'Thêm mới giảng viên'
-                      : 'Thêm mới cán bộ'
+                        ? 'Thêm mới giảng viên'
+                        : 'Thêm mới cán bộ'
             }
-            className="w-[70vw]"
+            className="w-[80vw]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -357,18 +365,18 @@ const PutUserProfileLectureModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                fileList.length > 0
+                                                    fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                          <p
-                                                              style={{
-                                                                  fontSize:
-                                                                      '0.65rem',
-                                                              }}
-                                                          >
-                                                              + Tải ảnh lên
-                                                          </p>
-                                                      )}
+                                                        <p
+                                                            style={{
+                                                                fontSize:
+                                                                    '0.65rem',
+                                                            }}
+                                                        >
+                                                            + Tải ảnh lên
+                                                        </p>
+                                                    )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -757,6 +765,131 @@ const PutUserProfileLectureModal = () => {
                                 className="mb-0"
                             >
                                 <Input placeholder="Nhập số điện thoại phụ huynh" />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane tab="Lịch sử" key="3">
+                    <Row gutter={[16, 16]}>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="rankName"
+                                label="Cấp bậc hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập cấp bậc hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="rankName"
+                                label="Năm cấp bậc hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm cấp bậc hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="educationLevel"
+                                label="Trình độ học vấn"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập trình độ học vấn" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="academicDegreeTypeName"
+                                label="Học hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập học hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="academicDegreeTypeName"
+                                label="Năm học hàm"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm học hàm" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="academicRankTypeName"
+                                label="Học vị"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập học vị" />
+                            </FormItem>
+                        </Col>
+
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="academicRankTypeName"
+                                label="Năm học vị"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm học vị" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="positionName"
+                                label="Chức vụ chính quyền"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập chức vụ chính quyền" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="positionName"
+                                label="Năm chức vụ"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập năm chức vụ" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="positionCPVName"
+                                label="Chức vụ Đảng"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập chức vụ Đảng" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="organizationName"
+                                label="Đơn vị"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập đơn vị" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="organizationCPVName"
+                                label="Nơi sinh hoạt Đảng"
+                                className="mb-0"
+                            >
+                                <Input placeholder="Nhập nơi sinh hoạt Đảng" />
                             </FormItem>
                         </Col>
                     </Row>
