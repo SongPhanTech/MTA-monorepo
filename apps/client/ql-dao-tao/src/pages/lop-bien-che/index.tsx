@@ -40,7 +40,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
-import OptionsPage from '@components/sub-pages/options'
+// import OptionsPage from '@components/sub-pages/options'
 import EditIcon from '@components/icons/edit'
 
 export default function FixedClassPage({ trainingCourse }: any) {
@@ -61,7 +61,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
             managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
-            fixedClassStudent: {
+            students: {
                 include: {
                     userProfile: true,
                 },
@@ -215,7 +215,8 @@ export default function FixedClassPage({ trainingCourse }: any) {
     )
     const treeData = buildOrgTree(manageOrgData)
     const renderExpandedRow = useCallback((record: FixedClass) => {
-        return <OptionsPage key={record.id} fixedClass={record} />
+        return <></>
+        // return <OptionsPage key={record.id} fixedClass={record} />
     }, [])
 
     return (
@@ -409,10 +410,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 record: Partial<FixedClass>
                             ) => (
                                 <div style={{ maxWidth: '100%' }}>
-                                    <OptionsPage
+                                    {/* <OptionsPage
                                         key={record.id}
                                         fixedClass={record}
-                                    />
+                                    /> */}
                                 </div>
                             ),
                         }}

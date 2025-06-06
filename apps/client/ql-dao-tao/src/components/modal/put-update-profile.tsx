@@ -2,8 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserType } from '@workspace/db'
-import { useFindManyUserType } from '@workspace/db/hooks'
+import { $Enums, type UserType } from '@workspace/db'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
@@ -27,12 +26,8 @@ const PutUpdateProfileModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [typeId, setTypeId] = useState<any>()
-    useEffect(() => {
-        const type = userTypeData?.find((item: any) => item.code === code)
-        setTypeId(type?.id ?? undefined)
-    }, [code])
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+  
+    const userTypeData=$Enums.UserType
 
     async function onOk(output?: PutUpdateProfile) {
         if (!output) return
