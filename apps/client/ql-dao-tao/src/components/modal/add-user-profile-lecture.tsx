@@ -1,46 +1,35 @@
+import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 import { queryClient } from '@api/index'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import TreeSelect from '@components/commons/tree-select/TreeSelect'
+import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type {
-    UserProfile,
-    TrainingCourse,
-    Organization,
-    UserType,
-} from '@workspace/db'
+import type { UserProfile } from '@workspace/db'
 import {
     useCreateUserProfile,
+    useFindManyOrganization,
     useFindUniqueUserProfile,
     useUpdateUserProfile,
-    useFindManyTrainingCourse,
-    useFindManyFixedClass,
-    useFindManyUserType,
-    useFindManyOrganization,
-    useFindManyPosition,
-    useCreateOrganizationUser,
 } from '@workspace/db/hooks'
 import {
     Col,
     Form,
     Input,
-    message,
     Row,
     Upload,
     type UploadFile,
     type UploadProps,
+    message,
 } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { GENDER_LIST } from '@constants/constants'
 export type PutUserProfile = UserProfile
-import 'dayjs/locale/vi'
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
-import { getMinioUrl } from '@workspace/constant'
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
 export interface AddUserProfileLectureProps {
     id: string | null
     code: string

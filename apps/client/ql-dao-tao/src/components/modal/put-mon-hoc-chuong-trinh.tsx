@@ -1,53 +1,34 @@
+import { UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import MonHocSongHanhPage from '@components/sub-pages/mon-hoc-song-hanh'
+import MonHocTienQuyetPage from '@components/sub-pages/mon-hoc-tien-quyet'
+import { LOAI_MON_HOC_CTDT } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersionSubject,
     Subject,
-    SubjectGroup,
     TrainingBlock,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersionSubject,
-    useCreateSubject,
     useFindManyOrganization,
     useFindManySubject,
-    useFindManySubjectGroup,
     useFindManyTrainingBlock,
     useFindUniqueCurriculumVersionSubject,
-    useFindUniqueSubject,
     useUpdateCurriculumVersionSubject,
-    useUpdateSubject,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Form,
-    Input,
-    message,
-    Steps,
-    TreeSelect,
-    Upload,
-} from 'antd'
-import DatePicker from '@components/commons/date-picker'
+import { Button, Col, Form, Input, Steps, Upload, message } from 'antd'
+import axios from 'axios'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import dayjs from 'dayjs'
 export type PutCurriculumVersionSubject = CurriculumVersionSubject
-import 'dayjs/locale/vi'
-import { buildOrgTree } from '@lib/utils'
-import Select from '@components/commons/select'
-import {
-    LOAI_MON_HOC_CTDT,
-    SUBJECT_EQUIVALENT_TYPE,
-} from '@constants/constants'
-import MonHocTienQuyetPage from '@components/sub-pages/mon-hoc-tien-quyet'
-import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
-import MonHocSongHanhPage from '@components/sub-pages/mon-hoc-song-hanh'
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
-import axios from 'axios'
-import { UploadOutlined } from '@ant-design/icons'
 
 dayjs.locale('vi')
 type PutCurriculumVersionSubjectFile = PutCurriculumVersionSubject & {

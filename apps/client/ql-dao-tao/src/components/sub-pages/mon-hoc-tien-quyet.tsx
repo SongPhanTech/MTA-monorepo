@@ -7,11 +7,11 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountPrerequisiteSubject,
+    // useCountPrerequisiteSubject,
     useCountSemester,
-    useFindManyPrerequisiteSubject,
+    // useFindManyPrerequisiteSubject,
     useFindManySemester,
-    useUpdatePrerequisiteSubject,
+    // useUpdatePrerequisiteSubject,
     useUpdateSemester,
 } from '@workspace/db/hooks'
 import {

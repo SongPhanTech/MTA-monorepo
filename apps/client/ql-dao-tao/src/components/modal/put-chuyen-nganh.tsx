@@ -14,7 +14,7 @@ import {
     useUpdateTrainingMajor,
     useFindManyTrainingObjectType,
     useFindManyTrainingField,
-    useFindManyOrganization
+    useFindManyOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio, InputNumber } from 'antd'
 import { useEffect } from 'react'
@@ -70,15 +70,16 @@ const PutTrainingMajorModal = () => {
                         numberCreditsRequired: output.numberCreditsRequired,
                         numberCreditsElective: output.numberCreditsElective,
                         trainingObjectTypes: {
-                            set:
-                                output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                            set: output.trainingObjectTypeIds.map(
+                                (trainingObjectTypeId) => ({
                                     trainingMajorId_trainingObjectTypeId: {
                                         trainingMajorId: id,
-                                        trainingObjectTypeId: trainingObjectTypeId
-                                    }
-                                }))
-
-                        }
+                                        trainingObjectTypeId:
+                                            trainingObjectTypeId,
+                                    },
+                                })
+                            ),
+                        },
                     },
                     where: {
                         id,
@@ -101,11 +102,13 @@ const PutTrainingMajorModal = () => {
                         numberCreditsElective: output.numberCreditsElective,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map((trainingObjectTypeId) => ({
-                                    trainingObjectTypeId
-                                }))
-                            }
-                        }
+                                data: output.trainingObjectTypeIds.map(
+                                    (trainingObjectTypeId) => ({
+                                        trainingObjectTypeId,
+                                    })
+                                ),
+                            },
+                        },
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -147,7 +150,6 @@ const PutTrainingMajorModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa chuyên ngành' : 'Thêm mới chuyên ngành'}
             className="w-[45vw]"
-
         >
             <Col span={12}>
                 <FormItem
@@ -179,14 +181,12 @@ const PutTrainingMajorModal = () => {
                 >
                     <Select
                         placeholder="Chọn ngành"
-                        options={trainingFieldData.map(
-                            (i: TrainingField) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={trainingFieldData.map((i: TrainingField) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>
@@ -205,7 +205,12 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="codeTrainingMajor" label="Mã chuyên ngành" required>
+                <FormItem
+                    form={form}
+                    name="codeTrainingMajor"
+                    label="Mã chuyên ngành"
+                    required
+                >
                     <Input placeholder="Nhập mã chuyên ngành" />
                 </FormItem>
             </Col>
@@ -215,7 +220,12 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên chuyên ngành" required>
+                <FormItem
+                    form={form}
+                    name="name"
+                    label="Tên chuyên ngành"
+                    required
+                >
                     <Input placeholder="Nhập tên chuyên ngành" />
                 </FormItem>
             </Col>
@@ -273,21 +283,16 @@ const PutTrainingMajorModal = () => {
                         required
                     >
                         <Radio.Group buttonStyle="solid">
-                            <Radio
-                                value={$Enums.TrainingFieldStatus.ACTIVE}
-                            >
+                            <Radio value={$Enums.TrainingFieldStatus.ACTIVE}>
                                 Đang hoạt động
                             </Radio>
-                            <Radio
-                                value={$Enums.TrainingFieldStatus.IN_ACTIVE}
-                            >
+                            <Radio value={$Enums.TrainingFieldStatus.IN_ACTIVE}>
                                 Ngừng hoạt động
                             </Radio>
                         </Radio.Group>
                     </FormItem>
                 </Col>
             </Col>
-
         </PutFormModal>
     )
 }

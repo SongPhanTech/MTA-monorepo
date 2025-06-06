@@ -1,10 +1,4 @@
-import {
-    DownCircleFilled,
-    DownloadOutlined,
-    EyeOutlined,
-    UploadOutlined,
-} from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
@@ -20,41 +14,27 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { UserProfile } from '@workspace/db'
 import {
     useCountUserProfile,
-    useFindManyUserProfile,
-    useFindManyTrainingForm,
-    useUpdateUserProfile,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManyUserType,
     useFindManyTemplateFile,
     useFindManyOrganization,
+    useFindManyStudent,
+    useUpdateStudent,
 } from '@workspace/db/hooks'
-import type {
-    UserProfile,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
-    UserType,
-} from '@workspace/db'
 
+import Select from '@components/commons/select'
+import { FilterSinhVien } from '@components/filter'
+import EditIcon from '@components/icons/edit'
 import {
     Button,
     Col,
     Divider,
     Dropdown,
     Flex,
-    Form,
-    Input,
     Menu,
     Row,
-    Space,
     Tag,
-    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -62,10 +42,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
-import Select from '@components/commons/select'
-import { FilterSinhVien } from '@components/filter'
-import EditIcon from '@components/icons/edit'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -76,33 +52,35 @@ export default function UserProfilePageDs() {
     })
     const [selectedDoiTuong, setSelectedDoiTuong] = useState<string>()
 
-    const { data = [], refetch } = useFindManyUserProfile({
+    const { data = [], refetch } = useFindManyStudent({
         where: {
-            OR: [
-                {
-                    firstName: {
-                        contains: filters.searchText,
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.searchText,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.searchText,
+                        },
+                    },
+                ],
+                userType: {
+                    is: {
+                        code: 'SV',
                     },
                 },
-                {
-                    lastName: {
-                        contains: filters.searchText,
+                ...(selectedDoiTuong && {
+                    organizationName: {
+                        equals: selectedDoiTuong,
                     },
-                },
-            ],
-            userType: {
-                is: {
-                    code: 'SV',
-                },
-            },
-            ...(selectedDoiTuong && {
-                organizationName: {
-                    equals: selectedDoiTuong,
-                },
-            }),
+                }),
+            }
         },
         include: {
-            userType: true,
+            userProfile: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -125,11 +103,6 @@ export default function UserProfilePageDs() {
                     },
                 },
             ],
-            userType: {
-                is: {
-                    code: 'SV',
-                },
-            },
             ...(selectedDoiTuong && {
                 organizationName: {
                     equals: selectedDoiTuong,
@@ -180,7 +153,7 @@ export default function UserProfilePageDs() {
             onOpenUpdateFile('SV')
         }
     }
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { mutateAsync: updateUserProfile } = useUpdateStudent()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -197,8 +170,7 @@ export default function UserProfilePageDs() {
         }
         hideSpinner()
     }
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+
     const { data: templateFile = [], refetch: refetchTemplateFile } =
         useFindManyTemplateFile()
 
@@ -406,7 +378,7 @@ export default function UserProfilePageDs() {
                                 width: 80,
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
-                                        gender as keyof typeof GENDER_MEAN
+                                    gender as keyof typeof GENDER_MEAN
                                     ],
                             },
                             {

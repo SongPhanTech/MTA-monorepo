@@ -2,11 +2,10 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Subject, SubjectGroup } from '@workspace/db'
+import type { Subject } from '@workspace/db'
 import {
     useCreateSubject,
     useFindManyOrganization,
-    useFindManySubjectGroup,
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'

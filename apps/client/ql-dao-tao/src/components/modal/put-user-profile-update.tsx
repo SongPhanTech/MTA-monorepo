@@ -1,51 +1,39 @@
 import { queryClient } from '@api/index'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { getMinioUrl } from '@workspace/constant'
 import type {
-    UserProfile,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
-    TrainingObjectType,
+    Ethnicity,
+    Nationality,
     PriorityObject,
     RegistrationArea,
-    Nationality,
     Religion,
-    Ethnicity,
+    UserProfile,
 } from '@workspace/db'
 import {
     useCreateUserProfile,
-    useFindUniqueUserProfile,
-    useFindManySchoolYear,
-    useFindManyUserProfile,
-    useUpdateUserProfile,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManyUserType,
+    useFindManyEthnicity,
+    useFindManyNationality,
     useFindManyPriorityObject,
     useFindManyRegistrationArea,
-    useFindManyNationality,
     useFindManyReligion,
-    useFindManyEthnicity,
+    useFindUniqueUserProfile,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Tabs, Collapse, Row, Upload } from 'antd'
+import type { UploadFile, UploadProps } from 'antd'
+import { Col, Collapse, Form, Input, Row, Tabs, Upload, message } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { GENDER_LIST } from '@constants/constants'
 const { TabPane } = Tabs
 const { Panel } = Collapse
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
-import type { GetProp, UploadFile, UploadProps } from 'antd'
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
-import { getMinioUrl } from '@workspace/constant'
 
 export type PutUserProfile = UserProfile
 const PutUserProfileUpdateModal = () => {

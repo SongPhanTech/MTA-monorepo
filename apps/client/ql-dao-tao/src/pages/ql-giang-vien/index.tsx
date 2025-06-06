@@ -1,41 +1,32 @@
+import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 import {
     DownloadOutlined,
     EyeOutlined,
     UploadOutlined,
-    UserOutlined,
 } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
+    AddUserProfileLecture,
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileUpdateModal,
     PutUserProfileLectureModal,
-    AddUserProfileLecture,
 } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    convertToTree,
-    getAllChildrenByParentId,
-    searchTree,
-} from '@/utils/convertOrganizationToTree'
-import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
-import {
     useCountUserProfile,
-    useFindManyUserProfile,
-    useFindManyTrainingForm,
-    useUpdateUserProfile,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManyUserType,
-    useFindManyTemplateFile,
     useFindManyOrganization,
+    useFindManyTemplateFile,
+    useFindManyUserProfile,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 
+import EditIcon from '@components/icons/edit'
+import type { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
+import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import {
     Avatar,
     Button,
@@ -43,26 +34,18 @@ import {
     Divider,
     Dropdown,
     Flex,
-    Form,
     Input,
     Menu,
     Row,
-    Space,
-    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterLecture from '../../components/filter/filter-lecture'
 import type { FilterProps } from '../../components/filter/filter-lecture'
-import { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
-import { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
-import { record } from 'zod'
-import { OrganizationUserStatus } from '@workspace/db'
-import EditIcon from '@components/icons/edit'
+import FilterLecture from '../../components/filter/filter-lecture'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string

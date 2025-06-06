@@ -8,10 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { SchoolYear } from '@workspace/db'
 import {
-    useCountSubjectGroup,
-    useFindManySubjectGroup,
     useFindManySchoolYear,
-    useUpdateSubjectGroup,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {

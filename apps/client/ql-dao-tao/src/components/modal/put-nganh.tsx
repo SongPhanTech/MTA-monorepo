@@ -2,10 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    TrainingField,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingField, TrainingObjectType } from '@workspace/db'
 import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingField,
@@ -228,14 +225,10 @@ const PutTrainingFieldModal = () => {
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio
-                            value={$Enums.TrainingFieldStatus.ACTIVE}
-                        >
+                        <Radio value={$Enums.TrainingFieldStatus.ACTIVE}>
                             Đang hoạt động
                         </Radio>
-                        <Radio
-                            value={$Enums.TrainingFieldStatus.IN_ACTIVE}
-                        >
+                        <Radio value={$Enums.TrainingFieldStatus.IN_ACTIVE}>
                             Ngừng hoạt động
                         </Radio>
                     </Radio.Group>

@@ -8,11 +8,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountUserType,
-    useFindManyUserType,
-    useUpdateUserType,
-} from '@workspace/db/hooks'
-import {
     Button,
     Col,
     Divider,
