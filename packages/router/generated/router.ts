@@ -54,7 +54,9 @@ export default {
     "QL_GIANG_VIEN": "/ql-giang-vien",
     "QL_HOC_VIEN": "/ql-hoc-vien",
     "QL_SINH_VIEN": "/ql-sinh-vien",
-    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management"
+    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management",
+    "KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
+    "PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
