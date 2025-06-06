@@ -64,9 +64,6 @@ model SurveyAnswer extends Base {
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
 
-  userAnswered     User?          @relation("SurveyAnswer", fields: [userId], references: [id])
-  userId           String?
-
   @@schema("khao-thi")
 }
 

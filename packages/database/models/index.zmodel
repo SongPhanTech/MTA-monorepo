@@ -4,10 +4,10 @@ import './khao-thi/survey'
 
 import './ql-danh-muc/categories'
 import './ql-danh-muc/common'
-import './ql-danh-muc/edu'
 import './ql-danh-muc/template-file'
 
 import './ql-dao-tao/plan-training'
+import './ql-dao-tao/categories'
 
 import './ql-nguoi-dung/blocked-ip'
 import './ql-nguoi-dung/feedback'

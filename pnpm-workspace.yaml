@@ -32,10 +32,10 @@ catalog:
   "@types/react": ^18.3
   "@types/react-dom": ^18.3
   "@types/react-image-fallback": ^8.0.6
-  "@zenstackhq/openapi": ^2.11.6
-  "@zenstackhq/runtime": 2.11.6
-  "@zenstackhq/server": ^2.11.6
-  "@zenstackhq/tanstack-query": ^2.11.6
+  "@zenstackhq/openapi": ^2.15.1
+  "@zenstackhq/runtime": ^2.15.1
+  "@zenstackhq/server": ^2.15.1
+  "@zenstackhq/tanstack-query": ^2.15.1
   antd: ^5.23.1
   autoprefixer: ^10.4.20
   axios: 1.7.9
@@ -85,5 +85,5 @@ catalog:
   ts-node: ^10.9.2
   turbo: ^2.4.2
   typescript: ^5.8.3
-  zenstack: 2.11.6
+  zenstack: ^2.15.1
   zod: 3.24.2

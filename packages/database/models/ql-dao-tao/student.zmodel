@@ -1,0 +1,44 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/categories'
+import '../ql-danh-muc/common'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/plan-training'
+import '../ql-nguoi-dung/profile'
+
+model Student extends Base {
+  from                 DateTime? // từ ngày
+  to                   DateTime? // đến ngày
+
+  trainingLocation     TrainingLocation?       @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId   String?
+
+  /// đối tượng ưu tiên
+  priorityObject       PriorityObject[]
+
+  status               FixedClassStudentStatus @default(ENROLLED)
+
+  fixedClass           FixedClass?             @relation(fields: [fixedClassId], references: [id])
+  fixedClassId         String?
+  subjectClassStudent  SubjectClassStudent[]
+
+  userProfileId        String?
+  userProfile          UserProfile?            @relation(fields: [userProfileId], references: [id])
+
+  trainingLevel        TrainingLevel?          @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
+
+  trainingObjectType   TrainingObjectType?     @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId String?
+
+  trainingType         TrainingType?           @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId       String?
+
+  trainingForm         TrainingForm?           @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+
+  registrationArea     RegistrationArea?       @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
+  registrationAreaId   String?
+
+  @@schema("ql-dao-tao")
+}

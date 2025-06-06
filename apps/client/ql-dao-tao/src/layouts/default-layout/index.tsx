@@ -3,6 +3,7 @@ import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
+import { getDynamicTitle } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -10,6 +11,7 @@ import NAVIGATION from '@workspace/router'
 import { SearchSystem } from '@workspace/ui'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
@@ -18,6 +20,9 @@ const DefaultLayout = ({
     children,
     className,
 }: { children: ReactNode; className?: string }) => {
+    const router = useRouter()
+    const currentPath = router.pathname
+    const title = getDynamicTitle('QL_DAO_TAO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -90,7 +95,7 @@ const DefaultLayout = ({
                 >
                     <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
                         <span className="text-lg font-bold text-primary">
-                            PHÂN HỆ QUẢN LÝ ĐÀO TẠO
+                            {title}
                         </span>
                         <div className="flex gap-2 items-center">
                             <SearchSystem />

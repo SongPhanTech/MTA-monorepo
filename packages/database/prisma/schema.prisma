@@ -35,6 +35,13 @@ enum CurriculumStatus {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingLanguage {
+  Vietnamese
+  English
+
+  @@schema("ql-dao-tao")
+}
+
 enum SubjectEquivalentType {
   NONE
   OneByOne
@@ -47,6 +54,21 @@ enum SubjectEquivalentType {
   @@schema("ql-dao-tao")
 }
 
+/// loại hình thi
+enum ExamType {
+  OfflineWritten
+  OnlineWritten
+  OfflineChoices
+  OnlineChoices
+  Oral
+  Practice
+  Project
+  Other
+
+  @@schema("ql-dao-tao")
+}
+
+/// loại bắt buộc
 enum CurriculumVersionSubjectType {
   None
   Mandatory
@@ -54,28 +76,6 @@ enum CurriculumVersionSubjectType {
   Elective
 
   @@schema("ql-dao-tao")
-}
-
-enum FixedClassStudentStatus {
-  ENROLLED
-  GRADUATED
-  DEFERRED_STUDY
-  SUSPENDED_STUDY
-  WITHDRAWN
-  TRANSFERRED
-  PENDING_GRADUATION_REVIEW
-  ACADEMIC_SUSPENSION
-
-  @@schema("ql-nguoi-dung")
-}
-
-enum OrganizationUserStatus {
-  ACTIVE
-  INACTIVE
-  ON_HOLD
-  TERMINATED
-
-  @@schema("ql-nguoi-dung")
 }
 
 enum UserRole {
@@ -151,6 +151,33 @@ enum Satisfaction {
   @@schema("ql-nguoi-dung")
 }
 
+enum UserType {
+  MILITARY_STUDENT
+  CIVILIAN_STUDENT
+  LECTURER
+  STAFF
+  PROFESSIONAL
+  CONTRACT
+  CIVIL_STUDENT
+  TEACHER
+  OTHER
+
+  @@schema("ql-nguoi-dung")
+}
+
+enum FixedClassStudentStatus {
+  ENROLLED
+  GRADUATED
+  DEFERRED_STUDY
+  SUSPENDED_STUDY
+  WITHDRAWN
+  TRANSFERRED
+  PENDING_GRADUATION_REVIEW
+  ACADEMIC_SUSPENSION
+
+  @@schema("ql-nguoi-dung")
+}
+
 enum Gender {
   Male
   Female
@@ -168,7 +195,8 @@ enum TemplateFileType {
 
 model Config {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -181,7 +209,8 @@ model Config {
 
 model SurveyObjectType {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -194,7 +223,8 @@ model SurveyObjectType {
 
 model SurveyTopic {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -207,7 +237,8 @@ model SurveyTopic {
 
 model SurveyQuestionType {
   id             String           @id() @default(cuid())
-  code           String?
+  code           String?          @unique()
+  active         Boolean          @default(true)
   description    String?          @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
@@ -220,7 +251,8 @@ model SurveyQuestionType {
 
 model Survey {
   id               String           @id() @default(cuid())
-  code             String?
+  code             String?          @unique()
+  active           Boolean          @default(true)
   description      String?          @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime         @default(now())
@@ -239,7 +271,8 @@ model Survey {
 
 model SurveyQuestion {
   id                   String             @id() @default(cuid())
-  code                 String?
+  code                 String?            @unique()
+  active               Boolean            @default(true)
   description          String?            @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime           @default(now())
@@ -256,7 +289,8 @@ model SurveyQuestion {
 
 model SurveyAnswer {
   id               String         @id() @default(cuid())
-  code             String?
+  code             String?        @unique()
+  active           Boolean        @default(true)
   description      String?        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
@@ -264,15 +298,33 @@ model SurveyAnswer {
   answer           String?
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
-  userAnswered     User?          @relation("SurveyAnswer", fields: [userId], references: [id])
-  userId           String?
 
   @@schema("khao-thi")
 }
 
+model SubjectClassStudent {
+  id              String       @id() @default(cuid())
+  code            String?      @unique()
+  active          Boolean      @default(true)
+  description     String?      @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt()
+  subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId  String
+  student         Student      @relation(fields: [studentId], references: [id])
+  studentId       String
+  attendanceScore Float?
+  midtermScore    Float?
+  finalScore      Float?
+
+  @@schema("ql-dao-tao")
+}
+
 model SchoolYear {
   id          String      @id() @default(cuid())
-  code        String?
+  code        String?     @unique()
+  active      Boolean     @default(true)
   description String?     @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime    @default(now())
@@ -288,12 +340,14 @@ model SchoolYear {
 
 model Semester {
   id           String     @id() @default(cuid())
-  code         String?
+  code         String?    @unique()
+  active       Boolean    @default(true)
   description  String?    @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
   name         String
+  shortName    String?
   schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
   schoolYearId String
   startDate    DateTime
@@ -304,7 +358,8 @@ model Semester {
 
 model Milestone {
   id           String     @id() @default(cuid())
-  code         String?
+  code         String?    @unique()
+  active       Boolean    @default(true)
   description  String?    @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())
@@ -321,7 +376,8 @@ model Milestone {
 
 model TrainingCourse {
   id                   String               @id() @default(cuid())
-  code                 String?
+  code                 String?              @unique()
+  active               Boolean              @default(true)
   description          String?              @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime             @default(now())
@@ -344,26 +400,28 @@ model TrainingCourse {
 }
 
 model FixedClass {
-  id                       String              @id() @default(cuid())
-  code                     String?
-  description              String?             @db.Text()
+  id                       String          @id() @default(cuid())
+  code                     String?         @unique()
+  active                   Boolean         @default(true)
+  description              String?         @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime            @default(now())
-  updatedAt                DateTime            @updatedAt()
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt()
   name                     String
-  trainingCourse           TrainingCourse?     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse           TrainingCourse? @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
-  managementOrganization   Organization?       @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization?   @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String?
-  classSize                Int                 @default(0)
-  fixedClassStudent        FixedClassStudent[]
+  initSize                 Int             @default(0)
+  students                 Student[]
 
   @@schema("ql-dao-tao")
 }
 
 model Curriculum {
   id                       String              @id() @default(cuid())
-  code                     String?
+  code                     String?             @unique()
+  active                   Boolean             @default(true)
   description              String?             @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime            @default(now())
@@ -392,17 +450,26 @@ model Curriculum {
 
 model CurriculumVersion {
   id                       String                     @id() @default(cuid())
-  code                     String?
+  code                     String?                    @unique()
+  active                   Boolean                    @default(true)
   description              String?                    @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @updatedAt()
   name                     String
+  shortName                String?
+  englishName              String?
+  trainingLanguage         TrainingLanguage           @default(Vietnamese)
   status                   CurriculumStatus           @default(ACTIVE)
   startDate                DateTime
   endDate                  DateTime?
   curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id])
   curriculumId             String
+  scoreToTakeExam          Float?
+  scoreToPass              Float?
+  objectives               String?
+  inputStandard            String?
+  outputStandard           String?
   information              String?
   documentPath             String?
   renderPath               String?
@@ -411,32 +478,56 @@ model CurriculumVersion {
   @@schema("ql-dao-tao")
 }
 
-model SubjectGroup {
-  id                       String       @id() @default(cuid())
-  code                     String?
-  description              String?      @db.Text()
+model Subject {
+  id                       String           @id() @default(cuid())
+  code                     String?          @unique()
+  active                   Boolean          @default(true)
+  description              String?          @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime     @default(now())
-  updatedAt                DateTime     @updatedAt()
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt()
   name                     String
-  managementOrganization   Organization @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization     @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
   information              String?
-  subject                  Subject[]
+  subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
 
   @@schema("ql-dao-tao")
 }
 
-model Subject {
+model SubjectVersionType {
+  id               String           @id() @default(cuid())
+  code             String?          @unique()
+  active           Boolean          @default(true)
+  description      String?          @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt()
+  name             String
+  useForFinalScore Boolean
+  graduation       Boolean
+  conditional      Boolean
+  project          Boolean
+  print            Boolean
+  subjectVersions  SubjectVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// phiên bản môn học
+/// Giao diện nhập điểm sẽ phụ thuộc vào hệ số (e.g. 1 hay 2 điểm giữa kỳ)
+model SubjectVersion {
   id                       String                     @id() @default(cuid())
-  code                     String?
+  code                     String?                    @unique()
+  active                   Boolean                    @default(true)
   description              String?                    @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @updatedAt()
   name                     String
+  examType                 ExamType
   subjectEquivalentType    SubjectEquivalentType      @default(NONE)
-  credit                   Int                        @default(0)
+  credit                   Int
   period                   Int                        @default(0)
   numberOfTheory           Int                        @default(0)
   numberOfPractice         Int                        @default(0)
@@ -444,13 +535,28 @@ model Subject {
   numberOfProject          Int                        @default(0)
   numberOfInternship       Int                        @default(0)
   numberOfOther            Int                        @default(0)
+  objectives               String?
+  outputStandard           String?
+  documentPath             String?
+  coef_1                   Float?
+  coef_2                   Float?
+  coef_3                   Float?
+  coef_4                   Float?
+  coef_5                   Float?
   managementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
-  subjectGroup             SubjectGroup               @relation(fields: [subjectGroupId], references: [id])
-  subjectGroupId           String
+  subject                  Subject                    @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subjectId                String
+  subjectType              SubjectVersionType         @relation(fields: [subjectTypeId], references: [id])
+  subjectTypeId            String
+  trainingObjectTypes      TrainingObjectType[]
+  /// môn học chương trình
   curriculumVersionSubject CurriculumVersionSubject[]
-  prerequisiteSubject      PrerequisiteSubject[]
-  coRequisiteSubject       CoRequisiteSubject[]
+  /// môn học tiên quyết
+  prerequisiteSubject      SubjectVersion[]           @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]           @relation(name: "PrerequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]           @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]           @relation(name: "CoRequisiteSubject")
   subjectClass             SubjectClass[]
 
   @@schema("ql-dao-tao")
@@ -458,60 +564,31 @@ model Subject {
 
 model CurriculumVersionSubject {
   id                  String                       @id() @default(cuid())
-  code                String?
+  code                String?                      @unique()
+  active              Boolean                      @default(true)
   description         String?                      @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime                     @default(now())
   updatedAt           DateTime                     @updatedAt()
   curriculumVersion   CurriculumVersion            @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId String
-  subject             Subject                      @relation(fields: [subjectId], references: [id])
+  subject             SubjectVersion               @relation(fields: [subjectId], references: [id])
   subjectId           String
   trainingBlock       TrainingBlock?               @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId     String?
+  semester            Int?
   type                CurriculumVersionSubjectType @default(None)
   information         String?
   documentPath        String?
   renderPath          String?
-  coRequisiteSubject  CoRequisiteSubject[]
-  prerequisiteSubject PrerequisiteSubject[]
-
-  @@schema("ql-dao-tao")
-}
-
-model PrerequisiteSubject {
-  id                         String                   @id() @default(cuid())
-  code                       String?
-  description                String?                  @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime                 @default(now())
-  updatedAt                  DateTime                 @updatedAt()
-  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
-  curriculumVersionSubjectId String
-  subject                    Subject                  @relation(fields: [subjectId], references: [id])
-  subjectId                  String
-
-  @@schema("ql-dao-tao")
-}
-
-model CoRequisiteSubject {
-  id                         String                   @id() @default(cuid())
-  code                       String?
-  description                String?                  @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime                 @default(now())
-  updatedAt                  DateTime                 @updatedAt()
-  curriculumVersionSubject   CurriculumVersionSubject @relation(fields: [curriculumVersionSubjectId], references: [id])
-  curriculumVersionSubjectId String
-  subject                    Subject                  @relation(fields: [subjectId], references: [id])
-  subjectId                  String
 
   @@schema("ql-dao-tao")
 }
 
 model SubjectClass {
   id                  String                @id() @default(cuid())
-  code                String?
+  code                String?               @unique()
+  active              Boolean               @default(true)
   description         String?               @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime              @default(now())
@@ -519,7 +596,7 @@ model SubjectClass {
   name                String
   startDate           DateTime
   endDate             DateTime?
-  subject             Subject               @relation(fields: [subjectId], references: [id])
+  subject             SubjectVersion        @relation(fields: [subjectId], references: [id])
   subjectId           String
   examDate            DateTime?
   subjectClassStudent SubjectClassStudent[]
@@ -528,35 +605,58 @@ model SubjectClass {
 }
 
 model TrainingObjectType {
-  id             String           @id() @default(cuid())
-  code           String?
-  description    String?          @db.Text()
+  id             String                              @id() @default(cuid())
+  code           String?                             @unique()
+  active         Boolean                             @default(true)
+  description    String?                             @db.Text()
   deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
+  createdAt      DateTime                            @default(now())
+  updatedAt      DateTime                            @updatedAt()
   name           String
-  TrainingCourse TrainingCourse[]
+  trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+  trainingMajors TrainingMajorOnTrainingObjectType[]
+  trainingFields TrainingFieldOnTrainingObjectType[]
+  subjectVersion SubjectVersion[]
+  students       Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
+}
+
+/// đối tượng ưu tiên
+model PriorityObject {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  students    Student[]
+
+  @@schema("ql-dao-tao")
 }
 
 model TrainingType {
   id             String           @id() @default(cuid())
-  code           String?
+  code           String?          @unique()
+  active         Boolean          @default(true)
   description    String?          @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt()
   name           String
   trainingCourse TrainingCourse[]
+  students       Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingLevel {
   id             String           @id() @default(cuid())
-  code           String?
+  code           String?          @unique()
+  active         Boolean          @default(true)
   description    String?          @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
@@ -564,76 +664,142 @@ model TrainingLevel {
   name           String
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
+  students       Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingForm {
   id             String           @id() @default(cuid())
-  code           String?
+  code           String?          @unique()
+  active         Boolean          @default(true)
   description    String?          @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt()
   name           String
   trainingCourse TrainingCourse[]
+  students       Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingLocation {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
+  students    Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingField {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
+  id                  String                              @id() @default(cuid())
+  code                String?                             @unique()
+  active              Boolean                             @default(true)
+  description         String?                             @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime                            @default(now())
+  updatedAt           DateTime                            @updatedAt()
+  name                String
+  codeTrainingField   String                              @unique()
+  englishName         String
+  publishDate         DateTime
+  organization        Organization                        @relation(fields: [organizationId], references: [id])
+  organizationId      String
+  trainingObjectTypes TrainingFieldOnTrainingObjectType[]
+  trainingMajors      TrainingMajor[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
+}
+
+model TrainingFieldOnTrainingObjectType {
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt()
+  trainingField        TrainingField      @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId      String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingFieldId, trainingObjectTypeId])
+  @@schema("ql-dao-tao")
 }
 
 model TrainingMajor {
-  id          String       @id() @default(cuid())
-  code        String?
-  description String?      @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  name        String
-  curriculum  Curriculum[]
+  id                    String                              @id() @default(cuid())
+  code                  String?                             @unique()
+  active                Boolean                             @default(true)
+  description           String?                             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                            @default(now())
+  updatedAt             DateTime                            @updatedAt()
+  name                  String
+  codeTrainingMajor     String                              @unique()
+  englishName           String
+  summary               String
+  /// Số tín chỉ chuyên ngành
+  numberCreditsMajor    Int                                 @default(0)
+  /// Số tín chỉ bắt buộc
+  numberCreditsRequired Int                                 @default(0)
+  /// Số tín chỉ tự chọn
+  numberCreditsElective Int                                 @default(0)
+  organization          Organization                        @relation(fields: [organizationId], references: [id])
+  organizationId        String
+  trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId       String
+  trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
+  curriculum            Curriculum[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
+}
+
+model TrainingMajorOnTrainingObjectType {
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt()
+  trainingMajor        TrainingMajor      @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId      String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingMajorId, trainingObjectTypeId])
+  @@schema("ql-dao-tao")
 }
 
 model TrainingBlock {
   id                       String                     @id() @default(cuid())
-  code                     String?
+  code                     String?                    @unique()
+  active                   Boolean                    @default(true)
   description              String?                    @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @updatedAt()
   name                     String
+  /// ưu tiên sắp xếp
+  priority                 Int                        @default(0)
   curriculumVersionSubject CurriculumVersionSubject[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingTime {
   id          String       @id() @default(cuid())
-  code        String?
+  code        String?      @unique()
+  active      Boolean      @default(true)
   description String?      @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
@@ -641,299 +807,86 @@ model TrainingTime {
   name        String
   curriculum  Curriculum[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model StudyRank {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingRank {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-dao-tao")
 }
 
 model TrainingKPI {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
   name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model Province {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  Commune     Commune[]
-
-  @@schema("ql-danh-muc")
-}
-
-model Commune {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  province    Province  @relation(fields: [provinceId], references: [id])
-  provinceId  String
-
-  @@unique([name, provinceId])
-  @@schema("ql-danh-muc")
-}
-
-model Level {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model Rank {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model AcademicDegreeType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model AcademicRankType {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model Position {
-  id               String             @id() @default(cuid())
-  code             String?
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt()
-  name             String
-  organizationUser OrganizationUser[]
-
-  @@schema("ql-danh-muc")
-}
-
-model PositionCPV {
-  id          String    @id() @default(cuid())
-  code        String?
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-
-  @@schema("ql-danh-muc")
-}
-
-model OrganizationType {
-  id            String         @id() @default(cuid())
-  code          String?
-  description   String?        @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt()
-  name          String
-  organizations Organization[]
-
-  @@schema("ql-danh-muc")
-}
-
-model Organization {
-  id               String             @id() @default(cuid())
-  code             String?
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt()
-  name             String             @unique()
-  type             OrganizationType   @relation(fields: [typeId], references: [id])
-  typeId           String
-  parent           Organization?      @relation("ParentChild", fields: [organizationId], references: [id])
-  parentId         String?
-  children         Organization[]     @relation("ParentChild")
-  address          String?
-  curriculum       Curriculum[]
-  fixedClass       FixedClass[]
-  subject          Subject[]
-  subjectGroup     SubjectGroup[]
-  organizationUser OrganizationUser[]
-  organizationId   String?
-
-  @@schema("ql-danh-muc")
-}
-
-model UserProfile {
-  id                     String                @id() @default(cuid())
-  code                   String?
-  description            String?               @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime              @default(now())
-  updatedAt              DateTime              @updatedAt()
-  user                   User?                 @relation(fields: [userId], references: [id])
-  userId                 String?               @unique()
-  userType               UserType              @relation(fields: [userTypeId], references: [id])
-  userTypeId             String
-  avatar                 String?
-  firstName              String
-  lastName               String
-  dateOfBirth            DateTime?
-  placeOfBirth           String?
-  homeTown               String?
-  idCardNumber           String?
-  idCardDate             DateTime?
-  officerNumber          String?
-  priorityObject         PriorityObject?       @relation(fields: [priorityObjectId], references: [id])
-  priorityObjectId       String?
-  registrationArea       RegistrationArea?     @relation(fields: [registrationAreaId], references: [id])
-  registrationAreaId     String?
-  nationality            Nationality?          @relation(fields: [nationalityId], references: [id])
-  nationalityId          String?
-  religion               Religion?             @relation(fields: [religionId], references: [id])
-  religionId             String?
-  ethnicity              Ethnicity?            @relation(fields: [ethnicityId], references: [id])
-  ethnicityId            String?
-  gender                 Gender?
-  permanentAddress       String?
-  temporaryAddress       String?
-  contactAddress         String?
-  phoneNumber            String?
-  email                  String?
-  parentPhoneNumber      String?
-  parentName             String?
-  unionDate              DateTime?
-  unionPlace             String?
-  CPVJoinDate            DateTime?
-  officialCPVDate        DateTime?
-  CPVJoinPlace           String?
-  tenureDate             DateTime?
-  enlistmentDate         DateTime?
-  dischargeDate          DateTime?
-  rankName               String?
-  educationLevel         String?
-  academicDegreeTypeName String?
-  academicRankTypeName   String?
-  positionName           String?
-  positionCPVName        String?
-  organizationName       String?
-  organizationCPVName    String?
-  fixedClassStudent      FixedClassStudent[]
-  organizationUser       OrganizationUser[]
-  subjectClassStudent    SubjectClassStudent[]
-
-  @@schema("ql-nguoi-dung")
-}
-
-model FixedClassStudent {
-  id            String                  @id() @default(cuid())
-  code          String?
-  description   String?                 @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime                @default(now())
-  updatedAt     DateTime                @updatedAt()
-  fixedClass    FixedClass              @relation(fields: [fixedClassId], references: [id])
-  fixedClassId  String
-  userProfile   UserProfile             @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-  status        FixedClassStudentStatus @default(ENROLLED)
 
   @@schema("ql-dao-tao")
 }
 
-model SubjectClassStudent {
-  id              String       @id() @default(cuid())
-  code            String?
-  description     String?      @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt()
-  subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
-  subjectClassId  String
-  userProfile     UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId   String
-  attendanceScore Float?
-  midtermScore    Float?
-  finalScore      Float?
+model Student {
+  id                   String                  @id() @default(cuid())
+  code                 String?                 @unique()
+  active               Boolean                 @default(true)
+  description          String?                 @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt()
+  from                 DateTime?
+  to                   DateTime?
+  trainingLocation     TrainingLocation?       @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId   String?
+  /// đối tượng ưu tiên
+  priorityObject       PriorityObject[]
+  status               FixedClassStudentStatus @default(ENROLLED)
+  fixedClass           FixedClass?             @relation(fields: [fixedClassId], references: [id])
+  fixedClassId         String?
+  subjectClassStudent  SubjectClassStudent[]
+  userProfileId        String?
+  userProfile          UserProfile?            @relation(fields: [userProfileId], references: [id])
+  trainingLevel        TrainingLevel?          @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
+  trainingObjectType   TrainingObjectType?     @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+  trainingType         TrainingType?           @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId       String?
+  trainingForm         TrainingForm?           @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+  registrationArea     RegistrationArea?       @relation(fields: [registrationAreaId], references: [id])
+  registrationAreaId   String?
 
   @@schema("ql-dao-tao")
-}
-
-model OrganizationUser {
-  id             String                 @id() @default(cuid())
-  code           String?
-  description    String?                @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt()
-  userProfileId  String
-  userProfile    UserProfile            @relation(fields: [userProfileId], references: [id])
-  organizationId String
-  organization   Organization           @relation(fields: [organizationId], references: [id])
-  position       Position?              @relation(fields: [positionId], references: [id])
-  positionId     String?
-  status         OrganizationUserStatus @default(ACTIVE)
-
-  @@schema("ql-nguoi-dung")
 }
 
 model User {
   id               String         @id() @default(cuid())
-  code             String?
+  code             String?        @unique()
+  active           Boolean        @default(true)
   description      String?        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
@@ -953,14 +906,14 @@ model User {
   documentApproved Document[]     @relation("DocumentApproved")
   fAQUploaded      FAQ[]          @relation("FAQUploaded")
   fAQApproved      FAQ[]          @relation("FAQApproved")
-  surveyAnswered   SurveyAnswer[] @relation("SurveyAnswer")
 
   @@schema("ql-nguoi-dung")
 }
 
 model Group {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -974,7 +927,8 @@ model Group {
 
 model Role {
   id          String       @id() @default(cuid())
-  code        String?
+  code        String?      @unique()
+  active      Boolean      @default(true)
   description String?      @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
@@ -988,7 +942,8 @@ model Role {
 
 model Permission {
   id             String         @id() @default(cuid())
-  code           String?
+  code           String?        @unique()
+  active         Boolean        @default(true)
   description    String?        @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
@@ -1004,7 +959,8 @@ model Permission {
 
 model ChatBotConfig {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
@@ -1017,7 +973,8 @@ model ChatBotConfig {
 
 model Document {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
+  active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
@@ -1040,7 +997,8 @@ model Document {
 
 model FAQ {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
+  active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
@@ -1060,7 +1018,8 @@ model FAQ {
 
 model Prompt {
   id          String         @id() @default(cuid())
-  code        String?
+  code        String?        @unique()
+  active      Boolean        @default(true)
   description String?        @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime       @default(now())
@@ -1075,7 +1034,8 @@ model Prompt {
 
 model Conversation {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
+  active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
@@ -1090,7 +1050,8 @@ model Conversation {
 
 model Message {
   id             String        @id() @default(cuid())
-  code           String?
+  code           String?       @unique()
+  active         Boolean       @default(true)
   description    String?       @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime      @default(now())
@@ -1105,7 +1066,8 @@ model Message {
 
 model Feedback {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
+  active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
@@ -1119,35 +1081,90 @@ model Feedback {
   @@schema("ql-nguoi-dung")
 }
 
-model PriorityObject {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
+model UserProfile {
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt()
+  user                 User?               @relation(fields: [userId], references: [id])
+  userId               String?             @unique()
+  userType             UserType            @default(OTHER)
+  avatar               String?
+  firstName            String
+  lastName             String
+  dateOfBirth          DateTime?
+  placeOfBirth         String?
+  homeTown             String?
+  idCardNumber         String?
+  idCardDate           DateTime?
+  gender               Gender?
+  permanentAddress     String?
+  temporaryAddress     String?
+  contactAddress       String?
+  phoneNumber          String?
+  email                String?
+  nationality          Nationality?        @relation(fields: [nationalityId], references: [id])
+  nationalityId        String?
+  religion             Religion?           @relation(fields: [religionId], references: [id])
+  religionId           String?
+  ethnicity            Ethnicity?          @relation(fields: [ethnicityId], references: [id])
+  ethnicityId          String?
+  provinceHometown     Province?           @relation(fields: [provinceHometownId], references: [id])
+  provinceHometownId   String?
+  communeHometown      Commune?            @relation(fields: [communeHometownId], references: [id])
+  communeHometownId    String?
+  officerNumber        String?
+  rank                 Rank?               @relation(fields: [rankId], references: [id])
+  rankId               String?
+  academicDegreeType   AcademicDegreeType? @relation(fields: [academicDegreeTypeId], references: [id])
+  academicDegreeTypeId String?
+  academicRankType     AcademicRankType?   @relation(fields: [academicRankTypeId], references: [id])
+  academicRankTypeId   String?
+  unionDate            DateTime?
+  unionPlace           String?
+  CPVJoinDate          DateTime?
+  officialCPVDate      DateTime?
+  CPVJoinPlace         String?
+  positionCPV          PositionCPV?        @relation(fields: [positionCPVId], references: [id])
+  positionCPVId        String?
+  tenureDate           DateTime?
+  enlistmentDate       DateTime?
+  dischargeDate        DateTime?
+  familyPhone          String?
+  familyName           String?
+  /// hồ sơ đào tạo
+  educationAndTraining Student[]
+  /// hồ sơ giảng viên
+  lecturer             Lecturer?
+  lecturerHistory      LecturerHistory[]
+  /// hồ sơ cán bộ
+  staffs               Staff?
+  staffHistory         StaffHistory[]
 
-  @@schema("ql-danh-muc")
+  @@schema("ql-nguoi-dung")
 }
 
 model RegistrationArea {
-  id          String        @id() @default(cuid())
-  code        String?
-  description String?       @db.Text()
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
   name        String
-  userProfile UserProfile[]
+  student     Student[]
 
   @@schema("ql-danh-muc")
 }
 
 model Nationality {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
+  active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
@@ -1160,7 +1177,8 @@ model Nationality {
 
 model Religion {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
+  active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
@@ -1173,7 +1191,8 @@ model Religion {
 
 model Ethnicity {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
+  active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
@@ -1184,22 +1203,293 @@ model Ethnicity {
   @@schema("ql-danh-muc")
 }
 
-model UserType {
+model Province {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
+  active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt()
   name        String
-  userProfile UserProfile[]
+  profiles    UserProfile[]
+  Commune     Commune[]
 
   @@schema("ql-danh-muc")
+}
+
+model Commune {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  province    Province      @relation(fields: [provinceId], references: [id])
+  provinceId  String
+  profiles    UserProfile[]
+
+  @@unique([name, provinceId])
+  @@schema("ql-danh-muc")
+}
+
+model Level {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+
+  @@schema("ql-danh-muc")
+}
+
+model Rank {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  profiles    UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicDegreeType {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  profiles    UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model AcademicRankType {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  profiles    UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model LecturerType {
+  id              String            @id() @default(cuid())
+  code            String?           @unique()
+  active          Boolean           @default(true)
+  description     String?           @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt()
+  name            String            @unique()
+  lecturers       Lecturer[]
+  staffPosition   StaffPosition[]
+  lecturerHistory LecturerHistory[]
+
+  @@schema("ql-danh-muc")
+}
+
+model StaffType {
+  id           String         @id() @default(cuid())
+  code         String?        @unique()
+  active       Boolean        @default(true)
+  description  String?        @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt()
+  name         String         @unique()
+  staffs       Staff[]
+  staffHistory StaffHistory[]
+
+  @@schema("ql-danh-muc")
+}
+
+model StaffPosition {
+  id             String         @id() @default(cuid())
+  code           String?        @unique()
+  active         Boolean        @default(true)
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt()
+  name           String
+  lecturerType   LecturerType   @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
+  staffs         Staff[]
+  staffHistory   StaffHistory[]
+
+  @@unique([name, lecturerTypeId])
+  @@schema("ql-danh-muc")
+}
+
+model PositionCPV {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  name        String
+  profiles    UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model OrganizationType {
+  id            String         @id() @default(cuid())
+  code          String?        @unique()
+  active        Boolean        @default(true)
+  description   String?        @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  name          String
+  organizations Organization[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Organization {
+  id              String            @id() @default(cuid())
+  code            String?           @unique()
+  active          Boolean           @default(true)
+  description     String?           @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt()
+  name            String            @unique()
+  type            OrganizationType  @relation(fields: [typeId], references: [id])
+  typeId          String
+  parent          Organization?     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId        String?
+  children        Organization[]    @relation("ParentChild")
+  address         String?
+  lecturers       Lecturer[]
+  lecturerHistory LecturerHistory[]
+  staffs          Staff[]
+  staffHistory    StaffHistory[]
+  curriculum      Curriculum[]
+  fixedClass      FixedClass[]
+  subjectVersions SubjectVersion[]
+  subjects        Subject[]
+  trainingFields  TrainingField[]
+  trainingMajors  TrainingMajor[]
+
+  @@schema("ql-danh-muc")
+}
+
+model Lecturer {
+  id             String       @id() @default(cuid())
+  code           String?      @unique()
+  active         Boolean      @default(true)
+  description    String?      @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt()
+  lectureID      String?      @unique()
+  lectureCode    String?      @unique()
+  serviceDate    DateTime?
+  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId  String       @unique()
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
+
+  @@schema("ql-dao-tao")
+}
+
+model LecturerHistory {
+  id             String        @id() @default(cuid())
+  code           String?       @unique()
+  active         Boolean       @default(true)
+  description    String?       @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  from           DateTime?
+  to             DateTime?
+  lectureID      String?
+  lectureCode    String?
+  serviceDate    DateTime?
+  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId  String        @unique()
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  lecturerType   LecturerType  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
+
+  @@schema("ql-dao-tao")
+}
+
+model Staff {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt()
+  from            DateTime?
+  lectureID       String?       @unique()
+  lectureCode     String?       @unique()
+  serviceDate     DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique()
+  organization    Organization  @relation(fields: [organizationId], references: [id])
+  organizationId  String
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+
+  @@schema("ql-dao-tao")
+}
+
+model StaffHistory {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt()
+  from            DateTime?
+  to              DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique()
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  organizationId  String?
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+
+  @@schema("ql-dao-tao")
 }
 
 model TemplateFile {
   id          String            @id() @default(cuid())
-  code        String?
+  code        String?           @unique()
+  active      Boolean           @default(true)
   description String?           @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime          @default(now())
@@ -1215,7 +1505,8 @@ model TemplateFile {
 
 model BlockedIp {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
+  active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())

@@ -4,7 +4,8 @@
 
 Table Config {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -15,7 +16,8 @@ Table Config {
 
 Table SurveyObjectType {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -26,7 +28,8 @@ Table SurveyObjectType {
 
 Table SurveyTopic {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -37,7 +40,8 @@ Table SurveyTopic {
 
 Table SurveyQuestionType {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -48,7 +52,8 @@ Table SurveyQuestionType {
 
 Table Survey {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -65,7 +70,8 @@ Table Survey {
 
 Table SurveyQuestion {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -80,7 +86,8 @@ Table SurveyQuestion {
 
 Table SurveyAnswer {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -88,13 +95,29 @@ Table SurveyAnswer {
   answer String
   surveyQuestion SurveyQuestion [not null]
   surveyQuestionId String [not null]
-  userAnswered User
-  userId String
+}
+
+Table SubjectClassStudent {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  subjectClass SubjectClass [not null]
+  subjectClassId String [not null]
+  student Student [not null]
+  studentId String [not null]
+  attendanceScore Float
+  midtermScore Float
+  finalScore Float
 }
 
 Table SchoolYear {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -108,12 +131,14 @@ Table SchoolYear {
 
 Table Semester {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  shortName String
   schoolYear SchoolYear [not null]
   schoolYearId String [not null]
   startDate DateTime [not null]
@@ -122,7 +147,8 @@ Table Semester {
 
 Table Milestone {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -137,7 +163,8 @@ Table Milestone {
 
 Table TrainingCourse {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -159,7 +186,8 @@ Table TrainingCourse {
 
 Table FixedClass {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -169,13 +197,14 @@ Table FixedClass {
   trainingCourseId String
   managementOrganization Organization
   managementOrganizationId String
-  classSize Int [not null, default: 0]
-  fixedClassStudent FixedClassStudent [not null]
+  initSize Int [not null, default: 0]
+  students Student [not null]
 }
 
 Table Curriculum {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -202,26 +231,36 @@ Table Curriculum {
 
 Table CurriculumVersion {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  shortName String
+  englishName String
+  trainingLanguage TrainingLanguage [not null, default: 'Vietnamese']
   status CurriculumStatus [not null, default: 'ACTIVE']
   startDate DateTime [not null]
   endDate DateTime
   curriculum Curriculum [not null]
   curriculumId String [not null]
+  scoreToTakeExam Float
+  scoreToPass Float
+  objectives String
+  inputStandard String
+  outputStandard String
   information String
   documentPath String
   renderPath String
   curriculumVersionSubject CurriculumVersionSubject [not null]
 }
 
-Table SubjectGroup {
+Table Subject {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -230,19 +269,38 @@ Table SubjectGroup {
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
   information String
-  subject Subject [not null]
+  subjectVersion SubjectVersion [not null]
 }
 
-Table Subject {
+Table SubjectVersionType {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  useForFinalScore Boolean [not null]
+  graduation Boolean [not null]
+  conditional Boolean [not null]
+  project Boolean [not null]
+  print Boolean [not null]
+  subjectVersions SubjectVersion [not null]
+}
+
+Table SubjectVersion {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  examType ExamType [not null]
   subjectEquivalentType SubjectEquivalentType [not null, default: 'NONE']
-  credit Int [not null, default: 0]
+  credit Int [not null]
   period Int [not null, default: 0]
   numberOfTheory Int [not null, default: 0]
   numberOfPractice Int [not null, default: 0]
@@ -250,66 +308,57 @@ Table Subject {
   numberOfProject Int [not null, default: 0]
   numberOfInternship Int [not null, default: 0]
   numberOfOther Int [not null, default: 0]
+  objectives String
+  outputStandard String
+  documentPath String
+  coef_1 Float
+  coef_2 Float
+  coef_3 Float
+  coef_4 Float
+  coef_5 Float
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
-  subjectGroup SubjectGroup [not null]
-  subjectGroupId String [not null]
-  curriculumVersionSubject CurriculumVersionSubject [not null]
-  prerequisiteSubject PrerequisiteSubject [not null]
-  coRequisiteSubject CoRequisiteSubject [not null]
+  subject Subject [not null]
+  subjectId String [not null]
+  subjectType SubjectVersionType [not null]
+  subjectTypeId String [not null]
+  trainingObjectTypes TrainingObjectType [not null]
+  curriculumVersionSubject CurriculumVersionSubject [not null, note: 'môn học chương trình']
+  prerequisiteSubject SubjectVersion [not null, note: 'môn học tiên quyết']
+  dependentSubject SubjectVersion [not null]
+  coRequisiteSubject SubjectVersion [not null]
+  depCoRequisiteSubject SubjectVersion [not null]
   subjectClass SubjectClass [not null]
+
+  Note: 'phiên bản môn học
+Giao diện nhập điểm sẽ phụ thuộc vào hệ số (e.g. 1 hay 2 điểm giữa kỳ)'
 }
 
 Table CurriculumVersionSubject {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   curriculumVersion CurriculumVersion [not null]
   curriculumVersionId String [not null]
-  subject Subject [not null]
+  subject SubjectVersion [not null]
   subjectId String [not null]
   trainingBlock TrainingBlock
   trainingBlockId String
+  semester Int
   type CurriculumVersionSubjectType [not null, default: 'None']
   information String
   documentPath String
   renderPath String
-  coRequisiteSubject CoRequisiteSubject [not null]
-  prerequisiteSubject PrerequisiteSubject [not null]
-}
-
-Table PrerequisiteSubject {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  curriculumVersionSubject CurriculumVersionSubject [not null]
-  curriculumVersionSubjectId String [not null]
-  subject Subject [not null]
-  subjectId String [not null]
-}
-
-Table CoRequisiteSubject {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  curriculumVersionSubject CurriculumVersionSubject [not null]
-  curriculumVersionSubjectId String [not null]
-  subject Subject [not null]
-  subjectId String [not null]
 }
 
 Table SubjectClass {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -317,7 +366,7 @@ Table SubjectClass {
   name String [not null]
   startDate DateTime [not null]
   endDate DateTime
-  subject Subject [not null]
+  subject SubjectVersion [not null]
   subjectId String [not null]
   examDate DateTime
   subjectClassStudent SubjectClassStudent [not null]
@@ -325,30 +374,52 @@ Table SubjectClass {
 
 Table TrainingObjectType {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  TrainingCourse TrainingCourse [not null]
+  trainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
+  trainingMajors TrainingMajorOnTrainingObjectType [not null]
+  trainingFields TrainingFieldOnTrainingObjectType [not null]
+  subjectVersion SubjectVersion [not null]
+  students Student [not null]
+}
+
+Table PriorityObject {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  students Student [not null]
+
+  Note: 'đối tượng ưu tiên'
 }
 
 Table TrainingType {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
   trainingCourse TrainingCourse [not null]
+  students Student [not null]
 }
 
 Table TrainingLevel {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -356,64 +427,128 @@ Table TrainingLevel {
   name String [not null]
   trainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
+  students Student [not null]
 }
 
 Table TrainingForm {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
   trainingCourse TrainingCourse [not null]
+  students Student [not null]
 }
 
 Table TrainingLocation {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  students Student [not null]
 }
 
 Table TrainingField {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  codeTrainingField String [unique, not null]
+  englishName String [not null]
+  publishDate DateTime [not null]
+  organization Organization [not null]
+  organizationId String [not null]
+  trainingObjectTypes TrainingFieldOnTrainingObjectType [not null]
+  trainingMajors TrainingMajor [not null]
+}
+
+Table TrainingFieldOnTrainingObjectType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingField TrainingField [not null]
+  trainingFieldId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingFieldId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingMajor {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  codeTrainingMajor String [unique, not null]
+  englishName String [not null]
+  summary String [not null]
+  numberCreditsMajor Int [not null, default: 0, note: 'Số tín chỉ chuyên ngành']
+  numberCreditsRequired Int [not null, default: 0, note: 'Số tín chỉ bắt buộc']
+  numberCreditsElective Int [not null, default: 0, note: 'Số tín chỉ tự chọn']
+  organization Organization [not null]
+  organizationId String [not null]
+  trainingField TrainingField [not null]
+  trainingFieldId String [not null]
+  trainingObjectTypes TrainingMajorOnTrainingObjectType [not null]
   curriculum Curriculum [not null]
+}
+
+Table TrainingMajorOnTrainingObjectType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingMajor TrainingMajor [not null]
+  trainingMajorId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+
+  indexes {
+    (trainingMajorId, trainingObjectTypeId) [unique]
+  }
 }
 
 Table TrainingBlock {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
   curriculumVersionSubject CurriculumVersionSubject [not null]
 }
 
 Table TrainingTime {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -424,7 +559,8 @@ Table TrainingTime {
 
 Table StudyRank {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -434,7 +570,8 @@ Table StudyRank {
 
 Table TrainingRank {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -444,7 +581,8 @@ Table TrainingRank {
 
 Table TrainingKPI {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -452,235 +590,41 @@ Table TrainingKPI {
   name String [not null]
 }
 
-Table Province {
+Table Student {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  Commune Commune [not null]
-}
-
-Table Commune {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  province Province [not null]
-  provinceId String [not null]
-
-  indexes {
-    (name, provinceId) [unique]
-  }
-}
-
-Table Level {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table Rank {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table AcademicDegreeType {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table AcademicRankType {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table Position {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  organizationUser OrganizationUser [not null]
-}
-
-Table PositionCPV {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-}
-
-Table OrganizationType {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  organizations Organization [not null]
-}
-
-Table Organization {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [unique, not null]
-  type OrganizationType [not null]
-  typeId String [not null]
-  parent Organization
-  parentId String
-  children Organization [not null]
-  address String
-  curriculum Curriculum [not null]
-  fixedClass FixedClass [not null]
-  subject Subject [not null]
-  subjectGroup SubjectGroup [not null]
-  organizationUser OrganizationUser [not null]
-  organizationId String
-}
-
-Table UserProfile {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  user User
-  userId String [unique]
-  userType UserType [not null]
-  userTypeId String [not null]
-  avatar String
-  firstName String [not null]
-  lastName String [not null]
-  dateOfBirth DateTime
-  placeOfBirth String
-  homeTown String
-  idCardNumber String
-  idCardDate DateTime
-  officerNumber String
-  priorityObject PriorityObject
-  priorityObjectId String
+  from DateTime
+  to DateTime
+  trainingLocation TrainingLocation
+  trainingLocationId String
+  priorityObject PriorityObject [not null, note: 'đối tượng ưu tiên']
+  status FixedClassStudentStatus [not null, default: 'ENROLLED']
+  fixedClass FixedClass
+  fixedClassId String
+  subjectClassStudent SubjectClassStudent [not null]
+  userProfileId String
+  userProfile UserProfile
+  trainingLevel TrainingLevel
+  trainingLevelId String
+  trainingObjectType TrainingObjectType
+  trainingObjectTypeId String
+  trainingType TrainingType
+  trainingTypeId String
+  trainingForm TrainingForm
+  trainingFormId String
   registrationArea RegistrationArea
   registrationAreaId String
-  nationality Nationality
-  nationalityId String
-  religion Religion
-  religionId String
-  ethnicity Ethnicity
-  ethnicityId String
-  gender Gender
-  permanentAddress String
-  temporaryAddress String
-  contactAddress String
-  phoneNumber String
-  email String
-  parentPhoneNumber String
-  parentName String
-  unionDate DateTime
-  unionPlace String
-  CPVJoinDate DateTime
-  officialCPVDate DateTime
-  CPVJoinPlace String
-  tenureDate DateTime
-  enlistmentDate DateTime
-  dischargeDate DateTime
-  rankName String
-  educationLevel String
-  academicDegreeTypeName String
-  academicRankTypeName String
-  positionName String
-  positionCPVName String
-  organizationName String
-  organizationCPVName String
-  fixedClassStudent FixedClassStudent [not null]
-  organizationUser OrganizationUser [not null]
-  subjectClassStudent SubjectClassStudent [not null]
-}
-
-Table FixedClassStudent {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  fixedClass FixedClass [not null]
-  fixedClassId String [not null]
-  userProfile UserProfile [not null]
-  userProfileId String [not null]
-  status FixedClassStudentStatus [not null, default: 'ENROLLED']
-}
-
-Table SubjectClassStudent {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  subjectClass SubjectClass [not null]
-  subjectClassId String [not null]
-  userProfile UserProfile [not null]
-  userProfileId String [not null]
-  attendanceScore Float
-  midtermScore Float
-  finalScore Float
-}
-
-Table OrganizationUser {
-  id String [pk]
-  code String
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  userProfileId String [not null]
-  userProfile UserProfile [not null]
-  organizationId String [not null]
-  organization Organization [not null]
-  position Position
-  positionId String
-  status OrganizationUserStatus [not null, default: 'ACTIVE']
 }
 
 Table User {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -700,12 +644,12 @@ Table User {
   documentApproved Document [not null]
   fAQUploaded FAQ [not null]
   fAQApproved FAQ [not null]
-  surveyAnswered SurveyAnswer [not null]
 }
 
 Table Group {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -717,7 +661,8 @@ Table Group {
 
 Table Role {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -729,7 +674,8 @@ Table Role {
 
 Table Permission {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -746,7 +692,8 @@ Table Permission {
 
 Table ChatBotConfig {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -757,7 +704,8 @@ Table ChatBotConfig {
 
 Table Document {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -778,7 +726,8 @@ Table Document {
 
 Table FAQ {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -796,7 +745,8 @@ Table FAQ {
 
 Table Prompt {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -809,7 +759,8 @@ Table Prompt {
 
 Table Conversation {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -822,7 +773,8 @@ Table Conversation {
 
 Table Message {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -835,7 +787,8 @@ Table Message {
 
 Table Feedback {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -847,31 +800,83 @@ Table Feedback {
   userId String [not null]
 }
 
-Table PriorityObject {
+Table UserProfile {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  userProfile UserProfile [not null]
+  user User
+  userId String [unique]
+  userType UserType [not null, default: 'OTHER']
+  avatar String
+  firstName String [not null]
+  lastName String [not null]
+  dateOfBirth DateTime
+  placeOfBirth String
+  homeTown String
+  idCardNumber String
+  idCardDate DateTime
+  gender Gender
+  permanentAddress String
+  temporaryAddress String
+  contactAddress String
+  phoneNumber String
+  email String
+  nationality Nationality
+  nationalityId String
+  religion Religion
+  religionId String
+  ethnicity Ethnicity
+  ethnicityId String
+  provinceHometown Province
+  provinceHometownId String
+  communeHometown Commune
+  communeHometownId String
+  officerNumber String
+  rank Rank
+  rankId String
+  academicDegreeType AcademicDegreeType
+  academicDegreeTypeId String
+  academicRankType AcademicRankType
+  academicRankTypeId String
+  unionDate DateTime
+  unionPlace String
+  CPVJoinDate DateTime
+  officialCPVDate DateTime
+  CPVJoinPlace String
+  positionCPV PositionCPV
+  positionCPVId String
+  tenureDate DateTime
+  enlistmentDate DateTime
+  dischargeDate DateTime
+  familyPhone String
+  familyName String
+  educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
+  lecturer Lecturer [note: 'hồ sơ giảng viên']
+  lecturerHistory LecturerHistory [not null]
+  staffs Staff [note: 'hồ sơ cán bộ']
+  staffHistory StaffHistory [not null]
 }
 
 Table RegistrationArea {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  userProfile UserProfile [not null]
+  student Student [not null]
 }
 
 Table Nationality {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -882,7 +887,8 @@ Table Nationality {
 
 Table Religion {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -893,7 +899,8 @@ Table Religion {
 
 Table Ethnicity {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -902,20 +909,267 @@ Table Ethnicity {
   userProfile UserProfile [not null]
 }
 
-Table UserType {
+Table Province {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  profiles UserProfile [not null]
+  Commune Commune [not null]
+}
+
+Table Commune {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  province Province [not null]
+  provinceId String [not null]
+  profiles UserProfile [not null]
+
+  indexes {
+    (name, provinceId) [unique]
+  }
+}
+
+Table Level {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+}
+
+Table Rank {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  profiles UserProfile [not null]
+}
+
+Table AcademicDegreeType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  profiles UserProfile [not null]
+}
+
+Table AcademicRankType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  profiles UserProfile [not null]
+}
+
+Table LecturerType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  lecturers Lecturer [not null]
+  staffPosition StaffPosition [not null]
+  lecturerHistory LecturerHistory [not null]
+}
+
+Table StaffType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  staffs Staff [not null]
+  staffHistory StaffHistory [not null]
+}
+
+Table StaffPosition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+  staffs Staff [not null]
+  staffHistory StaffHistory [not null]
+
+  indexes {
+    (name, lecturerTypeId) [unique]
+  }
+}
+
+Table PositionCPV {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  profiles UserProfile [not null]
+}
+
+Table OrganizationType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  organizations Organization [not null]
+}
+
+Table Organization {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  type OrganizationType [not null]
+  typeId String [not null]
+  parent Organization
+  parentId String
+  children Organization [not null]
+  address String
+  lecturers Lecturer [not null]
+  lecturerHistory LecturerHistory [not null]
+  staffs Staff [not null]
+  staffHistory StaffHistory [not null]
+  curriculum Curriculum [not null]
+  fixedClass FixedClass [not null]
+  subjectVersions SubjectVersion [not null]
+  subjects Subject [not null]
+  trainingFields TrainingField [not null]
+  trainingMajors TrainingMajor [not null]
+}
+
+Table Lecturer {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lectureID String [unique]
+  lectureCode String [unique]
+  serviceDate DateTime
   userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization Organization [not null]
+  organizationId String [not null]
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+}
+
+Table LecturerHistory {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  to DateTime
+  lectureID String
+  lectureCode String
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization Organization
+  organizationId String
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+}
+
+Table Staff {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  lectureID String [unique]
+  lectureCode String [unique]
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization Organization [not null]
+  organizationId String [not null]
+  staffType StaffType [not null]
+  staffTypeId String [not null]
+  staffPosition StaffPosition [not null]
+  staffPositionId String [not null]
+}
+
+Table StaffHistory {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  to DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization Organization
+  organizationId String
+  staffType StaffType [not null]
+  staffTypeId String [not null]
+  staffPosition StaffPosition [not null]
+  staffPositionId String [not null]
 }
 
 Table TemplateFile {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -929,7 +1183,8 @@ Table TemplateFile {
 
 Table BlockedIp {
   id String [pk]
-  code String
+  code String [unique]
+  active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
@@ -937,6 +1192,26 @@ Table BlockedIp {
   ipAddress String [unique, not null]
   reason String
   expiresAt DateTime
+}
+
+Table SubjectVersionToTrainingObjectType {
+  trainingobjecttypesId String [ref: > TrainingObjectType.id]
+  subjectversionId String [ref: > SubjectVersion.id]
+}
+
+Table PrerequisiteSubject {
+  prerequisitesubjectId String [ref: > SubjectVersion.id]
+  dependentsubjectId String [ref: > SubjectVersion.id]
+}
+
+Table CoRequisiteSubject {
+  corequisitesubjectId String [ref: > SubjectVersion.id]
+  depcorequisitesubjectId String [ref: > SubjectVersion.id]
+}
+
+Table PriorityObjectToStudent {
+  studentsId String [ref: > Student.id]
+  priorityobjectId String [ref: > PriorityObject.id]
 }
 
 Table GroupToUser {
@@ -966,6 +1241,11 @@ Enum CurriculumStatus {
   INACTIVATED
 }
 
+Enum TrainingLanguage {
+  Vietnamese
+  English
+}
+
 Enum SubjectEquivalentType {
   NONE
   OneByOne
@@ -976,29 +1256,22 @@ Enum SubjectEquivalentType {
   OneByThree
 }
 
+Enum ExamType {
+  OfflineWritten
+  OnlineWritten
+  OfflineChoices
+  OnlineChoices
+  Oral
+  Practice
+  Project
+  Other
+}
+
 Enum CurriculumVersionSubjectType {
   None
   Mandatory
   Optional
   Elective
-}
-
-Enum FixedClassStudentStatus {
-  ENROLLED
-  GRADUATED
-  DEFERRED_STUDY
-  SUSPENDED_STUDY
-  WITHDRAWN
-  TRANSFERRED
-  PENDING_GRADUATION_REVIEW
-  ACADEMIC_SUSPENSION
-}
-
-Enum OrganizationUserStatus {
-  ACTIVE
-  INACTIVE
-  ON_HOLD
-  TERMINATED
 }
 
 Enum UserRole {
@@ -1060,6 +1333,29 @@ Enum Satisfaction {
   VerySatisfied
 }
 
+Enum UserType {
+  MILITARY_STUDENT
+  CIVILIAN_STUDENT
+  LECTURER
+  STAFF
+  PROFESSIONAL
+  CONTRACT
+  CIVIL_STUDENT
+  TEACHER
+  OTHER
+}
+
+Enum FixedClassStudentStatus {
+  ENROLLED
+  GRADUATED
+  DEFERRED_STUDY
+  SUSPENDED_STUDY
+  WITHDRAWN
+  TRANSFERRED
+  PENDING_GRADUATION_REVIEW
+  ACADEMIC_SUSPENSION
+}
+
 Enum Gender {
   Male
   Female
@@ -1081,7 +1377,9 @@ Ref: SurveyQuestion.surveyId > Survey.id
 
 Ref: SurveyAnswer.surveyQuestionId > SurveyQuestion.id
 
-Ref: SurveyAnswer.userId > User.id
+Ref: SubjectClassStudent.subjectClassId > SubjectClass.id
+
+Ref: SubjectClassStudent.studentId > Student.id
 
 Ref: Semester.schoolYearId > SchoolYear.id
 
@@ -1111,61 +1409,51 @@ Ref: Curriculum.trainingMajorId > TrainingMajor.id
 
 Ref: CurriculumVersion.curriculumId > Curriculum.id
 
-Ref: SubjectGroup.managementOrganizationId > Organization.id
-
 Ref: Subject.managementOrganizationId > Organization.id
 
-Ref: Subject.subjectGroupId > SubjectGroup.id
+Ref: SubjectVersion.managementOrganizationId > Organization.id
+
+Ref: SubjectVersion.subjectId > Subject.id
+
+Ref: SubjectVersion.subjectTypeId > SubjectVersionType.id
 
 Ref: CurriculumVersionSubject.curriculumVersionId > CurriculumVersion.id
 
-Ref: CurriculumVersionSubject.subjectId > Subject.id
+Ref: CurriculumVersionSubject.subjectId > SubjectVersion.id
 
 Ref: CurriculumVersionSubject.trainingBlockId > TrainingBlock.id
 
-Ref: PrerequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
+Ref: SubjectClass.subjectId > SubjectVersion.id
 
-Ref: PrerequisiteSubject.subjectId > Subject.id
+Ref: TrainingField.organizationId > Organization.id
 
-Ref: CoRequisiteSubject.curriculumVersionSubjectId > CurriculumVersionSubject.id
+Ref: TrainingFieldOnTrainingObjectType.trainingFieldId > TrainingField.id
 
-Ref: CoRequisiteSubject.subjectId > Subject.id
+Ref: TrainingFieldOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
-Ref: SubjectClass.subjectId > Subject.id
+Ref: TrainingMajor.organizationId > Organization.id
 
-Ref: Commune.provinceId > Province.id
+Ref: TrainingMajor.trainingFieldId > TrainingField.id
 
-Ref: Organization.typeId > OrganizationType.id
+Ref: TrainingMajorOnTrainingObjectType.trainingMajorId > TrainingMajor.id
 
-Ref: Organization.organizationId - Organization.id
+Ref: TrainingMajorOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
-Ref: UserProfile.userId > User.id
+Ref: Student.trainingLocationId > TrainingLocation.id
 
-Ref: UserProfile.userTypeId > UserType.id
+Ref: Student.fixedClassId > FixedClass.id
 
-Ref: UserProfile.priorityObjectId > PriorityObject.id
+Ref: Student.userProfileId > UserProfile.id
 
-Ref: UserProfile.registrationAreaId > RegistrationArea.id
+Ref: Student.trainingLevelId > TrainingLevel.id
 
-Ref: UserProfile.nationalityId > Nationality.id
+Ref: Student.trainingObjectTypeId > TrainingObjectType.id
 
-Ref: UserProfile.religionId > Religion.id
+Ref: Student.trainingTypeId > TrainingType.id
 
-Ref: UserProfile.ethnicityId > Ethnicity.id
+Ref: Student.trainingFormId > TrainingForm.id
 
-Ref: FixedClassStudent.fixedClassId > FixedClass.id
-
-Ref: FixedClassStudent.userProfileId > UserProfile.id
-
-Ref: SubjectClassStudent.subjectClassId > SubjectClass.id
-
-Ref: SubjectClassStudent.userProfileId > UserProfile.id
-
-Ref: OrganizationUser.userProfileId > UserProfile.id
-
-Ref: OrganizationUser.organizationId > Organization.id
-
-Ref: OrganizationUser.positionId > Position.id
+Ref: Student.registrationAreaId > RegistrationArea.id
 
 Ref: Document.uploadedById > User.id
 
@@ -1180,3 +1468,59 @@ Ref: Conversation.userId > User.id
 Ref: Message.conversationId > Conversation.id
 
 Ref: Feedback.userId > User.id
+
+Ref: UserProfile.userId > User.id
+
+Ref: UserProfile.nationalityId > Nationality.id
+
+Ref: UserProfile.religionId > Religion.id
+
+Ref: UserProfile.ethnicityId > Ethnicity.id
+
+Ref: UserProfile.provinceHometownId > Province.id
+
+Ref: UserProfile.communeHometownId > Commune.id
+
+Ref: UserProfile.rankId > Rank.id
+
+Ref: UserProfile.academicDegreeTypeId > AcademicDegreeType.id
+
+Ref: UserProfile.academicRankTypeId > AcademicRankType.id
+
+Ref: UserProfile.positionCPVId > PositionCPV.id
+
+Ref: Commune.provinceId > Province.id
+
+Ref: StaffPosition.lecturerTypeId > LecturerType.id
+
+Ref: Organization.typeId > OrganizationType.id
+
+Ref: Organization.parentId - Organization.id
+
+Ref: Lecturer.userProfileId - UserProfile.id
+
+Ref: Lecturer.organizationId > Organization.id
+
+Ref: Lecturer.lecturerTypeId > LecturerType.id
+
+Ref: LecturerHistory.userProfileId > UserProfile.id
+
+Ref: LecturerHistory.organizationId > Organization.id
+
+Ref: LecturerHistory.lecturerTypeId > LecturerType.id
+
+Ref: Staff.userProfileId - UserProfile.id
+
+Ref: Staff.organizationId > Organization.id
+
+Ref: Staff.staffTypeId > StaffType.id
+
+Ref: Staff.staffPositionId > StaffPosition.id
+
+Ref: StaffHistory.userProfileId > UserProfile.id
+
+Ref: StaffHistory.organizationId > Organization.id
+
+Ref: StaffHistory.staffTypeId > StaffType.id
+
+Ref: StaffHistory.staffPositionId > StaffPosition.id

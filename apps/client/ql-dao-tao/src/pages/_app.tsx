@@ -1,7 +1,7 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
-import { API_BASE_URL } from '@constants/constants'
+import { API_BASE_URL, API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
@@ -80,7 +80,7 @@ function App({ Component, pageProps }: AppProps) {
                     <QueryClientProvider client={queryClient}>
                         <ZenStackHooksProvider
                             value={{
-                                endpoint: `${API_BASE_URL}/api/model`,
+                                endpoint: `${API_MODEL_BASE_URL}/api/model`,
                                 fetch: fetchInstance,
                             }}
                         >
