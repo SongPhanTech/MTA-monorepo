@@ -1,10 +1,7 @@
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import {
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
+import { PutUpdateProfileModal, PutUploadProfileModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     GENDER_MEAN,

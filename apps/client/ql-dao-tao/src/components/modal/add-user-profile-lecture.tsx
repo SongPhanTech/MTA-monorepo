@@ -6,10 +6,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import {
-    type UserProfile,
-    $Enums,
-} from '@workspace/db'
+import { type UserProfile, $Enums } from '@workspace/db'
 import {
     useCreateUserProfile,
     useFindManyOrganization,
@@ -47,7 +44,6 @@ const AddUserProfileLecture = () => {
     const { id, code } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-
     // TODO: mapping vietnamese
     const userTypeData = $Enums.UserType
     const { data: organizations = [], refetch: refetchOrganization } =
@@ -81,9 +77,7 @@ const AddUserProfileLecture = () => {
             const organizaiontName = organizations.find(
                 (org) => org.id === ''
             )?.name
-            const positionName = positions.find(
-                (pos) => pos.id === ''
-            )?.name
+            const positionName = positions.find((pos) => pos.id === '')?.name
             const userProfile = await createUserProfile({
                 data: {
                     code: output.code,
@@ -101,7 +95,6 @@ const AddUserProfileLecture = () => {
 
             // TODO: create lecturer profile
 
-           
             message.success('Thêm mới thành công')
             //   await updateUserProfile({
             //     data: {
@@ -285,7 +278,6 @@ const AddUserProfileLecture = () => {
                 </Col>
             </Row>
 
-           
             <Col span={12}>
                 <FormItem
                     form={form}

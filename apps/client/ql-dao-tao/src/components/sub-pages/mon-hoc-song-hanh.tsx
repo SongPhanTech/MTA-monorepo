@@ -49,7 +49,6 @@ export default function MonHocSongHanhPage({
         include: {
             curriculumVersionSubject: true,
             subject: true,
-            
         },
         orderBy: {
             createdAt: 'desc',
@@ -58,7 +57,7 @@ export default function MonHocSongHanhPage({
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const count =0
+    const count = 0
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<{
