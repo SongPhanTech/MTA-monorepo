@@ -8,7 +8,7 @@ import {
     useFindUniqueTrainingCourse,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Table, TreeSelect } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Table, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -104,9 +104,10 @@ const PutOpenClassModal = () => {
             title={'Mở lớp môn học'}
             className="w-[60vw]"
         >
-            <Col span={8}><div>Mã HK: 242</div></Col>
-            <Col span={8}>Học kỳ 2 năm 2024-2025</Col>
-            <Col span={8}>Đơn vị phụ trách: Bộ môn</Col>
+            <Col span={6}><div>Mã HK: 242</div></Col>
+            <Col span={6}>Học kỳ 2 năm 2024-2025</Col>
+            <Col span={6}>Đơn vị phụ trách:</Col>
+            <Col span={6}>Bộ môn...</Col>
             <Col span={6}>Mã MH: ...</Col>
             <Col span={6}>Tên MH: ...</Col>
             <Col span={6}>Tổng SV: 80</Col>
@@ -136,13 +137,23 @@ const PutOpenClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="Số lớp môn học">
-                    <Input placeholder='' />
+                <FormItem form={form} name="trainingTypeId" label="Số lớp môn học" >
+                    <Flex gap={8}>
+                        <Input placeholder='' />
+                        <Button type="primary" className="h-[32px]" >
+                            Thêm LMH theo số lớp
+                        </Button>
+                    </Flex>
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="trainingTypeId" label="Số sinh viên tối đa">
-                    <Input placeholder='' />
+                    <Flex gap={8}>
+                        <Input placeholder='' />
+                        <Button type="primary" className="h-[32px]" >
+                            Thêm LMH theo số SV tối đa
+                        </Button>
+                    </Flex>
                 </FormItem>
             </Col>
             <Table
