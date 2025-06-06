@@ -2,9 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    useFindManyOrganization,
-} from '@workspace/db/hooks'
+import { useFindManyOrganization } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

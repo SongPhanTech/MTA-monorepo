@@ -27,7 +27,6 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 dayjs.locale('vi')
 const PutMonHocTienQuyetModal = () => {
-
     return <></>
     // const [form] = Form.useForm<PutPrerequisiteSubject>()
     // const { isOpen, onClose, input } = useDisclosure<{

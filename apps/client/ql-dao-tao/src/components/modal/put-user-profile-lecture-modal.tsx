@@ -89,7 +89,7 @@ const PutUserProfileLectureModal = () => {
     const { id, code } = input ?? { id: null, code: '' }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const userTypeData=$Enums.UserType
+    const userTypeData = $Enums.UserType
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
@@ -432,7 +432,6 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập nơi sinh" />
                                             </FormItem>
                                         </Col>
-                                        
                                     </Row>
                                 </Col>
                                 <Col span={24}>
@@ -551,8 +550,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập thư điện tử" />
                                             </FormItem>
                                         </Col>
-                                        
-                                      
+
                                         <Col span={8}>
                                             <FormItem
                                                 form={form}
@@ -763,7 +761,6 @@ const PutUserProfileLectureModal = () => {
                         </Col>
                     </Row>
                 </TabPane>
-                
             </Tabs>
         </PutFormModal>
     )
