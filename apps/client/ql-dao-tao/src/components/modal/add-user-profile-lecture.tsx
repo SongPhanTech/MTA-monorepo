@@ -1,17 +1,19 @@
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 import { queryClient } from '@api/index'
 import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { UserProfile } from '@workspace/db'
+import {
+    type UserProfile,
+    $Enums,
+} from '@workspace/db'
 import {
     useCreateUserProfile,
     useFindManyOrganization,
+    useFindManyStaffPosition,
     useFindUniqueUserProfile,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
@@ -45,16 +47,16 @@ const AddUserProfileLecture = () => {
     const { id, code } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+
+    // TODO: mapping vietnamese
+    const userTypeData = $Enums.UserType
     const { data: organizations = [], refetch: refetchOrganization } =
         useFindManyOrganization()
     const { data: positions = [], refetch: refetchPosition } =
-        useFindManyPosition()
+        useFindManyStaffPosition()
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
-    const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
     async function onOk(output?: PutUserProfile) {
         // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
@@ -77,10 +79,10 @@ const AddUserProfileLecture = () => {
             }
             //do model PutUserProfile k co organizationId nen su dung organizationName cho FormItem
             const organizaiontName = organizations.find(
-                (org) => org.id === output.organizationName
+                (org) => org.id === ''
             )?.name
             const positionName = positions.find(
-                (pos) => pos.id === output.positionName
+                (pos) => pos.id === ''
             )?.name
             const userProfile = await createUserProfile({
                 data: {
@@ -93,24 +95,13 @@ const AddUserProfileLecture = () => {
                     homeTown: output.homeTown,
                     idCardNumber: output.idCardNumber,
                     phoneNumber: output.phoneNumber,
-                    userTypeId: userTypeData?.find(
-                        (type: any) => type.code === code
-                    )!.id,
-                    organizationName: organizaiontName,
-                    positionName: positionName,
+                    userType: $Enums.UserType.LECTURER,
                 },
             })
 
-            // tao lich su don vi chuc vu
-            if (output.organizationName && output.positionName && userProfile) {
-                await createOrganizationUser({
-                    data: {
-                        userProfileId: userProfile.id,
-                        organizationId: output.organizationName,
-                        positionId: output.positionName,
-                    },
-                })
-            }
+            // TODO: create lecturer profile
+
+           
             message.success('Thêm mới thành công')
             //   await updateUserProfile({
             //     data: {
@@ -294,41 +285,7 @@ const AddUserProfileLecture = () => {
                 </Col>
             </Row>
 
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="positionName"
-                    label="Chức vụ"
-                    required
-                >
-                    <Select
-                        placeholder="Chọn chức vụ"
-                        options={
-                            positions
-                                ? positions.map((i: any) => {
-                                      return {
-                                          value: i.id,
-                                          label: i.name,
-                                      }
-                                  })
-                                : []
-                        }
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="organizationName"
-                    label="Chọn đơn vị"
-                    required
-                >
-                    <TreeSelect
-                        placeholder="Chọn đơn vị"
-                        treeData={convertToTreeSelect(organizations || [])}
-                    />
-                </FormItem>
-            </Col>
+           
             <Col span={12}>
                 <FormItem
                     form={form}

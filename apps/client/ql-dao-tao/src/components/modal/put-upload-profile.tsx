@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { UserType } from '@workspace/db'
+import { $Enums, type UserType } from '@workspace/db'
 import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
@@ -23,17 +23,10 @@ const PutUploadProfileModal = () => {
         onClose: form.resetFields,
     })
     const [typeId, setTypeId] = useState<string>()
-    useEffect(() => {
-        const type = userTypeData?.find(
-            (item: UserType) =>
-                code !== null && code !== undefined && item.code === code
-        )
-        setTypeId(type?.id ?? undefined)
-    }, [code])
+
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+    const userTypeData = $Enums.UserType
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return
@@ -60,13 +53,13 @@ const PutUploadProfileModal = () => {
             // } else {
             //   message.error(data.message || "Tải lên thất bại!");
             // }
-            const response = await fetchUploadExcelCreateUserProfile({
-                body: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            console.log(response)
+            // const response = await fetchUploadExcelCreateUserProfile({
+            //     body: formData,
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            // })
+            // console.log(response)
             message.success('Tải lên thành công!')
 
             // refetch() lại danh sách level
