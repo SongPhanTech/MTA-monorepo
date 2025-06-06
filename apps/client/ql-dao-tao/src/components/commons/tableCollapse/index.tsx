@@ -58,14 +58,14 @@ const TableCollapse = <T extends Data>({
     }
 
     const dataWithKey = useMemo(() => {
+        if (!data) return []
         let keyCounter = 0
-
         function generateKey(prefix = 'key') {
             keyCounter++
             return `${prefix}-${keyCounter}`
         }
 
-        return data?.map((item) => {
+        return data.map((item) => {
             const hasChildren = Array.isArray(item.children)
             // Nếu item không có key thì tạo key mới
             if (!item.key) {
@@ -83,8 +83,6 @@ const TableCollapse = <T extends Data>({
                         return {
                             ...child,
                             type: 'child',
-                            parentKey: item.key,
-                            subject: undefined,
                         }
                     }),
                 }
@@ -96,8 +94,6 @@ const TableCollapse = <T extends Data>({
             return {
                 ...item,
                 type: 'child',
-                parentKey: undefined,
-                subject: undefined,
             }
         })
     }, [data])
@@ -122,7 +118,7 @@ const TableCollapse = <T extends Data>({
                 width: 60,
                 align: 'center',
                 fixed: 'left',
-                render: (_, record, index: number) => {
+                render: (_, record) => {
                     if (Array.isArray(record?.children)) {
                         return (
                             <strong className="select-none">
@@ -130,11 +126,9 @@ const TableCollapse = <T extends Data>({
                             </strong>
                         )
                     }
-
                     const order = allChildren.findIndex(
                         (item) => item.key === record.key
                     )
-
                     return order >= 0
                         ? order + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE
                         : null
