@@ -16,11 +16,13 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { UserProfile } from '@workspace/db'
 import {
-    useCountUserProfile,
     useFindManyTemplateFile,
-    useFindManyOrganization,
     useFindManyStudent,
     useUpdateStudent,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingCourse,
+    useCountStudent,
+    useFindManyFixedClass,
 } from '@workspace/db/hooks'
 
 import Select from '@components/commons/select'
@@ -43,6 +45,7 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -50,7 +53,9 @@ export default function UserProfilePageDs() {
     const [filters, setFilters] = useState({
         searchText: '',
     })
-    const [selectedDoiTuong, setSelectedDoiTuong] = useState<string>()
+    const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
+    const [selectedTrainingCourse, setSelectedTrainingCourse] = useState<string>()
+    const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
 
     const { data = [], refetch } = useFindManyStudent({
         where: {
@@ -67,20 +72,47 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                userType: {
-                    is: {
-                        code: 'SV',
-                    },
-                },
-                ...(selectedDoiTuong && {
-                    organizationName: {
-                        equals: selectedDoiTuong,
-                    },
-                }),
-            }
+            },
+            ...(selectedTrainingObjectType && {
+                trainingObjectTypeId: {
+                    equals: selectedTrainingObjectType,
+                }
+            }),
+            ...(selectedTrainingCourse && {
+                fixedClass: {
+                    trainingCourseId: {
+                        equals: selectedTrainingCourse,
+                    }
+                }
+            }),
+            ...(selectedFixedClass && {
+                fixedClassId: {
+                    equals: selectedFixedClass,
+                }
+            })
         },
         include: {
             userProfile: true,
+            trainingObjectType: {
+                include: {
+                    trainingFields: {
+                        include: {
+                            trainingField: true,
+                        }
+                    },
+                    trainingMajors: {
+                        include: {
+                            trainingMajor: true
+                        }
+                    },
+                    curriculum: true,
+                }
+            },
+            fixedClass: {
+                include: {
+                    trainingCourse: true
+                }
+            }
         },
         orderBy: {
             createdAt: 'desc',
@@ -89,25 +121,60 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountUserProfile({
+    const { data: TrainingOnjectTypeData = [], refetch: refetchTrainingObjectType } = useFindManyTrainingObjectType()
+
+    const handleTrainingObjectTypeChange = (value: string) => {
+        setSelectedTrainingObjectType(value)
+        refetch()
+    }
+
+    const { data: TrainingCourseData, refetch: refetchTrainingCourse } = useFindManyTrainingCourse()
+
+    const handleTrainingCourseChange = (value: string) => {
+        setSelectedTrainingCourse(value)
+        refetch()
+    }
+
+    const { data: FixedClassData } = useFindManyFixedClass()
+
+    const handleFixedClassChange = (value: string) => {
+        setSelectedFixedClass(value)
+        refetch()
+    }
+
+    const { data: count } = useCountStudent({
         where: {
-            OR: [
-                {
-                    firstName: {
-                        contains: filters.searchText,
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.searchText,
+                        },
                     },
-                },
-                {
-                    lastName: {
-                        contains: filters.searchText,
+                    {
+                        lastName: {
+                            contains: filters.searchText,
+                        },
                     },
-                },
-            ],
-            ...(selectedDoiTuong && {
-                organizationName: {
-                    equals: selectedDoiTuong,
-                },
+                ],
+            },
+            ...(selectedTrainingObjectType && {
+                trainingObjectTypeId: {
+                    equals: selectedTrainingObjectType,
+                }
             }),
+            ...(selectedTrainingCourse && {
+                fixedClass: {
+                    trainingCourseId: {
+                        equals: selectedTrainingCourse,
+                    }
+                }
+            }),
+            ...(selectedFixedClass && {
+                fixedClassId: {
+                    equals: selectedFixedClass,
+                }
+            })
         },
     })
 
@@ -173,8 +240,6 @@ export default function UserProfilePageDs() {
 
     const { data: templateFile = [], refetch: refetchTemplateFile } =
         useFindManyTemplateFile()
-
-    const { data: organizationData } = useFindManyOrganization()
 
     const handleFilterChange = (
         key: string,
@@ -251,10 +316,6 @@ export default function UserProfilePageDs() {
         })
     )
 
-    const handleDoiTuongChange = (value: string) => {
-        setSelectedDoiTuong(value)
-        refetch()
-    }
 
     return (
         <div>
@@ -276,26 +337,42 @@ export default function UserProfilePageDs() {
                             <Select
                                 placeholder="Đối tượng đào tạo"
                                 style={{ width: '100%' }}
-                                options={organizationData?.map((item) => {
+                                options={TrainingOnjectTypeData?.map((item) => {
                                     return {
-                                        value: item.name,
+                                        value: item.id,
                                         label: item.name,
                                     }
                                 })}
-                                value={selectedDoiTuong}
-                                onChange={handleDoiTuongChange}
+                                value={selectedTrainingObjectType}
+                                onChange={handleTrainingObjectTypeChange}
                             />
                         </Col>
                         <Col flex="1 1" className="max-w-[350px]">
                             <Select
                                 placeholder="Khóa đào tạo"
                                 style={{ width: '100%' }}
+                                options={TrainingCourseData?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name,
+                                    }
+                                })}
+                                value={selectedTrainingCourse}
+                                onChange={handleTrainingCourseChange}
                             />
                         </Col>
                         <Col flex="1 1">
                             <Select
                                 placeholder="Lớp"
                                 style={{ width: '100%' }}
+                                options={FixedClassData?.map((item) => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name,
+                                    }
+                                })}
+                                value={selectedFixedClass}
+                                onChange={handleFixedClassChange}
                             />
                         </Col>
 
@@ -359,68 +436,76 @@ export default function UserProfilePageDs() {
                                 title: 'Họ và tên',
                                 align: 'center',
                                 width: 150,
-                                render: ({
-                                    firstName,
-                                    lastName,
-                                }: { firstName: string; lastName: string }) =>
-                                    `${lastName} ${firstName}`,
+                                render: (record) => record.userProfile
+                                    ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                    : '',
                             },
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
                                 width: 100,
-                                render: ({ dateOfBirth }) =>
-                                    dayjs(dateOfBirth).format('DD/MM/YYYY'),
+                                render: (record) => record.userProfile?.dateOfBirth
+                                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                                    : ""
                             },
                             {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 80,
-                                render: ({ gender }) =>
-                                    GENDER_MEAN[
-                                    gender as keyof typeof GENDER_MEAN
-                                    ],
+                                render: (record) => record.userProfile?.gender
+                                    ? GENDER_MEAN[record.userProfile.gender as keyof typeof GENDER_MEAN]
+                                    : '',
                             },
                             {
                                 title: 'Đối tượng ĐT',
                                 align: 'center',
                                 width: 120,
-                                dataIndex: 'UserType',
-                                render: (value) => value?.name || '',
+                                render: (record) => record.trainingObjectType ? record.trainingObjectType.name : "",
                             },
                             {
                                 title: 'Lớp',
                                 align: 'center',
                                 width: 120,
-                                dataIndex: 'fixedClassStudent',
-                                render: (value) =>
-                                    value?.length > 0
-                                        ? value[0]?.fixedClass?.name
-                                        : 'Chưa phân lớp',
+                                render: (record) => {
+                                    const fiexedClass = record.fixedClass?.name;
+                                    return fiexedClass || ""
+                                }
                             },
                             {
                                 title: 'Khóa',
                                 align: 'center',
                                 width: 100,
-                                dataIndex: 'educationLevel',
+                                render: (record) => {
+                                    const trainingCourse = record.fixedClass?.trainingCourse;
+                                    return trainingCourse ? trainingCourse.name : "";
+                                }
                             },
                             {
                                 title: 'Ngành',
                                 align: 'center',
                                 width: 120,
-                                dataIndex: 'trainingType',
+                                render: (record) => {
+                                    const trainingField = record.trainingObjectType?.trainingFields?.[0]?.trainingField;
+                                    return trainingField?.name || ""
+                                }
                             },
                             {
                                 title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 130,
-                                dataIndex: 'trainingObjectType',
+                                render: (record) => {
+                                    const trainingMajor = record.trainingObjectType?.trainingMajors?.[0]?.trainingMajor;
+                                    return trainingMajor?.name || ""
+                                }
                             },
                             {
                                 title: 'Chương trình đào tạo',
                                 align: 'center',
-                                width: 130,
-                                dataIndex: 'trainingForm',
+                                width: 150,
+                                render: (record) => {
+                                    const curriculum = record.trainingObjectType?.curriculum?.[0];
+                                    return curriculum ? curriculum.name : "";
+                                }
                             },
                             {
                                 title: 'Thao tác',

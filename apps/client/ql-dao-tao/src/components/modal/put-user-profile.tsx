@@ -7,18 +7,27 @@ import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { UserProfile } from '@workspace/db'
 import {
+    useCreateCurriculum,
+    useCreateStudent,
     useCreateUserProfile,
+    useFindManyCurriculum,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useFindUniqueUserProfile,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutUserProfile = UserProfile
+export type PutUserProfile = UserProfile & {
+    trainingObjectTypeId?: string
+    fixedClassId?: string
+    trainingCourseId?: string
+}
 dayjs.locale('vi')
 const PutUserProfileModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
@@ -34,78 +43,52 @@ const PutUserProfileModal = () => {
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse()
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
 
-    const { mutateAsync: createUserProfile } = useCreateUserProfile()
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { data: trainingObjectTypeData } = useFindManyTrainingObjectType()
+
+    const { mutateAsync: createStudent } = useCreateStudent()
+
     async function onOk(output?: PutUserProfile) {
         if (!output) return
         try {
             showSpinner()
-            if (id) {
-                await updateUserProfile({
-                    data: {
-                        code: output.code,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        gender: output.gender,
-                        dateOfBirth: output.dateOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        phoneNumber: output.phoneNumber,
-                        userTypeId:
-                            userTypeData?.find(
-                                (type: any) => type.code === code
-                            )?.id ?? undefined,
-                        // fixedClass: output.fixedClass
+
+            await createStudent({
+                data: {
+                    userProfile: {
+                        create: {
+                            code: output.code,
+                            firstName: output.firstName,
+                            lastName: output.lastName,
+                            gender: output.gender,
+                            dateOfBirth: output.dateOfBirth
+                        }
                     },
-                    where: {
-                        id,
+                    trainingObjectType: {
+                        connect: {
+                            id: output.trainingObjectTypeId
+                        }
                     },
-                })
-                message.success('Cập nhật thành công')
-            } else {
-                await createUserProfile({
-                    data: {
-                        code: output.code,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        gender: output.gender,
-                        dateOfBirth: output.dateOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        phoneNumber: output.phoneNumber,
-                        userTypeId: userTypeData?.find(
-                            (type: any) => type.code === code
-                        )!.id,
-                    },
-                })
-                message.success('Thêm mới thành công')
-            }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['UserProfile'],
+                    fixedClass: {
+                        connect: {
+                            id: output.fixedClassId
+                        }
+                    }
+                },
             })
+
+            message.success('Thêm mới thành công')
+
+            queryClient.invalidateQueries({
+                queryKey: ['Student'],
+            })
+
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
-
-    const { data: level } = useFindUniqueUserProfile({
-        where: { id },
-    })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        if (level) {
-            form.setFieldsValue({
-                ...level,
-                dateOfBirth: dayjs(level.dateOfBirth),
-            })
-        }
-    }, [level])
 
     return (
         <PutFormModal
@@ -120,8 +103,8 @@ const PutUserProfileModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                      ? 'Thêm mới sinh viên'
-                      : 'Thêm mới học viên'
+                        ? 'Thêm mới sinh viên'
+                        : 'Thêm mới học viên'
             }
             className="w-[50vw]"
         >
@@ -164,7 +147,7 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
+                <FormItem form={form} name="dateOfBirth" label="Ngày sinh" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
@@ -173,7 +156,7 @@ const PutUserProfileModal = () => {
                     form={form}
                     name="gender"
                     label="Giới tính"
-                    // required
+                    required
                 >
                     <Select
                         placeholder="Chọn giới tính"
@@ -187,52 +170,39 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="idCardNumber" label="Số CCCD">
-                    <Input placeholder="Nhập số CCCD" />
+                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
+                    <Select placeholder="Chọn đối tượng đào tạo" options={
+                        trainingObjectTypeData?.map((value) => {
+                            return {
+                                value: value.id,
+                                label: value.name,
+                            }
+                        })
+                    } />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="phoneNumber" label="Số điện thoại">
-                    <Input placeholder="Nhập số điện thoại" />
+                <FormItem form={form} name="fixedClassId" label="Lớp" required>
+                    <Select placeholder="Chọn lớp" options={
+                        fixedClassData?.map((value) => {
+                            return {
+                                value: value.id,
+                                label: value.name,
+                            }
+                        })
+                    } />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="homeTown" label="Quê quán">
-                    <Input placeholder="Nhập quê quán" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="homeTown" label="Đối tượng đào tạo">
-                    <Input placeholder="Nhập đối tượng đào tạo" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="homeTown" label="Lớp">
-                    <Input placeholder="Nhập lớp" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="homeTown" label="Khóa">
-                    <Input placeholder="Nhập khóa" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="homeTown" label="Ngành">
-                    <Input placeholder="Nhập nhành" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="homeTown" label="Chuyên ngành">
-                    <Input placeholder="Nhập chuyên ngành" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="homeTown"
-                    label="Chương trình đào tạo"
-                >
-                    <Input placeholder="Nhập chương trình đào tạo" />
+                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
+                    <Select placeholder="Chọn khóa học" options={
+                        trainingCourseData?.map((value) => {
+                            return {
+                                value: value.id,
+                                label: value.name,
+                            }
+                        })
+                    } />
                 </FormItem>
             </Col>
         </PutFormModal>

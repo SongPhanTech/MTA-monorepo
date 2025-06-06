@@ -77,8 +77,7 @@ const PutUserProfileLectureModal = () => {
     const { id, code } = input ?? { id: null, code: '' }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
@@ -96,14 +95,14 @@ const PutUserProfileLectureModal = () => {
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyReligion()
 
-    const {
-        data: organizationUserData = [],
-        refetch: refetchOrganizationUser,
-    } = useFindManyOrganizationUser({
-        where: {
-            userProfileId: id || undefined,
-        },
-    })
+    // const {
+    //     data: organizationUserData = [],
+    //     refetch: refetchOrganizationUser,
+    // } = useFindManyOrganizationUser({
+    //     where: {
+    //         userProfileId: id || undefined,
+    //     },
+    // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
 
@@ -248,15 +247,15 @@ const PutUserProfileLectureModal = () => {
     const { data: userProfile } = useFindUniqueUserProfile(
         id
             ? {
-                  where: {
-                      id: id,
-                  },
-              }
+                where: {
+                    id: id,
+                },
+            }
             : {
-                  where: {
-                      id: '',
-                  },
-              }
+                where: {
+                    id: '',
+                },
+            }
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -337,13 +336,13 @@ const PutUserProfileLectureModal = () => {
                         ? 'Chỉnh sửa giảng viên'
                         : 'Chỉnh sửa cán bộ'
                     : code === 'GV'
-                      ? 'Thêm mới giảng viên'
-                      : 'Thêm mới cán bộ'
+                        ? 'Thêm mới giảng viên'
+                        : 'Thêm mới cán bộ'
             }
             className="w-[80vw]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -379,18 +378,18 @@ const PutUserProfileLectureModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                fileList.length > 0
+                                                    fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                          <p
-                                                              style={{
-                                                                  fontSize:
-                                                                      '0.65rem',
-                                                              }}
-                                                          >
-                                                              + Tải ảnh lên
-                                                          </p>
-                                                      )}
+                                                        <p
+                                                            style={{
+                                                                fontSize:
+                                                                    '0.65rem',
+                                                            }}
+                                                        >
+                                                            + Tải ảnh lên
+                                                        </p>
+                                                    )}
                                             </Upload>
                                         </Form.Item>
                                     </div>

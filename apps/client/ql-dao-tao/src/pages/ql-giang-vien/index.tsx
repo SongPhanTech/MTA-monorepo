@@ -3,6 +3,7 @@ import {
     DownloadOutlined,
     EyeOutlined,
     UploadOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
@@ -13,7 +14,7 @@ import {
     PutUploadProfileModal,
     PutUserProfileLectureModal,
 } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -72,11 +73,11 @@ export default function UserProfilePageLecture() {
     const { data: organization_data = [], refetch: refetch_organization } =
         useFindManyOrganization()
 
-    const tree_organization = convertToTree(organization_data)
-    const tree_search_organization = searchTree(
-        tree_organization,
-        searchOrganization
-    )
+    // const tree_organization = convertToTree(organization_data)
+    // const tree_search_organization = searchTree(
+    //     tree_organization,
+    //     searchOrganization
+    // )
 
     const { data = [], refetch } = useFindManyUserProfile({
         where: {
@@ -84,36 +85,26 @@ export default function UserProfilePageLecture() {
                 // Tìm kiếm theo tên giảng viên
                 ...(filters.searchText
                     ? [
-                          {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.searchText,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.searchText,
-                                      },
-                                  },
-                              ],
-                          },
-                      ]
+                        {
+                            OR: [
+                                {
+                                    firstName: {
+                                        contains: filters.searchText,
+                                    },
+                                },
+                                {
+                                    lastName: {
+                                        contains: filters.searchText,
+                                    },
+                                },
+                            ],
+                        },
+                    ]
                     : []),
                 // Tìm kiếm theo tên đơn vị
-                ...(filters.organizationText
-                    ? [
-                          {
-                              organizationName: {
-                                  contains: filters.organizationText,
-                              },
-                          },
-                      ]
-                    : []),
+
                 // Các filter khác
-                ...(filters.priorityObjectId
-                    ? [{ priorityObjectId: filters.priorityObjectId }]
-                    : []),
+
                 ...(filters.nationalityId
                     ? [{ nationalityId: filters.nationalityId }]
                     : []),
@@ -124,23 +115,10 @@ export default function UserProfilePageLecture() {
                     ? [{ ethnicityId: filters.ethnicityId }]
                     : []),
                 // Filter theo userType - luôn có
-                {
-                    userType: {
-                        is: {
-                            code: 'GV',
-                        },
-                    },
-                },
+
             ],
         },
-        include: {
-            userType: true,
-            organizationUser: {
-                include: {
-                    organization: true,
-                },
-            },
-        },
+
         orderBy: {
             createdAt: 'desc',
         },
@@ -153,30 +131,30 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                          {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.searchText,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.searchText,
-                                      },
-                                  },
-                              ],
-                          },
-                      ]
+                        {
+                            OR: [
+                                {
+                                    firstName: {
+                                        contains: filters.searchText,
+                                    },
+                                },
+                                {
+                                    lastName: {
+                                        contains: filters.searchText,
+                                    },
+                                },
+                            ],
+                        },
+                    ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                          {
-                              organizationName: {
-                                  contains: filters.organizationText,
-                              },
-                          },
-                      ]
+                        {
+                            organizationName: {
+                                contains: filters.organizationText,
+                            },
+                        },
+                    ]
                     : []),
                 {
                     userType: {
@@ -226,14 +204,14 @@ export default function UserProfilePageLecture() {
         }
     }
 
-    const handleSelectOrganization = (idOrganization: string) => {
-        const children = getAllChildrenByParentId(
-            tree_organization,
-            idOrganization
-        )
-        const listChildrenOrganizationId = children.map((item: any) => item.id)
-        setOrganizationIds(listChildrenOrganizationId)
-    }
+    // const handleSelectOrganization = (idOrganization: string) => {
+    //     const children = getAllChildrenByParentId(
+    //         tree_organization,
+    //         idOrganization
+    //     )
+    //     const listChildrenOrganizationId = children.map((item: any) => item.id)
+    //     setOrganizationIds(listChildrenOrganizationId)
+    // }
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     async function handleDelete(id: string) {
         try {
@@ -251,8 +229,7 @@ export default function UserProfilePageLecture() {
         }
         hideSpinner()
     }
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+
     const { data: templateFile = [], refetch: refetchTemplateFile } =
         useFindManyTemplateFile()
 
@@ -499,7 +476,7 @@ export default function UserProfilePageLecture() {
                                 width: 100,
                                 render: ({ gender }) =>
                                     GENDER_MEAN[
-                                        gender as keyof typeof GENDER_MEAN
+                                    gender as keyof typeof GENDER_MEAN
                                     ],
                             },
                             {

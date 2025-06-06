@@ -45,16 +45,16 @@ const AddUserProfileLecture = () => {
     const { id, code } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+    // const { data: userTypeData = [], refetch: refetchUserType } =
+    //     useFindManyUserType()
     const { data: organizations = [], refetch: refetchOrganization } =
         useFindManyOrganization()
-    const { data: positions = [], refetch: refetchPosition } =
-        useFindManyPosition()
+    // const { data: positions = [], refetch: refetchPosition } =
+    //     useFindManyPosition()
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
-    const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
+    // const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
     async function onOk(output?: PutUserProfile) {
         // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
@@ -76,12 +76,12 @@ const AddUserProfileLecture = () => {
                 fileName = resPresignedUrl.fileName
             }
             //do model PutUserProfile k co organizationId nen su dung organizationName cho FormItem
-            const organizaiontName = organizations.find(
-                (org) => org.id === output.organizationName
-            )?.name
-            const positionName = positions.find(
-                (pos) => pos.id === output.positionName
-            )?.name
+            // const organizaiontName = organizations.find(
+            //     (org) => org.id === output.organizationName
+            // )?.name
+            // const positionName = positions.find(
+            //     (pos) => pos.id === output.positionName
+            // )?.name
             const userProfile = await createUserProfile({
                 data: {
                     code: output.code,
@@ -93,24 +93,24 @@ const AddUserProfileLecture = () => {
                     homeTown: output.homeTown,
                     idCardNumber: output.idCardNumber,
                     phoneNumber: output.phoneNumber,
-                    userTypeId: userTypeData?.find(
-                        (type: any) => type.code === code
-                    )!.id,
-                    organizationName: organizaiontName,
-                    positionName: positionName,
+                    // userTypeId: userTypeData?.find(
+                    //     (type: any) => type.code === code
+                    // )!.id,
+                    // organizationName: organizaiontName,
+                    // positionName: positionName,
                 },
             })
 
             // tao lich su don vi chuc vu
-            if (output.organizationName && output.positionName && userProfile) {
-                await createOrganizationUser({
-                    data: {
-                        userProfileId: userProfile.id,
-                        organizationId: output.organizationName,
-                        positionId: output.positionName,
-                    },
-                })
-            }
+            // if (output.organizationName && output.positionName && userProfile) {
+            //     await createOrganizationUser({
+            //         data: {
+            //             userProfileId: userProfile.id,
+            //             organizationId: output.organizationName,
+            //             positionId: output.positionName,
+            //         },
+            //     })
+            // }
             message.success('Thêm mới thành công')
             //   await updateUserProfile({
             //     data: {
@@ -163,15 +163,15 @@ const AddUserProfileLecture = () => {
     const { data: level } = useFindUniqueUserProfile(
         id
             ? {
-                  where: {
-                      id: id,
-                  },
-              }
+                where: {
+                    id: id,
+                },
+            }
             : {
-                  where: {
-                      id: '',
-                  },
-              }
+                where: {
+                    id: '',
+                },
+            }
     )
     useEffect(() => {
         if (level) {
@@ -306,7 +306,7 @@ const AddUserProfileLecture = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem
+                {/* <FormItem
                     form={form}
                     name="positionName"
                     label="Chức vụ"
@@ -317,15 +317,15 @@ const AddUserProfileLecture = () => {
                         options={
                             positions
                                 ? positions.map((i: any) => {
-                                      return {
-                                          value: i.id,
-                                          label: i.name,
-                                      }
-                                  })
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })
                                 : []
                         }
                     />
-                </FormItem>
+                </FormItem> */}
             </Col>
             <Col span={12}>
                 <FormItem
@@ -345,7 +345,7 @@ const AddUserProfileLecture = () => {
                     form={form}
                     name="gender"
                     label="Giới tính"
-                    // required
+                // required
                 >
                     <Select
                         placeholder="Chọn giới tính"

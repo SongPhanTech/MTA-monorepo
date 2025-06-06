@@ -45,9 +45,6 @@ const PutUserProfileUpdateModal = () => {
     const { id, code } = input
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
-
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
     const { data: registrationAreaData = [], refetch: refetchRe } =
@@ -272,13 +269,13 @@ const PutUserProfileUpdateModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                      ? 'Thêm mới sinh viên'
-                      : 'Thêm mới học viên'
+                        ? 'Thêm mới sinh viên'
+                        : 'Thêm mới học viên'
             }
             className="w-[80vw]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -314,18 +311,18 @@ const PutUserProfileUpdateModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                fileList.length > 0
+                                                    fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                          <p
-                                                              style={{
-                                                                  fontSize:
-                                                                      '0.65rem',
-                                                              }}
-                                                          >
-                                                              + Tải ảnh lên
-                                                          </p>
-                                                      )}
+                                                        <p
+                                                            style={{
+                                                                fontSize:
+                                                                    '0.65rem',
+                                                            }}
+                                                        >
+                                                            + Tải ảnh lên
+                                                        </p>
+                                                    )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -378,47 +375,49 @@ const PutUserProfileUpdateModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
-                                            <FormItem
-                                                form={form}
-                                                name="placeOfBirth"
-                                                label="Nơi sinh"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập nơi sinh" />
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={12}>
-                                            <FormItem
-                                                form={form}
-                                                name="homeTown"
-                                                label="Quê quán"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập quê quán" />
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={12}>
-                                            <FormItem
-                                                form={form}
-                                                name="officerNumber"
-                                                label="Số hiệu sĩ quan"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập số hiệu sĩ quan" />
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={12}>
-                                            <FormItem
-                                                form={form}
-                                                name="idCardNumber"
-                                                label="Số CCCD"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập số CCCD" />
-                                            </FormItem>
-                                        </Col>
+
                                     </Row>
+                                </Col>
+
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="placeOfBirth"
+                                        label="Nơi sinh"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập nơi sinh" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="homeTown"
+                                        label="Quê quán"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập quê quán" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="officerNumber"
+                                        label="Số hiệu sĩ quan"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập số hiệu sĩ quan" />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="idCardNumber"
+                                        label="Số CCCD"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập số CCCD" />
+                                    </FormItem>
                                 </Col>
 
                                 <Col span={12}>
