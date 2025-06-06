@@ -4,7 +4,8 @@ import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { Button, Col, Form, Upload, message } from 'antd'
+import { $Enums, type UserType } from '@workspace/db'
+import { Col, Form, Input, message, Upload, Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUpdateProfile = {
@@ -22,12 +23,8 @@ const PutUpdateProfileModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [typeId, setTypeId] = useState<any>()
-    useEffect(() => {
-        const type = userTypeData?.find((item: any) => item.code === code)
-        setTypeId(type?.id ?? undefined)
-    }, [code])
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+  
+    const userTypeData=$Enums.UserType
 
     async function onOk(output?: PutUpdateProfile) {
         if (!output) return

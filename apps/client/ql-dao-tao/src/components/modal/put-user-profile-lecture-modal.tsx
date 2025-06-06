@@ -7,26 +7,36 @@ import Select from '@components/commons/select'
 import { PutOrganizationUser } from '@components/modal'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { buildOrgTree } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
-import type {
-    Ethnicity,
-    Nationality,
-    PriorityObject,
-    RegistrationArea,
-    Religion,
-    UserProfile,
+import {
+    type UserProfile,
+    type SchoolYear,
+    type TrainingForm,
+    type TrainingLevel,
+    type TrainingType,
+    type TrainingObjectType,
+    type PriorityObject,
+    type RegistrationArea,
+    type Nationality,
+    type Religion,
+    type Ethnicity,
+    $Enums,
 } from '@workspace/db'
 import {
     useCreateUserProfile,
-    useFindManyEthnicity,
-    useFindManyNationality,
-    useFindManyOrganization,
+    useFindUniqueUserProfile,
+    useFindManySchoolYear,
+    useFindManyUserProfile,
+    useUpdateUserProfile,
+    useFindManyTrainingForm,
+    useFindManyTrainingType,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingLevel,
     useFindManyPriorityObject,
     useFindManyRegistrationArea,
     useFindManyReligion,
-    useFindUniqueUserProfile,
-    useUpdateUserProfile,
+    useFindManyEthnicity,
+    useFindManyOrganization,
+    useFindManyNationality,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -45,6 +55,8 @@ import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { PutOrganizationUserProps } from './put-organization-user'
+import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -77,8 +89,7 @@ const PutUserProfileLectureModal = () => {
     const { id, code } = input ?? { id: null, code: '' }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: userTypeData = [], refetch: refetchUserType } =
-        useFindManyUserType()
+    const userTypeData=$Enums.UserType
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
@@ -96,14 +107,6 @@ const PutUserProfileLectureModal = () => {
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyReligion()
 
-    const {
-        data: organizationUserData = [],
-        refetch: refetchOrganizationUser,
-    } = useFindManyOrganizationUser({
-        where: {
-            userProfileId: id || undefined,
-        },
-    })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
 
@@ -130,9 +133,6 @@ const PutUserProfileLectureModal = () => {
         try {
             showSpinner()
             if (id) {
-                const nameOrganiztion = manageOrgData.find(
-                    (organiztion) => organiztion.id == output?.organizationName
-                )?.name
                 await updateUserProfile({
                     data: {
                         code: output.code,
@@ -151,8 +151,8 @@ const PutUserProfileLectureModal = () => {
                         contactAddress: output.contactAddress,
                         phoneNumber: output.phoneNumber,
                         email: output.email,
-                        parentPhoneNumber: output.parentPhoneNumber,
-                        parentName: output.parentName,
+                        familyPhone: output.familyPhone,
+                        familyName: output.familyName,
                         unionDate: output.unionDate,
                         unionPlace: output.unionPlace,
                         CPVJoinDate: output.CPVJoinDate,
@@ -161,21 +161,9 @@ const PutUserProfileLectureModal = () => {
                         tenureDate: output.tenureDate,
                         enlistmentDate: output.enlistmentDate,
                         dischargeDate: output.dischargeDate,
-                        rankName: output.rankName,
-                        educationLevel: output.educationLevel,
-                        academicDegreeTypeName: output.academicDegreeTypeName,
-                        academicRankTypeName: output.academicRankTypeName,
-                        positionName: output.positionName,
-                        positionCPVName: output.positionCPVName,
-                        organizationName: nameOrganiztion,
-                        organizationCPVName: output.organizationCPVName,
-                        userTypeId:
-                            userTypeData?.find(
-                                (type: any) => type.code === code
-                            )?.id ?? undefined,
+                        // TODO: add education and training
+                        userType: $Enums.UserType.LECTURER,
                         userId: output.userId,
-                        priorityObjectId: output.priorityObjectId,
-                        registrationAreaId: output.registrationAreaId,
                         nationalityId: output.nationalityId,
                         religionId: output.religionId,
                         ethnicityId: output.ethnicityId,
@@ -189,6 +177,7 @@ const PutUserProfileLectureModal = () => {
                 await createUserProfile({
                     data: {
                         code: output.code,
+                        avatar: fileName ? fileName : undefined,
                         firstName: output.firstName,
                         lastName: output.lastName,
                         dateOfBirth: output.dateOfBirth,
@@ -203,8 +192,8 @@ const PutUserProfileLectureModal = () => {
                         contactAddress: output.contactAddress,
                         phoneNumber: output.phoneNumber,
                         email: output.email,
-                        parentPhoneNumber: output.parentPhoneNumber,
-                        parentName: output.parentName,
+                        familyPhone: output.familyPhone,
+                        familyName: output.familyName,
                         unionDate: output.unionDate,
                         unionPlace: output.unionPlace,
                         CPVJoinDate: output.CPVJoinDate,
@@ -213,20 +202,9 @@ const PutUserProfileLectureModal = () => {
                         tenureDate: output.tenureDate,
                         enlistmentDate: output.enlistmentDate,
                         dischargeDate: output.dischargeDate,
-                        rankName: output.rankName,
-                        educationLevel: output.educationLevel,
-                        academicDegreeTypeName: output.academicDegreeTypeName,
-                        academicRankTypeName: output.academicRankTypeName,
-                        positionName: output.positionName,
-                        positionCPVName: output.positionCPVName,
-                        organizationName: output.organizationName,
-                        organizationCPVName: output.organizationCPVName,
-                        userTypeId: userTypeData?.find(
-                            (type: any) => type.code === code
-                        )!.id,
+                        // TODO: add education and training
+                        userType: $Enums.UserType.LECTURER,
                         userId: output.userId,
-                        priorityObjectId: output.priorityObjectId,
-                        registrationAreaId: output.registrationAreaId,
                         nationalityId: output.nationalityId,
                         religionId: output.religionId,
                         ethnicityId: output.ethnicityId,
@@ -454,39 +432,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập nơi sinh" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="organizationName"
-                                                label="Đơn vị"
-                                                className="mb-0"
-                                            >
-                                                {/* <Input placeholder="Nhập đơn vị" /> */}
-                                                <TreeSelect
-                                                    placeholder="Chọn đơn vị quản lý"
-                                                    allowClear
-                                                    showSearch
-                                                    treeDefaultExpandAll
-                                                    // onChange={(val) =>
-                                                    //     handleFilterChange(
-                                                    //         'managementOrganizationId',
-                                                    //         val
-                                                    //     )
-                                                    // }
-                                                    treeData={treeData}
-                                                    filterTreeNode={(
-                                                        input,
-                                                        node
-                                                    ) =>
-                                                        (node.title as string)
-                                                            .toLowerCase()
-                                                            .includes(
-                                                                input.toLowerCase()
-                                                            )
-                                                    }
-                                                />
-                                            </FormItem>
-                                        </Col>
+                                        
                                     </Row>
                                 </Col>
                                 <Col span={24}>
@@ -605,60 +551,8 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập thư điện tử" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="priorityObjectId"
-                                                label="Đối tượng ưu tiên"
-                                                className="mb-0"
-                                                normalize={(value) =>
-                                                    value === undefined
-                                                        ? null
-                                                        : value
-                                                }
-                                            >
-                                                <Select
-                                                    allowClear
-                                                    placeholder="Chọn đối tượng ưu tiên"
-                                                    options={priorityObjectData.map(
-                                                        (i: PriorityObject) => {
-                                                            return {
-                                                                value: i.id,
-                                                                label: i.name,
-                                                            }
-                                                        }
-                                                    )}
-                                                />
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="registrationAreaId"
-                                                label="Khu vực đăng ký"
-                                                className="mb-0"
-                                                normalize={(value) =>
-                                                    value === undefined
-                                                        ? null
-                                                        : value
-                                                }
-                                            >
-                                                <Select
-                                                    allowClear
-                                                    placeholder="Chọn khu vực đăng ký"
-                                                    options={registrationAreaData.map(
-                                                        (
-                                                            i: RegistrationArea
-                                                        ) => {
-                                                            return {
-                                                                value: i.id,
-                                                                label: i.name,
-                                                            }
-                                                        }
-                                                    )}
-                                                />
-                                            </FormItem>
-                                        </Col>
+                                        
+                                      
                                         <Col span={8}>
                                             <FormItem
                                                 form={form}
@@ -850,7 +744,7 @@ const PutUserProfileLectureModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="parentName"
+                                name="familyName"
                                 label="Tên phụ huynh"
                                 className="mb-0"
                             >
@@ -860,7 +754,7 @@ const PutUserProfileLectureModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="parentPhoneNumber"
+                                name="familyPhone"
                                 label="Số điện thoại phụ huynh"
                                 className="mb-0"
                             >
@@ -869,90 +763,7 @@ const PutUserProfileLectureModal = () => {
                         </Col>
                     </Row>
                 </TabPane>
-                <TabPane tab="Lịch sử" key="3">
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="rankName"
-                                label="Cấp bậc hàm"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập cấp bậc hàm" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="educationLevel"
-                                label="Trình độ học vấn"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập trình độ học vấn" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="academicDegreeTypeName"
-                                label="Học hàm"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập học hàm" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="academicRankTypeName"
-                                label="Học vị"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập học vị" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="positionName"
-                                label="Chức vụ chính quyền"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập chức vụ chính quyền" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="positionCPVName"
-                                label="Chức vụ Đảng"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập chức vụ Đảng" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="organizationName"
-                                label="Đơn vị"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập đơn vị" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="organizationCPVName"
-                                label="Nơi sinh hoạt Đảng"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập nơi sinh hoạt Đảng" />
-                            </FormItem>
-                        </Col>
-                    </Row>
-                </TabPane>
+                
             </Tabs>
         </PutFormModal>
     )

@@ -2,19 +2,20 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Subject } from '@workspace/db'
+import type { SubjectVersion,  Subject } from '@workspace/db'
 import {
-    useCreateSubject,
+    useCreateSubjectVersion,
     useFindManyOrganization,
-    useFindUniqueSubject,
-    useUpdateSubject,
+     useFindManySubject,
+    useFindUniqueSubjectVersion,
+    useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Steps, TreeSelect } from 'antd'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import dayjs from 'dayjs'
-export type PutSubjectFormType = Subject
+export type PutSubjectFormType = SubjectVersion
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
 import Select from '@components/commons/select'
@@ -35,14 +36,14 @@ const PutSubjectModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createSubject } = useCreateSubject()
-    const { mutateAsync: updateSubject } = useUpdateSubject()
+    const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
+    const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function onOk(output?: PutSubjectFormType) {
         if (!output) return
         try {
             showSpinner()
             if (id) {
-                await updateSubject({
+                await updateSubjectVersion({
                     data: {
                         name: output.name,
                         managementOrganizationId:
@@ -56,7 +57,6 @@ const PutSubjectModal = () => {
                         numberOfProject: +output.numberOfProject,
                         numberOfInternship: +output.numberOfInternship,
                         numberOfOther: +output.numberOfOther,
-                        subjectGroupId: output.subjectGroupId,
                     },
                     where: {
                         id,
@@ -64,23 +64,22 @@ const PutSubjectModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createSubject({
-                    data: {
-                        name: output.name,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
-                        subjectEquivalentType: output.subjectEquivalentType,
-                        credit: +output.credit,
-                        period: +output.period,
-                        numberOfTheory: +output.numberOfTheory,
-                        numberOfPractice: +output.numberOfPractice,
-                        numberOfSelfStudy: +output.numberOfSelfStudy,
-                        numberOfProject: +output.numberOfProject,
-                        numberOfInternship: +output.numberOfInternship,
-                        numberOfOther: +output.numberOfOther,
-                        subjectGroupId: output.subjectGroupId,
-                    },
-                })
+                // await createSubjectVersion({
+                //     data: {
+                //         name: output.name,
+                //         managementOrganizationId:
+                //             output.managementOrganizationId,
+                //         subjectEquivalentType: output.subjectEquivalentType,
+                //         credit: +output.credit,
+                //         period: +output.period,
+                //         numberOfTheory: +output.numberOfTheory,
+                //         numberOfPractice: +output.numberOfPractice,
+                //         numberOfSelfStudy: +output.numberOfSelfStudy,
+                //         numberOfProject: +output.numberOfProject,
+                //         numberOfInternship: +output.numberOfInternship,
+                //         numberOfOther: +output.numberOfOther,
+                //     },
+                // })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
@@ -94,7 +93,7 @@ const PutSubjectModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueSubject({
+    const { data: level } = useFindUniqueSubjectVersion({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -107,7 +106,7 @@ const PutSubjectModal = () => {
         useFindManyOrganization()
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } =
-        useFindManySubjectGroup()
+        useFindManySubject()
 
     return (
         <PutFormModal
@@ -148,7 +147,7 @@ const PutSubjectModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="subjectGroupId"
+                    name="subjectId"
                     label="Nhóm môn học"
                     normalize={(value) => (value === undefined ? null : value)}
                     required
@@ -156,7 +155,7 @@ const PutSubjectModal = () => {
                     <Select
                         allowClear
                         placeholder="Chọn nhóm môn học"
-                        options={subjectGroupData.map((item: SubjectGroup) => {
+                        options={subjectGroupData.map((item: Subject) => {
                             return {
                                 value: item.id,
                                 label: item.name,

@@ -4,8 +4,6 @@ import DeleteIcon from '@components/icons/delete'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileModal,
-    PutUserProfileUpdateModal,
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,

@@ -11,10 +11,10 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { SchoolYear } from '@workspace/db'
 import {
-    useCountSubject,
-    useFindManySubject,
+    useCountSubjectVersion,
+    useFindManySubjectVersion,
     useFindManySchoolYear,
-    useUpdateSubject,
+    useUpdateSubjectVersion,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
@@ -37,7 +37,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
 import EditIcon from '@components/icons/edit'
-export default function SubjectPage({ subjectInfo }: any) {
+export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -46,7 +46,7 @@ export default function SubjectPage({ subjectInfo }: any) {
         name: '',
         subjectGroupId: subjectInfo ? subjectInfo.id : undefined,
     })
-    const { data = [], refetch } = useFindManySubject({
+    const { data = [], refetch } = useFindManySubjectVersion({
         where: {
             name: {
                 contains: filters.name,
@@ -64,7 +64,7 @@ export default function SubjectPage({ subjectInfo }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSubject({
+    const { data: count } = useCountSubjectVersion({
         where: {
             name: {
                 contains: filters.name,
@@ -83,7 +83,7 @@ export default function SubjectPage({ subjectInfo }: any) {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateSubject } = useUpdateSubject()
+    const { mutateAsync: updateSubject } = useUpdateSubjectVersion()
     async function handleDelete(id: string) {
         try {
             showSpinner()

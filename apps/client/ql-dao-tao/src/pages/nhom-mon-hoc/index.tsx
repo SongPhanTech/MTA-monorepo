@@ -2,13 +2,16 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutSubjectGroupModal } from '@components/modal'
+import { PutSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { SchoolYear } from '@workspace/db'
 import {
+    useCountSubject,
+    useFindManySubject,
     useFindManySchoolYear,
+    useUpdateSubject,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
@@ -30,10 +33,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
-import SubjectPage from '@pages/mon-hoc'
+import SubjectVersionPage from '@pages/mon-hoc'
 import EditIcon from '@components/icons/edit'
 
-export default function SubjectGroupPage() {
+export default function SubjectPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -41,7 +44,7 @@ export default function SubjectGroupPage() {
         managementOrganizationId: undefined,
         name: '',
     })
-    const { data = [], refetch } = useFindManySubjectGroup({
+    const { data = [], refetch } = useFindManySubject({
         where: {
             name: {
                 contains: filters.name,
@@ -58,7 +61,7 @@ export default function SubjectGroupPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSubjectGroup({
+    const { data: count } = useCountSubject({
         where: {
             name: {
                 contains: filters.name,
@@ -69,7 +72,7 @@ export default function SubjectGroupPage() {
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutSubjectGroupModal.name,
+        tag: PutSubjectModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -77,11 +80,11 @@ export default function SubjectGroupPage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateSubjectGroup } = useUpdateSubjectGroup()
+    const { mutateAsync: updateSubject } = useUpdateSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateSubjectGroup({
+            await updateSubject({
                 where: {
                     id,
                 },
@@ -291,6 +294,6 @@ export default function SubjectGroupPage() {
     )
 }
 
-SubjectGroupPage.getLayout = function getLayout(page: React.ReactElement) {
+SubjectPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
