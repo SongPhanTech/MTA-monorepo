@@ -384,7 +384,7 @@ const PutUserProfileLectureModal = () => {
 
                                 <Col span={20}>
                                     <Row gutter={[10, 10]}>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="code"
@@ -395,7 +395,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập mã" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="lastName"
@@ -406,7 +406,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập họ và tên đệm" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="firstName"
@@ -417,7 +417,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập tên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="dateOfBirth"
@@ -430,18 +430,9 @@ const PutUserProfileLectureModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="placeOfBirth"
-                                                label="Nơi sinh"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập nơi sinh" />
-                                            </FormItem>
-                                        </Col>
                                     </Row>
                                 </Col>
+
                                 <Col span={24}>
                                     <Row gutter={[10, 10]}>
                                         <Col span={8}>
@@ -452,6 +443,16 @@ const PutUserProfileLectureModal = () => {
                                                 className="mb-0"
                                             >
                                                 <Input placeholder="Nhập quê quán" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="placeOfBirth"
+                                                label="Nơi sinh"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập nơi sinh" />
                                             </FormItem>
                                         </Col>
                                         <Col span={8}>
