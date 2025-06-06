@@ -388,7 +388,7 @@ const PutUserProfileUpdateModal = () => {
                                         <Input placeholder="Nhập nơi sinh" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={12} className="mt-2">
                                     <FormItem
                                         form={form}
                                         name="homeTown"
