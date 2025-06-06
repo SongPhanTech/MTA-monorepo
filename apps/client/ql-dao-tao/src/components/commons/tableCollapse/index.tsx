@@ -135,48 +135,60 @@ const TableCollapse = <T extends Record<string, unknown>>({
     }, [dataFake, currentPage]);
 
     return (
-        <TableAntd
-            id={id}
-            rowKey={rowKey}
-            className="mt-4 custom-scrollbar"
-            columns={columns.map((column) => ({
-                ...column,
-                key:
-                    column.key ||
-                    (column as unknown as { dataIndex: string }).dataIndex,
-            }))}
-            // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
-            scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
-            bordered
-            dataSource={dataFake}
-            locale={{
-                emptyText: <Empty description="Không có dữ liệu" />,
-            }}
-            pagination={{
-                position: ['bottomRight'],
-                defaultPageSize: DEFAULT_PAGINATE_SIZE,
-                showSizeChanger: {
-                    labelRender: ({ value }) => `${value} / trang`,
-                    optionRender: (oriOption) => `${oriOption.value} / trang`,
-                },
-                showTotal: (total, range) =>
-                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                ...pagination,
-                onShowSizeChange(current, size) {
-                    pagination?.onShowSizeChange?.(size)
-                },
-            }}
-            expandable={expandable}
-            onRow={(record) => ({
-                onClick: () => {
-                    if (onRowClick) {
-                        onRowClick(record)
-                    }
-                },
-                style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
-            })}
-        />
+        <>
+            <TableAntd
+                id={id}
+                rowKey={rowKey}
+                className="mt-4 custom-scrollbar"
+                columns={columns.map((column) => ({
+                    ...column,
+                    key:
+                        column.key ||
+                        (column as unknown as { dataIndex: string }).dataIndex,
+                }))}
+                // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
+                scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
+                bordered
+                dataSource={dataFake}
+                locale={{
+                    emptyText: <Empty description="Không có dữ liệu" />,
+                }}
+                pagination={{
+                    position: ['bottomRight'],
+                    defaultPageSize: DEFAULT_PAGINATE_SIZE,
+                    showSizeChanger: {
+                        labelRender: ({ value }) => `${value} / trang`,
+                        optionRender: (oriOption) => `${oriOption.value} / trang`,
+                    },
+                    showTotal: (total, range) =>
+                        `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                    ...pagination,
+                    onShowSizeChange(current, size) {
+                        pagination?.onShowSizeChange?.(size)
+                    },
+                }}
+                expandable={expandable}
+                onRow={(record) => ({
+                    onClick: () => {
+                        if (onRowClick) {
+                            onRowClick(record)
+                        }
+                    },
+                    style: { cursor: 'pointer' },
+                    className: record.id === selectedRow ? 'bg-blue-100' : '',
+                })}
+            />
+            <style>{`
+                .indent-level-1 {
+                    display: none !important
+                }
+                .ant-table-cell[colspan] {
+                    text-align: left !important;
+                }
+            `}
+            </style>
+
+        </>
     )
 }
 

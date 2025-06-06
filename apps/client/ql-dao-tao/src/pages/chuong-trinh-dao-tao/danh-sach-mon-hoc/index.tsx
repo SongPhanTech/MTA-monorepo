@@ -430,15 +430,6 @@ export default function SubjectList() {
                     />
                 </Col>
             </Row>
-            <style>{`
-            .indent-level-1 {
-            display: none !important
-            }
-        .ant-table-cell[colspan] {
-          text-align: left !important;
-        }
-      `}</style>
-
         </div>
     )
 }
