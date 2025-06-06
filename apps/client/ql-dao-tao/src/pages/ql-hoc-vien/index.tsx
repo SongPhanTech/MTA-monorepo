@@ -1,17 +1,9 @@
-import {
-    DownCircleFilled,
-    DownloadOutlined,
-    EyeOutlined,
-    UploadOutlined,
-} from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileModal,
-    PutUserProfileUpdateModal,
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -22,26 +14,24 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountUserProfile,
+    useFindManyTemplateFile,
     useFindManyUserProfile,
     useUpdateUserProfile,
-    useFindManyUserType,
-    useFindManyTemplateFile,
-    useCheckFixedClassStudent,
 } from '@workspace/db/hooks'
 
+import Select from '@components/commons/select'
+import { FilterHocVien } from '@components/filter'
+import EditIcon from '@components/icons/edit'
+import type { FixedClassStudentStatus, UserProfile } from '@workspace/db'
 import {
     Button,
     Col,
     Divider,
     Dropdown,
     Flex,
-    Form,
-    Input,
     Menu,
     Row,
-    Space,
     Tag,
-    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -49,10 +39,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { FilterHocVien } from '@components/filter'
-import Select from '@components/commons/select'
-import { FixedClassStudentStatus, UserProfile } from '@workspace/db'
-import EditIcon from '@components/icons/edit'
 
 dayjs.locale('vi')
 export default function UserProfilePageQs() {

@@ -1,8 +1,7 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutMonHocSongHanhModal, PutSemesterModal } from '@components/modal'
+import EditIcon from '@components/icons/edit'
+import { PutMonHocSongHanhModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -28,7 +27,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import EditIcon from '@components/icons/edit'
 
 type Props = {
     curriculumVersionSubjectId: string

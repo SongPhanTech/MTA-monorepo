@@ -59,19 +59,19 @@ export default function TrainingCoursePage() {
 
     const { data = [], refetch } = useFindManyTrainingMajor({
         where: {
-            OR:[
-                { name: { contains: filters.searchText }},
+            OR: [
+                { name: { contains: filters.searchText } },
                 { codeTrainingMajor: { contains: filters.searchText } },
             ],
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId: filters.trainingObjectTypeId
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: filters.trainingObjectTypeId,
                 },
-            }
+            },
         },
         include: {
-         organization:true,
-         trainingField:true
+            organization: true,
+            trainingField: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -82,15 +82,15 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingMajor({
         where: {
-             OR:[
-                { name: { contains: filters.searchText }},
+            OR: [
+                { name: { contains: filters.searchText } },
                 { codeTrainingMajor: { contains: filters.searchText } },
             ],
-            trainingObjectTypes:{
-                some:{
-                    trainingObjectTypeId: filters.trainingObjectTypeId
+            trainingObjectTypes: {
+                some: {
+                    trainingObjectTypeId: filters.trainingObjectTypeId,
                 },
-            }
+            },
         },
     })
 
@@ -218,7 +218,7 @@ export default function TrainingCoursePage() {
                         rowKey="id"
                         id="training-category"
                         columns={[
-                             {
+                            {
                                 title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectType',
                                 align: 'left',
@@ -239,7 +239,7 @@ export default function TrainingCoursePage() {
                                 dataIndex: 'trainingField',
                                 align: 'left',
                                 width: 100,
-                                render:(value: TrainingField) =>
+                                render: (value: TrainingField) =>
                                     value?.name ? value?.name : '',
                             },
                             {
@@ -248,7 +248,7 @@ export default function TrainingCoursePage() {
                                 align: 'left',
                                 width: 150,
                             },
-                               {
+                            {
                                 title: 'Viết tắt',
                                 align: 'left',
                                 dataIndex: 'sumary',

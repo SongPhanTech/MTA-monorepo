@@ -1,7 +1,9 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type {
     CurriculumVersionSubject,
     Subject,
@@ -18,19 +20,11 @@ import {
     useUpdateCurriculumVersionSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
-import DatePicker from '@components/commons/date-picker'
-import { useEffect } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { buildOrgTree } from '@lib/utils'
-import Select from '@components/commons/select'
-import {
-    LOAI_MON_HOC_CTDT,
-    SUBJECT_EQUIVALENT_TYPE,
-} from '@constants/constants'
-
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 dayjs.locale('vi')
 const PutMonHocTienQuyetModal = () => {
 

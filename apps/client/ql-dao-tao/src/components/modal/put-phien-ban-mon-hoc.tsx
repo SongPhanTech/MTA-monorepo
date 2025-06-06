@@ -18,23 +18,23 @@ import 'dayjs/locale/vi'
 dayjs.locale('vi')
 
 const treeData = [
-  {
-    title: 'Nhóm Cơ sở',
-    value: 'nhom-co-so',
-    children: [
-      { title: 'Toán cao cấp', value: 'toan-cao-cap' },
-      { title: 'Vật lý đại cương', value: 'vat-ly-dai-cuong' },
-    ],
-  },
-  {
-    title: 'Nhóm Chuyên ngành',
-    value: 'nhom-chuyen-nganh',
-    children: [
-      { title: 'Lập trình Web', value: 'lap-trinh-web' },
-      { title: 'Cơ sở dữ liệu', value: 'csdl' },
-    ],
-  },
-];
+    {
+        title: 'Nhóm Cơ sở',
+        value: 'nhom-co-so',
+        children: [
+            { title: 'Toán cao cấp', value: 'toan-cao-cap' },
+            { title: 'Vật lý đại cương', value: 'vat-ly-dai-cuong' },
+        ],
+    },
+    {
+        title: 'Nhóm Chuyên ngành',
+        value: 'nhom-chuyen-nganh',
+        children: [
+            { title: 'Lập trình Web', value: 'lap-trinh-web' },
+            { title: 'Cơ sở dữ liệu', value: 'csdl' },
+        ],
+    },
+]
 
 const PutVersionSubjectModal = () => {
     const [form] = Form.useForm<PutTrainingCourse>()
@@ -197,8 +197,8 @@ const PutVersionSubjectModal = () => {
             )}
             <Col span={12}>
                 <Form.Item
-                name="prerequisiteSubjects"
-                label="Môn học tiên quyết"
+                    name="prerequisiteSubjects"
+                    label="Môn học tiên quyết"
                 >
                     <TreeSelect
                         treeData={treeData}
@@ -210,10 +210,7 @@ const PutVersionSubjectModal = () => {
                 </Form.Item>
             </Col>
             <Col span={12}>
-                <Form.Item
-                name="name"
-                label="Môn học song hành"
-                >
+                <Form.Item name="name" label="Môn học song hành">
                     <TreeSelect
                         treeData={treeData}
                         treeCheckable={true}

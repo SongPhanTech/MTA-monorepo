@@ -4,7 +4,6 @@ import { PutVersionSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useUpdatePrerequisiteSubject } from '@workspace/db/hooks'
 import { Button, Col, Flex, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -29,19 +28,19 @@ export default function VersionProgramSubject({ record }: Props) {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updatePrerequisiteSubject } =
-        useUpdatePrerequisiteSubject()
+    // const { mutateAsync: updatePrerequisiteSubject } =
+    //     useUpdatePrerequisiteSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updatePrerequisiteSubject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
+            // await updatePrerequisiteSubject({
+            //     where: {
+            //         id,
+            //     },
+            //     data: {
+            //         deletedAt: new Date(),
+            //     },
+            // })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }

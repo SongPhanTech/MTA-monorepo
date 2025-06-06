@@ -1,6 +1,11 @@
 import { queryClient } from '@api/index'
+import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { PutOrganizationUser } from '@components/modal'
+import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
     type UserProfile,
@@ -28,46 +33,35 @@ import {
     useFindManyTrainingLevel,
     useFindManyPriorityObject,
     useFindManyRegistrationArea,
-    useFindManyNationality,
     useFindManyReligion,
     useFindManyEthnicity,
     useFindManyOrganization,
+    useFindManyNationality,
 } from '@workspace/db/hooks'
+import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
     Col,
+    Collapse,
     Form,
     Input,
-    message,
-    Tabs,
-    Collapse,
     Row,
-    Button,
-    Tooltip,
-    Flex,
+    Tabs,
     TreeSelect,
+    Upload,
+    message,
 } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { GENDER_LIST } from '@constants/constants'
-import { Upload } from 'antd'
-import type { GetProp, UploadFile, UploadProps } from 'antd'
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
-import Table from '@components/commons/table'
-import { PutOrganizationUser } from '@components/modal'
 import { PutOrganizationUserProps } from './put-organization-user'
-import { getMinioUrl } from '@workspace/constant'
 import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const { TabPane } = Tabs
 const { Panel } = Collapse
-import 'dayjs/locale/vi'
-import { EyeOutlined } from '@ant-design/icons'
-import DeleteIcon from '@components/icons/delete'
 dayjs.locale('vi')
 // export type PutUserProfile = UserProfile;
 export type PutUserProfile = UserProfile & {

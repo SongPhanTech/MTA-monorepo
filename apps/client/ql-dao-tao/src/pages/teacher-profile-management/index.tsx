@@ -19,8 +19,6 @@ import {
     useCountUserProfile,
     useFindManyTemplateFile,
     useFindManyUserProfile,
-    useFindManyUserType,
-    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 
 import Select from '@components/commons/select'
