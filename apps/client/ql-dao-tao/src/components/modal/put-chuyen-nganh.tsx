@@ -17,7 +17,7 @@ import {
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio, InputNumber, TreeSelect } from 'antd'
-import { useEffect } from 'react'
+import { useEffect,useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
@@ -32,6 +32,7 @@ import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingMajorModal = () => {
     const [form] = Form.useForm<PutTrainingMajor>()
+    const [targetDisabled, setTargetDisabled] = useState(true);
     const {
         isOpen,
         onClose,
@@ -41,13 +42,20 @@ const PutTrainingMajorModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
     const { data: trainingFieldData = [], refetch: refetchManyTrainingField } =
         useFindManyTrainingField()
 
-
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+                     where: {
+                trainingFields: {
+                    some: {
+                        trainingFieldId: form.getFieldValue('trainingFieldId')
+                    }
+                }
+            }
+            })
+    
     const { data: organizations = [], refetch: refetchOrganizations } =
         useFindManyOrganization()
     const treeData = buildOrgTree(organizations)
@@ -61,7 +69,7 @@ const PutTrainingMajorModal = () => {
             if (id) {
                 await updateTrainingMajor({
                     data: {
-                        codeTrainingMajor: output.codeTrainingMajor,
+                        code: output.code,
                         name: output.name,
                         summary: output.summary,
                         active: output.active,
@@ -92,7 +100,7 @@ const PutTrainingMajorModal = () => {
             } else {
                 await createTrainingMajor({
                     data: {
-                        codeTrainingMajor: output.codeTrainingMajor,
+                        code: output.code,
                         name: output.name,
                         summary: output.summary,
                         active: output.active,
@@ -134,9 +142,36 @@ const PutTrainingMajorModal = () => {
             trainingObjectTypes: true
         },
     })
+
+    // const disableTrainingObjectTypes = useMemo(() => {
+    //     if(!form.getFieldValue('trainingFieldId')){
+    //         return true
+    //     }
+    //     return false
+    // },[form])
+    const handleMajorChange = async (val:string) => {
+        console.log(val)
+
+        try {
+            form.setFieldsValue({
+                        trainingObjectTypeIds: [],
+                    })
+            setTargetDisabled(true)
+            await refetchObjectType();
+            if(form.getFieldValue('trainingFieldId')){
+                setTargetDisabled(false)
+            }else {
+                setTargetDisabled(true)
+            }
+        } catch (err) {
+            message.error("Lỗi khi tải đối tượng đào tạo");
+        }
+};
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
+            setTargetDisabled(false)
             form.setFieldsValue({
                 ...level,
                 trainingObjectTypeIds: level.trainingObjectTypes.map(i => i?.trainingObjectTypeId),
@@ -161,8 +196,29 @@ const PutTrainingMajorModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
+                    name="trainingFieldId"
+                    label="Ngành"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn ngành"
+                        options={trainingFieldData.map((i: TrainingField) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                        onChange={(val) =>handleMajorChange(val)}
+                        
+                    />
+                </FormItem>
+            </Col>
+                  <Col span={12}>
+                <FormItem
+                    form={form}
                     name="trainingObjectTypeIds"
                     label="Đối tượng đào tạo"
+                    
                     required
                 >
                     <Select
@@ -176,24 +232,7 @@ const PutTrainingMajorModal = () => {
                                 }
                             }
                         )}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingFieldId"
-                    label="Ngành"
-                    required
-                >
-                    <Select
-                        placeholder="Chọn ngành"
-                        options={trainingFieldData.map((i: TrainingField) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
+                        disabled={targetDisabled}
                     />
                 </FormItem>
             </Col>
@@ -222,7 +261,7 @@ const PutTrainingMajorModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="codeTrainingMajor"
+                    name="code"
                     label="Mã chuyên ngành"
                     required
                 >

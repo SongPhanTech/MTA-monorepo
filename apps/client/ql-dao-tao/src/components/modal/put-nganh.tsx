@@ -54,7 +54,7 @@ const PutTrainingFieldModal = () => {
             if (id) {
                 await updateTrainingField({
                     data: {
-                        codeTrainingField: output.codeTrainingField,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                         publishDate: output.publishDate,
@@ -81,7 +81,7 @@ const PutTrainingFieldModal = () => {
             } else {
                 await createTrainingField({
                     data: {
-                        codeTrainingField: output.codeTrainingField,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                         active: output.active,
@@ -148,7 +148,7 @@ const PutTrainingFieldModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="codeTrainingField"
+                    name="code"
                     label="Mã ngành"
                     required
                 >

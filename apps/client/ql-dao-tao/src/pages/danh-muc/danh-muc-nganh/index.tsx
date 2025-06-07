@@ -55,7 +55,7 @@ export default function TrainingFieldPage() {
         where: {
             OR: [
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { codeTrainingField: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             trainingObjectTypes: {
                 some: {
@@ -82,7 +82,7 @@ export default function TrainingFieldPage() {
         where: {
             OR: [
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { codeTrainingField: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             trainingObjectTypes: {
                 some: {
@@ -260,7 +260,7 @@ export default function TrainingFieldPage() {
                             },
                             {
                                 title: 'Mã ngành',
-                                dataIndex: 'codeTrainingField',
+                                dataIndex: 'code',
                                 align: 'left',
                                 width: 150,
                             },

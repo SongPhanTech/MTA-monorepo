@@ -40,7 +40,7 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
@@ -79,27 +79,13 @@ export default function TrainingMajorPage() {
     })
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
 
-    const handleExpand = (expanded: boolean, record: any) => {
-        if (!record.children?.length) return;
-
-        setExpandedKeys(prev => {
-            if (expanded) {
-                // Mở rộng thêm key
-                return [...prev, record.key];
-            } else {
-                // Thu gọn bớt key
-                return prev.filter(k => k !== record.key);
-            }
-        });
-    };
-
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
             trainingMajors: {
                 some: {
                     OR: [
                         { name: { contains: filters.searchText, mode: 'insensitive' } },
-                        { codeTrainingMajor: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
                     ],
                     trainingObjectTypes: {
                         some: {
@@ -112,6 +98,18 @@ export default function TrainingMajorPage() {
         },
         include: {
             trainingMajors: {
+                where:{
+                    OR: [
+                        { name: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                    ],
+                    trainingObjectTypes: {
+                        some: {
+                            trainingObjectTypeId: filters.trainingObjectTypeId
+                        }
+                    }
+                },
                 include: {
                     organization: true,
                     trainingObjectTypes: {
@@ -129,13 +127,21 @@ export default function TrainingMajorPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
+      const dataRaw = useMemo(() => {
+        if (data?.length) {
+            let result=data.map(i=>{return {...i,children:i?.trainingMajors}});
+            return result
+        }
+        return []
+    }, [data])
+
     const { data: count } = useCountTrainingField({
         where: {
             trainingMajors: {
                 some: {
                     OR: [
                         { name: { contains: filters.searchText, mode: 'insensitive' } },
-                        { codeTrainingMajor: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
                     ],
                     trainingObjectTypes: {
                         some: {
@@ -192,11 +198,6 @@ export default function TrainingMajorPage() {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-    const baseColumn = [
-
-    ]
-
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -231,7 +232,7 @@ export default function TrainingMajorPage() {
                                 </Form.Item>
                                 <Form.Item
                                     className="mb-0"
-                                    name="trainingObjectId"
+                                    name="trainingObjectTypeId"
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
                                     labelAlign="left"
@@ -248,12 +249,12 @@ export default function TrainingMajorPage() {
                                             width: 300,
                                             marginRight: 8,
                                         }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
+                                        onChange={(val) =>
+                                            handleFilterChange(
+                                                'trainingObjectTypeId',
+                                                val
+                                            )
+                                        }
                                         allowClear
                                     />
                                 </Form.Item>
@@ -271,28 +272,28 @@ export default function TrainingMajorPage() {
 
                 <Col span={24}>
                     <TableCollapse
-                        rowKey="key"
-                        headerTitleKey="trainingMajors"
+                        // rowKey="id"
+                        headerTitleKey="name"
                         currentPage={currentPage}
                         columns={[
                             {
-                                title: 'Đối tượng đào tạo',
+                                title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectTypes',
-                                align: 'center',
-                                width: 150,
-                              
+                                align: 'left',
+                                width: 100,
+                                render: (value) =>
+                                    value?.length > 0 ? value.map((i:TrainingObjectType & {trainingObjectType:TrainingObjectType})=>{return (<div>- {i?.trainingObjectType?.name}</div>)}) : '',
                             },
                             {
                                 title: 'Khoa phụ trách',
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
-                                render: (organization: Organization) =>
-                                    organization?.name ? organization?.name : '',
+                                render: value => value?.name
                             },
                             {
                                 title: 'Mã ngành',
-                                dataIndex: 'codeTrainingField',
+                                dataIndex: 'code',
                                 align: 'left',
                                 width: 150,
                             },
@@ -315,15 +316,22 @@ export default function TrainingMajorPage() {
                                 dataIndex: 'description',
                             },
                             {
-                                title: 'Ngày ban hành',
-                                align: 'center',
+                                title: 'Số TC chuyên ngành',
                                 width: 150,
-                                render: ({ publishDate }) =>
-                                    publishDate
-                                        ? dayjs(publishDate).format(
-                                            'DD/MM/YYYY'
-                                        )
-                                        : '',
+                                align: 'center',
+                                dataIndex: 'numberCreditsMajor',
+                            },
+                            {
+                                title: 'Số TC bắt buộc',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'numberCreditsRequired',
+                            },
+                            {
+                                title: 'Số TC lựa chọn',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'numberCreditsElective',
                             },
                             {
                                 title: 'Trạng thái',
@@ -381,7 +389,7 @@ export default function TrainingMajorPage() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={dataRaw}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
