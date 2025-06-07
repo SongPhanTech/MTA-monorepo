@@ -1,9 +1,11 @@
+import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 import { queryClient } from '@api/index'
 import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { type UserProfile, $Enums } from '@workspace/db'
@@ -53,7 +55,7 @@ const AddUserProfileLecture = () => {
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
-    const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
+    // const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
     async function onOk(output?: PutUserProfile) {
         // console.log(userTypeData?.find((type: any) => type.code === code))
         if (!output) return
@@ -148,15 +150,15 @@ const AddUserProfileLecture = () => {
     const { data: level } = useFindUniqueUserProfile(
         id
             ? {
-                where: {
-                    id: id,
-                },
-            }
+                  where: {
+                      id: id,
+                  },
+              }
             : {
-                where: {
-                    id: '',
-                },
-            }
+                  where: {
+                      id: '',
+                  },
+              }
     )
     useEffect(() => {
         if (level) {
@@ -291,7 +293,7 @@ const AddUserProfileLecture = () => {
             </Col>
 
             <Col span={12}>
-                {/* <FormItem
+                <FormItem
                     form={form}
                     name="positionName"
                     label="Chức vụ"
@@ -302,15 +304,15 @@ const AddUserProfileLecture = () => {
                         options={
                             positions
                                 ? positions.map((i: any) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                })
+                                      return {
+                                          value: i.id,
+                                          label: i.name,
+                                      }
+                                  })
                                 : []
                         }
                     />
-                </FormItem> */}
+                </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem
@@ -330,7 +332,7 @@ const AddUserProfileLecture = () => {
                     form={form}
                     name="gender"
                     label="Giới tính"
-                // required
+                    // required
                 >
                     <Select
                         placeholder="Chọn giới tính"

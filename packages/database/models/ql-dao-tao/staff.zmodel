@@ -9,11 +9,6 @@ import '../ql-nguoi-dung/profile'
 model Staff extends Base {
   from            DateTime? // từ ngày
 
-  // lecture/staff information
-  lectureID       String?       @unique // giảng viên ID
-  lectureCode     String?       @unique // mã giảng viên
-  serviceDate     DateTime? // ngày vào ngành
-
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique
 
@@ -25,6 +20,8 @@ model Staff extends Base {
 
   staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
   staffPositionId String
+
+  fixedClass      FixedClass[]  @relation("ManageStaff")
 
   @@schema("ql-dao-tao")
 }

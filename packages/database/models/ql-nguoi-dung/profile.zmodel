@@ -57,10 +57,19 @@ model UserProfile extends Base {
   officerNumber        String? // số hiệu sĩ quan/quân nhân
   rank                 Rank?               @relation(fields: [rankId], references: [id])
   rankId               String?
+  rankDate             DateTime? // ngày phong quân hàm
+
   academicDegreeType   AcademicDegreeType? @relation(fields: [academicDegreeTypeId], references: [id])
   academicDegreeTypeId String?
+  academicDegreeDate   DateTime? // ngày cấp bằng học vị
+
   academicRankType     AcademicRankType?   @relation(fields: [academicRankTypeId], references: [id])
   academicRankTypeId   String?
+  academicRankDate     DateTime? // ngày cấp bằng học hàm
+
+  level                Level?              @relation(fields: [levelId], references: [id])
+  levelId              String?
+
   // thông tin đoàn thể
   unionDate            DateTime? // ngày vào Đoàn
   unionPlace           String? // nơi vào Đoàn

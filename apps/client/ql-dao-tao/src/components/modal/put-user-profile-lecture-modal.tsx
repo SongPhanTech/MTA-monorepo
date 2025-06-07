@@ -54,7 +54,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { PutOrganizationUserProps } from './put-organization-user'
+// import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 
@@ -79,12 +79,12 @@ const PutUserProfileLectureModal = () => {
             onClose: form.resetFields,
         })
 
-    const {
-        onOpen: onOpenModalOganizationUser,
-        onClose: onCloseModalOganizationUser,
-    } = useDisclosure<PutOrganizationUserProps>({
-        tag: PutOrganizationUser.name,
-    })
+    // const {
+    //     onOpen: onOpenModalOganizationUser,
+    //     onClose: onCloseModalOganizationUser,
+    // } = useDisclosure<PutOrganizationUserProps>({
+    //     tag: PutOrganizationUser.name,
+    // })
 
     const { id, code } = input ?? { id: null, code: '' }
     const { showSpinner, hideSpinner } = useSpinner()
@@ -107,14 +107,14 @@ const PutUserProfileLectureModal = () => {
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyReligion()
 
-    const {
-        data: organizationUserData = [],
-        refetch: refetchOrganizationUser,
-    } = useFindManyOrganizationUser({
-        where: {
-            userProfileId: id || undefined,
-        },
-    })
+    // const {
+    //     data: organizationUserData = [],
+    //     refetch: refetchOrganizationUser,
+    // } = useFindManyOrganizationUser({
+    //     where: {
+    //         userProfileId: id || undefined,
+    //     },
+    // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
 
@@ -234,15 +234,15 @@ const PutUserProfileLectureModal = () => {
     const { data: userProfile } = useFindUniqueUserProfile(
         id
             ? {
-                where: {
-                    id: id,
-                },
-            }
+                  where: {
+                      id: id,
+                  },
+              }
             : {
-                where: {
-                    id: '',
-                },
-            }
+                  where: {
+                      id: '',
+                  },
+              }
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -323,13 +323,13 @@ const PutUserProfileLectureModal = () => {
                         ? 'Chỉnh sửa giảng viên'
                         : 'Chỉnh sửa cán bộ'
                     : code === 'GV'
-                        ? 'Thêm mới giảng viên'
-                        : 'Thêm mới cán bộ'
+                      ? 'Thêm mới giảng viên'
+                      : 'Thêm mới cán bộ'
             }
             className="w-[80vw]"
             layout="vertical"
-        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -365,18 +365,18 @@ const PutUserProfileLectureModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                    fileList.length > 0
+                                                fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                        <p
-                                                            style={{
-                                                                fontSize:
-                                                                    '0.65rem',
-                                                            }}
-                                                        >
-                                                            + Tải ảnh lên
-                                                        </p>
-                                                    )}
+                                                          <p
+                                                              style={{
+                                                                  fontSize:
+                                                                      '0.65rem',
+                                                              }}
+                                                          >
+                                                              + Tải ảnh lên
+                                                          </p>
+                                                      )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -384,7 +384,7 @@ const PutUserProfileLectureModal = () => {
 
                                 <Col span={20}>
                                     <Row gutter={[10, 10]}>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="code"
@@ -395,7 +395,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập mã" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="lastName"
@@ -406,7 +406,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập họ và tên đệm" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="firstName"
@@ -417,7 +417,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập tên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
+                                        <Col span={12}>
                                             <FormItem
                                                 form={form}
                                                 name="dateOfBirth"
@@ -430,18 +430,9 @@ const PutUserProfileLectureModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="placeOfBirth"
-                                                label="Nơi sinh"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập nơi sinh" />
-                                            </FormItem>
-                                        </Col>
                                     </Row>
                                 </Col>
+
                                 <Col span={24}>
                                     <Row gutter={[10, 10]}>
                                         <Col span={8}>
@@ -452,6 +443,16 @@ const PutUserProfileLectureModal = () => {
                                                 className="mb-0"
                                             >
                                                 <Input placeholder="Nhập quê quán" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="placeOfBirth"
+                                                label="Nơi sinh"
+                                                className="mb-0"
+                                            >
+                                                <Input placeholder="Nhập nơi sinh" />
                                             </FormItem>
                                         </Col>
                                         <Col span={8}>

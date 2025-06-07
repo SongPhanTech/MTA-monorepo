@@ -3,8 +3,10 @@ import './categories'
 import '../ql-danh-muc/common'
 import '../ql-nguoi-dung/profile'
 import './student'
+import './lecturer'
+import './staff'
 
-// học viên - lớp môn học
+/// học viên - lớp môn học
 model SubjectClassStudent extends Base {
   subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
   subjectClassId  String
@@ -19,9 +21,11 @@ model SubjectClassStudent extends Base {
   @@schema("ql-dao-tao")
 }
 
-// năm học
+/// Năm học
+// Giao diện tạo năm học có ô stt tự động tăng (useCount), người dùng chọn năm học bắt đầu và kết thúc => SchoolYear
 model SchoolYear extends Base {
   name      String
+  order     Int         @unique // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
   startDate DateTime
   endDate   DateTime?
   semesters Semester[]
@@ -29,18 +33,32 @@ model SchoolYear extends Base {
   @@schema("ql-dao-tao")
 }
 
-// kỳ học
-model Semester extends Base {
-  name         String
-  shortName    String? // tên ngắn gọn
-  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String
-  startDate    DateTime
-  endDate      DateTime?
+enum SemesterType {
+  FIRST // Kỳ học đầu tiên
+  SECOND // Kỳ học thứ hai
   @@schema("ql-dao-tao")
 }
 
-// Mốc huấn luyện
+/// Kỳ học
+// Giao diện tạo kỳ học có ô stt tự động tăng (useCount), người dùng chọn kỳ học là kỳ 1 hay kỳ 2 => HK chính => SemesterType
+model Semester extends Base {
+  name           String
+  shortName      String? // tên ngắn gọn
+  semesterType   SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
+  order          Int // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
+  schoolYear     SchoolYear     @relation(fields: [schoolYearId], references: [id])
+  schoolYearId   String
+  startDate      DateTime
+  endDate        DateTime?
+
+  subjectClasses SubjectClass[]
+
+  @@unique([schoolYearId, order]) // stt kỳ học trong một năm học không được trùng nhau
+  @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
+  @@schema("ql-dao-tao")
+}
+
+/// Mốc huấn luyện
 model Milestone extends Base {
   name         String
   period       String? // Thời gian thực hiện
@@ -59,7 +77,7 @@ enum TrainingCourseStatus {
   @@schema("ql-dao-tao")
 }
 
-// Khoá học
+/// Khoá học
 model TrainingCourse extends Base {
   name                 String
   startDate            DateTime
@@ -77,18 +95,27 @@ model TrainingCourse extends Base {
   fixedClass           FixedClass[]
   @@schema("ql-dao-tao")
 }
-// lớp biên chế
+/// lớp biên chế
 model FixedClass extends Base {
   name                     String
 
-  trainingCourse           TrainingCourse? @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khóa học
   trainingCourseId         String?
 
-  managementOrganization   Organization?   @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String?
 
-  initSize                 Int             @default(0) // sĩ số
+  lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
+  lecturerManagementId     String?
+
+  staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
+  staffManagementId        String?
+
+  initSize                 Int                @default(0) // sĩ số
   students                 Student[]
+
+  curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId      String?
 
   @@schema("ql-dao-tao")
 }
@@ -99,7 +126,7 @@ enum CurriculumStatus {
   @@schema("ql-dao-tao")
 }
 
-// chương trình đào tạo
+/// chương trình đào tạo
 model Curriculum extends Base {
   name                     String
   status                   CurriculumStatus    @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
@@ -132,35 +159,39 @@ enum TrainingLanguage {
   @@schema("ql-dao-tao")
 }
 
-// Phiên bản chương trình đào tạo
+/// Phiên bản chương trình đào tạo
 model CurriculumVersion extends Base {
-  name                     String
-  shortName                String?
-  englishName              String?
-  trainingLanguage         TrainingLanguage           @default(Vietnamese) // Ngôn ngữ đào tạo
-  status                   CurriculumStatus           @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
-  startDate                DateTime
-  endDate                  DateTime?
-  curriculum               Curriculum                 @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
-  curriculumId             String
+  name              String
+  shortName         String?
+  englishName       String?
+  trainingLanguage  TrainingLanguage @default(Vietnamese) // Ngôn ngữ đào tạo
+  status            CurriculumStatus @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
+  numberOfSemesters Int
+  startDate         DateTime
+  endDate           DateTime?
+  curriculum        Curriculum       @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
+  curriculumId      String
 
-  scoreToTakeExam          Float? // Điểm tối thiểu để được thi
-  scoreToPass              Float? // Điểm tối thiểu để qua môn
+  scoreToTakeExam   Float? // Điểm tối thiểu để được thi
+  scoreToPass       Float? // Điểm tối thiểu để qua môn
 
   // TODO: Thêm các quy chế cho chương trình đào tạo
 
-  objectives               String? // Mục tiêu
-  inputStandard            String? // Chuẩn đầu vào
-  outputStandard           String? // Chuẩn đầu ra
-  information              String? // Thông tin
-  documentPath             String? // Đường dẫn tài liệu
-  renderPath               String? // Đường dẫn tài liệu kết xuất
+  objectives        String? // Mục tiêu
+  inputStandard     String? // Chuẩn đầu vào
+  outputStandard    String? // Chuẩn đầu ra
+  information       String? // Thông tin
+  documentPath      String? // Đường dẫn tài liệu
+  renderPath        String? // Đường dẫn tài liệu kết xuất
 
-  curriculumVersionSubject CurriculumVersionSubject[]
+  trainingBlocks    TrainingBlock[]
+  fixedClasses      FixedClass[] // Lớp biên chế
+  students          Student[] // Học viên
+
   @@schema("ql-dao-tao")
 }
 
-// môn học
+/// môn học
 model Subject extends Base {
   name                     String
 
@@ -209,8 +240,8 @@ model SubjectVersionType extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// phiên bản môn học
-/// Giao diện nhập điểm sẽ phụ thuộc vào hệ số (e.g. 1 hay 2 điểm giữa kỳ)
+/// Phiên bản môn học
+// Giao diện nhập điểm sẽ phụ thuộc vào hệ số (e.g. 1 hay 2 điểm giữa kỳ)
 model SubjectVersion extends Base {
   name                     String
   examType                 ExamType
@@ -269,27 +300,24 @@ enum CurriculumVersionSubjectType {
   @@schema("ql-dao-tao")
 }
 
-// môn học chương trình
+/// môn học chương trình
 model CurriculumVersionSubject extends Base {
-  curriculumVersion   CurriculumVersion            @relation(fields: [curriculumVersionId], references: [id]) // Chương trình giảng dạy
-  curriculumVersionId String
+  subject         SubjectVersion               @relation(fields: [subjectId], references: [id])
+  subjectId       String
 
-  subject             SubjectVersion               @relation(fields: [subjectId], references: [id])
-  subjectId           String
+  trainingBlock   TrainingBlock?               @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
+  trainingBlockId String?
 
-  trainingBlock       TrainingBlock?               @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
-  trainingBlockId     String?
+  semester        Int? // kỳ học
 
-  semester            Int? // kỳ học
-
-  type                CurriculumVersionSubjectType @default(None) // loại bắt buộc
-  information         String?   //Thông tin
-  documentPath        String? // Đường dẫn tài liệu
-  renderPath          String? // Đường dẫn tài liệu kết xuất
+  type            CurriculumVersionSubjectType @default(None) // loại bắt buộc
+  information     String?   //Thông tin
+  documentPath    String? // Đường dẫn tài liệu
+  renderPath      String? // Đường dẫn tài liệu kết xuất
   @@schema("ql-dao-tao")
 }
 
-// Lớp môn học
+/// Lớp môn học
 model SubjectClass extends Base {
   name                String
   startDate           DateTime
@@ -298,8 +326,17 @@ model SubjectClass extends Base {
   subjectId           String
 
   examDate            DateTime?
-  @@schema("ql-dao-tao")
+
+  semester            Semester              @relation(fields: [semesterId], references: [id])
+  semesterId          String
+
+  mainLecturer        Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId          String?
+
+  extraLecturer       Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId     String?
 
   subjectClassStudent SubjectClassStudent[]
+  @@schema("ql-dao-tao")
 }
 

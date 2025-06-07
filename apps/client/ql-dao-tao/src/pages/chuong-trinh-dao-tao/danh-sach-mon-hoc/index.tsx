@@ -50,26 +50,6 @@ interface DataItem {
 const rawData = [
     {
         id: 1,
-        maMon: '126001234',
-        mapb: 'PB1',
-        dtdt: 'Đại học quân sự',
-        tenPB: 'nam 2025',
-        maTKB: 'TKB001',
-        stc: 3,
-        sttkb: 45,
-        stlt: 30,
-        stth: 15,
-        svMax: 60,
-        thi: 'Tự luận',
-        dbn: 0,
-        sdd: 3,
-        hs1: 0.1,
-        hs2: 0.2,
-        hs3: 0.6,
-        status: 'ACTIVE',
-    },
-    {
-        id: 2,
         subject: 'Lý thuyết hệ điều hành - Bộ môn Khoa học máy tính',
         children: [
             {
@@ -449,7 +429,6 @@ export default function SubjectList() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                // onCell: (record: any) => ({ colSpan: Array.isArray(record.children) && record.children.length > 0 ? 0 : 1 }),
                                 render: (_, { id }) =>
                                     id ? (
                                         <Row className="justify-center gap-2">
