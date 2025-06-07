@@ -2,7 +2,7 @@ import '../base'
 import '../ql-nguoi-dung/profile'
 import '../ql-dao-tao/student'
 
-// khu vực đăng ký (Bắc, Trung, Nam)
+/// khu vực đăng ký (Bắc, Trung, Nam)
 model RegistrationArea extends Base {
   name    String
 
@@ -10,21 +10,21 @@ model RegistrationArea extends Base {
   @@schema("ql-danh-muc")
 }
 
-// quốc tịch
+/// quốc tịch
 model Nationality extends Base {
   name        String
   userProfile UserProfile[]
   @@schema("ql-danh-muc")
 }
 
-// tôn giáo
+/// tôn giáo
 model Religion extends Base {
   name        String
   userProfile UserProfile[]
   @@schema("ql-danh-muc")
 }
 
-// dân tộc
+/// dân tộc
 model Ethnicity extends Base {
   name        String
   userProfile UserProfile[]

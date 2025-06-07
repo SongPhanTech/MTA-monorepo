@@ -23,10 +23,12 @@ model Commune extends Base {
 }
 
 model Level extends Base {
-  name String
+  name     String
+
+  profiles UserProfile[]
   @@schema("ql-danh-muc")
 }
-// cấp bậc hàm
+/// cấp bậc hàm
 model Rank extends Base {
   name     String
 
@@ -35,7 +37,7 @@ model Rank extends Base {
   @@schema("ql-danh-muc")
 }
 
-// học hàm
+/// học hàm
 model AcademicDegreeType extends Base {
   name     String
 
@@ -43,7 +45,7 @@ model AcademicDegreeType extends Base {
   @@schema("ql-danh-muc")
 }
 
-// học vị
+/// học vị
 model AcademicRankType extends Base {
   name     String
 
@@ -51,6 +53,7 @@ model AcademicRankType extends Base {
   @@schema("ql-danh-muc")
 }
 
+/// Loại giáo viên
 model LecturerType extends Base {
   name            String            @unique
 
@@ -62,6 +65,7 @@ model LecturerType extends Base {
   lecturerHistory LecturerHistory[]
 }
 
+/// Loại nhân viên
 model StaffType extends Base {
   name         String         @unique
 
@@ -70,6 +74,7 @@ model StaffType extends Base {
   @@schema("ql-danh-muc")
 }
 
+/// Chức vụ nhân viên
 model StaffPosition extends Base {
   name           String
   lecturerType   LecturerType   @relation(fields: [lecturerTypeId], references: [id])
@@ -82,7 +87,7 @@ model StaffPosition extends Base {
   @@schema("ql-danh-muc")
 }
 
-// chức vụ Đảng
+/// chức vụ Đảng
 model PositionCPV extends Base {
   name     String
 
@@ -90,7 +95,7 @@ model PositionCPV extends Base {
   @@schema("ql-danh-muc")
 }
 
-// loại đơn vị
+/// loại đơn vị
 model OrganizationType extends Base {
   name          String
 
@@ -98,7 +103,7 @@ model OrganizationType extends Base {
   @@schema("ql-danh-muc")
 }
 
-// đơn vị
+/// đơn vị
 model Organization extends Base {
   name            String            @unique
   type            OrganizationType  @relation(fields: [typeId], references: [id])

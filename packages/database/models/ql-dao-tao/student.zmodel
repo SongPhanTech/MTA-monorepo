@@ -6,6 +6,7 @@ import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
 
+/// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
   from                 DateTime? // từ ngày
   to                   DateTime? // đến ngày
@@ -40,5 +41,15 @@ model Student extends Base {
   registrationArea     RegistrationArea?       @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
   registrationAreaId   String?
 
+  // phiên bản chương trình đào tạo, được copy từ lớp quản lý
+  // phiên bản -> CTĐT -> chuyên ngành
+  curriculumVersion    CurriculumVersion?      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId  String?
+
+  studyRank            StudyRank?              @relation(fields: [studyRankId], references: [id])
+  studyRankId          String?
+
+  trainingRank         TrainingRank?           @relation(fields: [trainingRankId], references: [id])
+  trainingRankId       String?
   @@schema("ql-dao-tao")
 }
