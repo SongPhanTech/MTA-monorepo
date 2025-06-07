@@ -38,7 +38,7 @@ export default function TeachingAssignment() {
                 ? { name: { contains: filters.searchText } }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
+                ? { code: { contains: filters.searchText } }
                 : {}),
             ...(filters.trainingCourseId
                 ? { trainingCourseId: filters.trainingCourseId }
@@ -60,7 +60,7 @@ export default function TeachingAssignment() {
                 ? { name: { contains: filters.searchText } }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
+                ? { code: { contains: filters.searchText } }
                 : {}),
         },
     })

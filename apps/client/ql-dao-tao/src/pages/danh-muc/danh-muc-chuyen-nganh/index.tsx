@@ -1,6 +1,5 @@
-import Table from '@components/commons/table'
+// import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutTrainingCourseModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     KHOA_HL_STATUS,
@@ -10,9 +9,9 @@ import { PutTrainingMajorModal } from '@components/modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingMajor,
-    useFindManyTrainingMajor,
-    useUpdateTrainingCourse,
+    useCountTrainingField,
+    useFindManyTrainingField,
+    useUpdateTrainingMajor,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import type {
@@ -20,7 +19,7 @@ import type {
     TrainingObjectType,
     TrainingMajor,
     TrainingField,
-    TrainingFieldStatus,
+    Organization,
 } from '@workspace/db'
 import { X, Search } from 'lucide-react'
 import {
@@ -35,43 +34,91 @@ import {
     Tag,
     Tooltip,
     message,
+    Typography,
+    Table
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
+import type { TableProps } from 'antd';
+import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import TableCollapse from '@components/commons/tableCollapse'
+const { Text } = Typography;
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
     trainingObjectTypeId: string | undefined
 }
 
-export default function TrainingCoursePage() {
+interface DataType {
+    key: React.Key;
+    majorName: string;
+    department?: string;
+    majorCode?: string;
+    abbreviation?: string;
+    specializationName?: string;
+    englishName?: string;
+    description?: string;
+    creditsMajor?: string;
+    creditsRequired?: string;
+    creditsElective?: string;
+    status?: string;
+    children?: DataType[];
+}
+
+export default function TrainingMajorPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingObjectTypeId: undefined,
     })
+    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
 
-    const { data = [], refetch } = useFindManyTrainingMajor({
+    const { data = [], refetch } = useFindManyTrainingField({
         where: {
-            OR: [
-                { name: { contains: filters.searchText } },
-                { codeTrainingMajor: { contains: filters.searchText } },
-            ],
-            trainingObjectTypes: {
+            trainingMajors: {
                 some: {
-                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                    OR: [
+                        { name: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                    ],
+                    trainingObjectTypes: {
+                        some: {
+                            trainingObjectTypeId: filters.trainingObjectTypeId
+                        }
+                    }
                 },
             },
+
         },
         include: {
-            organization: true,
-            trainingField: true,
+            trainingMajors: {
+                where:{
+                    OR: [
+                        { name: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                    ],
+                    trainingObjectTypes: {
+                        some: {
+                            trainingObjectTypeId: filters.trainingObjectTypeId
+                        }
+                    }
+                },
+                include: {
+                    organization: true,
+                    trainingObjectTypes: {
+                        include: {
+                            trainingObjectType: true
+                        }
+                    }
+                }
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -80,17 +127,30 @@ export default function TrainingCoursePage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingMajor({
+      const dataRaw = useMemo(() => {
+        if (data?.length) {
+            let result=data.map(i=>{return {...i,children:i?.trainingMajors}});
+            return result
+        }
+        return []
+    }, [data])
+
+    const { data: count } = useCountTrainingField({
         where: {
-            OR: [
-                { name: { contains: filters.searchText } },
-                { codeTrainingMajor: { contains: filters.searchText } },
-            ],
-            trainingObjectTypes: {
+            trainingMajors: {
                 some: {
-                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                    OR: [
+                        { name: { contains: filters.searchText, mode: 'insensitive' } },
+                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                    ],
+                    trainingObjectTypes: {
+                        some: {
+                            trainingObjectTypeId: filters.trainingObjectTypeId
+                        }
+                    }
                 },
             },
+
         },
     })
 
@@ -109,11 +169,11 @@ export default function TrainingCoursePage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateTrainingMajor({
                 where: {
                     id,
                 },
@@ -140,9 +200,6 @@ export default function TrainingCoursePage() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Danh mục chuyên ngành
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -175,7 +232,7 @@ export default function TrainingCoursePage() {
                                 </Form.Item>
                                 <Form.Item
                                     className="mb-0"
-                                    name="trainingObjectId"
+                                    name="trainingObjectTypeId"
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
                                     labelAlign="left"
@@ -192,12 +249,12 @@ export default function TrainingCoursePage() {
                                             width: 300,
                                             marginRight: 8,
                                         }}
-                                        // onChange={(val) =>
-                                        //     handleFilterChange(
-                                        //         'trainingObjectTypeId',
-                                        //         val
-                                        //     )
-                                        // }
+                                        onChange={(val) =>
+                                            handleFilterChange(
+                                                'trainingObjectTypeId',
+                                                val
+                                            )
+                                        }
                                         allowClear
                                     />
                                 </Form.Item>
@@ -214,49 +271,36 @@ export default function TrainingCoursePage() {
                 </Col>
 
                 <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="training-category"
+                    <TableCollapse
+                        // rowKey="id"
+                        headerTitleKey="name"
+                        currentPage={currentPage}
                         columns={[
                             {
                                 title: 'ĐTĐT',
-                                dataIndex: 'trainingObjectType',
+                                dataIndex: 'trainingObjectTypes',
                                 align: 'left',
                                 width: 100,
-                                render: (value: TrainingObjectType) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) =>
+                                    value?.length > 0 ? value.map((i:TrainingObjectType & {trainingObjectType:TrainingObjectType})=>{return (<div>- {i?.trainingObjectType?.name}</div>)}) : '',
                             },
                             {
                                 title: 'Khoa phụ trách',
-                                dataIndex: 'trainingObjectTypes',
-                                align: 'left',
+                                dataIndex: 'organization',
+                                align: 'center',
                                 width: 150,
-                                render: (value: TrainingType) =>
-                                    value?.name ? value?.name : '',
+                                render: value => value?.name
                             },
                             {
-                                title: 'Ngành',
-                                dataIndex: 'trainingField',
-                                align: 'left',
-                                width: 100,
-                                render: (value: TrainingField) =>
-                                    value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Mã chuyên ngành',
-                                dataIndex: 'codeTrainingMajor',
+                                title: 'Mã ngành',
+                                dataIndex: 'code',
                                 align: 'left',
                                 width: 150,
                             },
                             {
-                                title: 'Viết tắt',
-                                align: 'left',
-                                dataIndex: 'sumary',
-                                width: 100,
-                            },
-                            {
-                                title: 'Tên chuyên ngành',
+                                title: 'Tên ngành',
                                 dataIndex: 'name',
+                                width: 200,
                                 align: 'left',
                             },
                             {
@@ -267,7 +311,7 @@ export default function TrainingCoursePage() {
                             },
                             {
                                 title: 'Mô tả',
-                                width: 100,
+                                width: 150,
                                 align: 'center',
                                 dataIndex: 'description',
                             },
@@ -294,7 +338,7 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 width: 130,
                                 render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -308,6 +352,7 @@ export default function TrainingCoursePage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
@@ -344,15 +389,13 @@ export default function TrainingCoursePage() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={dataRaw}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
@@ -361,6 +404,6 @@ export default function TrainingCoursePage() {
     )
 }
 
-TrainingCoursePage.getLayout = function getLayout(page: React.ReactElement) {
+TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

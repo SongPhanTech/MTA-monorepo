@@ -16,14 +16,15 @@ import {
     useFindManyTrainingField,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, InputNumber } from 'antd'
-import { useEffect } from 'react'
+import { Col, Form, Input, message, Radio, InputNumber, TreeSelect } from 'antd'
+import { useEffect,useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
+// import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
+import { buildOrgTree } from '@lib/utils'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
@@ -31,6 +32,7 @@ import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingMajorModal = () => {
     const [form] = Form.useForm<PutTrainingMajor>()
+    const [targetDisabled, setTargetDisabled] = useState(true);
     const {
         isOpen,
         onClose,
@@ -40,14 +42,23 @@ const PutTrainingMajorModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
-    const { data: trainingFieldData = [], refetch: refetchTrainingMajor } =
+    const { data: trainingFieldData = [], refetch: refetchManyTrainingField } =
         useFindManyTrainingField()
 
-    const { data: organizations, refetch: refetchOrganizations } =
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+                     where: {
+                trainingFields: {
+                    some: {
+                        trainingFieldId: form.getFieldValue('trainingFieldId')
+                    }
+                }
+            }
+            })
+    
+    const { data: organizations = [], refetch: refetchOrganizations } =
         useFindManyOrganization()
+    const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()
     const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
@@ -58,12 +69,12 @@ const PutTrainingMajorModal = () => {
             if (id) {
                 await updateTrainingMajor({
                     data: {
-                        codeTrainingMajor: output.codeTrainingMajor,
+                        code: output.code,
                         name: output.name,
-                        sumary: output.sumary,
+                        summary: output.summary,
+                        active: output.active,
                         description: output.description,
                         englishName: output.englishName,
-                        status: output.status,
                         organizationId: output.organizationId,
                         trainingFieldId: output.trainingFieldId,
                         numberCreditsMajor: output.numberCreditsMajor,
@@ -89,12 +100,12 @@ const PutTrainingMajorModal = () => {
             } else {
                 await createTrainingMajor({
                     data: {
-                        codeTrainingMajor: output.codeTrainingMajor,
+                        code: output.code,
                         name: output.name,
-                        sumary: output.sumary,
+                        summary: output.summary,
+                        active: output.active,
                         description: output.description,
                         englishName: output.englishName,
-                        status: output.status,
                         organizationId: output.organizationId,
                         trainingFieldId: output.trainingFieldId,
                         numberCreditsMajor: output.numberCreditsMajor,
@@ -126,21 +137,52 @@ const PutTrainingMajorModal = () => {
 
     const { data: level } = useFindUniqueTrainingMajor({
         where: { id },
+        include: {
+            organization: true,
+            trainingObjectTypes: true
+        },
     })
+
+    // const disableTrainingObjectTypes = useMemo(() => {
+    //     if(!form.getFieldValue('trainingFieldId')){
+    //         return true
+    //     }
+    //     return false
+    // },[form])
+    const handleMajorChange = async (val:string) => {
+        console.log(val)
+
+        try {
+            form.setFieldsValue({
+                        trainingObjectTypeIds: [],
+                    })
+            setTargetDisabled(true)
+            await refetchObjectType();
+            if(form.getFieldValue('trainingFieldId')){
+                setTargetDisabled(false)
+            }else {
+                setTargetDisabled(true)
+            }
+        } catch (err) {
+            message.error("Lỗi khi tải đối tượng đào tạo");
+        }
+};
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
+            setTargetDisabled(false)
             form.setFieldsValue({
                 ...level,
+                trainingObjectTypeIds: level.trainingObjectTypes.map(i => i?.trainingObjectTypeId),
+            })
+        } else {
+            form.setFieldsValue({
+                active: true,
             })
         }
     }, [level])
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        form.setFieldsValue({
-            status: 'ACTIVE',
-        })
-    }, [])
+
     return (
         <PutFormModal
             open={isOpen}
@@ -151,27 +193,6 @@ const PutTrainingMajorModal = () => {
             title={id ? 'Chỉnh sửa chuyên ngành' : 'Thêm mới chuyên ngành'}
             className="w-[45vw]"
         >
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingObjectTypeIds"
-                    label="Đối tượng đào tạo"
-                    required
-                >
-                    <Select
-                        mode="multiple"
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map(
-                            (i: TrainingObjectType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            }
-                        )}
-                    />
-                </FormItem>
-            </Col>
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -187,6 +208,31 @@ const PutTrainingMajorModal = () => {
                                 label: i.name,
                             }
                         })}
+                        onChange={(val) =>handleMajorChange(val)}
+                        
+                    />
+                </FormItem>
+            </Col>
+                  <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeIds"
+                    label="Đối tượng đào tạo"
+                    
+                    required
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectTypeData.map(
+                            (i: TrainingObjectType) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            }
+                        )}
+                        disabled={targetDisabled}
                     />
                 </FormItem>
             </Col>
@@ -199,15 +245,23 @@ const PutTrainingMajorModal = () => {
                     className="mb-2"
                 >
                     <TreeSelect
-                        placeholder="Chọn khoa phụ trách"
-                        treeData={convertToTreeSelect(organizations || [])}
+                        allowClear
+                        showSearch
+                        placeholder="Chọn đơn vị phụ trách"
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={(input, node) =>
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="codeTrainingMajor"
+                    name="code"
                     label="Mã chuyên ngành"
                     required
                 >
@@ -215,7 +269,7 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="sumary" label="Viết tắt" required>
+                <FormItem form={form} name="summary" label="Viết tắt" required>
                     <Input placeholder="Nhập viết tắt" />
                 </FormItem>
             </Col>
@@ -275,23 +329,21 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name={'status'}
-                        label="Trạng thái"
-                        required
-                    >
-                        <Radio.Group buttonStyle="solid">
-                            <Radio value={$Enums.TrainingFieldStatus.ACTIVE}>
-                                Đang hoạt động
-                            </Radio>
-                            <Radio value={$Enums.TrainingFieldStatus.IN_ACTIVE}>
-                                Ngừng hoạt động
-                            </Radio>
-                        </Radio.Group>
-                    </FormItem>
-                </Col>
+                <FormItem
+                    form={form}
+                    name={'active'}
+                    label="Trạng thái"
+                    required
+                >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>
+                            Đang hoạt động
+                        </Radio>
+                        <Radio value={false}>
+                            Ngừng hoạt động
+                        </Radio>
+                    </Radio.Group>
+                </FormItem>
             </Col>
         </PutFormModal>
     )

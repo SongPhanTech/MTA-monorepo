@@ -12,13 +12,14 @@ import {
     useFindManyTrainingLevel,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Switch, Radio, Flex } from 'antd'
+import { Col, Form, Input, message, Switch, Radio, Flex, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
+import { buildOrgTree } from '@lib/utils'
+// import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
@@ -40,8 +41,9 @@ const PutTrainingFieldModal = () => {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-    const { data: organizations, refetch: refetchOrganizations } =
+    const { data: organizations = [], refetch: refetchOrganizations } =
         useFindManyOrganization()
+    const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
@@ -52,12 +54,12 @@ const PutTrainingFieldModal = () => {
             if (id) {
                 await updateTrainingField({
                     data: {
-                        codeTrainingField: output.codeTrainingField,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status,
+                        active: output.active,
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
                             set: output.trainingObjectTypeIds.map(
@@ -79,12 +81,12 @@ const PutTrainingFieldModal = () => {
             } else {
                 await createTrainingField({
                     data: {
-                        codeTrainingField: output.codeTrainingField,
+                        code: output.code,
                         name: output.name,
                         description: output.description,
+                        active: output.active,
                         publishDate: output.publishDate,
                         englishName: output.englishName,
-                        status: output.status,
                         organizationId: output.organizationId,
                         trainingObjectTypes: {
                             createMany: {
@@ -112,6 +114,10 @@ const PutTrainingFieldModal = () => {
 
     const { data: level } = useFindUniqueTrainingField({
         where: { id },
+        include: {
+            organization: true,
+            trainingObjectTypes: true
+        },
     })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -119,17 +125,15 @@ const PutTrainingFieldModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
+                trainingObjectTypeIds: level.trainingObjectTypes.map(i => i?.trainingObjectTypeId),
                 publishDate: dayjs(level.publishDate),
+            })
+        } else {
+            form.setFieldsValue({
+                active: true,
             })
         }
     }, [level])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        form.setFieldsValue({
-            status: 'ACTIVE',
-        })
-    }, [])
 
     return (
         <PutFormModal
@@ -144,7 +148,7 @@ const PutTrainingFieldModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="codeTrainingField"
+                    name="code"
                     label="Mã ngành"
                     required
                 >
@@ -197,8 +201,16 @@ const PutTrainingFieldModal = () => {
                     className="mb-2"
                 >
                     <TreeSelect
-                        placeholder="Chọn đơn vị"
-                        treeData={convertToTreeSelect(organizations || [])}
+                        allowClear
+                        showSearch
+                        placeholder="Chọn đơn vị phụ trách"
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={(input, node) =>
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
                     />
                 </FormItem>
             </Col>
@@ -220,15 +232,15 @@ const PutTrainingFieldModal = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
-                    name={'status'}
+                    name={'active'}
                     label="Trạng thái"
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio value={$Enums.TrainingFieldStatus.ACTIVE}>
+                        <Radio value={true}>
                             Đang hoạt động
                         </Radio>
-                        <Radio value={$Enums.TrainingFieldStatus.IN_ACTIVE}>
+                        <Radio value={false}>
                             Ngừng hoạt động
                         </Radio>
                     </Radio.Group>
