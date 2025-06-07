@@ -1,8 +1,6 @@
 import {
     ApartmentOutlined,
     BookOutlined,
-    ClockCircleOutlined,
-    HomeOutlined,
     IdcardOutlined,
     MessageOutlined,
     FileTextOutlined,
@@ -12,16 +10,17 @@ import {
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
-    ProductOutlined,
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import ROUTER_PATH from '../generated/router'
+import { BookCheckIcon, CalendarFold, FileUser, Flag, House, LayoutDashboard, LucideProps } from 'lucide-react'
+import "./index.css"
 interface MenuItem {
     id: string
     label: React.ReactNode
     icon?: React.ForwardRefExoticComponent<
         Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-    >
+    > | React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
     path?: string
     children?: MenuItem[]
     description?: string
@@ -312,7 +311,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'home',
                 label: 'Trang chủ',
-                icon: HomeOutlined,
+                icon: House,
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
             },
@@ -326,7 +325,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'category',
                 label: 'Danh mục',
-                icon: ProductOutlined,
+                icon: LayoutDashboard,
                 children: [
                     {
                         id: 'danh-muc-nganh',
@@ -347,7 +346,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'chuong-trinh-dao-tao-123',
                 label: 'Chương trình đào tạo',
-                icon: ProductOutlined,
+                icon: BookCheckIcon,
                 children: [
                     {
                         id: 'danh-muc-chuong-trinh-dao-tao',
@@ -380,7 +379,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ke-hoach-giao-duc',
                 label: 'Kế hoạch giáo dục',
-                icon: ProductOutlined,
+                icon: CalendarFold,
                 children: [
                     {
                         id: 'ke-hoach-mo-lop-mon-hoc',
@@ -401,7 +400,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'milestone',
                 label: 'Mốc huấn luyện',
-                icon: ClockCircleOutlined,
+                icon: Flag,
                 path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                 description: 'Thông tin năm học, kỳ học',
             },
@@ -429,7 +428,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'user-profile-qs',
                 label: 'Quản lý hồ sơ học viên',
-                icon: IdcardOutlined,
+                icon: FileUser,
                 path: ROUTER_PATH.QL_DAO_TAO.QL_HOC_VIEN,
                 description: 'Quản lý hồ sơ học viên',
             },
