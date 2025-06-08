@@ -29,7 +29,7 @@ interface FilterProps {
 export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingCourseId: null,
@@ -77,13 +77,13 @@ export default function SubjectOpeningPlan() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-        const { onOpen, onClose } = useDisclosure<string>({
-            tag: PutOpenClassModal.name,
-        })
-    
-        const handleModal = () => {
-            onOpen()
-        }
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutOpenClassModal.name,
+    })
+
+    const handleModal = () => {
+        onOpen()
+    }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
@@ -119,67 +119,70 @@ export default function SubjectOpeningPlan() {
     const dataFake = [
         {
             id: 1,
-            maMonHoc: "003603",
-            tenMonHoc: "Toán rời rạc",
-            danhSachLop: [{name: "003560 01 (53)"}, {name: "003560 02 (53)"}],
+            maMonHoc: '003603',
+            tenMonHoc: 'Toán rời rạc',
+            danhSachLop: [
+                { name: '003560 01 (53)' },
+                { name: '003560 02 (53)' },
+            ],
             stc: 3,
             chuongTrinhDaoTao: [
-                {name: "Đạn"},
-                {name: "Công nghệ chế tạo máy"},
-                {name: "Công nghệ chế tạo dạn"},
-                {name: "Công nghệ vật liệu"},
-                {name: "Phòng hóa"},
+                { name: 'Đạn' },
+                { name: 'Công nghệ chế tạo máy' },
+                { name: 'Công nghệ chế tạo dạn' },
+                { name: 'Công nghệ vật liệu' },
+                { name: 'Phòng hóa' },
             ],
             cacLopCoMon: [
-                {name: "Đạn 1"},
-                {name: "Đạn 2"},
-                {name: "Đạn 3"},
-                {name: "Công nghệ chế tạo máy"},
-                {name: "Công nghệ chế tạo dạn"},
-                {name: "Công nghệ vật liệu"},
-                {name: "Phòng hóa"},
+                { name: 'Đạn 1' },
+                { name: 'Đạn 2' },
+                { name: 'Đạn 3' },
+                { name: 'Công nghệ chế tạo máy' },
+                { name: 'Công nghệ chế tạo dạn' },
+                { name: 'Công nghệ vật liệu' },
+                { name: 'Phòng hóa' },
             ],
             svNo: 0,
             tongSV: 81,
             soLMH: 4,
-            donViPhuTrach: "Bộ môn Khoa học máy tính",
+            donViPhuTrach: 'Bộ môn Khoa học máy tính',
         },
         {
             id: 2,
-            maMonHoc: "003603",
-            tenMonHoc: "Toán rời rạc",
-            danhSachLop: ["003560 01 (53)", "003560 02 (53)"],
+            maMonHoc: '003603',
+            tenMonHoc: 'Toán rời rạc',
+            danhSachLop: ['003560 01 (53)', '003560 02 (53)'],
             stc: 3,
             chuongTrinhDaoTao: [
-                {name: "Đạn"},
-                {name: "Công nghệ chế tạo máy"},
-                {name: "Công nghệ chế tạo dạn"},
-                {name: "Công nghệ vật liệu"},
-                {name: "Phòng hóa"},
+                { name: 'Đạn' },
+                { name: 'Công nghệ chế tạo máy' },
+                { name: 'Công nghệ chế tạo dạn' },
+                { name: 'Công nghệ vật liệu' },
+                { name: 'Phòng hóa' },
             ],
             cacLopCoMon: [
-                {name: "Đạn 1"},
-                {name: "Đạn 2"},
-                {name: "Đạn 3"},
-                {name: "Công nghệ chế tạo máy"},
-                {name: "Công nghệ chế tạo dạn"},
-                {name: "Công nghệ vật liệu"},
-                {name: "Phòng hóa"},
+                { name: 'Đạn 1' },
+                { name: 'Đạn 2' },
+                { name: 'Đạn 3' },
+                { name: 'Công nghệ chế tạo máy' },
+                { name: 'Công nghệ chế tạo dạn' },
+                { name: 'Công nghệ vật liệu' },
+                { name: 'Phòng hóa' },
             ],
             svNo: 0,
             tongSV: 81,
             soLMH: 4,
-            donViPhuTrach: "Bộ môn Khoa học máy tính",
+            donViPhuTrach: 'Bộ môn Khoa học máy tính',
         },
     ]
 
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys);
-            console.log(selectedKeys);
+            setSelectedRowKeys(selectedKeys)
+            console.log(selectedKeys)
         },
-    };
+    }
 
     return (
         <div>
@@ -276,17 +279,11 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
+                                <Button type="primary" className="h-[40px]">
                                     Thêm mới
                                 </Button>
-                                <Button
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
-                                    <EditIcon stroke='white'/>
+                                <Button type="primary" className="h-[40px]">
+                                    <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>
                             </Flex>
@@ -326,11 +323,11 @@ export default function SubjectOpeningPlan() {
                                 dataIndex: 'danhSachLop',
                                 width: 200,
                                 render: (values: { name: string }[]) => (
-                                <ul style={{ paddingLeft: 16, margin: 0 }}>
-                                    {values.map((val, idx) => (
-                                    <li key={idx}>{val.name}</li>
-                                    ))}
-                                </ul>
+                                    <ul style={{ paddingLeft: 16, margin: 0 }}>
+                                        {values.map((val, idx) => (
+                                            <li key={idx}>{val.name}</li>
+                                        ))}
+                                    </ul>
                                 ),
                             },
                             {
@@ -340,27 +337,39 @@ export default function SubjectOpeningPlan() {
                                 align: 'center',
                             },
                             {
-                                title: "Chương trình đào tạo",
-                                dataIndex: "chuongTrinhDaoTao",
+                                title: 'Chương trình đào tạo',
+                                dataIndex: 'chuongTrinhDaoTao',
                                 width: 200,
                                 render: (values: { name: string }[]) => (
-                                <ul style={{ paddingLeft: 16, margin: 0, listStyleType: 'disc' }}>
-                                    {values.map((val, idx) => (
-                                    <li key={idx}>{val.name}</li>
-                                    ))}
-                                </ul>
+                                    <ul
+                                        style={{
+                                            paddingLeft: 16,
+                                            margin: 0,
+                                            listStyleType: 'disc',
+                                        }}
+                                    >
+                                        {values.map((val, idx) => (
+                                            <li key={idx}>{val.name}</li>
+                                        ))}
+                                    </ul>
                                 ),
                             },
                             {
-                                title: "Các lớp có môn",
-                                dataIndex: "cacLopCoMon",
+                                title: 'Các lớp có môn',
+                                dataIndex: 'cacLopCoMon',
                                 width: 200,
                                 render: (classes: { name: string }[]) => (
-                                <ul style={{ paddingLeft: 16, margin: 0, listStyleType: 'disc' }}>
-                                    {classes.map((cls, idx) => (
-                                    <li key={idx}>{cls.name}</li>
-                                    ))}
-                                </ul>
+                                    <ul
+                                        style={{
+                                            paddingLeft: 16,
+                                            margin: 0,
+                                            listStyleType: 'disc',
+                                        }}
+                                    >
+                                        {classes.map((cls, idx) => (
+                                            <li key={idx}>{cls.name}</li>
+                                        ))}
+                                    </ul>
                                 ),
                             },
                             {
@@ -394,11 +403,14 @@ export default function SubjectOpeningPlan() {
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
-                                            <Row 
+                                            <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
                                                 onClick={handleModal}
                                             >
-                                                <CalendarPlus size={16} strokeWidth={2} />
+                                                <CalendarPlus
+                                                    size={16}
+                                                    strokeWidth={2}
+                                                />
                                                 Mở Lớp
                                             </Row>
                                         )

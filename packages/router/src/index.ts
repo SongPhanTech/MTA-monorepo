@@ -385,15 +385,13 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'ke-hoach-mo-lop-mon-hoc',
                         label: 'Kế hoạch mở lớp môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .KE_HOACH_MO_LOP_MON_HOC,
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_MO_LOP_MON_HOC,
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
                         id: 'phan-cong-giang-day',
                         label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .PHAN_CONG_GIANG_DAY,
+                        path: ROUTER_PATH.QL_DAO_TAO.PHAN_CONG_GIANG_DAY,
                         description: 'Phân công giảng dạy',
                     },
                 ],

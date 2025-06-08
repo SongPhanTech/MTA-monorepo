@@ -61,19 +61,19 @@ const PutUserProfileModal = () => {
                             firstName: output.firstName,
                             lastName: output.lastName,
                             gender: output.gender,
-                            dateOfBirth: output.dateOfBirth
-                        }
+                            dateOfBirth: output.dateOfBirth,
+                        },
                     },
                     trainingObjectType: {
                         connect: {
-                            id: output.trainingObjectTypeId
-                        }
+                            id: output.trainingObjectTypeId,
+                        },
                     },
                     fixedClass: {
                         connect: {
-                            id: output.fixedClassId
-                        }
-                    }
+                            id: output.fixedClassId,
+                        },
+                    },
                 },
             })
 
@@ -103,8 +103,8 @@ const PutUserProfileModal = () => {
                         ? 'Chỉnh sửa sinh viên'
                         : 'Chỉnh sửa học viên'
                     : code === 'SV'
-                        ? 'Thêm mới sinh viên'
-                        : 'Thêm mới học viên'
+                      ? 'Thêm mới sinh viên'
+                      : 'Thêm mới học viên'
             }
             className="w-[50vw]"
         >
@@ -147,17 +147,17 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="dateOfBirth" label="Ngày sinh" required>
+                <FormItem
+                    form={form}
+                    name="dateOfBirth"
+                    label="Ngày sinh"
+                    required
+                >
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="gender"
-                    label="Giới tính"
-                    required
-                >
+                <FormItem form={form} name="gender" label="Giới tính" required>
                     <Select
                         placeholder="Chọn giới tính"
                         options={GENDER_LIST.map((i: any) => {
@@ -170,39 +170,52 @@ const PutUserProfileModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
-                    <Select placeholder="Chọn đối tượng đào tạo" options={
-                        trainingObjectTypeData?.map((value) => {
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectTypeData?.map((value) => {
                             return {
                                 value: value.id,
                                 label: value.name,
                             }
-                        })
-                    } />
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="fixedClassId" label="Lớp" required>
-                    <Select placeholder="Chọn lớp" options={
-                        fixedClassData?.map((value) => {
+                    <Select
+                        placeholder="Chọn lớp"
+                        options={fixedClassData?.map((value) => {
                             return {
                                 value: value.id,
                                 label: value.name,
                             }
-                        })
-                    } />
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
-                    <Select placeholder="Chọn khóa học" options={
-                        trainingCourseData?.map((value) => {
+                <FormItem
+                    form={form}
+                    name="trainingCourseId"
+                    label="Khóa"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn khóa học"
+                        options={trainingCourseData?.map((value) => {
                             return {
                                 value: value.id,
                                 label: value.name,
                             }
-                        })
-                    } />
+                        })}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

@@ -1,9 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingFieldModal } from '@components/modal'
-import {
-    DEFAULT_PAGINATE_SIZE,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -67,9 +65,9 @@ export default function TrainingFieldPage() {
             organization: true,
             trainingObjectTypes: {
                 include: {
-                    trainingObjectType: true
-                }
-            }
+                    trainingObjectType: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -248,7 +246,21 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (trainingObjectTypes) =>
-                                    trainingObjectTypes.map((i: TrainingObjectType & { trainingObjectType: TrainingObjectType }, index: Number) => (<span>{i?.trainingObjectType?.name}{index != trainingObjectTypes?.length - 1 && <span>, </span>}</span>))
+                                    trainingObjectTypes.map(
+                                        (
+                                            i: TrainingObjectType & {
+                                                trainingObjectType: TrainingObjectType
+                                            },
+                                            index: Number
+                                        ) => (
+                                            <span>
+                                                {i?.trainingObjectType?.name}
+                                                {index !=
+                                                    trainingObjectTypes?.length -
+                                                        1 && <span>, </span>}
+                                            </span>
+                                        )
+                                    ),
                             },
                             {
                                 title: 'Khoa phụ trách',
@@ -256,7 +268,9 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (organization: Organization) =>
-                                    organization?.name ? organization?.name : '',
+                                    organization?.name
+                                        ? organization?.name
+                                        : '',
                             },
                             {
                                 title: 'Mã ngành',
@@ -289,8 +303,8 @@ export default function TrainingFieldPage() {
                                 render: ({ publishDate }) =>
                                     publishDate
                                         ? dayjs(publishDate).format(
-                                            'DD/MM/YYYY'
-                                        )
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                             },
                             {
