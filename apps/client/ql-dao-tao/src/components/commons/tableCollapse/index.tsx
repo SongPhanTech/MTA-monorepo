@@ -19,8 +19,6 @@ type TableProps<T extends Data> = {
         onShowSizeChange?: ((size: number) => void) | undefined
     }
     headerTitleKey: keyof T | ((record: T) => ReactNode)
-    actionButtonIcon?: ReactNode
-    onActionButtonClick?: (record: T) => void
     onRowClick?: (record: T) => void
     expandable?: TableAntdProps<T>['expandable']
     rowKey?: string
