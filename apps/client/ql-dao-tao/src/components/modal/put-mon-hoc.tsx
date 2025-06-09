@@ -1,8 +1,11 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { SubjectVersion, Subject } from '@workspace/db'
+import { buildOrgTree } from '@lib/utils'
+import type { Subject, SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManyOrganization,
@@ -10,18 +13,12 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Steps, TreeSelect } from 'antd'
-import DatePicker from '@components/commons/date-picker'
-import { useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { Col, Form, Input, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
-export type PutSubjectFormType = SubjectVersion
 import 'dayjs/locale/vi'
-import { buildOrgTree } from '@lib/utils'
-import Select from '@components/commons/select'
-import { SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
-import MonHocTienQuyetPage from '@components/sub-pages/mon-hoc-tien-quyet'
-import MonHocSongHanhPage from '@components/sub-pages/mon-hoc-song-hanh'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+export type PutSubjectFormType = SubjectVersion
 
 dayjs.locale('vi')
 const PutSubjectModal = () => {

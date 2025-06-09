@@ -13,14 +13,26 @@ import {
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import ROUTER_PATH from '../generated/router'
-import { BookCheckIcon, CalendarFold, FileUser, Flag, House, LayoutDashboard, LucideProps } from 'lucide-react'
-import "./index.css"
+import {
+    BookCheckIcon,
+    CalendarFold,
+    FileUser,
+    Flag,
+    House,
+    LayoutDashboard,
+    LucideProps,
+} from 'lucide-react'
+import './index.css'
 interface MenuItem {
     id: string
     label: React.ReactNode
-    icon?: React.ForwardRefExoticComponent<
-        Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-    > | React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+    icon?:
+        | React.ForwardRefExoticComponent<
+              Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+          >
+        | React.ForwardRefExoticComponent<
+              Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+          >
     path?: string
     children?: MenuItem[]
     description?: string
