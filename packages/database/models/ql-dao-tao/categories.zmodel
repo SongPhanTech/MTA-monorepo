@@ -6,7 +6,7 @@ import '../ql-nguoi-dung/profile'
 
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
-  name           String
+  name           String                              @unique
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
   trainingMajors TrainingMajorOnTrainingObjectType[]
@@ -19,7 +19,7 @@ model TrainingObjectType extends Base {
 
 /// đối tượng ưu tiên
 model PriorityObject extends Base {
-  name     String
+  name     String    @unique
 
   students Student[]
   @@schema("ql-dao-tao")
@@ -27,7 +27,7 @@ model PriorityObject extends Base {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType extends Base {
-  name           String
+  name           String           @unique
 
   trainingCourse TrainingCourse[]
   students       Student[]
@@ -37,7 +37,7 @@ model TrainingType extends Base {
 
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel extends Base {
-  name           String
+  name           String           @unique
 
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
@@ -48,7 +48,7 @@ model TrainingLevel extends Base {
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
-  name           String
+  name           String           @unique
 
   trainingCourse TrainingCourse[]
   students       Student[]
@@ -57,7 +57,7 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name     String
+  name     String    @unique
 
   students Student[]
   @@schema("ql-dao-tao")
@@ -90,7 +90,7 @@ model TrainingFieldOnTrainingObjectType extends Base {
 /// chuyên ngành đào tạo
 model TrainingMajor extends Base {
   name                  String
-  englishName           String
+  englishName           String?
   summary               String
   /// Số tín chỉ chuyên ngành
   numberCreditsMajor    Int                                 @default(0)

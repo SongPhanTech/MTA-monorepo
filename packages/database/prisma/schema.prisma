@@ -453,6 +453,7 @@ model Curriculum {
   createdAt                DateTime            @default(now())
   updatedAt                DateTime            @updatedAt()
   name                     String
+  englishName              String?
   status                   CurriculumStatus    @default(ACTIVE)
   startDate                DateTime
   endDate                  DateTime?
@@ -649,7 +650,7 @@ model TrainingObjectType {
   deletedAt      DateTime?
   createdAt      DateTime                            @default(now())
   updatedAt      DateTime                            @updatedAt()
-  name           String
+  name           String                              @unique()
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
   trainingMajors TrainingMajorOnTrainingObjectType[]
@@ -669,7 +670,7 @@ model PriorityObject {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  name        String
+  name        String    @unique()
   students    Student[]
 
   @@schema("ql-dao-tao")
@@ -684,7 +685,7 @@ model TrainingType {
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt()
-  name           String
+  name           String           @unique()
   trainingCourse TrainingCourse[]
   students       Student[]
 
@@ -700,7 +701,7 @@ model TrainingLevel {
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt()
-  name           String
+  name           String           @unique()
   trainingCourse TrainingCourse[]
   curriculum     Curriculum[]
   students       Student[]
@@ -717,7 +718,7 @@ model TrainingForm {
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt()
-  name           String
+  name           String           @unique()
   trainingCourse TrainingCourse[]
   students       Student[]
 
@@ -733,7 +734,7 @@ model TrainingLocation {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt()
-  name        String
+  name        String    @unique()
   students    Student[]
 
   @@schema("ql-dao-tao")
@@ -786,7 +787,7 @@ model TrainingMajor {
   createdAt             DateTime                            @default(now())
   updatedAt             DateTime                            @updatedAt()
   name                  String
-  englishName           String
+  englishName           String?
   summary               String
   /// Số tín chỉ chuyên ngành
   numberCreditsMajor    Int                                 @default(0)
@@ -1371,7 +1372,6 @@ model LecturerType {
   updatedAt       DateTime          @updatedAt()
   name            String            @unique()
   lecturers       Lecturer[]
-  staffPosition   StaffPosition[]
   lecturerHistory LecturerHistory[]
 
   @@schema("ql-danh-muc")
@@ -1395,20 +1395,17 @@ model StaffType {
 
 /// Chức vụ nhân viên
 model StaffPosition {
-  id             String         @id() @default(cuid())
-  code           String?        @unique()
-  active         Boolean        @default(true)
-  description    String?        @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt()
-  name           String
-  lecturerType   LecturerType   @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId String
-  staffs         Staff[]
-  staffHistory   StaffHistory[]
+  id           String         @id() @default(cuid())
+  code         String?        @unique()
+  active       Boolean        @default(true)
+  description  String?        @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt()
+  name         String
+  staffs       Staff[]
+  staffHistory StaffHistory[]
 
-  @@unique([name, lecturerTypeId])
   @@schema("ql-danh-muc")
 }
 
