@@ -18,9 +18,12 @@ import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
+    useCountLecturer,
     useCountUserProfile,
+    useFindManyLecturer,
     useFindManyTemplateFile,
     useFindManyUserProfile,
+    useUpdateLecturer,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
 
@@ -34,9 +37,11 @@ import {
     Divider,
     Dropdown,
     Flex,
+    Image,
     Input,
     Menu,
     Row,
+    Tag,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -78,45 +83,84 @@ export default function UserProfilePageLecture() {
     //     searchOrganization
     // )
 
-    const { data = [], refetch } = useFindManyUserProfile({
+    const { data = [], refetch } = useFindManyLecturer({
         where: {
             AND: [
-                // Tìm kiếm theo tên giảng viên
                 ...(filters.searchText
                     ? [
                           {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.searchText,
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
                                       },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.searchText,
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
                                       },
-                                  },
-                              ],
+                                  ],
+                              },
                           },
                       ]
                     : []),
-                // Tìm kiếm theo tên đơn vị
-
-                // Các filter khác
-
+                ...(filters.organizationText
+                    ? [
+                          {
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
                 ...(filters.nationalityId
-                    ? [{ nationalityId: filters.nationalityId }]
+                    ? [
+                          {
+                              userProfile: {
+                                  nationalityId: filters.nationalityId,
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.religionId
-                    ? [{ religionId: filters.religionId }] // Sửa từ nationalityId
+                    ? [
+                          {
+                              userProfile: {
+                                  religionId: filters.religionId,
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.ethnicityId
-                    ? [{ ethnicityId: filters.ethnicityId }]
+                    ? [
+                          {
+                              userProfile: {
+                                  ethnicityId: filters.ethnicityId,
+                              },
+                          },
+                      ]
                     : []),
-                // Filter theo userType - luôn có
             ],
         },
-
+        include: {
+            userProfile: {
+                include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    rank: true,
+                },
+            },
+            organization: true,
+            lecturerType: {
+                include: {
+                    staffPosition: true,
+                },
+            },
+        },
         orderBy: {
             createdAt: 'desc',
         },
@@ -124,43 +168,40 @@ export default function UserProfilePageLecture() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountUserProfile({
+    const { data: count } = useCountLecturer({
         where: {
             AND: [
                 ...(filters.searchText
                     ? [
                           {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.searchText,
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
                                       },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.searchText,
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
                                       },
-                                  },
-                              ],
+                                  ],
+                              },
                           },
                       ]
                     : []),
                 ...(filters.organizationText
                     ? [
                           {
-                              organizationName: {
-                                  contains: filters.organizationText,
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
                               },
                           },
                       ]
                     : []),
-                {
-                    userType: {
-                        is: {
-                            code: 'GV',
-                        },
-                    },
-                },
             ],
         },
     })
@@ -192,7 +233,7 @@ export default function UserProfilePageLecture() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpenModalAdd({ id: null, code: 'GV' })
+        onOpenModalAdd({ userType: 'LECTURER' })
     }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
@@ -210,11 +251,12 @@ export default function UserProfilePageLecture() {
     //     const listChildrenOrganizationId = children.map((item: any) => item.id)
     //     setOrganizationIds(listChildrenOrganizationId)
     // }
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+
+    const { mutateAsync: updateLecturer } = useUpdateLecturer()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateUserProfile({
+            await updateLecturer({
                 where: {
                     id,
                 },
@@ -320,7 +362,7 @@ export default function UserProfilePageLecture() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={4}>
+                        <Col span={7}>
                             <Input
                                 id="search"
                                 onChange={(e) =>
@@ -332,13 +374,13 @@ export default function UserProfilePageLecture() {
                                 placeholder="Tìm kiếm theo tên đơn vị"
                             />
                         </Col>
-                        <Col span={3}></Col>
                         <Col span={10}>
                             <FilterLecture
                                 onSearchChange={handleFilterChange}
                                 onFilterChange={handleAdvancedFilter}
                             />
                         </Col>
+
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
@@ -439,14 +481,20 @@ export default function UserProfilePageLecture() {
                                 width: 120,
                                 render: (avatar) =>
                                     avatar ? (
-                                        <img src={avatar} alt="Avatar" />
-                                    ) : (
-                                        <UserOutlined
-                                            style={{
-                                                fontSize: 24,
-                                                color: '#999',
-                                            }}
+                                        <Image
+                                            src={avatar}
+                                            width={80}
+                                            // height={80}
                                         />
+                                    ) : (
+                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                                            <UserOutlined
+                                                style={{
+                                                    fontSize: 32,
+                                                    color: '#bfbfbf',
+                                                }}
+                                            />
+                                        </div>
                                     ),
                             },
                             {
@@ -457,14 +505,17 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'SHSQ/SHQN',
-                                dataIndex: 'officerNumber',
+                                render: (_, record) =>
+                                    record.userProfile?.officerNumber,
                                 align: 'center',
                                 width: 120,
                             },
                             {
                                 title: 'Họ và tên',
-                                render: ({ firstName, lastName }) =>
-                                    `${lastName}` + ' ' + `${firstName}`,
+                                render: (record) =>
+                                    record.userProfile
+                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        : '',
                                 align: 'center',
                                 width: 150,
                             },
@@ -472,69 +523,134 @@ export default function UserProfilePageLecture() {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 100,
-                                render: ({ gender }) =>
-                                    GENDER_MEAN[
-                                        gender as keyof typeof GENDER_MEAN
-                                    ],
+                                render: (record) =>
+                                    record.userProfile?.gender
+                                        ? GENDER_MEAN[
+                                              record.userProfile
+                                                  .gender as keyof typeof GENDER_MEAN
+                                          ]
+                                        : '',
                             },
                             {
                                 title: 'Ngày sinh',
-                                render: ({ dateOfBirth }) =>
-                                    dayjs(dateOfBirth).format('DD/MM/YYYY'),
+                                render: (_, record) =>
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(
+                                              record.userProfile.dateOfBirth
+                                          ).format('DD/MM/YYYY')
+                                        : '',
                                 align: 'center',
                                 width: 100,
                             },
                             {
                                 title: 'Đơn vị',
                                 width: 150,
-                                dataIndex: 'organizationName',
+                                render: (_, record) => {
+                                    return (
+                                        record.organization?.name || 'Chưa có'
+                                    )
+                                },
                                 align: 'center',
                             },
                             {
                                 title: 'Học hàm',
-                                width: 100,
-                                dataIndex: 'academicDegreeTypeName',
+                                width: 120,
+                                render: (_, record) =>
+                                    record.userProfile?.academicRankType
+                                        ?.name || '',
                                 align: 'center',
                             },
                             {
                                 title: 'Năm HH',
-                                dataIndex: 'educationYear',
+                                render: (_, record) =>
+                                    record.userProfile?.academicRankDate
+                                        ? dayjs(
+                                              record.userProfile
+                                                  .academicRankDate
+                                          ).format('DD/MM/YYYY')
+                                        : '',
                                 align: 'center',
-                                width: 100,
+                                width: 120,
                             },
                             {
                                 title: 'Học vị',
-                                dataIndex: 'academicRankTypeName',
+                                render: (_, record) =>
+                                    record.userProfile?.academicDegreeType
+                                        ?.name || '',
                                 align: 'center',
-                                width: 100,
+                                width: 120,
                             },
                             {
                                 title: 'Năm HV',
-                                dataIndex: 'academicYear',
+                                render: (_, record) =>
+                                    record.userProfile?.academicDegreeDate
+                                        ? dayjs(
+                                              record.userProfile
+                                                  .academicDegreeDate
+                                          ).format('DD/MM/YYYY')
+                                        : '',
                                 align: 'center',
-                                width: 100,
+                                width: 120,
                             },
                             {
                                 title: 'Chức vụ',
-                                dataIndex: 'positionName',
                                 align: 'center',
-                                width: 100,
+                                width: 200,
+                                render: (_, record) => {
+                                    const staffPositions =
+                                        record.lecturerType?.staffPosition || []
+
+                                    if (staffPositions.length === 0) {
+                                        return (
+                                            <Tag color="default">Chưa có</Tag>
+                                        )
+                                    }
+
+                                    return (
+                                        <div className="flex flex-wrap gap-1 justify-start items-center">
+                                            {staffPositions.map(
+                                                (position, index) => (
+                                                    <Tag
+                                                        key={`${position.id}-${index}`}
+                                                        className="whitespace-nowrap"
+                                                    >
+                                                        {position.name}
+                                                    </Tag>
+                                                )
+                                            )}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Năm CV',
-                                dataIndex: 'tenureYear',
+                                render: (_, record) =>
+                                    record.userProfile?.academicDegreeDate
+                                        ? dayjs(
+                                              record.userProfile
+                                                  .academicDegreeDate
+                                          ).format('DD/MM/YYYY')
+                                        : '',
                                 align: 'center',
                                 width: 100,
                             },
                             {
                                 title: 'Cập bậc hàm',
-                                dataIndex: 'rankName',
+                                dataIndex: 'rankId',
+                                render: (_, record) =>
+                                    record.userProfile?.rank?.name || '',
                                 align: 'center',
                                 width: 120,
                             },
                             {
                                 title: 'Năm CB',
-                                dataIndex: 'rankYear',
+                                dataIndex: 'rankDate',
+                                render: (_, record) =>
+                                    record.userProfile?.rankDate
+                                        ? dayjs(
+                                              record.userProfile.rankDate
+                                          ).format('DD/MM/YYYY')
+                                        : '',
                                 align: 'center',
                                 width: 100,
                             },
@@ -548,7 +664,6 @@ export default function UserProfilePageLecture() {
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
                                                 id: id,
-                                                code: 'GV',
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />

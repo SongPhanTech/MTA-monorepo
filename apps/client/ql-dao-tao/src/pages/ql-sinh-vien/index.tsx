@@ -4,8 +4,8 @@ import DeleteIcon from '@components/icons/delete'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileModal,
-    PutUserProfileUpdateModal,
+    AddStudentModal,
+    PutStudentModal,
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -191,10 +191,8 @@ export default function UserProfilePageDs() {
     )
     const { onOpen, onClose } = useDisclosure<{
         tag?: string
-        id: string | null
-        code: string
     }>({
-        tag: PutUserProfileModal.name,
+        tag: AddStudentModal.name,
     })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
@@ -208,15 +206,14 @@ export default function UserProfilePageDs() {
     const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
         tag?: string
         id: string | null
-        code: string
     }>({
-        tag: PutUserProfileUpdateModal.name,
+        tag: PutStudentModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({ id: null, code: 'SV' })
+        onOpen()
     }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
@@ -541,7 +538,6 @@ export default function UserProfilePageDs() {
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,
-                                                code: 'SV',
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />

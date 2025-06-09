@@ -37,6 +37,12 @@ import {
     useFindManyEthnicity,
     useFindManyOrganization,
     useFindManyNationality,
+    useFindManyRank,
+    useFindManyLevel,
+    useFindManyAcademicDegreeType,
+    useFindManyAcademicRankType,
+    useFindUniqueLecturer,
+    useUpdateLecturer,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -69,7 +75,6 @@ export type PutUserProfile = UserProfile & {
 }
 export interface PutUserProfileLectureProps {
     id: string | null
-    code: string
 }
 const PutUserProfileLectureModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
@@ -86,15 +91,9 @@ const PutUserProfileLectureModal = () => {
     //     tag: PutOrganizationUser.name,
     // })
 
-    const { id, code } = input ?? { id: null, code: '' }
+    const { id } = input ?? { id: null }
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const userTypeData = $Enums.UserType
-
-    const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
-        useFindManyPriorityObject()
-    const { data: registrationAreaData = [], refetch: refetchRe } =
-        useFindManyRegistrationArea()
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
 
@@ -104,8 +103,38 @@ const PutUserProfileLectureModal = () => {
     const { data: ethnicityData = [], refetch: refetchEth } =
         useFindManyEthnicity()
 
-    const { data: fixedClassData = [], refetch: refetchFix } =
-        useFindManyReligion()
+    const { data: rankData = [] } = useFindManyRank()
+    const { data: levelData = [] } = useFindManyLevel()
+    const { data: academicDegreeTypeData = [] } =
+        useFindManyAcademicDegreeType()
+    const { data: academicRankTypeData = [] } = useFindManyAcademicRankType()
+
+    const { data: lecturerData } = useFindUniqueLecturer({
+        where: {
+            id: id ?? undefined,
+        },
+        include: {
+            userProfile: {
+                include: {
+                    academicDegreeType: true,
+                    academicRankType: true,
+                    rank: true,
+                    nationality: true,
+                    religion: true,
+                    ethnicity: true,
+                    level: true,
+                },
+            },
+            organization: true,
+            lecturerType: {
+                include: {
+                    staffPosition: true,
+                },
+            },
+        },
+    })
+
+    console.log('lecturerData', lecturerData)
 
     // const {
     //     data: organizationUserData = [],
@@ -120,8 +149,8 @@ const PutUserProfileLectureModal = () => {
 
     const treeData = buildOrgTree(manageOrgData)
 
-    const { mutateAsync: createUserProfile } = useCreateUserProfile()
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { mutateAsync: updateLecturer } = useUpdateLecturer()
+
     async function onOk(output?: PutUserProfile) {
         if (!output) return
         let fileName
@@ -141,88 +170,90 @@ const PutUserProfileLectureModal = () => {
         try {
             showSpinner()
             if (id) {
-                await updateUserProfile({
+                await updateLecturer({
                     data: {
-                        code: output.code,
-                        avatar: fileName ? fileName : undefined,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        dateOfBirth: output.dateOfBirth,
-                        placeOfBirth: output.placeOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        idCardDate: output.idCardDate,
-                        officerNumber: output.officerNumber,
-                        gender: output.gender,
-                        permanentAddress: output.permanentAddress,
-                        temporaryAddress: output.temporaryAddress,
-                        contactAddress: output.contactAddress,
-                        phoneNumber: output.phoneNumber,
-                        email: output.email,
-                        familyPhone: output.familyPhone,
-                        familyName: output.familyName,
-                        unionDate: output.unionDate,
-                        unionPlace: output.unionPlace,
-                        CPVJoinDate: output.CPVJoinDate,
-                        officialCPVDate: output.officialCPVDate,
-                        CPVJoinPlace: output.CPVJoinPlace,
-                        tenureDate: output.tenureDate,
-                        enlistmentDate: output.enlistmentDate,
-                        dischargeDate: output.dischargeDate,
-                        // TODO: add education and training
-                        userType: $Enums.UserType.LECTURER,
-                        userId: output.userId,
-                        nationalityId: output.nationalityId,
-                        religionId: output.religionId,
-                        ethnicityId: output.ethnicityId,
+                        userProfile: {
+                            update: {
+                                code: output.code,
+                                avatar: fileName ? fileName : undefined,
+                                firstName: output.firstName,
+                                lastName: output.lastName,
+                                dateOfBirth: output.dateOfBirth,
+                                placeOfBirth: output.placeOfBirth,
+                                homeTown: output.homeTown,
+                                idCardNumber: output.idCardNumber,
+                                idCardDate: output.idCardDate,
+                                officerNumber: output.officerNumber,
+                                gender: output.gender,
+                                permanentAddress: output.permanentAddress,
+                                temporaryAddress: output.temporaryAddress,
+                                contactAddress: output.contactAddress,
+                                phoneNumber: output.phoneNumber,
+                                email: output.email,
+                                familyPhone: output.familyPhone,
+                                familyName: output.familyName,
+                                unionDate: output.unionDate,
+                                unionPlace: output.unionPlace,
+                                CPVJoinDate: output.CPVJoinDate,
+                                officialCPVDate: output.officialCPVDate,
+                                CPVJoinPlace: output.CPVJoinPlace,
+                                tenureDate: output.tenureDate,
+                                enlistmentDate: output.enlistmentDate,
+                                dischargeDate: output.dischargeDate,
+                                rankDate: output.rankDate,
+                                academicRankDate: output.academicRankDate,
+                                academicDegreeDate: output.academicDegreeDate,
+                                userType: $Enums.UserType.LECTURER,
+                                // Connect relations
+                                nationality: output.nationalityId
+                                    ? {
+                                          connect: { id: output.nationalityId },
+                                      }
+                                    : { disconnect: true },
+                                religion: output.religionId
+                                    ? {
+                                          connect: { id: output.religionId },
+                                      }
+                                    : { disconnect: true },
+                                ethnicity: output.ethnicityId
+                                    ? {
+                                          connect: { id: output.ethnicityId },
+                                      }
+                                    : { disconnect: true },
+                                rank: output.rankId
+                                    ? {
+                                          connect: { id: output.rankId },
+                                      }
+                                    : { disconnect: true },
+                                level: output.levelId
+                                    ? {
+                                          connect: { id: output.levelId },
+                                      }
+                                    : { disconnect: true },
+                                academicDegreeType: output.academicDegreeTypeId
+                                    ? {
+                                          connect: {
+                                              id: output.academicDegreeTypeId,
+                                          },
+                                      }
+                                    : { disconnect: true },
+                                academicRankType: output.academicRankTypeId
+                                    ? {
+                                          connect: {
+                                              id: output.academicRankTypeId,
+                                          },
+                                      }
+                                    : { disconnect: true },
+                            },
+                        },
                     },
-                    where: {
-                        id,
-                    },
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
-            } else {
-                await createUserProfile({
-                    data: {
-                        code: output.code,
-                        avatar: fileName ? fileName : undefined,
-                        firstName: output.firstName,
-                        lastName: output.lastName,
-                        dateOfBirth: output.dateOfBirth,
-                        placeOfBirth: output.placeOfBirth,
-                        homeTown: output.homeTown,
-                        idCardNumber: output.idCardNumber,
-                        idCardDate: output.idCardDate,
-                        officerNumber: output.officerNumber,
-                        gender: output.gender,
-                        permanentAddress: output.permanentAddress,
-                        temporaryAddress: output.temporaryAddress,
-                        contactAddress: output.contactAddress,
-                        phoneNumber: output.phoneNumber,
-                        email: output.email,
-                        familyPhone: output.familyPhone,
-                        familyName: output.familyName,
-                        unionDate: output.unionDate,
-                        unionPlace: output.unionPlace,
-                        CPVJoinDate: output.CPVJoinDate,
-                        officialCPVDate: output.officialCPVDate,
-                        CPVJoinPlace: output.CPVJoinPlace,
-                        tenureDate: output.tenureDate,
-                        enlistmentDate: output.enlistmentDate,
-                        dischargeDate: output.dischargeDate,
-                        // TODO: add education and training
-                        userType: $Enums.UserType.LECTURER,
-                        userId: output.userId,
-                        nationalityId: output.nationalityId,
-                        religionId: output.religionId,
-                        ethnicityId: output.ethnicityId,
-                    },
-                })
-                message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['UserProfile'],
+                queryKey: ['Lecturer'],
             })
             onClose()
         } catch (error) {
@@ -231,24 +262,14 @@ const PutUserProfileLectureModal = () => {
         hideSpinner()
     }
 
-    const { data: userProfile } = useFindUniqueUserProfile(
-        id
-            ? {
-                  where: {
-                      id: id,
-                  },
-              }
-            : {
-                  where: {
-                      id: '',
-                  },
-              }
-    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if (userProfile) {
+        if (lecturerData?.userProfile) {
+            const userProfile = lecturerData.userProfile
             form.setFieldsValue({
+                // Thông tin từ UserProfile
                 ...userProfile,
+                // Convert dates
                 dateOfBirth: userProfile.dateOfBirth
                     ? dayjs(userProfile.dateOfBirth)
                     : null,
@@ -273,9 +294,18 @@ const PutUserProfileLectureModal = () => {
                 dischargeDate: userProfile.dischargeDate
                     ? dayjs(userProfile.dischargeDate)
                     : null,
+                rankDate: userProfile.rankDate
+                    ? dayjs(userProfile.rankDate)
+                    : null,
+                academicRankDate: userProfile.academicRankDate
+                    ? dayjs(userProfile.academicRankDate)
+                    : null,
+                academicDegreeDate: userProfile.academicDegreeDate
+                    ? dayjs(userProfile.academicDegreeDate)
+                    : null,
             })
+
             if (userProfile.avatar) {
-                console.log(getMinioUrl(userProfile.avatar))
                 setAvatar([
                     {
                         uid: '-1',
@@ -286,7 +316,7 @@ const PutUserProfileLectureModal = () => {
                 ])
             }
         }
-    }, [userProfile])
+    }, [lecturerData, form])
 
     //upload file
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -317,15 +347,7 @@ const PutUserProfileLectureModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? code === 'GV'
-                        ? 'Chỉnh sửa giảng viên'
-                        : 'Chỉnh sửa cán bộ'
-                    : code === 'GV'
-                      ? 'Thêm mới giảng viên'
-                      : 'Thêm mới cán bộ'
-            }
+            title={'Chỉnh sửa giảng viên'}
             className="w-[80vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
@@ -388,11 +410,11 @@ const PutUserProfileLectureModal = () => {
                                             <FormItem
                                                 form={form}
                                                 name="code"
-                                                label="Mã"
+                                                label="Mã giảng viên"
                                                 required
                                                 className="mb-0"
                                             >
-                                                <Input placeholder="Nhập mã" />
+                                                <Input placeholder="Nhập mã giảng viên" />
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
@@ -427,6 +449,11 @@ const PutUserProfileLectureModal = () => {
                                                 <DatePicker
                                                     format="DD/MM/YYYY"
                                                     className="w-full"
+                                                    disabledDate={(date) =>
+                                                        date &&
+                                                        date >
+                                                            dayjs().endOf('day')
+                                                    }
                                                 />
                                             </FormItem>
                                         </Col>
@@ -485,6 +512,11 @@ const PutUserProfileLectureModal = () => {
                                                 <DatePicker
                                                     format="DD/MM/YYYY"
                                                     className="w-full"
+                                                    disabledDate={(date) =>
+                                                        date &&
+                                                        date >
+                                                            dayjs().endOf('day')
+                                                    }
                                                 />
                                             </FormItem>
                                         </Col>
@@ -499,7 +531,7 @@ const PutUserProfileLectureModal = () => {
                                                     allowClear
                                                     placeholder="Chọn giới tính"
                                                     options={GENDER_LIST.map(
-                                                        (i: any) => {
+                                                        (i) => {
                                                             return {
                                                                 value: i.id,
                                                                 label: i.name,
@@ -513,10 +545,10 @@ const PutUserProfileLectureModal = () => {
                                             <FormItem
                                                 form={form}
                                                 name="permanentAddress"
-                                                label="HK thường trú"
+                                                label="Địa chỉ thường trú"
                                                 className="mb-0"
                                             >
-                                                <Input placeholder="Nhập hk thường trú" />
+                                                <Input placeholder="Nhập địa chỉ thường trú" />
                                             </FormItem>
                                         </Col>
                                         <Col span={8}>
@@ -654,6 +686,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -677,6 +713,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -690,6 +730,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -713,6 +757,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -726,6 +774,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -739,6 +791,10 @@ const PutUserProfileLectureModal = () => {
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
                                         />
                                     </FormItem>
                                 </Col>
@@ -775,75 +831,128 @@ const PutUserProfileLectureModal = () => {
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="rankName"
+                                name="rankId"
                                 label="Cấp bậc hàm"
                                 className="mb-0"
+                                normalize={(value) =>
+                                    value === undefined ? null : value
+                                }
                             >
-                                <Input placeholder="Nhập cấp bậc hàm" />
+                                <Select
+                                    placeholder="Chọn cấp bậc hàm"
+                                    options={rankData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="rankName"
+                                name="rankDate"
                                 label="Năm cấp bậc hàm"
                                 className="mb-0"
                             >
-                                <Input placeholder="Nhập năm cấp bậc hàm" />
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date > dayjs().endOf('day')
+                                    }
+                                />
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="educationLevel"
+                                name="levelId"
                                 label="Trình độ học vấn"
                                 className="mb-0"
+                                normalize={(value) =>
+                                    value === undefined ? null : value
+                                }
                             >
-                                <Input placeholder="Nhập trình độ học vấn" />
+                                <Select
+                                    placeholder="Chọn trình độ học vấn"
+                                    options={levelData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="academicDegreeTypeName"
+                                name="academicDegreeTypeId"
                                 label="Học hàm"
                                 className="mb-0"
+                                normalize={(value) =>
+                                    value === undefined ? null : value
+                                }
                             >
-                                <Input placeholder="Nhập học hàm" />
+                                <Select
+                                    placeholder="Chọn học hàm"
+                                    options={academicDegreeTypeData.map(
+                                        (i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                />
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="academicDegreeTypeName"
+                                name="academicRankDate"
                                 label="Năm học hàm"
                                 className="mb-0"
                             >
-                                <Input placeholder="Nhập năm học hàm" />
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date > dayjs().endOf('day')
+                                    }
+                                />
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="academicRankTypeName"
+                                name="academicRankTypeId"
                                 label="Học vị"
                                 className="mb-0"
                             >
-                                <Input placeholder="Nhập học vị" />
+                                <Select
+                                    placeholder="Chọn học vị"
+                                    options={academicRankTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
                             </FormItem>
                         </Col>
 
                         <Col span={12}>
                             <FormItem
                                 form={form}
-                                name="academicRankTypeName"
+                                name="academicDegreeDate"
                                 label="Năm học vị"
                                 className="mb-0"
                             >
-                                <Input placeholder="Nhập năm học vị" />
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date > dayjs().endOf('day')
+                                    }
+                                />
                             </FormItem>
                         </Col>
-                        <Col span={12}>
+                        {/* <Col span={12}>
                             <FormItem
                                 form={form}
                                 name="positionName"
@@ -892,7 +1001,7 @@ const PutUserProfileLectureModal = () => {
                             >
                                 <Input placeholder="Nhập nơi sinh hoạt Đảng" />
                             </FormItem>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </TabPane>
             </Tabs>
