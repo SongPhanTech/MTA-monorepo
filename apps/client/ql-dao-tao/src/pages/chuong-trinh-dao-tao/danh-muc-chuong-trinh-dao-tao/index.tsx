@@ -1,90 +1,41 @@
 import { PlusOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingProgramCatalog } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
     useFindManyTrainingCourse,
     useFindManyCurriculum,
+    useUpdateCurriculum,
+    useCountCurriculum,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import { $Enums, type TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tag,
+    message,
+} from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
-import MajorInforList from '@components/sub-pages/chuyen-nganh'
+import TableCollapse from '@components/commons/tableCollapse'
+import dayjs from 'dayjs'
 interface FilterProps {
     searchText: string | null
     trainingObjectTypeId: string | undefined
 }
-
-const fakeData = [
-    {
-        id: '1',
-        major: '748020101_Công nghệ thông tin',
-        name: 'Công nghệ thông tin CPC 60',
-        status: 'ACTIVE',
-        infor: [
-            {
-                id: '1',
-                version: '1.0',
-                code: 'CNTTCPC60',
-                abbreviation: 'CNTT CPC 60',
-                englistName: 'Information Technology CPC 60',
-                totalCredits: 140,
-                description: 'Medical training program',
-                startYear: 2022,
-                effectiveYear: 2022,
-                duration: '6 năm',
-                totalCreditsRequired: 130,
-                startSemester: 'Học kỳ 1 năm học 2023 -2024 ',
-                endSemester: 'Học kỳ 2 năm học 2023 -2024 ',
-                isStandardProgram: true,
-                isLocked: true,
-            },
-            {
-                id: '2',
-                version: '2.0',
-                code: 'CNTT60',
-                abbreviation: 'CNTT CPC 60',
-                englistName: 'Information Technology CPC 60',
-                totalCredits: 140,
-                description: 'Medical training program',
-                startYear: 2022,
-                effectiveYear: 2022,
-                duration: '6 năm',
-                totalCreditsRequired: 130,
-                startSemester: 'Học kỳ 1 năm học 2023 -2024 ',
-                endSemester: 'Học kỳ 2 năm học 2023 -2024 ',
-                isStandardProgram: true,
-                isLocked: true,
-            },
-        ],
-    },
-    {
-        id: '2',
-        major: '748020101_Công nghệ thông tin',
-        name: 'Công nghệ thông tin Lào 60',
-        status: 'IN_ACTIVE',
-    },
-    {
-        id: '3',
-        major: '748020101_Công nghệ thông tin',
-        name: 'Công nghệ thông tin_K60',
-        status: 'IN_ACTIVE',
-    },
-]
-
 export default function TrainingProgramCatalog() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -93,20 +44,25 @@ export default function TrainingProgramCatalog() {
         trainingObjectTypeId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data = [], refetch } = useFindManyCurriculum({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+            // name: {
+            //     contains: filters.name,
+            // },
+            // ...(filters.curriculumId
+            //     ? { curriculumId: filters.curriculumId }
+            //     : {}),
+            // ...(filters.startDate && filters.endDate
+            //     ? {
+            //           startDate: {
+            //               gte: new Date(filters.startDate),
+            //               lte: new Date(filters.endDate),
+            //           },
+            //       }
+            //     : {}),
         },
         include: {
-            organization: true,
+            curriculumVersion: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -115,7 +71,7 @@ export default function TrainingProgramCatalog() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
+    const { data: count } = useCountCurriculum({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
@@ -156,11 +112,11 @@ export default function TrainingProgramCatalog() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateCurriculum } = useUpdateCurriculum()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateCurriculum({
                 where: {
                     id,
                 },
@@ -182,13 +138,12 @@ export default function TrainingProgramCatalog() {
         })
     }
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const { data: curriculumData = [], refetch: refetchCurriculum } =
-        useFindManyCurriculum()
+    const { data: curriculumData = [] } = useFindManyCurriculum()
 
     return (
         <div>
@@ -324,29 +279,111 @@ export default function TrainingProgramCatalog() {
                 </Col>
 
                 <Col span={24}>
-                    <Table
-                        rowKey="id"
+                    <TableCollapse
+                        rowKey="key"
                         id="version-category"
+                        headerTitleKey="name"
+                        childrenFieldName="curriculumVersion"
+                        currentPage={currentPage}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
+                                title: 'Phiên bản',
+                                dataIndex: 'name',
                                 align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                width: 180,
                             },
                             {
                                 title: 'Chuyên ngành',
                                 dataIndex: 'major',
                                 align: 'center',
+                                width: 200,
+                            },
+                            {
+                                title: 'Mã CTĐT',
+                                dataIndex: 'code',
+                                align: 'center',
+                                width: 200,
                             },
                             {
                                 title: 'Tên chương trình',
                                 dataIndex: 'name',
                                 align: 'center',
+                                width: 120,
+                            },
+                            {
+                                title: 'Tên viết tắt',
+                                dataIndex: 'shortName',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Tên tiếng anh',
+                                dataIndex: 'englishName',
+                                align: 'center',
+                                width: 120,
+                            },
+                            {
+                                title: 'Tổng tín chỉ',
+                                dataIndex: 'englishName',
+                                align: 'center',
+                                width: 120,
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                                align: 'center',
+                                width: 200,
+                            },
+                            {
+                                title: 'Năm khởi tạo',
+                                dataIndex: 'createdAt',
+                                align: 'center',
+                                width: 140,
+                                render: (value) => dayjs(value).year(),
+                            },
+                            {
+                                title: 'Năm áp dụng',
+                                dataIndex: 'startDate',
+                                align: 'center',
+                                width: 140,
+                                render: (value) => dayjs(value).year(),
+                            },
+                            {
+                                title: 'Thời gian đào tạo',
+                                dataIndex: 'numberOfSemesters',
+                                align: 'center',
+                                width: 140,
+                                render: (value) => `${value} năm`,
+                            },
+                            {
+                                title: 'HK bắt đầu',
+                                dataIndex: 'numberOfSemesters123',
+                                align: 'center',
+                                width: 170,
+                            },
+                            {
+                                title: 'HK Kết thúc',
+                                dataIndex: 'numberOfSemesters123',
+                                align: 'center',
+                                width: 140,
+                            },
+                            {
+                                title: 'Là CTĐT Khung',
+                                dataIndex: 'active',
+                                align: 'center',
+                                width: 120,
+                                render: (value: boolean) => (
+                                    <Checkbox checked={!!value} disabled />
+                                ),
+                            },
+                            {
+                                title: 'Khóa sửa',
+                                dataIndex: 'active',
+                                align: 'center',
+                                width: 120,
+                                render: (value: boolean) => (
+                                    <Checkbox checked={!!value} disabled />
+                                ),
                             },
                             {
                                 title: 'Trạng thái',
@@ -354,7 +391,7 @@ export default function TrainingProgramCatalog() {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                    return record?.status === 'IN_ACTIVE' ? (
+                                     return record?.status === $Enums.CurriculumStatus.INACTIVATED ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -404,22 +441,13 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                         ]}
-                        data={fakeData}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
-                        expandable={{
-                            expandedRowRender: (record) => (
-                                <div style={{ maxWidth: '100%' }}>
-                                    <MajorInforList infor={record.infor} />
-                                </div>
-                            ),
                         }}
                     />
                 </Col>

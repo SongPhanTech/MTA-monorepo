@@ -2,23 +2,30 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingCourse, TrainingForm, TrainingTime } from '@workspace/db'
+import type {
+    Curriculum,
+    TrainingCourse,
+    TrainingForm,
+    TrainingTime,
+} from '@workspace/db'
 import {
     useCreateTrainingCourse,
     useFindUniqueTrainingCourse,
     useUpdateTrainingCourse,
     useFindManyTrainingType,
     useFindManyTrainingLevel,
+    useFindUniqueCurriculum,
+    useFindUniqueCurriculumVersion,
 } from '@workspace/db/hooks'
 import { Col, Collapse, Form, Input, message, Row, theme } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import dayjs from 'dayjs'
-export type PutTrainingCourse = TrainingCourse
+export type PutTrainingCourse = Curriculum
 import 'dayjs/locale/vi'
 import type { CSSProperties } from 'react'
-import React from 'react'
+import type React from 'react'
 import type { CollapseProps } from 'antd'
 import './index.css'
 dayjs.locale('vi')
@@ -28,7 +35,7 @@ const PutTrainingProgramCatalog = () => {
     const { token } = theme.useToken()
 
     const panelStyle: React.CSSProperties = {
-        marginBottom: 24,
+        marginBottom: 16,
         background: token.colorFillAlter,
         borderRadius: token.borderRadiusLG,
     }
@@ -63,8 +70,8 @@ const PutTrainingProgramCatalog = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
+                        // trainingTypeId: output.trainingTypeId,
+                        // trainingFormId: output.trainingFormId,
                         trainingLevelId: output.trainingLevelId,
                     },
                     where: {
@@ -81,14 +88,13 @@ const PutTrainingProgramCatalog = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
+                        // trainingTypeId: output.trainingTypeId,
+                        // trainingFormId: output.trainingFormId,
                         trainingLevelId: output.trainingLevelId,
                     },
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['TrainingCourse'],
             })
@@ -99,7 +105,7 @@ const PutTrainingProgramCatalog = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueTrainingCourse({
+    const { data: level } = useFindUniqueCurriculumVersion({
         where: { id },
     })
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -107,8 +113,8 @@ const PutTrainingProgramCatalog = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                startDate: dayjs(level.startDate),
-                endDate: level.endDate ? dayjs(level.endDate) : undefined,
+                // startDate: dayjs(level.startDate),
+                // endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
         }
     }, [level])
@@ -178,7 +184,7 @@ const PutTrainingProgramCatalog = () => {
                 <Col span={12}>
                     <FormItem
                         form={form}
-                        name="trainingObjectTypeId"
+                        name="trainingLanguage"
                         label="Ngôn ngữ đào tạo"
                     >
                         <Input placeholder="Nhập ngôn ngữ đào tạo" />
@@ -297,6 +303,15 @@ const PutTrainingProgramCatalog = () => {
                 items={getItems(panelStyle)}
                 className="w-full"
             />
+            <style>
+                {`
+                .ant-collapse-header-text {
+                    color: #374151;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+            `}
+            </style>
         </PutFormModal>
     )
 }

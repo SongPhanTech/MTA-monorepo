@@ -1,128 +1,119 @@
 import AI_TYPES from '@constants/ai_types'
+import { useCurrentUser } from '@hooks/use-current-user'
 import ChatLayout from '@layouts/chat-layout'
-import { MessageSender } from '@workspace/db'
+import { type DocumentType, MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import { Typography, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 const { Title } = Typography
 export default function TroLyAo() {
     const router = useRouter()
+    const userCurrent = useCurrentUser()
+
     const { id: conversationId } = router.query
-
-    const scrollRef = useRef<HTMLDivElement>(null)
-    const { mutateAsync: createConversation } = useCreateConversation()
-
-    const [messages, setMessages] = useState<
-        { id: number; role: string; content: string }[]
-    >([])
-    const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
+    const { mutateAsync: createConversation } = useCreateConversation()
     const [currentConversationId, setCurrentConversationId] = useState<
         string | undefined
     >(conversationId as string)
 
-    const handleSend = async () => {
-        if (!input.trim()) return
+    // const handleClick = async (key: string) => {
+    //     try {
+    //         setLoading(true)
 
-        const newMessage = { id: Date.now(), role: 'USER', content: input }
-        setMessages((prev) => [...prev, newMessage])
-        setInput('')
+    //         // Tìm loại AI đã chọn từ dữ liệu
+    //         const selectedAI = Object.values(groupedAITypes)
+    //             .flat()
+    //             .find((item) => item.key === key)
+
+    //         if (!selectedAI) {
+    //             throw new Error('Không tìm thấy loại AI')
+    //         }
+
+    //         const { label } = selectedAI // Lấy label của AI đã chọn
+
+    //         // Kiểm tra nếu chưa có currentConversationId thì tạo một cuộc trò chuyện mới
+    //         if (!currentConversationId && userCurrent?.id) {
+    //             const res = await createConversation({
+    //                 data: {
+    //                     userId: userCurrent?.id, // ID người dùng, thay theo đúng
+    //                     message: {
+    //                         create: [
+    //                             {
+    //                                 content: `${label}`, // Sử dụng label của AI
+    //                                 sender: MessageSender.BOT,
+    //                             },
+    //                         ],
+    //                     },
+    //                     type: key as DocumentType,
+    //                 },
+    //             })
+
+    //             const newConversationId = res?.id
+    //             if (newConversationId) {
+    //                 setCurrentConversationId(newConversationId)
+
+    //                 // Chuyển sang trang hội thoại mới với query document_type
+    //                 router.push({
+    //                     pathname: `/hoi-thoai/${newConversationId}`,
+    //                 })
+    //             } else {
+    //                 throw new Error('Không tạo được cuộc trò chuyện mới')
+    //             }
+    //         } else {
+    //             // Nếu đã có currentConversationId, chuyển hướng sang trang hội thoại cũ với document_type
+    //             router.push({
+    //                 pathname: `/hoi-thoai/${currentConversationId}`,
+    //             })
+    //         }
+    //     } catch (error) {
+    //         console.error(error)
+    //         message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+    const handleClick = async (key: string) => {
+        if (loading) return // Chặn bấm liên tục
+
+        setLoading(true)
 
         try {
-            setLoading(true)
+            const selectedAI = Object.values(groupedAITypes)
+                .flat()
+                .find((item) => item.key === key)
 
-            if (!currentConversationId) {
-                setCurrentConversationId('creating')
+            if (!selectedAI) throw new Error('Không tìm thấy loại AI')
 
+            const { label } = selectedAI
+
+            if (!currentConversationId && userCurrent?.id) {
                 const res = await createConversation({
                     data: {
-                        userId: 'cm9tpyicp0000s401big8i0s9',
+                        userId: userCurrent.id,
                         message: {
                             create: [
                                 {
-                                    content: input,
-                                    sender: MessageSender.USER,
+                                    content: label,
+                                    sender: MessageSender.BOT,
                                 },
                             ],
                         },
+                        type: key as DocumentType,
                     },
                 })
 
                 const newId = res?.id
                 if (newId) {
                     setCurrentConversationId(newId)
-
-                    // 🔁 Chuyển sang trang hội thoại mới, truyền message ban đầu qua query
-                    router.push({
-                        pathname: `/hoi-thoai/${newId}`,
-                        query: { initialMessage: input },
-                    })
-                } else {
-                    throw new Error('Không lấy được ID cuộc trò chuyện mới')
-                }
-            } else {
-                // TODO: call API gửi message tiếp vào conversation cũ (nếu có)
-            }
-        } catch (error) {
-            console.error(error)
-            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-            setCurrentConversationId(undefined)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const handleClick = async (key: string) => {
-        try {
-            setLoading(true)
-
-            // Tìm loại AI đã chọn từ dữ liệu của bạn
-            const selectedAI = Object.values(groupedAITypes)
-                .flat()
-                .find((item) => item.key === key)
-
-            if (!selectedAI) {
-                throw new Error('Không tìm thấy loại AI')
-            }
-
-            const { label } = selectedAI // Lấy label của AI đã chọn
-
-            // Kiểm tra nếu chưa có currentConversationId thì tạo một cuộc trò chuyện mới
-            if (!currentConversationId) {
-                const res = await createConversation({
-                    data: {
-                        userId: 'cm9tpyicp0000s401big8i0s9', // ID người dùng, thay theo đúng
-                        message: {
-                            create: [
-                                {
-                                    content: `${label}`, // Sử dụng label của AI
-                                    sender: MessageSender.BOT,
-                                },
-                            ],
-                        },
-                    },
-                })
-
-                const newConversationId = res?.id
-                if (newConversationId) {
-                    setCurrentConversationId(newConversationId)
-
-                    // Chuyển sang trang hội thoại mới với query document_type
-                    router.push({
-                        pathname: `/hoi-thoai/${newConversationId}`,
-                        query: { document_type: key },
-                    })
+                    router.push({ pathname: `/hoi-thoai/${newId}` })
                 } else {
                     throw new Error('Không tạo được cuộc trò chuyện mới')
                 }
             } else {
-                // Nếu đã có currentConversationId, chuyển hướng sang trang hội thoại cũ với document_type
-                router.push({
-                    pathname: `/hoi-thoai/${currentConversationId}`,
-                    query: { document_type: key },
-                })
+                router.push({ pathname: `/hoi-thoai/${currentConversationId}` })
             }
         } catch (error) {
             console.error(error)
@@ -153,7 +144,11 @@ export default function TroLyAo() {
                             <div
                                 key={item.key}
                                 onClick={() => handleClick(item.key)}
-                                className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:shadow-xl"
+                                className={`group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:shadow-xl ${
+                                    loading
+                                        ? 'pointer-events-none opacity-50'
+                                        : ''
+                                }`}
                             >
                                 <div className="flex items-center gap-3 cursor-pointer">
                                     <span className="text-xl text-[#028850] group-hover:text-white transition-all duration-300">

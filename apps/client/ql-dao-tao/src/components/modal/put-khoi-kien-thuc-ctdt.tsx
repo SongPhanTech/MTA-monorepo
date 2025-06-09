@@ -2,71 +2,81 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useCreateFixedClass, useUpdateFixedClass } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { useCreateTrainingBlock, useFindManyCurriculumVersion, useFindUniqueTrainingBlock, useUpdateTrainingBlock } from '@workspace/db/hooks'
+import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { TrainingBlock } from '@workspace/db'
 import dayjs from 'dayjs'
-export type PutFixedClass = {
-    name: string
-    code: string
-    knowledgeBlockName?: string
-    totalCredits: string
-    totalRequiredCredits: string
-    electiveCredits: string
-    specializedCredits: string
-    requiredSpecializedCredits: string
-    order: string
-}
+export type PutTrainingBlock = TrainingBlock
 import 'dayjs/locale/vi'
+import { useEffect } from 'react'
 dayjs.locale('vi')
-const PutKnowledgeBlock = () => {
-    const [form] = Form.useForm<PutFixedClass>()
+const PutTrainingBlock = () => {
+    const [form] = Form.useForm<PutTrainingBlock>()
     const {
         isOpen,
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutKnowledgeBlock.name,
+        tag: PutTrainingBlock.name,
         onClose: form.resetFields,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createFixedClass } = useCreateFixedClass()
-    const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
-    async function onOk(output?: PutFixedClass) {
-        if (!output) return
-        try {
-            showSpinner()
-            if (id) {
-                await updateFixedClass({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
-            } else {
-                await createFixedClass({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                    },
-                })
-                message.success('Thêm mới thành công')
-            }
-            // refetch() lại danh sách
-            queryClient.invalidateQueries({
-                queryKey: ['FixedClass'],
-            })
-            onClose()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    
+    const { data: trainingBlock } = useFindUniqueTrainingBlock(
+        { where: { id } },
+        { enabled: !!id }
+    );
+
+    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion();
+
+    useEffect(() => {
+        if (trainingBlock) {
+            form.setFieldsValue({
+            ...trainingBlock,
+            });
         }
-        hideSpinner()
+    }, [ trainingBlock, form ]);
+
+    const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
+    const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
+    async function onOk(output?: PutTrainingBlock) {
+        if (!output) return;
+
+        try {
+            showSpinner();
+            const payload = {
+                code: output.code,
+                name: output.name,
+                priority: output.priority,
+                active: output.active,
+                curriculumVersionId: output.curriculumVersionId,
+            };
+
+            if (id) {
+                await updateTrainingBlock({
+                    data: payload,
+                    where: { id },
+                });
+                message.success('Cập nhật thành công');
+            } else {
+                await createTrainingBlock({
+                    data: payload,
+                });
+                message.success('Thêm mới thành công');
+            }
+
+            queryClient.invalidateQueries({
+                queryKey: ['TrainingBlock'],
+            });
+            onClose();
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+        }
+
+        hideSpinner();
     }
 
     return (
@@ -83,7 +93,7 @@ const PutKnowledgeBlock = () => {
             }
             className="min-w-[400px] w-[500px]"
         >
-            {/* <Col span={24}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="code"
@@ -92,64 +102,94 @@ const PutKnowledgeBlock = () => {
                 >
                     <Input placeholder="Nhập mã khối kiến thức" />
                 </FormItem>
-            </Col> */}
+            </Col>
             <Col span={24}>
                 <FormItem
                     form={form}
-                    name="knowledgeBlockName"
+                    name="name"
                     label="Tên khối kiến thức"
                     required
                 >
                     <Input placeholder="Nhập tên khối kiến thức" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            {/* <Col span={24}>
                 <FormItem
                     form={form}
                     name="totalCredits"
                     label="Tổng tín chỉ"
-                    required
                 >
                     <Input placeholder="Tổng tín chỉ" />
                 </FormItem>
-            </Col>
-            <Col span={24}>
+            </Col> */}
+            {/* <Col span={24}>
                 <FormItem
                     form={form}
                     name="totalRequiredCredits"
                     label="Tổng tín chỉ bắt buộc"
-                    required
                 >
                     <Input placeholder="Tổng tín chỉ bắt buộc" />
                 </FormItem>
-            </Col>
-            <Col span={24}>
+            </Col> */}
+            {/* <Col span={24}>
                 <FormItem
                     form={form}
                     name="electiveCredits"
                     label="Số tín chỉ tự chọn"
-                    required
                 >
                     <Input placeholder="Số tín chỉ tự chọn" />
                 </FormItem>
-            </Col>
-            <Col span={24}>
+            </Col> */}
+            {/* <Col span={24}>
                 <FormItem
                     form={form}
                     name="specializedCredits"
                     label="Số tín chỉ chuyên ngành"
-                    required
                 >
                     <Input placeholder="Số tín chỉ chuyên ngành" />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={24}>
-                <FormItem form={form} name="order" label="Thứ tự" required>
-                    <Input placeholder="Thứ tự" />
+                <FormItem form={form} name="priority" label="Thứ tự" required >
+                    <InputNumber placeholder="Thứ tự" className='w-full'/>
+                </FormItem>
+            </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem
+                        form={form}
+                        name="active"
+                        label="Trạng thái"
+                    >
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            options={[
+                                { label: 'Đang hoạt động', value: true },
+                                { label: 'Ngừng đào tạo', value: false },
+                            ]}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+            )}
+            <Col span={24}>
+                <FormItem
+                    form={form}
+                    name="curriculumVersionId"
+                    label="Phiên bản chương trình đào tạo"
+                >
+                    <Select
+                        placeholder="Chọn phiên bản chương trình đào tạo"
+                        options={curriculumVersion.map(item => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                        allowClear
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>
     )
 }
 
-export default PutKnowledgeBlock
+export default PutTrainingBlock

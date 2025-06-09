@@ -26,8 +26,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { getMinioUrl } from '@workspace/constant'
-import EditIcon from '@components/icons/edit'
 
 type Props = {
     // data?: CurriculumVersionSubject[]
