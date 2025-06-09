@@ -200,7 +200,7 @@ Table TrainingCourse {
   status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 
-  Note: 'Khoá học'
+  Note: 'Khoá h���c'
 }
 
 Table FixedClass {

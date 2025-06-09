@@ -17,7 +17,7 @@ import {
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio, InputNumber, TreeSelect } from 'antd'
-import { useEffect,useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
@@ -32,7 +32,7 @@ import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingMajorModal = () => {
     const [form] = Form.useForm<PutTrainingMajor>()
-    const [targetDisabled, setTargetDisabled] = useState(true);
+    const [targetDisabled, setTargetDisabled] = useState(true)
     const {
         isOpen,
         onClose,
@@ -47,15 +47,15 @@ const PutTrainingMajorModal = () => {
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType({
-                     where: {
+            where: {
                 trainingFields: {
                     some: {
-                        trainingFieldId: form.getFieldValue('trainingFieldId')
-                    }
-                }
-            }
-            })
-    
+                        trainingFieldId: form.getFieldValue('trainingFieldId'),
+                    },
+                },
+            },
+        })
+
     const { data: organizations = [], refetch: refetchOrganizations } =
         useFindManyOrganization()
     const treeData = buildOrgTree(organizations)
@@ -139,7 +139,7 @@ const PutTrainingMajorModal = () => {
         where: { id },
         include: {
             organization: true,
-            trainingObjectTypes: true
+            trainingObjectTypes: true,
         },
     })
 
@@ -149,24 +149,24 @@ const PutTrainingMajorModal = () => {
     //     }
     //     return false
     // },[form])
-    const handleMajorChange = async (val:string) => {
+    const handleMajorChange = async (val: string) => {
         console.log(val)
 
         try {
             form.setFieldsValue({
-                        trainingObjectTypeIds: [],
-                    })
+                trainingObjectTypeIds: [],
+            })
             setTargetDisabled(true)
-            await refetchObjectType();
-            if(form.getFieldValue('trainingFieldId')){
+            await refetchObjectType()
+            if (form.getFieldValue('trainingFieldId')) {
                 setTargetDisabled(false)
-            }else {
+            } else {
                 setTargetDisabled(true)
             }
         } catch (err) {
-            message.error("Lỗi khi tải đối tượng đào tạo");
+            message.error('Lỗi khi tải đối tượng đào tạo')
         }
-};
+    }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -174,7 +174,9 @@ const PutTrainingMajorModal = () => {
             setTargetDisabled(false)
             form.setFieldsValue({
                 ...level,
-                trainingObjectTypeIds: level.trainingObjectTypes.map(i => i?.trainingObjectTypeId),
+                trainingObjectTypeIds: level.trainingObjectTypes.map(
+                    (i) => i?.trainingObjectTypeId
+                ),
             })
         } else {
             form.setFieldsValue({
@@ -208,17 +210,15 @@ const PutTrainingMajorModal = () => {
                                 label: i.name,
                             }
                         })}
-                        onChange={(val) =>handleMajorChange(val)}
-                        
+                        onChange={(val) => handleMajorChange(val)}
                     />
                 </FormItem>
             </Col>
-                  <Col span={12}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="trainingObjectTypeIds"
                     label="Đối tượng đào tạo"
-                    
                     required
                 >
                     <Select
@@ -336,12 +336,8 @@ const PutTrainingMajorModal = () => {
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>
-                            Đang hoạt động
-                        </Radio>
-                        <Radio value={false}>
-                            Ngừng hoạt động
-                        </Radio>
+                        <Radio value={true}>Đang hoạt động</Radio>
+                        <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>

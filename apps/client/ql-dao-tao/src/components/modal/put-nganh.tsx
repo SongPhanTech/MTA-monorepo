@@ -12,7 +12,16 @@ import {
     useFindManyTrainingLevel,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Switch, Radio, Flex, TreeSelect } from 'antd'
+import {
+    Col,
+    Form,
+    Input,
+    message,
+    Switch,
+    Radio,
+    Flex,
+    TreeSelect,
+} from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -116,7 +125,7 @@ const PutTrainingFieldModal = () => {
         where: { id },
         include: {
             organization: true,
-            trainingObjectTypes: true
+            trainingObjectTypes: true,
         },
     })
 
@@ -125,7 +134,9 @@ const PutTrainingFieldModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                trainingObjectTypeIds: level.trainingObjectTypes.map(i => i?.trainingObjectTypeId),
+                trainingObjectTypeIds: level.trainingObjectTypes.map(
+                    (i) => i?.trainingObjectTypeId
+                ),
                 publishDate: dayjs(level.publishDate),
             })
         } else {
@@ -146,12 +157,7 @@ const PutTrainingFieldModal = () => {
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã ngành"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã ngành" required>
                     <Input placeholder="Nhập mã ngành" />
                 </FormItem>
             </Col>
@@ -237,12 +243,8 @@ const PutTrainingFieldModal = () => {
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>
-                            Đang hoạt động
-                        </Radio>
-                        <Radio value={false}>
-                            Ngừng hoạt động
-                        </Radio>
+                        <Radio value={true}>Đang hoạt động</Radio>
+                        <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>

@@ -332,14 +332,15 @@ const NAVIGATION: NavigationType = {
                         id: 'danh-muc-nganh',
                         label: 'Danh mục ngành',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NGANH,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_NGANH,
                         description: 'Danh mục ngành',
                     },
                     {
                         id: 'danh-muc-chuyen-nganh',
                         label: 'Danh mục chuyên ngành',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUYEN_NGANH,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .DANH_MUC_DANH_MUC_CHUYEN_NGANH,
                         description: 'Danh mục chuyên ngành',
                     },
                 ],
@@ -353,26 +354,28 @@ const NAVIGATION: NavigationType = {
                         id: 'danh-muc-chuong-trinh-dao-tao',
                         label: 'Danh mục chương trình đào tạo',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                            .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                         description: 'Danh mục chương trình đào tạo',
                     },
                     {
                         id: 'khoi-kien-thuc-ctdt',
                         label: 'Khối kiến thức CTDT',
-                        path: ROUTER_PATH.QL_DAO_TAO.KHOI_KIEN_THUC_CTDT,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                         description: 'Khối kiến thức CTDT',
                     },
                     {
                         id: 'mon-hoc-chuong-trinh-dao-tao',
                         label: 'Môn học chương trình đào tạo',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .MON_HOC_CHUONG_TRINH_DAO_TAO,
+                            .CHUONG_TRINH_DAO_TAO_MON_HOC_CHUONG_TRINH_DAO_TAO,
                         description: 'Môn học chương trình đào tạo',
                     },
                     {
                         id: 'danh-sach-mon-hoc',
                         label: 'Danh sách môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_SACH_MON_HOC,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                         description: 'Danh sách môn học',
                     },
                 ],
@@ -386,14 +389,14 @@ const NAVIGATION: NavigationType = {
                         id: 'ke-hoach-mo-lop-mon-hoc',
                         label: 'Kế hoạch mở lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .KE_HOACH_MO_LOP_MON_HOC,
+                            .KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
                         id: 'phan-cong-giang-day',
                         label: 'Phân công giảng dạy',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .PHAN_CONG_GIANG_DAY,
+                            .KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                         description: 'Phân công giảng dạy',
                     },
                 ],
@@ -439,20 +442,6 @@ const NAVIGATION: NavigationType = {
                 icon: IdcardOutlined,
                 path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
                 description: 'Quản lý hồ sơ sinh viên',
-            },
-            {
-                id: 'quan-ly-chuong-trinh-dao-tao',
-                label: 'Quản lý chương trình đào tạo',
-                icon: PieChartOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO,
-                description: 'Quản lý chương trình đào tạo',
-            },
-            {
-                id: 'subject-group',
-                label: 'Quản lý môn học',
-                icon: ReadOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.NHOM_MON_HOC,
-                description: 'Quản lý môn học',
             },
         ],
         label: 'Quản lý đào tạo',

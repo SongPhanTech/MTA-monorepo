@@ -11,7 +11,17 @@ import {
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
-import { Button, Checkbox, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tag,
+    message,
+} from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -108,36 +118,36 @@ export default function TeachingAssignment() {
     const dataFake = [
         {
             id: 1,
-            maMonHoc: "003603",
-            tenMonHoc: "Toán rời rạc",
-            maLMH: "003560 01",
+            maMonHoc: '003603',
+            tenMonHoc: 'Toán rời rạc',
+            maLMH: '003560 01',
             pcgd: true,
             stc: 3,
-            gv1: "gv1",
-            kipHoc: "Sáng",
+            gv1: 'gv1',
+            kipHoc: 'Sáng',
             diaDiem: 1,
-            gvNhapDiem: "Nguyễn Quang Uy",
-            hanPCGD: "29/09/2025",
-            thi: "Thi viết",
+            gvNhapDiem: 'Nguyễn Quang Uy',
+            hanPCGD: '29/09/2025',
+            thi: 'Thi viết',
             diemBangNhau: true,
-            donViPhuTrach: "Bộ môn Khoa học máy tính",
+            donViPhuTrach: 'Bộ môn Khoa học máy tính',
         },
         {
             id: 2,
-            maMonHoc: "003603",
-            tenMonHoc: "Toán rời rạc",
-            maLMH: "003560 02",
-            gv1: "gv2",
+            maMonHoc: '003603',
+            tenMonHoc: 'Toán rời rạc',
+            maLMH: '003560 02',
+            gv1: 'gv2',
             stc: 3,
-            donViPhuTrach: "Bộ môn Khoa học máy tính",
+            donViPhuTrach: 'Bộ môn Khoa học máy tính',
         },
     ]
 
     const lecturerOptions = [
-    { label: 'Nguyễn Văn A', value: 'gv1' },
-    { label: 'Trần Thị B', value: 'gv2' },
-    { label: 'Lê Văn C', value: 'gv3' },
-    ];
+        { label: 'Nguyễn Văn A', value: 'gv1' },
+        { label: 'Trần Thị B', value: 'gv2' },
+        { label: 'Lê Văn C', value: 'gv3' },
+    ]
 
     return (
         <div>
@@ -239,7 +249,7 @@ export default function TeachingAssignment() {
                                     type="primary"
                                     className="h-[40px]"
                                 >
-                                    <EditIcon stroke='white'/>
+                                    <EditIcon stroke="white" />
                                     Nhập
                                 </Button>
                                 <Button
@@ -281,13 +291,19 @@ export default function TeachingAssignment() {
                                 dataIndex: 'pcgd',
                                 align: 'center',
                                 width: 100,
-                                render: (value) => {return value ? <CheckOutlined className='text-[#028850]'/> : ""}
+                                render: (value) => {
+                                    return value ? (
+                                        <CheckOutlined className="text-[#028850]" />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Mã lớp môn học',
                                 dataIndex: 'maLMH',
                                 width: 100,
-                                align: "center",
+                                align: 'center',
                             },
                             {
                                 title: 'Tên môn học',
@@ -305,16 +321,18 @@ export default function TeachingAssignment() {
                                 dataIndex: 'gv1',
                                 width: 200,
                                 render: (value, index) => (
-                                <Select
-                                    style={{ width: '100%' }}
-                                    options={lecturerOptions}
-                                    value={value || undefined}
-                                    placeholder="Chọn giảng viên"
-                                    onChange={(selectedValue) => {
-                                        console.log(`Selected ${selectedValue} for row ${index}`);
-                                    }}
-                                />
-                            ),
+                                    <Select
+                                        style={{ width: '100%' }}
+                                        options={lecturerOptions}
+                                        value={value || undefined}
+                                        placeholder="Chọn giảng viên"
+                                        onChange={(selectedValue) => {
+                                            console.log(
+                                                `Selected ${selectedValue} for row ${index}`
+                                            )
+                                        }}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Giảng viên 2',
@@ -361,7 +379,9 @@ export default function TeachingAssignment() {
                                 dataIndex: 'diemBangNhau',
                                 width: 150,
                                 align: 'center',
-                                render: (value: boolean) => <Checkbox checked={value} disabled />,
+                                render: (value: boolean) => (
+                                    <Checkbox checked={value} disabled />
+                                ),
                             },
                             {
                                 title: 'Lớp liên kết',

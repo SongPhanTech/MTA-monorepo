@@ -35,7 +35,7 @@ import {
     Tooltip,
     message,
     Typography,
-    Table
+    Table,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -44,10 +44,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
-import type { TableProps } from 'antd';
-import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import type { TableProps } from 'antd'
+import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-const { Text } = Typography;
+const { Text } = Typography
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
@@ -55,19 +55,19 @@ interface FilterProps {
 }
 
 interface DataType {
-    key: React.Key;
-    majorName: string;
-    department?: string;
-    majorCode?: string;
-    abbreviation?: string;
-    specializationName?: string;
-    englishName?: string;
-    description?: string;
-    creditsMajor?: string;
-    creditsRequired?: string;
-    creditsElective?: string;
-    status?: string;
-    children?: DataType[];
+    key: React.Key
+    majorName: string
+    department?: string
+    majorCode?: string
+    abbreviation?: string
+    specializationName?: string
+    englishName?: string
+    description?: string
+    creditsMajor?: string
+    creditsRequired?: string
+    creditsElective?: string
+    status?: string
+    children?: DataType[]
 }
 
 export default function TrainingMajorPage() {
@@ -77,47 +77,71 @@ export default function TrainingMajorPage() {
         searchText: '',
         trainingObjectTypeId: undefined,
     })
-    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
+    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
             trainingMajors: {
                 some: {
                     OR: [
-                        { name: { contains: filters.searchText, mode: 'insensitive' } },
-                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
                     ],
                     trainingObjectTypes: {
                         some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId
-                        }
-                    }
+                            trainingObjectTypeId: filters.trainingObjectTypeId,
+                        },
+                    },
                 },
             },
-
         },
         include: {
             trainingMajors: {
-                where:{
+                where: {
                     OR: [
-                        { name: { contains: filters.searchText, mode: 'insensitive' } },
-                        { code: { contains: filters.searchText, mode: 'insensitive' } },
-                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
                     ],
                     trainingObjectTypes: {
                         some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId
-                        }
-                    }
+                            trainingObjectTypeId: filters.trainingObjectTypeId,
+                        },
+                    },
                 },
                 include: {
                     organization: true,
                     trainingObjectTypes: {
                         include: {
-                            trainingObjectType: true
-                        }
-                    }
-                }
+                            trainingObjectType: true,
+                        },
+                    },
+                },
             },
         },
         orderBy: {
@@ -127,9 +151,11 @@ export default function TrainingMajorPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-      const dataRaw = useMemo(() => {
+    const dataRaw = useMemo(() => {
         if (data?.length) {
-            let result=data.map(i=>{return {...i,children:i?.trainingMajors}});
+            let result = data.map((i) => {
+                return { ...i, children: i?.trainingMajors }
+            })
             return result
         }
         return []
@@ -140,17 +166,26 @@ export default function TrainingMajorPage() {
             trainingMajors: {
                 some: {
                     OR: [
-                        { name: { contains: filters.searchText, mode: 'insensitive' } },
-                        { code: { contains: filters.searchText, mode: 'insensitive' } },
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
                     ],
                     trainingObjectTypes: {
                         some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId
-                        }
-                    }
+                            trainingObjectTypeId: filters.trainingObjectTypeId,
+                        },
+                    },
                 },
             },
-
         },
     })
 
@@ -282,14 +317,33 @@ export default function TrainingMajorPage() {
                                 align: 'left',
                                 width: 100,
                                 render: (value) =>
-                                    value?.length > 0 ? value.map((i:TrainingObjectType & {trainingObjectType:TrainingObjectType})=>{return (<div>- {i?.trainingObjectType?.name}</div>)}) : '',
+                                    value?.length > 0
+                                        ? value.map(
+                                              (
+                                                  i: TrainingObjectType & {
+                                                      trainingObjectType: TrainingObjectType
+                                                  }
+                                              ) => {
+                                                  return (
+                                                      <div>
+                                                          -{' '}
+                                                          {
+                                                              i
+                                                                  ?.trainingObjectType
+                                                                  ?.name
+                                                          }
+                                                      </div>
+                                                  )
+                                              }
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Khoa phụ trách',
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
-                                render: value => value?.name
+                                render: (value) => value?.name,
                             },
                             {
                                 title: 'Mã ngành',

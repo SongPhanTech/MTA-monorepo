@@ -1464,6 +1464,9 @@ importers:
       '@ant-design/icons':
         specifier: 'catalog:'
         version: 5.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      glob:
+        specifier: 'catalog:'
+        version: 11.0.1
       lucide-react:
         specifier: 'catalog:'
         version: 0.468.0(react@18.3.1)
