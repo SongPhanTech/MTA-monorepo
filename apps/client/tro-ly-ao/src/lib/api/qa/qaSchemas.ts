@@ -3,9 +3,6 @@
  *
  * @version 1.0.0
  */
-/**
- * An enumeration.
- */
 export type DocumentType =
     | 'GENERAL_ADMISSIONS_INFORMATION'
     | 'ADMISSIONS_RULES_AND_REGULATIONS'
@@ -45,12 +42,12 @@ export type ValidationError = {
 }
 
 export type SrcRoutersDocumentDocumentReaderResponse = {
-    body?: string
-    message?: string
-    document_simmilar?: any[]
+    body?: string | null
+    message?: string | null
+    document_simmilar?: any[] | null
 }
 
 export type SrcRoutersUtilDocumentReaderResponse = {
-    body?: string
-    message?: string
+    body?: string | null
+    message?: string | null
 }
