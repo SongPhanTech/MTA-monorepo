@@ -30,7 +30,7 @@ const PutTrainingBlock = () => {
         { enabled: !!id }
     );
 
-    const { data: curriculumVersion } = useFindManyCurriculumVersion();
+    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion();
 
     useEffect(() => {
         if (trainingBlock) {
@@ -43,43 +43,40 @@ const PutTrainingBlock = () => {
     const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
     const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
     async function onOk(output?: PutTrainingBlock) {
-        if (!output) return
+        if (!output) return;
+
         try {
-            showSpinner()
+            showSpinner();
+            const payload = {
+                code: output.code,
+                name: output.name,
+                priority: output.priority,
+                active: output.active,
+                curriculumVersionId: output.curriculumVersionId,
+            };
+
             if (id) {
                 await updateTrainingBlock({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        priority: output.priority,
-                        active: output.active,
-                        curriculumVersionId: output.curriculumVersionId,
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+                    data: payload,
+                    where: { id },
+                });
+                message.success('Cập nhật thành công');
             } else {
                 await createTrainingBlock({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        priority: output.priority,
-                        curriculumVersionId: output.curriculumVersionId,
-                    },
-                })
-                message.success('Thêm mới thành công')
+                    data: payload,
+                });
+                message.success('Thêm mới thành công');
             }
-            // refetch() lại danh sách
+
             queryClient.invalidateQueries({
                 queryKey: ['TrainingBlock'],
-            })
-            onClose()
+            });
+            onClose();
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
         }
-        hideSpinner()
+
+        hideSpinner();
     }
 
     return (
@@ -183,7 +180,7 @@ const PutTrainingBlock = () => {
                 >
                     <Select
                         placeholder="Chọn phiên bản chương trình đào tạo"
-                        options={curriculumVersion?.map(item => ({
+                        options={curriculumVersion.map(item => ({
                             label: item.name,
                             value: item.id,
                         }))}

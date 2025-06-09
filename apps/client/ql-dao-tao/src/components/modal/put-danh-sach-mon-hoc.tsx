@@ -29,52 +29,44 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization } = useFindManyOrganization();
+    const { data: organization = [] } = useFindManyOrganization();
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
     async function onOk(output?: PutSubject) {
-        if (!output) return
-        try {
-            showSpinner()
-            if (id) {
-                await updateSubject({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        active: output.active,
-                        information: output.information,
-                        managementOrganizationId: output.managementOrganizationId,
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
-            } else {
-                await createSubject({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        active: output.active,
-                        information: output.information,
-                        managementOrganizationId: output.managementOrganizationId,
-                    },
-                })
-                message.success('Thêm mới thành công')
-            }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['Subject'],
-            })
-            onClose()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+    if (!output) return;
+    try {
+        showSpinner();
+
+        const payload = {
+            code: output.code,
+            name: output.name,
+            description: output.description,
+            active: output.active,
+            information: output.information,
+            managementOrganizationId: output.managementOrganizationId,
+        };
+
+        if (id) {
+            await updateSubject({
+                data: payload,
+                where: { id },
+            });
+            message.success('Cập nhật thành công');
+        } else {
+            await createSubject({
+                data: payload,
+            });
+            message.success('Thêm mới thành công');
         }
-        hideSpinner()
+
+        queryClient.invalidateQueries({ queryKey: ['Subject'] });
+        onClose();
+    } catch (error) {
+        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
     }
+    hideSpinner();
+}
 
     const { data: subject } = useFindUniqueSubject({
         where: { id },

@@ -11,7 +11,7 @@ import {
     useUpdateCurriculum,
     useCountCurriculum,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import { $Enums, type TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
 import {
     Button,
@@ -391,7 +391,7 @@ export default function TrainingProgramCatalog() {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                    return record?.status === 'INACTIVATED' ? (
+                                     return record?.status === $Enums.CurriculumStatus.INACTIVATED ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">

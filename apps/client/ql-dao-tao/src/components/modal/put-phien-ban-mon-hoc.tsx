@@ -51,77 +51,59 @@ const PutVersionSubjectModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization } = useFindManyOrganization();
-    const { data: subject } = useFindManySubject();
-    const { data: subjectType } = useFindManySubjectVersionType();
+    const { data: organization = [] } = useFindManyOrganization();
+    const { data: subject = [] } = useFindManySubject();
+    const { data: subjectType = [] } = useFindManySubjectVersionType();
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function onOk(output?: PutSubjectVersion) {
-        if (!output) return
+        if (!output) return;
+
         try {
-            showSpinner()
+            showSpinner();
+
+            const payload = {
+                code: output.code,
+                name: output.name,
+                description: output.description,
+                coef_1: output.coef_1,
+                active: output.active,
+                examType: ExamType.OfflineWritten,
+                subjectEquivalentType: SubjectEquivalentType.OneByOne,
+                credit: output.credit,
+                period: output.period,
+                numberOfOther: output.numberOfOther,
+                numberOfInternship: output.numberOfInternship,
+                numberOfPractice: output.numberOfPractice,
+                numberOfProject: output.numberOfProject,
+                numberOfSelfStudy: output.numberOfSelfStudy,
+                numberOfTheory: output.numberOfTheory,
+                managementOrganizationId: output.managementOrganizationId,
+                subjectId: output.subjectId,
+                subjectTypeId: output.subjectTypeId,
+            };
+
             if (id) {
                 await updateSubjectVersion({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        coef_1: output.coef_1,
-                        active: output.active,
-                        examType: ExamType.OfflineWritten,
-                        subjectEquivalentType: SubjectEquivalentType.OneByOne,
-                        credit: output.credit,
-                        period: output.period,
-                        numberOfOther: output.numberOfOther,
-                        numberOfInternship: output.numberOfInternship,
-                        numberOfPractice: output.numberOfPractice,
-                        numberOfProject: output.numberOfProject,
-                        numberOfSelfStudy: output.numberOfSelfStudy,
-                        numberOfTheory: output.numberOfTheory,
-                        managementOrganizationId: output.managementOrganizationId,
-                        subjectId: output.subjectId,
-                        subjectTypeId: output.subjectTypeId,
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+                    data: payload,
+                    where: { id },
+                });
+                message.success('Cập nhật thành công');
             } else {
                 await createSubjectVersion({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        coef_1: output.coef_1,
-                        active: output.active,
-                        examType: ExamType.OfflineWritten,
-                        subjectEquivalentType: SubjectEquivalentType.OneByOne,
-                        credit: output.credit,
-                        period: output.period,
-                        numberOfOther: output.numberOfOther,
-                        numberOfInternship: output.numberOfInternship,
-                        numberOfPractice: output.numberOfPractice,
-                        numberOfProject: output.numberOfProject,
-                        numberOfSelfStudy: output.numberOfSelfStudy,
-                        numberOfTheory: output.numberOfTheory,
-                        managementOrganizationId: output.managementOrganizationId,
-                        subjectId: output.subjectId,
-                        subjectTypeId: output.subjectTypeId,
-                    },
-                })
-                message.success('Thêm mới thành công')
+                    data: payload,
+                });
+                message.success('Thêm mới thành công');
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['SubjectVersion'],
-            })
-            onClose()
+
+            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] });
+            onClose();
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
         }
-        hideSpinner()
+
+        hideSpinner();
     }
 
     const { data: subjectVersion } = useFindUniqueSubjectVersion({
