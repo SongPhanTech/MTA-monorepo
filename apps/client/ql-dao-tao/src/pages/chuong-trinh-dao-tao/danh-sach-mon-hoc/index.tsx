@@ -3,7 +3,7 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSubjectListModal } from '@components/modal'
+import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -35,17 +35,6 @@ interface FilterProps {
     trainingObjectTypeId: string | undefined
 }
 
-interface DataItem {
-    id?: string | number
-    key: string
-    type: 'parent' | 'child'
-    code: string
-    scheduleCode: string
-    institution: string
-    subject?: string
-    parentKey?: string
-}
-
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<FilterProps>({
@@ -67,9 +56,6 @@ export default function SubjectList() {
             subjectVersion: true,
             managementOrganization: true,
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
     })
 
     const debouncedRefetch = useCallback(
@@ -82,11 +68,20 @@ export default function SubjectList() {
         tag: PutSubjectListModal.name,
     })
 
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<string>({
+        tag: PutVersionSubjectModal.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
     }
+
+    const handleModalSubjectVersion = () => {
+        onOpenSubjectVersion()
+    }
+
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
         try {
@@ -195,7 +190,7 @@ export default function SubjectList() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button onClick={handleModal} type="primary">
+                                <Button onClick={handleModalSubjectVersion} type="primary">
                                     <PlusOutlined />
                                     Thêm phiên bản môn học
                                 </Button>
@@ -309,19 +304,15 @@ export default function SubjectList() {
                                 align: 'center',
                                 fixed: 'right',
                                 width: 150,
-                                render: (record) => (
-                                    <Tag
-                                        color={
-                                            record.status === 'IN_ACTIVE'
-                                                ? 'error'
-                                                : 'success'
-                                        }
-                                    >
-                                        {record.status === 'IN_ACTIVE'
-                                            ? 'Ngừng đào tạo'
-                                            : 'Đang hoạt động'}
-                                    </Tag>
-                                ),
+                                render: (record) => {
+                                    return !record?.active ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -332,7 +323,7 @@ export default function SubjectList() {
                                     id ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                onClick={() => onOpen(id)}
+                                                onClick={() => onOpenSubjectVersion(id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
