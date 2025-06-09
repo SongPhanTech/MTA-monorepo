@@ -15,9 +15,6 @@ import PutSubjectModal from './put-mon-hoc'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import AddUserProfileLecture from './add-user-profile-lecture'
 import PutOrganizationUser from './put-organization-user'
-import PutMonHocChuongTrinhModal from './put-mon-hoc-chuong-trinh'
-import PutMonHocTienQuyetModal from './put-mon-hoc-tien-quyet'
-import PutMonHocSongHanhModal from './put-mon-hoc-song-hanh'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutTrainingFieldModal from './put-nganh'
 import PutTrainingMajorModal from './put-chuyen-nganh'
@@ -46,9 +43,6 @@ export {
     PutUserProfileLectureModal,
     AddUserProfileLecture,
     PutOrganizationUser,
-    PutMonHocChuongTrinhModal,
-    PutMonHocTienQuyetModal,
-    PutMonHocSongHanhModal,
     ThongTinBaoCaoModal,
     PutTrainingFieldModal,
     PutTrainingMajorModal,

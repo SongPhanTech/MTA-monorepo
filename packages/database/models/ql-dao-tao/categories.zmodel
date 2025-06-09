@@ -6,20 +6,20 @@ import '../ql-nguoi-dung/profile'
 
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
-  name           String
-  trainingCourse TrainingCourse[]
-  curriculum     Curriculum[]
-  trainingMajors TrainingMajorOnTrainingObjectType[]
-  trainingFields TrainingFieldOnTrainingObjectType[]
-  subjectVersion SubjectVersion[]
-  students       Student[]
+  name              String                              @unique
+  trainingCourse    TrainingCourse[]
+  curriculumVersion CurriculumVersion[]
+  trainingMajors    TrainingMajorOnTrainingObjectType[]
+  trainingFields    TrainingFieldOnTrainingObjectType[]
+  subjectVersion    SubjectVersion[]
+  students          Student[]
 
   @@schema("ql-dao-tao")
 }
 
 /// đối tượng ưu tiên
 model PriorityObject extends Base {
-  name     String
+  name     String    @unique
 
   students Student[]
   @@schema("ql-dao-tao")
@@ -27,7 +27,7 @@ model PriorityObject extends Base {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType extends Base {
-  name           String
+  name           String           @unique
 
   trainingCourse TrainingCourse[]
   students       Student[]
@@ -37,18 +37,18 @@ model TrainingType extends Base {
 
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel extends Base {
-  name           String
+  name              String              @unique
 
-  trainingCourse TrainingCourse[]
-  curriculum     Curriculum[]
-  students       Student[]
+  trainingCourse    TrainingCourse[]
+  curriculumVersion CurriculumVersion[]
+  students          Student[]
 
   @@schema("ql-dao-tao")
 }
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
-  name           String
+  name           String           @unique
 
   trainingCourse TrainingCourse[]
   students       Student[]
@@ -57,7 +57,7 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name     String
+  name     String    @unique
 
   students Student[]
   @@schema("ql-dao-tao")
@@ -90,7 +90,7 @@ model TrainingFieldOnTrainingObjectType extends Base {
 /// chuyên ngành đào tạo
 model TrainingMajor extends Base {
   name                  String
-  englishName           String
+  englishName           String?
   summary               String
   /// Số tín chỉ chuyên ngành
   numberCreditsMajor    Int                                 @default(0)
@@ -133,9 +133,9 @@ model TrainingBlock extends Base {
 
 /// thời gian đào tạo
 model TrainingTime extends Base {
-  name       String
+  name              String
 
-  curriculum Curriculum[]
+  curriculumVersion CurriculumVersion[]
   @@schema("ql-dao-tao")
 }
 
