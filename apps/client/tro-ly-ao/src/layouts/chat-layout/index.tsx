@@ -5,14 +5,15 @@ import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
+import { useCurrentUser } from '@hooks/use-current-user'
 import { CONFIG_KEY } from '@workspace/constant'
 import {
     useDeleteConversation,
+    useDeleteManyMessage,
     useFindManyConversation,
     useFindUniqueConfig,
 } from '@workspace/db/hooks'
-import { Layout, message, theme } from 'antd'
-import { signIn, useSession } from 'next-auth/react'
+import { Layout, message, Spin, theme } from 'antd'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
@@ -28,6 +29,7 @@ const ChatLayout = ({
     className?: string
 }) => {
     const router = useRouter()
+    const [isDeleting, setIsDeleting] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
         return (
             typeof window !== 'undefined' &&
@@ -35,7 +37,7 @@ const ChatLayout = ({
         )
     })
 
-    const { status, data: userInfo } = useSession()
+    const userCurrent = useCurrentUser()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
@@ -56,16 +58,22 @@ const ChatLayout = ({
         }
     }
     const { mutateAsync: deleteConversation } = useDeleteConversation()
+    const { mutateAsync: deleteManyMessages } = useDeleteManyMessage()
+
     const handleDelete = async (id: string) => {
         if (!id) return
         const realId = id.split('-')[1]
+        setIsDeleting(true)
         try {
+            await deleteManyMessages({ where: { conversationId: realId } })
             await deleteConversation({ where: { id: realId } })
             message.success('Đã xóa cuộc trò chuyện')
             router.push('/tro-ly-ao')
         } catch (error) {
             console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+        } finally {
+            setIsDeleting(false)
         }
     }
 
@@ -76,8 +84,7 @@ const ChatLayout = ({
 
     const { data: conversation } = useFindManyConversation({
         where: {
-            // userId: userInfo?.user?.user_id || '',
-            userId: 'cmbj92pfb01q8ny01np2o5gsd',
+            userId: userCurrent?.id || '',
         },
         include: {
             message: true,
@@ -87,7 +94,7 @@ const ChatLayout = ({
         conversation || []
     ).map((item) => ({
         id: item.id,
-        label: item.message?.[0]?.content || 'Không có nội dung',
+        label: item.message?.[0]?.content || 'Loading...',
     }))
 
     return (
@@ -98,7 +105,7 @@ const ChatLayout = ({
             onIdle={signOutAction}
         >
             <Layout className="h-screen">
-                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary shadow">
+                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary">
                     <div className="flex items-center gap-2">
                         <Image
                             src={logo_mta}
@@ -124,7 +131,15 @@ const ChatLayout = ({
                     />
                     <Layout className="overflow-hidden">
                         <HeaderContent />
-                        <Content className="h-full p-[10px] bg-white">
+                        {/* <Content className="h-full p-[10px] bg-white rounded-lg">
+                            {children}
+                        </Content> */}
+                        <Content className="h-full p-[10px] bg-white rounded-lg relative overflow-hidden">
+                            {isDeleting && (
+                                <div className="absolute inset-0 z-50 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                                    <Spin size="large" tip="Đang xoá..." />
+                                </div>
+                            )}
                             {children}
                         </Content>
                     </Layout>

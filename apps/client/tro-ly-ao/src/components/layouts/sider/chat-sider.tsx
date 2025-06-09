@@ -168,7 +168,7 @@ const SiderChatLayout = ({
             collapsed={collapsed}
             theme={theme}
             width={280}
-            className="h-full relative mr-[10px]"
+            className="h-full relative mr-[10px] rounded-lg"
         >
             <div className="overflow-y-auto h-full pb-[60px]">
                 <div className="px-1">
@@ -206,10 +206,10 @@ const SiderChatLayout = ({
                 />
             </div>
 
-            <div className="absolute bottom-0 w-full flex justify-center z-10">
+            <div className="absolute bottom-0 w-full flex justify-center ">
                 <Button
                     type="text"
-                    className="w-full bg-white text-primary text-lg rounded-none"
+                    className="w-full bg-white text-primary text-lg rounded-none z-10 rounded-b-lg"
                     onClick={() => onCollapse?.(!collapsed)}
                 >
                     {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
