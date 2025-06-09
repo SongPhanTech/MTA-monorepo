@@ -22,7 +22,7 @@ import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutTrainingFieldModal from './put-nganh'
 import PutTrainingMajorModal from './put-chuyen-nganh'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
-import PutKnowledgeBlock from './put-khoi-kien-thuc-ctdt'
+import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutTrainingProgramCatalog from './put-danh-muc-dao-tao'
 import PutOpenClassModal from './put-mo-lop'
@@ -53,7 +53,7 @@ export {
     PutTrainingFieldModal,
     PutTrainingMajorModal,
     PutSubjectListModal,
-    PutKnowledgeBlock,
+    PutTrainingBlock,
     PutTrainingProgramCatalog,
     PutVersionSubjectModal,
     PutOpenClassModal,

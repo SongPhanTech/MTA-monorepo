@@ -9,8 +9,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
+    useFindManySubject,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
@@ -47,106 +46,6 @@ interface DataItem {
     parentKey?: string
 }
 
-const rawData = [
-    {
-        id: 1,
-        subject: 'Lý thuyết hệ điều hành - Bộ môn Khoa học máy tính',
-        children: [
-            {
-                id: 1,
-                maMon: '126004',
-                mapb: 'PB1',
-                dtdt: 'Đại học quân sự',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB001',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                hs1: 0.1,
-                hs2: 0.2,
-                hs3: 0.6,
-                status: 'ACTIVE',
-            },
-            {
-                id: 2,
-                mapb: 'PB2',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB004',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                status: 'ACTIVE',
-            },
-        ],
-    },
-    {
-        id: 2,
-        subject: 'Đồ hoạ máy tính - Bộ môn Khoa học máy tính',
-        children: [
-            {
-                id: 3,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-            {
-                id: 4,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-            {
-                id: 5,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-        ],
-    },
-    {
-        id: 3,
-        subject: 'Đồ hoạ máy tính - tính',
-        children: [],
-    },
-]
-
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -155,7 +54,7 @@ export default function SubjectList() {
         trainingObjectTypeId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data: SubjectData, refetch } = useFindManySubject({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
@@ -163,12 +62,10 @@ export default function SubjectList() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
                 : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
         },
         include: {
-            organization: true,
+            subjectVersion: true,
+            managementOrganization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -177,27 +74,13 @@ export default function SubjectList() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
-        },
-    })
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutSubjectListModal.name,
     })
 
@@ -234,6 +117,8 @@ export default function SubjectList() {
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
+
+    console.log(SubjectData);
 
     return (
         <div>
@@ -302,7 +187,11 @@ export default function SubjectList() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={8}>
+                                <Button onClick={handleModal} type="primary">
+                                    <PlusOutlined />
+                                    Thêm phiên bản môn học
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
@@ -315,17 +204,18 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey="subject"
+                        headerTitleKey={"name"}
+                        childrenFieldName='subjectVersion'
                         currentPage={currentPage}
                         columns={[
                             {
                                 title: 'Mã',
-                                dataIndex: 'maMon',
+                                dataIndex: 'code',
                                 width: 100,
                                 align: 'center',
                             },
                             {
-                                title: 'MãTKB',
+                                title: 'Mã TKB',
                                 dataIndex: 'maTKB',
                                 width: 100,
                                 align: 'center',
@@ -338,7 +228,7 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Số tín chỉ',
-                                dataIndex: 'stc',
+                                dataIndex: 'credit',
                                 width: 150,
                                 align: 'center',
                             },
@@ -350,13 +240,13 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Số tiết lý thuyết',
-                                dataIndex: 'stlt',
+                                dataIndex: 'numberOfTheory',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Số tiết thực hành',
-                                dataIndex: 'stth',
+                                dataIndex: 'numberOfPractice',
                                 width: 150,
                                 align: 'center',
                             },
@@ -368,7 +258,7 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Hình thức thi',
-                                dataIndex: 'thi',
+                                dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
                             },
@@ -389,19 +279,19 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Hệ số điểm chuyên cần',
-                                dataIndex: 'hs1',
+                                dataIndex: 'coef_1',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Hệ số điểm thường xuyên',
-                                dataIndex: 'hs2',
+                                dataIndex: 'coef_2',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Hệ số điểm thi',
-                                dataIndex: 'hs3',
+                                dataIndex: 'coef_3',
                                 width: 150,
                                 align: 'center',
                             },
@@ -446,14 +336,7 @@ export default function SubjectList() {
                                     ) : null,
                             },
                         ]}
-                        data={rawData}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                        }}
+                        data={SubjectData}
                     />
                 </Col>
             </Row>
