@@ -2,18 +2,21 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
+import { ExamType, SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
 import {
-    useCreateTrainingCourse,
-    useFindUniqueTrainingCourse,
-    useUpdateTrainingCourse,
+    useCreateSubjectVersion,
+    useFindManyOrganization,
+    useFindManySubject,
+    useFindManySubjectVersionType,
+    useFindUniqueSubjectVersion,
+    useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import dayjs from 'dayjs'
-export type PutTrainingCourse = TrainingCourse
+export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
 
@@ -37,7 +40,7 @@ const treeData = [
 ]
 
 const PutVersionSubjectModal = () => {
-    const [form] = Form.useForm<PutTrainingCourse>()
+    const [form] = Form.useForm<PutSubjectVersion>()
     const {
         isOpen,
         onClose,
@@ -48,70 +51,72 @@ const PutVersionSubjectModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    async function onOk(output?: PutTrainingCourse) {
-        if (!output) return
+    const { data: organization = [] } = useFindManyOrganization();
+    const { data: subject = [] } = useFindManySubject();
+    const { data: subjectType = [] } = useFindManySubjectVersionType();
+
+    const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
+    const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
+    async function onOk(output?: PutSubjectVersion) {
+        if (!output) return;
+
         try {
-            showSpinner()
+            showSpinner();
+
+            const payload = {
+                code: output.code,
+                name: output.name,
+                description: output.description,
+                coef_1: output.coef_1,
+                active: output.active,
+                examType: ExamType.OfflineWritten,
+                subjectEquivalentType: SubjectEquivalentType.OneByOne,
+                credit: output.credit,
+                period: output.period,
+                numberOfOther: output.numberOfOther,
+                numberOfInternship: output.numberOfInternship,
+                numberOfPractice: output.numberOfPractice,
+                numberOfProject: output.numberOfProject,
+                numberOfSelfStudy: output.numberOfSelfStudy,
+                numberOfTheory: output.numberOfTheory,
+                managementOrganizationId: output.managementOrganizationId,
+                subjectId: output.subjectId,
+                subjectTypeId: output.subjectTypeId,
+            };
+
             if (id) {
-                await updateTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
-                        trainingLevelId: output.trainingLevelId,
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+                await updateSubjectVersion({
+                    data: payload,
+                    where: { id },
+                });
+                message.success('Cập nhật thành công');
             } else {
-                await createTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
-                        trainingLevelId: output.trainingLevelId,
-                    },
-                })
-                message.success('Thêm mới thành công')
+                await createSubjectVersion({
+                    data: payload,
+                });
+                message.success('Thêm mới thành công');
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['TrainingCourse'],
-            })
-            onClose()
+
+            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] });
+            onClose();
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
         }
-        hideSpinner()
+
+        hideSpinner();
     }
 
-    const { data: level } = useFindUniqueTrainingCourse({
+    const { data: subjectVersion } = useFindUniqueSubjectVersion({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    
     useEffect(() => {
-        if (level) {
+        if (subjectVersion) {
             form.setFieldsValue({
-                ...level,
-                startDate: dayjs(level.startDate),
-                endDate: level.endDate ? dayjs(level.endDate) : undefined,
+                ...subjectVersion,
             })
         }
-    }, [level])
+    }, [subjectVersion, form])
 
     return (
         <PutFormModal
@@ -124,77 +129,109 @@ const PutVersionSubjectModal = () => {
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Cơ sở cấp bằng"
-                >
-                    <Input placeholder="Nhập cơ sở cấp bằng" />
+                <FormItem form={form} name="name" label="Tên phiên bản" >
+                    <Input placeholder='Tên phiên bản'/>
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="STC">
-                    <Input placeholder="Nhập STC" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="STTKB">
-                    <Input placeholder="Nhập STTKB" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="STLT">
-                    <Input placeholder="Nhập STLT" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="STTL">
-                    <Input placeholder="Nhập STTL" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="STTH">
-                    <Input placeholder="Nhập STTH" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="Không TD">
-                    <Input placeholder="Nhập Không TD" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="Thi">
-                    <Input placeholder="Nhập hình thức thi" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="DBN">
-                    <Input placeholder="Nhập DBN" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="SĐĐ">
-                    <Input placeholder="Nhập SĐĐ" />
+                <FormItem form={form} name="code" label="Mã phiên bản" >
+                    <Input placeholder='Mã phiên bản'/>
                 </FormItem>
             </Col>
             {id && (
                 <Col span={12}>
                     <FormItem
                         form={form}
-                        name="trainingTypeId"
+                        name="active"
                         label="Trạng thái"
                     >
                         <Select
                             placeholder="Chọn trạng thái"
                             options={[
-                                { label: 'Đang hoạt động', value: 'ACTIVE' },
-                                { label: 'Ngừng đào tạo', value: 'IN_ACTIVE' },
+                                { label: 'Đang hoạt động', value: true },
+                                { label: 'Ngừng đào tạo', value: false },
                             ]}
                             allowClear
                         />
                     </FormItem>
                 </Col>
             )}
+            <Col span={12}>
+                <FormItem form={form} name="credit" label="Số tín chỉ" >
+                    <InputNumber placeholder='Số tín chỉ' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="period" label="Giai đoạn" >
+                    <InputNumber placeholder='Giai đoạn' className='w-full'/>
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfInternship" label="Number Of Internship" >
+                    <InputNumber placeholder='Number Of Internship' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfOther" label="Number Of Other" >
+                    <InputNumber placeholder='Number Of Other' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfPractice" label="Number Of Practice" >
+                    <InputNumber placeholder='Number Of Practice' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfProject" label="Number Of Project" >
+                    <InputNumber placeholder='Number Of Project' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfSelfStudy" label="Number Of Self Study" >
+                    <InputNumber placeholder='Number Of Self Study' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="numberOfTheory" label="Number Of Theory" >
+                    <InputNumber placeholder='Number Of Theory' className='w-full' />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="managementOrganizationId" label="Đơn vị quản lý" >
+                    <Select
+                        placeholder="Chọn đơn vị quản lý"
+                        options={organization?.map(item => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="subjectId" label="Môn học" >
+                    <Select
+                        placeholder="Chọn môn học"
+                        options={subject?.map(item => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="subjectTypeId" label="Loại môn học" >
+                    <Select
+                        placeholder="Chọn loại môn học"
+                        options={subjectType?.map(item => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <Form.Item
                     name="prerequisiteSubjects"

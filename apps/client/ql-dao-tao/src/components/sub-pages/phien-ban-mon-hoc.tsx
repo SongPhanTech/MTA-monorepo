@@ -156,7 +156,7 @@ export default function VersionSubject({ record }: Props) {
                                 align: 'center',
                                 width: 130,
                                 render: (record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return record?.status === 'IN_ACTIVE' ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
                                         <Tag color="success">
