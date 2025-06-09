@@ -121,7 +121,7 @@ const TableCollapse = <T extends Data>({
                 render: (_, record) => {
                     if (Array.isArray(record?.children)) {
                         return (
-                            <strong className="select-none">
+                            <strong className="select-none sticky top-0 left-[30px]">
                                 {record[headerTitleKey] as ReactNode}
                             </strong>
                         )
@@ -156,6 +156,7 @@ const TableCollapse = <T extends Data>({
                 id={id}
                 rowKey={rowKey}
                 className="mt-4 custom-scrollbar"
+                // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 columns={columns.map((column) => ({
                     ...column,
                     key:
@@ -163,6 +164,7 @@ const TableCollapse = <T extends Data>({
                         (column as unknown as { dataIndex: string }).dataIndex,
                 }))}
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
+                // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
                 scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
                 bordered
                 dataSource={dataWithKey}
@@ -214,6 +216,9 @@ const TableCollapse = <T extends Data>({
                                         : 'rotate(-90deg)',
                                     marginRight: 8,
                                     fontSize: 12,
+                                    position: 'sticky',
+                                    top: 0,
+                                    left: 10,
                                 }}
                             />
                         ) : null,

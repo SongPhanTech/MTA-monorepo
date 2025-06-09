@@ -120,14 +120,14 @@ model TrainingMajorOnTrainingObjectType extends Base {
 
 /// khối kiến thức
 model TrainingBlock extends Base {
-  name                     String
+  name                String
   /// ưu tiên sắp xếp
-  priority                 Int                        @default(0)
+  priority            Int                    @default(0)
 
-  curriculumVersion        CurriculumVersion          @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String
+  curriculumVersion   CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId String
 
-  curriculumVersionSubject CurriculumVersionSubject[]
+  subjects            TrainingBlockSubject[]
   @@schema("ql-dao-tao")
 }
 

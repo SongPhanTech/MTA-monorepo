@@ -71,8 +71,8 @@ const AddStudentModal = () => {
                     },
                     fixedClass: {
                         connect: {
-                            id: output.fixedClassId,
-                        },
+                            id: output.fixedClassId
+                        }
                     },
                     code: output.code,
                 },
@@ -98,7 +98,15 @@ const AddStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Thêm mới sinh viên'}
+            title={
+                id
+                    ? code === 'SV'
+                        ? 'Chỉnh sửa sinh viên'
+                        : 'Chỉnh sửa học viên'
+                    : code === 'SV'
+                        ? 'Thêm mới sinh viên'
+                        : 'Thêm mới học viên'
+            }
             className="w-[50vw]"
         >
             <Col span={12}>
@@ -140,23 +148,17 @@ const AddStudentModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="dateOfBirth"
-                    label="Ngày sinh"
-                    required
-                >
-                    <DatePicker
-                        format="DD/MM/YYYY"
-                        className="w-full"
-                        disabledDate={(date) =>
-                            date && date > dayjs().endOf('day')
-                        }
-                    />
+                <FormItem form={form} name="dateOfBirth" label="Ngày sinh" required>
+                    <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="gender" label="Giới tính" required>
+                <FormItem
+                    form={form}
+                    name="gender"
+                    label="Giới tính"
+                    required
+                >
                     <Select
                         placeholder="Chọn giới tính"
                         options={GENDER_LIST.map((i) => {

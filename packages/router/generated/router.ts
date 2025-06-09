@@ -35,28 +35,26 @@ export default {
     "INDEX": "/"
   },
   "QL_DAO_TAO": {
-    "CHUONG_TRINH_DAO_TAO": "/quan-ly-chuong-trinh-dao-tao",
-    "DANH_MUC_NGANH": "/danh-muc/danh-muc-nganh",
-    "DANH_MUC_CHUYEN_NGANH": "/danh-muc/danh-muc-chuyen-nganh",
-    "DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
-    "KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
-    "MON_HOC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/mon-hoc-chuong-trinh-dao-tao",
-    "DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
+    "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
+    "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
+    "CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
+    "CHUONG_TRINH_DAO_TAO_MON_HOC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/mon-hoc-chuong-trinh-dao-tao",
+    "DANH_MUC_DANH_MUC_CHUYEN_NGANH": "/danh-muc/danh-muc-chuyen-nganh",
+    "DANH_MUC_DANH_MUC_NGANH": "/danh-muc/danh-muc-nganh",
     "HOME": "/home",
     "INDEX": "/",
+    "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
+    "KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
     "KHOA_HUAN_LUYEN": "/khoa-huan-luyen",
     "LOP_BIEN_CHE": "/lop-bien-che",
     "MOC_HUAN_LUYEN": "/moc-huan-luyen",
     "MON_HOC": "/mon-hoc",
     "NAM_HOC_KY_HOC": "/nam-hoc-ky-hoc",
-    "NHOM_MON_HOC": "/nhom-mon-hoc",
     "PHIEN_BAN_CTDT": "/phien-ban-ctdt",
     "QL_GIANG_VIEN": "/ql-giang-vien",
     "QL_HOC_VIEN": "/ql-hoc-vien",
     "QL_SINH_VIEN": "/ql-sinh-vien",
-    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management",
-    "KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
-    "PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
+    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management"
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
@@ -76,6 +74,8 @@ export default {
     "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
     "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
     "QUAN_TRI": "/quan-tri",
-    "TRO_LY_AO": "/tro-ly-ao"
+    "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
+    "TRO_LY_AO": "/tro-ly-ao",
+    "XU_LY_VAN_BAN": "/xu-ly-van-ban"
   }
 }

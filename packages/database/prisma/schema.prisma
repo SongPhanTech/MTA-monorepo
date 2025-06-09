@@ -547,24 +547,24 @@ model SubjectVersionType {
 
 /// Phiên bản môn học
 model SubjectVersion {
-  id                       String                     @id() @default(cuid())
-  code                     String?                    @unique()
-  active                   Boolean                    @default(true)
-  description              String?                    @db.Text()
+  id                       String                 @id() @default(cuid())
+  code                     String?                @unique()
+  active                   Boolean                @default(true)
+  description              String?                @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt()
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt()
   name                     String
   examType                 ExamType
-  subjectEquivalentType    SubjectEquivalentType      @default(NONE)
+  subjectEquivalentType    SubjectEquivalentType  @default(NONE)
   credit                   Int
-  period                   Int                        @default(0)
-  numberOfTheory           Int                        @default(0)
-  numberOfPractice         Int                        @default(0)
-  numberOfSelfStudy        Int                        @default(0)
-  numberOfProject          Int                        @default(0)
-  numberOfInternship       Int                        @default(0)
-  numberOfOther            Int                        @default(0)
+  period                   Int                    @default(0)
+  numberOfTheory           Int                    @default(0)
+  numberOfPractice         Int                    @default(0)
+  numberOfSelfStudy        Int                    @default(0)
+  numberOfProject          Int                    @default(0)
+  numberOfInternship       Int                    @default(0)
+  numberOfOther            Int                    @default(0)
   objectives               String?
   outputStandard           String?
   documentPath             String?
@@ -573,27 +573,27 @@ model SubjectVersion {
   coef_3                   Float?
   coef_4                   Float?
   coef_5                   Float?
-  managementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
-  subject                  Subject                    @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
-  subjectType              SubjectVersionType         @relation(fields: [subjectTypeId], references: [id])
+  subjectType              SubjectVersionType     @relation(fields: [subjectTypeId], references: [id])
   subjectTypeId            String
   trainingObjectTypes      TrainingObjectType[]
   /// môn học chương trình
-  curriculumVersionSubject CurriculumVersionSubject[]
+  trainingBlocks           TrainingBlockSubject[]
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]           @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]           @relation(name: "PrerequisiteSubject")
-  coRequisiteSubject       SubjectVersion[]           @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]           @relation(name: "CoRequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]       @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   subjectClass             SubjectClass[]
 
   @@schema("ql-dao-tao")
 }
 
-/// môn học chương trình
-model CurriculumVersionSubject {
+/// môn học khối kiến thức chương trình
+model TrainingBlockSubject {
   id              String                       @id() @default(cuid())
   code            String?                      @unique()
   active          Boolean                      @default(true)
@@ -603,8 +603,8 @@ model CurriculumVersionSubject {
   updatedAt       DateTime                     @updatedAt()
   subject         SubjectVersion               @relation(fields: [subjectId], references: [id])
   subjectId       String
-  trainingBlock   TrainingBlock?               @relation(fields: [trainingBlockId], references: [id])
-  trainingBlockId String?
+  trainingBlock   TrainingBlock                @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId String
   semester        Int?
   type            CurriculumVersionSubjectType @default(None)
   information     String?
@@ -823,19 +823,19 @@ model TrainingMajorOnTrainingObjectType {
 
 /// khối kiến thức
 model TrainingBlock {
-  id                       String                     @id() @default(cuid())
-  code                     String?                    @unique()
-  active                   Boolean                    @default(true)
-  description              String?                    @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt()
-  name                     String
+  id                  String                 @id() @default(cuid())
+  code                String?                @unique()
+  active              Boolean                @default(true)
+  description         String?                @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt()
+  name                String
   /// ưu tiên sắp xếp
-  priority                 Int                        @default(0)
-  curriculumVersion        CurriculumVersion          @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String
-  curriculumVersionSubject CurriculumVersionSubject[]
+  priority            Int                    @default(0)
+  curriculumVersion   CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId String
+  subjects            TrainingBlockSubject[]
 
   @@schema("ql-dao-tao")
 }

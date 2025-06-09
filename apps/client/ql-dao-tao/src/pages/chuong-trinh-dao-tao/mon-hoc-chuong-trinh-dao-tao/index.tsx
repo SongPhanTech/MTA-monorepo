@@ -120,7 +120,7 @@ export default function TrainingProgramSubjects() {
                 ? { name: { contains: filters.searchText } }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
+                ? { code: { contains: filters.searchText } }
                 : {}),
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
@@ -134,7 +134,7 @@ export default function TrainingProgramSubjects() {
                 ? { name: { contains: filters.searchText } }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
-                ? { codeTrainingField: { contains: filters.searchText } }
+                ? { code: { contains: filters.searchText } }
                 : {}),
             ...(filters.trainingObjectTypeId
                 ? { trainingObjectTypeId: filters.trainingObjectTypeId }
