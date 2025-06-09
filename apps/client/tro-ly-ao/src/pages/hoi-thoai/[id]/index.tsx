@@ -3,10 +3,10 @@ import { readStreamWithLiveUpdate } from '@/utils'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
-import { DocumentType, MessageSender } from '@workspace/db'
+import { MessageSender } from '@workspace/db'
 import {
-    useDeleteConversation,
     useFindManyMessage,
+    useFindUniqueConversation,
     useUpdateConversation,
 } from '@workspace/db/hooks'
 import { Avatar, Button, List, Spin, message } from 'antd'
@@ -20,12 +20,6 @@ export default function Page() {
     const { id } = router.query
     const scrollRef = useRef<HTMLDivElement>(null)
 
-    const { mutateAsync: updateConversation } = useUpdateConversation()
-    const { mutateAsync: deleteConversation } = useDeleteConversation()
-    const { data: messageList } = useFindManyMessage({
-        where: { conversationId: id as string },
-    })
-
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<
         { id: number; role: string; content: string }[]
@@ -35,48 +29,21 @@ export default function Page() {
     const [abortController, setAbortController] =
         useState<AbortController | null>(null)
 
-    const documentTypeFromUrl = router.query.document_type as string | undefined
-    const isValidDocumentType = documentTypeFromUrl
-        ? Object.values(DocumentType).includes(
-              documentTypeFromUrl as DocumentType
-          )
-        : false
-    const documentType: DocumentType =
-        isValidDocumentType && documentTypeFromUrl
-            ? (documentTypeFromUrl as DocumentType)
-            : DocumentType.GENERAL_ADMISSIONS_INFORMATION
+    const { mutateAsync: updateConversation } = useUpdateConversation()
 
-    useEffect(() => {
-        if (documentTypeFromUrl && !isValidDocumentType) {
-            message.error('Trợ lý ảo không tồn tại')
-            router.replace('/tro-ly-ao')
-        }
-    }, [documentTypeFromUrl, isValidDocumentType, router])
+    const { data: conversationCurrent } = useFindUniqueConversation({
+        where: { id: id as string },
+    })
 
-    useEffect(() => {
-        if (messageList) {
-            const mappedMessages = messageList.map((msg) => ({
-                id: Number(msg.id),
-                role: msg.sender === 'USER' ? 'USER' : 'BOT',
-                content: msg.content || '',
-            }))
-            setMessages(mappedMessages)
-        }
-    }, [messageList])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-        }
-    }, [messages])
+    const { data: messageList } = useFindManyMessage({
+        where: { conversationId: id as string },
+    })
 
     const handleSend = async () => {
-        if (!input.trim() || !id) return
+        if (!input.trim() || !id || botTyping) return
 
         const currentInput = input
         setInput('')
-
         await sendMessage(currentInput)
     }
 
@@ -106,7 +73,7 @@ export default function Page() {
 
             const response = await fetchHoiDap({
                 prompt: text,
-                type_data: documentType,
+                type_data: conversationCurrent?.type ?? '',
                 conversation_id: id as string,
                 signal: newAbortController.signal,
             })
@@ -145,6 +112,24 @@ export default function Page() {
     const handleStop = () => {
         abortController?.abort()
     }
+
+    useEffect(() => {
+        if (messageList) {
+            const mappedMessages = messageList.map((msg) => ({
+                id: Number(msg.id),
+                role: msg.sender === 'USER' ? 'USER' : 'BOT',
+                content: msg.content || '',
+            }))
+            setMessages(mappedMessages)
+        }
+    }, [messageList])
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }, [messages])
 
     return (
         <div className="flex flex-col h-full items-center bg-white">
@@ -195,9 +180,21 @@ export default function Page() {
                                             }`}
                                         >
                                             <div className="relative group">
-                                                <ReactMarkdown>
-                                                    {msg.content}
-                                                </ReactMarkdown>
+                                                {msg.role === 'USER' ? (
+                                                    <div
+                                                        style={{
+                                                            whiteSpace:
+                                                                'pre-wrap',
+                                                        }}
+                                                        className="font-normal"
+                                                    >
+                                                        {msg.content}
+                                                    </div>
+                                                ) : (
+                                                    <ReactMarkdown>
+                                                        {msg.content}
+                                                    </ReactMarkdown>
+                                                )}
                                                 <Button
                                                     size="small"
                                                     icon={<CopyOutlined />}
