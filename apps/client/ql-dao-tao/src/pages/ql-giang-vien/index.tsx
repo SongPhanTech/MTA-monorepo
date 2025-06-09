@@ -51,6 +51,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { FilterProps } from '../../components/filter/filter-lecture'
 import FilterLecture from '../../components/filter/filter-lecture'
+import { getMinioUrl } from '@workspace/constant'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
@@ -155,11 +156,7 @@ export default function UserProfilePageLecture() {
                 },
             },
             organization: true,
-            lecturerType: {
-                include: {
-                    staffPosition: true,
-                },
-            },
+            lecturerType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -476,15 +473,16 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Ảnh',
-                                dataIndex: 'avatar',
                                 align: 'center',
                                 width: 120,
-                                render: (avatar) =>
-                                    avatar ? (
+                                render: (_, record) => {
+                                    const avatar = record.userProfile?.avatar
+
+                                    return avatar ? (
                                         <Image
-                                            src={avatar}
-                                            width={80}
-                                            // height={80}
+                                            src={getMinioUrl(avatar)}
+                                            width={100}
+                                            height={80}
                                         />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
@@ -495,7 +493,8 @@ export default function UserProfilePageLecture() {
                                                 }}
                                             />
                                         </div>
-                                    ),
+                                    )
+                                },
                             },
                             {
                                 title: 'Mã giảng viên',

@@ -9,21 +9,13 @@ import {
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
+    FIXED_CLASS_STUDENT_STATUS,
     GENDER_MEAN,
     TRANG_THAI_HOC_VIEN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { UserProfile } from '@workspace/db'
-import {
-    useFindManyTemplateFile,
-    useFindManyStudent,
-    useUpdateStudent,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-    useCountStudent,
-    useFindManyFixedClass,
-} from '@workspace/db/hooks'
 
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
@@ -44,6 +36,15 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import {
+    useCountStudent,
+    useFindManyFixedClass,
+    useFindManyStudent,
+    useFindManyTemplateFile,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateStudent,
+} from '@workspace/db/hooks'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -106,12 +107,16 @@ export default function UserProfilePageDs() {
                             trainingMajor: true,
                         },
                     },
-                    curriculum: true,
                 },
             },
             fixedClass: {
                 include: {
                     trainingCourse: true,
+                },
+            },
+            curriculumVersion: {
+                include: {
+                    curriculum: true,
                 },
             },
         },
@@ -133,14 +138,22 @@ export default function UserProfilePageDs() {
     }
 
     const { data: TrainingCourseData, refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse()
+        useFindManyTrainingCourse({
+            include: {
+                fixedClass: true,
+            },
+        })
 
     const handleTrainingCourseChange = (value: string) => {
         setSelectedTrainingCourse(value)
         refetch()
     }
 
-    const { data: FixedClassData } = useFindManyFixedClass()
+    const { data: FixedClassData } = useFindManyFixedClass({
+        include: {
+            trainingCourse: true,
+        },
+    })
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -191,6 +204,11 @@ export default function UserProfilePageDs() {
     )
     const { onOpen, onClose } = useDisclosure<{
         tag?: string
+        preSelectedValues?: {
+            trainingObjectTypeId?: string
+            trainingCourseId?: string
+            fixedClassId?: string
+        }
     }>({
         tag: AddStudentModal.name,
     })
@@ -213,7 +231,13 @@ export default function UserProfilePageDs() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        onOpen({
+            preSelectedValues: {
+                trainingObjectTypeId: selectedTrainingObjectType,
+                trainingCourseId: selectedTrainingCourse,
+                fixedClassId: selectedFixedClass,
+            },
+        })
     }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
@@ -321,7 +345,7 @@ export default function UserProfilePageDs() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Sinh viên
+                Sinh viên / Học viên
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -334,10 +358,10 @@ export default function UserProfilePageDs() {
                                 setFilters={setFilters}
                             />
                         </Col>
-                        <Col flex="1 1" className="max-w-[350px]">
+                        <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Đối tượng đào tạo"
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', height: 40 }}
                                 options={TrainingOnjectTypeData?.map((item) => {
                                     return {
                                         value: item.id,
@@ -348,10 +372,10 @@ export default function UserProfilePageDs() {
                                 onChange={handleTrainingObjectTypeChange}
                             />
                         </Col>
-                        <Col flex="1 1" className="max-w-[350px]">
+                        <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Khóa đào tạo"
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', height: 40 }}
                                 options={TrainingCourseData?.map((item) => {
                                     return {
                                         value: item.id,
@@ -362,14 +386,14 @@ export default function UserProfilePageDs() {
                                 onChange={handleTrainingCourseChange}
                             />
                         </Col>
-                        <Col flex="1 1">
+                        <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Lớp"
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', height: 40 }}
                                 options={FixedClassData?.map((item) => {
                                     return {
                                         value: item.id,
-                                        label: item.name,
+                                        label: `${item.code}-${item.name}`,
                                     }
                                 })}
                                 value={selectedFixedClass}
@@ -477,9 +501,9 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Lớp',
                                 align: 'center',
-                                width: 120,
+                                width: 140,
                                 render: (record) => {
-                                    const fiexedClass = record.fixedClass?.name
+                                    const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
                                     return fiexedClass || ''
                                 },
                             },
@@ -526,6 +550,26 @@ export default function UserProfilePageDs() {
                                         record.trainingObjectType
                                             ?.curriculum?.[0]
                                     return curriculum ? curriculum.name : ''
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => {
+                                    const statusInfo =
+                                        FIXED_CLASS_STUDENT_STATUS[
+                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                        ]
+                                    return statusInfo ? (
+                                        <Tag color={statusInfo.color}>
+                                            {statusInfo.label}
+                                        </Tag>
+                                    ) : (
+                                        <Tag color="default">
+                                            Không xác định
+                                        </Tag>
+                                    )
                                 },
                             },
                             {

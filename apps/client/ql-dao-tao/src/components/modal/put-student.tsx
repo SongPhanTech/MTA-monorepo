@@ -4,10 +4,11 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { GENDER_LIST } from '@constants/constants'
+import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { getMinioUrl } from '@workspace/constant'
 import type {
+    $Enums,
     Ethnicity,
     Nationality,
     PriorityObject,
@@ -40,7 +41,7 @@ import type { UploadFile, UploadProps } from 'antd'
 import { Col, Collapse, Form, Input, Row, Tabs, Upload, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 const { TabPane } = Tabs
 const { Panel } = Collapse
@@ -58,6 +59,7 @@ export type PutUserProfile = UserProfile & {
     rankId: string
     academicDegreeTypeId: string
     academicRankTypeId: string
+    status: $Enums.FixedClassStudentStatus
 }
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
@@ -82,7 +84,11 @@ const PutStudentModal = () => {
         useFindManyEthnicity()
 
     const { data: fixedClassData = [], refetch: refetchFix } =
-        useFindManyFixedClass()
+        useFindManyFixedClass({
+            include: {
+                trainingCourse: true,
+            },
+        })
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
@@ -218,6 +224,40 @@ const PutStudentModal = () => {
         hideSpinner()
     }
 
+    //Watch lớp
+    const selectedFixedClassId = Form.useWatch('fixedClassId', form)
+
+    // Lọc khóa theo lớp đã chọn (chỉ hiển thị khóa của lớp đó)
+    const filteredTrainingCourses = useMemo(() => {
+        if (!selectedFixedClassId) {
+            return trainingCourseData
+        }
+
+        const selectedClass = fixedClassData.find(
+            (cls) => cls.id === selectedFixedClassId
+        )
+        if (selectedClass?.trainingCourseId) {
+            return trainingCourseData.filter(
+                (course) => course.id === selectedClass.trainingCourseId
+            )
+        }
+
+        return trainingCourseData
+    }, [trainingCourseData, selectedFixedClassId, fixedClassData])
+
+    // Handler khi thay đổi lớp
+    const handleFixedClassChange = (classId: string) => {
+        const selectedClass = fixedClassData.find((cls) => cls.id === classId)
+
+        if (selectedClass?.trainingCourseId) {
+            // Tự động set khóa học tương ứng với lớp
+            form.setFieldValue(
+                'trainingCourseId',
+                selectedClass.trainingCourseId
+            )
+        }
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (studentData) {
@@ -228,8 +268,9 @@ const PutStudentModal = () => {
                     studentData.trainingObjectTypeId ?? undefined,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 registrationAreaId: studentData.registrationAreaId ?? undefined,
-                trainingCourseId: studentData.fixedClass?.trainingCourse?.name,
+                trainingCourseId: studentData.fixedClass?.trainingCourse?.id,
                 priorityObjectId: studentData.priorityObject[0]?.id,
+                status: studentData.status,
 
                 // UserProfile fields với ID
                 firstName: studentData.userProfile?.firstName,
@@ -381,6 +422,7 @@ const PutStudentModal = () => {
                                         </Form.Item>
                                     </div>
                                 </Col>
+
                                 <Col span={20}>
                                     <Row gutter={[10, 10]}>
                                         <Col span={12}>
@@ -437,7 +479,28 @@ const PutStudentModal = () => {
                                     </Row>
                                 </Col>
 
-                                <Col span={12} className="mt-2">
+                                <Col span={12} className="mt-6">
+                                    <FormItem
+                                        form={form}
+                                        name="status"
+                                        label="Trạng thái"
+                                        className="mb-0"
+                                    >
+                                        <Select
+                                            placeholder="Chọn trạng thái"
+                                            options={STUDENT_STATUS_OPTIONS.map(
+                                                (v) => {
+                                                    return {
+                                                        value: v.value,
+                                                        label: v.label,
+                                                    }
+                                                }
+                                            )}
+                                        />
+                                    </FormItem>
+                                </Col>
+
+                                <Col span={12} className="mt-6">
                                     <FormItem
                                         form={form}
                                         name="placeOfBirth"
@@ -447,7 +510,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập nơi sinh" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12} className="mt-2">
+                                <Col span={12}>
                                     <FormItem
                                         form={form}
                                         name="homeTown"
@@ -541,10 +604,12 @@ const PutStudentModal = () => {
                                     >
                                         <Select
                                             placeholder="Chọn lớp"
+                                            optionFilterProp="label"
+                                            onChange={handleFixedClassChange}
                                             options={fixedClassData.map(
                                                 (value) => ({
                                                     value: value.id,
-                                                    label: value.name,
+                                                    label: `${value.code}-${value.name}`,
                                                 })
                                             )}
                                         />
