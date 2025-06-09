@@ -41,7 +41,7 @@ function HeaderContent() {
     )
 
     return (
-        <div className="h-[60px] p-[8px] mb-2 bg-white flex items-center justify-start border-primary">
+        <div className="h-[60px] p-[8px] mb-2 bg-white flex items-center justify-start border-primary rounded-lg">
             <div className="flex items-center gap-2">
                 {visibleList.map((item) => (
                     <Button

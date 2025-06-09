@@ -264,13 +264,7 @@ const AddStudentModal = () => {
                     label="Ngày sinh"
                     required
                 >
-                    <DatePicker
-                        format="DD/MM/YYYY"
-                        className="w-full"
-                        disabledDate={(date) =>
-                            date && date > dayjs().endOf('day')
-                        }
-                    />
+                    <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>

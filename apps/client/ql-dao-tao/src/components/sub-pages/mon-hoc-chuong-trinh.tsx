@@ -2,17 +2,17 @@ import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutMonHocChuongTrinhModal } from '@components/modal'
+import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE, LOAI_MON_HOC_CTDT } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { CurriculumVersionSubject } from '@workspace/db'
+import { getMinioUrl } from '@workspace/constant'
 import {
-    useCountCurriculumVersionSubject,
     useCountSchoolYear,
-    useFindManyCurriculumVersionSubject,
+    useCountTrainingBlockSubject,
+    useDeleteTrainingBlockSubject,
     useFindManySchoolYear,
-    useUpdateCurriculumVersionSubject,
+    useFindManyTrainingBlock,
     useUpdateSchoolYear,
 } from '@workspace/db/hooks'
 import {
@@ -31,80 +31,35 @@ import _ from 'lodash'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { getMinioUrl } from '@workspace/constant'
-import EditIcon from '@components/icons/edit'
 
-type Props = {
-    // data?: CurriculumVersionSubject[]
-    curriculumVersionId?: string
-}
-export default function MonHocChuongTrinhPage({
-    // data,
-    curriculumVersionId,
-}: Props) {
+type Props = { curriculumVersionId: string }
+export default function MonHocChuongTrinhPage({ curriculumVersionId }: Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { data = [], refetch } = useFindManyCurriculumVersionSubject({
-        where: {
-            curriculumVersionId: {
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                equals: curriculumVersionId!,
-            },
-        },
-        include: {
-            trainingBlock: true,
-            subject: true,
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
+    const { data = [], refetch } = useFindManyTrainingBlock({
+        where: { curriculumVersionId },
+        include: { subjects: true, _count: true },
+        orderBy: { priority: 'asc' },
     })
 
-    const { data: count } = useCountCurriculumVersionSubject({
-        where: {
-            curriculumVersionId: {
-                // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                equals: curriculumVersionId!,
-            },
-        },
+    const { data: count } = useCountTrainingBlockSubject({
+        where: { trainingBlock: { curriculumVersionId } },
     })
 
-    const { onOpen, onClose } = useDisclosure<{
-        curriculumVersionId?: string | null
-        id?: string | null
-    }>({
-        tag: PutMonHocChuongTrinhModal.name,
-    })
+    const { mutateAsync: deleteTrainingBlockSubject } =
+        useDeleteTrainingBlockSubject()
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
-        onOpen({
-            curriculumVersionId: curriculumVersionId || null,
-            id: null,
-        })
-    }
-    const { mutateAsync: updateCurrriculumVersionSubject } =
-        useUpdateCurriculumVersionSubject()
     async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateCurrriculumVersionSubject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (error) {
+        showSpinner()
+        await deleteTrainingBlockSubject({ where: { id } }).catch((error) => {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
+            console.error('Error deleting training block subject:', error)
+        })
         hideSpinner()
     }
 
@@ -132,9 +87,7 @@ export default function MonHocChuongTrinhPage({
                         {/* Thêm mới */}
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                <Button type="primary">Thêm mới</Button>
                             </Flex>
                         </Col>
                     </Row>
@@ -181,7 +134,7 @@ export default function MonHocChuongTrinhPage({
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id, documentPath }) => (
+                                render: (_, { id, subjects }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip
                                             title="Tải file"
@@ -189,21 +142,21 @@ export default function MonHocChuongTrinhPage({
                                         >
                                             <a
                                                 href={
-                                                    documentPath
+                                                    subjects.documentPath
                                                         ? getMinioUrl(
-                                                              documentPath
+                                                              subjects.documentPath
                                                           )
                                                         : '#'
                                                 }
                                                 // target="_blank"
                                                 rel="noopener noreferrer"
                                                 className={
-                                                    documentPath
+                                                    subjects.documentPath
                                                         ? 'text-sm text-blue-700 cursor-pointer'
                                                         : 'text-sm text-gray-400 cursor-not-allowed'
                                                 }
                                                 style={
-                                                    documentPath
+                                                    subjects.documentPath
                                                         ? {}
                                                         : {
                                                               pointerEvents:
@@ -230,17 +183,7 @@ export default function MonHocChuongTrinhPage({
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         </Tooltip> */}
-                                        <EditIcon
-                                            onClick={() =>
-                                                onOpen({
-                                                    curriculumVersionId:
-                                                        curriculumVersionId ||
-                                                        null,
-                                                    id: id,
-                                                })
-                                            }
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
+                                        <EditIcon className="text-sm text-blue-700 cursor-pointer" />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () =>

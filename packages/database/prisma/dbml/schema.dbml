@@ -239,19 +239,11 @@ Table Curriculum {
   name String [not null]
   englishName String
   status CurriculumStatus [not null, default: 'ACTIVE']
-  startDate DateTime [not null]
-  endDate DateTime
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
-  trainingObjectType TrainingObjectType [not null]
-  trainingObjectTypeId String [not null]
-  trainingLevel TrainingLevel [not null]
-  trainingLevelId String [not null]
-  trainingTime TrainingTime [not null]
-  trainingTimeId String [not null]
   trainingMajor TrainingMajor [not null]
   trainingMajorId String [not null]
-  information String [not null]
+  information String
   documentPath String
   renderPath String
   curriculumVersion CurriculumVersion [not null]
@@ -273,12 +265,20 @@ Table CurriculumVersion {
   trainingLanguage TrainingLanguage [not null, default: 'Vietnamese']
   status CurriculumStatus [not null, default: 'ACTIVE']
   numberOfSemesters Int [not null]
-  startDate DateTime [not null]
-  endDate DateTime
+  yearCreation Int
+  yearApplication Int
   curriculum Curriculum [not null]
   curriculumId String [not null]
+  trainingObjectType TrainingObjectType [not null]
+  trainingObjectTypeId String [not null]
+  trainingLevel TrainingLevel [not null]
+  trainingLevelId String [not null]
+  trainingTime TrainingTime [not null]
+  trainingTimeId String [not null]
   scoreToTakeExam Float
   scoreToPass Float
+  requiredCredits Int
+  electiveCredits Int
   objectives String
   inputStandard String
   outputStandard String
@@ -426,7 +426,7 @@ Table TrainingObjectType {
   updatedAt DateTime [not null]
   name String [unique, not null]
   trainingCourse TrainingCourse [not null]
-  curriculum Curriculum [not null]
+  curriculumVersion CurriculumVersion [not null]
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
   trainingFields TrainingFieldOnTrainingObjectType [not null]
   subjectVersion SubjectVersion [not null]
@@ -474,7 +474,7 @@ Table TrainingLevel {
   updatedAt DateTime [not null]
   name String [unique, not null]
   trainingCourse TrainingCourse [not null]
-  curriculum Curriculum [not null]
+  curriculumVersion CurriculumVersion [not null]
   students Student [not null]
 
   Note: 'Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)'
@@ -614,9 +614,9 @@ Table TrainingTime {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  curriculum Curriculum [not null]
+  curriculumVersion CurriculumVersion [not null]
 
-  Note: 'thời gian đ��o tạo'
+  Note: 'thời gian đào tạo'
 }
 
 Table StudyRank {
@@ -1514,15 +1514,15 @@ Ref: FixedClass.curriculumVersionId > CurriculumVersion.id
 
 Ref: Curriculum.managementOrganizationId > Organization.id
 
-Ref: Curriculum.trainingObjectTypeId > TrainingObjectType.id
-
-Ref: Curriculum.trainingLevelId > TrainingLevel.id
-
-Ref: Curriculum.trainingTimeId > TrainingTime.id
-
 Ref: Curriculum.trainingMajorId > TrainingMajor.id
 
 Ref: CurriculumVersion.curriculumId > Curriculum.id
+
+Ref: CurriculumVersion.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: CurriculumVersion.trainingLevelId > TrainingLevel.id
+
+Ref: CurriculumVersion.trainingTimeId > TrainingTime.id
 
 Ref: Subject.managementOrganizationId > Organization.id
 

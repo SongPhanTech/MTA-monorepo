@@ -131,21 +131,13 @@ model Curriculum extends Base {
   name                     String
   englishName              String?
   status                   CurriculumStatus    @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
-  startDate                DateTime
-  endDate                  DateTime?
   managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
-  trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId     String
-  trainingLevel            TrainingLevel       @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
-  trainingLevelId          String
-  trainingTime             TrainingTime        @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
-  trainingTimeId           String
 
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
   trainingMajorId          String
 
-  information              String   //Thông tin
+  information              String?   //Thông tin
   documentPath             String? // Đường dẫn tài liệu
   renderPath               String? // Đường dẫn tài liệu kết xuất
 
@@ -162,32 +154,40 @@ enum TrainingLanguage {
 
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion extends Base {
-  name              String
-  shortName         String?
-  englishName       String?
-  trainingLanguage  TrainingLanguage @default(Vietnamese) // Ngôn ngữ đào tạo
-  status            CurriculumStatus @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
-  numberOfSemesters Int
-  startDate         DateTime
-  endDate           DateTime?
-  curriculum        Curriculum       @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
-  curriculumId      String
+  name                 String
+  shortName            String?
+  englishName          String?
+  trainingLanguage     TrainingLanguage   @default(Vietnamese) // Ngôn ngữ đào tạo
+  status               CurriculumStatus   @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
+  numberOfSemesters    Int
+  yearCreation         Int? // Năm tạo chương trình đào tạo
+  yearApplication      Int? // Năm áp dụng chương trình đào tạo
+  curriculum           Curriculum         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
+  curriculumId         String
 
-  scoreToTakeExam   Float? // Điểm tối thiểu để được thi
-  scoreToPass       Float? // Điểm tối thiểu để qua môn
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId String
+  trainingLevel        TrainingLevel      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevelId      String
+  trainingTime         TrainingTime       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
+  trainingTimeId       String
 
   // TODO: Thêm các quy chế cho chương trình đào tạo
+  scoreToTakeExam      Float? // Điểm tối thiểu để được thi
+  scoreToPass          Float? // Điểm tối thiểu để qua môn
+  requiredCredits      Int? // Số tín chỉ bắt buộc
+  electiveCredits      Int? // Số tín chỉ tự chọn
 
-  objectives        String? // Mục tiêu
-  inputStandard     String? // Chuẩn đầu vào
-  outputStandard    String? // Chuẩn đầu ra
-  information       String? // Thông tin
-  documentPath      String? // Đường dẫn tài liệu
-  renderPath        String? // Đường dẫn tài liệu kết xuất
+  objectives           String? // Mục tiêu
+  inputStandard        String? // Chuẩn đầu vào
+  outputStandard       String? // Chuẩn đầu ra
+  information          String? // Thông tin
+  documentPath         String? // Đường dẫn tài liệu
+  renderPath           String? // Đường dẫn tài liệu kết xuất
 
-  trainingBlocks    TrainingBlock[]
-  fixedClasses      FixedClass[] // Lớp biên chế
-  students          Student[] // Học viên
+  trainingBlocks       TrainingBlock[]
+  fixedClasses         FixedClass[] // Lớp biên chế
+  students             Student[] // Học viên
 
   @@schema("ql-dao-tao")
 }
@@ -312,9 +312,6 @@ model TrainingBlockSubject extends Base {
   semester        Int? // kỳ học
 
   type            CurriculumVersionSubjectType @default(None) // loại bắt buộc
-  information     String?   //Thông tin
-  documentPath    String? // Đường dẫn tài liệu
-  renderPath      String? // Đường dẫn tài liệu kết xuất
   @@schema("ql-dao-tao")
 }
 
