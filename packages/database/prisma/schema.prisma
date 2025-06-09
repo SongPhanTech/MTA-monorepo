@@ -427,6 +427,9 @@ model FixedClass {
   createdAt                DateTime           @default(now())
   updatedAt                DateTime           @updatedAt()
   name                     String
+  summary                  String?
+  startYear                String
+  graduated                Boolean?           @default(true)
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
   managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id])

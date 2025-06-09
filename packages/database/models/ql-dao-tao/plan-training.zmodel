@@ -98,7 +98,10 @@ model TrainingCourse extends Base {
 /// lớp biên chế
 model FixedClass extends Base {
   name                     String
-
+  summary                  String?
+  startYear                String
+  graduated                Boolean?           @default(true)
+  
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khóa học
   trainingCourseId         String?
 
@@ -116,7 +119,7 @@ model FixedClass extends Base {
 
   curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
-
+  
   @@schema("ql-dao-tao")
 }
 

@@ -354,6 +354,20 @@ const NAVIGATION: NavigationType = {
                             .DANH_MUC_DANH_MUC_CHUYEN_NGANH,
                         description: 'Danh mục chuyên ngành',
                     },
+                    {
+                        id: 'khoa-huan-luyen',
+                        label: 'Danh mục khoá đào tạo',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.KHOA_HUAN_LUYEN,
+                        description: 'Danh mục khoá đào tạo',
+                    },
+                        {
+                        id: 'lop-bien-che',
+                        label: 'Quản lý lớp biên chế',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.LOP_BIEN_CHE,
+                        description: 'Quản lý lớp biên chế',
+                    },
                 ],
             },
             {
@@ -419,20 +433,7 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                 description: 'Thông tin năm học, kỳ học',
             },
-            {
-                id: 'traning-course',
-                label: 'Quản lý khóa',
-                icon: BookOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.KHOA_HUAN_LUYEN,
-                description: 'Quản lý khóa',
-            },
-            {
-                id: 'fixed-class',
-                label: 'Quản lý lớp biên chế',
-                icon: TeamOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.LOP_BIEN_CHE,
-                description: 'Quản lý lớp biên chế',
-            },
+        
             {
                 id: 'user-profile-lecture',
                 label: 'Quản lý hồ sơ giảng viên',
