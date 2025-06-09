@@ -18,7 +18,9 @@ type TableProps<T extends Data> = {
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
     }
-    headerTitleKey: keyof T
+    headerTitleKey: keyof T | ((record: T) => ReactNode)
+    actionButtonIcon?: ReactNode
+    onActionButtonClick?: (record: T) => void
     onRowClick?: (record: T) => void
     expandable?: TableAntdProps<T>['expandable']
     rowKey?: string
@@ -131,7 +133,9 @@ const TableCollapse = <T extends Data>({
                     if (Array.isArray(children)) {
                         return (
                             <strong className="select-none sticky top-0 left-[30px]">
-                                {record[headerTitleKey] as ReactNode}
+                                {typeof headerTitleKey === 'function'
+                                    ? headerTitleKey(record)
+                                    : (record[headerTitleKey] as ReactNode)}
                             </strong>
                         )
                     }

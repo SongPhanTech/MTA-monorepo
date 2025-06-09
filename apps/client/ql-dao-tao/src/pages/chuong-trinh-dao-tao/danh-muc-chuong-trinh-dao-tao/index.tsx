@@ -1,5 +1,4 @@
 import { PlusOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingProgramCatalog } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -9,7 +8,6 @@ import {
     useFindManyTrainingObjectType,
     useFindManyTrainingCourse,
     useFindManyCurriculum,
-    useCountCurriculumVersion,
     useUpdateCurriculum,
     useCountCurriculum,
 } from '@workspace/db/hooks'
@@ -32,7 +30,6 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
-import MajorInforList from '@components/sub-pages/chuyen-nganh'
 import TableCollapse from '@components/commons/tableCollapse'
 import dayjs from 'dayjs'
 interface FilterProps {
@@ -394,7 +391,7 @@ export default function TrainingProgramCatalog() {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                    return record?.status === 'IN_ACTIVE' ? (
+                                    return record?.status === 'INACTIVATED' ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">

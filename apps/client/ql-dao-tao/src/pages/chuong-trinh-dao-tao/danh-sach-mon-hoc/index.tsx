@@ -4,10 +4,10 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSubjectListModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
+import type { ExamType, TrainingObjectType } from '@workspace/db'
 import {
     useFindManySubject,
     useFindManyTrainingObjectType,
@@ -27,7 +27,7 @@ import {
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -48,11 +48,11 @@ interface DataItem {
 
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingObjectTypeId: undefined,
     })
+    const { getExamTypeLabel } = useExamTypeOptions()
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
@@ -70,8 +70,6 @@ export default function SubjectList() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
     const debouncedRefetch = useCallback(
@@ -118,7 +116,16 @@ export default function SubjectList() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    console.log(SubjectData);
+    const processedData = useMemo(() => {
+        return SubjectData?.map((item) => ({
+            ...item,
+            name: `${item?.name}${
+                item?.managementOrganization?.name
+                    ? ` - ${item?.managementOrganization?.name}`
+                    : ''
+            }`,
+        }))
+    }, [SubjectData])
 
     return (
         <div>
@@ -204,8 +211,8 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey={"name"}
-                        childrenFieldName='subjectVersion'
+                        headerTitleKey="name"
+                        childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         columns={[
                             {
@@ -261,6 +268,8 @@ export default function SubjectList() {
                                 dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
+                                render: (value: ExamType) =>
+                                    getExamTypeLabel(value),
                             },
                             {
                                 title: 'Điểm bằng nhau',
@@ -336,7 +345,7 @@ export default function SubjectList() {
                                     ) : null,
                             },
                         ]}
-                        data={SubjectData}
+                        data={processedData}
                     />
                 </Col>
             </Row>
