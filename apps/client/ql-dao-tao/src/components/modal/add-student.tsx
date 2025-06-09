@@ -29,13 +29,13 @@ export type PutUserProfile = UserProfile & {
     trainingCourseId?: string
 }
 dayjs.locale('vi')
-const PutUserProfileModal = () => {
+const AddStudentModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
-    const { isOpen, onClose, input } = useDisclosure<any>({
-        tag: PutUserProfileModal.name,
+    const { isOpen, onClose } = useDisclosure({
+        tag: AddStudentModal.name,
         onClose: form.resetFields,
     })
-    const { id, code } = input ?? {}
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [], refetch: refetchFixedClassData } =
@@ -71,9 +71,10 @@ const PutUserProfileModal = () => {
                     },
                     fixedClass: {
                         connect: {
-                            id: output.fixedClassId,
-                        },
+                            id: output.fixedClassId
+                        }
                     },
+                    code: output.code,
                 },
             })
 
@@ -110,7 +111,7 @@ const PutUserProfileModal = () => {
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã" required>
-                    <Input placeholder="Nhập mã" />
+                    <Input placeholder="Nhập mã sinh viên" />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -160,7 +161,7 @@ const PutUserProfileModal = () => {
                 <FormItem form={form} name="gender" label="Giới tính" required>
                     <Select
                         placeholder="Chọn giới tính"
-                        options={GENDER_LIST.map((i: any) => {
+                        options={GENDER_LIST.map((i) => {
                             return {
                                 value: i.id,
                                 label: i.name,
@@ -222,4 +223,4 @@ const PutUserProfileModal = () => {
     )
 }
 
-export default PutUserProfileModal
+export default AddStudentModal

@@ -237,6 +237,7 @@ Table Curriculum {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  englishName String
   status CurriculumStatus [not null, default: 'ACTIVE']
   startDate DateTime [not null]
   endDate DateTime
@@ -359,7 +360,7 @@ Table SubjectVersion {
   subjectType SubjectVersionType [not null]
   subjectTypeId String [not null]
   trainingObjectTypes TrainingObjectType [not null]
-  curriculumVersionSubject CurriculumVersionSubject [not null, note: 'môn học chương trình']
+  trainingBlocks TrainingBlockSubject [not null, note: 'môn học chương trình']
   prerequisiteSubject SubjectVersion [not null, note: 'môn học tiên quyết']
   dependentSubject SubjectVersion [not null]
   coRequisiteSubject SubjectVersion [not null]
@@ -369,7 +370,7 @@ Table SubjectVersion {
   Note: 'Phiên bản môn học'
 }
 
-Table CurriculumVersionSubject {
+Table TrainingBlockSubject {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -379,15 +380,15 @@ Table CurriculumVersionSubject {
   updatedAt DateTime [not null]
   subject SubjectVersion [not null]
   subjectId String [not null]
-  trainingBlock TrainingBlock
-  trainingBlockId String
+  trainingBlock TrainingBlock [not null]
+  trainingBlockId String [not null]
   semester Int
   type CurriculumVersionSubjectType [not null, default: 'None']
   information String
   documentPath String
   renderPath String
 
-  Note: 'môn học chương trình'
+  Note: 'môn học khối kiến thức chương trình'
 }
 
 Table SubjectClass {
@@ -423,7 +424,7 @@ Table TrainingObjectType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   trainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
@@ -442,7 +443,7 @@ Table PriorityObject {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   students Student [not null]
 
   Note: 'đối tượng ưu tiên'
@@ -456,7 +457,7 @@ Table TrainingType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   trainingCourse TrainingCourse [not null]
   students Student [not null]
 
@@ -471,7 +472,7 @@ Table TrainingLevel {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   trainingCourse TrainingCourse [not null]
   curriculum Curriculum [not null]
   students Student [not null]
@@ -487,7 +488,7 @@ Table TrainingForm {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   trainingCourse TrainingCourse [not null]
   students Student [not null]
 
@@ -502,7 +503,7 @@ Table TrainingLocation {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   students Student [not null]
 
   Note: 'địa điểm đào tạo'
@@ -554,7 +555,7 @@ Table TrainingMajor {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  englishName String [not null]
+  englishName String
   summary String [not null]
   numberCreditsMajor Int [not null, default: 0, note: 'Số tín chỉ chuyên ngành']
   numberCreditsRequired Int [not null, default: 0, note: 'Số tín chỉ bắt buộc']
@@ -599,7 +600,7 @@ Table TrainingBlock {
   priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
   curriculumVersion CurriculumVersion [not null]
   curriculumVersionId String [not null]
-  curriculumVersionSubject CurriculumVersionSubject [not null]
+  subjects TrainingBlockSubject [not null]
 
   Note: 'khối kiến thức'
 }
@@ -615,7 +616,7 @@ Table TrainingTime {
   name String [not null]
   curriculum Curriculum [not null]
 
-  Note: 'thời gian đào tạo'
+  Note: 'thời gian đ��o tạo'
 }
 
 Table StudyRank {
@@ -1094,7 +1095,6 @@ Table LecturerType {
   updatedAt DateTime [not null]
   name String [unique, not null]
   lecturers Lecturer [not null]
-  staffPosition StaffPosition [not null]
   lecturerHistory LecturerHistory [not null]
 
   Note: 'Loại giáo viên'
@@ -1124,14 +1124,8 @@ Table StaffPosition {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  lecturerType LecturerType [not null]
-  lecturerTypeId String [not null]
   staffs Staff [not null]
   staffHistory StaffHistory [not null]
-
-  indexes {
-    (name, lecturerTypeId) [unique]
-  }
 
   Note: 'Chức vụ nhân viên'
 }
@@ -1538,9 +1532,9 @@ Ref: SubjectVersion.subjectId > Subject.id
 
 Ref: SubjectVersion.subjectTypeId > SubjectVersionType.id
 
-Ref: CurriculumVersionSubject.subjectId > SubjectVersion.id
+Ref: TrainingBlockSubject.subjectId > SubjectVersion.id
 
-Ref: CurriculumVersionSubject.trainingBlockId > TrainingBlock.id
+Ref: TrainingBlockSubject.trainingBlockId > TrainingBlock.id
 
 Ref: SubjectClass.subjectId > SubjectVersion.id
 
@@ -1625,8 +1619,6 @@ Ref: UserProfile.levelId > Level.id
 Ref: UserProfile.positionCPVId > PositionCPV.id
 
 Ref: Commune.provinceId > Province.id
-
-Ref: StaffPosition.lecturerTypeId > LecturerType.id
 
 Ref: Organization.typeId > OrganizationType.id
 

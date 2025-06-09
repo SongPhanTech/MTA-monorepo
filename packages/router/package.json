@@ -10,13 +10,14 @@
     ".": "./src/index.ts"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@types/node": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {
     "@ant-design/icons": "catalog:",
+    "glob": "catalog:",
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"

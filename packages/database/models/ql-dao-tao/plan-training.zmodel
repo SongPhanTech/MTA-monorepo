@@ -129,6 +129,7 @@ enum CurriculumStatus {
 /// chương trình đào tạo
 model Curriculum extends Base {
   name                     String
+  englishName              String?
   status                   CurriculumStatus    @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   startDate                DateTime
   endDate                  DateTime?
@@ -245,15 +246,15 @@ model SubjectVersionType extends Base {
 model SubjectVersion extends Base {
   name                     String
   examType                 ExamType
-  subjectEquivalentType    SubjectEquivalentType      @default(NONE) // loại môn học tương đương
+  subjectEquivalentType    SubjectEquivalentType  @default(NONE) // loại môn học tương đương
   credit                   Int // số tín chỉ
-  period                   Int                        @default(0) // số tiết học
-  numberOfTheory           Int                        @default(0) // số tiết lý thuyết
-  numberOfPractice         Int                        @default(0) // số tiết thực hành
-  numberOfSelfStudy        Int                        @default(0) // số tiết tự học
-  numberOfProject          Int                        @default(0) // số tiết đồ án
-  numberOfInternship       Int                        @default(0) // số tiết thực tập
-  numberOfOther            Int                        @default(0) // số tiết khác
+  period                   Int                    @default(0) // số tiết học
+  numberOfTheory           Int                    @default(0) // số tiết lý thuyết
+  numberOfPractice         Int                    @default(0) // số tiết thực hành
+  numberOfSelfStudy        Int                    @default(0) // số tiết tự học
+  numberOfProject          Int                    @default(0) // số tiết đồ án
+  numberOfInternship       Int                    @default(0) // số tiết thực tập
+  numberOfOther            Int                    @default(0) // số tiết khác
   objectives               String? // Mục tiêu
   outputStandard           String? // Chuẩn đầu ra
   documentPath             String? // Đường dẫn tài liệu
@@ -264,27 +265,27 @@ model SubjectVersion extends Base {
   coef_4                   Float? // Hệ số 4
   coef_5                   Float? // Hệ số 5
 
-  managementOrganization   Organization               @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
 
-  subject                  Subject                    @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
 
-  subjectType              SubjectVersionType         @relation(fields: [subjectTypeId], references: [id])
+  subjectType              SubjectVersionType     @relation(fields: [subjectTypeId], references: [id])
   subjectTypeId            String
 
   trainingObjectTypes      TrainingObjectType[] // Đối tượng đào tạo
 
   /// môn học chương trình
-  curriculumVersionSubject CurriculumVersionSubject[]
+  trainingBlocks           TrainingBlockSubject[]
 
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]           @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]           @relation(name: "PrerequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]       @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
 
   // môn học song hành
-  coRequisiteSubject       SubjectVersion[]           @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]           @relation(name: "CoRequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
 
   subjectClass             SubjectClass[]
 
@@ -300,13 +301,13 @@ enum CurriculumVersionSubjectType {
   @@schema("ql-dao-tao")
 }
 
-/// môn học chương trình
-model CurriculumVersionSubject extends Base {
+/// môn học khối kiến thức chương trình
+model TrainingBlockSubject extends Base {
   subject         SubjectVersion               @relation(fields: [subjectId], references: [id])
   subjectId       String
 
-  trainingBlock   TrainingBlock?               @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
-  trainingBlockId String?
+  trainingBlock   TrainingBlock                @relation(fields: [trainingBlockId], references: [id]) // Khối kiến thức
+  trainingBlockId String
 
   semester        Int? // kỳ học
 

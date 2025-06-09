@@ -58,11 +58,8 @@ model LecturerType extends Base {
   name            String            @unique
 
   lecturers       Lecturer[]
-  @@schema("ql-danh-muc")
-
-  staffPosition   StaffPosition[]
-
   lecturerHistory LecturerHistory[]
+  @@schema("ql-danh-muc")
 }
 
 /// Loại nhân viên
@@ -76,14 +73,11 @@ model StaffType extends Base {
 
 /// Chức vụ nhân viên
 model StaffPosition extends Base {
-  name           String
-  lecturerType   LecturerType   @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId String
+  name         String
 
-  staffs         Staff[]
-  staffHistory   StaffHistory[]
+  staffs       Staff[]
+  staffHistory StaffHistory[]
 
-  @@unique([name, lecturerTypeId])
   @@schema("ql-danh-muc")
 }
 

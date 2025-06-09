@@ -27,6 +27,7 @@ type TableProps<T extends Data> = {
     scrollable?: boolean
     maxHeight?: number
     currentPage: number
+    childrenFieldName?: string
 } & TableAntdProps
 
 const TableCollapse = <T extends Data>({
@@ -41,12 +42,14 @@ const TableCollapse = <T extends Data>({
     scrollable,
     maxHeight,
     currentPage,
+    childrenFieldName = 'children',
     ...rest
 }: TableProps<T>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
     const handleExpand = (expanded: boolean, record: T) => {
-        if (!record.children?.length) return
+        const children = record[childrenFieldName]
+        if (!Array.isArray(children) || children?.length === 0) return
         setExpandedKeys((prev) => {
             if (expanded && record.key) {
                 // Mở rộng thêm key
@@ -66,26 +69,30 @@ const TableCollapse = <T extends Data>({
         }
 
         return data.map((item) => {
-            const hasChildren = Array.isArray(item.children)
+            const children = item[childrenFieldName] as Data[] | undefined
+            const hasChildren = Array.isArray(children)
             // Nếu item không có key thì tạo key mới
             if (!item.key) {
                 item.key = generateKey('parent')
             }
 
             if (hasChildren) {
-                return {
+                const childrenArray = children?.map((child) => {
+                    if (!child.key) {
+                        child.key = generateKey('child')
+                    }
+                    return {
+                        ...child,
+                        type: 'child',
+                    }
+                })
+                // Đảm bảo trường children được đặt đúng tên
+                const newItem = {
                     ...item,
                     type: 'parent',
-                    children: item?.children?.map((child) => {
-                        if (!child.key) {
-                            child.key = generateKey('child')
-                        }
-                        return {
-                            ...child,
-                            type: 'child',
-                        }
-                    }),
+                    [childrenFieldName]: childrenArray,
                 }
+                return newItem
             }
             // Item không có children thì chắc chắn là child
             if (!item.key) {
@@ -96,20 +103,21 @@ const TableCollapse = <T extends Data>({
                 type: 'child',
             }
         })
-    }, [data])
+    }, [data, childrenFieldName])
 
     const allChildren = useMemo(() => {
         const children: Data[] = []
         if (!dataWithKey) return children
         for (const item of dataWithKey) {
-            if (item.type === 'parent' && Array.isArray(item.children)) {
-                children.push(...item.children)
+            const itemChildren = item[childrenFieldName] as Data[] | undefined
+            if (item.type === 'parent' && Array.isArray(itemChildren)) {
+                children.push(...itemChildren)
             } else if (item.type === 'child') {
                 children.push(item)
             }
         }
         return children
-    }, [dataWithKey])
+    }, [dataWithKey, childrenFieldName])
 
     const columns: ColumnsType<T> = useMemo(() => {
         const baseColumns: ColumnsType<T> = [
@@ -119,9 +127,10 @@ const TableCollapse = <T extends Data>({
                 align: 'center',
                 fixed: 'left',
                 render: (_, record) => {
-                    if (Array.isArray(record?.children)) {
+                    const children = record[childrenFieldName]
+                    if (Array.isArray(children)) {
                         return (
-                            <strong className="select-none">
+                            <strong className="select-none sticky top-0 left-[30px]">
                                 {record[headerTitleKey] as ReactNode}
                             </strong>
                         )
@@ -141,14 +150,20 @@ const TableCollapse = <T extends Data>({
         return baseColumns?.map((col, index) => ({
             ...col,
             onCell: (record: T) => ({
-                colSpan: Array.isArray(record?.children)
+                colSpan: Array.isArray(record[childrenFieldName])
                     ? index === 0
                         ? baseColumns?.length
                         : 0
                     : 1,
             }),
         }))
-    }, [headerTitleKey, currentPage, rest.columns, allChildren])
+    }, [
+        headerTitleKey,
+        currentPage,
+        rest.columns,
+        allChildren,
+        childrenFieldName,
+    ])
 
     return (
         <>
@@ -156,6 +171,7 @@ const TableCollapse = <T extends Data>({
                 id={id}
                 rowKey={rowKey}
                 className="mt-4 custom-scrollbar"
+                // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 columns={columns.map((column) => ({
                     ...column,
                     key:
@@ -163,6 +179,7 @@ const TableCollapse = <T extends Data>({
                         (column as unknown as { dataIndex: string }).dataIndex,
                 }))}
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
+                // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
                 scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
                 bordered
                 dataSource={dataWithKey}
@@ -196,13 +213,15 @@ const TableCollapse = <T extends Data>({
                 expandable={{
                     expandedRowKeys: expandedKeys,
                     onExpand: handleExpand,
-                    rowExpandable: (record) =>
-                        Array.isArray(record.children) &&
-                        record.children.length > 0,
+                    rowExpandable: (record) => {
+                        const children = record[childrenFieldName]
+                        return Array.isArray(children) && children.length > 0
+                    },
                     expandRowByClick: true,
-                    expandIcon: ({ expanded, onExpand, record }) =>
-                        Array.isArray(record.children) &&
-                        record.children.length > 0 ? (
+                    expandIcon: ({ expanded, onExpand, record }) => {
+                        const children = record[childrenFieldName]
+                        return Array.isArray(children) &&
+                            children.length > 0 ? (
                             <DownOutlined
                                 onClick={(e) => {
                                     e.stopPropagation()
@@ -214,10 +233,14 @@ const TableCollapse = <T extends Data>({
                                         : 'rotate(-90deg)',
                                     marginRight: 8,
                                     fontSize: 12,
+                                    position: 'sticky',
+                                    top: 0,
+                                    left: 10,
                                 }}
                             />
-                        ) : null,
-                    childrenColumnName: 'children',
+                        ) : null
+                    },
+                    childrenColumnName: childrenFieldName,
                     ...expandable,
                 }}
             />
