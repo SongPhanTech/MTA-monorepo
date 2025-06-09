@@ -71,8 +71,8 @@ const AddStudentModal = () => {
                     },
                     fixedClass: {
                         connect: {
-                            id: output.fixedClassId
-                        }
+                            id: output.fixedClassId,
+                        },
                     },
                     code: output.code,
                 },
