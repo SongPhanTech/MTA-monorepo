@@ -11,9 +11,11 @@ import {
     useCreateStudent,
     useCreateUserProfile,
     useFindManyCurriculum,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
+    useFindManyTrainingLevel,
     useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
     useFindUniqueUserProfile,
@@ -28,6 +30,8 @@ export type PutUserProfile = UserProfile & {
     trainingObjectTypeId?: string
     fixedClassId?: string
     trainingCourseId?: string
+    trainingLevelId?: string
+    curriculumVersionId?: string
     status: $Enums.FixedClassStudentStatus
 }
 dayjs.locale('vi')
@@ -61,6 +65,7 @@ const AddStudentModal = () => {
         useFindManyFixedClass({
             include: {
                 trainingCourse: true,
+                curriculumVersion: true,
             },
         })
 
@@ -73,13 +78,17 @@ const AddStudentModal = () => {
 
     const { data: trainingObjectTypeData } = useFindManyTrainingObjectType()
 
+    const { data: trainingLevelData = [] } = useFindManyTrainingLevel()
+
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
+
     const { mutateAsync: createStudent } = useCreateStudent()
 
     //Watch lớp
     const selectedFixedClassId = Form.useWatch('fixedClassId', form)
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
 
-    // SỬA: Lọc lớp theo khóa đã chọn
+    //Lọc lớp theo khóa đã chọn
     const filteredFixedClasses = useMemo(() => {
         if (!selectedTrainingCourseId) {
             return fixedClassData
@@ -91,7 +100,7 @@ const AddStudentModal = () => {
         )
     }, [fixedClassData, selectedTrainingCourseId])
 
-    // SỬA: Lọc khóa theo lớp đã chọn (giữ nguyên logic cũ)
+    //Lọc khóa theo lớp đã chọn (giữ nguyên logic cũ)
     const filteredTrainingCourses = useMemo(() => {
         if (!selectedFixedClassId) {
             return trainingCourseData
@@ -109,7 +118,7 @@ const AddStudentModal = () => {
         return trainingCourseData
     }, [trainingCourseData, selectedFixedClassId, fixedClassData])
 
-    // SỬA: Handler khi thay đổi lớp
+    //Handler khi thay đổi lớp
     const handleFixedClassChange = (classId: string) => {
         const selectedClass = fixedClassData.find((cls) => cls.id === classId)
 
@@ -120,9 +129,16 @@ const AddStudentModal = () => {
                 selectedClass.trainingCourseId
             )
         }
+
+        if (selectedClass?.curriculumVersionId) {
+            form.setFieldValue(
+                'curriculumVersionId',
+                selectedClass.curriculumVersionId
+            )
+        }
     }
 
-    // SỬA: Thêm handler khi thay đổi khóa
+    //Thêm handler khi thay đổi khóa
     const handleTrainingCourseChange = (courseId: string) => {
         const currentClassId = form.getFieldValue('fixedClassId')
 
@@ -209,6 +225,11 @@ const AddStudentModal = () => {
                             id: output.fixedClassId,
                         },
                     },
+                    curriculumVersion: {
+                        connect: {
+                            id: output.curriculumVersionId,
+                        },
+                    },
                     code: output.code,
                     status: output.status,
                 },
@@ -238,11 +259,6 @@ const AddStudentModal = () => {
             className="w-[50vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã" required>
-                    <Input placeholder="Nhập mã sinh viên" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem
                     form={form}
                     name="firstName"
@@ -258,13 +274,25 @@ const AddStudentModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="code" label="Mã" required>
+                    <Input placeholder="Nhập mã sinh viên" />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="dateOfBirth"
                     label="Ngày sinh"
                     required
                 >
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format="DD/MM/YYYY"
+                        className="w-full"
+                        disabledDate={(date) =>
+                            date && date > dayjs().endOf('day')
+                        }
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -299,7 +327,24 @@ const AddStudentModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="status" label="Trạng thái" required>
+                <FormItem
+                    form={form}
+                    name="trainingLevelId"
+                    label="Bậc đào tạo"
+                >
+                    <Select
+                        placeholder="Chọn bậc đào tạo"
+                        options={trainingLevelData.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="status" label="Trạng thái">
                     <Select
                         placeholder="Chọn trạng thái"
                         options={STUDENT_STATUS_OPTIONS.map((v) => {
@@ -312,7 +357,7 @@ const AddStudentModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="fixedClassId" label="Lớp" required>
+                <FormItem form={form} name="fixedClassId" label="Lớp">
                     <Select
                         placeholder="Chọn lớp"
                         showSearch
@@ -327,18 +372,31 @@ const AddStudentModal = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khóa học"
-                    required
-                >
+                <FormItem form={form} name="trainingCourseId" label="Khóa học">
                     <Select
                         placeholder={'Chọn khóa học'}
                         showSearch
                         optionFilterProp="label"
                         onChange={handleTrainingCourseChange}
                         options={filteredTrainingCourses.map((value) => ({
+                            value: value.id,
+                            label: value.name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="curriculumVersionId"
+                    label="Phiên bản chương trình đào tạo"
+                >
+                    <Select
+                        placeholder={'Chọn phiên bản chương trình đào tạo'}
+                        showSearch
+                        optionFilterProp="label"
+                        options={curriculumVersionData.map((value) => ({
                             value: value.id,
                             label: value.name,
                         }))}

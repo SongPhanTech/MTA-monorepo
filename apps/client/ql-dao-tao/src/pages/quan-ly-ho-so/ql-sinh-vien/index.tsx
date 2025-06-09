@@ -34,7 +34,7 @@ import {
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import {
     useCountStudent,
@@ -146,6 +146,28 @@ export default function UserProfilePageDs() {
 
     const handleTrainingCourseChange = (value: string) => {
         setSelectedTrainingCourse(value)
+
+        // Kiểm tra xem lớp hiện tại có thuộc khóa mới không
+        if (selectedFixedClass) {
+            const selectedClass = FixedClassData?.find(
+                (cls) => cls.id === selectedFixedClass
+            )
+
+            // Nếu lớp hiện tại không thuộc khóa mới được chọn
+            if (selectedClass?.trainingCourseId !== value) {
+                setSelectedFixedClass(undefined) // Reset lớp
+            }
+        }
+
+        // Nếu khóa chỉ có 1 lớp, tự động chọn lớp đó
+        const classesInCourse =
+            FixedClassData?.filter((cls) => cls.trainingCourseId === value) ||
+            []
+
+        if (classesInCourse.length === 1 && !selectedFixedClass) {
+            setSelectedFixedClass(classesInCourse[0].id)
+        }
+
         refetch()
     }
 
@@ -157,8 +179,31 @@ export default function UserProfilePageDs() {
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
+
+        const selectedClass = FixedClassData?.find((cls) => cls.id === value)
+
+        if (selectedClass?.trainingCourseId) {
+            const currentCourse = selectedTrainingCourse
+            const newCourse = selectedClass.trainingCourseId
+
+            // Tự động set khóa học tương ứng với lớp
+            setSelectedTrainingCourse(newCourse)
+        }
+
         refetch()
     }
+
+    const filteredFixedClassData = useMemo(() => {
+        if (!selectedTrainingCourse) {
+            return FixedClassData
+        }
+
+        return (
+            FixedClassData?.filter(
+                (cls) => cls.trainingCourseId === selectedTrainingCourse
+            ) || []
+        )
+    }, [FixedClassData, selectedTrainingCourse])
 
     const { data: count } = useCountStudent({
         where: {
@@ -390,7 +435,7 @@ export default function UserProfilePageDs() {
                             <Select
                                 placeholder="Lớp"
                                 style={{ width: '100%', height: 40 }}
-                                options={FixedClassData?.map((item) => {
+                                options={filteredFixedClassData?.map((item) => {
                                     return {
                                         value: item.id,
                                         label: `${item.code}-${item.name}`,
@@ -546,9 +591,7 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 width: 150,
                                 render: (record) => {
-                                    const curriculum =
-                                        record.trainingObjectType
-                                            ?.curriculum?.[0]
+                                    const curriculum = record.curriculumVersion
                                     return curriculum ? curriculum.name : ''
                                 },
                             },

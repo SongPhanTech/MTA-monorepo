@@ -49,9 +49,10 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { FilterProps } from '../../components/filter/filter-lecture'
-import FilterLecture from '../../components/filter/filter-lecture'
+
 import { getMinioUrl } from '@workspace/constant'
+import { FilterLecture } from '@components/filter'
+import { FilterProps } from '@components/filter/filter-lecture'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
