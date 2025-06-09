@@ -38,7 +38,7 @@ export default function TroLyAo() {
 
                 const res = await createConversation({
                     data: {
-                        userId: 'cm9tpyicp0000s401big8i0s9',
+                        userId: 'cmbj92pfb01q8ny01np2o5gsd',
                         message: {
                             create: [
                                 {
@@ -93,7 +93,7 @@ export default function TroLyAo() {
             if (!currentConversationId) {
                 const res = await createConversation({
                     data: {
-                        userId: 'cm9tpyicp0000s401big8i0s9', // ID người dùng, thay theo đúng
+                        userId: 'cmbj92pfb01q8ny01np2o5gsd', // ID người dùng, thay theo đúng
                         message: {
                             create: [
                                 {

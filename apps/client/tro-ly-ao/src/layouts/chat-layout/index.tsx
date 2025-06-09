@@ -7,10 +7,11 @@ import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { CONFIG_KEY } from '@workspace/constant'
 import {
+    useDeleteConversation,
     useFindManyConversation,
     useFindUniqueConfig,
 } from '@workspace/db/hooks'
-import { Layout, theme } from 'antd'
+import { Layout, message, theme } from 'antd'
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -54,6 +55,19 @@ const ChatLayout = ({
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
+    const { mutateAsync: deleteConversation } = useDeleteConversation()
+    const handleDelete = async (id: string) => {
+        if (!id) return
+        const realId = id.split('-')[1]
+        try {
+            await deleteConversation({ where: { id: realId } })
+            message.success('Đã xóa cuộc trò chuyện')
+            router.push('/tro-ly-ao')
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+        }
+    }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -63,7 +77,7 @@ const ChatLayout = ({
     const { data: conversation } = useFindManyConversation({
         where: {
             // userId: userInfo?.user?.user_id || '',
-            userId: 'cm9tpyicp0000s401big8i0s9',
+            userId: 'cmbj92pfb01q8ny01np2o5gsd',
         },
         include: {
             message: true,
@@ -106,6 +120,7 @@ const ChatLayout = ({
                         onCollapse={handleCollapsed}
                         collapsed={collapsed}
                         theme={'light'}
+                        onDelete={handleDelete}
                     />
                     <Layout className="overflow-hidden">
                         <HeaderContent />

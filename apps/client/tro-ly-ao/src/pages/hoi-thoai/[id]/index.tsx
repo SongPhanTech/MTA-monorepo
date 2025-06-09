@@ -80,21 +80,6 @@ export default function Page() {
         await sendMessage(currentInput)
     }
 
-    const handleDelete = async () => {
-        if (!id) return
-        try {
-            setLoading(true)
-            await deleteConversation({ where: { id: id as string } })
-            message.success('Đã xóa cuộc trò chuyện')
-            router.push('/tro-ly-ao')
-        } catch (error) {
-            console.error(error)
-            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const sendMessage = async (text: string) => {
         const newMessage = { id: Date.now(), role: 'USER', content: text }
         setMessages((prev) => [...prev, newMessage])
@@ -257,7 +242,6 @@ export default function Page() {
                     loading={loading}
                     onInputChange={setInput}
                     onSend={handleSend}
-                    onDelete={handleDelete}
                     onStop={handleStop}
                 />
             </div>

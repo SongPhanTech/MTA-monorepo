@@ -1,6 +1,13 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import {
+    DeleteFilled,
+    DeleteOutlined,
+    EditOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    MoreOutlined,
+} from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
-import { Button, Layout, Menu } from 'antd'
+import { Button, Dropdown, Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
@@ -13,38 +20,75 @@ interface SiderDefaultLayoutProps {
     theme: 'light' | 'dark'
     items: MenuItem[]
     onCollapse?: (collapsed: boolean) => void
+    onDelete?: (id: string) => void
+    onEdit?: (id: string) => void
 }
 
-// Tạo MenuItems dùng cho Ant Design <Menu />
-function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
+function getMenus(
+    menus: MenuItem[],
+    onDelete?: (id: string) => void,
+    onEdit?: (id: string) => void
+): ItemType<MenuItemType>[] {
+    console.log('menus', menus)
     return menus.map((item) => {
+        const key = item.id
+        const dropdownMenu = [
+            {
+                key: 'delete',
+                label: (
+                    <div
+                        onClick={() => onDelete?.(key)}
+                        className=" text-red-500"
+                    >
+                        <DeleteFilled className="mr-2" />
+                        Xoá
+                    </div>
+                ),
+            },
+        ]
+
+        const label = (
+            <div
+                className="flex justify-between items-center group w-full"
+                key={key}
+            >
+                <span className="truncate max-w-[180px]">{item.label}</span>
+                <Dropdown
+                    menu={{ items: dropdownMenu }}
+                    trigger={['click']}
+                    placement="bottomRight"
+                >
+                    <MoreOutlined
+                        onClick={(e) => e.stopPropagation()}
+                        className="opacity-50 group-hover:opacity-100 text-gray-600 group-hover:text-gray-800 hover:text-black ml-2 cursor-pointer transition-all duration-200"
+                    />
+                </Dropdown>
+            </div>
+        )
+
         if (item.type === 'group' && item.children) {
             return {
                 type: 'group',
-                label: item.label,
-                key: item.id,
-                children: item.children.map((child) => ({
-                    key: child.path || child.id,
-                    label: child.label,
-                })),
+                label,
+                key,
+                children: getMenus(item.children, onDelete, onEdit),
             }
         }
 
         return {
-            key: item.path || item.id,
-            label: item.label,
+            key,
+            label,
             icon: item.icon ? <item.icon /> : undefined,
-            children: item.children ? getMenus(item.children) : undefined,
+            children: item.children
+                ? getMenus(item.children, onDelete, onEdit)
+                : undefined,
         }
     })
 }
 
-// Tìm menu theo key để lấy path
 const findMenuItemByKey = (menus: MenuItem[], key: string): MenuItem | null => {
     for (const item of menus) {
-        if ((item.path || item.id) === key) {
-            return item
-        }
+        if (item.id === key) return item
         if (item.children) {
             const found = findMenuItemByKey(item.children, key)
             if (found) return found
@@ -53,7 +97,6 @@ const findMenuItemByKey = (menus: MenuItem[], key: string): MenuItem | null => {
     return null
 }
 
-// Tìm openKeys dựa vào path hiện tại
 const findOpenKeys = (
     menus: MenuItem[],
     currentPath: string | null
@@ -62,11 +105,11 @@ const findOpenKeys = (
         if (item.children) {
             const childKeys = findOpenKeys(item.children, currentPath)
             if (childKeys.length > 0) {
-                return [item.path || item.id, ...childKeys]
+                return [item.id, ...childKeys]
             }
         }
         if (item.path === currentPath) {
-            return [item.path || item.id]
+            return [item.id]
         }
     }
     return []
@@ -77,6 +120,8 @@ const SiderChatLayout = ({
     theme,
     items,
     onCollapse,
+    onDelete,
+    onEdit,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
     const router = useRouter()
@@ -84,7 +129,6 @@ const SiderChatLayout = ({
         findOpenKeys(items, pathname)
     )
 
-    // Tìm item đầu tiên hợp lệ
     const getFirstValidItem = (menus: MenuItem[]): MenuItem | null => {
         for (const item of menus) {
             if (item.path) return item
@@ -96,12 +140,9 @@ const SiderChatLayout = ({
         return null
     }
 
-    const firstItem = getFirstValidItem(items)
-
-    // Filter menu để loại bỏ item đầu tiên khỏi menu
     const filterFirstItem = (
         menus: MenuItem[],
-        excludePath: string | undefined
+        excludePath?: string
     ): MenuItem[] => {
         return menus
             .map((item) => {
@@ -119,9 +160,8 @@ const SiderChatLayout = ({
             .filter(Boolean) as MenuItem[]
     }
 
+    const firstItem = getFirstValidItem(items)
     const filteredItems = filterFirstItem(items, firstItem?.path)
-
-    // Xử lý active status khi user click vào Button
     const isActive = pathname === firstItem?.path
 
     return (
@@ -134,11 +174,9 @@ const SiderChatLayout = ({
             <div className="overflow-y-auto h-full pb-[60px]">
                 <div className="px-1">
                     <Button
-                        color={'primary'}
+                        color="primary"
                         variant={isActive ? 'solid' : 'outlined'}
-                        className={
-                            'w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-lg'
-                        }
+                        className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-lg"
                         icon={firstItem?.icon ? <firstItem.icon /> : undefined}
                         onClick={() => {
                             if (firstItem?.path) router.push(firstItem.path)
@@ -151,10 +189,14 @@ const SiderChatLayout = ({
                 <Menu
                     theme={theme}
                     mode="inline"
-                    selectedKeys={pathname ? [pathname] : []}
+                    selectedKeys={
+                        pathname
+                            ? [items.find((i) => i.path === pathname)?.id ?? '']
+                            : []
+                    }
                     openKeys={openKeys}
                     onOpenChange={setOpenKeys}
-                    items={getMenus(filteredItems)}
+                    items={getMenus(filteredItems, onDelete, onEdit)}
                     className="bg-transparent"
                     onClick={({ key }) => {
                         const menuItem = findMenuItemByKey(filteredItems, key)
@@ -177,4 +219,5 @@ const SiderChatLayout = ({
         </Sider>
     )
 }
+
 export default SiderChatLayout
