@@ -312,9 +312,6 @@ model TrainingBlockSubject extends Base {
   semester        Int? // kỳ học
 
   type            CurriculumVersionSubjectType @default(None) // loại bắt buộc
-  information     String?   //Thông tin
-  documentPath    String? // Đường dẫn tài liệu
-  renderPath      String? // Đường dẫn tài liệu kết xuất
   @@schema("ql-dao-tao")
 }
 
