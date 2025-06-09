@@ -29,7 +29,6 @@ function getMenus(
     onDelete?: (id: string) => void,
     onEdit?: (id: string) => void
 ): ItemType<MenuItemType>[] {
-    console.log('menus', menus)
     return menus.map((item) => {
         const key = item.id
         const dropdownMenu = [

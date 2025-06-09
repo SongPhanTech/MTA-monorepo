@@ -1,6 +1,6 @@
 import AI_TYPES from '@constants/ai_types'
 import ChatLayout from '@layouts/chat-layout'
-import { MessageSender } from '@workspace/db'
+import { type DocumentType, MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import { Typography, message } from 'antd'
 import { useRouter } from 'next/router'
@@ -22,57 +22,6 @@ export default function TroLyAo() {
     const [currentConversationId, setCurrentConversationId] = useState<
         string | undefined
     >(conversationId as string)
-
-    const handleSend = async () => {
-        if (!input.trim()) return
-
-        const newMessage = { id: Date.now(), role: 'USER', content: input }
-        setMessages((prev) => [...prev, newMessage])
-        setInput('')
-
-        try {
-            setLoading(true)
-
-            if (!currentConversationId) {
-                setCurrentConversationId('creating')
-
-                const res = await createConversation({
-                    data: {
-                        userId: 'cmbj92pfb01q8ny01np2o5gsd',
-                        message: {
-                            create: [
-                                {
-                                    content: input,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
-                        },
-                    },
-                })
-
-                const newId = res?.id
-                if (newId) {
-                    setCurrentConversationId(newId)
-
-                    // 🔁 Chuyển sang trang hội thoại mới, truyền message ban đầu qua query
-                    router.push({
-                        pathname: `/hoi-thoai/${newId}`,
-                        query: { initialMessage: input },
-                    })
-                } else {
-                    throw new Error('Không lấy được ID cuộc trò chuyện mới')
-                }
-            } else {
-                // TODO: call API gửi message tiếp vào conversation cũ (nếu có)
-            }
-        } catch (error) {
-            console.error(error)
-            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-            setCurrentConversationId(undefined)
-        } finally {
-            setLoading(false)
-        }
-    }
 
     const handleClick = async (key: string) => {
         try {
@@ -102,6 +51,7 @@ export default function TroLyAo() {
                                 },
                             ],
                         },
+                        type: key as DocumentType,
                     },
                 })
 
@@ -112,7 +62,6 @@ export default function TroLyAo() {
                     // Chuyển sang trang hội thoại mới với query document_type
                     router.push({
                         pathname: `/hoi-thoai/${newConversationId}`,
-                        query: { document_type: key },
                     })
                 } else {
                     throw new Error('Không tạo được cuộc trò chuyện mới')
@@ -121,7 +70,6 @@ export default function TroLyAo() {
                 // Nếu đã có currentConversationId, chuyển hướng sang trang hội thoại cũ với document_type
                 router.push({
                     pathname: `/hoi-thoai/${currentConversationId}`,
-                    query: { document_type: key },
                 })
             }
         } catch (error) {
