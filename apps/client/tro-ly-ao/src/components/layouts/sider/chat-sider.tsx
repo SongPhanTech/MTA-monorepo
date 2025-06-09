@@ -48,8 +48,11 @@ function getMenus(
         ]
 
         const label = (
-            <div className="flex justify-between items-center group" key={key}>
-                <span>{item.label}</span>
+            <div
+                className="flex justify-between items-center group w-full"
+                key={key}
+            >
+                <span className="truncate max-w-[180px]">{item.label}</span>
                 <Dropdown
                     menu={{ items: dropdownMenu }}
                     trigger={['click']}
