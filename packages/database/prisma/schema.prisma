@@ -608,9 +608,6 @@ model TrainingBlockSubject {
   trainingBlockId String
   semester        Int?
   type            CurriculumVersionSubjectType @default(None)
-  information     String?
-  documentPath    String?
-  renderPath      String?
 
   @@schema("ql-dao-tao")
 }
@@ -1153,6 +1150,7 @@ model UserProfile {
   avatar               String?
   firstName            String
   lastName             String
+  fullname             String?
   dateOfBirth          DateTime?
   placeOfBirth         String?
   homeTown             String?

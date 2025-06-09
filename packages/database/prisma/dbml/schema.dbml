@@ -384,9 +384,6 @@ Table TrainingBlockSubject {
   trainingBlockId String [not null]
   semester Int
   type CurriculumVersionSubjectType [not null, default: 'None']
-  information String
-  documentPath String
-  renderPath String
 
   Note: 'môn học khối kiến thức chương trình'
 }
@@ -892,6 +889,7 @@ Table UserProfile {
   avatar String
   firstName String [not null]
   lastName String [not null]
+  fullname String
   dateOfBirth DateTime
   placeOfBirth String
   homeTown String
