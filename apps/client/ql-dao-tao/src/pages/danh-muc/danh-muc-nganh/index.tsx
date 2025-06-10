@@ -130,7 +130,6 @@ export default function TrainingFieldPage() {
             return newFilters
         })
     }
- 
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -155,7 +154,7 @@ export default function TrainingFieldPage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
-                                            height:32
+                                            height: 32,
                                         }}
                                         prefix={
                                             <Search
@@ -273,7 +272,7 @@ export default function TrainingFieldPage() {
                                         ? organization?.name
                                         : '',
                             },
-                          
+
                             {
                                 title: 'Mô tả',
                                 width: 150,

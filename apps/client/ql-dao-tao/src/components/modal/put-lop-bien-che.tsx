@@ -30,8 +30,8 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutFixedClass = FixedClass & {
-    trainingObjectTypeId: string | null,
-    trainingMajorId: string | null,
+    trainingObjectTypeId: string | null
+    trainingMajorId: string | null
 }
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
@@ -138,37 +138,47 @@ const PutFixedClassModal = () => {
                 graduated: output.graduated,
                 active: output.active,
                 summary: output.summary,
-                initSize: output.initSize
+                initSize: output.initSize,
             }
             if (id) {
                 await updateFixedClass({
                     data: {
                         ...payload,
-                        trainingCourse: output.trainingCourseId ? {
-                            connect: {
-                                id: output.trainingCourseId
-                            }
-                        } : { disconnect: true },
-                        managementOrganization: output.managementOrganizationId ? {
-                            connect: {
-                                id: output.managementOrganizationId
-                            }
-                        } : { disconnect: true },
-                        curriculumVersion: output.curriculumVersionId ? {
-                            connect: {
-                                id: output.curriculumVersionId
-                            }
-                        } : { disconnect: true },
-                        staffManagement: output.staffManagementId ? {
-                            connect: {
-                                id: output.staffManagementId
-                            }
-                        } : { disconnect: true },
-                        lecturerManagement: output.lecturerManagementId ? {
-                            connect: {
-                                id: output.lecturerManagementId
-                            }
-                        } : { disconnect: true },
+                        trainingCourse: output.trainingCourseId
+                            ? {
+                                  connect: {
+                                      id: output.trainingCourseId,
+                                  },
+                              }
+                            : { disconnect: true },
+                        managementOrganization: output.managementOrganizationId
+                            ? {
+                                  connect: {
+                                      id: output.managementOrganizationId,
+                                  },
+                              }
+                            : { disconnect: true },
+                        curriculumVersion: output.curriculumVersionId
+                            ? {
+                                  connect: {
+                                      id: output.curriculumVersionId,
+                                  },
+                              }
+                            : { disconnect: true },
+                        staffManagement: output.staffManagementId
+                            ? {
+                                  connect: {
+                                      id: output.staffManagementId,
+                                  },
+                              }
+                            : { disconnect: true },
+                        lecturerManagement: output.lecturerManagementId
+                            ? {
+                                  connect: {
+                                      id: output.lecturerManagementId,
+                                  },
+                              }
+                            : { disconnect: true },
                     },
                     where: {
                         id,
@@ -179,31 +189,41 @@ const PutFixedClassModal = () => {
                 await createFixedClass({
                     data: {
                         ...payload,
-                          trainingCourse: output.trainingCourseId ? {
-                            connect: {
-                                id: output.trainingCourseId
-                            }
-                        } : undefined,
-                        managementOrganization: output.managementOrganizationId ? {
-                            connect: {
-                                id: output.managementOrganizationId
-                            }
-                        } : undefined,
-                        curriculumVersion: output.curriculumVersionId ? {
-                            connect: {
-                                id: output.curriculumVersionId
-                            }
-                        } : undefined,
-                        staffManagement: output.staffManagementId ? {
-                            connect: {
-                                id: output.staffManagementId
-                            }
-                        } : undefined,
-                        lecturerManagement: output.lecturerManagementId ? {
-                            connect: {
-                                id: output.lecturerManagementId
-                            }
-                        } : undefined,
+                        trainingCourse: output.trainingCourseId
+                            ? {
+                                  connect: {
+                                      id: output.trainingCourseId,
+                                  },
+                              }
+                            : undefined,
+                        managementOrganization: output.managementOrganizationId
+                            ? {
+                                  connect: {
+                                      id: output.managementOrganizationId,
+                                  },
+                              }
+                            : undefined,
+                        curriculumVersion: output.curriculumVersionId
+                            ? {
+                                  connect: {
+                                      id: output.curriculumVersionId,
+                                  },
+                              }
+                            : undefined,
+                        staffManagement: output.staffManagementId
+                            ? {
+                                  connect: {
+                                      id: output.staffManagementId,
+                                  },
+                              }
+                            : undefined,
+                        lecturerManagement: output.lecturerManagementId
+                            ? {
+                                  connect: {
+                                      id: output.lecturerManagementId,
+                                  },
+                              }
+                            : undefined,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -230,10 +250,10 @@ const PutFixedClassModal = () => {
 
     const handleChangeFieldOrganization = async (field: any, val: string) => {
         try {
-            let newValue={}
-             for(const i of field){
+            let newValue = {}
+            for (const i of field) {
                 newValue = { ...newValue, [i]: null }
-                }
+            }
             form.setFieldsValue({
                 ...newValue,
             })
@@ -445,21 +465,23 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startYear"
-                    label="Năm bắt đầu"
-                >
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập năm bắt đầu"  />
+                <FormItem form={form} name="startYear" label="Năm bắt đầu">
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        placeholder="Nhập năm bắt đầu"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="initSize"
-                    label="Sĩ số"
-                >
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập sĩ số" />
+                <FormItem form={form} name="initSize" label="Sĩ số">
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        placeholder="Nhập sĩ số"
+                    />
                 </FormItem>
             </Col>
 

@@ -58,18 +58,17 @@ export default function TrainingCoursePage() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingObjectTypeId: undefined,
-
     })
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-           OR: [
+            OR: [
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
-            trainingObjectType:{
-                id:filters.trainingObjectTypeId
-            }
+            trainingObjectType: {
+                id: filters.trainingObjectTypeId,
+            },
         },
         include: {
             trainingObjectType: true,
@@ -83,7 +82,7 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-             OR: [
+            OR: [
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
@@ -171,8 +170,8 @@ export default function TrainingCoursePage() {
         })
     )
 
-        const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-            useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType()
 
     return (
         <div>
@@ -194,7 +193,7 @@ export default function TrainingCoursePage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
-                                            height:32
+                                            height: 32,
                                         }}
                                         prefix={
                                             <Search
@@ -256,7 +255,7 @@ export default function TrainingCoursePage() {
                                 title: 'STT',
                                 width: 50,
                                 align: 'center',
-                                fixed:'right',
+                                fixed: 'right',
                                 render: (_, record, index) =>
                                     index +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
@@ -328,7 +327,7 @@ export default function TrainingCoursePage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                fixed:'right',
+                                fixed: 'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
@@ -375,7 +374,6 @@ export default function TrainingCoursePage() {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
-                 
                     />
                 </Col>
             </Row>
