@@ -1,20 +1,84 @@
 import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Form, InputNumber, Row } from 'antd'
+import {
+    useCreateChatBotConfig,
+    useCreateManyChatBotConfig,
+    useFindFirstChatBotConfig,
+    useFindManyChatBotConfig,
+    useUpdateChatBotConfig,
+} from '@workspace/db/hooks'
+import { Button, Col, Form, InputNumber, message, Row } from 'antd'
 import { ArrowLeftIcon } from 'lucide-react'
+import { useEffect } from 'react'
 
 // Mâu tham số cho LLM
 type ParamsType = {
-    temperature: number
-    topP: number
-    topK: number
-    maxTokens: number
-    presencePenalty: number
+    temperature?: string
+    topP?: string
+    topK?: string
+    maxTokens?: string
+    presencePenalty?: string
 }
 
 function Page() {
     const [form] = Form.useForm<ParamsType>()
-    const onFinish = async (values: ParamsType) => {}
+    const { data: chatbotConfig = [] } = useFindManyChatBotConfig({})
+
+    useEffect(() => {
+        if (chatbotConfig) {
+            form.setFieldsValue({
+                temperature: chatbotConfig.find((e) => e.name === 'temperature')
+                    ?.value,
+                topP: chatbotConfig.find((e) => e.name === 'topP')?.value,
+                topK: chatbotConfig.find((e) => e.name === 'topK')?.value,
+                maxTokens: chatbotConfig.find((e) => e.name === 'maxTokens')
+                    ?.value,
+                presencePenalty: chatbotConfig.find(
+                    (e) => e.name === 'presencePenalty'
+                )?.value,
+            })
+        }
+    }, [chatbotConfig, form])
+
+    const { mutateAsync: updateChatbotConfig } = useUpdateChatBotConfig()
+    const { mutateAsync: createChatbotConfig } = useCreateManyChatBotConfig()
+    const onFinish = async (values: ParamsType) => {
+        try {
+            const configData = [
+                { name: 'temperature', value: values.temperature },
+                { name: 'topP', value: values.topP },
+                { name: 'topK', value: values.topK },
+                { name: 'maxTokens', value: values.maxTokens },
+                { name: 'presencePenalty', value: values.presencePenalty },
+            ]
+
+            if (chatbotConfig.length > 0) {
+                await Promise.all(
+                    configData.map((item) => {
+                        return updateChatbotConfig({
+                            where: { name: item.name },
+                            data: {
+                                value: String(item.value) ?? '',
+                            },
+                        })
+                    })
+                )
+            } else {
+                await createChatbotConfig({
+                    data: configData.map((item) => {
+                        return {
+                            name: item.name,
+                            value: String(item.value) ?? '',
+                        }
+                    }),
+                })
+            }
+            message.success('Cập nhật thành công')
+        } catch (error) {
+            console.error('Error updating chatbot config:', error)
+            message.error('Cập nhật thất bại, vui lòng thử lại sau')
+        }
+    }
 
     return (
         <div>
