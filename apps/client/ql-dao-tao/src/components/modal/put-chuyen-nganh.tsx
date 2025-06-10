@@ -150,8 +150,6 @@ const PutTrainingMajorModal = () => {
     //     return false
     // },[form])
     const handleMajorChange = async (val: string) => {
-        console.log(val)
-
         try {
             form.setFieldsValue({
                 trainingObjectTypeIds: [],
