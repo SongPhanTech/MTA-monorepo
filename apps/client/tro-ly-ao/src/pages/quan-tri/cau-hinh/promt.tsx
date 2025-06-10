@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import type { $Enums } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import {
     useCreateManyPrompt,
     useFindFirstPrompt,
@@ -52,6 +52,7 @@ const PromptQuestionAnswer = ({ label, type }: PromptQuestionAnswerType) => {
                     data: {
                         prompt: values.prompt,
                         type: type,
+                        status: $Enums.DocumentStatus.APPROVE,
                     },
                 })
             } else
@@ -61,6 +62,7 @@ const PromptQuestionAnswer = ({ label, type }: PromptQuestionAnswerType) => {
                     },
                     data: {
                         prompt: values.prompt,
+                        status: $Enums.DocumentStatus.APPROVE,
                     },
                 })
             message.success('Cập nhật thành công')
