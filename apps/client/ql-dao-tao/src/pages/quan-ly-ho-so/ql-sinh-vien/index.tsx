@@ -454,7 +454,11 @@ export default function UserProfilePageDs() {
                                 gap="8px"
                                 className="mt-1"
                             >
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    style={{ height: 40 }}
+                                >
                                     Thêm mới
                                 </Button>
                                 <Dropdown
@@ -464,6 +468,7 @@ export default function UserProfilePageDs() {
                                     <Button
                                         type="primary"
                                         icon={<DownloadOutlined />}
+                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -475,6 +480,7 @@ export default function UserProfilePageDs() {
                                     <Button
                                         type="primary"
                                         icon={<UploadOutlined />}
+                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>

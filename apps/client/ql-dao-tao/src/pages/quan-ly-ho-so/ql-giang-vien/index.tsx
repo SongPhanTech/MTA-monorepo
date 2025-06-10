@@ -52,7 +52,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 import { getMinioUrl } from '@workspace/constant'
 import { FilterLecture } from '@components/filter'
-import { FilterProps } from '@components/filter/filter-lecture'
+import type { FilterProps } from '@components/filter/filter-lecture'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
@@ -165,6 +165,8 @@ export default function UserProfilePageLecture() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    console.log('data', data)
 
     const { data: count } = useCountLecturer({
         where: {
@@ -370,6 +372,7 @@ export default function UserProfilePageLecture() {
                                     )
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
+                                style={{ height: 40 }}
                             />
                         </Col>
                         <Col span={10}>
@@ -381,7 +384,11 @@ export default function UserProfilePageLecture() {
 
                         <Col span={7}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    style={{ height: 40 }}
+                                >
                                     Thêm mới
                                 </Button>
 
@@ -394,6 +401,7 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<DownloadOutlined />}
+                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -407,6 +415,7 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<UploadOutlined />}
+                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>
@@ -593,47 +602,24 @@ export default function UserProfilePageLecture() {
                                 width: 120,
                             },
                             {
-                                title: 'Chức vụ',
+                                title: 'Loại giáo viên',
                                 align: 'center',
-                                width: 200,
-                                render: (_, record) => {
-                                    const staffPositions =
-                                        record.lecturerType?.staffPosition || []
-
-                                    if (staffPositions.length === 0) {
-                                        return (
-                                            <Tag color="default">Chưa có</Tag>
-                                        )
-                                    }
-
-                                    return (
-                                        <div className="flex flex-wrap gap-1 justify-start items-center">
-                                            {staffPositions.map(
-                                                (position, index) => (
-                                                    <Tag
-                                                        key={`${position.id}-${index}`}
-                                                        className="whitespace-nowrap"
-                                                    >
-                                                        {position.name}
-                                                    </Tag>
-                                                )
-                                            )}
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Năm CV',
+                                width: 120,
                                 render: (_, record) =>
-                                    record.userProfile?.academicDegreeDate
-                                        ? dayjs(
-                                              record.userProfile
-                                                  .academicDegreeDate
-                                          ).format('DD/MM/YYYY')
-                                        : '',
-                                align: 'center',
-                                width: 100,
+                                    record.lecturerType?.name || '',
                             },
+                            // {
+                            //     title: 'Năm CV',
+                            //     render: (_, record) =>
+                            //         record.userProfile?.academicDegreeDate
+                            //             ? dayjs(
+                            //                   record.userProfile
+                            //                       .academicDegreeDate
+                            //               ).format('DD/MM/YYYY')
+                            //             : '',
+                            //     align: 'center',
+                            //     width: 100,
+                            // },
                             {
                                 title: 'Cập bậc hàm',
                                 dataIndex: 'rankId',
