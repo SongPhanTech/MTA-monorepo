@@ -136,6 +136,8 @@ export default function Page() {
 
     const handleStop = () => {
         abortController?.abort()
+        setBotTyping(false)
+        setLoading(false)
     }
 
     useEffect(() => {

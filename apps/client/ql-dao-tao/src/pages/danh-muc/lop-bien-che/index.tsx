@@ -459,7 +459,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                         ''
                                     ),
                             },
-                          
+
                             {
                                 title: 'GVCN',
                                 dataIndex: 'lecturerManagement',

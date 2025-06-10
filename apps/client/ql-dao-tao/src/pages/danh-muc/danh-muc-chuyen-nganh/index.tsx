@@ -253,7 +253,7 @@ export default function TrainingMajorPage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
-                                            height:32
+                                            height: 32,
                                         }}
                                         prefix={
                                             <Search
@@ -312,7 +312,7 @@ export default function TrainingMajorPage() {
                         headerTitleKey="name"
                         currentPage={currentPage}
                         columns={[
-                               {
+                            {
                                 title: 'Mã chuyên ngành',
                                 dataIndex: 'code',
                                 align: 'center',
@@ -364,7 +364,7 @@ export default function TrainingMajorPage() {
                                 width: 150,
                                 render: (value) => value?.name,
                             },
-                          
+
                             {
                                 title: 'Mô tả',
                                 width: 150,
