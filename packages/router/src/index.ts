@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import ROUTER_PATH from '../generated/router'
+// biome-ignore lint/style/useImportType: <explanation>
 import {
     BookCheckIcon,
     CalendarFold,
@@ -434,25 +435,32 @@ const NAVIGATION: NavigationType = {
                 description: 'Quản lý lớp biên chế',
             },
             {
-                id: 'user-profile-lecture',
-                label: 'Quản lý hồ sơ giảng viên',
-                icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.QL_GIANG_VIEN,
-                description: 'Quản lý hồ sơ giảng viên',
-            },
-            {
-                id: 'user-profile-qs',
-                label: 'Quản lý hồ sơ học viên',
+                id: 'ql-ho-so',
+                label: 'Quản lý hồ sơ',
                 icon: FileUser,
-                path: ROUTER_PATH.QL_DAO_TAO.QL_HOC_VIEN,
-                description: 'Quản lý hồ sơ học viên',
+                children: [
+                    {
+                        id: 'user-profile-ds',
+                        label: 'Quản lý hồ sơ sinh viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
+                        description: 'Quản lý hồ sơ sinh viên',
+                    },
+                    {
+                        id: 'user-profile-lecture',
+                        label: 'Quản lý hồ sơ giảng viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QL_GIANG_VIEN,
+                        description: 'Quản lý hồ sơ giảng viên',
+                    },
+                ],
             },
             {
-                id: 'user-profile-ds',
-                label: 'Quản lý hồ sơ sinh viên',
-                icon: IdcardOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
-                description: 'Quản lý hồ sơ sinh viên',
+                id: 'danh-muc-ho-so',
+                label: 'Danh mục hồ sơ',
+                icon: ReadOutlined,
+                children: [],
+                description: 'Danh mục hồ sơ',
             },
         ],
         label: 'Quản lý đào tạo',

@@ -51,9 +51,8 @@ export default {
     "MON_HOC": "/mon-hoc",
     "NAM_HOC_KY_HOC": "/nam-hoc-ky-hoc",
     "PHIEN_BAN_CTDT": "/phien-ban-ctdt",
-    "QL_GIANG_VIEN": "/ql-giang-vien",
-    "QL_HOC_VIEN": "/ql-hoc-vien",
-    "QL_SINH_VIEN": "/ql-sinh-vien",
+    "QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QL_SINH_VIEN": "/quan-ly-ho-so//ql-sinh-vien",
     "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management"
   },
   "QL_NGUOI_DUNG": {
