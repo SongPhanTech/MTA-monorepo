@@ -2,7 +2,11 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { ExamType, SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
+import {
+    ExamType,
+    SubjectEquivalentType,
+    type SubjectVersion,
+} from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManyOrganization,
@@ -51,17 +55,17 @@ const PutVersionSubjectModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization = [] } = useFindManyOrganization();
-    const { data: subject = [] } = useFindManySubject();
-    const { data: subjectType = [] } = useFindManySubjectVersionType();
+    const { data: organization = [] } = useFindManyOrganization()
+    const { data: subject = [] } = useFindManySubject()
+    const { data: subjectType = [] } = useFindManySubjectVersionType()
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function onOk(output?: PutSubjectVersion) {
-        if (!output) return;
+        if (!output) return
 
         try {
-            showSpinner();
+            showSpinner()
 
             const payload = {
                 code: output.code,
@@ -82,34 +86,34 @@ const PutVersionSubjectModal = () => {
                 managementOrganizationId: output.managementOrganizationId,
                 subjectId: output.subjectId,
                 subjectTypeId: output.subjectTypeId,
-            };
+            }
 
             if (id) {
                 await updateSubjectVersion({
                     data: payload,
                     where: { id },
-                });
-                message.success('Cập nhật thành công');
+                })
+                message.success('Cập nhật thành công')
             } else {
                 await createSubjectVersion({
                     data: payload,
-                });
-                message.success('Thêm mới thành công');
+                })
+                message.success('Thêm mới thành công')
             }
 
-            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] });
-            onClose();
+            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
+            onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
-        hideSpinner();
+        hideSpinner()
     }
 
     const { data: subjectVersion } = useFindUniqueSubjectVersion({
         where: { id },
     })
-    
+
     useEffect(() => {
         if (subjectVersion) {
             form.setFieldsValue({
@@ -129,22 +133,18 @@ const PutVersionSubjectModal = () => {
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên phiên bản" >
-                    <Input placeholder='Tên phiên bản'/>
+                <FormItem form={form} name="name" label="Tên phiên bản">
+                    <Input placeholder="Tên phiên bản" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã phiên bản" >
-                    <Input placeholder='Mã phiên bản'/>
+                <FormItem form={form} name="code" label="Mã phiên bản">
+                    <Input placeholder="Mã phiên bản" />
                 </FormItem>
             </Col>
             {id && (
                 <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label="Trạng thái"
-                    >
+                    <FormItem form={form} name="active" label="Trạng thái">
                         <Select
                             placeholder="Chọn trạng thái"
                             options={[
@@ -157,50 +157,96 @@ const PutVersionSubjectModal = () => {
                 </Col>
             )}
             <Col span={12}>
-                <FormItem form={form} name="credit" label="Số tín chỉ" >
-                    <InputNumber placeholder='Số tín chỉ' className='w-full' />
+                <FormItem form={form} name="credit" label="Số tín chỉ">
+                    <InputNumber placeholder="Số tín chỉ" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="period" label="Giai đoạn" >
-                    <InputNumber placeholder='Giai đoạn' className='w-full'/>
+                <FormItem form={form} name="period" label="Giai đoạn">
+                    <InputNumber placeholder="Giai đoạn" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfInternship" label="Number Of Internship" >
-                    <InputNumber placeholder='Number Of Internship' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfInternship"
+                    label="Number Of Internship"
+                >
+                    <InputNumber
+                        placeholder="Number Of Internship"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfOther" label="Number Of Other" >
-                    <InputNumber placeholder='Number Of Other' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfOther"
+                    label="Number Of Other"
+                >
+                    <InputNumber
+                        placeholder="Number Of Other"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfPractice" label="Number Of Practice" >
-                    <InputNumber placeholder='Number Of Practice' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfPractice"
+                    label="Number Of Practice"
+                >
+                    <InputNumber
+                        placeholder="Number Of Practice"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfProject" label="Number Of Project" >
-                    <InputNumber placeholder='Number Of Project' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfProject"
+                    label="Number Of Project"
+                >
+                    <InputNumber
+                        placeholder="Number Of Project"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfSelfStudy" label="Number Of Self Study" >
-                    <InputNumber placeholder='Number Of Self Study' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfSelfStudy"
+                    label="Number Of Self Study"
+                >
+                    <InputNumber
+                        placeholder="Number Of Self Study"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfTheory" label="Number Of Theory" >
-                    <InputNumber placeholder='Number Of Theory' className='w-full' />
+                <FormItem
+                    form={form}
+                    name="numberOfTheory"
+                    label="Number Of Theory"
+                >
+                    <InputNumber
+                        placeholder="Number Of Theory"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="managementOrganizationId" label="Đơn vị quản lý" >
+                <FormItem
+                    form={form}
+                    name="managementOrganizationId"
+                    label="Đơn vị quản lý"
+                >
                     <Select
                         placeholder="Chọn đơn vị quản lý"
-                        options={organization?.map(item => ({
+                        options={organization?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
@@ -209,10 +255,10 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="subjectId" label="Môn học" >
+                <FormItem form={form} name="subjectId" label="Môn học">
                     <Select
                         placeholder="Chọn môn học"
-                        options={subject?.map(item => ({
+                        options={subject?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
@@ -221,10 +267,10 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="subjectTypeId" label="Loại môn học" >
+                <FormItem form={form} name="subjectTypeId" label="Loại môn học">
                     <Select
                         placeholder="Chọn loại môn học"
-                        options={subjectType?.map(item => ({
+                        options={subjectType?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}

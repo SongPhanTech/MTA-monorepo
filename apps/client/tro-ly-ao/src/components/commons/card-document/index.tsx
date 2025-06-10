@@ -46,7 +46,7 @@ export const CardDocument = ({
                     className="cursor-pointer text-7xl text-primary"
                 />
                 <Tooltip title={title}>
-                    <span className="text-center text-xs font-semibold line-clamp-1 text-gray-700 px-2">
+                    <span className="text-center text-xs font-semibold w-[150px] truncate text-gray-700 px-2">
                         {title}
                     </span>
                 </Tooltip>

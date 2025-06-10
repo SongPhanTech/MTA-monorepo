@@ -94,7 +94,7 @@ const ChatLayout = ({
         conversation || []
     ).map((item) => ({
         id: item.id,
-        label: item.message?.[0]?.content || 'Loading...',
+        label: item.message?.[0]?.content || 'Đang tải...',
     }))
 
     return (
@@ -105,12 +105,12 @@ const ChatLayout = ({
             onIdle={signOutAction}
         >
             <Layout className="h-screen">
-                <Header className="fixed left-0 right-0 top-0 z-50 h-[64px] px-6 flex justify-between items-center bg-white border-b-2 border-primary">
-                    <div className="flex items-center gap-2">
+                <Header className="fixed z-50 top-0 left-0 right-0 justify-between flex items-center bg-white shadow m-2 rounded-xl px-4">
+                    <div className="flex items-center gap-4">
                         <Image
                             src={logo_mta}
                             alt="logo_mta"
-                            className="size-12"
+                            className="w-10 h-10"
                         />
                         <span className="text-lg font-bold text-primary">
                             HỌC VIỆN KỸ THUẬT QUÂN SỰ
@@ -121,7 +121,7 @@ const ChatLayout = ({
                     </div>
                 </Header>
 
-                <Layout className="mt-[64px] h-[calc(100vh-64px-20px)] p-[10px]">
+                <Layout className="mt-[70px] h-[calc(100vh-64px-20px)] p-[10px]">
                     <SiderChatLayout
                         items={generateMenusTroLyAo(conversationMenuList)}
                         onCollapse={handleCollapsed}
@@ -134,7 +134,7 @@ const ChatLayout = ({
                         {/* <Content className="h-full p-[10px] bg-white rounded-lg">
                             {children}
                         </Content> */}
-                        <Content className="h-full p-[10px] bg-white rounded-lg relative overflow-hidden">
+                        <Content className="h-full p-[10px] bg-white rounded-xl relative overflow-hidden">
                             {isDeleting && (
                                 <div className="absolute inset-0 z-50 bg-white/60 backdrop-blur-sm flex items-center justify-center">
                                     <Spin size="large" tip="Đang xoá..." />

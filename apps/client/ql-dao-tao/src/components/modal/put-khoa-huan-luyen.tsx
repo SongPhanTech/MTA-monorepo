@@ -173,7 +173,6 @@ const PutTrainingCourseModal = () => {
                               form={form}
                               name="startYear"
                               label="Năm bắt đầu"
-                              required
                           >
                             <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập năm bắt đầu" />
                           </FormItem>
@@ -183,7 +182,6 @@ const PutTrainingCourseModal = () => {
                               form={form}
                               name="endYear"
                               label="Năm kết thúc"
-                              required
                           >
                             <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập năm kết thúc" />
                           </FormItem>
@@ -193,7 +191,6 @@ const PutTrainingCourseModal = () => {
                               form={form}
                               name="academicYear"
                               label="Niên khoá"
-                              required
                           >
                               <Input placeholder="Nhập niên khoá" />
                           </FormItem>
@@ -203,7 +200,6 @@ const PutTrainingCourseModal = () => {
                               form={form}
                               name="maxTrainingTime"
                               label="Thời gian đào tạo Max"
-                              required
                           >
                               <InputNumber style={{ width: '100%' }} min={0} step={1} />
                           </FormItem>
@@ -213,7 +209,6 @@ const PutTrainingCourseModal = () => {
                               form={form}
                               name="admissionQuota"
                               label="Chỉ tiêu tuyển sinh"
-                              required
                           >
                               <InputNumber style={{ width: '100%' }} min={0} step={1} />
                           </FormItem>

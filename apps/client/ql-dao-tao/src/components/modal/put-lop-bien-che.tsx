@@ -21,7 +21,7 @@ import {
     useFindManyCurriculumVersion,
     useFindManyLecturer,
     useFindUniqueCurriculumVersion,
-    useFindManyStaff
+    useFindManyStaff,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, TreeSelect, Radio } from 'antd'
 import { useEffect } from 'react'
@@ -49,76 +49,80 @@ const PutFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
     const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType({
             where: {
-                trainingCourse: TrainingCourseForm ? {
-                    some: {
-                        id: TrainingCourseForm || ''
-                    }
-                } : {
-                }
-            }
+                trainingCourse: TrainingCourseForm
+                    ? {
+                          some: {
+                              id: TrainingCourseForm || '',
+                          },
+                      }
+                    : {},
+            },
         })
 
-    const managementOrganizationForm = Form.useWatch('managementOrganizationId', form)
+    const managementOrganizationForm = Form.useWatch(
+        'managementOrganizationId',
+        form
+    )
 
     const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
         useFindManyTrainingMajor({
-            where: managementOrganizationForm ? {
-                organizationId: managementOrganizationForm
-            } : {}
+            where: managementOrganizationForm
+                ? {
+                      organizationId: managementOrganizationForm,
+                  }
+                : {},
         })
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
-            where: trainingObjectTypeForm ? {
-                trainingObjectTypeId: trainingObjectTypeForm || ''
-            } : {}
+            where: trainingObjectTypeForm
+                ? {
+                      trainingObjectTypeId: trainingObjectTypeForm || '',
+                  }
+                : {},
         })
     const trainingMajorForm = Form.useWatch('trainingMajorId', form)
-    const { data: curriculumVersionData = [], refetch: refetchCurriculumVersion } =
-        useFindManyCurriculumVersion({
-            where: {
-                trainingObjectTypeId: trainingObjectTypeForm || undefined,
-                curriculum:{
-                    managementOrganizationId:managementOrganizationForm|| undefined,
-                    trainingMajorId:trainingMajorForm|| undefined
-                }
+    const {
+        data: curriculumVersionData = [],
+        refetch: refetchCurriculumVersion,
+    } = useFindManyCurriculumVersion({
+        where: {
+            trainingObjectTypeId: trainingObjectTypeForm || undefined,
+        },
+        include: {
+            curriculum: {
+                include: {
+                    trainingMajor: true,
+                    managementOrganization: true,
+                },
             },
-            include: {
-                curriculum: {
-                    include: {
-                        trainingMajor: true,
-                        managementOrganization: true,
-                    }
+            fixedClasses: {
+                include: {
+                    trainingCourse: true,
                 },
-                fixedClasses: {
-                    include: {
-                        trainingCourse: true
-                    }
-                },
-                trainingObjectType: true
-            }
-        })
+            },
+            trainingObjectType: true,
+        },
+    })
     const { data: lecturerData = [], refetch: refetchLecturer } =
         useFindManyLecturer({
             include: {
-                userProfile: true
-            }
+                userProfile: true,
+            },
         })
 
-    const { data: staffData = [], refetch: refetchStaff } =
-        useFindManyStaff({
-            include: {
-                userProfile: true
-            }
-        })
+    const { data: staffData = [], refetch: refetchStaff } = useFindManyStaff({
+        include: {
+            userProfile: true,
+        },
+    })
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -217,7 +221,7 @@ const PutFixedClassModal = () => {
     const handleChangeField = async (field: string, val: string) => {
         try {
             form.setFieldsValue({
-                [field]: null
+                [field]: null,
             })
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
@@ -227,9 +231,11 @@ const PutFixedClassModal = () => {
     const handleChangeFieldOrganization = async (field: any, val: string) => {
         try {
             let newValue = {}
-            field.forEach((i: string) => newValue = { ...newValue, [i]: null })
+            field.forEach(
+                (i: string) => (newValue = { ...newValue, [i]: null })
+            )
             form.setFieldsValue({
-                ...newValue
+                ...newValue,
             })
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
@@ -238,14 +244,14 @@ const PutFixedClassModal = () => {
 
     const handleChangeFieldcurriculumVersion = async (val: string) => {
         try {
-            let result = curriculumVersionData.find(i => i?.id == val);
+            let result = curriculumVersionData.find((i) => i?.id == val)
             form.setFieldsValue({
-                managementOrganizationId: result?.curriculum?.managementOrganization?.id,
+                managementOrganizationId:
+                    result?.curriculum?.managementOrganization?.id,
                 trainingMajorId: result?.curriculum?.trainingMajor?.id,
                 trainingObjectTypeId: result?.trainingObjectType?.id,
             })
             console.log(result)
-
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
@@ -257,11 +263,11 @@ const PutFixedClassModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
-            form.setFieldsValue({ ...level, })
+            form.setFieldsValue({ ...level })
         } else {
             form.setFieldsValue({
                 graduated: false,
-                active: true
+                active: true,
             })
         }
     }, [level])
@@ -293,16 +299,14 @@ const PutFixedClassModal = () => {
                                 }
                             }
                         )}
-                        onChange={(val) => handleChangeField('trainingCourseId', val)}
+                        onChange={(val) =>
+                            handleChangeField('trainingCourseId', val)
+                        }
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khóa"
-                >
+                <FormItem form={form} name="trainingCourseId" label="Khóa">
                     <Select
                         placeholder="Chọn khóa"
                         options={trainingCourseData.map((i: TrainingCourse) => {
@@ -332,7 +336,12 @@ const PutFixedClassModal = () => {
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        onChange={(val) => handleChangeFieldOrganization(['trainingMajorId', 'curriculumVersionId'], val)}
+                        onChange={(val) =>
+                            handleChangeFieldOrganization(
+                                ['trainingMajorId', 'curriculumVersionId'],
+                                val
+                            )
+                        }
                     />
                 </FormItem>
             </Col>
@@ -351,8 +360,9 @@ const PutFixedClassModal = () => {
                                 label: i.name,
                             }
                         })}
-                        onChange={(val) => handleChangeField('curriculumVersionId', val)}
-
+                        onChange={(val) =>
+                            handleChangeField('curriculumVersionId', val)
+                        }
                     />
                 </FormItem>
             </Col>
@@ -365,22 +375,22 @@ const PutFixedClassModal = () => {
                 >
                     <Select
                         placeholder="Chọn chương trình đào tạo"
-                        options={curriculumVersionData.map((i: CurriculumVersion) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
+                        options={curriculumVersionData.map(
+                            (i: CurriculumVersion) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
                             }
-                        })}
-                        onChange={(val, record) => handleChangeFieldcurriculumVersion(val)}
+                        )}
+                        onChange={(val, record) =>
+                            handleChangeFieldcurriculumVersion(val)
+                        }
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="lecturerManagementId"
-                    label="GVCN"
-                >
+                <FormItem form={form} name="lecturerManagementId" label="GVCN">
                     <Select
                         placeholder="Chọn giáo viên chủ nhiệm"
                         options={lecturerData.map((i) => {
@@ -389,17 +399,12 @@ const PutFixedClassModal = () => {
                                 label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
                             }
                         })}
-                    // onChange={(val) =>handleMajorChange(val)}
-
+                        // onChange={(val) =>handleMajorChange(val)}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="staffManagementId"
-                    label="CBQL"
-                >
+                <FormItem form={form} name="staffManagementId" label="CBQL">
                     <Select
                         placeholder="Chọn giáo viên chủ nhiệm"
                         options={staffData.map((i) => {
@@ -408,8 +413,7 @@ const PutFixedClassModal = () => {
                                 label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
                             }
                         })}
-                    // onChange={(val) =>handleMajorChange(val)}
-
+                        // onChange={(val) =>handleMajorChange(val)}
                     />
                 </FormItem>
             </Col>
@@ -436,11 +440,7 @@ const PutFixedClassModal = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="summary"
-                    label="Tên viết tắt"
-                >
+                <FormItem form={form} name="summary" label="Tên viết tắt">
                     <Input placeholder="Nhập tên viết tắt" />
                 </FormItem>
             </Col>
@@ -449,7 +449,6 @@ const PutFixedClassModal = () => {
                     form={form}
                     name="startYear"
                     label="Năm bắt đầu"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập năm bắt đầu"  />
                 </FormItem>
@@ -459,7 +458,6 @@ const PutFixedClassModal = () => {
                     form={form}
                     name="initSize"
                     label="Sĩ số"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập sĩ số" />
                 </FormItem>
@@ -478,12 +476,8 @@ const PutFixedClassModal = () => {
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>
-                            Đang hoạt động
-                        </Radio>
-                        <Radio value={false}>
-                            Ngừng hoạt động
-                        </Radio>
+                        <Radio value={true}>Đang hoạt động</Radio>
+                        <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>
@@ -495,12 +489,8 @@ const PutFixedClassModal = () => {
                     required
                 >
                     <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>
-                            Đã tốt nghiệp
-                        </Radio>
-                        <Radio value={false}>
-                            Chưa tốt nghiệp
-                        </Radio>
+                        <Radio value={true}>Đã tốt nghiệp</Radio>
+                        <Radio value={false}>Chưa tốt nghiệp</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>
