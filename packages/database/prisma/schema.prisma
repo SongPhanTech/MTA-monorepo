@@ -401,16 +401,13 @@ model TrainingCourse {
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt()
   name                 String
-  startDate            DateTime
-  endDate              DateTime?
+  startYear            Int?
+  endYear              Int?
+  academicYear         String?
+  maxTrainingTime      Float?
+  admissionQuota       Int?
   trainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
-  trainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId       String
-  trainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String
-  trainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String
   status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
 
@@ -428,8 +425,8 @@ model FixedClass {
   updatedAt                DateTime           @updatedAt()
   name                     String
   summary                  String?
-  startYear                String
-  graduated                Boolean?           @default(true)
+  startYear                Int?
+  graduated                Boolean?           @default(false)
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
   managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id])
@@ -678,16 +675,15 @@ model PriorityObject {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType {
-  id             String           @id() @default(cuid())
-  code           String?          @unique()
-  active         Boolean          @default(true)
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String           @unique()
-  trainingCourse TrainingCourse[]
-  students       Student[]
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+  students    Student[]
 
   @@schema("ql-dao-tao")
 }
@@ -702,7 +698,6 @@ model TrainingLevel {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt()
   name              String              @unique()
-  trainingCourse    TrainingCourse[]
   curriculumVersion CurriculumVersion[]
   students          Student[]
 
@@ -711,16 +706,15 @@ model TrainingLevel {
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm {
-  id             String           @id() @default(cuid())
-  code           String?          @unique()
-  active         Boolean          @default(true)
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
-  name           String           @unique()
-  trainingCourse TrainingCourse[]
-  students       Student[]
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+  students    Student[]
 
   @@schema("ql-dao-tao")
 }

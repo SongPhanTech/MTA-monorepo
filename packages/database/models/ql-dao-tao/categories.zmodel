@@ -29,7 +29,6 @@ model PriorityObject extends Base {
 model TrainingType extends Base {
   name           String           @unique
 
-  trainingCourse TrainingCourse[]
   students       Student[]
 
   @@schema("ql-dao-tao")
@@ -39,7 +38,6 @@ model TrainingType extends Base {
 model TrainingLevel extends Base {
   name              String              @unique
 
-  trainingCourse    TrainingCourse[]
   curriculumVersion CurriculumVersion[]
   students          Student[]
 
@@ -50,7 +48,6 @@ model TrainingLevel extends Base {
 model TrainingForm extends Base {
   name           String           @unique
 
-  trainingCourse TrainingCourse[]
   students       Student[]
   @@schema("ql-dao-tao")
 }

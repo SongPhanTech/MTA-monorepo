@@ -253,6 +253,7 @@ export default function TrainingMajorPage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
+                                            height:32
                                         }}
                                         prefix={
                                             <Search
@@ -311,6 +312,24 @@ export default function TrainingMajorPage() {
                         headerTitleKey="name"
                         currentPage={currentPage}
                         columns={[
+                               {
+                                title: 'Mã chuyên ngành',
+                                dataIndex: 'code',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Tên chuyên ngành',
+                                dataIndex: 'name',
+                                width: 200,
+                                align: 'left',
+                            },
+                            {
+                                title: 'Tên tiếng anh',
+                                align: 'left',
+                                dataIndex: 'englishName',
+                                width: 150,
+                            },
                             {
                                 title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectTypes',
@@ -345,24 +364,7 @@ export default function TrainingMajorPage() {
                                 width: 150,
                                 render: (value) => value?.name,
                             },
-                            {
-                                title: 'Mã ngành',
-                                dataIndex: 'code',
-                                align: 'left',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tên ngành',
-                                dataIndex: 'name',
-                                width: 200,
-                                align: 'left',
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                align: 'left',
-                                dataIndex: 'englishName',
-                                width: 150,
-                            },
+                          
                             {
                                 title: 'Mô tả',
                                 width: 150,
