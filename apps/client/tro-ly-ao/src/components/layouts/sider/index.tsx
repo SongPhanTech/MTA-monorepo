@@ -85,7 +85,7 @@ const SiderDefaultLayout = ({
                 position: 'fixed',
                 overflow: 'hidden',
             }}
-            className="rounded-xl ml-4"
+            className="rounded-xl ml-2"
             collapsible
             onCollapse={onCollapse}
             collapsed={collapsed}

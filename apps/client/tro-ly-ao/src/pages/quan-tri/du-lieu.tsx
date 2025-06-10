@@ -595,10 +595,7 @@ function Page() {
                 defaultActiveKey="1"
                 items={items}
                 renderTabBar={(props, TabBar) => (
-                    <TabBar
-                        {...props}
-                        className="bg-white shadow-lg px-4 rounded-md"
-                    />
+                    <TabBar {...props} className="bg-white px-4 rounded-md" />
                 )}
             />
         </div>
