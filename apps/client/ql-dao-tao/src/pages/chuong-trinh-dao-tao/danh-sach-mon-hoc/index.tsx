@@ -190,7 +190,10 @@ export default function SubjectList() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button onClick={handleModalSubjectVersion} type="primary">
+                                <Button
+                                    onClick={handleModalSubjectVersion}
+                                    type="primary"
+                                >
                                     <PlusOutlined />
                                     Thêm phiên bản môn học
                                 </Button>
@@ -323,7 +326,9 @@ export default function SubjectList() {
                                     id ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                onClick={() => onOpenSubjectVersion(id)}
+                                                onClick={() =>
+                                                    onOpenSubjectVersion(id)
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon

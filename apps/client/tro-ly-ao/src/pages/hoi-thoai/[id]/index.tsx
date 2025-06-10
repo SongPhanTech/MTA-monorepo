@@ -48,10 +48,11 @@ export default function Page() {
     }
 
     const sendMessage = async (text: string) => {
-        const newMessage = { id: Date.now(), role: 'USER', content: text }
-        setMessages((prev) => [...prev, newMessage])
         setBotTyping(true)
         setLoading(true)
+
+        const newAbortController = new AbortController()
+        setAbortController(newAbortController)
 
         try {
             await updateConversation({
@@ -68,8 +69,8 @@ export default function Page() {
                 },
             })
 
-            const newAbortController = new AbortController()
-            setAbortController(newAbortController)
+            const userMessage = { id: Date.now(), role: 'USER', content: text }
+            setMessages((prev) => [...prev, userMessage])
 
             const response = await fetchHoiDap({
                 prompt: text,
@@ -77,6 +78,16 @@ export default function Page() {
                 conversation_id: id as string,
                 signal: newAbortController.signal,
             })
+
+            const contentType = response.headers.get('content-type')
+            
+            if (contentType?.includes('application/json')) {
+                const json = await response.json()
+                if (json.error === 'True') {
+                    message.error('Đã xảy ra lỗi từ máy chủ')
+                    return
+                }
+            }
 
             if (!response.body) {
                 message.error('Không có nội dung phản hồi')
@@ -115,7 +126,13 @@ export default function Page() {
 
     useEffect(() => {
         if (messageList) {
-            const mappedMessages = messageList.map((msg) => ({
+            const sortedMessages = [...messageList].sort(
+                (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime()
+            )
+
+            const mappedMessages = sortedMessages.map((msg) => ({
                 id: Number(msg.id),
                 role: msg.sender === 'USER' ? 'USER' : 'BOT',
                 content: msg.content || '',

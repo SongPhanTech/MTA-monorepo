@@ -37,11 +37,11 @@ export default function TrainingBlock() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        // { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          // { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
@@ -51,7 +51,7 @@ export default function TrainingBlock() {
                 : {}),
         },
         orderBy: {
-            priority:'asc',
+            priority: 'asc',
         },
     })
 
