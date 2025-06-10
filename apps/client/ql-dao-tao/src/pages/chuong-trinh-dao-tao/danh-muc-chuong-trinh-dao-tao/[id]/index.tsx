@@ -1,24 +1,14 @@
 import { PlusOutlined } from '@ant-design/icons'
-import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutSubjectListModal } from '@components/modal'
-import { PutTrainingCourseModal } from '@components/modal'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    KHOA_HL_STATUS,
-    CTDT_STATUS,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
-    useFindManySubjectVersion,
     useFindManyTrainingBlock,
     useCountTrainingBlock,
-    useFindManyTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import type { ExamType, TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
@@ -38,80 +28,6 @@ interface FilterProps {
     searchText: string | null
     trainingObjectTypeId: string | undefined
 }
-
-const fakeData = [
-    {
-        id: 1,
-        maMon: 'MH001',
-        tenMonHoc: 'Toán cao cấp A1',
-        dtdt: 'Đại học quân sự',
-        trainingObjectTypeId: 'Đại trà',
-        dvql: 'Khoa Toán',
-        status: 'ACTIVE',
-        pb: [
-            {
-                id: 1,
-                mapb: 'PB1',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB001',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                stbtl: 10,
-                bbtc: true,
-                hkdk: 1,
-                hkgd: 1,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                status: 'ACTIVE',
-            },
-            {
-                id: 2,
-                mapb: 'PB2',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB004',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                status: 'ACTIVE',
-            },
-        ],
-    },
-    {
-        id: 2,
-        maMon: 'MH002',
-        tenMonHoc: 'Vật lý đại cương',
-        trainingObjectTypeId: 'CLC',
-        dtdt: 'Đại học quân sự',
-        dvql: 'Khoa Vật Lý',
-        status: 'ACTIVE',
-        pb: [
-            {
-                id: 3,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-        ],
-    },
-]
 
 export default function TrainingProgramSubjects() {
     const router = useRouter()
@@ -145,8 +61,6 @@ export default function TrainingProgramSubjects() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-
-    console.log(data)
 
     const { data: count } = useCountTrainingBlock({
         where: {
