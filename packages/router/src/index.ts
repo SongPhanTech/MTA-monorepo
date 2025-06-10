@@ -329,13 +329,6 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
-                id: 'schoolyear-semester',
-                label: 'Năm học, kỳ học',
-                icon: ScheduleOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
-                description: 'Thông tin năm học, kỳ học',
-            },
-            {
                 id: 'category',
                 label: 'Danh mục',
                 icon: LayoutDashboard,
@@ -398,6 +391,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh sách môn học',
                     },
                 ],
+            },
+            {
+                id: 'schoolyear-semester',
+                label: 'Năm học kỳ học',
+                icon: CalendarFold,
+                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
+                description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'ke-hoach-giao-duc',

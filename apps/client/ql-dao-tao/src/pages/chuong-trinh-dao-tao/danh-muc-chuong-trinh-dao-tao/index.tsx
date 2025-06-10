@@ -33,6 +33,7 @@ import EditIcon from '@components/icons/edit'
 import TableCollapse from '@components/commons/tableCollapse'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
+import { ROUTER_PATH } from '@workspace/router'
 interface FilterProps {
     searchText: string | null
     trainingObjectTypeId: string | undefined
@@ -150,7 +151,10 @@ export default function TrainingProgramCatalog() {
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
             router.push(
-                `/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/${record.id}`
+                `${
+                    ROUTER_PATH.QL_DAO_TAO
+                        .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
+                }/${record.id}`
             )
         }
     }
