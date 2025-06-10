@@ -1,4 +1,9 @@
-import { MoreOutlined, SendOutlined, StopOutlined } from '@ant-design/icons'
+import {
+    ArrowUpOutlined,
+    MoreOutlined,
+    SendOutlined,
+    StopOutlined,
+} from '@ant-design/icons'
 import { Button } from 'antd'
 import { useRouter } from 'next/router'
 import { useRef, useEffect } from 'react'
@@ -88,7 +93,9 @@ export default function ChatInput({
                             {loading ? (
                                 <Button
                                     className="p-2"
-                                    icon={<StopOutlined />}
+                                    icon={
+                                        <div className="w-2.5 h-2.5 bg-white" />
+                                    }
                                     type="primary"
                                     shape="circle"
                                     danger
@@ -99,7 +106,7 @@ export default function ChatInput({
                                     onClick={onSend}
                                     className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
                                     icon={
-                                        <SendOutlined className="text-white text-[16px]" />
+                                        <ArrowUpOutlined className="text-white text-[16px]" />
                                     }
                                 />
                             )}
