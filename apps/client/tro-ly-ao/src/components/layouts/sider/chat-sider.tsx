@@ -31,20 +31,24 @@ function getMenus(
 ): ItemType<MenuItemType>[] {
     return menus.map((item) => {
         const key = item.id
-        const dropdownMenu = [
-            {
-                key: 'delete',
-                label: (
-                    <div
-                        onClick={() => onDelete?.(key)}
-                        className=" text-red-500"
-                    >
-                        <DeleteFilled className="mr-2" />
-                        Xoá
-                    </div>
-                ),
+        const dropdownMenu = {
+            items: [
+                {
+                    key: 'delete',
+                    label: (
+                        <span className="text-red-500">
+                            <DeleteFilled className="mr-2" />
+                            Xoá
+                        </span>
+                    ),
+                },
+            ],
+            onClick: ({ key: actionKey }: { key: string }) => {
+                if (actionKey === 'delete') {
+                    onDelete?.(key)
+                }
             },
-        ]
+        }
 
         const label = (
             <div
@@ -53,7 +57,7 @@ function getMenus(
             >
                 <span className="truncate max-w-[180px]">{item.label}</span>
                 <Dropdown
-                    menu={{ items: dropdownMenu }}
+                    menu={dropdownMenu}
                     trigger={['click']}
                     placement="bottomRight"
                 >

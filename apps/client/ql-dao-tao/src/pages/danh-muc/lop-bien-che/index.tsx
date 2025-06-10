@@ -10,7 +10,13 @@ import {
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, Organization, FixedClass, TrainingObjectType, CurriculumVersion } from '@workspace/db'
+import type {
+    TrainingCourse,
+    Organization,
+    FixedClass,
+    TrainingObjectType,
+    CurriculumVersion,
+} from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
@@ -52,21 +58,20 @@ export default function FixedClassPage({ trainingCourse }: any) {
     const [filters, setFilters] = useState({
         searchText: '',
         trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
-        trainingObjectTypeId:undefined,
-        curriculumVersionId:undefined
+        trainingObjectTypeId: undefined,
+        curriculumVersionId: undefined,
     })
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             OR: [
-                    { name: { contains: filters.searchText, mode: 'insensitive' } },
-                    { code: { contains: filters.searchText, mode: 'insensitive' } },
-                ],
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
             trainingCourseId: filters.trainingCourseId,
-            trainingCourse:{
-                trainingObjectTypeId:filters.trainingObjectTypeId
+            trainingCourse: {
+                trainingObjectTypeId: filters.trainingObjectTypeId,
             },
-            curriculumVersionId:filters.curriculumVersionId
-
+            curriculumVersionId: filters.curriculumVersionId,
         },
         include: {
             students: {
@@ -74,8 +79,8 @@ export default function FixedClassPage({ trainingCourse }: any) {
                     userProfile: true,
                 },
             },
-            lecturerManagement:{
-                 include: {
+            lecturerManagement: {
+                include: {
                     userProfile: true,
                 },
             },
@@ -85,14 +90,14 @@ export default function FixedClassPage({ trainingCourse }: any) {
                     trainingObjectType: true,
                 },
             },
-            curriculumVersion:{
-                include:{
-                    curriculum:{
-                        include:{
-                            trainingMajor:true
-                        }
-                    }
-                }
+            curriculumVersion: {
+                include: {
+                    curriculum: {
+                        include: {
+                            trainingMajor: true,
+                        },
+                    },
+                },
             },
         },
         orderBy: {
@@ -108,9 +113,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse()
-    const { data: curriculumVersionData = [], refetch: refetchCurriculumVersion } =
-        useFindManyCurriculumVersion()
- 
+    const {
+        data: curriculumVersionData = [],
+        refetch: refetchCurriculumVersion,
+    } = useFindManyCurriculumVersion()
+
     const { data: count } = useCountFixedClass({
         where: {
             OR: [
@@ -118,10 +125,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             trainingCourseId: filters.trainingCourseId,
-            trainingCourse:{
-                trainingObjectTypeId:filters.trainingObjectTypeId
+            trainingCourse: {
+                trainingObjectTypeId: filters.trainingObjectTypeId,
             },
-            curriculumVersionId:filters.curriculumVersionId
+            curriculumVersionId: filters.curriculumVersionId,
         },
     })
 
@@ -275,23 +282,23 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
                                 labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        onChange={(val) =>
-                                            handleFilterChange(
-                                                'trainingObjectTypeId',
-                                                val
-                                            )
-                                        }
-                                        allowClear
-                                    />
+                            >
+                                <Select
+                                    placeholder="Chọn đối tượng đào tạo"
+                                    options={trainingObjectTypeData.map(
+                                        (i: TrainingObjectType) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        })
+                                    )}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingObjectTypeId',
+                                            val
+                                        )
+                                    }
+                                    allowClear
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={4}>
@@ -314,10 +321,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                     }
                                     allowClear
                                 />
-                                </Form.Item>
-                            </Col>
-                    
-                         <Col span={6}>
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
                             <Form.Item name="curriculumVersionId" label="">
                                 <Select
                                     placeholder="Chọn chương trình đào tạo"
@@ -337,7 +344,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                     }
                                     allowClear
                                 />
-                                </Form.Item>
+                            </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Flex justify="end">
@@ -375,7 +382,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 title: 'STT',
                                 width: 50,
                                 align: 'center',
-                                fixed:'left',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index +
                                     1 +
@@ -386,9 +393,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 align: 'left',
                                 width: 100,
                                 render: (record) =>
-                                    record?.trainingCourse?.trainingObjectType?.name||''
+                                    record?.trainingCourse?.trainingObjectType
+                                        ?.name || '',
                             },
-                               {
+                            {
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
@@ -396,7 +404,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
-                             {
+                            {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
@@ -409,7 +417,8 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 align: 'center',
                                 width: 150,
                                 render: (record) =>
-                                    record?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
+                                    record?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '',
                             },
                             {
                                 title: 'Chương trình đào tạo',
@@ -424,8 +433,12 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'graduated',
-                                render:(value)=>
-                                    !value ? <CheckOutlined className='text-[#028850]' />:''
+                                render: (value) =>
+                                    !value ? (
+                                        <CheckOutlined className="text-[#028850]" />
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'Mã lớp biên chế',
@@ -451,7 +464,10 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    (value?.userProfile?.lastName || value?.userProfile?.firstName) ? `${value?.userProfile?.lastName} ${value?.userProfile?.firstName}` : '',
+                                    value?.userProfile?.lastName ||
+                                    value?.userProfile?.firstName
+                                        ? `${value?.userProfile?.lastName} ${value?.userProfile?.firstName}`
+                                        : '',
                             },
                             {
                                 title: 'Năm bắt đầu',
@@ -462,13 +478,13 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
-                                 width: 100,
+                                width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
-                                fixed:'right',
+                                fixed: 'right',
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
@@ -505,7 +521,6 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
-                     
                     />
                 </Col>
             </Row>

@@ -362,7 +362,7 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.KHOA_HUAN_LUYEN,
                         description: 'Danh mục khoá đào tạo',
                     },
-                        {
+                    {
                         id: 'lop-bien-che',
                         label: 'Quản lý lớp biên chế',
                         icon: TeamOutlined,
@@ -434,7 +434,7 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                 description: 'Thông tin năm học, kỳ học',
             },
-        
+
             {
                 id: 'ql-ho-so',
                 label: 'Quản lý hồ sơ',
