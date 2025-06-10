@@ -31,7 +31,7 @@ import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null,
-    trainingMajorId:string | null,
+    trainingMajorId: string | null,
 }
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
@@ -52,69 +52,73 @@ const PutFixedClassModal = () => {
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
-    const TrainingCourseForm =Form.useWatch('trainingCourseId',form)
+    const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType({
-            where:{
-                trainingCourse:TrainingCourseForm ? {
-                    some :{
-                        id:TrainingCourseForm||''
+            where: {
+                trainingCourse: TrainingCourseForm ? {
+                    some: {
+                        id: TrainingCourseForm || ''
                     }
-                }:{
+                } : {
                 }
             }
         })
 
-    const managementOrganizationForm =Form.useWatch('managementOrganizationId',form)
+    const managementOrganizationForm = Form.useWatch('managementOrganizationId', form)
 
     const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-                useFindManyTrainingMajor({
-                    where:managementOrganizationForm?{
-                        organizationId:managementOrganizationForm
-                    }:{}
-                })
+        useFindManyTrainingMajor({
+            where: managementOrganizationForm ? {
+                organizationId: managementOrganizationForm
+            } : {}
+        })
 
-    const trainingObjectTypeForm =Form.useWatch('trainingObjectTypeId',form)
+    const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
-            where:trainingObjectTypeForm ?{
-                trainingObjectTypeId: trainingObjectTypeForm ||''
-            }:{}
+            where: trainingObjectTypeForm ? {
+                trainingObjectTypeId: trainingObjectTypeForm || ''
+            } : {}
         })
- const trainingMajorForm =Form.useWatch('trainingMajorId',form)
+    const trainingMajorForm = Form.useWatch('trainingMajorId', form)
     const { data: curriculumVersionData = [], refetch: refetchCurriculumVersion } =
         useFindManyCurriculumVersion({
-            where:{
-               trainingObjectTypeId: trainingObjectTypeForm || undefined,
-            },
-            include:{
+            where: {
+                trainingObjectTypeId: trainingObjectTypeForm || undefined,
                 curriculum:{
-                        include:{
-                            trainingMajor:true,
-                            managementOrganization:true,
-                        }
-                    },
-                    fixedClasses:{
-                        include:{
-                            trainingCourse:true
-                        }
-                    },
-                    trainingObjectType:true
+                    managementOrganizationId:managementOrganizationForm|| undefined,
+                    trainingMajorId:trainingMajorForm|| undefined
+                }
+            },
+            include: {
+                curriculum: {
+                    include: {
+                        trainingMajor: true,
+                        managementOrganization: true,
+                    }
+                },
+                fixedClasses: {
+                    include: {
+                        trainingCourse: true
+                    }
+                },
+                trainingObjectType: true
             }
         })
     const { data: lecturerData = [], refetch: refetchLecturer } =
         useFindManyLecturer({
-            include:{
-                userProfile:true
+            include: {
+                userProfile: true
             }
         })
 
-            const { data: staffData = [], refetch: refetchStaff} =
-                useFindManyStaff({
-                    include:{
-                        userProfile:true
-                    }
-                })
+    const { data: staffData = [], refetch: refetchStaff } =
+        useFindManyStaff({
+            include: {
+                userProfile: true
+            }
+        })
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -126,20 +130,41 @@ const PutFixedClassModal = () => {
                 code: output.code,
                 name: output.name,
                 description: output.description,
-                trainingCourseId: output.trainingCourseId,
-                managementOrganizationId: output.managementOrganizationId,
-                curriculumVersionId: output.curriculumVersionId,
-                staffManagementId: output.staffManagementId,
-                lecturerManagementId: output.lecturerManagementId,
                 startYear: output.startYear,
                 graduated: output.graduated,
                 active: output.active,
                 summary: output.summary,
+                initSize: output.initSize
             }
             if (id) {
                 await updateFixedClass({
                     data: {
                         ...payload,
+                        trainingCourse: output.trainingCourseId ? {
+                            connect: {
+                                id: output.trainingCourseId
+                            }
+                        } : { disconnect: true },
+                        managementOrganization: output.managementOrganizationId ? {
+                            connect: {
+                                id: output.managementOrganizationId
+                            }
+                        } : { disconnect: true },
+                        curriculumVersion: output.curriculumVersionId ? {
+                            connect: {
+                                id: output.curriculumVersionId
+                            }
+                        } : { disconnect: true },
+                        staffManagement: output.staffManagementId ? {
+                            connect: {
+                                id: output.staffManagementId
+                            }
+                        } : { disconnect: true },
+                        lecturerManagement: output.lecturerManagementId ? {
+                            connect: {
+                                id: output.lecturerManagementId
+                            }
+                        } : { disconnect: true },
                     },
                     where: {
                         id,
@@ -150,6 +175,31 @@ const PutFixedClassModal = () => {
                 await createFixedClass({
                     data: {
                         ...payload,
+                          trainingCourse: output.trainingCourseId ? {
+                            connect: {
+                                id: output.trainingCourseId
+                            }
+                        } : undefined,
+                        managementOrganization: output.managementOrganizationId ? {
+                            connect: {
+                                id: output.managementOrganizationId
+                            }
+                        } : undefined,
+                        curriculumVersion: output.curriculumVersionId ? {
+                            connect: {
+                                id: output.curriculumVersionId
+                            }
+                        } : undefined,
+                        staffManagement: output.staffManagementId ? {
+                            connect: {
+                                id: output.staffManagementId
+                            }
+                        } : undefined,
+                        lecturerManagement: output.lecturerManagementId ? {
+                            connect: {
+                                id: output.lecturerManagementId
+                            }
+                        } : undefined,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -164,20 +214,20 @@ const PutFixedClassModal = () => {
         }
         hideSpinner()
     }
-    const handleChangeField = async (field:string,val: string) => {
+    const handleChangeField = async (field: string, val: string) => {
         try {
             form.setFieldsValue({
-                [field]:null
+                [field]: null
             })
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
     }
 
-    const handleChangeFieldOrganization = async (field:any,val: string) => {
+    const handleChangeFieldOrganization = async (field: any, val: string) => {
         try {
-            let newValue={}
-            field.forEach((i:string)=>newValue={...newValue,[i]:null})
+            let newValue = {}
+            field.forEach((i: string) => newValue = { ...newValue, [i]: null })
             form.setFieldsValue({
                 ...newValue
             })
@@ -186,16 +236,16 @@ const PutFixedClassModal = () => {
         }
     }
 
-      const handleChangeFieldcurriculumVersion = async (val: string) => {
+    const handleChangeFieldcurriculumVersion = async (val: string) => {
         try {
-            let result= curriculumVersionData.find(i=>i?.id==val);
-             form.setFieldsValue({
+            let result = curriculumVersionData.find(i => i?.id == val);
+            form.setFieldsValue({
                 managementOrganizationId: result?.curriculum?.managementOrganization?.id,
                 trainingMajorId: result?.curriculum?.trainingMajor?.id,
                 trainingObjectTypeId: result?.trainingObjectType?.id,
             })
             console.log(result)
-           
+
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
@@ -207,11 +257,11 @@ const PutFixedClassModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
-            form.setFieldsValue({...level,})
-        }else {
+            form.setFieldsValue({ ...level, })
+        } else {
             form.setFieldsValue({
-                graduated:false,
-                active:true
+                graduated: false,
+                active: true
             })
         }
     }, [level])
@@ -243,7 +293,7 @@ const PutFixedClassModal = () => {
                                 }
                             }
                         )}
-                    onChange={(val) => handleChangeField('trainingCourseId',val)}
+                        onChange={(val) => handleChangeField('trainingCourseId', val)}
                     />
                 </FormItem>
             </Col>
@@ -282,7 +332,7 @@ const PutFixedClassModal = () => {
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        onChange={(val) => handleChangeFieldOrganization(['trainingMajorId','curriculumVersionId'],val)}
+                        onChange={(val) => handleChangeFieldOrganization(['trainingMajorId', 'curriculumVersionId'], val)}
                     />
                 </FormItem>
             </Col>
@@ -301,8 +351,8 @@ const PutFixedClassModal = () => {
                                 label: i.name,
                             }
                         })}
-                        onChange={(val) => handleChangeField('curriculumVersionId',val)}
-                        
+                        onChange={(val) => handleChangeField('curriculumVersionId', val)}
+
                     />
                 </FormItem>
             </Col>
@@ -321,7 +371,7 @@ const PutFixedClassModal = () => {
                                 label: i.name,
                             }
                         })}
-                        onChange={(val,record)=>handleChangeFieldcurriculumVersion(val)}
+                        onChange={(val, record) => handleChangeFieldcurriculumVersion(val)}
                     />
                 </FormItem>
             </Col>
@@ -339,12 +389,12 @@ const PutFixedClassModal = () => {
                                 label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
                             }
                         })}
-                        // onChange={(val) =>handleMajorChange(val)}
-                        
+                    // onChange={(val) =>handleMajorChange(val)}
+
                     />
                 </FormItem>
             </Col>
-                 <Col span={12}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="staffManagementId"
@@ -358,8 +408,8 @@ const PutFixedClassModal = () => {
                                 label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
                             }
                         })}
-                        // onChange={(val) =>handleMajorChange(val)}
-                        
+                    // onChange={(val) =>handleMajorChange(val)}
+
                     />
                 </FormItem>
             </Col>
@@ -373,7 +423,7 @@ const PutFixedClassModal = () => {
                     <Input placeholder="Nhập mã lớp biên chế" />
                 </FormItem>
             </Col>
-       
+
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -401,7 +451,17 @@ const PutFixedClassModal = () => {
                     label="Năm bắt đầu"
                     required
                 >
-                    <Input placeholder="Nhập năm bắt đầu" />
+                    <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập năm bắt đầu"  />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="initSize"
+                    label="Sĩ số"
+                    required
+                >
+                    <InputNumber style={{ width: '100%' }} min={0} step={1} placeholder="Nhập sĩ số" />
                 </FormItem>
             </Col>
 

@@ -187,16 +187,13 @@ Table TrainingCourse {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  startDate DateTime [not null]
-  endDate DateTime
+  startYear Int
+  endYear Int
+  academicYear String
+  maxTrainingTime Float
+  admissionQuota Int
   trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
-  trainingType TrainingType [not null]
-  trainingTypeId String [not null]
-  trainingLevel TrainingLevel [not null]
-  trainingLevelId String [not null]
-  trainingForm TrainingForm [not null]
-  trainingFormId String [not null]
   status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 
@@ -213,8 +210,8 @@ Table FixedClass {
   updatedAt DateTime [not null]
   name String [not null]
   summary String
-  startYear String [not null]
-  graduated Boolean [default: true]
+  startYear Int
+  graduated Boolean [default: false]
   trainingCourse TrainingCourse
   trainingCourseId String
   managementOrganization Organization
@@ -458,7 +455,6 @@ Table TrainingType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   students Student [not null]
 
   Note: 'loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)'
@@ -473,7 +469,6 @@ Table TrainingLevel {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   curriculumVersion CurriculumVersion [not null]
   students Student [not null]
 
@@ -489,7 +484,6 @@ Table TrainingForm {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   students Student [not null]
 
   Note: 'hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)'
@@ -1496,12 +1490,6 @@ Ref: Semester.schoolYearId > SchoolYear.id
 Ref: Milestone.schoolYearId > SchoolYear.id
 
 Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
-
-Ref: TrainingCourse.trainingTypeId > TrainingType.id
-
-Ref: TrainingCourse.trainingLevelId > TrainingLevel.id
-
-Ref: TrainingCourse.trainingFormId > TrainingForm.id
 
 Ref: FixedClass.trainingCourseId > TrainingCourse.id
 

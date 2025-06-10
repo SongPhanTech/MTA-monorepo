@@ -80,16 +80,13 @@ enum TrainingCourseStatus {
 /// Khoá học
 model TrainingCourse extends Base {
   name                 String
-  startDate            DateTime
-  endDate              DateTime?
+  startYear            Int?
+  endYear              Int?
+  academicYear         String?
+  maxTrainingTime      Float?
+  admissionQuota       Int?                 
   trainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
-  trainingType         TrainingType         @relation(fields: [trainingTypeId], references: [id]) // Loại hình đào tạo
-  trainingTypeId       String
-  trainingLevel        TrainingLevel        @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
-  trainingLevelId      String
-  trainingForm         TrainingForm         @relation(fields: [trainingFormId], references: [id]) // Hình thức đào tạo
-  trainingFormId       String
 
   status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
@@ -99,8 +96,8 @@ model TrainingCourse extends Base {
 model FixedClass extends Base {
   name                     String
   summary                  String?
-  startYear                String
-  graduated                Boolean?           @default(true)
+  startYear                Int?
+  graduated                Boolean?           @default(false)
   
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khóa học
   trainingCourseId         String?

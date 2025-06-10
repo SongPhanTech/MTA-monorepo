@@ -265,6 +265,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                         )
                                     }
                                     placeholder="Tìm kiếm"
+                                    allowClear
                                 />
                             </Form.Item>
                         </Col>
@@ -382,6 +383,24 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
+                                title: 'Mã lớp biên chế',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'code',
+                            },
+                            {
+                                title: 'Tên lớp biên chế',
+                                align: 'center',
+                                width: 200,
+                                dataIndex: 'name',
+                            },
+                            {
+                                title: 'Tên viết tắt',
+                                dataIndex: 'summary',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
                                 title: 'ĐTĐT',
                                 align: 'left',
                                 width: 100,
@@ -427,24 +446,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 render:(value)=>
                                     !value ? <CheckOutlined className='text-[#028850]' />:''
                             },
-                            {
-                                title: 'Mã lớp biên chế',
-                                align: 'center',
-                                width: 150,
-                                dataIndex: 'code',
-                            },
-                            {
-                                title: 'Tên lớp biên chế',
-                                align: 'center',
-                                width: 200,
-                                dataIndex: 'name',
-                            },
-                            {
-                                title: 'Tên viết tắt',
-                                dataIndex: 'summary',
-                                width: 150,
-                                align: 'center',
-                            },
+                          
                             {
                                 title: 'GVCN',
                                 dataIndex: 'lecturerManagement',

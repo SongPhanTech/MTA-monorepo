@@ -14,13 +14,14 @@ DROP COLUMN "renderPath";
 -- AlterTable
 ALTER TABLE "ql-nguoi-dung"."UserProfile" ADD COLUMN     "fullname" TEXT;
 
-CREATE FUNCTION update_fullname() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION update_fullname() RETURNS TRIGGER AS $$
 BEGIN
   NEW."fullname" := NEW."lastName" || ' ' || NEW."firstName";
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS fullname_trigger ON "ql-nguoi-dung"."UserProfile";
 CREATE TRIGGER fullname_trigger
 BEFORE INSERT OR UPDATE ON "ql-nguoi-dung"."UserProfile"
 FOR EACH ROW EXECUTE FUNCTION update_fullname();

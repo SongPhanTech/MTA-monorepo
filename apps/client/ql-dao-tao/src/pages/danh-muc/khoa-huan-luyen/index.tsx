@@ -9,6 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import type {
@@ -44,17 +45,11 @@ import Select from '@components/commons/select'
 import FixedClassPage from '@pages/danh-muc/lop-bien-che'
 import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
+import { X, Search } from 'lucide-react'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null
-    trainingFormId: string | undefined
-    trainingTypeId: string | undefined
-    trainingLevelId: string | undefined
+    searchText: string | undefined
     trainingObjectTypeId: string | undefined
-    status: string | undefined
-    startDate: string | undefined
-    endDate: string | undefined
-    schoolYearId: string | undefined
 }
 
 export default function TrainingCoursePage() {
@@ -62,52 +57,21 @@ export default function TrainingCoursePage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingFormId: undefined,
-        trainingTypeId: undefined,
-        trainingLevelId: undefined,
         trainingObjectTypeId: undefined,
-        status: undefined,
-        startDate: undefined,
-        endDate: undefined,
-        schoolYearId: undefined,
+
     })
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingFormId
-                ? { trainingFormId: filters.trainingFormId }
-                : {}),
-            ...(filters.trainingTypeId
-                ? { trainingTypeId: filters.trainingTypeId }
-                : {}),
-            ...(filters.trainingLevelId
-                ? { trainingLevelId: filters.trainingLevelId }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
-            ...(filters.status
-                ? { status: filters.status as TrainingCourseStatus }
-                : {}),
-            ...(filters.startDate && filters.endDate
-                ? {
-                      startDate: {
-                          gte: new Date(filters.startDate),
-                          lte: new Date(filters.endDate),
-                      },
-                  }
-                : {}),
+           OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+            trainingObjectType:{
+                id:filters.trainingObjectTypeId
+            }
         },
         include: {
-            trainingForm: true,
-            trainingLevel: true,
-            trainingType: true,
             trainingObjectType: true,
         },
         orderBy: {
@@ -119,35 +83,33 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingFormId
-                ? { trainingFormId: filters.trainingFormId }
-                : {}),
-            ...(filters.trainingTypeId
-                ? { trainingTypeId: filters.trainingTypeId }
-                : {}),
-            ...(filters.trainingLevelId
-                ? { trainingLevelId: filters.trainingLevelId }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
-            ...(filters.status
-                ? { status: filters.status as TrainingCourseStatus }
-                : {}),
-            ...(filters.startDate && filters.endDate
-                ? {
-                      startDate: {
-                          gte: new Date(filters.startDate),
-                          lte: new Date(filters.endDate),
-                      },
-                  }
-                : {}),
+             OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+            // ...(filters.trainingFormId
+            //     ? { trainingFormId: filters.trainingFormId }
+            //     : {}),
+            // ...(filters.trainingTypeId
+            //     ? { trainingTypeId: filters.trainingTypeId }
+            //     : {}),
+            // ...(filters.trainingLevelId
+            //     ? { trainingLevelId: filters.trainingLevelId }
+            //     : {}),
+            // ...(filters.trainingObjectTypeId
+            //     ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+            //     : {}),
+            // ...(filters.status
+            //     ? { status: filters.status as TrainingCourseStatus }
+            //     : {}),
+            // ...(filters.startDate && filters.endDate
+            //     ? {
+            //           startDate: {
+            //               gte: new Date(filters.startDate),
+            //               lte: new Date(filters.endDate),
+            //           },
+            //       }
+            //     : {}),
         },
     })
 
@@ -232,20 +194,71 @@ export default function TrainingCoursePage() {
         })
     )
 
+        const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+            useFindManyTrainingObjectType()
+
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Khóa huấn luyện
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <FilterKhoa
-                                filters={filters}
-                                setFilters={setFilters}
-                                debouncedRefetch={debouncedRefetch}
-                            />
+                            <Flex>
+                                <Form.Item name="searchText">
+                                    <Input
+                                        id="search"
+                                        onChange={(e) =>
+                                            handleFilterChange(
+                                                'searchText',
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="Tìm kiếm"
+                                        style={{
+                                            width: 300,
+                                            marginRight: 8,
+                                            height:32
+                                        }}
+                                        prefix={
+                                            <Search
+                                                size={15}
+                                                style={{
+                                                    color: 'rgba(0, 0, 0, 0.25)',
+                                                }}
+                                            />
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="trainingObjectId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Chọn đối tượng đào tạo"
+                                        options={trainingObjectTypeData.map(
+                                            (i: TrainingObjectType) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            })
+                                        )}
+                                        style={{
+                                            width: 300,
+                                            marginRight: 8,
+                                        }}
+                                        onChange={(val) =>
+                                            handleFilterChange(
+                                                'trainingObjectTypeId',
+                                                val
+                                            )
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Flex>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -264,8 +277,9 @@ export default function TrainingCoursePage() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 50,
                                 align: 'center',
+                                fixed:'right',
                                 render: (_, record, index) =>
                                     index +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
@@ -274,56 +288,36 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Mã khóa',
                                 dataIndex: 'code',
+                                width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên khóa',
                                 dataIndex: 'name',
+                                width: 200,
                                 align: 'center',
-                            },
-                            {
-                                title: 'Loại hình đào tạo',
-                                dataIndex: 'trainingType',
-                                align: 'center',
-                                width: 150,
-                                render: (value: TrainingType) =>
-                                    value?.name ? value?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'trainingObjectType',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
                                 render: (value: TrainingObjectType) =>
                                     value?.name ? value?.name : '',
                             },
                             {
-                                title: 'Hình thức đào tạo',
+                                title: 'Năm bắt đầu',
                                 align: 'center',
-                                dataIndex: 'trainingForm',
-                                width: 120,
-                                render: (value: TrainingForm) =>
-                                    value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Trình độ đào tạo',
-                                dataIndex: 'trainingLevel',
-                                align: 'center',
-                                width: 120,
-                                render: (value: TrainingLevel) =>
-                                    value?.name ? value?.name : '',
-                            },
-                            {
-                                title: 'Ngày bắt đầu',
-                                align: 'center',
+                                width: 150,
                                 render: ({ startDate }) =>
                                     startDate
                                         ? dayjs(startDate).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
-                                title: 'Ngày kết thúc',
+                                title: 'Năm kết thúc',
                                 align: 'center',
+                                width: 150,
                                 render: ({ endDate }) =>
                                     endDate
                                         ? dayjs(endDate).format('DD/MM/YYYY')
@@ -332,7 +326,7 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 130,
+                                width: 175,
                                 render: (record: TrainingCourse) => {
                                     return (
                                         <Select
@@ -363,6 +357,7 @@ export default function TrainingCoursePage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed:'right',
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
@@ -409,18 +404,7 @@ export default function TrainingCoursePage() {
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
-                        expandable={{
-                            expandedRowRender: (
-                                record: Partial<TrainingCourse>
-                            ) => (
-                                <div style={{ maxWidth: '100%' }}>
-                                    <FixedClassPage
-                                        key={record.id}
-                                        trainingCourse={record}
-                                    />
-                                </div>
-                            ),
-                        }}
+                 
                     />
                 </Col>
             </Row>
