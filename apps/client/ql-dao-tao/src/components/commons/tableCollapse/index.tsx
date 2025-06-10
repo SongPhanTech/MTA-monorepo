@@ -28,6 +28,7 @@ type TableProps<T extends Data> = {
     maxHeight?: number
     currentPage: number
     childrenFieldName?: string
+    onRowDoubleClick?: (record: T) => void
 } & TableAntdProps
 
 const TableCollapse = <T extends Data>({
@@ -43,6 +44,7 @@ const TableCollapse = <T extends Data>({
     maxHeight,
     currentPage,
     childrenFieldName = 'children',
+    onRowDoubleClick,
     ...rest
 }: TableProps<T>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -203,15 +205,34 @@ const TableCollapse = <T extends Data>({
                         pagination?.onShowSizeChange?.(size)
                     },
                 }}
-                onRow={(record) => ({
-                    onClick: () => {
-                        if (onRowClick) {
-                            onRowClick(record)
+                onRow={(record) => {
+                    const children = record[childrenFieldName]
+                    const isParent =
+                        Array.isArray(children) && children.length > 0
+
+                    // Nếu là cha -> không cho click/doubleClick
+                    if (isParent) {
+                        return {
+                            style: { cursor: 'default' },
                         }
-                    },
-                    style: { cursor: 'pointer' },
-                    className: record.id === selectedRow ? 'bg-blue-100' : '',
-                })}
+                    }
+
+                    return {
+                        onClick: () => {
+                            if (onRowClick) {
+                                onRowClick(record)
+                            }
+                        },
+                        onDoubleClick: () => {
+                            if (onRowDoubleClick) {
+                                onRowDoubleClick(record)
+                            }
+                        },
+                        style: { cursor: 'pointer' },
+                        className:
+                            record.id === selectedRow ? 'bg-blue-100' : '',
+                    }
+                }}
                 expandable={{
                     expandedRowKeys: expandedKeys,
                     onExpand: handleExpand,

@@ -15,8 +15,12 @@ import {
     useFindManyTrainingField,
     useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
+    useFindManySubjectVersion,
+    useFindManyTrainingBlock,
+    useCountTrainingBlock,
+    useFindManyTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import type { ExamType, TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
@@ -26,6 +30,9 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import VersionProgramSubject from '@components/sub-pages/phien-ban-mon-hoc-chuong-trinh-dao-tao'
+import { useRouter } from 'next/router'
+import TableCollapse from '@components/commons/tableCollapse'
+import { useExamTypeOptions } from '@hooks/examType'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
@@ -107,6 +114,8 @@ const fakeData = [
 ]
 
 export default function TrainingProgramSubjects() {
+    const router = useRouter()
+    const { id } = router.query
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -114,21 +123,32 @@ export default function TrainingProgramSubjects() {
         trainingObjectTypeId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { getExamTypeLabel } = useExamTypeOptions()
+
+    const { data = [], refetch } = useFindManyTrainingBlock({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+            // name: {
+            //     contains: searchText,
+            // },
+            curriculumVersionId: id as string,
         },
+        include: {
+            subjects: {
+                include: {
+                    subject: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
+    console.log(data)
+
+    const { data: count } = useCountTrainingBlock({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
@@ -264,19 +284,12 @@ export default function TrainingProgramSubjects() {
                 </Col>
 
                 <Col span={24}>
-                    <Table
-                        rowKey="id"
+                    <TableCollapse
+                        rowKey="key"
+                        headerTitleKey="name"
+                        childrenFieldName="subjects"
+                        currentPage={currentPage}
                         columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, record, index) =>
-                                    index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
-                                    1,
-                            },
                             {
                                 title: 'ĐV QL',
                                 dataIndex: 'dvql',
@@ -291,20 +304,138 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Mã',
-                                dataIndex: 'maMon',
+                                dataIndex: ['subject', 'code'],
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Mã TKB',
+                                dataIndex: 'code',
                                 width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên Môn Học',
-                                dataIndex: 'tenMonHoc',
+                                dataIndex: ['subject', 'name'],
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên Viết Tắt',
-                                dataIndex: 'tenVietTat',
+                                dataIndex: ['subject', 'shortName'],
                                 width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tín chỉ',
+                                dataIndex: ['subject', 'credit'],
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Học kỳ dự kiến',
+                                dataIndex: 'semester',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Học kỳ giảng dạy',
+                                dataIndex: 'shortName',
+                                width: 140,
+                                align: 'center',
+                            },
+                            {
+                                title: 'BB/TC',
+                                dataIndex: 'shortName',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'ĐK',
+                                dataIndex: 'shortName',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tiết TKB',
+                                dataIndex: ['subject', 'period'],
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tiết lý thuyết',
+                                dataIndex: ['subject', 'numberOfTheory'],
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tiết thực hành',
+                                dataIndex: ['subject', 'numberOfPractice'],
+
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tiết tự học',
+                                dataIndex: ['subject', 'numberOfSelfStudy'],
+
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'STTL',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số tiết bài tập lớn',
+                                dataIndex: ['subject', 'numberOfProject'],
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Hệ số học phần',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'DQ',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'TT',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Thi',
+                                dataIndex: ['subject', 'examType'],
+                                width: 150,
+                                align: 'center',
+                                render: (record: ExamType) =>
+                                    getExamTypeLabel(record),
+                            },
+                            {
+                                title: 'SDD',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Danh sách môn',
+                                dataIndex: 'numberOfPractice13',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Đề cương',
+                                dataIndex: 'numberOfPractice13',
+                                width: 100,
                                 align: 'center',
                             },
                             {
@@ -312,7 +443,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 width: 150,
                                 render: (record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return !record?.active ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -350,7 +481,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                         ]}
-                        data={fakeData}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
@@ -359,13 +490,6 @@ export default function TrainingProgramSubjects() {
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
-                        expandable={{
-                            expandedRowRender: (record) => (
-                                <div style={{ maxWidth: '100%' }}>
-                                    <VersionProgramSubject record={record} />
-                                </div>
-                            ),
                         }}
                     />
                 </Col>

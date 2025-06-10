@@ -32,11 +32,13 @@ import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import TableCollapse from '@components/commons/tableCollapse'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 interface FilterProps {
     searchText: string | null
     trainingObjectTypeId: string | undefined
 }
 export default function TrainingProgramCatalog() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -144,6 +146,14 @@ export default function TrainingProgramCatalog() {
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
     const { data: curriculumData = [] } = useFindManyCurriculum()
+
+    const handleRowClick = (record: { id?: string }) => {
+        if (record?.id) {
+            router.push(
+                `/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/${record.id}`
+            )
+        }
+    }
 
     return (
         <div>
@@ -285,6 +295,7 @@ export default function TrainingProgramCatalog() {
                         headerTitleKey="name"
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
+                        onRowClick={(record) => handleRowClick(record)}
                         columns={[
                             {
                                 title: 'Phiên bản',
@@ -423,10 +434,10 @@ export default function TrainingProgramCatalog() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen(id)
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
@@ -434,6 +445,9 @@ export default function TrainingProgramCatalog() {
                                                         onConfirm: () =>
                                                             handleDelete(id),
                                                     }}
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
                                                 />
                                             </Row>
                                         )

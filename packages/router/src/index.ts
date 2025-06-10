@@ -391,13 +391,6 @@ const NAVIGATION: NavigationType = {
                         description: 'Khối kiến thức CTDT',
                     },
                     {
-                        id: 'mon-hoc-chuong-trinh-dao-tao',
-                        label: 'Môn học chương trình đào tạo',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .CHUONG_TRINH_DAO_TAO_MON_HOC_CHUONG_TRINH_DAO_TAO,
-                        description: 'Môn học chương trình đào tạo',
-                    },
-                    {
                         id: 'danh-sach-mon-hoc',
                         label: 'Danh sách môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
