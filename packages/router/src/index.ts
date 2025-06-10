@@ -329,13 +329,6 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
-                id: 'schoolyear-semester',
-                label: 'Năm học, kỳ học',
-                icon: ScheduleOutlined,
-                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
-                description: 'Thông tin năm học, kỳ học',
-            },
-            {
                 id: 'category',
                 label: 'Danh mục',
                 icon: LayoutDashboard,
@@ -391,13 +384,6 @@ const NAVIGATION: NavigationType = {
                         description: 'Khối kiến thức CTDT',
                     },
                     {
-                        id: 'mon-hoc-chuong-trinh-dao-tao',
-                        label: 'Môn học chương trình đào tạo',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .CHUONG_TRINH_DAO_TAO_MON_HOC_CHUONG_TRINH_DAO_TAO,
-                        description: 'Môn học chương trình đào tạo',
-                    },
-                    {
                         id: 'danh-sach-mon-hoc',
                         label: 'Danh sách môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
@@ -405,6 +391,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh sách môn học',
                     },
                 ],
+            },
+            {
+                id: 'schoolyear-semester',
+                label: 'Năm học kỳ học',
+                icon: CalendarFold,
+                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
+                description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'ke-hoach-giao-duc',

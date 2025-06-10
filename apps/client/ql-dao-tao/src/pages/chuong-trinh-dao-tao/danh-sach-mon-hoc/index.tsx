@@ -7,11 +7,12 @@ import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { ExamType, TrainingObjectType } from '@workspace/db'
+import type { Curriculum, ExamType } from '@workspace/db'
 import {
+    useFindManyCurriculum,
     useFindManySubject,
     useFindManyTrainingObjectType,
-    useUpdateTrainingCourse,
+    useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -42,6 +43,8 @@ export default function SubjectList() {
         trainingObjectTypeId: undefined,
     })
     const { getExamTypeLabel } = useExamTypeOptions()
+
+    const { data: curriculum = [] } = useFindManyCurriculum()
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
@@ -82,11 +85,11 @@ export default function SubjectList() {
         onOpenSubjectVersion()
     }
 
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateSubjectVersion({
                 where: {
                     id,
                 },
@@ -166,8 +169,8 @@ export default function SubjectList() {
                                     >
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
+                                            options={curriculum.map(
+                                                (i: Curriculum) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })
