@@ -15,7 +15,7 @@ export default function Page() {
         if (status === 'unauthenticated') {
             signIn('asgardeo')
         } else if (status === 'authenticated') {
-            // router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
+            router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
         }
     }, [status, menus])
 
