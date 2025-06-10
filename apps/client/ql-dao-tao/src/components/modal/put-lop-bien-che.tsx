@@ -230,10 +230,10 @@ const PutFixedClassModal = () => {
 
     const handleChangeFieldOrganization = async (field: any, val: string) => {
         try {
-            let newValue = {}
-            field.forEach(
-                (i: string) => (newValue = { ...newValue, [i]: null })
-            )
+            let newValue={}
+             for(const i of field){
+                newValue = { ...newValue, [i]: null }
+                }
             form.setFieldsValue({
                 ...newValue,
             })
@@ -251,9 +251,9 @@ const PutFixedClassModal = () => {
                 trainingMajorId: result?.curriculum?.trainingMajor?.id,
                 trainingObjectTypeId: result?.trainingObjectType?.id,
             })
-            console.log(result)
         } catch (err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
+            console.log('[handleChangeFieldcurriculumVersion]', err)
         }
     }
 

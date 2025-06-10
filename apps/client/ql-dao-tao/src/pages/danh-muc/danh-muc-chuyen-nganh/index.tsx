@@ -315,7 +315,7 @@ export default function TrainingMajorPage() {
                                {
                                 title: 'Mã chuyên ngành',
                                 dataIndex: 'code',
-                                align: 'left',
+                                align: 'center',
                                 width: 150,
                             },
                             {

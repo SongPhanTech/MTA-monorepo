@@ -87,29 +87,6 @@ export default function TrainingCoursePage() {
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
-            // ...(filters.trainingFormId
-            //     ? { trainingFormId: filters.trainingFormId }
-            //     : {}),
-            // ...(filters.trainingTypeId
-            //     ? { trainingTypeId: filters.trainingTypeId }
-            //     : {}),
-            // ...(filters.trainingLevelId
-            //     ? { trainingLevelId: filters.trainingLevelId }
-            //     : {}),
-            // ...(filters.trainingObjectTypeId
-            //     ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-            //     : {}),
-            // ...(filters.status
-            //     ? { status: filters.status as TrainingCourseStatus }
-            //     : {}),
-            // ...(filters.startDate && filters.endDate
-            //     ? {
-            //           startDate: {
-            //               gte: new Date(filters.startDate),
-            //               lte: new Date(filters.endDate),
-            //           },
-            //       }
-            //     : {}),
         },
     })
 
@@ -308,20 +285,14 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Năm bắt đầu',
                                 align: 'center',
+                                dataIndex: 'startYear',
                                 width: 150,
-                                render: ({ startDate }) =>
-                                    startDate
-                                        ? dayjs(startDate).format('DD/MM/YYYY')
-                                        : '',
                             },
                             {
                                 title: 'Năm kết thúc',
                                 align: 'center',
+                                dataIndex: 'endYear',
                                 width: 150,
-                                render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
                             },
                             {
                                 title: 'Trạng thái',

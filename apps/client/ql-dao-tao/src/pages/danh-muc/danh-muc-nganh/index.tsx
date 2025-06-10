@@ -130,25 +130,7 @@ export default function TrainingFieldPage() {
             return newFilters
         })
     }
-    // async function handleStatusChange(
-    //     id: string,
-    //     newStatus: TrainingFieldStatus
-    // ) {
-    //     try {
-    //         showSpinner()
-    //         await updateTrainingField({
-    //             where: {
-    //                 id,
-    //             },
-    //             data: {
-    //                 status: newStatus,
-    //             },
-    //         })
-    //     } catch (error) {
-    //         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-    //     }
-    //     hideSpinner()
-    // }
+ 
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -244,7 +226,7 @@ export default function TrainingFieldPage() {
                             {
                                 title: 'Mã ngành',
                                 dataIndex: 'code',
-                                align: 'left',
+                                align: 'center',
                                 width: 150,
                             },
                             {
