@@ -2,7 +2,12 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useCreateTrainingBlock, useFindManyCurriculumVersion, useFindUniqueTrainingBlock, useUpdateTrainingBlock } from '@workspace/db/hooks'
+import {
+    useCreateTrainingBlock,
+    useFindManyCurriculumVersion,
+    useFindUniqueTrainingBlock,
+    useUpdateTrainingBlock,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { TrainingBlock } from '@workspace/db'
@@ -24,59 +29,58 @@ const PutTrainingBlock = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    
     const { data: trainingBlock } = useFindUniqueTrainingBlock(
         { where: { id } },
         { enabled: !!id }
-    );
+    )
 
-    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion();
+    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion()
 
     useEffect(() => {
         if (trainingBlock) {
             form.setFieldsValue({
-            ...trainingBlock,
-            });
+                ...trainingBlock,
+            })
         }
-    }, [ trainingBlock, form ]);
+    }, [trainingBlock, form])
 
     const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
     const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
     async function onOk(output?: PutTrainingBlock) {
-        if (!output) return;
+        if (!output) return
 
         try {
-            showSpinner();
+            showSpinner()
             const payload = {
                 code: output.code,
                 name: output.name,
                 priority: output.priority,
                 active: output.active,
                 curriculumVersionId: output.curriculumVersionId,
-            };
+            }
 
             if (id) {
                 await updateTrainingBlock({
                     data: payload,
                     where: { id },
-                });
-                message.success('Cập nhật thành công');
+                })
+                message.success('Cập nhật thành công')
             } else {
                 await createTrainingBlock({
                     data: payload,
-                });
-                message.success('Thêm mới thành công');
+                })
+                message.success('Thêm mới thành công')
             }
 
             queryClient.invalidateQueries({
                 queryKey: ['TrainingBlock'],
-            });
-            onClose();
+            })
+            onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
-        hideSpinner();
+        hideSpinner()
     }
 
     return (
@@ -150,17 +154,13 @@ const PutTrainingBlock = () => {
                 </FormItem>
             </Col> */}
             <Col span={24}>
-                <FormItem form={form} name="priority" label="Thứ tự" required >
-                    <InputNumber placeholder="Thứ tự" className='w-full'/>
+                <FormItem form={form} name="priority" label="Thứ tự" required>
+                    <InputNumber placeholder="Thứ tự" className="w-full" />
                 </FormItem>
             </Col>
             {id && (
                 <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label="Trạng thái"
-                    >
+                    <FormItem form={form} name="active" label="Trạng thái">
                         <Select
                             placeholder="Chọn trạng thái"
                             options={[
@@ -180,7 +180,7 @@ const PutTrainingBlock = () => {
                 >
                     <Select
                         placeholder="Chọn phiên bản chương trình đào tạo"
-                        options={curriculumVersion.map(item => ({
+                        options={curriculumVersion.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}

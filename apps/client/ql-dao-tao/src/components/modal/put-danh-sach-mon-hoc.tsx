@@ -29,44 +29,44 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization = [] } = useFindManyOrganization();
+    const { data: organization = [] } = useFindManyOrganization()
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
     async function onOk(output?: PutSubject) {
-    if (!output) return;
-    try {
-        showSpinner();
+        if (!output) return
+        try {
+            showSpinner()
 
-        const payload = {
-            code: output.code,
-            name: output.name,
-            description: output.description,
-            active: output.active,
-            information: output.information,
-            managementOrganizationId: output.managementOrganizationId,
-        };
+            const payload = {
+                code: output.code,
+                name: output.name,
+                description: output.description,
+                active: output.active,
+                information: output.information,
+                managementOrganizationId: output.managementOrganizationId,
+            }
 
-        if (id) {
-            await updateSubject({
-                data: payload,
-                where: { id },
-            });
-            message.success('Cập nhật thành công');
-        } else {
-            await createSubject({
-                data: payload,
-            });
-            message.success('Thêm mới thành công');
+            if (id) {
+                await updateSubject({
+                    data: payload,
+                    where: { id },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await createSubject({
+                    data: payload,
+                })
+                message.success('Thêm mới thành công')
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['Subject'] })
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
-
-        queryClient.invalidateQueries({ queryKey: ['Subject'] });
-        onClose();
-    } catch (error) {
-        message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+        hideSpinner()
     }
-    hideSpinner();
-}
 
     const { data: subject } = useFindUniqueSubject({
         where: { id },
@@ -127,7 +127,7 @@ const PutSubjectListModal = () => {
                 >
                     <Select
                         placeholder="Chọn đơn vị quản lý"
-                        options={organization?.map(item => ({
+                        options={organization?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}

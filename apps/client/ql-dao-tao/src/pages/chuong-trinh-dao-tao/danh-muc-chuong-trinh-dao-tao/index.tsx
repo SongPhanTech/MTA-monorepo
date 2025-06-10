@@ -391,7 +391,8 @@ export default function TrainingProgramCatalog() {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                     return record?.status === $Enums.CurriculumStatus.INACTIVATED ? (
+                                    return record?.status ===
+                                        $Enums.CurriculumStatus.INACTIVATED ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
