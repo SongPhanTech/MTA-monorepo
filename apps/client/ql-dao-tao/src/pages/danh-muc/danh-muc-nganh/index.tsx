@@ -130,25 +130,7 @@ export default function TrainingFieldPage() {
             return newFilters
         })
     }
-    // async function handleStatusChange(
-    //     id: string,
-    //     newStatus: TrainingFieldStatus
-    // ) {
-    //     try {
-    //         showSpinner()
-    //         await updateTrainingField({
-    //             where: {
-    //                 id,
-    //             },
-    //             data: {
-    //                 status: newStatus,
-    //             },
-    //         })
-    //     } catch (error) {
-    //         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-    //     }
-    //     hideSpinner()
-    // }
+ 
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -173,10 +155,11 @@ export default function TrainingFieldPage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
+                                            height:32
                                         }}
                                         prefix={
                                             <Search
-                                                size={15}
+                                                size={16}
                                                 style={{
                                                     color: 'rgba(0, 0, 0, 0.25)',
                                                 }}
@@ -241,6 +224,24 @@ export default function TrainingFieldPage() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
+                                title: 'Mã ngành',
+                                dataIndex: 'code',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Tên ngành',
+                                dataIndex: 'name',
+                                width: 200,
+                                align: 'left',
+                            },
+                            {
+                                title: 'Tên tiếng anh',
+                                align: 'left',
+                                dataIndex: 'englishName',
+                                width: 150,
+                            },
+                            {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
@@ -272,24 +273,7 @@ export default function TrainingFieldPage() {
                                         ? organization?.name
                                         : '',
                             },
-                            {
-                                title: 'Mã ngành',
-                                dataIndex: 'code',
-                                align: 'left',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tên ngành',
-                                dataIndex: 'name',
-                                width: 200,
-                                align: 'left',
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                align: 'left',
-                                dataIndex: 'englishName',
-                                width: 150,
-                            },
+                          
                             {
                                 title: 'Mô tả',
                                 width: 150,

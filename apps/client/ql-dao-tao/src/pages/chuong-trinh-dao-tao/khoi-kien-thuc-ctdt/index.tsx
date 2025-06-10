@@ -1,16 +1,14 @@
 import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutKnowledgeBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
     useFindManyTrainingCourse,
+    useFindManyTrainingBlock,
+    useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
@@ -21,24 +19,29 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
+import { PutTrainingBlock } from '@components/modal'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
     trainingCourseId: string | null
 }
 
-export default function KnowledgeBlock() {
+export default function TrainingBlock() {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingCourseId: null,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data: trainingBlockData, refetch } = useFindManyTrainingBlock({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          // { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
@@ -47,24 +50,8 @@ export default function KnowledgeBlock() {
                 ? { trainingCourseId: filters.trainingCourseId }
                 : {}),
         },
-        include: {
-            organization: true,
-        },
         orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const { data: count } = useCountTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
+            priority: 'asc',
         },
     })
 
@@ -75,7 +62,7 @@ export default function KnowledgeBlock() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutKnowledgeBlock.name,
+        tag: PutTrainingBlock.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -83,11 +70,11 @@ export default function KnowledgeBlock() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateTrainingBlock({
                 where: {
                     id,
                 },
@@ -95,6 +82,7 @@ export default function KnowledgeBlock() {
                     deletedAt: new Date(),
                 },
             })
+            message.success('Xóa thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -114,56 +102,6 @@ export default function KnowledgeBlock() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const dataFake = [
-        {
-            id: 1,
-            knowledgeBlockCode: 'CHKKT',
-            knowledgeBlockName: 'Major Foundation',
-            totalCredits: 15,
-            totalRequiredCredits: 12,
-            electiveCredits: 3,
-            specializedCredits: 0,
-            requiredSpecializedCredits: 12,
-            order: 1,
-            status: 'ACTIVE',
-        },
-        {
-            id: 2,
-            knowledgeBlockCode: 'DATN',
-            knowledgeBlockName: 'Graduation Project and Internship',
-            totalCredits: 10,
-            totalRequiredCredits: 10,
-            electiveCredits: 0,
-            specializedCredits: 10,
-            requiredSpecializedCredits: 10,
-            order: 2,
-            status: 'IN_ACTIVE',
-        },
-        {
-            id: 3,
-            knowledgeBlockCode: 'DATN',
-            knowledgeBlockName: 'Graduation Project and Internship',
-            totalCredits: 10,
-            totalRequiredCredits: 10,
-            electiveCredits: 0,
-            specializedCredits: 10,
-            requiredSpecializedCredits: 10,
-            order: 3,
-            status: 'IN_ACTIVE',
-        },
-        {
-            id: 4,
-            knowledgeBlockCode: 'GDĐC',
-            knowledgeBlockName: 'General Education',
-            totalCredits: 20,
-            totalRequiredCredits: 15,
-            electiveCredits: 5,
-            specializedCredits: 0,
-            requiredSpecializedCredits: 15,
-            order: 4,
-        },
-    ]
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -181,7 +119,7 @@ export default function KnowledgeBlock() {
                                                     e.target.value
                                                 )
                                             }
-                                            placeholder="Tìm kiếm"
+                                            placeholder="Nhập tên ngành..."
                                             style={{
                                                 height: 40,
                                             }}
@@ -304,7 +242,7 @@ export default function KnowledgeBlock() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-category"
+                        id="training-block"
                         columns={[
                             {
                                 title: 'STT',
@@ -318,18 +256,18 @@ export default function KnowledgeBlock() {
                             },
                             {
                                 title: 'Mã khối kiến thức',
-                                dataIndex: 'knowledgeBlockCode',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
                             },
                             {
                                 title: 'Tên khối kiến thức',
-                                dataIndex: 'knowledgeBlockName',
+                                dataIndex: 'name',
                                 width: 150,
                             },
                             {
                                 title: 'Tổng tín chỉ',
-                                dataIndex: 'totalCredits',
+                                dataIndex: '',
                                 width: 150,
                             },
                             {
@@ -344,7 +282,7 @@ export default function KnowledgeBlock() {
                             },
                             {
                                 title: 'Thứ tự',
-                                dataIndex: 'order',
+                                dataIndex: 'priority',
                                 width: 100,
                             },
                             {
@@ -352,8 +290,8 @@ export default function KnowledgeBlock() {
                                 align: 'center',
                                 width: 140,
                                 fixed: 'right',
-                                render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                render: (record) => {
+                                    return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -391,16 +329,7 @@ export default function KnowledgeBlock() {
                                 },
                             },
                         ]}
-                        data={dataFake}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
+                        data={trainingBlockData}
                     />
                 </Col>
             </Row>
@@ -408,6 +337,6 @@ export default function KnowledgeBlock() {
     )
 }
 
-KnowledgeBlock.getLayout = function getLayout(page: React.ReactElement) {
+TrainingBlock.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

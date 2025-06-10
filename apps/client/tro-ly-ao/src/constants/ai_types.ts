@@ -1,11 +1,22 @@
-import { RobotOutlined, UserOutlined } from '@ant-design/icons'
+import {
+    RobotOutlined,
+    UserOutlined,
+    BookOutlined,
+    FileTextOutlined,
+    SolutionOutlined,
+    TeamOutlined,
+    ProfileOutlined,
+    QuestionCircleOutlined,
+    SafetyCertificateOutlined,
+    AuditOutlined,
+} from '@ant-design/icons'
 
 const AI_TYPES = [
     // Thông tin học viện
     {
         key: 'ACADEMY_INFORMATION',
         label: 'Thông tin học viện',
-        icon: RobotOutlined,
+        icon: FileTextOutlined,
         group: 'Thông tin học viện',
     },
 
@@ -13,19 +24,19 @@ const AI_TYPES = [
     {
         key: 'TRAINING_RULES_AND_REGULATIONS',
         label: 'Quy chế đào tạo',
-        icon: UserOutlined,
+        icon: FileTextOutlined,
         group: 'Đào tạo',
     },
     {
         key: 'EXAMINATION_RULES_AND_REGULATIONS',
         label: 'Quy chế thi cử',
-        icon: UserOutlined,
+        icon: SolutionOutlined,
         group: 'Đào tạo',
     },
     {
         key: 'TRAINING_PROGRAMS_INFORMATION',
         label: 'Thông tin chương trình đào tạo',
-        icon: RobotOutlined,
+        icon: BookOutlined,
         group: 'Đào tạo',
     },
 
@@ -33,13 +44,13 @@ const AI_TYPES = [
     {
         key: 'GENERAL_ADMISSIONS_INFORMATION',
         label: 'Thông tin tuyển sinh chung',
-        icon: RobotOutlined,
+        icon: ProfileOutlined,
         group: 'Tuyển sinh',
     },
     {
         key: 'ADMISSIONS_RULES_AND_REGULATIONS',
         label: 'Quy chế tuyển sinh',
-        icon: UserOutlined,
+        icon: FileTextOutlined,
         group: 'Tuyển sinh',
     },
 
@@ -47,13 +58,13 @@ const AI_TYPES = [
     {
         key: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS',
         label: 'Chính sách học viên quân sự',
-        icon: UserOutlined,
+        icon: SafetyCertificateOutlined,
         group: 'Chính sách & quyền lợi',
     },
     {
         key: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS',
         label: 'Chính sách sinh viên dân sự',
-        icon: UserOutlined,
+        icon: SafetyCertificateOutlined,
         group: 'Chính sách & quyền lợi',
     },
 
@@ -61,13 +72,13 @@ const AI_TYPES = [
     {
         key: 'PARTY_WORK_AND_POLITICAL_WORK',
         label: 'Công tác Đảng & Chính trị',
-        icon: UserOutlined,
+        icon: AuditOutlined,
         group: 'Thông tin nội bộ',
     },
     {
         key: 'INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY',
         label: 'Quy định nội bộ học viện',
-        icon: UserOutlined,
+        icon: FileTextOutlined,
         group: 'Thông tin nội bộ',
     },
 
@@ -75,7 +86,7 @@ const AI_TYPES = [
     {
         key: 'IN_THE_FACULTY_HANDBOOK',
         label: 'Tài liệu khoa',
-        icon: RobotOutlined,
+        icon: BookOutlined,
         group: 'Tài liệu học thuật',
     },
 
@@ -83,8 +94,9 @@ const AI_TYPES = [
     {
         key: 'FREQUENTLY_ASKED_QUESTIONS',
         label: 'Câu hỏi thường gặp',
-        icon: RobotOutlined,
+        icon: QuestionCircleOutlined,
         group: 'Hỗ trợ & giải đáp',
     },
 ]
+
 export default AI_TYPES

@@ -32,6 +32,7 @@ model UserProfile extends Base {
   avatar               String? // đường dẫn ảnh đại diện
   firstName            String
   lastName             String
+  fullname             String?
   dateOfBirth          DateTime? // ngày sinh
   placeOfBirth         String? // nơi sinh
   homeTown             String? // quê quán

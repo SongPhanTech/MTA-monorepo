@@ -151,6 +151,7 @@ Table Semester {
   startDate DateTime [not null]
   endDate DateTime
   subjectClasses SubjectClass [not null]
+  trainingCoursesStart TrainingCourse [not null]
 
   indexes {
     (schoolYearId, order) [unique]
@@ -187,16 +188,15 @@ Table TrainingCourse {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  startDate DateTime [not null]
-  endDate DateTime
+  semesterStart Semester [not null]
+  semesterStartId String [not null]
+  startYear Int
+  endYear Int
+  academicYear String
+  maxTrainingTime Float
+  admissionQuota Int
   trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
-  trainingType TrainingType [not null]
-  trainingTypeId String [not null]
-  trainingLevel TrainingLevel [not null]
-  trainingLevelId String [not null]
-  trainingForm TrainingForm [not null]
-  trainingFormId String [not null]
   status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 
@@ -212,6 +212,9 @@ Table FixedClass {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  summary String
+  startYear Int
+  graduated Boolean [default: false]
   trainingCourse TrainingCourse
   trainingCourseId String
   managementOrganization Organization
@@ -244,7 +247,7 @@ Table Curriculum {
   trainingMajor TrainingMajor [not null]
   trainingMajorId String [not null]
   information String
-  documentPath String
+  documentPaths String[] [not null]
   renderPath String
   curriculumVersion CurriculumVersion [not null]
 
@@ -263,7 +266,6 @@ Table CurriculumVersion {
   shortName String
   englishName String
   trainingLanguage TrainingLanguage [not null, default: 'Vietnamese']
-  status CurriculumStatus [not null, default: 'ACTIVE']
   numberOfSemesters Int [not null]
   yearCreation Int
   yearApplication Int
@@ -275,6 +277,9 @@ Table CurriculumVersion {
   trainingLevelId String [not null]
   trainingTime TrainingTime [not null]
   trainingTimeId String [not null]
+  coef_1 Float
+  coef_2 Float
+  coef_3 Float
   scoreToTakeExam Float
   scoreToPass Float
   requiredCredits Int
@@ -283,9 +288,9 @@ Table CurriculumVersion {
   inputStandard String
   outputStandard String
   information String
-  documentPath String
+  documentPaths String[] [not null]
   renderPath String
-  trainingBlocks TrainingBlock [not null]
+  trainingBlocks TrainingBlockOnCurriculumVersion [not null]
   fixedClasses FixedClass [not null]
   students Student [not null]
 
@@ -309,23 +314,6 @@ Table Subject {
   Note: 'môn học'
 }
 
-Table SubjectVersionType {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  useForFinalScore Boolean [not null]
-  graduation Boolean [not null]
-  conditional Boolean [not null]
-  project Boolean [not null]
-  print Boolean [not null]
-  subjectVersions SubjectVersion [not null]
-}
-
 Table SubjectVersion {
   id String [pk]
   code String [unique]
@@ -347,20 +335,12 @@ Table SubjectVersion {
   numberOfOther Int [not null, default: 0]
   objectives String
   outputStandard String
-  documentPath String
-  coef_1 Float
-  coef_2 Float
-  coef_3 Float
-  coef_4 Float
-  coef_5 Float
+  documentPaths String[] [not null]
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
   subject Subject [not null]
   subjectId String [not null]
-  subjectType SubjectVersionType [not null]
-  subjectTypeId String [not null]
-  trainingObjectTypes TrainingObjectType [not null]
-  trainingBlocks TrainingBlockSubject [not null, note: 'môn học chương trình']
+  trainingBlocks TrainingBlockSubject [not null, note: 'môn học khối kiến thức - CTĐT']
   prerequisiteSubject SubjectVersion [not null, note: 'môn học tiên quyết']
   dependentSubject SubjectVersion [not null]
   coRequisiteSubject SubjectVersion [not null]
@@ -380,13 +360,14 @@ Table TrainingBlockSubject {
   updatedAt DateTime [not null]
   subject SubjectVersion [not null]
   subjectId String [not null]
-  trainingBlock TrainingBlock [not null]
-  trainingBlockId String [not null]
+  trainingBlockOnCurriculumVersion TrainingBlockOnCurriculumVersion [not null]
+  trainingBlockOnCurriculumVersionId String [not null]
   semester Int
-  type CurriculumVersionSubjectType [not null, default: 'None']
-  information String
-  documentPath String
-  renderPath String
+  type SubjectRequirementType [not null, default: 'None']
+  useForFinalScore Boolean [not null]
+  graduation Boolean [not null]
+  project Boolean [not null]
+  print Boolean [not null]
 
   Note: 'môn học khối kiến thức chương trình'
 }
@@ -429,7 +410,6 @@ Table TrainingObjectType {
   curriculumVersion CurriculumVersion [not null]
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
   trainingFields TrainingFieldOnTrainingObjectType [not null]
-  subjectVersion SubjectVersion [not null]
   students Student [not null]
 
   Note: 'đối tượng đào tạo (Quân sư, dân sự, quốc tế)'
@@ -458,7 +438,6 @@ Table TrainingType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   students Student [not null]
 
   Note: 'loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)'
@@ -473,7 +452,6 @@ Table TrainingLevel {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   curriculumVersion CurriculumVersion [not null]
   students Student [not null]
 
@@ -489,7 +467,6 @@ Table TrainingForm {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  trainingCourse TrainingCourse [not null]
   students Student [not null]
 
   Note: 'hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)'
@@ -598,11 +575,29 @@ Table TrainingBlock {
   updatedAt DateTime [not null]
   name String [not null]
   priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
-  curriculumVersion CurriculumVersion [not null]
-  curriculumVersionId String [not null]
-  subjects TrainingBlockSubject [not null]
+  curriculumVersions TrainingBlockOnCurriculumVersion [not null]
 
   Note: 'khối kiến thức'
+}
+
+Table TrainingBlockOnCurriculumVersion {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingBlock TrainingBlock [not null]
+  trainingBlockId String [not null]
+  curriculumVersion CurriculumVersion [not null]
+  curriculumVersionId String [not null]
+  priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
+  subjects TrainingBlockSubject [not null]
+
+  indexes {
+    (trainingBlockId, curriculumVersionId) [unique]
+  }
 }
 
 Table TrainingTime {
@@ -892,6 +887,7 @@ Table UserProfile {
   avatar String
   firstName String [not null]
   lastName String [not null]
+  fullname String
   dateOfBirth DateTime
   placeOfBirth String
   homeTown String
@@ -1298,11 +1294,6 @@ Table BlockedIp {
   expiresAt DateTime
 }
 
-Table SubjectVersionToTrainingObjectType {
-  trainingobjecttypesId String [ref: > TrainingObjectType.id]
-  subjectversionId String [ref: > SubjectVersion.id]
-}
-
 Table PrerequisiteSubject {
   prerequisitesubjectId String [ref: > SubjectVersion.id]
   dependentsubjectId String [ref: > SubjectVersion.id]
@@ -1376,7 +1367,7 @@ Enum ExamType {
   Other
 }
 
-Enum CurriculumVersionSubjectType {
+Enum SubjectRequirementType {
   None
   Mandatory
   Optional
@@ -1494,13 +1485,9 @@ Ref: Semester.schoolYearId > SchoolYear.id
 
 Ref: Milestone.schoolYearId > SchoolYear.id
 
+Ref: TrainingCourse.semesterStartId > Semester.id
+
 Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
-
-Ref: TrainingCourse.trainingTypeId > TrainingType.id
-
-Ref: TrainingCourse.trainingLevelId > TrainingLevel.id
-
-Ref: TrainingCourse.trainingFormId > TrainingForm.id
 
 Ref: FixedClass.trainingCourseId > TrainingCourse.id
 
@@ -1530,11 +1517,9 @@ Ref: SubjectVersion.managementOrganizationId > Organization.id
 
 Ref: SubjectVersion.subjectId > Subject.id
 
-Ref: SubjectVersion.subjectTypeId > SubjectVersionType.id
-
 Ref: TrainingBlockSubject.subjectId > SubjectVersion.id
 
-Ref: TrainingBlockSubject.trainingBlockId > TrainingBlock.id
+Ref: TrainingBlockSubject.trainingBlockOnCurriculumVersionId > TrainingBlockOnCurriculumVersion.id
 
 Ref: SubjectClass.subjectId > SubjectVersion.id
 
@@ -1558,7 +1543,9 @@ Ref: TrainingMajorOnTrainingObjectType.trainingMajorId > TrainingMajor.id
 
 Ref: TrainingMajorOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
-Ref: TrainingBlock.curriculumVersionId > CurriculumVersion.id
+Ref: TrainingBlockOnCurriculumVersion.trainingBlockId > TrainingBlock.id
+
+Ref: TrainingBlockOnCurriculumVersion.curriculumVersionId > CurriculumVersion.id
 
 Ref: Student.trainingLocationId > TrainingLocation.id
 

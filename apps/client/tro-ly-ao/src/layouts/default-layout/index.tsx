@@ -56,43 +56,38 @@ const DefaultLayout = ({
             }
             onIdle={signOutAction}
         >
-            <Layout className="h-[100px]">
-                <Header className="fixed z-50 top-0 left-0 right-0 justify-between flex items-center bg-white shadow m-4 rounded-xl px-4">
-                    <div className="flex items-center gap-4">
-                        <Image
-                            src={logo_mta}
-                            alt="logo k01"
-                            className="w-10 h-10"
-                        />
-                        <span className="text-lg font-bold text-primary">
-                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                        </span>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <SearchSystem />
-                        <AvatarDropdown />
-                    </div>
-                </Header>
-            </Layout>
-            <Layout hasSider>
+            {/* Header */}
+            <Header className="fixed z-50 top-0 left-0 right-0 flex justify-between items-center bg-white shadow rounded-xl px-4 py-2 m-2">
+                <div className="flex items-center gap-3">
+                    <Image
+                        src={logo_mta}
+                        alt="logo_mta"
+                        className="w-10 h-10"
+                    />
+                    <span className="text-lg font-bold text-primary">
+                        HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                    </span>
+                </div>
+                <div className="flex gap-2 items-center">
+                    <SearchSystem />
+                    <AvatarDropdown />
+                </div>
+            </Header>
+            <Layout hasSider className="pt-[80px]">
+                {' '}
                 <SiderDefaultLayout
                     items={menus}
                     onCollapse={handleCollapsed}
                     collapsed={collapsed}
-                    theme={'light'}
+                    theme="light"
                 />
                 <Layout
                     style={{
-                        marginInlineStart: collapsed ? 80 + 16 : 280 + 16, // Điều chỉnh margin theo trạng thái collapsed
-                        transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
+                        marginInlineStart: collapsed ? 96 : 296,
+                        transition: 'margin-inline-start 0.2s',
                     }}
                 >
-                    <div
-                        className={cn(
-                            'min-h-[100vh] rounded p-4 pb-2 pt-0',
-                            className
-                        )}
-                    >
+                    <div className={cn('min-h-[100vh] p-0', className)}>
                         {children}
                     </div>
                 </Layout>

@@ -44,14 +44,25 @@ export default function Page() {
 
         const currentInput = input
         setInput('')
-        await sendMessage(currentInput)
+
+        // 1. Hiển thị ngay trên UI
+        const userMessage = {
+            id: Date.now(),
+            role: 'USER',
+            content: currentInput,
+        }
+        setMessages((prev) => [...prev, userMessage])
+
+        // 2. Gửi bot trả lời (không block UI)
+        await sendMessage(currentInput, userMessage.id)
     }
 
-    const sendMessage = async (text: string) => {
-        const newMessage = { id: Date.now(), role: 'USER', content: text }
-        setMessages((prev) => [...prev, newMessage])
+    const sendMessage = async (text: string, userMessageId: number) => {
         setBotTyping(true)
         setLoading(true)
+
+        const controller = new AbortController()
+        setAbortController(controller)
 
         try {
             await updateConversation({
@@ -68,34 +79,49 @@ export default function Page() {
                 },
             })
 
-            const newAbortController = new AbortController()
-            setAbortController(newAbortController)
-
             const response = await fetchHoiDap({
                 prompt: text,
                 type_data: conversationCurrent?.type ?? '',
                 conversation_id: id as string,
-                signal: newAbortController.signal,
+                signal: controller.signal,
             })
+
+            const contentType = response.headers.get('content-type')
+            if (contentType?.includes('application/json')) {
+                const json = await response.json()
+                if (json.error === 'True') {
+                    message.error('Đã xảy ra lỗi từ máy chủ')
+                    return
+                }
+            }
 
             if (!response.body) {
                 message.error('Không có nội dung phản hồi')
                 return
             }
 
-            const botId = Date.now() + 1
+            const botId = Date.now()
             setMessages((prev) => [
                 ...prev,
                 { id: botId, role: 'BOT', content: '' },
             ])
 
-            await readStreamWithLiveUpdate(response.body, (chunk, fullText) => {
-                setMessages((prev) =>
-                    prev.map((msg) =>
-                        msg.id === botId ? { ...msg, content: fullText } : msg
-                    )
+            try {
+                await readStreamWithLiveUpdate(
+                    response.body,
+                    (chunk, fullText) => {
+                        setMessages((prev) =>
+                            prev.map((msg) =>
+                                msg.id === botId
+                                    ? { ...msg, content: fullText }
+                                    : msg
+                            )
+                        )
+                    }
                 )
-            })
+            } finally {
+                setBotTyping(false)
+            }
         } catch (err) {
             if (err instanceof Error && err.name === 'AbortError') {
                 message.warning('Đã hủy yêu cầu')
@@ -104,7 +130,6 @@ export default function Page() {
                 message.error('Đã xảy ra lỗi khi gửi tin nhắn')
             }
         } finally {
-            setBotTyping(false)
             setLoading(false)
         }
     }
@@ -115,7 +140,13 @@ export default function Page() {
 
     useEffect(() => {
         if (messageList) {
-            const mappedMessages = messageList.map((msg) => ({
+            const sortedMessages = [...messageList].sort(
+                (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime()
+            )
+
+            const mappedMessages = sortedMessages.map((msg) => ({
                 id: Number(msg.id),
                 role: msg.sender === 'USER' ? 'USER' : 'BOT',
                 content: msg.content || '',
@@ -222,10 +253,7 @@ export default function Page() {
                     )}
                 </div>
 
-                {(botTyping ||
-                    messages.some(
-                        (msg) => msg.role === 'BOT' && !msg.content
-                    )) && (
+                {botTyping && (
                     <div className="flex justify-center items-center gap-2 pb-4">
                         <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-md max-w-xs">
                             <Spin size="small" />

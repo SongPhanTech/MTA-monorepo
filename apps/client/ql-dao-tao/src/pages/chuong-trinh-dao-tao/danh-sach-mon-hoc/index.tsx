@@ -3,16 +3,16 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSubjectListModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
+import type { Curriculum, ExamType } from '@workspace/db'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
+    useFindManyCurriculum,
+    useFindManySubject,
     useFindManyTrainingObjectType,
-    useUpdateTrainingCourse,
+    useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -28,7 +28,7 @@ import {
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -36,158 +36,28 @@ interface FilterProps {
     trainingObjectTypeId: string | undefined
 }
 
-interface DataItem {
-    id?: string | number
-    key: string
-    type: 'parent' | 'child'
-    code: string
-    scheduleCode: string
-    institution: string
-    subject?: string
-    parentKey?: string
-}
-
-const rawData = [
-    {
-        id: 1,
-        subject: 'Lý thuyết hệ điều hành - Bộ môn Khoa học máy tính',
-        children: [
-            {
-                id: 1,
-                maMon: '126004',
-                mapb: 'PB1',
-                dtdt: 'Đại học quân sự',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB001',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                hs1: 0.1,
-                hs2: 0.2,
-                hs3: 0.6,
-                status: 'ACTIVE',
-            },
-            {
-                id: 2,
-                mapb: 'PB2',
-                tenPB: 'nam 2025',
-                maTKB: 'TKB004',
-                stc: 3,
-                sttkb: 45,
-                stlt: 30,
-                stth: 15,
-                svMax: 60,
-                thi: 'Tự luận',
-                dbn: 0,
-                sdd: 3,
-                status: 'ACTIVE',
-            },
-        ],
-    },
-    {
-        id: 2,
-        subject: 'Đồ hoạ máy tính - Bộ môn Khoa học máy tính',
-        children: [
-            {
-                id: 3,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-            {
-                id: 4,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-            {
-                id: 5,
-                mapb: 'PB3',
-                tenPB: 'nam 2024',
-                maTKB: 'TKB002',
-                stc: 4,
-                sttkb: 60,
-                stlt: 40,
-                stth: 20,
-                svMax: 50,
-                thi: 'Trắc nghiệm',
-                dbn: 1,
-                sdd: 3,
-                status: 'IN_ACTIVE',
-            },
-        ],
-    },
-    {
-        id: 3,
-        subject: 'Đồ hoạ máy tính - tính',
-        children: [],
-    },
-]
-
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingObjectTypeId: undefined,
     })
+    const { getExamTypeLabel } = useExamTypeOptions()
 
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data: curriculum = [] } = useFindManyCurriculum()
+
+    const { data: SubjectData, refetch } = useFindManySubject({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
                 : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                 : {}),
         },
         include: {
-            organization: true,
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const { data: count } = useCountTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
+            subjectVersion: true,
+            managementOrganization: true,
         },
     })
 
@@ -197,8 +67,12 @@ export default function SubjectList() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutSubjectListModal.name,
+    })
+
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<string>({
+        tag: PutVersionSubjectModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -206,11 +80,16 @@ export default function SubjectList() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+
+    const handleModalSubjectVersion = () => {
+        onOpenSubjectVersion()
+    }
+
+    const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingCourse({
+            await updateSubjectVersion({
                 where: {
                     id,
                 },
@@ -234,6 +113,17 @@ export default function SubjectList() {
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
+
+    const processedData = useMemo(() => {
+        return SubjectData?.map((item) => ({
+            ...item,
+            name: `${item?.name}${
+                item?.managementOrganization?.name
+                    ? ` - ${item?.managementOrganization?.name}`
+                    : ''
+            }`,
+        }))
+    }, [SubjectData])
 
     return (
         <div>
@@ -279,8 +169,8 @@ export default function SubjectList() {
                                     >
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
+                                            options={curriculum.map(
+                                                (i: Curriculum) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })
@@ -302,7 +192,14 @@ export default function SubjectList() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={8}>
+                                <Button
+                                    onClick={handleModalSubjectVersion}
+                                    type="primary"
+                                >
+                                    <PlusOutlined />
+                                    Thêm phiên bản môn học
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
@@ -315,17 +212,18 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey="subject"
+                        headerTitleKey="name"
+                        childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         columns={[
                             {
                                 title: 'Mã',
-                                dataIndex: 'maMon',
+                                dataIndex: 'code',
                                 width: 100,
                                 align: 'center',
                             },
                             {
-                                title: 'MãTKB',
+                                title: 'Mã TKB',
                                 dataIndex: 'maTKB',
                                 width: 100,
                                 align: 'center',
@@ -338,7 +236,7 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Số tín chỉ',
-                                dataIndex: 'stc',
+                                dataIndex: 'credit',
                                 width: 150,
                                 align: 'center',
                             },
@@ -350,13 +248,13 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Số tiết lý thuyết',
-                                dataIndex: 'stlt',
+                                dataIndex: 'numberOfTheory',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Số tiết thực hành',
-                                dataIndex: 'stth',
+                                dataIndex: 'numberOfPractice',
                                 width: 150,
                                 align: 'center',
                             },
@@ -368,9 +266,11 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Hình thức thi',
-                                dataIndex: 'thi',
+                                dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
+                                render: (value: ExamType) =>
+                                    getExamTypeLabel(value),
                             },
                             {
                                 title: 'Điểm bằng nhau',
@@ -389,19 +289,19 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Hệ số điểm chuyên cần',
-                                dataIndex: 'hs1',
+                                dataIndex: 'coef_1',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Hệ số điểm thường xuyên',
-                                dataIndex: 'hs2',
+                                dataIndex: 'coef_2',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Hệ số điểm thi',
-                                dataIndex: 'hs3',
+                                dataIndex: 'coef_3',
                                 width: 150,
                                 align: 'center',
                             },
@@ -410,19 +310,15 @@ export default function SubjectList() {
                                 align: 'center',
                                 fixed: 'right',
                                 width: 150,
-                                render: (record) => (
-                                    <Tag
-                                        color={
-                                            record.status === 'IN_ACTIVE'
-                                                ? 'error'
-                                                : 'success'
-                                        }
-                                    >
-                                        {record.status === 'IN_ACTIVE'
-                                            ? 'Ngừng đào tạo'
-                                            : 'Đang hoạt động'}
-                                    </Tag>
-                                ),
+                                render: (record) => {
+                                    return !record?.active ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -433,7 +329,9 @@ export default function SubjectList() {
                                     id ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                onClick={() => onOpen(id)}
+                                                onClick={() =>
+                                                    onOpenSubjectVersion(id)
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
@@ -446,14 +344,7 @@ export default function SubjectList() {
                                     ) : null,
                             },
                         ]}
-                        data={rawData}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                        }}
+                        data={processedData}
                     />
                 </Col>
             </Row>
