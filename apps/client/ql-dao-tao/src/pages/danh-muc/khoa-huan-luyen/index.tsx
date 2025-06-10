@@ -41,7 +41,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/lop-bien-che'
+import FixedClassPage from '@pages/danh-muc/lop-bien-che'
 import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 // const { Option } = Select;
