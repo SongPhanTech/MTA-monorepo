@@ -61,7 +61,7 @@ const DefaultLayout = ({
                     <div className="flex items-center gap-4">
                         <Image
                             src={logo_mta}
-                            alt="logo k01"
+                            alt="logo_mta"
                             className="w-10 h-10"
                         />
                         <span className="text-lg font-bold text-primary">
