@@ -94,7 +94,7 @@ const ChatLayout = ({
         conversation || []
     ).map((item) => ({
         id: item.id,
-        label: item.message?.[0]?.content || 'Loading...',
+        label: item.message?.[0]?.content || 'Đang tải...',
     }))
 
     return (
