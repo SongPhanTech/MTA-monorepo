@@ -11,7 +11,6 @@ model TrainingObjectType extends Base {
   curriculumVersion CurriculumVersion[]
   trainingMajors    TrainingMajorOnTrainingObjectType[]
   trainingFields    TrainingFieldOnTrainingObjectType[]
-  subjectVersion    SubjectVersion[]
   students          Student[]
 
   @@schema("ql-dao-tao")
@@ -27,9 +26,9 @@ model PriorityObject extends Base {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType extends Base {
-  name           String           @unique
+  name     String    @unique
 
-  students       Student[]
+  students Student[]
 
   @@schema("ql-dao-tao")
 }
@@ -46,9 +45,9 @@ model TrainingLevel extends Base {
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
-  name           String           @unique
+  name     String    @unique
 
-  students       Student[]
+  students Student[]
   @@schema("ql-dao-tao")
 }
 
@@ -117,14 +116,26 @@ model TrainingMajorOnTrainingObjectType extends Base {
 
 /// khối kiến thức
 model TrainingBlock extends Base {
-  name                String
+  name               String
   /// ưu tiên sắp xếp
-  priority            Int                    @default(0)
+  priority           Int                                @default(0)
 
+  curriculumVersions TrainingBlockOnCurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
+model TrainingBlockOnCurriculumVersion extends Base {
+  trainingBlock       TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId     String
   curriculumVersion   CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId String
 
+  /// ưu tiên sắp xếp
+  priority            Int                    @default(0)
   subjects            TrainingBlockSubject[]
+
+  @@unique([trainingBlockId, curriculumVersionId])
+
   @@schema("ql-dao-tao")
 }
 
