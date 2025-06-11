@@ -470,46 +470,69 @@ model Curriculum {
   @@schema("ql-dao-tao")
 }
 
+model DiplomaType {
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt()
+  name              String              @unique()
+  englishName       String?
+  curriculumVersion CurriculumVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion {
-  id                   String                             @id() @default(cuid())
-  code                 String?                            @unique()
-  active               Boolean                            @default(true)
-  description          String?                            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime                           @default(now())
-  updatedAt            DateTime                           @updatedAt()
-  name                 String
-  shortName            String?
-  englishName          String?
-  trainingLanguage     TrainingLanguage                   @default(Vietnamese)
-  numberOfSemesters    Int
-  yearCreation         Int?
-  yearApplication      Int?
-  curriculum           Curriculum                         @relation(fields: [curriculumId], references: [id])
-  curriculumId         String
-  trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
-  trainingLevel        TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String
-  trainingTime         TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
-  trainingTimeId       String
-  coef_1               Float?
-  coef_2               Float?
-  coef_3               Float?
-  scoreToTakeExam      Float?
-  scoreToPass          Float?
-  requiredCredits      Int?
-  electiveCredits      Int?
-  objectives           String?
-  inputStandard        String?
-  outputStandard       String?
-  information          String?
-  documentPaths        String[]
-  renderPath           String?
-  trainingBlocks       TrainingBlockOnCurriculumVersion[]
-  fixedClasses         FixedClass[]
-  students             Student[]
+  id                    String                             @id() @default(cuid())
+  code                  String?                            @unique()
+  active                Boolean                            @default(true)
+  description           String?                            @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                           @default(now())
+  updatedAt             DateTime                           @updatedAt()
+  name                  String
+  shortName             String?
+  englishName           String?
+  trainingLanguage      TrainingLanguage                   @default(Vietnamese)
+  numberOfSemesters     Int
+  yearCreation          Int?
+  yearApplication       Int?
+  curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id])
+  curriculumId          String
+  trainingObjectType    TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId  String
+  trainingLevel         TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId       String
+  trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
+  trainingTimeId        String
+  coef_1                Float?
+  coef_2                Float?
+  coef_3                Float?
+  diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId         String?
+  scoreToTakeExam       Float?
+  scoreToPass           Float?
+  requiredCredits       Int?
+  electiveCredits       Int?
+  jobPosition           String?
+  objectives            String?
+  learningOutcome       String?
+  inputStandard         String?
+  time                  String?
+  structure             String?
+  matrixLearningOutcome String?
+  summary               String?
+  learningDiagram       String?
+  guide                 String?
+  documentPaths         String[]
+  renderPath            String?
+  trainingBlocks        TrainingBlockOnCurriculumVersion[]
+  fixedClasses          FixedClass[]
+  students              Student[]
 
   @@schema("ql-dao-tao")
 }
@@ -545,15 +568,20 @@ model SubjectVersion {
   examType                 ExamType
   subjectEquivalentType    SubjectEquivalentType  @default(NONE)
   credit                   Int
-  period                   Int                    @default(0)
-  numberOfTheory           Int                    @default(0)
-  numberOfPractice         Int                    @default(0)
-  numberOfSelfStudy        Int                    @default(0)
-  numberOfProject          Int                    @default(0)
-  numberOfInternship       Int                    @default(0)
-  numberOfOther            Int                    @default(0)
+  period                   Int
+  numberOfTheory           Int?
+  numberOfPractice         Int?
+  numberOfSelfStudy        Int?
+  numberOfProject          Int?
+  numberOfInternship       Int?
+  numberOfOther            Int?
   objectives               String?
-  outputStandard           String?
+  learningOutcome          String?
+  structure                String?
+  guild                    String?
+  academicResults          String?
+  materials                String?
+  rules                    String?
   documentPaths            String[]
   managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id])
   managementOrganizationId String
@@ -1146,11 +1174,11 @@ model UserProfile {
   avatar               String?
   firstName            String
   lastName             String
+  idCardNumber         String              @unique()
   fullname             String?
   dateOfBirth          DateTime?
   placeOfBirth         String?
   homeTown             String?
-  idCardNumber         String?
   idCardDate           DateTime?
   gender               Gender?
   permanentAddress     String?

@@ -32,11 +32,11 @@ model UserProfile extends Base {
   avatar               String? // đường dẫn ảnh đại diện
   firstName            String
   lastName             String
+  idCardNumber         String              @unique // số căn cước công dân
   fullname             String?
   dateOfBirth          DateTime? // ngày sinh
   placeOfBirth         String? // nơi sinh
   homeTown             String? // quê quán
-  idCardNumber         String? // số căn cước công dân
   idCardDate           DateTime? // ngày cấp
   gender               Gender?
   permanentAddress     String? // địa chỉ thường trú

@@ -155,45 +155,62 @@ enum TrainingLanguage {
   @@schema("ql-dao-tao")
 }
 
+model DiplomaType extends Base {
+  name              String              @unique
+  englishName       String?
+
+  curriculumVersion CurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion extends Base {
-  name                 String
-  shortName            String?
-  englishName          String?
-  trainingLanguage     TrainingLanguage                   @default(Vietnamese) // Ngôn ngữ đào tạo
-  numberOfSemesters    Int
-  yearCreation         Int? // Năm tạo chương trình đào tạo
-  yearApplication      Int? // Năm áp dụng chương trình đào tạo
-  curriculum           Curriculum                         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
-  curriculumId         String
+  name                  String
+  shortName             String?
+  englishName           String?
+  trainingLanguage      TrainingLanguage                   @default(Vietnamese) // Ngôn ngữ đào tạo
+  numberOfSemesters     Int
+  yearCreation          Int? // Năm tạo chương trình đào tạo
+  yearApplication       Int? // Năm áp dụng chương trình đào tạo
+  curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
+  curriculumId          String
 
-  trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId String
-  trainingLevel        TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
-  trainingLevelId      String
-  trainingTime         TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
-  trainingTimeId       String
+  trainingObjectType    TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId  String
+  trainingLevel         TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
+  trainingLevelId       String
+  trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
+  trainingTimeId        String
 
-  coef_1               Float? // Hệ số 1
-  coef_2               Float? // Hệ số 2
-  coef_3               Float? // Hệ số 3
+  coef_1                Float? // Hệ số 1
+  coef_2                Float? // Hệ số 2
+  coef_3                Float? // Hệ số 3
+
+  diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
+  diplomaTypeId         String?
 
   // TODO: Thêm các quy chế cho chương trình đào tạo
-  scoreToTakeExam      Float? // Điểm tối thiểu để được thi
-  scoreToPass          Float? // Điểm tối thiểu để qua môn
-  requiredCredits      Int? // Số tín chỉ bắt buộc
-  electiveCredits      Int? // Số tín chỉ tự chọn
+  scoreToTakeExam       Float? // Điểm tối thiểu để được thi
+  scoreToPass           Float? // Điểm tối thiểu để qua môn
+  requiredCredits       Int? // Số tín chỉ bắt buộc
+  electiveCredits       Int? // Số tín chỉ tự chọn
 
-  objectives           String? // Mục tiêu
-  inputStandard        String? // Chuẩn đầu vào
-  outputStandard       String? // Chuẩn đầu ra
-  information          String? // Thông tin
-  documentPaths        String[] // Đường dẫn tài liệu
-  renderPath           String? // Đường dẫn tài liệu kết xuất
+  jobPosition           String? // I.10 Vị trí công việc
+  objectives            String? // II. Mục tiêu
+  learningOutcome       String? // III. Chuẩn đầu ra
+  inputStandard         String? // IV. Chuẩn đầu vào
+  time                  String? // V. Thời gian đào tạo
+  structure             String? // VI. Cấu trúc chương trình đào tạo
+  matrixLearningOutcome String? // VII. Ma trận chuẩn đầu ra
+  summary               String? // VIII. Mô tả tóm tắt nội dung các học phần
+  learningDiagram       String? // IX. Sơ đồ mối liên hệ, tiến trình đào tạo các học phần và mô hình đào tạo, phân phối kiến thức trong CTĐT
+  guide                 String? // X. Hướng dẫn thực hiện
+  documentPaths         String[] // Đường dẫn tài liệu
+  renderPath            String? // Đường dẫn tài liệu kết xuất
 
-  trainingBlocks       TrainingBlockOnCurriculumVersion[]
-  fixedClasses         FixedClass[] // Lớp biên chế
-  students             Student[] // Học viên
+  trainingBlocks        TrainingBlockOnCurriculumVersion[]
+  fixedClasses          FixedClass[] // Lớp biên chế
+  students              Student[] // Học viên
 
   @@schema("ql-dao-tao")
 }
@@ -242,15 +259,23 @@ model SubjectVersion extends Base {
   examType                 ExamType
   subjectEquivalentType    SubjectEquivalentType  @default(NONE) // loại môn học tương đương
   credit                   Int // số tín chỉ
-  period                   Int                    @default(0) // số tiết học
-  numberOfTheory           Int                    @default(0) // số tiết lý thuyết
-  numberOfPractice         Int                    @default(0) // số tiết thực hành
-  numberOfSelfStudy        Int                    @default(0) // số tiết tự học
-  numberOfProject          Int                    @default(0) // số tiết đồ án
-  numberOfInternship       Int                    @default(0) // số tiết thực tập
-  numberOfOther            Int                    @default(0) // số tiết khác
-  objectives               String? // Mục tiêu
-  outputStandard           String? // Chuẩn đầu ra
+  period                   Int // số tiết
+  numberOfTheory           Int? // số tiết lý thuyết
+  numberOfPractice         Int? // số tiết thực hành
+  numberOfSelfStudy        Int? // số tiết tự học
+  numberOfProject          Int? // số tiết đồ án
+  numberOfInternship       Int? // số tiết thực tập
+  numberOfOther            Int? // số tiết khác
+
+  // description ~ IV. MÔ TẢ
+  objectives               String? // II. Mục tiêu
+  learningOutcome          String? // III. Chuẩn đầu ra
+  structure                String? // V. Cấu trúc chương trình đào tạo
+  guild                    String? // ​VI. Kế hoạch và phương pháp dạy học
+  academicResults          String? // ​VII. Đánh giá kết quả học tập
+  materials                String? // VIII. Cơ sở vật chất, học liệu
+  rules                    String? // ​IX. Quy định của học phần
+
   documentPaths            String[] // Đường dẫn tài liệu
 
   managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách

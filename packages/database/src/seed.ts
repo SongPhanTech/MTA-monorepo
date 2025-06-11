@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 async function main() {
     // Seed OrganizationType
     await prisma.organizationType.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8400-e29b-41d4-a716-446655440000',
@@ -187,6 +188,7 @@ async function main() {
 
     // Seed Organization
     await prisma.organization.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8400-1234-41d4-a716-446655440000',
@@ -221,86 +223,9 @@ async function main() {
         ],
     })
 
-    /// Seed UserType
-    // await prisma.userType.createMany({
-    //     data: [
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440000',
-    //             name: 'Sinh viên',
-    //             code: 'SV',
-    //             description: 'Sinh viên dân sự',
-    //             createdAt: new Date('2025-04-03T12:58:40.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440001',
-    //             name: 'Học viên',
-    //             code: 'HV',
-    //             description: 'Học viên quân sự chính quy',
-    //             createdAt: new Date('2025-04-03T12:58:41.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:41.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440002',
-    //             name: 'Giảng viên',
-    //             code: 'GV',
-    //             description: 'Giảng viên',
-    //             createdAt: new Date('2025-04-03T12:58:42.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:42.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440003',
-    //             name: 'Cán bộ',
-    //             code: 'CB',
-    //             description: 'Cán bộ',
-    //             createdAt: new Date('2025-04-03T12:58:43.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:43.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440004',
-    //             name: 'Nhân viên',
-    //             code: 'NV',
-    //             description: 'Nhân viên hợp đồng',
-    //             createdAt: new Date('2025-04-03T12:58:44.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:44.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440005',
-    //             name: 'Người lao động',
-    //             code: 'NLĐ',
-    //             description: 'Người lao động',
-    //             createdAt: new Date('2025-04-03T12:58:45.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:45.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440006',
-    //             name: 'Quân nhân chuyên nghiệp',
-    //             code: 'QNCN',
-    //             description: 'Quân nhân chuyên nghiệp',
-    //             createdAt: new Date('2025-04-03T12:58:46.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:46.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440007',
-    //             name: 'Nghĩa vụ',
-    //             code: 'L',
-    //             description: 'Lính nghĩa vụ',
-    //             createdAt: new Date('2025-04-03T12:58:47.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:47.507Z'),
-    //         },
-    //         {
-    //             id: '550e8401-e29b-41d4-a716-446655440008',
-    //             name: 'Quốc tế',
-    //             code: 'QT',
-    //             description: 'Học viên quốc tế',
-    //             createdAt: new Date('2025-04-03T12:58:48.507Z'),
-    //             updatedAt: new Date('2025-04-03T12:58:48.507Z'),
-    //         },
-    //     ],
-    // })
-
     // Seed TrainingObjectType
     await prisma.trainingObjectType.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8402-e29b-41d4-a716-446655440000',
@@ -328,6 +253,7 @@ async function main() {
 
     // Seed TrainingType
     await prisma.trainingType.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8403-e29b-41d4-a716-446655440000',
@@ -362,6 +288,7 @@ async function main() {
 
     // Seed TrainingLevel
     await prisma.trainingLevel.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8404-e29b-41d4-a716-446655440000',
@@ -389,6 +316,7 @@ async function main() {
 
     // Seed TrainingForm
     await prisma.trainingForm.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8405-e29b-41d4-a716-446655440000',
@@ -414,394 +342,9 @@ async function main() {
         ],
     })
 
-    // Seed TrainingCourse
-    await prisma.trainingCourse.createMany({
-        data: [
-            {
-                id: '550e8406-e29b-41d4-a716-446655440000',
-                code: 'K31',
-                name: 'Khóa 31',
-                description: 'Khóa 31',
-                startDate: new Date('2025-04-03T12:58:40.507Z'),
-                trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
-                trainingTypeId: '550e8403-e29b-41d4-a716-446655440000',
-                trainingFormId: '550e8405-e29b-41d4-a716-446655440000',
-                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
-                createdAt: new Date('2025-04-03T12:58:40.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e8406-e29b-41d4-a716-446655440001',
-                code: 'K32',
-                name: 'Khóa 32',
-                description: 'Khóa 32',
-                startDate: new Date('2025-04-03T12:58:41.507Z'),
-                trainingLevelId: '550e8404-e29b-41d4-a716-446655440001',
-                trainingTypeId: '550e8403-e29b-41d4-a716-446655440001',
-                trainingFormId: '550e8405-e29b-41d4-a716-446655440001',
-                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
-                createdAt: new Date('2025-04-03T12:58:41.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
-            },
-            {
-                id: '550e8406-e29b-41d4-a716-446655440002',
-                code: 'K33',
-                name: 'Khóa 33',
-                description: 'Khóa 33',
-                startDate: new Date('2025-04-03T12:58:42.507Z'),
-                trainingLevelId: '550e8404-e29b-41d4-a716-446655440002',
-                trainingTypeId: '550e8403-e29b-41d4-a716-446655440002',
-                trainingFormId: '550e8405-e29b-41d4-a716-446655440002',
-                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440002',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
-            },
-        ],
-    })
-
-    // Seed FixedClass
-    await prisma.fixedClass.createMany({
-        data: [
-            {
-                id: '550e8407-e29b-41d4-a716-446655440000',
-                name: 'CNTT',
-                code: 'CNTT_K31',
-                createdAt: new Date('2025-04-03T12:58:40.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
-            },
-            {
-                id: '550e8407-e29b-41d4-a716-446655440001',
-                name: 'VK',
-                code: 'VK_K31',
-                createdAt: new Date('2025-04-03T12:58:41.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440002',
-            },
-            {
-                id: '550e8407-e29b-41d4-a716-446655440002',
-                name: 'CNTT',
-                code: 'CNTT_K32',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
-            },
-            {
-                id: '550e8407-e29b-41d4-a716-446655440003',
-                name: 'VK',
-                code: 'VK_K32',
-                createdAt: new Date('2025-04-03T12:58:43.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:43.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440002',
-            },
-            {
-                id: '550e8407-e29b-41d4-a716-446655440004',
-                name: 'CNTT',
-                code: 'CNTT_K33',
-                createdAt: new Date('2025-04-03T12:58:44.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:44.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440002',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
-            },
-        ],
-    })
-
-    // Seed TemplateFile
-    await prisma.templateFile.createMany({
-        data: [
-            {
-                id: '550e8408-e29b-41d4-a716-446655440000',
-                name: 'File nhập thông tin học viên mới',
-                code: 'IMPORT_USERPROFILE',
-                createdAt: new Date('2025-04-03T12:58:40.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                path: 'https://minio.swantech.vn/mta/template/fileNhapMauThongTinHocVien.xlsx',
-                fileType: 'UPLOAD',
-                extensions: 'xlsx',
-                numberField: 0,
-            },
-            {
-                id: '550e8408-e29b-41d4-a716-446655440001',
-                name: 'File cập nhập thông tin người dùng',
-                code: 'UPDATE_USERPROFILE',
-                createdAt: new Date('2025-04-03T12:58:41.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                path: 'https://minio.swantech.vn/mta/template/fileCapNhatThongTin.xlsx',
-                fileType: 'UPLOAD',
-                extensions: 'xlsx',
-                numberField: 0,
-            },
-            {
-                id: '550e8408-e29b-41d4-a716-446655440002',
-                name: 'File tạo lớp biên chế',
-                code: 'IMPORT_FIXCLASS',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                path: 'https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx',
-                fileType: 'UPLOAD',
-                extensions: 'xlsx',
-                numberField: 0,
-            },
-            {
-                id: '550e8408-e29b-41d4-a716-446655440003',
-                name: 'File xếp lớp',
-                code: 'CLASS_DEVISION',
-                createdAt: new Date('2025-04-03T12:58:43.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                path: 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx',
-                fileType: 'UPLOAD',
-                extensions: 'xlsx',
-                numberField: 0,
-            },
-            {
-                id: '550e8408-e29b-41d4-a716-446655440004',
-                name: 'File danh sách học viên lớp',
-                code: 'LIST_STUDENT_FIXCLASS',
-                createdAt: new Date('2025-04-03T12:58:43.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-                path: 'https://minio.swantech.vn/mta/template/DanhSachHocVienLop.docx',
-                fileType: 'DOWNLOAD',
-                extensions: 'docx',
-                numberField: 0,
-            },
-        ],
-    })
-
-    // Seed PriorityObject
-    await prisma.priorityObject.createMany({
-        data: [
-            {
-                id: '550e8409-e29b-41d4-a716-446655440000',
-                name: 'Đối tượng 1',
-                code: 'DOITUONG1',
-                createdAt: new Date('2025-04-03T12:58:44.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e8409-e29b-41d4-a716-446655440001',
-                name: 'Đối tượng 2',
-                code: 'DOITUONG2',
-                createdAt: new Date('2025-04-03T12:58:45.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e8409-e29b-41d4-a716-446655440002',
-                name: 'Đối tượng 3',
-                code: 'DOITUONG3',
-                createdAt: new Date('2025-04-03T12:58:46.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed RegistrationArea
-    await prisma.registrationArea.createMany({
-        data: [
-            {
-                id: '550e840a-e29b-41d4-a716-446655440000',
-                name: 'Khu vực 1',
-                code: 'KV1',
-                createdAt: new Date('2025-04-03T12:58:47.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840a-e29b-41d4-a716-446655440001',
-                name: 'Khu vực 2',
-                code: 'KV2',
-                createdAt: new Date('2025-04-03T12:58:48.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840a-e29b-41d4-a716-446655440002',
-                name: 'Khu vực 3',
-                code: 'KV3',
-                createdAt: new Date('2025-04-03T12:58:49.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed Nationality
-    await prisma.nationality.createMany({
-        data: [
-            {
-                id: '550e840b-e29b-41d4-a716-446655440000',
-                name: 'Việt Nam',
-                code: 'VN',
-                createdAt: new Date('2025-04-03T12:58:50.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840b-e29b-41d4-a716-446655440001',
-                name: 'Lào',
-                code: 'LAO',
-                createdAt: new Date('2025-04-03T12:58:51.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840b-e29b-41d4-a716-446655440002',
-                name: 'Campuchia',
-                code: 'CAM',
-                createdAt: new Date('2025-04-03T12:58:52.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840b-e29b-41d4-a716-446655440003',
-                name: 'Khác',
-                code: 'Khac',
-                createdAt: new Date('2025-04-03T12:58:53.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed Religion
-    await prisma.religion.createMany({
-        data: [
-            {
-                id: '550e840c-e29b-41d4-a716-446655440000',
-                name: 'Phật giáo',
-                code: 'PG',
-                createdAt: new Date('2025-04-03T12:58:54.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840c-e29b-41d4-a716-446655440001',
-                name: 'Thiên chúa giáo',
-                code: 'TCC',
-                createdAt: new Date('2025-04-03T12:58:55.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840c-e29b-41d4-a716-446655440002',
-                name: 'Hồi giáo',
-                code: 'HG',
-                createdAt: new Date('2025-04-03T12:58:56.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed Ethnicity
-    await prisma.ethnicity.createMany({
-        data: [
-            {
-                id: '550e840d-e29b-41d4-a716-446655440000',
-                name: 'Kinh',
-                code: 'K',
-                createdAt: new Date('2025-04-03T12:58:57.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440001',
-                name: 'Thái',
-                code: 'T',
-                createdAt: new Date('2025-04-03T12:58:58.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440002',
-                name: 'Khmer',
-                code: 'KHM',
-                createdAt: new Date('2025-04-03T12:58:59.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440003',
-                name: 'Mường',
-                code: 'M',
-                createdAt: new Date('2025-04-03T12:59:00.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440004',
-                name: 'Tày',
-                code: 'TAY',
-                createdAt: new Date('2025-04-03T12:59:01.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440005',
-                name: 'Thổ',
-                code: 'THO',
-                createdAt: new Date('2025-04-03T12:59:02.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840d-e29b-41d4-a716-446655440006',
-                name: 'Khác',
-                code: 'Khac',
-                createdAt: new Date('2025-04-03T12:59:03.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed TrainingRank
-    await prisma.trainingRank.createMany({
-        data: [
-            {
-                id: '550e840e-e29b-41d4-a716-446655440000',
-                name: 'Xuất sắc',
-                code: 'SX',
-                createdAt: new Date('2025-04-03T12:59:04.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840e-e29b-41d4-a716-446655440001',
-                name: 'Tốt',
-                code: 'T',
-                createdAt: new Date('2025-04-03T12:59:05.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840e-e29b-41d4-a716-446655440002',
-                name: 'Khá',
-                code: 'K',
-                createdAt: new Date('2025-04-03T12:59:06.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
-    // Seed TrainingLocation
-    await prisma.trainingLocation.createMany({
-        data: [
-            {
-                id: '550e840f-e29b-41d4-a716-446655440000',
-                name: 'Khu A',
-                code: 'A',
-                createdAt: new Date('2025-04-03T12:59:07.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840f-e29b-41d4-a716-446655440001',
-                name: 'Xuân Phương',
-                code: 'XP',
-                createdAt: new Date('2025-04-03T12:59:08.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840f-e29b-41d4-a716-446655440002',
-                name: 'Vĩnh Phúc',
-                code: 'VP',
-                createdAt: new Date('2025-04-03T12:59:09.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
     // Seed SchoolYear
     await prisma.schoolYear.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8408-e29b-41d4-a716-446655440000',
@@ -838,6 +381,7 @@ async function main() {
 
     // Seed Semester
     await prisma.semester.createMany({
+        skipDuplicates: true,
         data: [
             {
                 id: '550e8409-e29b-41d4-a716-446655440000',
@@ -947,6 +491,394 @@ async function main() {
         ],
     })
 
+    // Seed TrainingCourse
+    await prisma.trainingCourse.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8406-e29b-41d4-a716-446655440000',
+                code: 'K31',
+                name: 'Khóa 31',
+                description: 'Khóa 31',
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
+                createdAt: new Date('2025-04-03T12:58:40.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8406-e29b-41d4-a716-446655440001',
+                code: 'K32',
+                name: 'Khóa 32',
+                description: 'Khóa 32',
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
+                createdAt: new Date('2025-04-03T12:58:41.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
+            },
+            {
+                id: '550e8406-e29b-41d4-a716-446655440002',
+                code: 'K33',
+                name: 'Khóa 33',
+                description: 'Khóa 33',
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440002',
+                createdAt: new Date('2025-04-03T12:58:42.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
+            },
+        ],
+    })
+
+    // Seed FixedClass
+    await prisma.fixedClass.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8407-e29b-41d4-a716-446655440000',
+                name: 'CNTT',
+                code: 'CNTT_K31',
+                createdAt: new Date('2025-04-03T12:58:40.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
+                managementOrganizationId:
+                    '550e8400-1234-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440001',
+                name: 'VK',
+                code: 'VK_K31',
+                createdAt: new Date('2025-04-03T12:58:41.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
+                managementOrganizationId:
+                    '550e8400-1234-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440002',
+                name: 'CNTT',
+                code: 'CNTT_K32',
+                createdAt: new Date('2025-04-03T12:58:42.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
+                managementOrganizationId:
+                    '550e8400-1234-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440003',
+                name: 'VK',
+                code: 'VK_K32',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:43.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
+                managementOrganizationId:
+                    '550e8400-1234-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440004',
+                name: 'CNTT',
+                code: 'CNTT_K33',
+                createdAt: new Date('2025-04-03T12:58:44.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:44.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440002',
+                managementOrganizationId:
+                    '550e8400-1234-41d4-a716-446655440000',
+            },
+        ],
+    })
+
+    // Seed TemplateFile
+    await prisma.templateFile.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8408-e29b-41d4-a716-446655440000',
+                name: 'File nhập thông tin học viên mới',
+                code: 'IMPORT_USERPROFILE',
+                createdAt: new Date('2025-04-03T12:58:40.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/fileNhapMauThongTinHocVien.xlsx',
+                fileType: 'UPLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440001',
+                name: 'File cập nhập thông tin người dùng',
+                code: 'UPDATE_USERPROFILE',
+                createdAt: new Date('2025-04-03T12:58:41.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/fileCapNhatThongTin.xlsx',
+                fileType: 'UPLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440002',
+                name: 'File tạo lớp biên chế',
+                code: 'IMPORT_FIXCLASS',
+                createdAt: new Date('2025-04-03T12:58:42.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx',
+                fileType: 'UPLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440003',
+                name: 'File xếp lớp',
+                code: 'CLASS_DEVISION',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx',
+                fileType: 'UPLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440004',
+                name: 'File danh sách học viên lớp',
+                code: 'LIST_STUDENT_FIXCLASS',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/DanhSachHocVienLop.docx',
+                fileType: 'DOWNLOAD',
+                extensions: 'docx',
+                numberField: 0,
+            },
+        ],
+    })
+
+    // Seed PriorityObject
+    await prisma.priorityObject.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8409-e29b-41d4-a716-446655440000',
+                name: 'Đối tượng 1',
+                code: 'DOITUONG1',
+                createdAt: new Date('2025-04-03T12:58:44.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440001',
+                name: 'Đối tượng 2',
+                code: 'DOITUONG2',
+                createdAt: new Date('2025-04-03T12:58:45.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440002',
+                name: 'Đối tượng 3',
+                code: 'DOITUONG3',
+                createdAt: new Date('2025-04-03T12:58:46.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed RegistrationArea
+    await prisma.registrationArea.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840a-e29b-41d4-a716-446655440000',
+                name: 'Khu vực 1',
+                code: 'KV1',
+                createdAt: new Date('2025-04-03T12:58:47.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840a-e29b-41d4-a716-446655440001',
+                name: 'Khu vực 2',
+                code: 'KV2',
+                createdAt: new Date('2025-04-03T12:58:48.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840a-e29b-41d4-a716-446655440002',
+                name: 'Khu vực 3',
+                code: 'KV3',
+                createdAt: new Date('2025-04-03T12:58:49.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed Nationality
+    await prisma.nationality.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840b-e29b-41d4-a716-446655440000',
+                name: 'Việt Nam',
+                code: 'VN',
+                createdAt: new Date('2025-04-03T12:58:50.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840b-e29b-41d4-a716-446655440001',
+                name: 'Lào',
+                code: 'LAO',
+                createdAt: new Date('2025-04-03T12:58:51.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840b-e29b-41d4-a716-446655440002',
+                name: 'Campuchia',
+                code: 'CAM',
+                createdAt: new Date('2025-04-03T12:58:52.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840b-e29b-41d4-a716-446655440003',
+                name: 'Khác',
+                code: 'Khac',
+                createdAt: new Date('2025-04-03T12:58:53.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed Religion
+    await prisma.religion.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840c-e29b-41d4-a716-446655440000',
+                name: 'Phật giáo',
+                code: 'PG',
+                createdAt: new Date('2025-04-03T12:58:54.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840c-e29b-41d4-a716-446655440001',
+                name: 'Thiên chúa giáo',
+                code: 'TCC',
+                createdAt: new Date('2025-04-03T12:58:55.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840c-e29b-41d4-a716-446655440002',
+                name: 'Hồi giáo',
+                code: 'HG',
+                createdAt: new Date('2025-04-03T12:58:56.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed Ethnicity
+    await prisma.ethnicity.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840d-e29b-41d4-a716-446655440000',
+                name: 'Kinh',
+                code: 'K',
+                createdAt: new Date('2025-04-03T12:58:57.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440001',
+                name: 'Thái',
+                code: 'T',
+                createdAt: new Date('2025-04-03T12:58:58.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440002',
+                name: 'Khmer',
+                code: 'KHM',
+                createdAt: new Date('2025-04-03T12:58:59.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440003',
+                name: 'Mường',
+                code: 'M',
+                createdAt: new Date('2025-04-03T12:59:00.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440004',
+                name: 'Tày',
+                code: 'TAY',
+                createdAt: new Date('2025-04-03T12:59:01.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440005',
+                name: 'Thổ',
+                code: 'THO',
+                createdAt: new Date('2025-04-03T12:59:02.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840d-e29b-41d4-a716-446655440006',
+                name: 'Khác',
+                code: 'Khac',
+                createdAt: new Date('2025-04-03T12:59:03.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed TrainingRank
+    await prisma.trainingRank.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840e-e29b-41d4-a716-446655440000',
+                name: 'Xuất sắc',
+                code: 'SX',
+                createdAt: new Date('2025-04-03T12:59:04.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840e-e29b-41d4-a716-446655440001',
+                name: 'Tốt',
+                code: 'T',
+                createdAt: new Date('2025-04-03T12:59:05.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840e-e29b-41d4-a716-446655440002',
+                name: 'Khá',
+                code: 'K',
+                createdAt: new Date('2025-04-03T12:59:06.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed TrainingLocation
+    await prisma.trainingLocation.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e840f-e29b-41d4-a716-446655440000',
+                name: 'Khu A',
+                code: 'A',
+                createdAt: new Date('2025-04-03T12:59:07.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840f-e29b-41d4-a716-446655440001',
+                name: 'Xuân Phương',
+                code: 'XP',
+                createdAt: new Date('2025-04-03T12:59:08.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e840f-e29b-41d4-a716-446655440002',
+                name: 'Vĩnh Phúc',
+                code: 'VP',
+                createdAt: new Date('2025-04-03T12:59:09.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
     const organization = await prisma.organization.create({
         data: {
             name: 'Khoa CNTT',
@@ -1018,9 +950,9 @@ async function main() {
         },
     })
 
-    const { id: curriculumVersionId } =
-        await prisma.curriculumVersion.findFirstOrThrow({})
-    await prisma.trainingBlock.createMany({
+    const trainingBlocks = await prisma.trainingBlock.createManyAndReturn({
+        skipDuplicates: true,
+        select: { id: true },
         data: [
             {
                 id: 'cmbol4z820dk1ms0124kqhtgw',
@@ -1032,7 +964,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T04:21:48.243Z'),
                 name: 'Giáo dục đại cương 2',
                 priority: 9,
-                curriculumVersionId,
             },
             {
                 id: 'cmbol5u1q0dlhms01xe6914la',
@@ -1044,7 +975,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T04:22:28.191Z'),
                 name: 'Đồ án tốt nghiệp, thì tốt nghiệp 3',
                 priority: 4,
-                curriculumVersionId,
             },
             {
                 id: 'cmbol6rcs0dm9ms01dxcy3iv5',
@@ -1056,7 +986,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T04:23:11.357Z'),
                 name: 'test',
                 priority: 16,
-                curriculumVersionId,
             },
             {
                 id: 'cmbokin8z0cz1ms01o3tmcvsx',
@@ -1068,7 +997,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:35:16.206Z'),
                 name: 'Đồ án tốt nghiệp, thì tốt nghiệp',
                 priority: 4,
-                curriculumVersionId,
             },
             {
                 id: 'abc',
@@ -1080,7 +1008,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:37:31.107Z'),
                 name: 'Cơ sở ngành',
                 priority: 11,
-                curriculumVersionId,
             },
             {
                 id: 'cmbokaoq60crems01krgrsm1v',
@@ -1092,7 +1019,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:38:19.829Z'),
                 name: 'CHQLKT',
                 priority: 2,
-                curriculumVersionId,
             },
             {
                 id: 'cmbokc8dx0cswms01fdq0eigf',
@@ -1104,7 +1030,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:38:51.042Z'),
                 name: 'Công tác Đảng, công tác chính trị',
                 priority: 3,
-                curriculumVersionId,
             },
             {
                 id: 'cmbokswyu0d8fms01ijszirou',
@@ -1116,7 +1041,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:39:04.809Z'),
                 name: 'Giáo dục đại cương',
                 priority: 7,
-                curriculumVersionId,
             },
             {
                 id: 'cmbokx8g50ddvms01jbpeaip1',
@@ -1128,7 +1052,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:39:26.180Z'),
                 name: 'Đồ án tốt nghiệp, thì tốt nghiệp 2',
                 priority: 1,
-                curriculumVersionId,
             },
             {
                 id: 'cmbol7goj0dn5ms01xrk3bfcn',
@@ -1140,7 +1063,6 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:44:55.194Z'),
                 name: 'Công tác Đảng, công tác chính trị test',
                 priority: 5,
-                curriculumVersionId,
             },
             {
                 id: 'cmbol59up0dkdms015ubnqd90',
@@ -1152,7 +1074,38 @@ async function main() {
                 updatedAt: new Date('2025-06-09T06:45:51.404Z'),
                 name: 'abcg',
                 priority: 11,
-                curriculumVersionId,
+            },
+        ],
+    })
+
+    const curriculumVersions = await prisma.curriculumVersion.findMany()
+    await Promise.all(
+        curriculumVersions.map(({ id }) => {
+            prisma.curriculumVersion.update({
+                where: { id },
+                data: { trainingBlocks: { connect: trainingBlocks } },
+            })
+        })
+    )
+
+    await prisma.diplomaType.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                name: 'Bằng kỹ sư',
+                code: 'BS',
+            },
+            {
+                name: 'Bằng cử nhân',
+                code: 'BC',
+            },
+            {
+                name: 'Bằng thạc sĩ',
+                code: 'BTS',
+            },
+            {
+                name: 'Bằng tiến sĩ',
+                code: 'BTS',
             },
         ],
     })
