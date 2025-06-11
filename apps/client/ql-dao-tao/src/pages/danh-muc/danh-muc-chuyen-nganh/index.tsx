@@ -1,54 +1,34 @@
-// import Table from '@components/commons/table'
+import Select from '@components/commons/select'
+import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    KHOA_HL_STATUS,
-    CTDT_STATUS,
-} from '@constants/constants'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingMajorModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Prisma, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
-    useUpdateTrainingMajor,
     useFindManyTrainingObjectType,
+    useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import type {
-    TrainingType,
-    TrainingObjectType,
-    TrainingMajor,
-    TrainingField,
-    Organization,
-} from '@workspace/db'
-import { X, Search } from 'lucide-react'
 import {
     Button,
     Col,
-    Divider,
     Flex,
     Form,
     Input,
     Row,
-    Space,
     Tag,
-    Tooltip,
-    message,
     Typography,
-    Table,
+    message,
 } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import type { TableProps } from 'antd'
-import { EditOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons'
-import TableCollapse from '@components/commons/tableCollapse'
-const { Text } = Typography
-// const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
     trainingObjectTypeId: string | undefined
@@ -79,61 +59,52 @@ export default function TrainingMajorPage() {
     })
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
+    const trainingMajorWhere: Prisma.TrainingMajorWhereInput = useMemo(
+        () => ({
+            AND: [
+                {
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                },
+            ],
+            ...(filters.trainingObjectTypeId
+                ? {
+                      trainingObjectTypes: {
+                          some: {
+                              trainingObjectTypeId:
+                                  filters.trainingObjectTypeId,
+                          },
+                      },
+                  }
+                : {}),
+        }),
+        [filters]
+    )
+
     const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            trainingMajors: {
-                some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    trainingObjectTypes: {
-                        some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId,
-                        },
-                    },
-                },
-            },
-        },
+        where: { trainingMajors: { some: trainingMajorWhere } },
         include: {
+            _count: true,
             trainingMajors: {
-                where: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    trainingObjectTypes: {
-                        some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId,
-                        },
-                    },
-                },
+                where: trainingMajorWhere,
                 include: {
                     organization: true,
                     trainingObjectTypes: {
@@ -151,43 +122,20 @@ export default function TrainingMajorPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const dataRaw = useMemo(() => {
-        if (data?.length) {
-            const result = data.map((i) => {
-                return { ...i, children: i?.trainingMajors }
-            })
-            return result
-        }
-        return []
-    }, [data])
-
     const { data: count } = useCountTrainingField({
-        where: {
-            trainingMajors: {
-                some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    trainingObjectTypes: {
-                        some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId,
-                        },
-                    },
-                },
-            },
-        },
+        where: { trainingMajors: { some: trainingMajorWhere } },
     })
+
+    const dataRaw = useMemo(
+        () =>
+            data.length
+                ? data.map(({ trainingMajors, ...trainingField }) => ({
+                      ...trainingField,
+                      children: trainingMajors,
+                  }))
+                : [],
+        [data]
+    )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -209,12 +157,8 @@ export default function TrainingMajorPage() {
         try {
             showSpinner()
             await updateTrainingMajor({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -308,10 +252,11 @@ export default function TrainingMajorPage() {
 
                 <Col span={24}>
                     <TableCollapse
-                        // rowKey="id"
-                        headerTitleKey={(record)=>{
-                            return `${record?.code} - ${record?.name}`
-                        }}
+                        rowKey="id"
+                        headerTitleKey={({ code, name, children }) =>
+                            `${code} - ${name} (${children.length})`
+                        }
+                        defaultExpandAll
                         currentPage={currentPage}
                         columns={[
                             {

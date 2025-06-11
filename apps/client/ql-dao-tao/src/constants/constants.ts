@@ -103,24 +103,24 @@ const FIXED_CLASS_STUDENT_STATUS = {
 } as const
 
 const STUDENT_STATUS_OPTIONS = [
-    { value: $Enums.FixedClassStudentStatus.ENROLLED, label: 'Đang theo học' },
-    { value: $Enums.FixedClassStudentStatus.GRADUATED, label: 'Đã tốt nghiệp' },
-    { value: $Enums.FixedClassStudentStatus.DEFERRED_STUDY, label: 'Bảo lưu' },
+    { value: $Enums.StudentStatus.ENROLLED, label: 'Đang theo học' },
+    { value: $Enums.StudentStatus.GRADUATED, label: 'Đã tốt nghiệp' },
+    { value: $Enums.StudentStatus.DEFERRED_STUDY, label: 'Bảo lưu' },
     {
-        value: $Enums.FixedClassStudentStatus.SUSPENDED_STUDY,
+        value: $Enums.StudentStatus.SUSPENDED_STUDY,
         label: 'Tạm ngưng học',
     },
-    { value: $Enums.FixedClassStudentStatus.WITHDRAWN, label: 'Thôi học' },
+    { value: $Enums.StudentStatus.WITHDRAWN, label: 'Thôi học' },
     {
-        value: $Enums.FixedClassStudentStatus.TRANSFERRED,
+        value: $Enums.StudentStatus.TRANSFERRED,
         label: 'Chuyển trường',
     },
     {
-        value: $Enums.FixedClassStudentStatus.PENDING_GRADUATION_REVIEW,
+        value: $Enums.StudentStatus.PENDING_GRADUATION_REVIEW,
         label: 'Chờ xét tốt nghiệp',
     },
     {
-        value: $Enums.FixedClassStudentStatus.ACADEMIC_SUSPENSION,
+        value: $Enums.StudentStatus.ACADEMIC_SUSPENSION,
         label: 'Đình chỉ học',
     },
 ]
