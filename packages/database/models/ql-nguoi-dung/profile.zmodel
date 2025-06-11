@@ -100,14 +100,3 @@ model UserProfile extends Base {
   @@schema("ql-nguoi-dung")
 }
 
-enum FixedClassStudentStatus {
-  ENROLLED // Đang học: Sinh viên đang theo học tại trường.
-  GRADUATED // Tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo và được công nhận tốt nghiệp.
-  DEFERRED_STUDY // Bảo lưu: Sinh viên tạm ngưng học có lý do chính đáng.
-  SUSPENDED_STUDY // Tạm ngưng học: Sinh viên tạm ngưng học không có lý do chính đáng.
-  WITHDRAWN // Thôi học: Sinh viên đã ngừng học tại trường.
-  TRANSFERRED // Chuyển trường: Sinh viên đã chuyển sang trường khác.
-  PENDING_GRADUATION_REVIEW // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
-  ACADEMIC_SUSPENSION // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
-  @@schema("ql-nguoi-dung")
-}

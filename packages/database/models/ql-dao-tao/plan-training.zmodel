@@ -70,28 +70,20 @@ model Milestone extends Base {
   @@schema("ql-dao-tao")
 }
 
-enum TrainingCourseStatus {
-  ACTIVE // Đang hoạt động
-  COMPLETED // Hoàn thành
-  SUSPEND // Tạm dừng
-  CANCEL // Hủy bỏ
-  @@schema("ql-dao-tao")
-}
 
 /// Khoá học
 model TrainingCourse extends Base {
   name                 String
-  semesterStart        Semester             @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
+  semesterStart        Semester           @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
   semesterStartId      String
   startYear            Int?
   endYear              Int?
   academicYear         String?
   maxTrainingTime      Float?
   admissionQuota       Int?
-  trainingObjectType   TrainingObjectType   @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
 
-  status               TrainingCourseStatus @default(ACTIVE)
   fixedClass           FixedClass[]
   @@schema("ql-dao-tao")
 }
@@ -123,17 +115,11 @@ model FixedClass extends Base {
   @@schema("ql-dao-tao")
 }
 
-enum CurriculumStatus {
-  ACTIVE
-  INACTIVATED
-  @@schema("ql-dao-tao")
-}
 
 /// chương trình đào tạo
 model Curriculum extends Base {
   name                     String
   englishName              String?
-  status                   CurriculumStatus    @default(ACTIVE) //Có thể có endDate nhưng vẫn active do có lớp đang học
   managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
   managementOrganizationId String
 
