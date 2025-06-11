@@ -1,11 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    Button,
-    Empty,
-    Table as TableAntd,
-    type TableProps as TableAntdProps,
-} from 'antd'
+import { Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useMemo, useState } from 'react'
 import Table from '../table'
@@ -30,7 +25,7 @@ type TableProps<T extends Data> = {
     scrollable?: boolean
     maxHeight?: number
     currentPage: number
-    headerRight?: ReactNode | ReactNode[]
+    headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: string
     onRowDoubleClick?: (record: T) => void
 } & TableAntdProps
@@ -247,15 +242,15 @@ const TableCollapse = <T extends Data>({
                                     <strong className="select-none sticky left-[30px]">
                                         {typeof headerTitleKey === 'function'
                                             ? headerTitleKey(record)
-                                            : (record[
-                                                  headerTitleKey
+                                            : ((record as T)[
+                                                  headerTitleKey as keyof T
                                               ] as ReactNode)}
                                     </strong>
                                     <div
                                         onClick={(e) => e.stopPropagation()}
-                                        className="select-none sticky right-[10px]"
+                                        className="select-none sticky right-[11px]"
                                     >
-                                        {headerRight}
+                                        {headerRight?.(record)}
                                     </div>
                                 </div>
                             </div>

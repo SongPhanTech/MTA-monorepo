@@ -4,7 +4,6 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
     useCreateTrainingBlock,
-    useFindManyCurriculumVersion,
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
@@ -34,8 +33,6 @@ const PutTrainingBlock = () => {
         { enabled: !!id }
     )
 
-    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion()
-
     useEffect(() => {
         if (trainingBlock) {
             form.setFieldsValue({
@@ -56,7 +53,6 @@ const PutTrainingBlock = () => {
                 name: output.name,
                 priority: output.priority,
                 active: output.active,
-                curriculumVersionId: output.curriculumVersionId,
             }
 
             if (id) {
@@ -172,22 +168,6 @@ const PutTrainingBlock = () => {
                     </FormItem>
                 </Col>
             )}
-            <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="curriculumVersionId"
-                    label="Phiên bản chương trình đào tạo"
-                >
-                    <Select
-                        placeholder="Chọn phiên bản chương trình đào tạo"
-                        options={curriculumVersion.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
         </PutFormModal>
     )
 }

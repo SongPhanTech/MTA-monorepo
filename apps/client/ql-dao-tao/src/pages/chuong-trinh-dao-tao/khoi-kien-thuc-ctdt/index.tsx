@@ -265,24 +265,25 @@ export default function TrainingBlock() {
                                 dataIndex: 'name',
                                 width: 150,
                             },
-                            {
-                                title: 'Tổng tín chỉ',
-                                dataIndex: '',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tổng tín chỉ bắt buộc',
-                                dataIndex: 'totalRequiredCredits',
-                                width: 150,
-                            },
-                            {
-                                title: 'Số tín chỉ chuyên ngành',
-                                dataIndex: 'specializedCredits',
-                                width: 150,
-                            },
+                            // {
+                            //     title: 'Tổng tín chỉ',
+                            //     dataIndex: '',
+                            //     width: 150,
+                            // },
+                            // {
+                            //     title: 'Tổng tín chỉ bắt buộc',
+                            //     dataIndex: 'totalRequiredCredits',
+                            //     width: 150,
+                            // },
+                            // {
+                            //     title: 'Số tín chỉ chuyên ngành',
+                            //     dataIndex: 'specializedCredits',
+                            //     width: 150,
+                            // },
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'priority',
+                                align: 'center',
                                 width: 100,
                             },
                             {

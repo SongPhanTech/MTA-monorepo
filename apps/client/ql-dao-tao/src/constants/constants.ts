@@ -102,28 +102,28 @@ const FIXED_CLASS_STUDENT_STATUS = {
     ACADEMIC_SUSPENSION: { label: 'Đình chỉ học', color: 'red' },
 } as const
 
-const STUDENT_STATUS_OPTIONS = [
-    { value: $Enums.FixedClassStudentStatus.ENROLLED, label: 'Đang theo học' },
-    { value: $Enums.FixedClassStudentStatus.GRADUATED, label: 'Đã tốt nghiệp' },
-    { value: $Enums.FixedClassStudentStatus.DEFERRED_STUDY, label: 'Bảo lưu' },
-    {
-        value: $Enums.FixedClassStudentStatus.SUSPENDED_STUDY,
-        label: 'Tạm ngưng học',
-    },
-    { value: $Enums.FixedClassStudentStatus.WITHDRAWN, label: 'Thôi học' },
-    {
-        value: $Enums.FixedClassStudentStatus.TRANSFERRED,
-        label: 'Chuyển trường',
-    },
-    {
-        value: $Enums.FixedClassStudentStatus.PENDING_GRADUATION_REVIEW,
-        label: 'Chờ xét tốt nghiệp',
-    },
-    {
-        value: $Enums.FixedClassStudentStatus.ACADEMIC_SUSPENSION,
-        label: 'Đình chỉ học',
-    },
-]
+// const STUDENT_STATUS_OPTIONS = [
+//     { value: $Enums.FixedClassStudentStatus.ENROLLED, label: 'Đang theo học' },
+//     { value: $Enums.FixedClassStudentStatus.GRADUATED, label: 'Đã tốt nghiệp' },
+//     { value: $Enums.FixedClassStudentStatus.DEFERRED_STUDY, label: 'Bảo lưu' },
+//     {
+//         value: $Enums.FixedClassStudentStatus.SUSPENDED_STUDY,
+//         label: 'Tạm ngưng học',
+//     },
+//     { value: $Enums.FixedClassStudentStatus.WITHDRAWN, label: 'Thôi học' },
+//     {
+//         value: $Enums.FixedClassStudentStatus.TRANSFERRED,
+//         label: 'Chuyển trường',
+//     },
+//     {
+//         value: $Enums.FixedClassStudentStatus.PENDING_GRADUATION_REVIEW,
+//         label: 'Chờ xét tốt nghiệp',
+//     },
+//     {
+//         value: $Enums.FixedClassStudentStatus.ACADEMIC_SUSPENSION,
+//         label: 'Đình chỉ học',
+//     },
+// ]
 
 export {
     DEFAULT_PAGINATE_SIZE,
@@ -140,5 +140,5 @@ export {
     LOAI_MON_HOC_CTDT,
     TRANG_THAI_HOC_VIEN,
     FIXED_CLASS_STUDENT_STATUS,
-    STUDENT_STATUS_OPTIONS,
+    // STUDENT_STATUS_OPTIONS,
 }

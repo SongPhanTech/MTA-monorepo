@@ -274,11 +274,7 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="englishName"
-                    label="Tên tiếng anh"
-                >
+                <FormItem form={form} name="englishName" label="Tên tiếng anh">
                     <Input placeholder="Nhập tên tiếng anh" />
                 </FormItem>
             </Col>

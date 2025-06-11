@@ -418,6 +418,12 @@ const NAVIGATION: NavigationType = {
                             .KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                         description: 'Phân công giảng dạy',
                     },
+                    {
+                        id: 'dang-ky-hoc',
+                        label: 'Đăng ký học',
+                        path: '/ke-hoach-giao-duc/dang-ky-hoc',
+                        description: 'Đăng ký học',
+                    },
                 ],
             },
             {
