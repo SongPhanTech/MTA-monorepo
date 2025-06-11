@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { type QaContext, useQaContext } from './qaContext'
+import { useQaContext, QaContext } from './qaContext'
 import type * as Fetcher from './qaFetcher'
 import { qaFetch } from './qaFetcher'
 import type * as Schemas from './qaSchemas'
