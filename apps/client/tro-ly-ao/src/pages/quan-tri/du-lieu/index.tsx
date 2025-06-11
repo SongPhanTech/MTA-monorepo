@@ -1,17 +1,15 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
-import { CardDocument } from '@components/commons/card-document'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
-import { PheDuyetTaiLieu, PutCauHoi } from '@components/modal'
+import { PheDuyetTaiLieu, PreviewTaiLieu, PutCauHoi } from '@components/modal'
 import PheDuyetCauHoiThuongGap from '@components/modal/phe-duyet-cau-hoi-thuong-gap'
 import ThemTaiLieu from '@components/modal/them-tai-lieu'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import { formatDateReadable, formatNiceBytes } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
+import { formatDateReadable, formatNiceBytes, cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
-    useDeleteDocument,
+    useCountDocument,
     useDeleteFAQ,
     useFindManyDocument,
     useFindManyFAQ,
@@ -20,17 +18,28 @@ import {
 import {
     Button,
     Divider,
+    Input,
     Popconfirm,
+    Select,
     Tabs,
     type TabsProps,
     message,
 } from 'antd'
-import { EditIcon, FileDown, FileUp, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { EditIcon, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function Page() {
-    const { mutateAsync: update } = useUpdateDocument()
+    const [filters, setFilters] = useState<{
+        title: string
+        status: $Enums.DocumentStatus
+    }>({
+        title: '',
+        status: $Enums.DocumentStatus.APPROVE,
+    })
+    const [tableParams, setTableParams] = useState({
+        pagination: { current: 1, pageSize: 10, total: 10 },
+    })
     const { onOpen: openAddTaiLieu } = useDisclosure({
         tag: ThemTaiLieu.name,
     })
@@ -47,14 +56,39 @@ function Page() {
         tag: PutCauHoi.name,
     })
 
+    const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
+        tag: PreviewTaiLieu.name,
+    })
+    const { data: totalCountDocument = 0 } = useCountDocument()
+    // Đếm số tài liệu chờ duyệt
+    const { data: pendingCount = 0 } = useCountDocument({
+        where: { status: $Enums.DocumentStatus.PENDING },
+    })
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
         },
         where: {
-            status: $Enums.DocumentStatus.APPROVE,
+            status: filters.status,
+            title: {
+                contains: filters.title,
+                mode: 'insensitive',
+            },
         },
+        skip:
+            (tableParams.pagination.current - 1) *
+            tableParams.pagination.pageSize,
+        take: tableParams.pagination.pageSize,
     })
+    useEffect(() => {
+        setTableParams((prev) => ({
+            ...prev,
+            pagination: {
+                ...prev.pagination,
+                total: totalCountDocument,
+            },
+        }))
+    }, [totalCountDocument])
 
     const { data: faqs = [] } = useFindManyFAQ({
         include: {
@@ -65,21 +99,7 @@ function Page() {
         },
     })
 
-    const [selectedDocument, setSelectedDocument] =
-        useState<(typeof documents)[0]>()
-
     const [selectedFAQ, setSelectedFAQ] = useState<(typeof faqs)[0]>()
-
-    const { data: documentsPendingOrDeny = [] } = useFindManyDocument({
-        include: {
-            uploadedBy: true,
-        },
-        where: {
-            status: {
-                in: [$Enums.DocumentStatus.PENDING, $Enums.DocumentStatus.DENY],
-            },
-        },
-    })
 
     const { data: faqsPendingOrDeny = [] } = useFindManyFAQ({
         include: {
@@ -92,19 +112,6 @@ function Page() {
         },
     })
 
-    const onDownload = async (url: string, fileName: string) => {
-        const response = await fetch(url)
-        if (!response.ok) return message.error('Lỗi khi tải file')
-        const blob = await response.blob()
-        const blobUrl = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = blobUrl
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
-        link.parentNode?.removeChild(link)
-    }
-    const { mutateAsync: deleteDocument } = useDeleteDocument()
     const { mutateAsync: deleteFAQ } = useDeleteFAQ()
 
     const items: TabsProps['items'] = [
@@ -112,88 +119,127 @@ function Page() {
             key: '1',
             label: 'Tài liệu',
             children: (
-                <div className="flex gap-1">
-                    <div className="bg-white p-4 rounded-md shadow-md flex-1">
-                        <span className="text-xl font-semibold text-gray-700">
-                            Tài liệu
-                        </span>
-                        <div className="flex flex-wrap gap-4 max-h-[100vh] overflow-y-scroll mt-4">
-                            <div
-                                onClick={openAddTaiLieu}
-                                className="text-primary border-2 border-dashed border-primary rounded-lg w-[150px] h-[150px] gap-4 flex flex-col justify-center items-center cursor-pointer hover:bg-primary/10"
-                            >
-                                <FileUp size={40} strokeWidth={1} />
-                                <span>Tải lên</span>
+                <div className="flex gap-4 h-full overflow-hidden">
+                    <div className="flex-1 overflow-auto pr-2">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-4">
+                                <span className="text-xl font-semibold text-gray-700">
+                                    Danh sách tài liệu
+                                </span>
                             </div>
-                            {documents.map((item) => (
-                                <CardDocument
-                                    key={item.id}
-                                    onDelete={async () => {
-                                        try {
-                                            await update({
-                                                where: { id: item.id },
-                                                data: {
-                                                    deletedAt: new Date(),
-                                                },
-                                            })
-                                        } catch (error) {
-                                            message.error(
-                                                'Xóa tài liệu thất bại'
-                                            )
-                                        }
-                                    }}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        setSelectedDocument(item)
-                                    }}
-                                    {...item}
-                                />
-                            ))}
+                            <Button onClick={openAddTaiLieu} type="primary">
+                                Tải lên tài liệu
+                            </Button>
                         </div>
-                        <div className="text-xl font-semibold text-gray-700 mt-4">
-                            Tài liệu chờ duyệt
+                        <div className="flex items-center gap-2 mb-4">
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium',
+                                    filters.status ===
+                                        $Enums.DocumentStatus.APPROVE
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
+                                )}
+                                onClick={() =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.APPROVE,
+                                    }))
+                                }
+                            >
+                                Đã duyệt
+                            </Button>
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium flex items-center gap-2',
+                                    filters.status ===
+                                        $Enums.DocumentStatus.PENDING
+                                        ? 'bg-[#f8ba00] text-white border-[#f8ba00]'
+                                        : 'text-[#f8ba00] border-[#f8ba00]'
+                                )}
+                                onClick={() =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.PENDING,
+                                    }))
+                                }
+                            >
+                                Chờ duyệt
+                                {/* <span className="w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                                    {pendingCount}
+                                </span> */}
+                            </Button>
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium',
+                                    filters.status ===
+                                        $Enums.DocumentStatus.DENY
+                                        ? 'bg-red-500 text-white border-red-500'
+                                        : 'text-red-500 border-red-500'
+                                )}
+                                onClick={() =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.DENY,
+                                    }))
+                                }
+                            >
+                                Từ chối
+                            </Button>
+                            <Input
+                                placeholder="Tìm theo tên tài liệu"
+                                allowClear
+                                onPressEnter={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        title: e.currentTarget.value,
+                                    }))
+                                }
+                                style={{ width: 300 }}
+                            />
                         </div>
                         <Table
-                            onRow={(item) => {
-                                return {
-                                    className: 'cursor-pointer',
-                                    onClick: (e) => {
-                                        e.stopPropagation()
-                                        setSelectedDocument(item)
-                                    },
-                                }
-                            }}
+                            rowKey="id"
+                            onRow={(item) => ({
+                                className: 'cursor-pointer hover:bg-gray-50',
+                                onClick: (e) => {
+                                    e.stopPropagation()
+                                    // setSelectedDocument(item)
+                                    openPreviewTaiLieu(item.id)
+                                },
+                            })}
                             columns={[
+                                {
+                                    title: 'STT',
+                                    dataIndex: 'index',
+                                    width: 40,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        (tableParams.pagination.current - 1) *
+                                            tableParams.pagination.pageSize +
+                                        index +
+                                        1,
+                                },
                                 {
                                     title: 'Tên tài liệu',
                                     dataIndex: 'title',
-                                    className: 'cursor-pointer',
-                                    render: (value, { fileType }) => {
-                                        return (
-                                            <span className="flex items-center gap-2">
-                                                <FileUploadIcon
-                                                    fileType={fileType}
-                                                    className="w-[24px] h-[24px]"
-                                                />
-                                                {value}
-                                            </span>
-                                        )
-                                    },
+                                    render: (value, { fileType }) => (
+                                        <span className="flex items-center gap-2">
+                                            <FileUploadIcon
+                                                fileType={fileType}
+                                                className="w-[24px] h-[24px]"
+                                            />
+                                            {value}
+                                        </span>
+                                    ),
                                 },
                                 {
                                     title: 'Loại tài liệu',
                                     dataIndex: 'type',
-                                    render: (value) => {
-                                        return DOCUMENT_TYPE.find(
-                                            (item) => item.value === value
-                                        )?.label
-                                    },
-                                },
-                                {
-                                    title: 'Kích thước',
-                                    dataIndex: 'fileSize',
                                     render: (value) =>
-                                        formatNiceBytes(`${value}`),
+                                        DOCUMENT_TYPE.find(
+                                            (item) => item.value === value
+                                        )?.label,
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -201,8 +247,18 @@ function Page() {
                                     render: (value) => value.name,
                                 },
                                 {
+                                    title: 'Kích thước',
+                                    dataIndex: 'fileSize',
+                                    align: 'center',
+                                    width: 120,
+                                    render: (value) =>
+                                        formatNiceBytes(`${value}`),
+                                },
+                                {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
+                                    width: 180,
+                                    align: 'center',
                                     render: (value) =>
                                         formatDateReadable(value),
                                 },
@@ -215,137 +271,77 @@ function Page() {
                                     onCell: (record) => ({
                                         onClick: (e) => {
                                             e.stopPropagation()
-                                            openPheDuyetTaiLieu(record.id)
+                                            if (
+                                                record.status ===
+                                                    $Enums.DocumentStatus
+                                                        .PENDING ||
+                                                record.status ===
+                                                    $Enums.DocumentStatus.DENY
+                                            ) {
+                                                openPheDuyetTaiLieu(record.id)
+                                            }
                                         },
                                     }),
-                                    render: (value) => {
-                                        if (
-                                            value ===
-                                            $Enums.DocumentStatus.PENDING
-                                        ) {
-                                            return (
-                                                <div className="text-warning-600 bg-warning-100 rounded-md px-2 py-1 w-fit">
-                                                    Chờ duyệt
-                                                </div>
-                                            )
+                                    render: (value: $Enums.DocumentStatus) => {
+                                        const statusMap: Record<
+                                            $Enums.DocumentStatus,
+                                            {
+                                                label: string
+                                                textColor: string
+                                                bgColor: string
+                                                borderColor: string
+                                            }
+                                        > = {
+                                            [$Enums.DocumentStatus.APPROVE]: {
+                                                label: 'Đã duyệt',
+                                                textColor: 'text-white',
+                                                bgColor: 'bg-primary',
+                                                borderColor: 'border-primary',
+                                            },
+                                            [$Enums.DocumentStatus.PENDING]: {
+                                                label: 'Chờ duyệt',
+                                                textColor: 'text-white',
+                                                bgColor: 'bg-[#f8ba00]',
+                                                borderColor: 'border-[#f8ba00]',
+                                            },
+                                            [$Enums.DocumentStatus.DENY]: {
+                                                label: 'Từ chối',
+                                                textColor: 'text-white',
+                                                bgColor: 'bg-red-500',
+                                                borderColor: 'border-red-500',
+                                            },
                                         }
-                                        if (
-                                            value === $Enums.DocumentStatus.DENY
-                                        ) {
-                                            return (
-                                                <div className="text-danger-600 bg-danger-100 rounded-md px-2 py-1 w-fit">
-                                                    Từ chối
-                                                </div>
-                                            )
+
+                                        const status = statusMap[value] || {
+                                            label: 'Không xác định',
+                                            textColor: 'text-gray-700',
+                                            bgColor: 'bg-gray-100',
+                                            borderColor: 'border-gray-300',
                                         }
-                                        return 'Không xác định'
+
+                                        return (
+                                            <div
+                                                className={`${status.textColor} ${status.bgColor} ${status.borderColor} border rounded-md px-2 py-1 w-fit`}
+                                            >
+                                                {status.label}
+                                            </div>
+                                        )
                                     },
                                 },
                             ]}
-                            data={documentsPendingOrDeny}
+                            data={documents || []}
+                            pagination={tableParams.pagination}
+                            onChange={(pagination) =>
+                                setTableParams({
+                                    pagination: {
+                                        current: pagination.current ?? 1,
+                                        pageSize: pagination.pageSize ?? 10,
+                                        total: pagination.total ?? 0,
+                                    },
+                                })
+                            }
                         />
                     </div>
-                    {!!selectedDocument && (
-                        <div className="min-w-[460px] bg-white p-4 rounded-md shadow-md h-min-[100vh] relative">
-                            <div
-                                onClick={() => setSelectedDocument(undefined)}
-                                className="absolute top-4 right-4 cursor-pointer"
-                            >
-                                <CloseCircleOutlined className="text-lg" />
-                            </div>
-                            <div className="flex flex-col gap-4 items-center">
-                                <FileUploadIcon
-                                    className="w-[180px] h-[180px]"
-                                    fileType={selectedDocument.fileType}
-                                />
-                                <span className="font-bold text-lg">
-                                    {selectedDocument.title}
-                                </span>
-                            </div>
-                            <Divider />
-                            <div className="flex flex-col gap-2">
-                                <span className="font-semibold text-base">
-                                    Thông tin về tài liệu
-                                </span>
-                                <div>
-                                    <p className="font-semibold">
-                                        Loại tài liệu
-                                    </p>
-                                    <p>
-                                        {
-                                            DOCUMENT_TYPE.find(
-                                                (item) =>
-                                                    item.value ===
-                                                    selectedDocument.type
-                                            )?.label
-                                        }
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="font-semibold">Kích thước</p>
-                                    <p>
-                                        {formatNiceBytes(
-                                            selectedDocument.fileSize
-                                        )}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="font-semibold">Người đăng</p>
-                                    <p>{selectedDocument.uploadedBy.name}</p>
-                                </div>
-                                <div>
-                                    <p className="font-semibold">Ngày đăng</p>
-                                    <p>
-                                        {formatDateReadable(
-                                            selectedDocument.createdAt
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                            <Divider />
-                            <div className="flex gap-2">
-                                <Button
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onDownload(
-                                            getMinioUrl(selectedDocument.uri),
-                                            selectedDocument.title ||
-                                                selectedDocument.id
-                                        )
-                                    }}
-                                    className="bg-primary text-white flex-1 h-[40px]"
-                                >
-                                    <FileDown />
-                                    Tải xuống
-                                </Button>
-                                <Popconfirm
-                                    placement="topLeft"
-                                    title="Xác nhận xóa dữ liệu?"
-                                    description="Dữ liệu sẽ bị xóa vĩnh viễn"
-                                    okText="Đồng ý"
-                                    cancelText="Hủy"
-                                    onConfirm={async () => {
-                                        try {
-                                            await deleteDocument({
-                                                where: {
-                                                    id: selectedDocument.id,
-                                                },
-                                            })
-                                            setSelectedDocument(undefined)
-                                        } catch (error) {
-                                            message.error(
-                                                'Xóa tài liệu thất bại'
-                                            )
-                                        }
-                                    }}
-                                >
-                                    <Button className="w-[40px] h-[40px] p-0">
-                                        <Trash2 className="w-full h-[24px]" />
-                                    </Button>
-                                </Popconfirm>
-                            </div>
-                        </div>
-                    )}
                 </div>
             ),
         },
@@ -590,7 +586,7 @@ function Page() {
     ]
 
     return (
-        <div>
+        <div className="h-full overflow-hidden">
             <Tabs
                 defaultActiveKey="1"
                 items={items}

@@ -11,6 +11,7 @@ import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+
 const { Header, Content } = Layout
 
 const DefaultLayout = ({
@@ -44,6 +45,7 @@ const DefaultLayout = ({
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCollapsed()
@@ -57,7 +59,7 @@ const DefaultLayout = ({
             onIdle={signOutAction}
         >
             {/* Header */}
-            <Header className="fixed z-50 top-0 left-0 right-0 flex justify-between items-center bg-white shadow rounded-xl px-4 py-2 m-2">
+            <Header className="fixed z-50 top-0 left-0 right-0 flex justify-between items-center bg-white shadow rounded-xl px-4 py-2 m-2 h-[64px]">
                 <div className="flex items-center gap-3">
                     <Image
                         src={logo_mta}
@@ -73,8 +75,9 @@ const DefaultLayout = ({
                     <AvatarDropdown />
                 </div>
             </Header>
+
+            {/* Layout bên dưới header */}
             <Layout hasSider className="pt-[80px]">
-                {' '}
                 <SiderDefaultLayout
                     items={menus}
                     onCollapse={handleCollapsed}
@@ -87,9 +90,16 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s',
                     }}
                 >
-                    <div className={cn('min-h-[100vh] p-0', className)}>
+                    <Content
+                        className={cn('p-4 rounded-lg', className)}
+                        style={{
+                            height: 'calc(100vh - 80px)',
+                            overflowY: 'auto',
+                            background: colorBgContainer,
+                        }}
+                    >
                         {children}
-                    </div>
+                    </Content>
                 </Layout>
             </Layout>
         </IdleTimerProvider>

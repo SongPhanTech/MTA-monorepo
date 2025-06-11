@@ -30,7 +30,7 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse & {
-    schoolYearId:string | undefined
+    schoolYearId: string | undefined
 }
 import 'dayjs/locale/vi'
 import { action } from 'easy-peasy'
@@ -46,7 +46,6 @@ const PutTrainingCourseModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -75,8 +74,8 @@ const PutTrainingCourseModal = () => {
                         },
                         semesterStart: {
                             connect: {
-                                id: output.semesterStartId
-                            }
+                                id: output.semesterStartId,
+                            },
                         },
                     },
                     where: {
@@ -102,8 +101,8 @@ const PutTrainingCourseModal = () => {
                         },
                         semesterStart: {
                             connect: {
-                                id: output.semesterStartId
-                            }
+                                id: output.semesterStartId,
+                            },
                         },
                     },
                 })
@@ -119,15 +118,17 @@ const PutTrainingCourseModal = () => {
         }
         hideSpinner()
     }
-     const schoolYearIdForm = Form.useWatch('schoolYearId', form)
- 
+    const schoolYearIdForm = Form.useWatch('schoolYearId', form)
+
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
         useFindManySchoolYear()
     const { data: semesterData = [], refetch: refetchSemesters } =
         useFindManySemester({
-            where:schoolYearIdForm? {
-                schoolYearId:schoolYearIdForm
-            } :undefined
+            where: schoolYearIdForm
+                ? {
+                      schoolYearId: schoolYearIdForm,
+                  }
+                : undefined,
         })
     const { data: level } = useFindUniqueTrainingCourse({
         where: { id },
@@ -138,9 +139,9 @@ const PutTrainingCourseModal = () => {
             form.setFieldsValue({
                 ...level,
             })
-        }else {
+        } else {
             form.setFieldsValue({
-                active:true
+                active: true,
             })
         }
     }, [level])
@@ -155,114 +156,98 @@ const PutTrainingCourseModal = () => {
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
             className="w-[35vw]"
         >
-             <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="trainingObjectTypeId"
-                              label="Đối tượng đào tạo"
-                              required
-                          >
-                              <Select
-                                  placeholder="Chọn đối tượng đào tạo"
-                                  options={trainingObjectTypeData.map(
-                                      (i: TrainingObjectType) => {
-                                          return {
-                                              value: i.id,
-                                              label: i.name,
-                                          }
-                                      }
-                                  )}
-                              />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem form={form} name="code" label="Mã khoá học" required>
-                              <Input placeholder="Nhập mã khoá học" />
-                          </FormItem>
-                      </Col>
-          
-                      <Col span={24}>
-                          <FormItem form={form} name="name" label="Tên khoá học" required>
-                              <Input placeholder="Nhập tên khoá học" />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="schoolYearId"
-                              label="Năm học"
-                          >
-                            <Select
-                                  placeholder="Chọn năm học"
-                                  options={dataSchoolYear.map(
-                                      (i:SchoolYear) => {
-                                          return {
-                                              value: i.id,
-                                              label: i.name,
-                                          }
-                                      }
-                                  )}
-                              />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="semesterStartId"
-                              label="Kỳ học"
-                          >
-                               <Select
-                                  placeholder="Chọn kỳ học"
-                                  options={semesterData.map(
-                                      (i:Semester) => {
-                                          return {
-                                              value: i.id,
-                                              label: i.name,
-                                          }
-                                      }
-                                  )}
-                              />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="academicYear"
-                              label="Niên khoá"
-                          >
-                              <Input placeholder="Nhập niên khoá" />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="maxTrainingTime"
-                              label="Thời gian đào tạo Max"
-                          >
-                              <InputNumber style={{ width: '100%' }} min={0} step={1} />
-                          </FormItem>
-                      </Col>
-                      <Col span={12}>
-                          <FormItem
-                              form={form}
-                              name="admissionQuota"
-                              label="Chỉ tiêu tuyển sinh"
-                          >
-                              <InputNumber style={{ width: '100%' }} min={0} step={1} />
-                          </FormItem>
-                      </Col>
-                       <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name={'active'}
-                            label="Trạng thái"
-                            required
-                        >
-                            <Radio.Group buttonStyle="solid">
-                                <Radio value={true}>Đang hoạt động</Radio>
-                                <Radio value={false}>Ngừng hoạt động</Radio>
-                            </Radio.Group>
-                        </FormItem>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectTypeData.map(
+                            (i: TrainingObjectType) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            }
+                        )}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="code" label="Mã khoá học" required>
+                    <Input placeholder="Nhập mã khoá học" />
+                </FormItem>
+            </Col>
+
+            <Col span={24}>
+                <FormItem form={form} name="name" label="Tên khoá học" required>
+                    <Input placeholder="Nhập tên khoá học" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="schoolYearId" label="Năm học">
+                    <Select
+                        placeholder="Chọn năm học"
+                        options={dataSchoolYear.map((i: SchoolYear) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="semesterStartId" label="Kỳ học">
+                    <Select
+                        placeholder="Chọn kỳ học"
+                        options={semesterData.map((i: Semester) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="academicYear" label="Niên khoá">
+                    <Input placeholder="Nhập niên khoá" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="maxTrainingTime"
+                    label="Thời gian đào tạo Max"
+                >
+                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="admissionQuota"
+                    label="Chỉ tiêu tuyển sinh"
+                >
+                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name={'active'}
+                    label="Trạng thái"
+                    required
+                >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Đang hoạt động</Radio>
+                        <Radio value={false}>Ngừng hoạt động</Radio>
+                    </Radio.Group>
+                </FormItem>
             </Col>
         </PutFormModal>
     )
