@@ -277,7 +277,7 @@ Table CurriculumVersion {
   shortName String
   englishName String
   trainingLanguage TrainingLanguage [not null, default: 'Vietnamese']
-  numberOfSemesters Int [not null]
+  numberOfSemesters Int
   yearCreation Int
   yearApplication Int
   curriculum Curriculum [not null]
@@ -347,10 +347,11 @@ Table SubjectVersion {
   credit Int [not null]
   period Int [not null]
   numberOfTheory Int
-  numberOfPractice Int
+  numberOfPractical Int
   numberOfSelfStudy Int
-  numberOfProject Int
-  numberOfInternship Int
+  numberOfPractice Int
+  numberOfReview Int
+  numberOfExam Int
   numberOfOther Int
   objectives String
   learningOutcome String
@@ -663,7 +664,7 @@ Table TrainingRank {
   name String [not null]
   students Student [not null]
 
-  Note: 'X��p loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)'
+  Note: 'Xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)'
 }
 
 Table TrainingKPI {

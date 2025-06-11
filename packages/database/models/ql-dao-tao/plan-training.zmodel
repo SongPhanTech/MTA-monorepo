@@ -155,7 +155,7 @@ model CurriculumVersion extends Base {
   shortName             String?
   englishName           String?
   trainingLanguage      TrainingLanguage                   @default(Vietnamese) // Ngôn ngữ đào tạo
-  numberOfSemesters     Int
+  numberOfSemesters     Int? // Số kỳ học
   yearCreation          Int? // Năm tạo chương trình đào tạo
   yearApplication       Int? // Năm áp dụng chương trình đào tạo
   curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
@@ -247,10 +247,11 @@ model SubjectVersion extends Base {
   credit                   Int // số tín chỉ
   period                   Int // số tiết
   numberOfTheory           Int? // số tiết lý thuyết
-  numberOfPractice         Int? // số tiết thực hành
-  numberOfSelfStudy        Int? // số tiết tự học
-  numberOfProject          Int? // số tiết đồ án
-  numberOfInternship       Int? // số tiết thực tập
+  numberOfPractical        Int? // số tiết bài tập
+  numberOfSelfStudy        Int? // số tiết thảo luận/tự học
+  numberOfPractice         Int? // số tiết thí nghiệm/thực hành
+  numberOfReview           Int? // số tiết ôn tập
+  numberOfExam             Int? // số tiết KT/thi
   numberOfOther            Int? // số tiết khác
 
   // description ~ IV. MÔ TẢ
