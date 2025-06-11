@@ -291,23 +291,13 @@ export default function TrainingCoursePage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 175,
-                                render: (record: TrainingCourse) => {
-                                    return (
-                                        <Select
-                                            className="w-[155px]"
-                                            value={record.status}
-                                            onChange={(newStatus) =>
-                                                handleStatusChange(
-                                                    record.id,
-                                                    newStatus as TrainingCourseStatus
-                                                )
-                                            }
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-                                        />
+                                render: (value, record) => {
+                                    return !record?.active ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
                                     )
                                 },
                             },
