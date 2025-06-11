@@ -3,7 +3,7 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
+import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { $Enums, UserProfile } from '@workspace/db'
 import {

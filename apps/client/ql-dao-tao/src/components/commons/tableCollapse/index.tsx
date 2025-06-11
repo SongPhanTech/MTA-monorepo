@@ -1,11 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    Button,
-    Empty,
-    Table as TableAntd,
-    type TableProps as TableAntdProps,
-} from 'antd'
+import { Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { uniqueId } from 'lodash'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
@@ -258,7 +253,7 @@ const TableCollapse = <T extends Data>({
                                         {typeof headerTitleKey === 'function'
                                             ? headerTitleKey(record)
                                             : ((record as T)[
-                                                  headerTitleKey
+                                                  headerTitleKey as keyof T
                                               ] as ReactNode)}
                                     </strong>
                                     <div

@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { SubjectVersion } from '@workspace/db'
+import { SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManyOrganization,
@@ -69,15 +69,10 @@ const PutVersionSubjectModal = () => {
                 description: output.description,
                 active: output.active,
                 examType: output.examType,
-                subjectEquivalentType: output.subjectEquivalentType,
+                subjectEquivalentType: SubjectEquivalentType.NONE,
+                numberOfPractical: 1,
                 credit: output.credit,
                 period: output.period,
-                numberOfOther: output.numberOfOther,
-                numberOfInternship: output.numberOfInternship,
-                numberOfPractice: output.numberOfPractice,
-                numberOfProject: output.numberOfProject,
-                numberOfSelfStudy: output.numberOfSelfStudy,
-                numberOfTheory: output.numberOfTheory,
                 managementOrganizationId: output.managementOrganizationId,
                 subjectId: output.subjectId,
             }
@@ -127,14 +122,55 @@ const PutVersionSubjectModal = () => {
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên phiên bản">
-                    <Input placeholder="Tên phiên bản" />
+                <FormItem form={form} name="name" label="Tên phiên bản môn học">
+                    <Input placeholder="Tên phiên bản môn học" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã phiên bản">
-                    <Input placeholder="Mã phiên bản" />
+                <FormItem form={form} name="code" label="Mã phiên bản môn học">
+                    <Input placeholder="Mã phiên bản môn học" />
                 </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="managementOrganizationId"
+                    label="Đơn vị quản lý"
+                >
+                    <Select
+                        placeholder="Chọn đơn vị quản lý"
+                        options={organization?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <Form.Item
+                    name="prerequisiteSubjects"
+                    label="Môn học tiên quyết"
+                >
+                    <TreeSelect
+                        treeData={treeData}
+                        treeCheckable={true}
+                        placeholder="Chọn môn học tiên quyết"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={12}>
+                <Form.Item name="name" label="Môn học song hành">
+                    <TreeSelect
+                        treeData={treeData}
+                        treeCheckable={true}
+                        placeholder="Chọn môn học song hành"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
             </Col>
             {id && (
                 <Col span={12}>
@@ -158,18 +194,6 @@ const PutVersionSubjectModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="period" label="Giai đoạn">
                     <InputNumber placeholder="Giai đoạn" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfInternship"
-                    label="Number Of Internship"
-                >
-                    <InputNumber
-                        placeholder="Number Of Internship"
-                        className="w-full"
-                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -199,7 +223,7 @@ const PutVersionSubjectModal = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="numberOfProject"
+                    name="numberOfOther"
                     label="Number Of Project"
                 >
                     <InputNumber
@@ -245,22 +269,6 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="managementOrganizationId"
-                    label="Đơn vị quản lý"
-                >
-                    <Select
-                        placeholder="Chọn đơn vị quản lý"
-                        options={organization?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="subjectId" label="Môn học">
                     <Select
                         placeholder="Chọn môn học"
@@ -271,31 +279,6 @@ const PutVersionSubjectModal = () => {
                         allowClear
                     />
                 </FormItem>
-            </Col>
-            <Col span={12}>
-                <Form.Item
-                    name="prerequisiteSubjects"
-                    label="Môn học tiên quyết"
-                >
-                    <TreeSelect
-                        treeData={treeData}
-                        treeCheckable={true}
-                        placeholder="Chọn môn học tiên quyết"
-                        style={{ width: '100%' }}
-                        allowClear
-                    />
-                </Form.Item>
-            </Col>
-            <Col span={12}>
-                <Form.Item name="name" label="Môn học song hành">
-                    <TreeSelect
-                        treeData={treeData}
-                        treeCheckable={true}
-                        placeholder="Chọn môn học song hành"
-                        style={{ width: '100%' }}
-                        allowClear
-                    />
-                </Form.Item>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">

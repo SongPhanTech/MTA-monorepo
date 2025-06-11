@@ -11,7 +11,6 @@ import type { Curriculum, ExamType } from '@workspace/db'
 import {
     useFindManyCurriculum,
     useFindManySubject,
-    useFindManyTrainingObjectType,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import {
@@ -110,9 +109,6 @@ export default function SubjectList() {
             return newFilters
         })
     }
-
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
 
     const processedData = useMemo(() => {
         return SubjectData?.map((item) => ({
@@ -348,6 +344,17 @@ export default function SubjectList() {
                                     ) : null,
                             },
                         ]}
+                        headerRight={({ id }) => (
+                            <Flex>
+                                <Button
+                                    onClick={() => handleModalSubjectVersion()}
+                                    type="primary"
+                                >
+                                    <PlusOutlined />
+                                    Thêm phiên bản môn học
+                                </Button>
+                            </Flex>
+                        )}
                         data={processedData}
                     />
                 </Col>

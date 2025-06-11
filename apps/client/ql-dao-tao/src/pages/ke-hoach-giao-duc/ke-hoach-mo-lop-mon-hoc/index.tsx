@@ -176,14 +176,6 @@ export default function SubjectOpeningPlan() {
         },
     ]
 
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys)
-            console.log(selectedKeys)
-        },
-    }
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -295,7 +287,11 @@ export default function SubjectOpeningPlan() {
                     <Table
                         rowKey="id"
                         id="training-category"
-                        rowSelection={rowSelection}
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys) =>
+                                setSelectedRowKeys(selectedKeys),
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -324,8 +320,8 @@ export default function SubjectOpeningPlan() {
                                 width: 200,
                                 render: (values: { name: string }[]) => (
                                     <ul style={{ paddingLeft: 16, margin: 0 }}>
-                                        {values.map((val, idx) => (
-                                            <li key={idx}>{val.name}</li>
+                                        {values.map((val) => (
+                                            <li key={val.name}>{val.name}</li>
                                         ))}
                                     </ul>
                                 ),
@@ -348,8 +344,8 @@ export default function SubjectOpeningPlan() {
                                             listStyleType: 'disc',
                                         }}
                                     >
-                                        {values.map((val, idx) => (
-                                            <li key={idx}>{val.name}</li>
+                                        {values.map((val) => (
+                                            <li key={val.name}>{val.name}</li>
                                         ))}
                                     </ul>
                                 ),
@@ -366,8 +362,8 @@ export default function SubjectOpeningPlan() {
                                             listStyleType: 'disc',
                                         }}
                                     >
-                                        {classes.map((cls, idx) => (
-                                            <li key={idx}>{cls.name}</li>
+                                        {classes.map((cls) => (
+                                            <li key={cls.name}>{cls.name}</li>
                                         ))}
                                     </ul>
                                 ),
