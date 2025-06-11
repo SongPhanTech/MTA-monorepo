@@ -58,57 +58,40 @@ const PutTrainingMajorModal = () => {
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()
     const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
-    async function onOk(output?: PutTrainingMajor) {
-        if (!output) return
+    async function onOk({ trainingObjectTypeIds, ...rest }: PutTrainingMajor) {
         try {
             showSpinner()
             if (id) {
                 await updateTrainingMajor({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        summary: output.summary,
-                        active: output.active,
-                        description: output.description,
-                        englishName: output.englishName,
-                        organizationId: output.organizationId,
-                        trainingFieldId: output.trainingFieldId,
-                        numberCreditsMajor: output.numberCreditsMajor,
-                        numberCreditsRequired: output.numberCreditsRequired,
-                        numberCreditsElective: output.numberCreditsElective,
+                        ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map(
+                                data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({
                                         trainingObjectTypeId,
                                     })
                                 ),
                                 skipDuplicates: true,
                             },
+                            deleteMany: {
+                                trainingMajorId: id,
+                                trainingObjectTypeId: {
+                                    notIn: trainingObjectTypeIds,
+                                },
+                            },
                         },
                     },
-                    where: {
-                        id,
-                    },
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createTrainingMajor({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        summary: output.summary,
-                        active: output.active,
-                        description: output.description,
-                        englishName: output.englishName,
-                        organizationId: output.organizationId,
-                        trainingFieldId: output.trainingFieldId,
-                        numberCreditsMajor: output.numberCreditsMajor,
-                        numberCreditsRequired: output.numberCreditsRequired,
-                        numberCreditsElective: output.numberCreditsElective,
+                        ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map(
+                                data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({
                                         trainingObjectTypeId,
                                     })
