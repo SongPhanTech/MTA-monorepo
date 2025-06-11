@@ -1,15 +1,13 @@
-import { Header } from 'antd/es/layout/layout'
-
 const lightThemeCustom = {
     token: {
         colorPrimary: '#028850',
     },
     components: {
         Table: {
-            headerBg: '#028850',
+            headerBg: '#E8E8E8',
             padding: 10,
-            headerColor: '#fff',
-            headerBorderRadius: 5,
+            headerColor: '#26273D',
+            headerBorderRadius: 8,
         },
         Menu: {
             itemSelectedColor: '#fff',

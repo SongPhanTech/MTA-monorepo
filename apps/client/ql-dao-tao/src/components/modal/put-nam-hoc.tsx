@@ -43,7 +43,7 @@ const PutSchoolYearModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
-                        order: output.order
+                        order: output.order,
                     },
                     where: {
                         id,
@@ -58,7 +58,7 @@ const PutSchoolYearModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
-                        order: output.order
+                        order: output.order,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -74,7 +74,7 @@ const PutSchoolYearModal = () => {
         hideSpinner()
     }
 
-    const {data:schoolYearCount=0} = useCountSchoolYear()
+    const { data: schoolYearCount = 0 } = useCountSchoolYear()
 
     const { data: level } = useFindUniqueSchoolYear({
         where: { id },
@@ -86,11 +86,11 @@ const PutSchoolYearModal = () => {
                 ...level,
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
-                order: schoolYearCount+1
+                order: schoolYearCount + 1,
             })
-        }else {
-              form.setFieldsValue({
-                order: schoolYearCount+1
+        } else {
+            form.setFieldsValue({
+                order: schoolYearCount + 1,
             })
         }
     }, [level])
@@ -115,9 +115,14 @@ const PutSchoolYearModal = () => {
                     <Input placeholder="Nhập tên năm học" />
                 </FormItem>
             </Col>
-              <Col span={24}>
+            <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber style={{width:'100%'}} placeholder="Nhập thứ tự năm học" step={1} min={1} />
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        placeholder="Nhập thứ tự năm học"
+                        step={1}
+                        min={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -30,7 +30,7 @@ type TableProps<T extends Data> = {
     scrollable?: boolean
     maxHeight?: number
     currentPage: number
-    headerRight?: ReactNode | ReactNode[]
+    headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: string
     onRowDoubleClick?: (record: T) => void
 } & TableAntdProps
@@ -188,8 +188,7 @@ const TableCollapse = <T extends Data>({
                 pagination={pagination}
                 onRow={(record) => {
                     const children = record[childrenFieldName]
-                    const isParent =
-                        Array.isArray(children) && children.length > 0
+                    const isParent = Array.isArray(children)
 
                     // Nếu là cha -> không cho click/doubleClick
                     if (isParent) {
@@ -224,38 +223,40 @@ const TableCollapse = <T extends Data>({
                     expandRowByClick: true,
                     expandIcon: ({ expanded, onExpand, record }) => {
                         const children = record[childrenFieldName]
-                        return Array.isArray(children) &&
-                            children.length > 0 ? (
+                        return Array.isArray(children) ? (
                             <div className="flex w-full">
-                                <DownOutlined
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onExpand(record, e)
-                                    }}
-                                    style={{
-                                        transform: expanded
-                                            ? 'rotate(0deg)'
-                                            : 'rotate(-90deg)',
-                                        marginRight: 8,
-                                        fontSize: 12,
-                                        position: 'sticky',
-                                        top: 0,
-                                        left: 10,
-                                    }}
-                                />
+                                {children.length > 0 && (
+                                    <DownOutlined
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onExpand(record, e)
+                                        }}
+                                        style={{
+                                            transform: expanded
+                                                ? 'rotate(0deg)'
+                                                : 'rotate(-90deg)',
+                                            marginRight: 8,
+                                            fontSize: 12,
+                                            position: 'sticky',
+                                            top: 0,
+                                            left: 10,
+                                        }}
+                                    />
+                                )}
+
                                 <div className="flex w-full items-center justify-between">
                                     <strong className="select-none sticky left-[30px]">
                                         {typeof headerTitleKey === 'function'
                                             ? headerTitleKey(record)
-                                            : (record[
+                                            : ((record as T)[
                                                   headerTitleKey
                                               ] as ReactNode)}
                                     </strong>
                                     <div
                                         onClick={(e) => e.stopPropagation()}
-                                        className="select-none sticky right-[10px]"
+                                        className="select-none sticky right-[11px]"
                                     >
-                                        {headerRight}
+                                        {headerRight?.(record)}
                                     </div>
                                 </div>
                             </div>

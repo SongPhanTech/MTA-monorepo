@@ -46,12 +46,20 @@ export default function TrainingProgramSubjects() {
             // name: {
             //     contains: searchText,
             // },
-            curriculumVersionId: id as string,
+            curriculumVersions: {
+                some: {
+                    curriculumVersionId: id as string,
+                },
+            },
         },
         include: {
-            subjects: {
+            curriculumVersions: {
                 include: {
-                    subject: true,
+                    subjects: {
+                        include: {
+                            subject: true,
+                        },
+                    },
                 },
             },
         },
@@ -188,7 +196,11 @@ export default function TrainingProgramSubjects() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
