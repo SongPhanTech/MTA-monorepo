@@ -25,6 +25,7 @@ import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutOpenClassModal from './put-mo-lop'
 import AddStudentModal from './add-student'
 import PutStudentModal from './put-student'
+import PutUserProfileStaffModal from './put-staff-modal'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 export {
     ConfirmModal,
@@ -54,5 +55,4 @@ export {
     PutOpenClassModal,
     AddStudentModal,
     PutStudentModal,
-    PutCurriculum,
 }

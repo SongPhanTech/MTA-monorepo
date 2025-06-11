@@ -447,6 +447,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QL_GIANG_VIEN,
                         description: 'Quản lý hồ sơ giảng viên',
                     },
+                    {
+                        id: 'user-profile-staff',
+                        label: 'Quản lý hồ sơ cán bộ',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QL_CAN_BO,
+                        description: 'Quản lý hồ sơ cán bộ',
+                    },
                 ],
             },
             {

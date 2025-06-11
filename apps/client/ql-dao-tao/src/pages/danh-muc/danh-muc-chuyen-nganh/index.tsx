@@ -309,7 +309,9 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <TableCollapse
                         // rowKey="id"
-                        headerTitleKey="name"
+                        headerTitleKey={(record)=>{
+                            return `${record?.code} - ${record?.name}`
+                        }}
                         currentPage={currentPage}
                         columns={[
                             {

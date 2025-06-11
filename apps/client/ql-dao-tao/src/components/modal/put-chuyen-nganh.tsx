@@ -197,7 +197,7 @@ const PutTrainingMajorModal = () => {
                         options={trainingFieldData.map((i: TrainingField) => {
                             return {
                                 value: i.id,
-                                label: i.name,
+                                label: `${i?.code} - ${i.name}`,
                             }
                         })}
                         onChange={(val) => handleMajorChange(val)}
@@ -278,7 +278,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="englishName"
                     label="Tên tiếng anh"
-                    required
                 >
                     <Input placeholder="Nhập tên tiếng anh" />
                 </FormItem>
@@ -288,7 +287,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsMajor"
                     label="Số TC Chuyên Ngành"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
@@ -298,7 +296,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsRequired"
                     label="Số TC Bắt Buộc"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
@@ -308,7 +305,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsElective"
                     label="Số TC Lựa Chọn"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>

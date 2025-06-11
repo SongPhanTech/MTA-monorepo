@@ -4,35 +4,24 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { PutOrganizationUser } from '@components/modal'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
     type UserProfile,
-    type SchoolYear,
-    type TrainingForm,
-    type TrainingLevel,
-    type TrainingType,
-    type TrainingObjectType,
-    type PriorityObject,
-    type RegistrationArea,
     type Nationality,
     type Religion,
     type Ethnicity,
     $Enums,
+    type Rank,
+    type Level,
+    type AcademicDegreeType,
+    type AcademicRankType,
+    type Lecturer,
+    type Prisma,
 } from '@workspace/db'
 import {
-    useCreateUserProfile,
-    useFindUniqueUserProfile,
-    useFindManySchoolYear,
     useFindManyUserProfile,
     useUpdateUserProfile,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManyPriorityObject,
-    useFindManyRegistrationArea,
     useFindManyReligion,
     useFindManyEthnicity,
     useFindManyOrganization,
@@ -43,9 +32,12 @@ import {
     useFindManyAcademicRankType,
     useFindUniqueLecturer,
     useUpdateLecturer,
+    useCreateLecturer,
+    useFindManyLecturerType,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
+    AutoComplete,
     Col,
     Collapse,
     Form,
@@ -58,11 +50,12 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
+import _ from 'lodash'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -71,7 +64,9 @@ const { Panel } = Collapse
 dayjs.locale('vi')
 // export type PutUserProfile = UserProfile;
 export type PutUserProfile = UserProfile & {
-    file: any
+    file: FileType
+    organizationId?: string
+    lecturerTypeId?: string
 }
 export interface PutUserProfileLectureProps {
     id: string | null
@@ -94,6 +89,13 @@ const PutUserProfileLectureModal = () => {
     const { id } = input ?? { id: null }
     const { showSpinner, hideSpinner } = useSpinner()
 
+    const [searchIdCard, setSearchIdCard] = useState<string>('')
+    const [foundProfile, setFoundProfile] = useState<any>(null)
+    const [idCardOptions, setIdCardOptions] = useState<
+        { value: string; label: string }[]
+    >([])
+    const [originalData, setOriginalData] = useState<any>(null)
+
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
 
@@ -108,6 +110,7 @@ const PutUserProfileLectureModal = () => {
     const { data: academicDegreeTypeData = [] } =
         useFindManyAcademicDegreeType()
     const { data: academicRankTypeData = [] } = useFindManyAcademicRankType()
+    const { data: lecturerTypeData = [] } = useFindManyLecturerType()
 
     const { data: lecturerData } = useFindUniqueLecturer({
         where: {
@@ -126,15 +129,65 @@ const PutUserProfileLectureModal = () => {
                 },
             },
             organization: true,
-            lecturerType: {
+            lecturerType: true,
+        },
+    })
+
+    const { data: idCardNumberData = [] } = useFindManyUserProfile()
+    console.log('idCardNumberData:', idCardNumberData)
+
+    const { data: existingProfiles } = useFindManyUserProfile({
+        where: {
+            idCardNumber: searchIdCard || undefined,
+        },
+        include: {
+            nationality: true,
+            religion: true,
+            ethnicity: true,
+            rank: true,
+            level: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            lecturer: {
                 include: {
-                    staffPosition: true,
+                    organization: true,
+                    lecturerType: true,
                 },
             },
         },
     })
 
-    console.log('lecturerData', lecturerData)
+    useEffect(() => {
+        if (idCardNumberData.length > 0) {
+            const options = idCardNumberData
+                .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
+                .map((profile) => ({
+                    value: profile.idCardNumber,
+                    label: profile.idCardNumber,
+                }))
+            setIdCardOptions(options)
+        }
+    }, [idCardNumberData])
+
+    const debouncedSearch = useMemo(
+        () =>
+            _.debounce((value: string) => {
+                if (value && !id) {
+                    setSearchIdCard(value)
+                } else {
+                    setSearchIdCard('')
+                    setFoundProfile(null)
+                }
+            }, 500),
+        [id]
+    )
+
+    // SỬA: Cleanup debounce khi component unmount
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel()
+        }
+    }, [debouncedSearch])
 
     // const {
     //     data: organizationUserData = [],
@@ -149,11 +202,244 @@ const PutUserProfileLectureModal = () => {
 
     const treeData = buildOrgTree(manageOrgData)
 
+    // SỬA: Thêm fillProfileData function
+    const fillProfileData = useCallback(
+        (
+            profile: UserProfile & {
+                nationality?: Nationality | null
+                religion?: Religion | null
+                ethnicity?: Ethnicity | null
+                rank?: Rank | null
+                level?: Level | null
+                academicDegreeType?: AcademicDegreeType | null
+                academicRankType?: AcademicRankType | null
+                lecturer?: Lecturer | null
+            }
+        ) => {
+            form.setFieldsValue({
+                // Thông tin cơ bản từ UserProfile
+                firstName: profile.firstName,
+                lastName: profile.lastName,
+                code: profile.code || '',
+                dateOfBirth: profile.dateOfBirth
+                    ? dayjs(profile.dateOfBirth)
+                    : null,
+                placeOfBirth: profile.placeOfBirth,
+                homeTown: profile.homeTown,
+                idCardNumber: profile.idCardNumber,
+                idCardDate: profile.idCardDate
+                    ? dayjs(profile.idCardDate)
+                    : null,
+                officerNumber: profile.officerNumber,
+                gender: profile.gender,
+                permanentAddress: profile.permanentAddress,
+                temporaryAddress: profile.temporaryAddress,
+                contactAddress: profile.contactAddress,
+                phoneNumber: profile.phoneNumber,
+                email: profile.email,
+                familyPhone: profile.familyPhone,
+                familyName: profile.familyName,
+
+                // Thông tin Đoàn/Đảng
+                unionDate: profile.unionDate ? dayjs(profile.unionDate) : null,
+                unionPlace: profile.unionPlace,
+                CPVJoinDate: profile.CPVJoinDate
+                    ? dayjs(profile.CPVJoinDate)
+                    : null,
+                officialCPVDate: profile.officialCPVDate
+                    ? dayjs(profile.officialCPVDate)
+                    : null,
+                CPVJoinPlace: profile.CPVJoinPlace,
+                tenureDate: profile.tenureDate
+                    ? dayjs(profile.tenureDate)
+                    : null,
+                enlistmentDate: profile.enlistmentDate
+                    ? dayjs(profile.enlistmentDate)
+                    : null,
+                dischargeDate: profile.dischargeDate
+                    ? dayjs(profile.dischargeDate)
+                    : null,
+
+                // Relations
+                nationalityId: profile.nationality?.id,
+                religionId: profile.religion?.id,
+                ethnicityId: profile.ethnicity?.id,
+                rankId: profile.rank?.id,
+                levelId: profile.level?.id,
+                academicDegreeTypeId: profile.academicDegreeType?.id,
+                academicRankTypeId: profile.academicRankType?.id,
+
+                // Dates for history
+                rankDate: profile.rankDate ? dayjs(profile.rankDate) : null,
+                academicRankDate: profile.academicRankDate
+                    ? dayjs(profile.academicRankDate)
+                    : null,
+                academicDegreeDate: profile.academicDegreeDate
+                    ? dayjs(profile.academicDegreeDate)
+                    : null,
+
+                // ✅ Thông tin lecturer nếu có
+                ...(profile.lecturer && {
+                    organizationId: profile.lecturer.organizationId,
+                    lecturerTypeId: profile.lecturer.lecturerTypeId,
+                }),
+            })
+
+            // Set avatar nếu có
+            if (profile.avatar) {
+                setAvatar([
+                    {
+                        uid: '-1',
+                        name: 'avatar.png',
+                        status: 'done',
+                        url: getMinioUrl(profile.avatar),
+                    },
+                ])
+            }
+
+            setFoundProfile(profile)
+        },
+        [form]
+    )
+
+    // SỬA: Thêm useEffect để auto-fill
+    useEffect(() => {
+        if (existingProfiles && !id && searchIdCard) {
+            const profile = existingProfiles[0]
+
+            if (profile) {
+                fillProfileData(profile)
+            } else {
+                setFoundProfile(null)
+            }
+        }
+    }, [existingProfiles, id, fillProfileData, searchIdCard])
+
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
+    const { mutateAsync: createLecturer } = useCreateLecturer()
+    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+
+    // SỬA: Cập nhật buildUserProfileUpdateData
+    const buildUserProfileUpdateData = (
+        output: PutUserProfile,
+        fileName?: string
+    ) => {
+        const newData = {
+            code: output.code,
+            avatar: fileName,
+            firstName: output.firstName,
+            lastName: output.lastName,
+            dateOfBirth: output.dateOfBirth,
+            placeOfBirth: output.placeOfBirth,
+            homeTown: output.homeTown,
+            idCardNumber: output.idCardNumber,
+            idCardDate: output.idCardDate,
+            officerNumber: output.officerNumber,
+            gender: output.gender,
+            permanentAddress: output.permanentAddress,
+            temporaryAddress: output.temporaryAddress,
+            contactAddress: output.contactAddress,
+            phoneNumber: output.phoneNumber,
+            email: output.email,
+            familyPhone: output.familyPhone,
+            familyName: output.familyName,
+            unionDate: output.unionDate,
+            unionPlace: output.unionPlace,
+            CPVJoinDate: output.CPVJoinDate,
+            officialCPVDate: output.officialCPVDate,
+            CPVJoinPlace: output.CPVJoinPlace,
+            tenureDate: output.tenureDate,
+            enlistmentDate: output.enlistmentDate,
+            dischargeDate: output.dischargeDate,
+            rankDate: output.rankDate,
+            academicRankDate: output.academicRankDate,
+            academicDegreeDate: output.academicDegreeDate,
+            userType: $Enums.UserType.LECTURER,
+            // Gộp tất cả relations vào - chỉ connect khi có giá trị
+            ...(output.nationalityId && {
+                nationality: { connect: { id: output.nationalityId } },
+            }),
+            ...(output.religionId && {
+                religion: { connect: { id: output.religionId } },
+            }),
+            ...(output.ethnicityId && {
+                ethnicity: { connect: { id: output.ethnicityId } },
+            }),
+            ...(output.rankId && {
+                rank: { connect: { id: output.rankId } },
+            }),
+            ...(output.levelId && {
+                level: { connect: { id: output.levelId } },
+            }),
+            ...(output.academicDegreeTypeId && {
+                academicDegreeType: {
+                    connect: { id: output.academicDegreeTypeId },
+                },
+            }),
+            ...(output.academicRankTypeId && {
+                academicRankType: {
+                    connect: { id: output.academicRankTypeId },
+                },
+            }),
+        }
+
+        // Nếu là update mode và có dữ liệu gốc, chỉ gửi những field thay đổi
+        if (id && originalData) {
+            // So sánh và lấy ra chỉ những field cơ bản thay đổi
+            const basicFieldChanges = difference(newData, originalData)
+
+            // Tạo object chứa tất cả changes (bao gồm relations)
+            const allChanges = {
+                ...basicFieldChanges,
+                // Luôn thêm relations nếu có giá trị (không cần so sánh)
+                ...(output.nationalityId && {
+                    nationality: { connect: { id: output.nationalityId } },
+                }),
+                ...(output.religionId && {
+                    religion: { connect: { id: output.religionId } },
+                }),
+                ...(output.ethnicityId && {
+                    ethnicity: { connect: { id: output.ethnicityId } },
+                }),
+                ...(output.rankId && {
+                    rank: { connect: { id: output.rankId } },
+                }),
+                ...(output.levelId && {
+                    level: { connect: { id: output.levelId } },
+                }),
+                ...(output.academicDegreeTypeId && {
+                    academicDegreeType: {
+                        connect: { id: output.academicDegreeTypeId },
+                    },
+                }),
+                ...(output.academicRankTypeId && {
+                    academicRankType: {
+                        connect: { id: output.academicRankTypeId },
+                    },
+                }),
+            }
+
+            console.log(
+                'Only updating changed fields (with all relations):',
+                allChanges
+            )
+
+            return allChanges
+        }
+        return newData
+    }
+
+    // SỬA: buildUserProfileData giống hệt buildUserProfileUpdateData
+    const buildUserProfileData = (
+        output: PutUserProfile,
+        fileName?: string
+    ) => ({
+        ...buildUserProfileUpdateData(output, fileName), // ✅ Sử dụng lại function trên
+    })
 
     async function onOk(output?: PutUserProfile) {
         if (!output) return
-        let fileName
+        let fileName = output.avatar
         if (fileList.length > 0) {
             const resPresignedUrl = await fetchGeneratePresignedUrl({
                 body: {
@@ -170,8 +456,20 @@ const PutUserProfileLectureModal = () => {
         try {
             showSpinner()
             if (id) {
+                // UPDATE MODE
                 await updateLecturer({
                     data: {
+                        code: output.code, // ✅ Thêm update code
+                        ...(output.organizationId && {
+                            organization: {
+                                connect: { id: output.organizationId },
+                            },
+                        }),
+                        ...(output.lecturerTypeId && {
+                            lecturerType: {
+                                connect: { id: output.lecturerTypeId },
+                            },
+                        }),
                         userProfile: {
                             update: {
                                 code: output.code,
@@ -204,52 +502,134 @@ const PutUserProfileLectureModal = () => {
                                 academicRankDate: output.academicRankDate,
                                 academicDegreeDate: output.academicDegreeDate,
                                 userType: $Enums.UserType.LECTURER,
-                                // Connect relations
-                                nationality: output.nationalityId
-                                    ? {
-                                          connect: { id: output.nationalityId },
-                                      }
-                                    : { disconnect: true },
-                                religion: output.religionId
-                                    ? {
-                                          connect: { id: output.religionId },
-                                      }
-                                    : { disconnect: true },
-                                ethnicity: output.ethnicityId
-                                    ? {
-                                          connect: { id: output.ethnicityId },
-                                      }
-                                    : { disconnect: true },
-                                rank: output.rankId
-                                    ? {
-                                          connect: { id: output.rankId },
-                                      }
-                                    : { disconnect: true },
-                                level: output.levelId
-                                    ? {
-                                          connect: { id: output.levelId },
-                                      }
-                                    : { disconnect: true },
-                                academicDegreeType: output.academicDegreeTypeId
-                                    ? {
-                                          connect: {
-                                              id: output.academicDegreeTypeId,
-                                          },
-                                      }
-                                    : { disconnect: true },
-                                academicRankType: output.academicRankTypeId
-                                    ? {
-                                          connect: {
-                                              id: output.academicRankTypeId,
-                                          },
-                                      }
-                                    : { disconnect: true },
+                                // Relations - chỉ connect khi có giá trị
+                                ...(output.nationalityId && {
+                                    nationality: {
+                                        connect: { id: output.nationalityId },
+                                    },
+                                }),
+                                ...(output.religionId && {
+                                    religion: {
+                                        connect: { id: output.religionId },
+                                    },
+                                }),
+                                ...(output.ethnicityId && {
+                                    ethnicity: {
+                                        connect: { id: output.ethnicityId },
+                                    },
+                                }),
+                                ...(output.rankId && {
+                                    rank: { connect: { id: output.rankId } },
+                                }),
+                                ...(output.levelId && {
+                                    level: { connect: { id: output.levelId } },
+                                }),
+                                ...(output.academicDegreeTypeId && {
+                                    academicDegreeType: {
+                                        connect: {
+                                            id: output.academicDegreeTypeId,
+                                        },
+                                    },
+                                }),
+                                ...(output.academicRankTypeId && {
+                                    academicRankType: {
+                                        connect: {
+                                            id: output.academicRankTypeId,
+                                        },
+                                    },
+                                }),
                             },
                         },
                     },
                     where: { id },
                 })
                 message.success('Cập nhật thành công')
+            } else {
+                // CREATE MODE
+                if (foundProfile?.id) {
+                    // Có profile existing
+                    if (foundProfile.lecturer?.id) {
+                        // Profile đã có lecturer -> Update existing lecturer
+                        await updateLecturer({
+                            data: {
+                                code: output.code,
+                                ...(output.organizationId && {
+                                    organization: {
+                                        connect: { id: output.organizationId },
+                                    },
+                                }),
+                                ...(output.lecturerTypeId && {
+                                    lecturerType: {
+                                        connect: { id: output.lecturerTypeId },
+                                    },
+                                }),
+                                userProfile: {
+                                    update: buildUserProfileUpdateData(
+                                        output,
+                                        fileName ?? undefined
+                                    ),
+                                },
+                            },
+                            where: { id: foundProfile.lecturer.id },
+                        })
+                        message.success('Cập nhật giảng viên thành công')
+                    } else {
+                        // Profile chưa có lecturer -> Tạo lecturer mới cho profile existing
+                        await createLecturer({
+                            data: {
+                                code: output.code,
+                                ...(output.organizationId && {
+                                    organization: {
+                                        connect: { id: output.organizationId },
+                                    },
+                                }),
+                                ...(output.lecturerTypeId && {
+                                    lecturerType: {
+                                        connect: { id: output.lecturerTypeId },
+                                    },
+                                }),
+                                userProfile: {
+                                    connect: { id: foundProfile.id },
+                                },
+                            } as Prisma.LecturerCreateInput,
+                        })
+
+                        // Update profile với thông tin mới
+                        await updateUserProfile({
+                            data: buildUserProfileUpdateData(
+                                output,
+                                fileName ?? undefined
+                            ),
+                            where: { id: foundProfile.id },
+                        })
+
+                        message.success('Thêm giảng viên thành công')
+                    }
+                } else {
+                    // Tạo mới hoàn toàn
+                    await createLecturer({
+                        data: {
+                            code: output.code,
+                            ...(output.organizationId && {
+                                organization: {
+                                    connect: { id: output.organizationId },
+                                },
+                            }),
+                            ...(output.lecturerTypeId && {
+                                lecturerType: {
+                                    connect: { id: output.lecturerTypeId },
+                                },
+                            }),
+                            userProfile: {
+                                create: buildUserProfileData(
+                                    output,
+                                    fileName ?? undefined
+                                ),
+                            },
+                        } as Prisma.LecturerCreateInput,
+                    })
+                    message.success('Thêm mới giảng viên thành công')
+                }
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
@@ -262,29 +642,59 @@ const PutUserProfileLectureModal = () => {
         hideSpinner()
     }
 
+    const difference = (
+        object: Record<PropertyKey, unknown>,
+        base: Record<PropertyKey, unknown>
+    ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
-        if (lecturerData?.userProfile) {
+        if (lecturerData?.userProfile && id) {
             const userProfile = lecturerData.userProfile
-            form.setFieldsValue({
-                // Thông tin từ UserProfile
-                ...userProfile,
-                // Convert dates
+            const lecturer = lecturerData
+
+            const formData = {
+                // Thông tin từ Lecturer
+                code: lecturer.code || userProfile.code,
+                organizationId: lecturer.organizationId,
+                lecturerTypeId: lecturer.lecturerTypeId,
+
+                // Thông tin cơ bản từ UserProfile
+                firstName: userProfile.firstName,
+                lastName: userProfile.lastName,
                 dateOfBirth: userProfile.dateOfBirth
                     ? dayjs(userProfile.dateOfBirth)
                     : null,
+                placeOfBirth: userProfile.placeOfBirth,
+                avatar: userProfile.avatar,
+                homeTown: userProfile.homeTown,
+                idCardNumber: userProfile.idCardNumber,
                 idCardDate: userProfile.idCardDate
                     ? dayjs(userProfile.idCardDate)
                     : null,
+                officerNumber: userProfile.officerNumber,
+                gender: userProfile.gender,
+                permanentAddress: userProfile.permanentAddress,
+                temporaryAddress: userProfile.temporaryAddress,
+                contactAddress: userProfile.contactAddress,
+                phoneNumber: userProfile.phoneNumber,
+                email: userProfile.email,
+                familyPhone: userProfile.familyPhone,
+                familyName: userProfile.familyName,
+
+                // Thông tin Đoàn/Đảng/Nhập ngũ
                 unionDate: userProfile.unionDate
                     ? dayjs(userProfile.unionDate)
                     : null,
+                unionPlace: userProfile.unionPlace,
                 CPVJoinDate: userProfile.CPVJoinDate
                     ? dayjs(userProfile.CPVJoinDate)
                     : null,
                 officialCPVDate: userProfile.officialCPVDate
                     ? dayjs(userProfile.officialCPVDate)
                     : null,
+                CPVJoinPlace: userProfile.CPVJoinPlace,
                 tenureDate: userProfile.tenureDate
                     ? dayjs(userProfile.tenureDate)
                     : null,
@@ -294,6 +704,17 @@ const PutUserProfileLectureModal = () => {
                 dischargeDate: userProfile.dischargeDate
                     ? dayjs(userProfile.dischargeDate)
                     : null,
+
+                // Relations IDs
+                nationalityId: userProfile.nationality?.id,
+                religionId: userProfile.religion?.id,
+                ethnicityId: userProfile.ethnicity?.id,
+                rankId: userProfile.rank?.id,
+                levelId: userProfile.level?.id,
+                academicDegreeTypeId: userProfile.academicDegreeType?.id,
+                academicRankTypeId: userProfile.academicRankType?.id,
+
+                // Lịch sử - Dates
                 rankDate: userProfile.rankDate
                     ? dayjs(userProfile.rankDate)
                     : null,
@@ -303,8 +724,14 @@ const PutUserProfileLectureModal = () => {
                 academicDegreeDate: userProfile.academicDegreeDate
                     ? dayjs(userProfile.academicDegreeDate)
                     : null,
-            })
+            }
 
+            // Lưu dữ liệu gốc để so sánh
+            setOriginalData(formData)
+
+            form.setFieldsValue(formData)
+
+            // ✅ Set avatar nếu có
             if (userProfile.avatar) {
                 setAvatar([
                     {
@@ -316,7 +743,7 @@ const PutUserProfileLectureModal = () => {
                 ])
             }
         }
-    }, [lecturerData, form])
+    }, [lecturerData, form, id])
 
     //upload file
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -347,7 +774,7 @@ const PutUserProfileLectureModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Chỉnh sửa giảng viên'}
+            title={id ? 'Chỉnh sửa giảng viên' : 'Thêm mới giảng viên'}
             className="w-[80vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
@@ -361,7 +788,7 @@ const PutUserProfileLectureModal = () => {
                                 <Col span={4}>
                                     <div
                                         style={{
-                                            transform: 'scale(1.5)',
+                                            transform: 'scale(1.35)',
                                             transformOrigin: 'top left',
                                             fontSize: '0.65rem',
                                         }}
@@ -409,6 +836,48 @@ const PutUserProfileLectureModal = () => {
                                         <Col span={12}>
                                             <FormItem
                                                 form={form}
+                                                name="idCardNumber"
+                                                label="Số CCCD"
+                                                className="mb-0"
+                                                required
+                                            >
+                                                <AutoComplete
+                                                    placeholder="Nhập hoặc chọn số CCCD"
+                                                    allowClear
+                                                    options={idCardOptions}
+                                                    filterOption={(
+                                                        inputValue,
+                                                        option
+                                                    ) =>
+                                                        option?.value
+                                                            .toUpperCase()
+                                                            .indexOf(
+                                                                inputValue.toUpperCase()
+                                                            ) !== -1 ||
+                                                        option?.label
+                                                            .toUpperCase()
+                                                            .indexOf(
+                                                                inputValue.toUpperCase()
+                                                            ) !== -1
+                                                    }
+                                                    onSelect={(value) => {
+                                                        form.setFieldsValue({
+                                                            idCardNumber: value,
+                                                        })
+                                                        debouncedSearch(value)
+                                                    }}
+                                                    onChange={(value) => {
+                                                        form.setFieldsValue({
+                                                            idCardNumber: value,
+                                                        })
+                                                        debouncedSearch(value)
+                                                    }}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
                                                 name="code"
                                                 label="Mã giảng viên"
                                                 required
@@ -439,7 +908,64 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập tên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                    </Row>
+                                </Col>
+
+                                <Col span={24}>
+                                    <Row gutter={[10, 10]}>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="organizationId"
+                                                label="Đơn vị"
+                                                required={!id} // Required khi create
+                                                className="mb-0"
+                                            >
+                                                <TreeSelect
+                                                    placeholder="Chọn đơn vị"
+                                                    treeData={treeData}
+                                                    allowClear
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="lecturerTypeId"
+                                                label="Loại giảng viên"
+                                                required={!id} // Required khi create
+                                                className="mb-0"
+                                            >
+                                                <Select
+                                                    placeholder="Chọn loại giảng viên"
+                                                    options={lecturerTypeData.map(
+                                                        (i) => ({
+                                                            value: i.id,
+                                                            label: i.name,
+                                                        })
+                                                    )}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem
+                                                form={form}
+                                                name="idCardDate"
+                                                label="Ngày cấp CCCD"
+                                                className="mb-0"
+                                            >
+                                                <DatePicker
+                                                    format="DD/MM/YYYY"
+                                                    className="w-full"
+                                                    disabledDate={(date) =>
+                                                        date &&
+                                                        date >
+                                                            dayjs().endOf('day')
+                                                    }
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
                                             <FormItem
                                                 form={form}
                                                 name="dateOfBirth"
@@ -457,11 +983,6 @@ const PutUserProfileLectureModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                    </Row>
-                                </Col>
-
-                                <Col span={24}>
-                                    <Row gutter={[10, 10]}>
                                         <Col span={8}>
                                             <FormItem
                                                 form={form}
@@ -492,34 +1013,7 @@ const PutUserProfileLectureModal = () => {
                                                 <Input placeholder="Nhập số hiệu sĩ quan" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="idCardNumber"
-                                                label="Số CCCD"
-                                                className="mb-0"
-                                            >
-                                                <Input placeholder="Nhập số CCCD" />
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={8}>
-                                            <FormItem
-                                                form={form}
-                                                name="idCardDate"
-                                                label="Ngày cấp CCCD"
-                                                className="mb-0"
-                                            >
-                                                <DatePicker
-                                                    format="DD/MM/YYYY"
-                                                    className="w-full"
-                                                    disabledDate={(date) =>
-                                                        date &&
-                                                        date >
-                                                            dayjs().endOf('day')
-                                                    }
-                                                />
-                                            </FormItem>
-                                        </Col>
+
                                         <Col span={8}>
                                             <FormItem
                                                 form={form}
