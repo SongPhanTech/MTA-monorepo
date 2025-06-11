@@ -1,21 +1,20 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManyOrganization,
     useFindManySubject,
-    useFindManySubjectVersionType,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import dayjs from 'dayjs'
 export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -54,7 +53,6 @@ const PutVersionSubjectModal = () => {
 
     const { data: organization = [] } = useFindManyOrganization()
     const { data: subject = [] } = useFindManySubject()
-    const { data: subjectType = [] } = useFindManySubjectVersionType()
     const { options } = useExamTypeOptions()
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
@@ -69,9 +67,6 @@ const PutVersionSubjectModal = () => {
                 code: output.code,
                 name: output.name,
                 description: output.description,
-                coef_1: output.coef_1,
-                coef_2: output.coef_2,
-                coef_3: output.coef_3,
                 active: output.active,
                 examType: output.examType,
                 subjectEquivalentType: output.subjectEquivalentType,
@@ -85,7 +80,6 @@ const PutVersionSubjectModal = () => {
                 numberOfTheory: output.numberOfTheory,
                 managementOrganizationId: output.managementOrganizationId,
                 subjectId: output.subjectId,
-                subjectTypeId: output.subjectTypeId,
             }
 
             if (id) {
@@ -271,51 +265,6 @@ const PutVersionSubjectModal = () => {
                     <Select
                         placeholder="Chọn môn học"
                         options={subject?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="coef_1" label="HS1">
-                    <InputNumber
-                        step={0.1}
-                        min={0}
-                        max={1}
-                        placeholder="HS1"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="coef_2" label="HS2">
-                    <InputNumber
-                        step={0.1}
-                        min={0}
-                        max={1}
-                        placeholder="HS2"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="coef_3" label="HS3">
-                    <InputNumber
-                        step={0.1}
-                        min={0}
-                        max={1}
-                        placeholder="HS3"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="subjectTypeId" label="Loại môn học">
-                    <Select
-                        placeholder="Chọn loại môn học"
-                        options={subjectType?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
