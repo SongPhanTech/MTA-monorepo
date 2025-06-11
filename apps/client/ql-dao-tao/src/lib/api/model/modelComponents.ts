@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { useModelContext, ModelContext } from './modelContext'
+import { useModelContext, type ModelContext } from './modelContext'
 import type * as Fetcher from './modelFetcher'
 import { modelFetch } from './modelFetcher'
 import type * as Schemas from './modelSchemas'

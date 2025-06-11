@@ -14,7 +14,7 @@ import {
     useFindManySurveyQuestion,
     useCreateManySurveyAnswer,
 } from '@workspace/db/hooks'
-import { SurveyQuestion } from '@workspace/db'
+import type { SurveyQuestion } from '@workspace/db'
 import useSpinner from '@hooks/spinner'
 import { ROUTER_PATH } from '@workspace/router'
 import { useRouter } from 'next/router'

@@ -1,5 +1,5 @@
 import { fetchInstance } from '..'
-import { ChatContext } from './chatContext'
+import type { ChatContext } from './chatContext'
 
 const baseUrl = 'https://api.chat.chatbot.swantech.vn' // TODO add your baseUrl
 
@@ -95,7 +95,7 @@ export async function chatFetch<
             return (await response.blob()) as unknown as TData
         }
     } catch (e) {
-        let errorObject: Error = {
+        const errorObject: Error = {
             name: 'unknown' as const,
             message:
                 e instanceof Error

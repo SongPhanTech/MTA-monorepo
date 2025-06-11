@@ -1,5 +1,5 @@
 import { fetchInstance } from '..'
-import { QaContext } from './qaContext'
+import type { QaContext } from './qaContext'
 
 const baseUrl = 'https://api.doc.chatbot.swantech.vn' // TODO add your baseUrl
 
@@ -95,7 +95,7 @@ export async function qaFetch<
             return (await response.blob()) as unknown as TData
         }
     } catch (e) {
-        let errorObject: Error = {
+        const errorObject: Error = {
             name: 'unknown' as const,
             message:
                 e instanceof Error

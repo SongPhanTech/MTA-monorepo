@@ -251,7 +251,7 @@ export default function TrainingFieldPage() {
                                             i: TrainingObjectType & {
                                                 trainingObjectType: TrainingObjectType
                                             },
-                                            index: Number
+                                            index: number
                                         ) => (
                                             <span>
                                                 {i?.trainingObjectType?.name}
