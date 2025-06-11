@@ -166,7 +166,51 @@ export default function UserProfilePageLecture() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    console.log('data', data)
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+    const { onOpen, onClose } = useDisclosure<PutUserProfileLectureProps>({
+        tag: PutUserProfileLectureModal.name,
+    })
+
+    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
+        useDisclosure<AddUserProfileLectureProps>({
+            tag: PutUserProfileLectureModal.name,
+        })
+
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
+        useDisclosure<string>({
+            tag: PutUploadProfileModal.name,
+        })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
+        useDisclosure<string>({
+            tag: PutUpdateProfileModal.name,
+        })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpenModalAdd()
+    }
+    const handleModalUpload = (type: string) => {
+        if (type === 'upload') {
+            onOpenUpload('GV')
+        } else {
+            onOpenUpdateFile('GV')
+        }
+    }
+
+    // const handleSelectOrganization = (idOrganization: string) => {
+    //     const children = getAllChildrenByParentId(
+    //         tree_organization,
+    //         idOrganization
+    //     )
+    //     const listChildrenOrganizationId = children.map((item: any) => item.id)
+    //     setOrganizationIds(listChildrenOrganizationId)
+    // }
 
     const { data: count } = useCountLecturer({
         where: {
@@ -206,52 +250,6 @@ export default function UserProfilePageLecture() {
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-    const { onOpen, onClose } = useDisclosure<PutUserProfileLectureProps>({
-        tag: PutUserProfileLectureModal.name,
-    })
-
-    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
-        useDisclosure<AddUserProfileLectureProps>({
-            tag: AddUserProfileLecture.name,
-        })
-
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
-        useDisclosure<string>({
-            tag: PutUploadProfileModal.name,
-        })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
-        useDisclosure<string>({
-            tag: PutUpdateProfileModal.name,
-        })
-
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const handleModal = () => {
-        onOpenModalAdd({ userType: 'LECTURER' })
-    }
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('GV')
-        } else {
-            onOpenUpdateFile('GV')
-        }
-    }
-
-    // const handleSelectOrganization = (idOrganization: string) => {
-    //     const children = getAllChildrenByParentId(
-    //         tree_organization,
-    //         idOrganization
-    //     )
-    //     const listChildrenOrganizationId = children.map((item: any) => item.id)
-    //     setOrganizationIds(listChildrenOrganizationId)
-    // }
-
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
     async function handleDelete(id: string) {
         try {
@@ -262,6 +260,12 @@ export default function UserProfilePageLecture() {
                 },
                 data: {
                     deletedAt: new Date(),
+                    code: id,
+                    userProfile: {
+                        update: {
+                            idCardNumber: id,
+                        },
+                    },
                 },
             })
         } catch (error) {
@@ -355,9 +359,6 @@ export default function UserProfilePageLecture() {
     }
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Cán bộ / Giảng viên
-            </Divider>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
@@ -602,7 +603,7 @@ export default function UserProfilePageLecture() {
                                 width: 120,
                             },
                             {
-                                title: 'Loại giáo viên',
+                                title: 'Loại giảng viên',
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) =>
@@ -664,10 +665,7 @@ export default function UserProfilePageLecture() {
                             },
                         ]}
                         data={data}
-                        scroll={{ x: 'max-content' }}
                         pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
