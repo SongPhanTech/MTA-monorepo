@@ -121,10 +121,16 @@ const PutTrainingCourseModal = () => {
                       schoolYearId: schoolYearIdForm,
                   }
                 : undefined,
+                include:{
+                    schoolYear:true
+                }
         })
     const { data: level } = useFindUniqueTrainingCourse(
         {
             where: { id },
+            include: {
+                semesterStart: true,
+            }
         },
         {
             enabled: !!id,
@@ -136,6 +142,7 @@ const PutTrainingCourseModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
+                schoolYearId:level.semesterStart.schoolYearId
             })
         } else {
             form.setFieldsValue({
@@ -186,9 +193,9 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="schoolYearId" label="Năm học">
+                <FormItem form={form} name="schoolYearId" label="Năm học bắt đầu" required>
                     <Select
-                        placeholder="Chọn năm học"
+                        placeholder="Chọn năm học bắt đầu"
                         options={dataSchoolYear.map((i: SchoolYear) => {
                             return {
                                 value: i.id,
@@ -199,13 +206,13 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="semesterStartId" label="Kỳ học">
+                <FormItem form={form} name="semesterStartId" label="Kỳ học bắt đầu" required>
                     <Select
-                        placeholder="Chọn kỳ học"
-                        options={semesterData.map((i: Semester) => {
+                        placeholder="Chọn kỳ học bắt đầu"
+                        options={semesterData.map((i) => {
                             return {
                                 value: i.id,
-                                label: i.name,
+                                label: `${i.name} năm ${i.schoolYear.name}`,
                             }
                         })}
                     />

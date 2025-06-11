@@ -18,9 +18,10 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindManyTrainingMajor,
-    useFindManyCurriculumVersion,
+    useFindManyCurriculum,
     useFindManyLecturer,
     useFindManyStaff,
+    useFindUniqueCurriculumVersion,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, TreeSelect, Radio } from 'antd'
 import { useEffect } from 'react'
@@ -50,34 +51,15 @@ const PutFixedClassModal = () => {
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
         useFindManyOrganization()
     const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
-            where: {
-                trainingCourse: TrainingCourseForm
-                    ? {
-                          some: {
-                              id: TrainingCourseForm || '',
-                          },
-                      }
-                    : {},
-            },
-        })
 
-    const managementOrganizationForm = Form.useWatch(
-        'managementOrganizationId',
-        form
-    )
-
-    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor({
-            where: managementOrganizationForm
-                ? {
-                      organizationId: managementOrganizationForm,
-                  }
-                : {},
-        })
+    // const managementOrganizationForm = Form.useWatch(
+    //     'managementOrganizationId',
+    //     form
+    // )
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
+    const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
+
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
             where: trainingObjectTypeForm
@@ -86,29 +68,29 @@ const PutFixedClassModal = () => {
                   }
                 : {},
         })
-    const trainingMajorForm = Form.useWatch('trainingMajorId', form)
-    const {
-        data: curriculumVersionData = [],
-        refetch: refetchCurriculumVersion,
-    } = useFindManyCurriculumVersion({
-        where: {
-            trainingObjectTypeId: trainingObjectTypeForm || undefined,
-        },
-        include: {
-            curriculum: {
-                include: {
-                    trainingMajor: true,
-                    managementOrganization: true,
+    // const trainingMajorForm = Form.useWatch('trainingMajorId', form)
+    const { data: curriculumData = [], refetch: refetchCurriculum } =
+        useFindManyCurriculum({
+            where: {},
+            include: {
+                curriculumVersion: {
+                    include: {
+                        curriculum: {
+                            include: {
+                                trainingMajor: true,
+                                managementOrganization: true,
+                            },
+                        },
+                        fixedClasses: {
+                            include: {
+                                trainingCourse: true,
+                            },
+                        },
+                        trainingObjectType: true,
+                    },
                 },
             },
-            fixedClasses: {
-                include: {
-                    trainingCourse: true,
-                },
-            },
-            trainingObjectType: true,
-        },
-    })
+        })
     const { data: lecturerData = [], refetch: refetchLecturer } =
         useFindManyLecturer({
             include: {
@@ -121,6 +103,50 @@ const PutFixedClassModal = () => {
             userProfile: true,
         },
     })
+
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+            where: {
+                curriculumVersion: curriculumVersionIdForm
+                    ? {
+                          some: {
+                              id: curriculumVersionIdForm ?? undefined,
+                          },
+                      }
+                    : {},
+            },
+        })
+
+    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
+        useFindManyTrainingMajor({
+            where: {
+                curriculum: {
+                    some: {
+                        curriculumVersion: {
+                            some: {
+                                id: curriculumVersionIdForm ?? undefined,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
+        {
+            where: { id: curriculumVersionIdForm ?? undefined },
+            include: {
+                curriculum: {
+                    include: {
+                        trainingMajor: true,
+                        managementOrganization: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!curriculumVersionIdForm,
+        }
+    )
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -263,20 +289,20 @@ const PutFixedClassModal = () => {
         }
     }
 
-    const handleChangeFieldcurriculumVersion = async (val: string) => {
-        try {
-            const result = curriculumVersionData.find((i) => i?.id === val)
-            form.setFieldsValue({
-                managementOrganizationId:
-                    result?.curriculum?.managementOrganization?.id,
-                trainingMajorId: result?.curriculum?.trainingMajor?.id,
-                trainingObjectTypeId: result?.trainingObjectType?.id,
-            })
-        } catch (err) {
-            message.error('Lỗi khi tải đối tượng đào tạo')
-            console.log('[handleChangeFieldcurriculumVersion]', err)
+    const curriculumTreeData = curriculumData.map((i) => {
+        return {
+            ...i,
+            children: i?.curriculumVersion.map((t) => ({
+                ...t,
+                title: ` ${t?.code} - ${t?.name}`,
+                value: t?.id,
+            })),
+            title: ` ${i?.code} - ${i?.name}`,
+            value: i?.id,
+            selectable: false,
         }
-    }
+    })
+    const treeData = buildOrgTree(manageOrgData)
 
     const { data: level } = useFindUniqueFixedClass(
         {
@@ -286,6 +312,22 @@ const PutFixedClassModal = () => {
             enabled: !!id,
         }
     )
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (curriculumVersionData) {
+            form.setFieldsValue({
+                managementOrganizationId:
+                    curriculumVersionData?.curriculum?.managementOrganization
+                        ?.id,
+                trainingMajorId:
+                    curriculumVersionData?.curriculum?.trainingMajor?.id,
+                trainingObjectTypeId:
+                    curriculumVersionData?.trainingObjectTypeId,
+            })
+        }
+    }, [curriculumVersionData])
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
@@ -297,7 +339,6 @@ const PutFixedClassModal = () => {
             })
         }
     }, [level])
-    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <PutFormModal
@@ -309,6 +350,27 @@ const PutFixedClassModal = () => {
             title={id ? 'Chỉnh sửa lớp biên chế' : 'Thêm mới lớp biên chế'}
             className="w-[45vw]"
         >
+            <Col span={24}>
+                <FormItem
+                    form={form}
+                    name="curriculumVersionId"
+                    label="Chương trình đào tạo"
+                    required
+                >
+                    <TreeSelect
+                        allowClear
+                        showSearch
+                        placeholder="Chọn chương trình đào tạo"
+                        treeDefaultExpandAll
+                        treeData={curriculumTreeData}
+                        filterTreeNode={(input, node) =>
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -392,29 +454,7 @@ const PutFixedClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="curriculumVersionId"
-                    label="Chương trình đào tạo"
-                    required
-                >
-                    <Select
-                        placeholder="Chọn chương trình đào tạo"
-                        options={curriculumVersionData.map(
-                            (i: CurriculumVersion) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            }
-                        )}
-                        onChange={(val, record) =>
-                            handleChangeFieldcurriculumVersion(val)
-                        }
-                    />
-                </FormItem>
-            </Col>
+
             <Col span={12}>
                 <FormItem form={form} name="lecturerManagementId" label="GVCN">
                     <Select
@@ -480,7 +520,7 @@ const PutFixedClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="initSize" label="Sĩ số">
                     <InputNumber
                         style={{ width: '100%' }}
