@@ -55,4 +55,5 @@ export {
     PutOpenClassModal,
     AddStudentModal,
     PutStudentModal,
+    PutCurriculum,
 }
