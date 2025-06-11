@@ -66,6 +66,11 @@ export default function TrainingCoursePage() {
         },
         include: {
             trainingObjectType: true,
+            semesterStart: {
+                include: {
+                    schoolYear:true
+                }
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -278,13 +283,21 @@ export default function TrainingCoursePage() {
                             {
                                 title: 'Năm bắt đầu',
                                 align: 'center',
-                                dataIndex: 'startYear',
+                                dataIndex: 'semesterStart',
                                 width: 150,
+                                 render: (value) =>
+                                    value?.schoolYear?.name ? value?.schoolYear?.name : '',
                             },
                             {
-                                title: 'Năm kết thúc',
+                                title: 'Niên khoá',
                                 align: 'center',
-                                dataIndex: 'endYear',
+                                dataIndex: 'academicYear',
+                                width: 150,
+                            },
+                              {
+                                title: 'Chỉ tiêu tuyển sinh',
+                                align: 'center',
+                                dataIndex: 'admissionQuota',
                                 width: 150,
                             },
                             {
