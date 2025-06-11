@@ -50,7 +50,9 @@ import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
 import EditIcon from '@components/icons/edit'
 import check from '@assets/images/checked.svg'
-export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+export default function FixedClassPage({
+    trainingCourse,
+}: { trainingCourse?: TrainingCourse }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -96,7 +98,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             trainingMajor: true,
                         },
                     },
-                    trainingLevel:true
+                    trainingLevel: true,
                 },
             },
         },
@@ -437,9 +439,10 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 150,
                                 dataIndex: 'curriculumVersion',
                                 render: (value) =>
-                                    value?.trainingLevel?.trainingMajor?.name || '',
+                                    value?.trainingLevel?.trainingMajor?.name ||
+                                    '',
                             },
-                                {
+                            {
                                 title: 'Trình độ đào tạo',
                                 align: 'center',
                                 width: 150,
@@ -455,7 +458,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
-                        
+
                             {
                                 title: 'Đã tốt nghiệp',
                                 align: 'center',
@@ -468,13 +471,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                         ''
                                     ),
                             },
-                           {
+                            {
                                 title: 'GVCN',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    value?.userProfile?.fullname 
+                                    value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
                             },
@@ -484,7 +487,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    value?.userProfile?.fullname 
+                                    value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
                             },

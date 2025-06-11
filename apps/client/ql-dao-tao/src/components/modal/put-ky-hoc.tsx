@@ -55,7 +55,7 @@ const PutSemesterModal = () => {
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
                         order: output.order,
-                        semesterType: output.semesterType
+                        semesterType: output.semesterType,
                     },
                     where: {
                         id,
@@ -72,7 +72,7 @@ const PutSemesterModal = () => {
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
                         order: output.order,
-                        semesterType: output.semesterType
+                        semesterType: output.semesterType,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -107,7 +107,7 @@ const PutSemesterModal = () => {
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
-        } 
+        }
     }, [level])
 
     return (
@@ -154,11 +154,7 @@ const PutSemesterModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="semesterType"
-                    label="Loai học kỳ"
-                >
+                <FormItem form={form} name="semesterType" label="Loai học kỳ">
                     <Select
                         placeholder="Chọn loại học kỳ"
                         options={[
