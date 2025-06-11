@@ -141,12 +141,6 @@ const PutTrainingMajorModal = () => {
         { enabled: !!id }
     )
 
-    // const disableTrainingObjectTypes = useMemo(() => {
-    //     if(!form.getFieldValue('trainingFieldId')){
-    //         return true
-    //     }
-    //     return false
-    // },[form])
     const handleMajorChange = async (val: string) => {
         try {
             form.setFieldsValue({

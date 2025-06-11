@@ -344,12 +344,10 @@ export default function TrainingMajorPage() {
                                                   }
                                               ) => {
                                                   return (
-                                                      <div>
+                                                      <div key={i?.id}>
                                                           -{' '}
                                                           {
-                                                              i
-                                                                  ?.trainingObjectType
-                                                                  ?.name
+                                                              i?.trainingObjectType?.name
                                                           }
                                                       </div>
                                                   )
