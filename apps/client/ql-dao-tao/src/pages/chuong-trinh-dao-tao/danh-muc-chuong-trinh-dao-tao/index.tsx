@@ -294,9 +294,8 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 width: 140,
                                 fixed: 'right',
-                                render: (record) => {
-                                    return record?.status ===
-                                        $Enums.CurriculumStatus.INACTIVATED ? (
+                                render: (_, record) => {
+                                    return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
