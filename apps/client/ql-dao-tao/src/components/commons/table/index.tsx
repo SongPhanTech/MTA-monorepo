@@ -5,6 +5,7 @@ import {
     type TableProps as TableAntdProps,
 } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { TableRowSelection } from 'antd/es/table/interface'
 type TableProps<T> = {
     columns?: ColumnsType<T>
     data?: T[]
@@ -18,7 +19,7 @@ type TableProps<T> = {
     selectedRow?: string | null
     scrollable?: boolean
     maxHeight?: number
-    rowSelection?: any
+    rowSelection?: TableRowSelection<T>
 } & TableAntdProps
 
 const Table = <T extends Record<string, unknown>>({
@@ -33,6 +34,7 @@ const Table = <T extends Record<string, unknown>>({
     scrollable,
     maxHeight,
     rowSelection,
+    ...rest
 }: TableProps<T>) => {
     return (
         <TableAntd
@@ -40,12 +42,14 @@ const Table = <T extends Record<string, unknown>>({
             rowKey={rowKey}
             className="mt-4 custom-scrollbar"
             rowSelection={rowSelection}
-            columns={columns.map((column) => ({
-                ...column,
-                key:
-                    column.key ||
-                    (column as unknown as { dataIndex: string }).dataIndex,
-            }))}
+            columns={
+                columns.map((column) => ({
+                    ...column,
+                    key:
+                        column.key ||
+                        (column as unknown as { dataIndex: string }).dataIndex,
+                })) as ColumnsType<T>
+            }
             // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
             scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
             bordered
@@ -77,6 +81,7 @@ const Table = <T extends Record<string, unknown>>({
                 style: { cursor: 'pointer' },
                 className: record.id === selectedRow ? 'bg-blue-100' : '',
             })}
+            {...rest}
         />
     )
 }

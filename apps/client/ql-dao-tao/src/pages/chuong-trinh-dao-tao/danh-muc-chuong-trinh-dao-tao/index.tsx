@@ -460,6 +460,12 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                         ]}
+                        headerRight={
+                            <Button type="primary" onClick={handleModal}>
+                                <PlusOutlined />
+                                Thêm chương phiên bản CTĐT
+                            </Button>
+                        }
                         data={data}
                         pagination={{
                             current: currentPage,
