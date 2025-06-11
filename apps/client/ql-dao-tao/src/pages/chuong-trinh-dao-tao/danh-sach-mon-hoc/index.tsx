@@ -191,12 +191,16 @@ export default function SubjectList() {
                             <Flex justify="end" gap={8}>
                                 <Button
                                     onClick={handleModalSubjectVersion}
-                                    type="primary"
+                                    className="border-primary text-primary h-[40px]"
                                 >
                                     <PlusOutlined />
                                     Thêm phiên bản môn học
                                 </Button>
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
                                     <PlusOutlined />
                                     Thêm
                                 </Button>

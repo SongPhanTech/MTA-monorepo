@@ -1,41 +1,26 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingFieldModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Organization, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
-    useUpdateTrainingField,
     useFindManyTrainingObjectType,
+    useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import type {
-    TrainingType,
-    TrainingObjectType,
-    TrainingField,
-    Organization,
-} from '@workspace/db'
-import { X, Search } from 'lucide-react'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-// const { Option } = Select;
+
 interface FilterProps {
     searchText: string | undefined
     trainingObjectTypeId: string | undefined
@@ -211,6 +196,7 @@ export default function TrainingFieldPage() {
                     <Table
                         rowKey="id"
                         id="training-category"
+                        data={data}
                         columns={[
                             {
                                 title: 'STT',
@@ -246,21 +232,15 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (trainingObjectTypes) =>
-                                    trainingObjectTypes.map(
-                                        (
-                                            i: TrainingObjectType & {
+                                    trainingObjectTypes
+                                        .map(
+                                            ({
+                                                trainingObjectType,
+                                            }: {
                                                 trainingObjectType: TrainingObjectType
-                                            },
-                                            index: number
-                                        ) => (
-                                            <span>
-                                                {i?.trainingObjectType?.name}
-                                                {index !=
-                                                    trainingObjectTypes?.length -
-                                                        1 && <span>, </span>}
-                                            </span>
+                                            }) => trainingObjectType.name
                                         )
-                                    ),
+                                        .join(', '),
                             },
                             {
                                 title: 'Khoa phụ trách',
@@ -346,7 +326,6 @@ export default function TrainingFieldPage() {
                                 },
                             },
                         ]}
-                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
