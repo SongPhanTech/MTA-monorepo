@@ -197,7 +197,6 @@ Table TrainingCourse {
   admissionQuota Int
   trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
-  status TrainingCourseStatus [not null, default: 'ACTIVE']
   fixedClass FixedClass [not null]
 
   Note: 'Khoá học'
@@ -241,7 +240,6 @@ Table Curriculum {
   updatedAt DateTime [not null]
   name String [not null]
   englishName String
-  status CurriculumStatus [not null, default: 'ACTIVE']
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
   trainingMajor TrainingMajor [not null]
@@ -279,7 +277,7 @@ Table CurriculumVersion {
   shortName String
   englishName String
   trainingLanguage TrainingLanguage [not null, default: 'Vietnamese']
-  numberOfSemesters Int [not null]
+  numberOfSemesters Int
   yearCreation Int
   yearApplication Int
   curriculum Curriculum [not null]
@@ -349,10 +347,11 @@ Table SubjectVersion {
   credit Int [not null]
   period Int [not null]
   numberOfTheory Int
-  numberOfPractice Int
+  numberOfPractical Int
   numberOfSelfStudy Int
-  numberOfProject Int
-  numberOfInternship Int
+  numberOfPractice Int
+  numberOfReview Int
+  numberOfExam Int
   numberOfOther Int
   objectives String
   learningOutcome String
@@ -694,7 +693,7 @@ Table Student {
   trainingLocation TrainingLocation
   trainingLocationId String
   priorityObject PriorityObject [not null, note: 'đối tượng ưu tiên']
-  status FixedClassStudentStatus [not null, default: 'ENROLLED']
+  status StudentStatus [not null, default: 'ENROLLED']
   fixedClass FixedClass
   fixedClassId String
   subjectClassStudent SubjectClassStudent [not null]
@@ -1355,18 +1354,6 @@ Enum SemesterType {
   SECOND
 }
 
-Enum TrainingCourseStatus {
-  ACTIVE
-  COMPLETED
-  SUSPEND
-  CANCEL
-}
-
-Enum CurriculumStatus {
-  ACTIVE
-  INACTIVATED
-}
-
 Enum TrainingLanguage {
   Vietnamese
   English
@@ -1398,6 +1385,17 @@ Enum SubjectRequirementType {
   Mandatory
   Optional
   Elective
+}
+
+Enum StudentStatus {
+  ENROLLED
+  GRADUATED
+  DEFERRED_STUDY
+  SUSPENDED_STUDY
+  WITHDRAWN
+  TRANSFERRED
+  PENDING_GRADUATION_REVIEW
+  ACADEMIC_SUSPENSION
 }
 
 Enum UserRole {
@@ -1469,17 +1467,6 @@ Enum UserType {
   CIVIL_STUDENT
   TEACHER
   OTHER
-}
-
-Enum FixedClassStudentStatus {
-  ENROLLED
-  GRADUATED
-  DEFERRED_STUDY
-  SUSPENDED_STUDY
-  WITHDRAWN
-  TRANSFERRED
-  PENDING_GRADUATION_REVIEW
-  ACADEMIC_SUSPENSION
 }
 
 Enum Gender {

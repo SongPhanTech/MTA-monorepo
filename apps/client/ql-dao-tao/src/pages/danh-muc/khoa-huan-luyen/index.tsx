@@ -14,10 +14,6 @@ import {
 } from '@workspace/db/hooks'
 import type {
     TrainingCourse,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
     TrainingObjectType,
     TrainingCourseStatus,
 } from '@workspace/db'
@@ -42,8 +38,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/danh-muc/lop-bien-che'
-import { FilterKhoa } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 import { X, Search } from 'lucide-react'
 // const { Option } = Select;
@@ -297,23 +291,13 @@ export default function TrainingCoursePage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 175,
-                                render: (record: TrainingCourse) => {
-                                    return (
-                                        <Select
-                                            className="w-[155px]"
-                                            value={record.status}
-                                            onChange={(newStatus) =>
-                                                handleStatusChange(
-                                                    record.id,
-                                                    newStatus as TrainingCourseStatus
-                                                )
-                                            }
-                                            options={options}
-                                            optionLabelProp="label"
-                                            // style={{ width: 180 }}
-                                            bordered={false}
-                                            showSearch={false}
-                                        />
+                                render: (value, record) => {
+                                    return !record?.active ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
                                     )
                                 },
                             },

@@ -48,10 +48,9 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import { buildOrgTree } from '@lib/utils'
-// import OptionsPage from '@components/sub-pages/options'
 import EditIcon from '@components/icons/edit'
 import check from '@assets/images/checked.svg'
-export default function FixedClassPage({ trainingCourse }: any) {
+export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -97,6 +96,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
                             trainingMajor: true,
                         },
                     },
+                    trainingLevel:true
                 },
             },
         },
@@ -177,7 +177,7 @@ export default function FixedClassPage({ trainingCourse }: any) {
         }
         hideSpinner()
     }
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -247,11 +247,11 @@ export default function FixedClassPage({ trainingCourse }: any) {
     //         ))}
     //     </Menu>
     // )
-    const treeData = buildOrgTree(manageOrgData)
-    const renderExpandedRow = useCallback((record: FixedClass) => {
-        return <></>
-        // return <OptionsPage key={record.id} fixedClass={record} />
-    }, [])
+    // const treeData = buildOrgTree(manageOrgData)
+    // const renderExpandedRow = useCallback((record: FixedClass) => {
+    //     return <></>
+    //     // return <OptionsPage key={record.id} fixedClass={record} />
+    // }, [])
 
     return (
         <div>
@@ -435,9 +435,17 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 150,
-                                render: (record) =>
-                                    record?.curriculumVersion?.curriculum
-                                        ?.trainingMajor?.name || '',
+                                dataIndex: 'curriculumVersion',
+                                render: (value) =>
+                                    value?.trainingLevel?.trainingMajor?.name || '',
+                            },
+                                {
+                                title: 'Trình độ đào tạo',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'curriculumVersion',
+                                render: (value) =>
+                                    value?.trainingLevel?.name || '',
                             },
                             {
                                 title: 'Chương trình đào tạo',
@@ -447,28 +455,37 @@ export default function FixedClassPage({ trainingCourse }: any) {
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
+                        
                             {
                                 title: 'Đã tốt nghiệp',
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'graduated',
                                 render: (value) =>
-                                    !value ? (
+                                    value ? (
                                         <CheckOutlined className="text-[#028850]" />
                                     ) : (
                                         ''
                                     ),
                             },
-
-                            {
+                           {
                                 title: 'GVCN',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    value?.userProfile?.lastName ||
-                                    value?.userProfile?.firstName
-                                        ? `${value?.userProfile?.lastName} ${value?.userProfile?.firstName}`
+                                    value?.userProfile?.fullname 
+                                        ? value?.userProfile?.fullname
+                                        : '',
+                            },
+                            {
+                                title: 'CBQL',
+                                dataIndex: 'staffManagement',
+                                align: 'center',
+                                width: 150,
+                                render: (value) =>
+                                    value?.userProfile?.fullname 
+                                        ? value?.userProfile?.fullname
                                         : '',
                             },
                             {

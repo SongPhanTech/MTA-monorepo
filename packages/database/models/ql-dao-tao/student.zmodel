@@ -11,45 +11,57 @@ model Student extends Base {
   from                 DateTime? // từ ngày
   to                   DateTime? // đến ngày
 
-  trainingLocation     TrainingLocation?       @relation(fields: [trainingLocationId], references: [id])
+  trainingLocation     TrainingLocation?     @relation(fields: [trainingLocationId], references: [id])
   trainingLocationId   String?
 
   /// đối tượng ưu tiên
   priorityObject       PriorityObject[]
 
-  status               FixedClassStudentStatus @default(ENROLLED)
+  status               StudentStatus         @default(ENROLLED)
 
-  fixedClass           FixedClass?             @relation(fields: [fixedClassId], references: [id])
+  fixedClass           FixedClass?           @relation(fields: [fixedClassId], references: [id])
   fixedClassId         String?
   subjectClassStudent  SubjectClassStudent[]
 
   userProfileId        String?
-  userProfile          UserProfile?            @relation(fields: [userProfileId], references: [id])
+  userProfile          UserProfile?          @relation(fields: [userProfileId], references: [id])
 
-  trainingLevel        TrainingLevel?          @relation(fields: [trainingLevelId], references: [id])
+  trainingLevel        TrainingLevel?        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String?
 
-  trainingObjectType   TrainingObjectType?     @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectType   TrainingObjectType?   @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
   trainingObjectTypeId String?
 
-  trainingType         TrainingType?           @relation(fields: [trainingTypeId], references: [id])
+  trainingType         TrainingType?         @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId       String?
 
-  trainingForm         TrainingForm?           @relation(fields: [trainingFormId], references: [id])
+  trainingForm         TrainingForm?         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String?
 
-  registrationArea     RegistrationArea?       @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
+  registrationArea     RegistrationArea?     @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
   registrationAreaId   String?
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion    CurriculumVersion?      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion    CurriculumVersion?    @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId  String?
 
-  studyRank            StudyRank?              @relation(fields: [studyRankId], references: [id])
+  studyRank            StudyRank?            @relation(fields: [studyRankId], references: [id])
   studyRankId          String?
 
-  trainingRank         TrainingRank?           @relation(fields: [trainingRankId], references: [id])
+  trainingRank         TrainingRank?         @relation(fields: [trainingRankId], references: [id])
   trainingRankId       String?
+  @@schema("ql-dao-tao")
+}
+
+enum StudentStatus {
+  ENROLLED // Đang học: Sinh viên đang theo học tại trường.
+  GRADUATED // Tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo và được công nhận tốt nghiệp.
+  DEFERRED_STUDY // Bảo lưu: Sinh viên tạm ngưng học có lý do chính đáng.
+  SUSPENDED_STUDY // Tạm ngưng học: Sinh viên tạm ngưng học không có lý do chính đáng.
+  WITHDRAWN // Thôi học: Sinh viên đã ngừng học tại trường.
+  TRANSFERRED // Chuyển trường: Sinh viên đã chuyển sang trường khác.
+  PENDING_GRADUATION_REVIEW // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
+  ACADEMIC_SUSPENSION // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
   @@schema("ql-dao-tao")
 }

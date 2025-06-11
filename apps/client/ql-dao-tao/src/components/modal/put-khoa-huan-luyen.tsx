@@ -5,9 +5,6 @@ import useSpinner from '@hooks/spinner'
 import type {
     TrainingCourse,
     SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingType,
     TrainingObjectType,
     Semester,
 } from '@workspace/db'
@@ -15,12 +12,8 @@ import {
     useCreateTrainingCourse,
     useFindUniqueTrainingCourse,
     useFindManySchoolYear,
-    useFindManyTrainingCourse,
     useUpdateTrainingCourse,
-    useFindManyTrainingForm,
-    useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
     useFindManySemester,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
@@ -33,7 +26,6 @@ export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
 }
 import 'dayjs/locale/vi'
-import { action } from 'easy-peasy'
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
     const [form] = Form.useForm<PutTrainingCourse>()
@@ -130,9 +122,15 @@ const PutTrainingCourseModal = () => {
                   }
                 : undefined,
         })
-    const { data: level } = useFindUniqueTrainingCourse({
-        where: { id },
-    })
+    const { data: level } = useFindUniqueTrainingCourse(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
