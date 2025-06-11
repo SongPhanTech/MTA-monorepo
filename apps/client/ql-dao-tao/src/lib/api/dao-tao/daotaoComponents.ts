@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { type DaotaoContext, useDaotaoContext } from './daotaoContext'
+import { useDaotaoContext, DaotaoContext } from './daotaoContext'
 import type * as Fetcher from './daotaoFetcher'
 import { daotaoFetch } from './daotaoFetcher'
 import type * as Schemas from './daotaoSchemas'
@@ -148,7 +148,7 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
             description?: string | null
             deletedAt?: string | null
             /**
-             * @default 2025-06-11T08:56:37.583Z
+             * @default 2025-06-11T10:54:34.274Z
              */
             createdAt?: string | null
             updatedAt: string | null
