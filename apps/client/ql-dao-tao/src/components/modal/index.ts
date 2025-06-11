@@ -25,6 +25,7 @@ import PutTrainingProgramCatalog from './put-danh-muc-dao-tao'
 import PutOpenClassModal from './put-mo-lop'
 import AddStudentModal from './add-student'
 import PutStudentModal from './put-student'
+import PutUserProfileStaffModal from './put-staff-modal'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -53,4 +54,5 @@ export {
     PutOpenClassModal,
     AddStudentModal,
     PutStudentModal,
+    PutUserProfileStaffModal,
 }

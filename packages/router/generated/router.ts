@@ -52,6 +52,7 @@ export default {
     "PHIEN_BAN_CTDT": "/phien-ban-ctdt",
     "QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
     "QL_SINH_VIEN": "/quan-ly-ho-so//ql-sinh-vien",
+    "QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management",
     "DANH_MUC_HO_SO_TRINH_DO_HOC_VAN": "/danh-muc-ho-so/trinh-do-hoc-van",
     "DANH_MUC_HO_SO_TRINH_DO_LY_LUAN_CHINH_TRI": "/danh-muc-ho-so/trinh-do-ly-luan-chinh-tri",
