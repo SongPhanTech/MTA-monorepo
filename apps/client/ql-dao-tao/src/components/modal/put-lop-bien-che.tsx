@@ -20,7 +20,6 @@ import {
     useFindManyTrainingMajor,
     useFindManyCurriculumVersion,
     useFindManyLecturer,
-    useFindUniqueCurriculumVersion,
     useFindManyStaff,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, TreeSelect, Radio } from 'antd'
@@ -35,7 +34,6 @@ export type PutFixedClass = FixedClass & {
 }
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
-import { includes } from 'lodash'
 dayjs.locale('vi')
 const PutFixedClassModal = () => {
     const [form] = Form.useForm<PutFixedClass>()
@@ -248,7 +246,10 @@ const PutFixedClassModal = () => {
         }
     }
 
-    const handleChangeFieldOrganization = async (field: any, val: string) => {
+    const handleChangeFieldOrganization = async (
+        field: string[],
+        val: string
+    ) => {
         try {
             let newValue = {}
             for (const i of field) {
@@ -264,7 +265,7 @@ const PutFixedClassModal = () => {
 
     const handleChangeFieldcurriculumVersion = async (val: string) => {
         try {
-            const result = curriculumVersionData.find((i) => i?.id == val)
+            const result = curriculumVersionData.find((i) => i?.id === val)
             form.setFieldsValue({
                 managementOrganizationId:
                     result?.curriculum?.managementOrganization?.id,
@@ -277,9 +278,14 @@ const PutFixedClassModal = () => {
         }
     }
 
-    const { data: level } = useFindUniqueFixedClass({
-        where: { id },
-    })
+    const { data: level } = useFindUniqueFixedClass(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {

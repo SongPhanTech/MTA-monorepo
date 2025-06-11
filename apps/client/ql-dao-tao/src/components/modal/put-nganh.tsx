@@ -9,7 +9,6 @@ import {
     useFindUniqueTrainingField,
     useUpdateTrainingField,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
@@ -28,8 +27,6 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { buildOrgTree } from '@lib/utils'
-// import TreeSelect from '@components/commons/tree-select/TreeSelect'
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }
@@ -121,13 +118,18 @@ const PutTrainingFieldModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueTrainingField({
-        where: { id },
-        include: {
-            organization: true,
-            trainingObjectTypes: true,
+    const { data: level } = useFindUniqueTrainingField(
+        {
+            where: { id },
+            include: {
+                organization: true,
+                trainingObjectTypes: true,
+            },
         },
-    })
+        {
+            enabled: !!id,
+        }
+    )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {

@@ -45,7 +45,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
-import FixedClassPage from '@pages/danh-muc/lop-bien-che'
 import { buildOrgTree } from '@lib/utils'
 import CurriculumVersionPage from '@pages/phien-ban-ctdt'
 import { FilterChuongTrinhDT } from '@components/filter'
@@ -117,9 +116,6 @@ export default function CurriculumPage() {
         },
         include: {
             managementOrganization: true,
-            trainingLevel: true,
-            trainingObjectType: true,
-            trainingTime: true,
             trainingMajor: true,
         },
         orderBy: {
