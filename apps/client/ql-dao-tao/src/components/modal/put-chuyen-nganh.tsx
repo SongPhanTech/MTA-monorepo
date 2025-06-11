@@ -1,30 +1,26 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type {
+    TrainingField,
     TrainingMajor,
     TrainingObjectType,
-    TrainingField,
 } from '@workspace/db'
-import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingMajor,
+    useFindManyOrganization,
+    useFindManyTrainingField,
+    useFindManyTrainingObjectType,
     useFindUniqueTrainingMajor,
     useUpdateTrainingMajor,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingField,
-    useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, InputNumber, TreeSelect } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
+import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
-// import TreeSelect from '@components/commons/tree-select/TreeSelect'
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
-import { buildOrgTree } from '@lib/utils'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
@@ -81,15 +77,14 @@ const PutTrainingMajorModal = () => {
                         numberCreditsRequired: output.numberCreditsRequired,
                         numberCreditsElective: output.numberCreditsElective,
                         trainingObjectTypes: {
-                            set: output.trainingObjectTypeIds.map(
-                                (trainingObjectTypeId) => ({
-                                    trainingMajorId_trainingObjectTypeId: {
-                                        trainingMajorId: id,
-                                        trainingObjectTypeId:
-                                            trainingObjectTypeId,
-                                    },
-                                })
-                            ),
+                            createMany: {
+                                data: output.trainingObjectTypeIds.map(
+                                    (trainingObjectTypeId) => ({
+                                        trainingObjectTypeId,
+                                    })
+                                ),
+                                skipDuplicates: true,
+                            },
                         },
                     },
                     where: {
@@ -135,13 +130,16 @@ const PutTrainingMajorModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueTrainingMajor({
-        where: { id },
-        include: {
-            organization: true,
-            trainingObjectTypes: true,
+    const { data: level } = useFindUniqueTrainingMajor(
+        {
+            where: { id },
+            include: {
+                organization: true,
+                trainingObjectTypes: true,
+            },
         },
-    })
+        { enabled: !!id }
+    )
 
     // const disableTrainingObjectTypes = useMemo(() => {
     //     if(!form.getFieldValue('trainingFieldId')){
