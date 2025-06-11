@@ -422,7 +422,7 @@ const PutFixedClassModal = () => {
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
+                                label: i?.userProfile?.fullname,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}
@@ -436,7 +436,7 @@ const PutFixedClassModal = () => {
                         options={staffData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i?.userProfile?.lastName} ${i?.userProfile?.firstName}`,
+                                label: i?.userProfile?.fullname,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}

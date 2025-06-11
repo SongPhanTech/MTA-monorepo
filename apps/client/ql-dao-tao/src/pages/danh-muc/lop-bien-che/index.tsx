@@ -474,9 +474,8 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    value?.userProfile?.lastName ||
-                                    value?.userProfile?.firstName
-                                        ? `${value?.userProfile?.lastName} ${value?.userProfile?.firstName}`
+                                    value?.userProfile?.fullname 
+                                        ? value?.userProfile?.fullname
                                         : '',
                             },
                             {
@@ -485,9 +484,8 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 align: 'center',
                                 width: 150,
                                 render: (value) =>
-                                    value?.userProfile?.lastName ||
-                                    value?.userProfile?.firstName
-                                        ? `${value?.userProfile?.lastName} ${value?.userProfile?.firstName}`
+                                    value?.userProfile?.fullname 
+                                        ? value?.userProfile?.fullname
                                         : '',
                             },
                             {
