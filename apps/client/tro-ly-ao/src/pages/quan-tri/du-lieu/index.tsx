@@ -132,6 +132,17 @@ function Page() {
                             </Button>
                         </div>
                         <div className="flex items-center gap-2 mb-4">
+                            <Input
+                                placeholder="Tìm theo tên tài liệu"
+                                allowClear
+                                onPressEnter={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        title: e.currentTarget.value,
+                                    }))
+                                }
+                                style={{ width: 300 }}
+                            />
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
@@ -186,17 +197,6 @@ function Page() {
                             >
                                 Từ chối
                             </Button>
-                            <Input
-                                placeholder="Tìm theo tên tài liệu"
-                                allowClear
-                                onPressEnter={(e) =>
-                                    setFilters((prev) => ({
-                                        ...prev,
-                                        title: e.currentTarget.value,
-                                    }))
-                                }
-                                style={{ width: 300 }}
-                            />
                         </div>
                         <Table
                             rowKey="id"
