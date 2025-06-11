@@ -254,6 +254,19 @@ Table Curriculum {
   Note: 'chương trình đào tạo'
 }
 
+Table DiplomaType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  englishName String
+  curriculumVersion CurriculumVersion [not null]
+}
+
 Table CurriculumVersion {
   id String [pk]
   code String [unique]
@@ -280,14 +293,22 @@ Table CurriculumVersion {
   coef_1 Float
   coef_2 Float
   coef_3 Float
+  diplomaType DiplomaType
+  diplomaTypeId String
   scoreToTakeExam Float
   scoreToPass Float
   requiredCredits Int
   electiveCredits Int
+  jobPosition String
   objectives String
+  learningOutcome String
   inputStandard String
-  outputStandard String
-  information String
+  time String
+  structure String
+  matrixLearningOutcome String
+  summary String
+  learningDiagram String
+  guide String
   documentPaths String[] [not null]
   renderPath String
   trainingBlocks TrainingBlockOnCurriculumVersion [not null]
@@ -326,15 +347,20 @@ Table SubjectVersion {
   examType ExamType [not null]
   subjectEquivalentType SubjectEquivalentType [not null, default: 'NONE']
   credit Int [not null]
-  period Int [not null, default: 0]
-  numberOfTheory Int [not null, default: 0]
-  numberOfPractice Int [not null, default: 0]
-  numberOfSelfStudy Int [not null, default: 0]
-  numberOfProject Int [not null, default: 0]
-  numberOfInternship Int [not null, default: 0]
-  numberOfOther Int [not null, default: 0]
+  period Int [not null]
+  numberOfTheory Int
+  numberOfPractice Int
+  numberOfSelfStudy Int
+  numberOfProject Int
+  numberOfInternship Int
+  numberOfOther Int
   objectives String
-  outputStandard String
+  learningOutcome String
+  structure String
+  guild String
+  academicResults String
+  materials String
+  rules String
   documentPaths String[] [not null]
   managementOrganization Organization [not null]
   managementOrganizationId String [not null]
@@ -887,11 +913,11 @@ Table UserProfile {
   avatar String
   firstName String [not null]
   lastName String [not null]
+  idCardNumber String [unique, not null]
   fullname String
   dateOfBirth DateTime
   placeOfBirth String
   homeTown String
-  idCardNumber String
   idCardDate DateTime
   gender Gender
   permanentAddress String
@@ -1510,6 +1536,8 @@ Ref: CurriculumVersion.trainingObjectTypeId > TrainingObjectType.id
 Ref: CurriculumVersion.trainingLevelId > TrainingLevel.id
 
 Ref: CurriculumVersion.trainingTimeId > TrainingTime.id
+
+Ref: CurriculumVersion.diplomaTypeId > DiplomaType.id
 
 Ref: Subject.managementOrganizationId > Organization.id
 

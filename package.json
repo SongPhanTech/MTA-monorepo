@@ -7,10 +7,21 @@
     "dev": "turbo dev",
     "lint": "biome lint --fix",
     "generate": "turbo run generate",
-    "format": "biome format --write --verbose"
+    "format": "biome format --write --verbose",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "pnpm format"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "turbo": "catalog:",
     "typescript": "catalog:"
   },

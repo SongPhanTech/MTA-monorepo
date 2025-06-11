@@ -4,11 +4,12 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { SchoolYear } from '@workspace/db'
 import {
+    useCountSchoolYear,
     useCreateSchoolYear,
     useFindUniqueSchoolYear,
     useUpdateSchoolYear,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import DatePicker from '@components/commons/date-picker'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -42,6 +43,7 @@ const PutSchoolYearModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        order: output.order
                     },
                     where: {
                         id,
@@ -56,6 +58,7 @@ const PutSchoolYearModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        order: output.order
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -71,6 +74,8 @@ const PutSchoolYearModal = () => {
         hideSpinner()
     }
 
+    const {data:schoolYearCount=0} = useCountSchoolYear()
+
     const { data: level } = useFindUniqueSchoolYear({
         where: { id },
     })
@@ -81,6 +86,11 @@ const PutSchoolYearModal = () => {
                 ...level,
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
+                order: schoolYearCount+1
+            })
+        }else {
+              form.setFieldsValue({
+                order: schoolYearCount+1
             })
         }
     }, [level])
@@ -103,6 +113,11 @@ const PutSchoolYearModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên năm học" required>
                     <Input placeholder="Nhập tên năm học" />
+                </FormItem>
+            </Col>
+              <Col span={24}>
+                <FormItem form={form} name="order" label="Thứ tự" required>
+                    <InputNumber style={{width:'100%'}} placeholder="Nhập thứ tự năm học" step={1} min={1} />
                 </FormItem>
             </Col>
             <Col span={24}>

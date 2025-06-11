@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { useDaotaoContext, DaotaoContext } from './daotaoContext'
+import { useDaotaoContext, type DaotaoContext } from './daotaoContext'
 import type * as Fetcher from './daotaoFetcher'
 import { daotaoFetch } from './daotaoFetcher'
 import type * as Schemas from './daotaoSchemas'

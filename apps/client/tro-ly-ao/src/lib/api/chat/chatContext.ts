@@ -1,5 +1,5 @@
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
-import { QueryOperation } from './chatComponents'
+import type { QueryOperation } from './chatComponents'
 
 export type ChatContext = {
     fetcherOptions: {

@@ -2,15 +2,17 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Semester, SchoolYear } from '@workspace/db'
+import { type Semester, type SchoolYear, SemesterType } from '@workspace/db'
 import {
     useCreateSemester,
     useFindUniqueSemester,
     useFindManySchoolYear,
     useFindManySemester,
     useUpdateSemester,
+    useCountSchoolYear,
+    useCountSemester,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
@@ -18,6 +20,7 @@ import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 export type PutSemester = Semester
 import 'dayjs/locale/vi'
+import { useWatch } from 'antd/es/form/Form'
 dayjs.locale('vi')
 const PutSemesterModal = () => {
     const [form] = Form.useForm<PutSemester>()
@@ -35,8 +38,6 @@ const PutSemesterModal = () => {
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchSemesters } =
-        useFindManySemester()
 
     const { mutateAsync: createSemester } = useCreateSemester()
     const { mutateAsync: updateSemester } = useUpdateSemester()
@@ -53,6 +54,8 @@ const PutSemesterModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
+                        order: output.order,
+                        semesterType: output.semesterType
                     },
                     where: {
                         id,
@@ -68,6 +71,8 @@ const PutSemesterModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         schoolYearId: output.schoolYearId,
+                        order: output.order,
+                        semesterType: output.semesterType
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -82,6 +87,14 @@ const PutSemesterModal = () => {
         }
         hideSpinner()
     }
+    const schoolYearIdForm = useWatch('schoolYearId', form)
+    const { data: semesterCount = 0 } = useCountSemester({
+        where: schoolYearIdForm
+            ? {
+                  schoolYearId: schoolYearIdForm,
+              }
+            : {},
+    })
 
     const { data: level } = useFindUniqueSemester({
         where: { id },
@@ -94,7 +107,7 @@ const PutSemesterModal = () => {
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
-        }
+        } 
     }, [level])
 
     return (
@@ -132,6 +145,46 @@ const PutSemesterModal = () => {
                                 label: i.name,
                             }
                         })}
+                        onChange={(value) => {
+                            form.setFieldsValue({
+                                order: semesterCount + 1,
+                            })
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem
+                    form={form}
+                    name="semesterType"
+                    label="Loai học kỳ"
+                >
+                    <Select
+                        placeholder="Chọn loại học kỳ"
+                        options={[
+                            {
+                                value: SemesterType.FIRST,
+                                label: 'HK1',
+                            },
+                            {
+                                value: SemesterType.SECOND,
+                                label: 'HK2',
+                            },
+                            {
+                                value: null,
+                                label: 'HK khác',
+                            },
+                        ]}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="order" label="Thứ tự" required>
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        placeholder="Nhập thứ tự năm học"
+                        step={1}
+                        min={1}
                     />
                 </FormItem>
             </Col>

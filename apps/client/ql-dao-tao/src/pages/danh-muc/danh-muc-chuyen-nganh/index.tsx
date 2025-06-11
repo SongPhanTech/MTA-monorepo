@@ -153,7 +153,7 @@ export default function TrainingMajorPage() {
 
     const dataRaw = useMemo(() => {
         if (data?.length) {
-            let result = data.map((i) => {
+            const result = data.map((i) => {
                 return { ...i, children: i?.trainingMajors }
             })
             return result

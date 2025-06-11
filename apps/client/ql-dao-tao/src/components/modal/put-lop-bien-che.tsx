@@ -264,7 +264,7 @@ const PutFixedClassModal = () => {
 
     const handleChangeFieldcurriculumVersion = async (val: string) => {
         try {
-            let result = curriculumVersionData.find((i) => i?.id == val)
+            const result = curriculumVersionData.find((i) => i?.id == val)
             form.setFieldsValue({
                 managementOrganizationId:
                     result?.curriculum?.managementOrganization?.id,

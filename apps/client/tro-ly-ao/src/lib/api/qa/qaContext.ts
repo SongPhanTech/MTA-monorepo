@@ -1,5 +1,5 @@
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
-import { QueryOperation } from './qaComponents'
+import type { QueryOperation } from './qaComponents'
 
 export type QaContext = {
     fetcherOptions: {

@@ -1,5 +1,5 @@
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
-import { QueryOperation } from './daotaoComponents'
+import type { QueryOperation } from './daotaoComponents'
 
 export type DaotaoContext = {
     fetcherOptions: {

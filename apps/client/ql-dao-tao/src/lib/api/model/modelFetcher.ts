@@ -1,5 +1,5 @@
 import { fetchInstance } from '..'
-import { ModelContext } from './modelContext'
+import type { ModelContext } from './modelContext'
 import { API_MODEL_BASE_URL } from '@constants/constants'
 const baseUrl = API_MODEL_BASE_URL
 
@@ -95,7 +95,7 @@ export async function modelFetch<
             return (await response.blob()) as unknown as TData
         }
     } catch (e) {
-        let errorObject: Error = {
+        const errorObject: Error = {
             name: 'unknown' as const,
             message:
                 e instanceof Error
