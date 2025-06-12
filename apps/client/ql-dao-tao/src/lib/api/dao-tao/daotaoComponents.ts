@@ -148,7 +148,7 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
             description?: string | null
             deletedAt?: string | null
             /**
-             * @default 2025-06-11T10:54:34.274Z
+             * @default 2025-06-12T04:20:44.831Z
              */
             createdAt?: string | null
             updatedAt: string | null

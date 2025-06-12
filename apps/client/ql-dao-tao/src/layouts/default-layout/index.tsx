@@ -19,7 +19,8 @@ const { Header, Content } = Layout
 const DefaultLayout = ({
     children,
     className,
-}: { children: ReactNode; className?: string }) => {
+    headerChildren,
+}: { children: ReactNode; className?: string; headerChildren?: string }) => {
     const router = useRouter()
     const currentPath = router.pathname
     const title = getDynamicTitle('QL_DAO_TAO', currentPath)
@@ -95,7 +96,7 @@ const DefaultLayout = ({
                 >
                     <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
                         <span className="text-lg font-bold text-primary">
-                            {title}
+                            {headerChildren ? headerChildren : title}
                         </span>
                         <div className="flex gap-2 items-center">
                             <SearchSystem />
