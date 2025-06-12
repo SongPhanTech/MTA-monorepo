@@ -37,21 +37,15 @@ export default function TrainingBlock() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        // { code: { contains: filters.searchText } },
-                    ],
-                }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingCourseId
-                ? { trainingCourseId: filters.trainingCourseId }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          // { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
         },
         orderBy: {
-            priority:'asc',
+            priority: 'asc',
         },
     })
 
@@ -265,24 +259,25 @@ export default function TrainingBlock() {
                                 dataIndex: 'name',
                                 width: 150,
                             },
-                            {
-                                title: 'Tổng tín chỉ',
-                                dataIndex: '',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tổng tín chỉ bắt buộc',
-                                dataIndex: 'totalRequiredCredits',
-                                width: 150,
-                            },
-                            {
-                                title: 'Số tín chỉ chuyên ngành',
-                                dataIndex: 'specializedCredits',
-                                width: 150,
-                            },
+                            // {
+                            //     title: 'Tổng tín chỉ',
+                            //     dataIndex: '',
+                            //     width: 150,
+                            // },
+                            // {
+                            //     title: 'Tổng tín chỉ bắt buộc',
+                            //     dataIndex: 'totalRequiredCredits',
+                            //     width: 150,
+                            // },
+                            // {
+                            //     title: 'Số tín chỉ chuyên ngành',
+                            //     dataIndex: 'specializedCredits',
+                            //     width: 150,
+                            // },
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'priority',
+                                align: 'center',
                                 width: 100,
                             },
                             {

@@ -1,14 +1,13 @@
 import { DownOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    Empty,
-    Table as TableAntd,
-    type TableProps as TableAntdProps,
-} from 'antd'
+import { Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
-import { type ReactNode, useMemo, useState } from 'react'
+import { uniqueId } from 'lodash'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import Table from '../table'
 
 type Data = Record<string, unknown> & {
+    id: string
     key?: string
     children?: Data[]
 }
@@ -27,12 +26,18 @@ type TableProps<T extends Data> = {
     scrollable?: boolean
     maxHeight?: number
     currentPage: number
+    headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: string
+    onRowDoubleClick?: (record: T) => void
+    defaultExpandAll?: boolean
 } & TableAntdProps
-
+function generateKey(prefix = 'key') {
+    return `${uniqueId(prefix)}`
+}
 const TableCollapse = <T extends Data>({
-    data,
+    data = [],
     headerTitleKey,
+    headerRight,
     pagination,
     onRowClick,
     expandable,
@@ -43,12 +48,15 @@ const TableCollapse = <T extends Data>({
     maxHeight,
     currentPage,
     childrenFieldName = 'children',
+    onRowDoubleClick,
+    defaultExpandAll,
     ...rest
 }: TableProps<T>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
     const handleExpand = (expanded: boolean, record: T) => {
         const children = record[childrenFieldName]
+
         if (!Array.isArray(children) || children?.length === 0) return
         setExpandedKeys((prev) => {
             if (expanded && record.key) {
@@ -62,57 +70,57 @@ const TableCollapse = <T extends Data>({
 
     const dataWithKey = useMemo(() => {
         if (!data) return []
-        let keyCounter = 0
-        function generateKey(prefix = 'key') {
-            keyCounter++
-            return `${prefix}-${keyCounter}`
-        }
 
         return data.map((item) => {
             const children = item[childrenFieldName] as Data[] | undefined
             const hasChildren = Array.isArray(children)
             // Nếu item không có key thì tạo key mới
             if (!item.key) {
-                item.key = generateKey('parent')
+                item.key = item.id
             }
 
             if (hasChildren) {
                 const childrenArray = children?.map((child) => {
                     if (!child.key) {
-                        child.key = generateKey('child')
+                        child.key = child.id
                     }
                     return {
                         ...child,
-                        type: 'child',
+                        $type: 'child',
                     }
                 })
                 // Đảm bảo trường children được đặt đúng tên
                 const newItem = {
                     ...item,
-                    type: 'parent',
+                    $type: 'parent',
                     [childrenFieldName]: childrenArray,
                 }
                 return newItem
             }
             // Item không có children thì chắc chắn là child
             if (!item.key) {
-                item.key = generateKey('child')
+                item.key = item.id
             }
             return {
                 ...item,
-                type: 'child',
+                $type: 'child',
             }
         })
     }, [data, childrenFieldName])
+
+    useEffect(() => {
+        if (defaultExpandAll && dataWithKey.length > 0)
+            setExpandedKeys(dataWithKey.map((d) => d.key as React.Key))
+    }, [defaultExpandAll, dataWithKey])
 
     const allChildren = useMemo(() => {
         const children: Data[] = []
         if (!dataWithKey) return children
         for (const item of dataWithKey) {
             const itemChildren = item[childrenFieldName] as Data[] | undefined
-            if (item.type === 'parent' && Array.isArray(itemChildren)) {
+            if (item.$type === 'parent' && Array.isArray(itemChildren)) {
                 children.push(...itemChildren)
-            } else if (item.type === 'child') {
+            } else if (item.$type === 'child') {
                 children.push(item)
             }
         }
@@ -123,26 +131,15 @@ const TableCollapse = <T extends Data>({
         const baseColumns: ColumnsType<T> = [
             {
                 title: 'STT',
-                width: 60,
                 align: 'center',
-                fixed: 'left',
+                className: 'sticky left-0 z-50',
                 render: (_, record) => {
-                    const children = record[childrenFieldName]
-                    if (Array.isArray(children)) {
-                        return (
-                            <strong className="select-none sticky top-0 left-[30px]">
-                                {typeof headerTitleKey === 'function'
-                                    ? headerTitleKey(record)
-                                    : (record[headerTitleKey] as ReactNode)}
-                            </strong>
-                        )
-                    }
                     const order = allChildren.findIndex(
                         (item) => item.key === record.key
                     )
                     return order >= 0
                         ? order + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE
-                        : null
+                        : ''
                 },
             },
             ...(rest.columns as ColumnsType<T>),
@@ -154,64 +151,56 @@ const TableCollapse = <T extends Data>({
             onCell: (record: T) => ({
                 colSpan: Array.isArray(record[childrenFieldName])
                     ? index === 0
-                        ? baseColumns?.length
+                        ? baseColumns.length
                         : 0
                     : 1,
             }),
         }))
-    }, [
-        headerTitleKey,
-        currentPage,
-        rest.columns,
-        allChildren,
-        childrenFieldName,
-    ])
+    }, [rest.columns, childrenFieldName, allChildren, currentPage])
 
     return (
         <>
-            <TableAntd
+            <Table
                 id={id}
                 rowKey={rowKey}
-                className="mt-4 custom-scrollbar"
+                className="mt-4"
                 // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
-                columns={columns.map((column) => ({
-                    ...column,
-                    key:
-                        column.key ||
-                        (column as unknown as { dataIndex: string }).dataIndex,
-                }))}
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
                 // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
-                scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
+                scroll={{
+                    x: 'max-content',
+                    y: scrollable ? maxHeight : undefined,
+                }}
                 bordered
-                dataSource={dataWithKey}
-                locale={{
-                    emptyText: <Empty description="Không có dữ liệu" />,
-                }}
-                pagination={{
-                    position: ['bottomRight'],
-                    defaultPageSize: DEFAULT_PAGINATE_SIZE,
-                    showSizeChanger: {
-                        labelRender: ({ value }) => `${value} / trang`,
-                        optionRender: (oriOption) =>
-                            `${oriOption.value} / trang`,
-                    },
-                    showTotal: (total, range) =>
-                        `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                    ...pagination,
-                    onShowSizeChange(current, size) {
-                        pagination?.onShowSizeChange?.(size)
-                    },
-                }}
-                onRow={(record) => ({
-                    onClick: () => {
-                        if (onRowClick) {
-                            onRowClick(record)
+                data={dataWithKey}
+                pagination={pagination}
+                onRow={(record) => {
+                    const children = record[childrenFieldName]
+                    const isParent = Array.isArray(children)
+
+                    // Nếu là cha -> không cho click/doubleClick
+                    if (isParent) {
+                        return {
+                            style: { cursor: 'default' },
                         }
-                    },
-                    style: { cursor: 'pointer' },
-                    className: record.id === selectedRow ? 'bg-blue-100' : '',
-                })}
+                    }
+
+                    return {
+                        onClick: () => {
+                            if (onRowClick) {
+                                onRowClick(record)
+                            }
+                        },
+                        onDoubleClick: () => {
+                            if (onRowDoubleClick) {
+                                onRowDoubleClick(record)
+                            }
+                        },
+                        style: { cursor: 'pointer' },
+                        className:
+                            record.id === selectedRow ? 'bg-blue-100' : '',
+                    }
+                }}
                 expandable={{
                     expandedRowKeys: expandedKeys,
                     onExpand: handleExpand,
@@ -222,29 +211,50 @@ const TableCollapse = <T extends Data>({
                     expandRowByClick: true,
                     expandIcon: ({ expanded, onExpand, record }) => {
                         const children = record[childrenFieldName]
-                        return Array.isArray(children) &&
-                            children.length > 0 ? (
-                            <DownOutlined
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onExpand(record, e)
-                                }}
-                                style={{
-                                    transform: expanded
-                                        ? 'rotate(0deg)'
-                                        : 'rotate(-90deg)',
-                                    marginRight: 8,
-                                    fontSize: 12,
-                                    position: 'sticky',
-                                    top: 0,
-                                    left: 10,
-                                }}
-                            />
+                        return Array.isArray(children) ? (
+                            <div className="flex w-full">
+                                {children.length > 0 && (
+                                    <DownOutlined
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onExpand(record, e)
+                                        }}
+                                        style={{
+                                            transform: expanded
+                                                ? 'rotate(0deg)'
+                                                : 'rotate(-90deg)',
+                                            marginRight: 8,
+                                            fontSize: 12,
+                                            position: 'sticky',
+                                            top: 0,
+                                            left: 10,
+                                        }}
+                                    />
+                                )}
+
+                                <div className="flex w-full items-center justify-between">
+                                    <strong className="select-none sticky left-[30px]">
+                                        {typeof headerTitleKey === 'function'
+                                            ? headerTitleKey(record)
+                                            : ((record as T)[
+                                                  headerTitleKey as keyof T
+                                              ] as ReactNode)}
+                                    </strong>
+                                    <div
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="select-none sticky right-[11px]"
+                                    >
+                                        {headerRight?.(record)}
+                                    </div>
+                                </div>
+                            </div>
                         ) : null
                     },
                     childrenColumnName: childrenFieldName,
                     ...expandable,
                 }}
+                {...rest}
+                columns={columns}
             />
             <style>
                 {`
@@ -253,6 +263,9 @@ const TableCollapse = <T extends Data>({
                 }
                 .ant-table-cell[colspan] {
                     text-align: left !important;
+                }
+                .ant-table-row > td:first-child:not(:hover) {
+                    background-color: white;
                 }
             `}
             </style>

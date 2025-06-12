@@ -9,7 +9,6 @@ import {
     useFindUniqueTrainingField,
     useUpdateTrainingField,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
     useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
@@ -28,8 +27,6 @@ import Select from '@components/commons/select'
 import DatePicker from '@components/commons/date-picker'
 import dayjs from 'dayjs'
 import { buildOrgTree } from '@lib/utils'
-// import TreeSelect from '@components/commons/tree-select/TreeSelect'
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }
@@ -56,30 +53,28 @@ const PutTrainingFieldModal = () => {
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
-    async function onOk(output?: PutTrainingField) {
-        if (!output) return
+    async function onOk({ trainingObjectTypeIds, ...rest }: PutTrainingField) {
         try {
             showSpinner()
             if (id) {
                 await updateTrainingField({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        publishDate: output.publishDate,
-                        englishName: output.englishName,
-                        active: output.active,
-                        organizationId: output.organizationId,
+                        ...rest,
                         trainingObjectTypes: {
-                            set: output.trainingObjectTypeIds.map(
-                                (trainingObjectTypeId) => ({
-                                    trainingFieldId_trainingObjectTypeId: {
-                                        trainingFieldId: id,
-                                        trainingObjectTypeId:
-                                            trainingObjectTypeId,
-                                    },
-                                })
-                            ),
+                            createMany: {
+                                data: trainingObjectTypeIds.map(
+                                    (trainingObjectTypeId) => ({
+                                        trainingObjectTypeId,
+                                    })
+                                ),
+                                skipDuplicates: true,
+                            },
+                            deleteMany: {
+                                trainingFieldId: id,
+                                trainingObjectTypeId: {
+                                    notIn: trainingObjectTypeIds,
+                                },
+                            },
                         },
                     },
                     where: {
@@ -90,16 +85,10 @@ const PutTrainingFieldModal = () => {
             } else {
                 await createTrainingField({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        active: output.active,
-                        publishDate: output.publishDate,
-                        englishName: output.englishName,
-                        organizationId: output.organizationId,
+                        ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map(
+                                data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({
                                         trainingObjectTypeId,
                                     })
@@ -121,13 +110,18 @@ const PutTrainingFieldModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueTrainingField({
-        where: { id },
-        include: {
-            organization: true,
-            trainingObjectTypes: true,
+    const { data: level } = useFindUniqueTrainingField(
+        {
+            where: { id },
+            include: {
+                organization: true,
+                trainingObjectTypes: true,
+            },
         },
-    })
+        {
+            enabled: !!id,
+        }
+    )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {

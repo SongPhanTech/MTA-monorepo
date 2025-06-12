@@ -1,17 +1,16 @@
 import { PlusOutlined } from '@ant-design/icons'
 import DeleteIcon from '@components/icons/delete'
-import { PutTrainingProgramCatalog } from '@components/modal'
+import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
     useFindManyCurriculum,
     useUpdateCurriculum,
     useCountCurriculum,
+    useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { $Enums, type TrainingObjectType } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import { Search } from 'lucide-react'
 import {
     Button,
@@ -26,43 +25,36 @@ import {
 } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import TableCollapse from '@components/commons/tableCollapse'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import { ROUTER_PATH } from '@workspace/router'
+import CreateIcon from '@components/icons/create'
 interface FilterProps {
     searchText: string | null
-    trainingObjectTypeId: string | undefined
 }
+
 export default function TrainingProgramCatalog() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined,
     })
 
     const { data = [], refetch } = useFindManyCurriculum({
         where: {
-            // name: {
-            //     contains: filters.name,
-            // },
-            // ...(filters.curriculumId
-            //     ? { curriculumId: filters.curriculumId }
-            //     : {}),
-            // ...(filters.startDate && filters.endDate
-            //     ? {
-            //           startDate: {
-            //               gte: new Date(filters.startDate),
-            //               lte: new Date(filters.endDate),
-            //           },
-            //       }
-            //     : {}),
+            ...(filters.searchText && filters.searchText !== ''
+                ? { name: { contains: filters.searchText } }
+                : {}),
         },
         include: {
             curriculumVersion: true,
+            managementOrganization: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -76,26 +68,8 @@ export default function TrainingProgramCatalog() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
                 : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingObjectTypeId
-                ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                : {}),
         },
     })
-
-    // const { mutateAsync:createSubject } =useCreateSubject()
-
-    // const {
-    //     data: subjects = [],
-    // } = useFindManySubject(
-    //     {
-    //         where: {
-
-    //         }
-    //     }
-    // )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -103,20 +77,48 @@ export default function TrainingProgramCatalog() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutTrainingProgramCatalog.name,
+
+    const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } =
+        useDisclosure<string>({
+            tag: PutCurriculum.name,
+        })
+
+    const {
+        onOpen: onOpenCurriculumVersion,
+        onClose: onCloseCurriculumVersion,
+    } = useDisclosure<{ curriculumId: string; versionId: string }>({
+        tag: PutCurriculumVersion.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        onOpenCurriculum()
     }
     const { mutateAsync: updateCurriculum } = useUpdateCurriculum()
-    async function handleDelete(id: string) {
+    async function handleDeleteCurriculum(id: string) {
         try {
             showSpinner()
             await updateCurriculum({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { mutateAsync: updateCurriculumVersion } =
+        useUpdateCurriculumVersion()
+    async function handleDeleteCurriculumVersion(id: string) {
+        try {
+            showSpinner()
+            await updateCurriculumVersion({
                 where: {
                     id,
                 },
@@ -138,12 +140,27 @@ export default function TrainingProgramCatalog() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const handleRowClick = (record: { id?: string }) => {
+        if (record?.id) {
+            router.push(
+                `${
+                    ROUTER_PATH.QL_DAO_TAO
+                        .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
+                }/${record.id}`
+            )
+        }
+    }
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-
-    const { data: curriculumData = [] } = useFindManyCurriculum()
+    const processedData = useMemo(() => {
+        return data?.map((item) => ({
+            ...item,
+            name: `${item?.name}${
+                item?.managementOrganization?.name
+                    ? ` - ${item?.managementOrganization?.name}`
+                    : ''
+            }`,
+        }))
+    }, [data])
 
     return (
         <div>
@@ -178,100 +195,17 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chương trình đào tạo"
-                                            options={curriculumData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
                             </Flex>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    className="h-[40px]"
+                                >
                                     <PlusOutlined />
-                                    Thêm
+                                    Thêm chương trình
                                 </Button>
                             </Flex>
                         </Col>
@@ -285,19 +219,9 @@ export default function TrainingProgramCatalog() {
                         headerTitleKey="name"
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
+                        defaultExpandAll
+                        onRowClick={(record) => handleRowClick(record)}
                         columns={[
-                            {
-                                title: 'Phiên bản',
-                                dataIndex: 'name',
-                                align: 'center',
-                                width: 180,
-                            },
-                            {
-                                title: 'Chuyên ngành',
-                                dataIndex: 'major',
-                                align: 'center',
-                                width: 200,
-                            },
                             {
                                 title: 'Mã CTĐT',
                                 dataIndex: 'code',
@@ -308,7 +232,7 @@ export default function TrainingProgramCatalog() {
                                 title: 'Tên chương trình',
                                 dataIndex: 'name',
                                 align: 'center',
-                                width: 120,
+                                width: 180,
                             },
                             {
                                 title: 'Tên viết tắt',
@@ -329,10 +253,27 @@ export default function TrainingProgramCatalog() {
                                 width: 120,
                             },
                             {
+                                title: 'Số tín chỉ bắt buộc',
+                                dataIndex: 'requiredCredits',
+                                align: 'center',
+                                width: 140,
+                            },
+                            {
+                                title: 'Số tín chỉ tự chọn',
+                                dataIndex: 'electiveCredits',
+                                align: 'center',
+                                width: 140,
+                            },
+                            {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
                                 align: 'center',
                                 width: 200,
+                                render: (value) => (
+                                    <span className="line-clamp-1">
+                                        {value}
+                                    </span>
+                                ),
                             },
                             {
                                 title: 'Năm khởi tạo',
@@ -356,42 +297,12 @@ export default function TrainingProgramCatalog() {
                                 render: (value) => `${value} năm`,
                             },
                             {
-                                title: 'HK bắt đầu',
-                                dataIndex: 'numberOfSemesters123',
-                                align: 'center',
-                                width: 170,
-                            },
-                            {
-                                title: 'HK Kết thúc',
-                                dataIndex: 'numberOfSemesters123',
-                                align: 'center',
-                                width: 140,
-                            },
-                            {
-                                title: 'Là CTĐT Khung',
-                                dataIndex: 'active',
-                                align: 'center',
-                                width: 120,
-                                render: (value: boolean) => (
-                                    <Checkbox checked={!!value} disabled />
-                                ),
-                            },
-                            {
-                                title: 'Khóa sửa',
-                                dataIndex: 'active',
-                                align: 'center',
-                                width: 120,
-                                render: (value: boolean) => (
-                                    <Checkbox checked={!!value} disabled />
-                                ),
-                            },
-                            {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 140,
                                 fixed: 'right',
-                                render: (value, record) => {
-                                     return record?.status === $Enums.CurriculumStatus.INACTIVATED ? (
+                                render: (_, record) => {
+                                    return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
@@ -405,7 +316,7 @@ export default function TrainingProgramCatalog() {
                                 width: 100,
                                 fixed: 'right',
                                 align: 'center',
-                                render: (_, { id }) => {
+                                render: (_, { id, curriculumId }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -422,17 +333,28 @@ export default function TrainingProgramCatalog() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenCurriculumVersion(
+                                                            {
+                                                                curriculumId:
+                                                                    curriculumId,
+                                                                versionId: id,
+                                                            }
+                                                        )
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
-                                                            handleDelete(id),
+                                                            handleDeleteCurriculumVersion(
+                                                                id
+                                                            ),
                                                     }}
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
                                                 />
                                             </Row>
                                         )
@@ -441,7 +363,35 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                         ]}
-                        data={data}
+                        headerRight={({ id }) => (
+                            <div className="flex gap-2.5 w-[75px] items-center">
+                                <CreateIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenCurriculumVersion({
+                                            curriculumId: id,
+                                            versionId: '',
+                                        })
+                                    }}
+                                    title="Thêm mới phiên bản"
+                                />
+                                <EditIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenCurriculum(id)
+                                    }}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () =>
+                                            handleDeleteCurriculum(id),
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            </div>
+                        )}
+                        data={processedData}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

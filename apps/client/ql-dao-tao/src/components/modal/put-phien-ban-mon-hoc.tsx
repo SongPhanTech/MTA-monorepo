@@ -1,122 +1,179 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { ExamType, SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
+import { SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
-    useFindManyOrganization,
     useFindManySubject,
-    useFindManySubjectVersionType,
+    useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, TreeSelect } from 'antd'
-import { useEffect } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
+import {
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    Switch,
+    TreeSelect,
+    Upload,
+    type UploadProps,
+    message,
+} from 'antd'
 import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
+import { useExamTypeOptions } from '@hooks/examType'
+import { InboxOutlined } from '@ant-design/icons'
+import Tabs from '@components/commons/tabar'
 dayjs.locale('vi')
 
-const treeData = [
-    {
-        title: 'Nhóm Cơ sở',
-        value: 'nhom-co-so',
-        children: [
-            { title: 'Toán cao cấp', value: 'toan-cao-cap' },
-            { title: 'Vật lý đại cương', value: 'vat-ly-dai-cuong' },
-        ],
-    },
-    {
-        title: 'Nhóm Chuyên ngành',
-        value: 'nhom-chuyen-nganh',
-        children: [
-            { title: 'Lập trình Web', value: 'lap-trinh-web' },
-            { title: 'Cơ sở dữ liệu', value: 'csdl' },
-        ],
-    },
-]
+const { Dragger } = Upload
 
 const PutVersionSubjectModal = () => {
     const [form] = Form.useForm<PutSubjectVersion>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+    }>({
         tag: PutVersionSubjectModal.name,
         onClose: form.resetFields,
     })
+
+    const subjectId = input?.subjectId
+    const subjectVersionId = input?.subjectVersionId
+
+    const { data: subjectVersion } = useFindUniqueSubjectVersion({
+        where: { id: subjectVersionId },
+    })
+
+    const [active, setActive] = useState(true)
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization = [] } = useFindManyOrganization();
-    const { data: subject = [] } = useFindManySubject();
-    const { data: subjectType = [] } = useFindManySubjectVersionType();
+    const { options } = useExamTypeOptions()
+
+    const { data: subject } = useFindUniqueSubject(
+        { where: { id: subjectId } },
+        { enabled: !!subjectId }
+    )
+
+    const { data: subjectData = [] } = useFindManySubject({
+        include: {
+            subjectVersion: {
+                where: {
+                    id: {
+                        not: subjectVersionId,
+                    },
+                },
+            },
+        },
+    })
+
+    const treeData =
+        subjectData.map((subject) => ({
+            title: subject.name,
+            value: subject.id,
+            children:
+                subject.subjectVersion.map((version) => ({
+                    title: version.name,
+                    value: version.id,
+                })) || [],
+        })) || []
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     async function onOk(output?: PutSubjectVersion) {
-        if (!output) return;
+        if (!output) return
 
         try {
-            showSpinner();
+            showSpinner()
 
             const payload = {
                 code: output.code,
                 name: output.name,
                 description: output.description,
-                coef_1: output.coef_1,
                 active: output.active,
-                examType: ExamType.OfflineWritten,
-                subjectEquivalentType: SubjectEquivalentType.OneByOne,
+                examType: output.examType,
+                subjectEquivalentType: SubjectEquivalentType.NONE,
+                numberOfPractical: output.numberOfPractical,
+                numberOfExam: output.numberOfExam,
+                numberOfTheory: output.numberOfTheory,
+                numberOfPractice: output.numberOfPractice,
+                numberOfSelfStudy: output.numberOfSelfStudy,
+                numberOfReview: output.numberOfReview,
                 credit: output.credit,
                 period: output.period,
-                numberOfOther: output.numberOfOther,
-                numberOfInternship: output.numberOfInternship,
-                numberOfPractice: output.numberOfPractice,
-                numberOfProject: output.numberOfProject,
-                numberOfSelfStudy: output.numberOfSelfStudy,
-                numberOfTheory: output.numberOfTheory,
-                managementOrganizationId: output.managementOrganizationId,
-                subjectId: output.subjectId,
-                subjectTypeId: output.subjectTypeId,
-            };
+                managementOrganizationId: subject
+                    ? subject.managementOrganizationId
+                    : '',
+                subjectId: subjectId ? subjectId : '',
+                objectives: output.objectives,
+                learningOutcome: output.learningOutcome,
+                structure: output.structure,
+                guild: output.guild,
+                academicResults: output.academicResults,
+                materials: output.materials,
+                rules: output.rules,
+            }
 
-            if (id) {
+            if (subjectVersionId) {
                 await updateSubjectVersion({
                     data: payload,
-                    where: { id },
-                });
-                message.success('Cập nhật thành công');
+                    where: { id: subjectVersionId },
+                })
+                message.success('Cập nhật thành công')
             } else {
                 await createSubjectVersion({
                     data: payload,
-                });
-                message.success('Thêm mới thành công');
+                })
+                message.success('Thêm mới thành công')
             }
 
-            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] });
-            onClose();
+            queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
+            onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
-        hideSpinner();
+        hideSpinner()
     }
 
-    const { data: subjectVersion } = useFindUniqueSubjectVersion({
-        where: { id },
-    })
-    
     useEffect(() => {
         if (subjectVersion) {
             form.setFieldsValue({
                 ...subjectVersion,
             })
+            setActive(subjectVersion.active)
         }
     }, [subjectVersion, form])
+
+    const props: UploadProps = {
+        name: 'file',
+        multiple: true,
+        onChange(info) {
+            const { status } = info.file
+            if (status !== 'uploading') {
+                console.log(info.file, info.fileList)
+            }
+            if (status === 'done') {
+                message.success(`${info.file.name} uploaded successfully.`)
+            } else if (status === 'error') {
+                message.error(`${info.file.name} upload failed.`)
+            }
+        },
+        onDrop(e) {
+            console.log('Dropped files', e.dataTransfer.files)
+        },
+    }
+
+    const handleChange = (checked: boolean) => {
+        setActive(checked)
+        form.setFieldsValue({ active: checked })
+    }
 
     return (
         <PutFormModal
@@ -125,113 +182,52 @@ const PutVersionSubjectModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Sửa phiên bản môn học' : 'Thêm phiên bản môn học'}
+            title={
+                subjectVersionId
+                    ? `Sửa phiên bản môn học - ${subject?.name}`
+                    : `Thêm phiên bản môn học - ${subject?.name}`
+            }
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên phiên bản" >
-                    <Input placeholder='Tên phiên bản'/>
+                <FormItem form={form} name="name" label="Tên môn học" required>
+                    <Input placeholder="Tên môn học" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã phiên bản" >
-                    <Input placeholder='Mã phiên bản'/>
+                <FormItem
+                    form={form}
+                    name="examType"
+                    label="Hình thức thi"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn hình thức thi"
+                        options={options?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
+                        allowClear
+                    />
                 </FormItem>
             </Col>
-            {id && (
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label="Trạng thái"
-                    >
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-            )}
-            <Col span={12}>
-                <FormItem form={form} name="credit" label="Số tín chỉ" >
-                    <InputNumber placeholder='Số tín chỉ' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="period" label="Giai đoạn" >
-                    <InputNumber placeholder='Giai đoạn' className='w-full'/>
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfInternship" label="Number Of Internship" >
-                    <InputNumber placeholder='Number Of Internship' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfOther" label="Number Of Other" >
-                    <InputNumber placeholder='Number Of Other' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfPractice" label="Number Of Practice" >
-                    <InputNumber placeholder='Number Of Practice' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfProject" label="Number Of Project" >
-                    <InputNumber placeholder='Number Of Project' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfSelfStudy" label="Number Of Self Study" >
-                    <InputNumber placeholder='Number Of Self Study' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="numberOfTheory" label="Number Of Theory" >
-                    <InputNumber placeholder='Number Of Theory' className='w-full' />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="managementOrganizationId" label="Đơn vị quản lý" >
+            {/* <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="managementOrganizationId"
+                    label="Đơn vị quản lý"
+                    required
+                >
                     <Select
                         placeholder="Chọn đơn vị quản lý"
-                        options={organization?.map(item => ({
+                        options={organization?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
                         allowClear
                     />
                 </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="subjectId" label="Môn học" >
-                    <Select
-                        placeholder="Chọn môn học"
-                        options={subject?.map(item => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="subjectTypeId" label="Loại môn học" >
-                    <Select
-                        placeholder="Chọn loại môn học"
-                        options={subjectType?.map(item => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <Form.Item
                     name="prerequisiteSubjects"
@@ -240,28 +236,240 @@ const PutVersionSubjectModal = () => {
                     <TreeSelect
                         treeData={treeData}
                         treeCheckable={true}
+                        treeDefaultExpandAll
+                        showSearch
                         placeholder="Chọn môn học tiên quyết"
                         style={{ width: '100%' }}
                         allowClear
+                        filterTreeNode={(input, node) =>
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
                     />
                 </Form.Item>
             </Col>
             <Col span={12}>
-                <Form.Item name="name" label="Môn học song hành">
+                <Form.Item name="sh" label="Môn học song hành">
                     <TreeSelect
                         treeData={treeData}
                         treeCheckable={true}
+                        showSearch
                         placeholder="Chọn môn học song hành"
                         style={{ width: '100%' }}
                         allowClear
+                        filterTreeNode={(input, node) =>
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
                     />
                 </Form.Item>
             </Col>
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+            <Col span={12}>
+                <FormItem form={form} name="credit" label="Số tín chỉ" required>
+                    <InputNumber placeholder="Số tín chỉ" className="w-full" />
                 </FormItem>
             </Col>
+            <Col span={12}>
+                <FormItem form={form} name="period" label="Số tiết" required>
+                    <InputNumber placeholder="Số tiết" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfTheory"
+                    label="Số tiết lý thuyết"
+                >
+                    <InputNumber
+                        placeholder="Số tiết lý thuyết"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfPractical"
+                    label="Số tiết bài tập"
+                >
+                    <InputNumber
+                        placeholder="Số tiết bài tập"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfSelfStudy"
+                    label="Số tiết thảo luận/tự học"
+                >
+                    <InputNumber
+                        placeholder="Số tiết thảo luận/tự học"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfPractice"
+                    label="Số tiết thí nghiệm/thực hành"
+                >
+                    <InputNumber
+                        placeholder="Số tiết thí nghiệm/thực hành"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfReview"
+                    label="Số tiết ôn tập"
+                >
+                    <InputNumber
+                        placeholder="Số tiết ôn tập"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="numberOfExam"
+                    label="Số tiết KT/thi"
+                >
+                    <InputNumber
+                        placeholder="Số tiết KT/thi"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12} className="flex items-center">
+                <FormItem
+                    form={form}
+                    name="active"
+                    label=""
+                    valuePropName="checked"
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+                        <Switch checked={active} onChange={handleChange} />
+                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
+                    </div>
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="documentPaths" label="Tài liệu">
+                    <Dragger {...props}>
+                        <p className="ant-upload-drag-icon">
+                            <InboxOutlined />
+                        </p>
+                        <p className="ant-upload-text">
+                            Chọn tệp hoặc kéo và thả tệp vào đây
+                        </p>
+                        <p className="ant-upload-hint">
+                            Định dạng XLSX, XLS (tối đa 5MB)
+                        </p>
+                    </Dragger>
+                </FormItem>
+            </Col>
+            <Tabs
+                items={[
+                    {
+                        key: '1',
+                        label: 'Mục tiêu',
+                        children: (
+                            <FormItem form={form} name="objectives">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập mục tiêu"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '2',
+                        label: 'Chuẩn đầu ra',
+                        children: (
+                            <FormItem form={form} name="learningOutcome">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập chuẩn đầu ra"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '3',
+                        label: 'Cấu trúc chương trình đào',
+                        children: (
+                            <FormItem form={form} name="structure">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập cấu trúc chương trình đào"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '4',
+                        label: 'Kế hoạch và phương pháp dạy học',
+                        children: (
+                            <FormItem form={form} name="guild">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập kế hoạch và phương pháp dạy học"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '5',
+                        label: 'Đánh giá kết quả học tập',
+                        children: (
+                            <FormItem form={form} name="academicResults">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập đánh giá kết quả học tập"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '6',
+                        label: 'Cơ sở vật chất, học liệu',
+                        children: (
+                            <FormItem form={form} name="materials">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập cơ sở vật chất, học liệu"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                    {
+                        key: '7',
+                        label: 'Quy định của học phần',
+                        children: (
+                            <FormItem form={form} name="rules">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập quy định của học phần"
+                                />
+                            </FormItem>
+                        ),
+                    },
+                ]}
+            />
         </PutFormModal>
     )
 }

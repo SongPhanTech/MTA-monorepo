@@ -1,41 +1,26 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingFieldModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Organization, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
-    useUpdateTrainingField,
     useFindManyTrainingObjectType,
+    useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import type {
-    TrainingType,
-    TrainingObjectType,
-    TrainingField,
-    Organization,
-} from '@workspace/db'
-import { X, Search } from 'lucide-react'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-// const { Option } = Select;
+
 interface FilterProps {
     searchText: string | undefined
     trainingObjectTypeId: string | undefined
@@ -130,25 +115,6 @@ export default function TrainingFieldPage() {
             return newFilters
         })
     }
-    // async function handleStatusChange(
-    //     id: string,
-    //     newStatus: TrainingFieldStatus
-    // ) {
-    //     try {
-    //         showSpinner()
-    //         await updateTrainingField({
-    //             where: {
-    //                 id,
-    //             },
-    //             data: {
-    //                 status: newStatus,
-    //             },
-    //         })
-    //     } catch (error) {
-    //         message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-    //     }
-    //     hideSpinner()
-    // }
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -173,10 +139,11 @@ export default function TrainingFieldPage() {
                                         style={{
                                             width: 300,
                                             marginRight: 8,
+                                            height: 32,
                                         }}
                                         prefix={
                                             <Search
-                                                size={15}
+                                                size={16}
                                                 style={{
                                                     color: 'rgba(0, 0, 0, 0.25)',
                                                 }}
@@ -229,6 +196,7 @@ export default function TrainingFieldPage() {
                     <Table
                         rowKey="id"
                         id="training-category"
+                        data={data}
                         columns={[
                             {
                                 title: 'STT',
@@ -241,41 +209,9 @@ export default function TrainingFieldPage() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectTypes',
-                                align: 'center',
-                                width: 150,
-                                render: (trainingObjectTypes) =>
-                                    trainingObjectTypes.map(
-                                        (
-                                            i: TrainingObjectType & {
-                                                trainingObjectType: TrainingObjectType
-                                            },
-                                            index: Number
-                                        ) => (
-                                            <span>
-                                                {i?.trainingObjectType?.name}
-                                                {index !=
-                                                    trainingObjectTypes?.length -
-                                                        1 && <span>, </span>}
-                                            </span>
-                                        )
-                                    ),
-                            },
-                            {
-                                title: 'Khoa phụ trách',
-                                dataIndex: 'organization',
-                                align: 'center',
-                                width: 150,
-                                render: (organization: Organization) =>
-                                    organization?.name
-                                        ? organization?.name
-                                        : '',
-                            },
-                            {
                                 title: 'Mã ngành',
                                 dataIndex: 'code',
-                                align: 'left',
+                                align: 'center',
                                 width: 150,
                             },
                             {
@@ -290,6 +226,33 @@ export default function TrainingFieldPage() {
                                 dataIndex: 'englishName',
                                 width: 150,
                             },
+                            {
+                                title: 'Đối tượng đào tạo',
+                                dataIndex: 'trainingObjectTypes',
+                                align: 'center',
+                                width: 150,
+                                render: (trainingObjectTypes) =>
+                                    trainingObjectTypes
+                                        .map(
+                                            ({
+                                                trainingObjectType,
+                                            }: {
+                                                trainingObjectType: TrainingObjectType
+                                            }) => trainingObjectType.name
+                                        )
+                                        .join(', '),
+                            },
+                            {
+                                title: 'Khoa phụ trách',
+                                dataIndex: 'organization',
+                                align: 'center',
+                                width: 150,
+                                render: (organization: Organization) =>
+                                    organization?.name
+                                        ? organization?.name
+                                        : '',
+                            },
+
                             {
                                 title: 'Mô tả',
                                 width: 150,
@@ -363,7 +326,6 @@ export default function TrainingFieldPage() {
                                 },
                             },
                         ]}
-                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

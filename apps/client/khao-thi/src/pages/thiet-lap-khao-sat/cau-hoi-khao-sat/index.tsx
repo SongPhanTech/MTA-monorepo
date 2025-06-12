@@ -26,7 +26,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { PutSurveyQuestionModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterSurveyQuestion, {
-    FilterSurveyQuestionProps,
+    type FilterSurveyQuestionProps,
 } from '@components/filter/filter-survey-question'
 import EditIcon from '@components/icons/edit'
 type Filter = FilterSurveyQuestionProps & {

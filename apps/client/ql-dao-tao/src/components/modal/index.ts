@@ -21,10 +21,13 @@ import PutTrainingMajorModal from './put-chuyen-nganh'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
-import PutTrainingProgramCatalog from './put-danh-muc-dao-tao'
+import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutOpenClassModal from './put-mo-lop'
-import AddStudentModal from './add-student'
 import PutStudentModal from './put-student'
+import PutUserProfileStaffModal from './put-staff-modal'
+import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
+import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
+import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -48,9 +51,12 @@ export {
     PutTrainingMajorModal,
     PutSubjectListModal,
     PutTrainingBlock,
-    PutTrainingProgramCatalog,
+    PutCurriculumVersion,
     PutVersionSubjectModal,
     PutOpenClassModal,
-    AddStudentModal,
     PutStudentModal,
+    PutCurriculum,
+    PutTrainingBlockOnCurriculumVersion,
+    PutUserProfileStaffModal,
+    PutTrainingBlockSubject,
 }

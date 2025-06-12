@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
-import { TreeNodeType } from '@/utils/convertOrganizationToTree'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 // Define props for our custom component
 interface CustomTreeSelectProps {
     treeData: TreeNodeType[]

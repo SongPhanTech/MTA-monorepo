@@ -1,9 +1,11 @@
+import { fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost } from '@api/chat/chatComponents'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useUpdateDocument } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, Radio, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useState } from 'react'
 type PheDuyetTaiLieuFormType = {
     status: $Enums.DocumentStatus
     reason: string
@@ -19,11 +21,19 @@ const PheDuyetTaiLieu = () => {
     const { mutateAsync: update } = useUpdateDocument()
 
     const [form] = Form.useForm<PheDuyetTaiLieuFormType>()
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const status = Form.useWatch('status', form)
 
     const onFinish = async (values: PheDuyetTaiLieuFormType) => {
+        setIsSubmitting(true)
         try {
+            await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
+                {
+                    queryParams: { documentId },
+                }
+            )
+
             await update({
                 where: {
                     id: documentId,
@@ -36,6 +46,7 @@ const PheDuyetTaiLieu = () => {
                             : values.reason,
                 },
             })
+
             if (values.status === $Enums.DocumentStatus.APPROVE) {
                 message.success('Phê duyệt tài liệu thành công')
             } else {
@@ -43,7 +54,9 @@ const PheDuyetTaiLieu = () => {
             }
             onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Phê duyệt không thành công, vui lòng kiểm tra lại')
+        } finally {
+            setIsSubmitting(false)
         }
     }
     return (
@@ -55,6 +68,7 @@ const PheDuyetTaiLieu = () => {
             cancelText="Hủy"
             onCancel={onClose}
             onOk={form.submit}
+            confirmLoading={true}
         >
             <div className="flex gap-4 justify-between">
                 <Form

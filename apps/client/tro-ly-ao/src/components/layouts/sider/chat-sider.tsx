@@ -31,20 +31,24 @@ function getMenus(
 ): ItemType<MenuItemType>[] {
     return menus.map((item) => {
         const key = item.id
-        const dropdownMenu = [
-            {
-                key: 'delete',
-                label: (
-                    <div
-                        onClick={() => onDelete?.(key)}
-                        className=" text-red-500"
-                    >
-                        <DeleteFilled className="mr-2" />
-                        Xoá
-                    </div>
-                ),
+        const dropdownMenu = {
+            items: [
+                {
+                    key: 'delete',
+                    label: (
+                        <span className="text-red-500">
+                            <DeleteFilled className="mr-2" />
+                            Xoá
+                        </span>
+                    ),
+                },
+            ],
+            onClick: ({ key: actionKey }: { key: string }) => {
+                if (actionKey === 'delete') {
+                    onDelete?.(key)
+                }
             },
-        ]
+        }
 
         const label = (
             <div
@@ -53,7 +57,7 @@ function getMenus(
             >
                 <span className="truncate max-w-[180px]">{item.label}</span>
                 <Dropdown
-                    menu={{ items: dropdownMenu }}
+                    menu={dropdownMenu}
                     trigger={['click']}
                     placement="bottomRight"
                 >
@@ -168,14 +172,14 @@ const SiderChatLayout = ({
             collapsed={collapsed}
             theme={theme}
             width={280}
-            className="h-full relative mr-[10px] rounded-lg"
+            className="h-full relative mr-[10px] rounded-xl"
         >
             <div className="overflow-y-auto h-full pb-[60px]">
                 <div className="px-1">
                     <Button
                         color="primary"
                         variant={isActive ? 'solid' : 'outlined'}
-                        className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-lg"
+                        className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-xl"
                         icon={firstItem?.icon ? <firstItem.icon /> : undefined}
                         onClick={() => {
                             if (firstItem?.path) router.push(firstItem.path)
@@ -209,7 +213,7 @@ const SiderChatLayout = ({
             <div className="absolute bottom-0 w-full flex justify-center ">
                 <Button
                     type="text"
-                    className="w-full bg-white text-primary text-lg rounded-none z-10 rounded-b-lg"
+                    className="w-full bg-white text-primary text-lg rounded-none z-10 rounded-b-xl"
                     onClick={() => onCollapse?.(!collapsed)}
                 >
                     {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

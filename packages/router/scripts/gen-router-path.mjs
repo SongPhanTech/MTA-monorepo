@@ -36,6 +36,7 @@ const subsystems = await glob(`${basePath}/*`, {
 for (const subsystem of subsystems.sort()) {
     const subsystemKey = subsystem
         .replace(`${basePath}/`, '')
+        .replace('../../apps/client/', '')
         .toUpperCase()
         .replaceAll('-', '_')
     routerPath[subsystemKey] = {}

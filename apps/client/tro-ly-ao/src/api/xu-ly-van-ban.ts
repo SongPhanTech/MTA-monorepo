@@ -1,3 +1,5 @@
+import { env } from '@/env'
+
 export async function fetchXuLyVanBan({
     text,
     doc_type,
@@ -16,7 +18,7 @@ export async function fetchXuLyVanBan({
     })
 
     const response = await fetch(
-        `http://117.4.240.104:8010/util/nlp_task?${params.toString()}`,
+        `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8010/util/nlp_task?${params.toString()}`,
         {
             method: 'GET',
             signal, // truyền signal vào đây

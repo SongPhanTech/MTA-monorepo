@@ -42,6 +42,7 @@ export type ValidationError = {
 };
 
 export type SrcRoutersDocumentDocumentReaderResponse = {
+<<<<<<< HEAD
   body?: string | null;
   message?: string | null;
   document_simmilar?: any[] | null;
@@ -51,3 +52,14 @@ export type SrcRoutersUtilDocumentReaderResponse = {
   body?: string | null;
   message?: string | null;
 };
+=======
+    body?: string | null
+    message?: string | null
+    document_simmilar?: any[] | null
+}
+
+export type SrcRoutersUtilDocumentReaderResponse = {
+    body?: string | null
+    message?: string | null
+}
+>>>>>>> 4fee6e2a02d2cbe8e3204b9b113e4df2f584dc43

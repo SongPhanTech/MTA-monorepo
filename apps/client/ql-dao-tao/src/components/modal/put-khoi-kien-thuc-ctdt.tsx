@@ -2,14 +2,18 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useCreateTrainingBlock, useFindManyCurriculumVersion, useFindUniqueTrainingBlock, useUpdateTrainingBlock } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select } from 'antd'
+import {
+    useCreateTrainingBlock,
+    useFindUniqueTrainingBlock,
+    useUpdateTrainingBlock,
+} from '@workspace/db/hooks'
+import { Col, Form, Input, InputNumber, message, Select, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { TrainingBlock } from '@workspace/db'
 import dayjs from 'dayjs'
 export type PutTrainingBlock = TrainingBlock
 import 'dayjs/locale/vi'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 dayjs.locale('vi')
 const PutTrainingBlock = () => {
     const [form] = Form.useForm<PutTrainingBlock>()
@@ -23,60 +27,63 @@ const PutTrainingBlock = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
+    const [active, setActive] = useState(true)
 
-    
     const { data: trainingBlock } = useFindUniqueTrainingBlock(
         { where: { id } },
         { enabled: !!id }
-    );
-
-    const { data: curriculumVersion = [] } = useFindManyCurriculumVersion();
+    )
 
     useEffect(() => {
         if (trainingBlock) {
             form.setFieldsValue({
-            ...trainingBlock,
-            });
+                ...trainingBlock,
+            })
+            setActive(trainingBlock.active)
         }
-    }, [ trainingBlock, form ]);
+    }, [trainingBlock, form])
 
     const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
     const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
     async function onOk(output?: PutTrainingBlock) {
-        if (!output) return;
+        if (!output) return
 
         try {
-            showSpinner();
+            showSpinner()
             const payload = {
                 code: output.code,
                 name: output.name,
                 priority: output.priority,
                 active: output.active,
-                curriculumVersionId: output.curriculumVersionId,
-            };
+            }
 
             if (id) {
                 await updateTrainingBlock({
                     data: payload,
                     where: { id },
-                });
-                message.success('Cập nhật thành công');
+                })
+                message.success('Cập nhật thành công')
             } else {
                 await createTrainingBlock({
                     data: payload,
-                });
-                message.success('Thêm mới thành công');
+                })
+                message.success('Thêm mới thành công')
             }
 
             queryClient.invalidateQueries({
                 queryKey: ['TrainingBlock'],
-            });
-            onClose();
+            })
+            onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại');
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
-        hideSpinner();
+        hideSpinner()
+    }
+
+    const handleChange = (checked: boolean) => {
+        setActive(checked)
+        form.setFieldsValue({ active: checked })
     }
 
     return (
@@ -150,42 +157,27 @@ const PutTrainingBlock = () => {
                 </FormItem>
             </Col> */}
             <Col span={24}>
-                <FormItem form={form} name="priority" label="Thứ tự" required >
-                    <InputNumber placeholder="Thứ tự" className='w-full'/>
+                <FormItem form={form} name="priority" label="Thứ tự" required>
+                    <InputNumber placeholder="Thứ tự" className="w-full" />
                 </FormItem>
             </Col>
-            {id && (
-                <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label="Trạng thái"
-                    >
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-            )}
-            <Col span={24}>
+            <Col span={12} className="flex items-center">
                 <FormItem
                     form={form}
-                    name="curriculumVersionId"
-                    label="Phiên bản chương trình đào tạo"
+                    name="active"
+                    label=""
+                    valuePropName="checked"
                 >
-                    <Select
-                        placeholder="Chọn phiên bản chương trình đào tạo"
-                        options={curriculumVersion.map(item => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        allowClear
-                    />
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+                        <Switch checked={active} onChange={handleChange} />
+                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
+                    </div>
                 </FormItem>
             </Col>
         </PutFormModal>

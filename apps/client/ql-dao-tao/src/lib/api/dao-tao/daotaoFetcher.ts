@@ -1,4 +1,4 @@
-import { DaotaoContext } from './daotaoContext'
+import type { DaotaoContext } from './daotaoContext'
 import { fetchInstance } from '..'
 const baseUrl = 'https://api.daotao.mta.swantech.vn'
 
@@ -93,7 +93,7 @@ export async function daotaoFetch<
             return (await response.blob()) as unknown as TData
         }
     } catch (e) {
-        let errorObject: Error = {
+        const errorObject: Error = {
             name: 'unknown' as const,
             message:
                 e instanceof Error

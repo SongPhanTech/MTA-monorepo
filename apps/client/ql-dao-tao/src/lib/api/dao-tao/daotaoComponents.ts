@@ -135,6 +135,7 @@ export type UploadExcelCreateFixedClassError = Fetcher.ErrorWrapper<{
 }>;
 
 export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
+<<<<<<< HEAD
   (Schemas.PaginationQuery & {
     data: {
       id: string;
@@ -154,6 +155,27 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
     }[];
     count: number;
   });
+=======
+    (Schemas.PaginationQuery & {
+        data: {
+            id: string
+            code?: string | null
+            description?: string | null
+            deletedAt?: string | null
+            /**
+             * @default 2025-06-12T04:20:44.831Z
+             */
+            createdAt?: string | null
+            updatedAt: string | null
+            name: string
+            /**
+             * @default 0
+             */
+            classSize?: number
+        }[]
+        count: number
+    })
+>>>>>>> 4fee6e2a02d2cbe8e3204b9b113e4df2f584dc43
 
 export type UploadExcelCreateFixedClassVariables = {
   body: Schemas.UploadExcelCreateFixedClass;

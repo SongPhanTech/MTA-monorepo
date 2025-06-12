@@ -1,4 +1,5 @@
 import { env } from '@/env'
+import { $Enums } from '@workspace/db'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
@@ -90,6 +91,40 @@ const TRANG_THAI_HOC_VIEN = {
     },
 }
 
+const FIXED_CLASS_STUDENT_STATUS = {
+    ENROLLED: { label: 'Đang học', color: 'success' },
+    GRADUATED: { label: 'Đã tốt nghiệp', color: 'blue' },
+    DEFERRED_STUDY: { label: 'Bảo lưu', color: 'orange' },
+    SUSPENDED_STUDY: { label: 'Tạm ngưng học', color: 'warning' },
+    WITHDRAWN: { label: 'Thôi học', color: 'error' },
+    TRANSFERRED: { label: 'Chuyển trường', color: 'purple' },
+    PENDING_GRADUATION_REVIEW: { label: 'Chờ xét tốt nghiệp', color: 'cyan' },
+    ACADEMIC_SUSPENSION: { label: 'Đình chỉ học', color: 'red' },
+} as const
+
+const STUDENT_STATUS_OPTIONS = [
+    { value: $Enums.StudentStatus.ENROLLED, label: 'Đang theo học' },
+    { value: $Enums.StudentStatus.GRADUATED, label: 'Đã tốt nghiệp' },
+    { value: $Enums.StudentStatus.DEFERRED_STUDY, label: 'Bảo lưu' },
+    {
+        value: $Enums.StudentStatus.SUSPENDED_STUDY,
+        label: 'Tạm ngưng học',
+    },
+    { value: $Enums.StudentStatus.WITHDRAWN, label: 'Thôi học' },
+    {
+        value: $Enums.StudentStatus.TRANSFERRED,
+        label: 'Chuyển trường',
+    },
+    {
+        value: $Enums.StudentStatus.PENDING_GRADUATION_REVIEW,
+        label: 'Chờ xét tốt nghiệp',
+    },
+    {
+        value: $Enums.StudentStatus.ACADEMIC_SUSPENSION,
+        label: 'Đình chỉ học',
+    },
+]
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -104,4 +139,6 @@ export {
     API_MODEL_BASE_URL,
     LOAI_MON_HOC_CTDT,
     TRANG_THAI_HOC_VIEN,
+    FIXED_CLASS_STUDENT_STATUS,
+    STUDENT_STATUS_OPTIONS,
 }

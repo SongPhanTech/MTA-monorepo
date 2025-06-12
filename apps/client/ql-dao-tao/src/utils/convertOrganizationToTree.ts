@@ -1,4 +1,4 @@
-import { Organization } from '@workspace/db'
+import type { Organization } from '@workspace/db'
 
 export interface TreeNodeOrganization extends Record<string, unknown> {
     key: string

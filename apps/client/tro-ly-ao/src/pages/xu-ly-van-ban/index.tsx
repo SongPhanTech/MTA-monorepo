@@ -152,8 +152,9 @@ function Page() {
                         </Button>
                         {loading && (
                             <Button
-                                icon={<StopOutlined />}
-                                type="default"
+                                icon={<div className="w-3 h-3 bg-white" />}
+                                type="primary"
+                                shape="circle"
                                 danger
                                 size="large"
                                 onClick={() => {

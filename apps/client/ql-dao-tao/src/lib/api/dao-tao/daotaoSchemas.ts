@@ -9,6 +9,7 @@ export type PaginationQuery = {
 };
 
 export type ListOfundefined = PaginationQuery & {
+<<<<<<< HEAD
   data: {
     id: string;
     code?: string | null;
@@ -55,6 +56,54 @@ export type ListOfundefined = PaginationQuery & {
   }[];
   count: number;
 };
+=======
+    data: {
+        id: string
+        code?: string | null
+        description?: string | null
+        deletedAt?: string | null
+        /**
+         * @default 2025-06-12T04:20:44.830Z
+         */
+        createdAt?: string | null
+        updatedAt: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        dateOfBirth?: string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardNumber?: string | null
+        idCardDate?: string | null
+        officerNumber?: string | null
+        gender?: 'Male' | 'Female' | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        parentPhoneNumber?: string | null
+        parentName?: string | null
+        unionDate?: string | null
+        unionPlace?: string | null
+        CPVJoinDate?: string | null
+        officialCPVDate?: string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: string | null
+        enlistmentDate?: string | null
+        dischargeDate?: string | null
+        rankName?: string | null
+        educationLevel?: string | null
+        academicDegreeTypeName?: string | null
+        academicRankTypeName?: string | null
+        positionName?: string | null
+        positionCPVName?: string | null
+        organizationName?: string | null
+        organizationCPVName?: string | null
+    }[]
+    count: number
+}
+>>>>>>> 4fee6e2a02d2cbe8e3204b9b113e4df2f584dc43
 
 export type UploadExcelCreateUserProfile = {
   /**

@@ -1,30 +1,26 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type {
+    TrainingField,
     TrainingMajor,
     TrainingObjectType,
-    TrainingField,
 } from '@workspace/db'
-import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingMajor,
+    useFindManyOrganization,
+    useFindManyTrainingField,
+    useFindManyTrainingObjectType,
     useFindUniqueTrainingMajor,
     useUpdateTrainingMajor,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingField,
-    useFindManyOrganization,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, InputNumber, TreeSelect } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
+import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
-// import TreeSelect from '@components/commons/tree-select/TreeSelect'
-import { convertToTreeSelect } from '@/utils/convertOrganizationToTree'
-import { buildOrgTree } from '@lib/utils'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
@@ -62,58 +58,40 @@ const PutTrainingMajorModal = () => {
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()
     const { mutateAsync: updateTrainingMajor } = useUpdateTrainingMajor()
-    async function onOk(output?: PutTrainingMajor) {
-        if (!output) return
+    async function onOk({ trainingObjectTypeIds, ...rest }: PutTrainingMajor) {
         try {
             showSpinner()
             if (id) {
                 await updateTrainingMajor({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        summary: output.summary,
-                        active: output.active,
-                        description: output.description,
-                        englishName: output.englishName,
-                        organizationId: output.organizationId,
-                        trainingFieldId: output.trainingFieldId,
-                        numberCreditsMajor: output.numberCreditsMajor,
-                        numberCreditsRequired: output.numberCreditsRequired,
-                        numberCreditsElective: output.numberCreditsElective,
+                        ...rest,
                         trainingObjectTypes: {
-                            set: output.trainingObjectTypeIds.map(
-                                (trainingObjectTypeId) => ({
-                                    trainingMajorId_trainingObjectTypeId: {
-                                        trainingMajorId: id,
-                                        trainingObjectTypeId:
-                                            trainingObjectTypeId,
-                                    },
-                                })
-                            ),
+                            createMany: {
+                                data: trainingObjectTypeIds.map(
+                                    (trainingObjectTypeId) => ({
+                                        trainingObjectTypeId,
+                                    })
+                                ),
+                                skipDuplicates: true,
+                            },
+                            deleteMany: {
+                                trainingMajorId: id,
+                                trainingObjectTypeId: {
+                                    notIn: trainingObjectTypeIds,
+                                },
+                            },
                         },
                     },
-                    where: {
-                        id,
-                    },
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createTrainingMajor({
                     data: {
-                        code: output.code,
-                        name: output.name,
-                        summary: output.summary,
-                        active: output.active,
-                        description: output.description,
-                        englishName: output.englishName,
-                        organizationId: output.organizationId,
-                        trainingFieldId: output.trainingFieldId,
-                        numberCreditsMajor: output.numberCreditsMajor,
-                        numberCreditsRequired: output.numberCreditsRequired,
-                        numberCreditsElective: output.numberCreditsElective,
+                        ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: output.trainingObjectTypeIds.map(
+                                data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({
                                         trainingObjectTypeId,
                                     })
@@ -135,23 +113,18 @@ const PutTrainingMajorModal = () => {
         hideSpinner()
     }
 
-    const { data: level } = useFindUniqueTrainingMajor({
-        where: { id },
-        include: {
-            organization: true,
-            trainingObjectTypes: true,
+    const { data: level } = useFindUniqueTrainingMajor(
+        {
+            where: { id },
+            include: {
+                organization: true,
+                trainingObjectTypes: true,
+            },
         },
-    })
+        { enabled: !!id }
+    )
 
-    // const disableTrainingObjectTypes = useMemo(() => {
-    //     if(!form.getFieldValue('trainingFieldId')){
-    //         return true
-    //     }
-    //     return false
-    // },[form])
     const handleMajorChange = async (val: string) => {
-        console.log(val)
-
         try {
             form.setFieldsValue({
                 trainingObjectTypeIds: [],
@@ -207,7 +180,7 @@ const PutTrainingMajorModal = () => {
                         options={trainingFieldData.map((i: TrainingField) => {
                             return {
                                 value: i.id,
-                                label: i.name,
+                                label: `${i?.code} - ${i.name}`,
                             }
                         })}
                         onChange={(val) => handleMajorChange(val)}
@@ -284,12 +257,7 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="englishName"
-                    label="Tên tiếng anh"
-                    required
-                >
+                <FormItem form={form} name="englishName" label="Tên tiếng anh">
                     <Input placeholder="Nhập tên tiếng anh" />
                 </FormItem>
             </Col>
@@ -298,7 +266,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsMajor"
                     label="Số TC Chuyên Ngành"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
@@ -308,7 +275,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsRequired"
                     label="Số TC Bắt Buộc"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
@@ -318,7 +284,6 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     name="numberCreditsElective"
                     label="Số TC Lựa Chọn"
-                    required
                 >
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>

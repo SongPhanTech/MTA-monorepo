@@ -1,5 +1,5 @@
-// services/searchService.ts
 import axiosInstance from './axios-instance'
+import axios from 'axios'
 
 export const TimKiemTheoTuKhoa = async (prompt: string) => {
     try {
@@ -8,8 +8,12 @@ export const TimKiemTheoTuKhoa = async (prompt: string) => {
             new URLSearchParams({ prompt })
         )
         return response.data
-    } catch (error) {
-        console.error('Lỗi khi gọi searchByKeyword:', error)
-        return []
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+            throw new Error('Yêu cầu quá thời gian. Vui lòng thử lại sau.')
+        }
+
+        throw new Error('Đã xảy ra lỗi khi gọi API.')
     }
 }

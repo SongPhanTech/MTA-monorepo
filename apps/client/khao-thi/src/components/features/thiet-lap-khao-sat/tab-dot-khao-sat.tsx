@@ -25,7 +25,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import DeleteIcon from '@components/icons/delete'
 import dayjs from 'dayjs'
 import FilterSurvey, {
-    FilterSurveyProps,
+    type FilterSurveyProps,
 } from '@components/filter/filter-survey'
 import EditIcon from '@components/icons/edit'
 type Filter = FilterSurveyProps & {
