@@ -31,16 +31,13 @@ import {
     useFindManyLevel,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
-    useFindUniqueLecturer,
-    useUpdateLecturer,
-    useCreateLecturer,
-    useFindManyLecturerType,
     useFindManyStaffType,
     useFindManyStaffPosition,
     useFindManyFixedClass,
     useFindUniqueStaff,
     useUpdateStaff,
     useCreateStaff,
+    useFindManyStaff,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -124,6 +121,13 @@ const PutUserProfileStaffModal = () => {
     const { data: staffPositionData = [] } = useFindManyStaffPosition()
     const { data: fixedClassData = [] } = useFindManyFixedClass()
 
+    const { data: existingStaffs = [] } = useFindManyStaff({
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+
     const { data: staffData } = useFindUniqueStaff({
         where: {
             id: id ?? undefined,
@@ -172,14 +176,52 @@ const PutUserProfileStaffModal = () => {
         },
     })
 
+    const validateStaffCode = useCallback(
+        async (_: any, value: string) => {
+            if (!value) {
+                return Promise.resolve()
+            }
+
+            // Nếu đang ở chế độ update, bỏ qua validation cho chính mã đó
+            if (id && staffData?.code === value) {
+                return Promise.resolve()
+            }
+
+            // Kiểm tra mã đã tồn tại
+            const isExisting = existingStaffs.some(
+                (staff) => staff.code === value
+            )
+
+            if (isExisting) {
+                return Promise.reject(new Error('Mã cán bộ đã tồn tại!'))
+            }
+
+            return Promise.resolve()
+        },
+        [existingStaffs, id, staffData?.code]
+    )
+
     useEffect(() => {
         if (idCardNumberData.length > 0) {
             const options = idCardNumberData
                 .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
-                .map((profile) => ({
-                    value: profile.idCardNumber,
-                    label: profile.idCardNumber,
-                }))
+                .map((profile) => {
+                    // Tạo full name từ lastName + firstName
+                    const fullName =
+                        `${profile.lastName || ''} ${profile.firstName || ''}`.trim()
+
+                    // Tạo label: "Họ tên - Số CCCD"
+                    const label = fullName
+                        ? `${fullName} - ${profile.idCardNumber}`
+                        : profile.idCardNumber // Fallback nếu không có tên
+
+                    return {
+                        value: profile.idCardNumber,
+                        label: label,
+                        searchText:
+                            `${fullName} ${profile.idCardNumber}`.toLowerCase(),
+                    }
+                })
             setIdCardOptions(options)
         }
     }, [idCardNumberData])
@@ -228,7 +270,7 @@ const PutUserProfileStaffModal = () => {
                 level?: Level | null
                 academicDegreeType?: AcademicDegreeType | null
                 academicRankType?: AcademicRankType | null
-                staff?: any | null // Staff type với includes
+                staff?: any | null
             }
         ) => {
             form.setFieldsValue({
@@ -293,7 +335,6 @@ const PutUserProfileStaffModal = () => {
                     ? dayjs(profile.academicDegreeDate)
                     : null,
 
-                // ✅ Thông tin staff nếu có (thay vì lecturer)
                 ...(profile.staff && {
                     organizationId: profile.staff.organizationId,
                     staffTypeId: profile.staff.staffTypeId,
@@ -446,7 +487,7 @@ const PutUserProfileStaffModal = () => {
         output: PutUserProfile,
         fileName?: string
     ) => ({
-        ...buildUserProfileUpdateData(output, fileName), // ✅ Sử dụng lại function trên
+        ...buildUserProfileUpdateData(output, fileName),
     })
 
     async function onOk(output?: PutUserProfile) {
@@ -476,7 +517,15 @@ const PutUserProfileStaffModal = () => {
         try {
             showSpinner()
             if (id) {
-                // UPDATE MODE
+                // UPDATE MODE - Sử dụng 'set' cho update
+                const fixedClassConnections = output.fixedClassIds?.length
+                    ? {
+                          fixedClass: {
+                              set: output.fixedClassIds.map((id) => ({ id })),
+                          },
+                      }
+                    : { fixedClass: { set: [] } } // Clear all if empty
+
                 await updateStaff({
                     data: {
                         code: output.code,
@@ -495,7 +544,7 @@ const PutUserProfileStaffModal = () => {
                                 connect: { id: output.staffPositionId },
                             },
                         }),
-                        // Update fixed classes
+                        // Update fixed classes với 'set'
                         ...fixedClassConnections,
                         userProfile: {
                             update: buildUserProfileUpdateData(
@@ -513,6 +562,17 @@ const PutUserProfileStaffModal = () => {
                     // Có profile existing
                     if (foundProfile.staff?.id) {
                         // Profile đã có staff -> Update existing staff
+                        const fixedClassConnections = output.fixedClassIds
+                            ?.length
+                            ? {
+                                  fixedClass: {
+                                      set: output.fixedClassIds.map((id) => ({
+                                          id,
+                                      })),
+                                  },
+                              }
+                            : { fixedClass: { set: [] } }
+
                         await updateStaff({
                             data: {
                                 code: output.code,
@@ -531,7 +591,6 @@ const PutUserProfileStaffModal = () => {
                                         connect: { id: output.staffPositionId },
                                     },
                                 }),
-                                // Update fixed classes
                                 ...fixedClassConnections,
                                 userProfile: {
                                     update: buildUserProfileUpdateData(
@@ -545,6 +604,17 @@ const PutUserProfileStaffModal = () => {
                         message.success('Cập nhật cán bộ thành công')
                     } else {
                         // Profile chưa có staff -> Tạo staff mới cho profile existing
+                        const fixedClassConnections = output.fixedClassIds
+                            ?.length
+                            ? {
+                                  fixedClass: {
+                                      connect: output.fixedClassIds.map(
+                                          (id) => ({ id })
+                                      ),
+                                  },
+                              }
+                            : {}
+
                         await createStaff({
                             data: {
                                 code: output.code,
@@ -563,7 +633,7 @@ const PutUserProfileStaffModal = () => {
                                         connect: { id: output.staffPositionId },
                                     },
                                 }),
-                                // Connect fixed classes
+                                // Connect fixed classes trong create
                                 ...fixedClassConnections,
                                 userProfile: {
                                     connect: { id: foundProfile.id },
@@ -584,6 +654,16 @@ const PutUserProfileStaffModal = () => {
                     }
                 } else {
                     // Tạo mới hoàn toàn
+                    const fixedClassConnections = output.fixedClassIds?.length
+                        ? {
+                              fixedClass: {
+                                  connect: output.fixedClassIds.map((id) => ({
+                                      id,
+                                  })),
+                              },
+                          }
+                        : {}
+
                     await createStaff({
                         data: {
                             code: output.code,
@@ -602,7 +682,7 @@ const PutUserProfileStaffModal = () => {
                                     connect: { id: output.staffPositionId },
                                 },
                             }),
-                            // Connect fixed classes
+                            // Connect fixed classes trong create
                             ...fixedClassConnections,
                             userProfile: {
                                 create: buildUserProfileData(
@@ -618,7 +698,7 @@ const PutUserProfileStaffModal = () => {
 
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Lecturer'],
+                queryKey: ['Staff'],
             })
             onClose()
         } catch (error) {
@@ -867,7 +947,17 @@ const PutUserProfileStaffModal = () => {
                                                 form={form}
                                                 name="code"
                                                 label="Mã cán bộ"
-                                                required
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message:
+                                                            'Vui lòng nhập mã cán bộ!',
+                                                    },
+                                                    {
+                                                        validator:
+                                                            validateStaffCode,
+                                                    },
+                                                ]}
                                                 className="mb-0"
                                             >
                                                 <Input placeholder="Nhập mã giảng viên" />

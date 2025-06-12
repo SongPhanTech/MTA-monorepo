@@ -4,7 +4,6 @@ import DeleteIcon from '@components/icons/delete'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    AddStudentModal,
     PutStudentModal,
 } from '@components/modal'
 import {
@@ -183,7 +182,6 @@ export default function UserProfilePageDs() {
         const selectedClass = FixedClassData?.find((cls) => cls.id === value)
 
         if (selectedClass?.trainingCourseId) {
-            const currentCourse = selectedTrainingCourse
             const newCourse = selectedClass.trainingCourseId
 
             // Tự động set khóa học tương ứng với lớp
@@ -254,8 +252,9 @@ export default function UserProfilePageDs() {
             trainingCourseId?: string
             fixedClassId?: string
         }
+        id?: string | null
     }>({
-        tag: AddStudentModal.name,
+        tag: PutStudentModal.name,
     })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
@@ -268,6 +267,11 @@ export default function UserProfilePageDs() {
         })
     const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
         tag?: string
+        preSelectedValues?: {
+            trainingObjectTypeId?: string
+            trainingCourseId?: string
+            fixedClassId?: string
+        }
         id: string | null
     }>({
         tag: PutStudentModal.name,
@@ -379,12 +383,6 @@ export default function UserProfilePageDs() {
                 </Menu.Item>
             ))}
         </Menu>
-    )
-    const options = Object.entries(TRANG_THAI_HOC_VIEN).map(
-        ([value, { label, color }]) => ({
-            value,
-            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-        })
     )
 
     return (

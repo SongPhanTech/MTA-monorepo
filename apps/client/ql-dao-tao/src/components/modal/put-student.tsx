@@ -4,19 +4,28 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { GENDER_LIST } from '@constants/constants'
+import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { getMinioUrl } from '@workspace/constant'
 import type {
     $Enums,
+    AcademicDegreeType,
+    AcademicRankType,
+    CurriculumVersion,
     Ethnicity,
+    Level,
     Nationality,
     PriorityObject,
+    Rank,
     RegistrationArea,
     Religion,
+    Student,
+    TrainingCourse,
+    TrainingObjectType,
     UserProfile,
 } from '@workspace/db'
 import {
+    useCreateStudent,
     useCreateUserProfile,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
@@ -25,57 +34,114 @@ import {
     useFindManyFixedClass,
     useFindManyLevel,
     useFindManyNationality,
-    useFindManyOrganization,
-    useFindManyPositionCPV,
     useFindManyPriorityObject,
     useFindManyRank,
     useFindManyRegistrationArea,
     useFindManyReligion,
+    useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
+    useFindManyUserProfile,
     useFindUniqueStudent,
     useFindUniqueUserProfile,
     useUpdateStudent,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import type { UploadFile, UploadProps } from 'antd'
-import { Col, Collapse, Form, Input, Row, Tabs, Upload, message } from 'antd'
+import {
+    AutoComplete,
+    Col,
+    Collapse,
+    Form,
+    Input,
+    Row,
+    Tabs,
+    Upload,
+    message,
+} from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useMemo, useState } from 'react'
+import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 const { TabPane } = Tabs
 const { Panel } = Collapse
 dayjs.locale('vi')
 
 export type PutUserProfile = UserProfile & {
-    trainingObjectTypeId: string
-    fixedClassId: string
-    trainingCourseId: string
-    priorityObjectId: string
-    registrationAreaId: string
-    nationalityId: string
-    religionId: string
-    ethnicityId: string
-    rankId: string
-    academicDegreeTypeId: string
-    academicRankTypeId: string
-    status: $Enums.FixedClassStudentStatus
-    curriculumVersionId: string
+    trainingObjectTypeId?: string
+    fixedClassId?: string
+    trainingCourseId?: string
+    priorityObjectId?: string
+    registrationAreaId?: string
+    nationalityId?: string
+    religionId?: string
+    ethnicityId?: string
+    rankId?: string
+    academicDegreeTypeId?: string
+    academicRankTypeId?: string
+    status?: $Enums.StudentStatus
+    curriculumVersionId?: string
+    educationAndTraining?: string
 }
+
+export type StudentModalProps = {
+    preSelectedValues?: {
+        trainingObjectTypeId?: string
+        trainingCourseId?: string
+        fixedClassId?: string
+        curriculumVersionId?: string
+    }
+    id?: string | null
+}
+
+type PreFillFormFields = {
+    trainingObjectTypeId?: string
+    fixedClassId?: string
+    trainingCourseId?: string
+    curriculumVersionId?: string
+}
+
+type ProfileWithRelations = UserProfile & {
+    nationality?: Nationality | null
+    religion?: Religion | null
+    ethnicity?: Ethnicity | null
+    rank?: Rank | null
+    level?: Level | null
+    academicDegreeType?: AcademicDegreeType | null
+    academicRankType?: AcademicRankType | null
+    educationAndTraining: (Student & {
+        priorityObject?: PriorityObject[]
+        fixedClass?: {
+            trainingCourse?: TrainingCourse
+        } | null
+        trainingObjectType?: TrainingObjectType | null
+        curriculumVersion?: CurriculumVersion | null
+    })[]
+}
+
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
-    const { isOpen, onClose, input } = useDisclosure<any>({
+    const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutStudentModal.name,
         onClose: form.resetFields,
     })
-    const { id } = input
+    const { id, preSelectedValues } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const [searchIdCard, setSearchIdCard] = useState<string>('')
+    const [foundProfile, setFoundProfile] =
+        useState<ProfileWithRelations | null>(null)
+    const [idCardOptions, setIdCardOptions] = useState<
+        { value: string; label: string }[]
+    >([])
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
+
     const { data: registrationAreaData = [], refetch: refetchRe } =
         useFindManyRegistrationArea()
+
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
 
@@ -93,21 +159,33 @@ const PutStudentModal = () => {
             },
         })
 
+    const { data: existingStudents = [] } = useFindManyStudent({
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
     const { data: rankData = [] } = useFindManyRank()
+
     const { data: levelData = [] } = useFindManyLevel()
+
     const { data: academicDegreeTypeData = [] } =
         useFindManyAcademicDegreeType()
+
     const { data: academicRankTypeData = [] } = useFindManyAcademicRankType()
 
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
 
+    const { data: idCardNumberData = [] } = useFindManyUserProfile()
+
     const { data: studentData } = useFindUniqueStudent({
-        where: { id },
+        where: { id: id || '' },
         include: {
             userProfile: {
                 include: {
@@ -133,11 +211,43 @@ const PutStudentModal = () => {
             priorityObject: true,
         },
     })
+
+    const { data: existingProfiles } = useFindManyUserProfile({
+        where: {
+            idCardNumber: searchIdCard || undefined,
+        },
+        include: {
+            nationality: true,
+            religion: true,
+            ethnicity: true,
+            rank: true,
+            level: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            educationAndTraining: {
+                include: {
+                    priorityObject: true,
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                        },
+                    },
+                    trainingObjectType: true,
+                    registrationArea: true,
+                    curriculumVersion: true,
+                },
+            },
+        },
+    })
+
+    const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
+
     async function onOk(output?: PutUserProfile) {
         if (!output) return
-        let fileName
+        let fileName = output.avatar
         if (fileList.length > 0) {
             const resPresignedUrl = await fetchGeneratePresignedUrl({
                 body: {
@@ -155,11 +265,11 @@ const PutStudentModal = () => {
         try {
             showSpinner()
             if (id && studentData) {
-                // Cập nhật UserProfile
+                // UPDATE MODE - existing logic
                 if (studentData.userProfileId) {
                     await updateUserProfile({
                         data: {
-                            avatar: fileName ? fileName : undefined,
+                            avatar: fileName || undefined,
                             firstName: output.firstName,
                             lastName: output.lastName,
                             dateOfBirth: output.dateOfBirth,
@@ -206,6 +316,7 @@ const PutStudentModal = () => {
                         fixedClassId: output.fixedClassId,
                         registrationAreaId: output.registrationAreaId,
                         curriculumVersionId: output.curriculumVersionId,
+                        status: output.status,
                         ...(output.priorityObjectId && {
                             priorityObject: {
                                 set: [{ id: output.priorityObjectId }],
@@ -217,8 +328,202 @@ const PutStudentModal = () => {
                     },
                 })
 
-                message.success('Cập nhật thành công')
+                message.success('Cập nhật sinh viên thành công')
+            } else {
+                // CREATE MODE
+                if (foundProfile?.id) {
+                    // Có profile existing
+                    if (foundProfile.educationAndTraining.length > 0) {
+                        // Profile đã có student -> Update existing student
+                        await updateStudent({
+                            data: {
+                                code: output.code,
+                                trainingObjectTypeId:
+                                    output.trainingObjectTypeId,
+                                fixedClassId: output.fixedClassId,
+                                registrationAreaId: output.registrationAreaId,
+                                curriculumVersionId: output.curriculumVersionId,
+                                status: output.status,
+                                ...(output.priorityObjectId && {
+                                    priorityObject: {
+                                        set: [{ id: output.priorityObjectId }],
+                                    },
+                                }),
+                            },
+                            where: {
+                                id: foundProfile.educationAndTraining[0].id,
+                            },
+                        })
+
+                        // Update profile với thông tin mới
+                        await updateUserProfile({
+                            data: {
+                                avatar: fileName || undefined,
+                                firstName: output.firstName,
+                                lastName: output.lastName,
+                                dateOfBirth: output.dateOfBirth,
+                                placeOfBirth: output.placeOfBirth,
+                                homeTown: output.homeTown,
+                                idCardNumber: output.idCardNumber,
+                                idCardDate: output.idCardDate,
+                                officerNumber: output.officerNumber,
+                                gender: output.gender,
+                                permanentAddress: output.permanentAddress,
+                                temporaryAddress: output.temporaryAddress,
+                                contactAddress: output.contactAddress,
+                                phoneNumber: output.phoneNumber,
+                                email: output.email,
+                                nationalityId: output.nationalityId,
+                                religionId: output.religionId,
+                                ethnicityId: output.ethnicityId,
+                                unionDate: output.unionDate,
+                                unionPlace: output.unionPlace,
+                                CPVJoinDate: output.CPVJoinDate,
+                                officialCPVDate: output.officialCPVDate,
+                                CPVJoinPlace: output.CPVJoinPlace,
+                                tenureDate: output.tenureDate,
+                                enlistmentDate: output.enlistmentDate,
+                                dischargeDate: output.dischargeDate,
+                                familyName: output.familyName,
+                                familyPhone: output.familyPhone,
+                                rankId: output.rankId,
+                                levelId: output.levelId,
+                                academicDegreeTypeId:
+                                    output.academicDegreeTypeId,
+                                academicRankTypeId: output.academicRankTypeId,
+                            },
+                            where: { id: foundProfile.id },
+                        })
+
+                        message.success('Cập nhật sinh viên thành công')
+                    } else {
+                        // Profile chưa có student -> Tạo student mới cho profile existing
+                        await createStudent({
+                            data: {
+                                code: output.code,
+                                userProfileId: foundProfile.id,
+                                trainingObjectTypeId:
+                                    output.trainingObjectTypeId,
+                                fixedClassId: output.fixedClassId,
+                                registrationAreaId: output.registrationAreaId,
+                                curriculumVersionId: output.curriculumVersionId,
+                                status: output.status || 'ENROLLED',
+                                ...(output.priorityObjectId && {
+                                    priorityObject: {
+                                        connect: [
+                                            { id: output.priorityObjectId },
+                                        ],
+                                    },
+                                }),
+                            },
+                        })
+
+                        // Update profile với thông tin mới
+                        await updateUserProfile({
+                            data: {
+                                avatar: fileName || undefined,
+                                firstName: output.firstName,
+                                lastName: output.lastName,
+                                dateOfBirth: output.dateOfBirth,
+                                placeOfBirth: output.placeOfBirth,
+                                homeTown: output.homeTown,
+                                idCardNumber: output.idCardNumber,
+                                idCardDate: output.idCardDate,
+                                officerNumber: output.officerNumber,
+                                gender: output.gender,
+                                permanentAddress: output.permanentAddress,
+                                temporaryAddress: output.temporaryAddress,
+                                contactAddress: output.contactAddress,
+                                phoneNumber: output.phoneNumber,
+                                email: output.email,
+                                nationalityId: output.nationalityId,
+                                religionId: output.religionId,
+                                ethnicityId: output.ethnicityId,
+                                unionDate: output.unionDate,
+                                unionPlace: output.unionPlace,
+                                CPVJoinDate: output.CPVJoinDate,
+                                officialCPVDate: output.officialCPVDate,
+                                CPVJoinPlace: output.CPVJoinPlace,
+                                tenureDate: output.tenureDate,
+                                enlistmentDate: output.enlistmentDate,
+                                dischargeDate: output.dischargeDate,
+                                familyName: output.familyName,
+                                familyPhone: output.familyPhone,
+                                rankId: output.rankId,
+                                levelId: output.levelId,
+                                academicDegreeTypeId:
+                                    output.academicDegreeTypeId,
+                                academicRankTypeId: output.academicRankTypeId,
+                            },
+                            where: { id: foundProfile.id },
+                        })
+
+                        message.success('Thêm sinh viên thành công')
+                    }
+                } else {
+                    // Tạo mới hoàn toàn - existing logic
+                    const userProfile = await createUserProfile({
+                        data: {
+                            avatar: fileName || undefined,
+                            firstName: output.firstName,
+                            lastName: output.lastName,
+                            dateOfBirth: output.dateOfBirth,
+                            placeOfBirth: output.placeOfBirth,
+                            homeTown: output.homeTown,
+                            idCardNumber: output.idCardNumber,
+                            idCardDate: output.idCardDate,
+                            officerNumber: output.officerNumber,
+                            gender: output.gender,
+                            permanentAddress: output.permanentAddress,
+                            temporaryAddress: output.temporaryAddress,
+                            contactAddress: output.contactAddress,
+                            phoneNumber: output.phoneNumber,
+                            email: output.email,
+                            nationalityId: output.nationalityId,
+                            religionId: output.religionId,
+                            ethnicityId: output.ethnicityId,
+                            unionDate: output.unionDate,
+                            unionPlace: output.unionPlace,
+                            CPVJoinDate: output.CPVJoinDate,
+                            officialCPVDate: output.officialCPVDate,
+                            CPVJoinPlace: output.CPVJoinPlace,
+                            tenureDate: output.tenureDate,
+                            enlistmentDate: output.enlistmentDate,
+                            dischargeDate: output.dischargeDate,
+                            familyName: output.familyName,
+                            familyPhone: output.familyPhone,
+                            rankId: output.rankId,
+                            levelId: output.levelId,
+                            academicDegreeTypeId: output.academicDegreeTypeId,
+                            academicRankTypeId: output.academicRankTypeId,
+                        },
+                    })
+                    if (userProfile) {
+                        await createStudent({
+                            data: {
+                                code: output.code,
+                                userProfileId: userProfile.id,
+                                trainingObjectTypeId:
+                                    output.trainingObjectTypeId,
+                                fixedClassId: output.fixedClassId,
+                                registrationAreaId: output.registrationAreaId,
+                                curriculumVersionId: output.curriculumVersionId,
+                                status: output.status || 'ENROLLED',
+                                ...(output.priorityObjectId && {
+                                    priorityObject: {
+                                        connect: [
+                                            { id: output.priorityObjectId },
+                                        ],
+                                    },
+                                }),
+                            },
+                        })
+                    }
+
+                    message.success('Thêm sinh viên thành công')
+                }
             }
+
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Student'],
@@ -233,17 +538,47 @@ const PutStudentModal = () => {
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
+    const selectedCurriculumVersionId = Form.useWatch(
+        'curriculumVersionId',
+        form
+    )
 
-    //  Lọc lớp theo khóa đã chọn
     const filteredFixedClasses = useMemo(() => {
-        if (!selectedTrainingCourseId) {
+        if (!selectedTrainingCourseId && !selectedCurriculumVersionId) {
             return fixedClassData
         }
 
-        return fixedClassData.filter(
-            (cls) => cls.trainingCourseId === selectedTrainingCourseId
+        return fixedClassData.filter((cls) => {
+            const matchesCourse =
+                !selectedTrainingCourseId ||
+                cls.trainingCourseId === selectedTrainingCourseId
+            const matchesCurriculum =
+                !selectedCurriculumVersionId ||
+                cls.curriculumVersionId === selectedCurriculumVersionId
+            return matchesCourse && matchesCurriculum
+        })
+    }, [fixedClassData, selectedTrainingCourseId, selectedCurriculumVersionId])
+
+    // Lọc khóa học dựa trên chương trình đào tạo đã chọn
+    const filteredTrainingCourses = useMemo(() => {
+        if (!selectedCurriculumVersionId) {
+            return trainingCourseData
+        }
+
+        // Lấy danh sách khóa học có chứa chương trình đào tạo đã chọn
+        const coursesWithCurriculum = fixedClassData
+            .filter(
+                (cls) => cls.curriculumVersionId === selectedCurriculumVersionId
+            )
+            .map((cls) => cls.trainingCourseId)
+            .filter(
+                (courseId, index, array) => array.indexOf(courseId) === index
+            ) // Remove duplicates
+
+        return trainingCourseData.filter((course) =>
+            coursesWithCurriculum.includes(course.id)
         )
-    }, [fixedClassData, selectedTrainingCourseId])
+    }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
 
     // Cập nhật handleFixedClassChange hoàn chỉnh
     const handleFixedClassChange = (classId: string) => {
@@ -264,6 +599,31 @@ const PutStudentModal = () => {
         }
     }
 
+    const validateStudentCode = useCallback(
+        async (_: any, value: string) => {
+            if (!value) {
+                return Promise.resolve()
+            }
+
+            // Nếu đang ở chế độ update, bỏ qua validation cho chính mã đó
+            if (id && studentData?.code === value) {
+                return Promise.resolve()
+            }
+
+            // Kiểm tra mã đã tồn tại
+            const isExisting = existingStudents.some(
+                (student) => student.code === value
+            )
+
+            if (isExisting) {
+                return Promise.reject(new Error('Mã sinh viên đã tồn tại!'))
+            }
+
+            return Promise.resolve()
+        },
+        [existingStudents, id, studentData?.code]
+    )
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (studentData) {
@@ -274,7 +634,8 @@ const PutStudentModal = () => {
                     studentData.trainingObjectTypeId ?? undefined,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 registrationAreaId: studentData.registrationAreaId ?? undefined,
-                trainingCourseId: studentData.fixedClass?.trainingCourse?.id,
+                trainingCourseId:
+                    studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 priorityObjectId: studentData.priorityObject[0]?.id,
                 status: studentData.status,
                 curriculumVersionId:
@@ -346,6 +707,195 @@ const PutStudentModal = () => {
             }
         }
     }, [studentData, form])
+
+    useEffect(() => {
+        if (idCardNumberData.length > 0) {
+            const options = idCardNumberData
+                .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
+                .map((profile) => {
+                    // Tạo full name từ lastName + firstName
+                    const fullName =
+                        `${profile.lastName || ''} ${profile.firstName || ''}`.trim()
+
+                    // Tạo label: "Họ tên - Số CCCD"
+                    const label = fullName
+                        ? `${fullName} - ${profile.idCardNumber}`
+                        : profile.idCardNumber // Fallback nếu không có tên
+
+                    return {
+                        value: profile.idCardNumber,
+                        label: label,
+                        searchText:
+                            `${fullName} ${profile.idCardNumber}`.toLowerCase(),
+                    }
+                })
+            setIdCardOptions(options)
+        }
+    }, [idCardNumberData])
+
+    useEffect(() => {
+        if (isOpen && preSelectedValues) {
+            const fieldsToSet: PreFillFormFields = {}
+
+            if (preSelectedValues.trainingObjectTypeId) {
+                fieldsToSet.trainingObjectTypeId =
+                    preSelectedValues.trainingObjectTypeId
+            }
+
+            if (preSelectedValues.curriculumVersionId) {
+                fieldsToSet.curriculumVersionId =
+                    preSelectedValues.curriculumVersionId
+            }
+
+            if (preSelectedValues.fixedClassId) {
+                fieldsToSet.fixedClassId = preSelectedValues.fixedClassId
+
+                const selectedClass = fixedClassData.find(
+                    (cls) => cls.id === preSelectedValues.fixedClassId
+                )
+                if (selectedClass?.trainingCourseId) {
+                    fieldsToSet.trainingCourseId =
+                        selectedClass.trainingCourseId
+                }
+                if (
+                    selectedClass?.curriculumVersionId &&
+                    !preSelectedValues.curriculumVersionId
+                ) {
+                    fieldsToSet.curriculumVersionId =
+                        selectedClass.curriculumVersionId
+                }
+            } else if (preSelectedValues.trainingCourseId) {
+                fieldsToSet.trainingCourseId =
+                    preSelectedValues.trainingCourseId
+            }
+
+            if (Object.keys(fieldsToSet).length > 0) {
+                form.setFieldsValue(fieldsToSet)
+            }
+        }
+    }, [isOpen, preSelectedValues, form, fixedClassData])
+
+    const fillProfileData = useCallback(
+        (profile: ProfileWithRelations) => {
+            // Set thông tin UserProfile
+            form.setFieldsValue({
+                firstName: profile.firstName,
+                lastName: profile.lastName,
+                dateOfBirth: profile.dateOfBirth
+                    ? dayjs(profile.dateOfBirth)
+                    : null,
+                placeOfBirth: profile.placeOfBirth,
+                homeTown: profile.homeTown,
+                idCardNumber: profile.idCardNumber,
+                idCardDate: profile.idCardDate
+                    ? dayjs(profile.idCardDate)
+                    : null,
+                officerNumber: profile.officerNumber,
+                gender: profile.gender,
+                permanentAddress: profile.permanentAddress,
+                temporaryAddress: profile.temporaryAddress,
+                contactAddress: profile.contactAddress,
+                phoneNumber: profile.phoneNumber,
+                email: profile.email,
+                familyPhone: profile.familyPhone,
+                familyName: profile.familyName,
+                unionDate: profile.unionDate ? dayjs(profile.unionDate) : null,
+                unionPlace: profile.unionPlace,
+                CPVJoinDate: profile.CPVJoinDate
+                    ? dayjs(profile.CPVJoinDate)
+                    : null,
+                officialCPVDate: profile.officialCPVDate
+                    ? dayjs(profile.officialCPVDate)
+                    : null,
+                CPVJoinPlace: profile.CPVJoinPlace,
+                tenureDate: profile.tenureDate
+                    ? dayjs(profile.tenureDate)
+                    : null,
+                enlistmentDate: profile.enlistmentDate
+                    ? dayjs(profile.enlistmentDate)
+                    : null,
+                dischargeDate: profile.dischargeDate
+                    ? dayjs(profile.dischargeDate)
+                    : null,
+                nationalityId: profile.nationality?.id,
+                religionId: profile.religion?.id,
+                ethnicityId: profile.ethnicity?.id,
+                rankId: profile.rank?.id,
+                levelId: profile.level?.id,
+                academicDegreeTypeId: profile.academicDegreeType?.id,
+                academicRankTypeId: profile.academicRankType?.id,
+            })
+
+            // Set thông tin Student nếu có
+            if (profile.educationAndTraining.length > 0) {
+                const student = profile.educationAndTraining[0]
+                form.setFieldsValue({
+                    code: student.code || '',
+                    trainingObjectTypeId:
+                        student.trainingObjectTypeId ?? undefined,
+                    fixedClassId: student.fixedClassId ?? undefined,
+                    registrationAreaId: student.registrationAreaId ?? undefined,
+                    curriculumVersionId:
+                        student.curriculumVersionId ?? undefined,
+                    status: student.status,
+                    priorityObjectId: student.priorityObject?.[0]?.id,
+                    trainingCourseId:
+                        student.fixedClass?.trainingCourse?.id ??
+                        fixedClassData.find(
+                            (cls) => cls.id === student.fixedClassId
+                        )?.trainingCourseId ??
+                        undefined,
+                })
+            }
+
+            // Set avatar
+            if (profile.avatar) {
+                setAvatar([
+                    {
+                        uid: '-1',
+                        name: 'avatar.png',
+                        status: 'done',
+                        url: getMinioUrl(profile.avatar),
+                    },
+                ])
+            }
+
+            setFoundProfile(profile)
+        },
+        [form, fixedClassData]
+    )
+
+    useEffect(() => {
+        if (existingProfiles && !id && searchIdCard) {
+            const profile = existingProfiles[0]
+
+            if (profile) {
+                fillProfileData(profile as ProfileWithRelations)
+            } else {
+                setFoundProfile(null)
+            }
+        }
+    }, [existingProfiles, id, fillProfileData, searchIdCard])
+
+    const debouncedSearch = useMemo(
+        () =>
+            _.debounce((value: string) => {
+                if (value && !id) {
+                    setSearchIdCard(value)
+                } else {
+                    setSearchIdCard('')
+                }
+            }, 500),
+        [id]
+    )
+
+    // SỬA: Cleanup debounce khi component unmount
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel()
+        }
+    }, [debouncedSearch])
+
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const [avatar, setAvatar] = useState<UploadFile[]>([])
 
@@ -374,7 +924,11 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Chỉnh sửa sinh viên'}
+            title={
+                id
+                    ? 'Chỉnh sửa sinh viên/ học viên'
+                    : 'Thêm sinh viên/ học viên'
+            }
             className="w-[80vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
@@ -388,7 +942,7 @@ const PutStudentModal = () => {
                                 <Col span={4}>
                                     <div
                                         style={{
-                                            transform: 'scale(1.5)',
+                                            transform: 'scale(1.35)',
                                             transformOrigin: 'top left',
                                             fontSize: '0.65rem',
                                         }}
@@ -436,12 +990,64 @@ const PutStudentModal = () => {
                                         <Col span={12}>
                                             <FormItem
                                                 form={form}
-                                                name="code"
-                                                label="Mã sinh viên"
+                                                name="idCardNumber"
+                                                label="Số CCCD"
+                                                className="mb-0"
                                                 required
+                                            >
+                                                <AutoComplete
+                                                    placeholder="Nhập hoặc chọn số CCCD"
+                                                    allowClear
+                                                    options={idCardOptions}
+                                                    filterOption={(
+                                                        inputValue,
+                                                        option
+                                                    ) =>
+                                                        option?.value
+                                                            .toUpperCase()
+                                                            .indexOf(
+                                                                inputValue.toUpperCase()
+                                                            ) !== -1 ||
+                                                        option?.label
+                                                            .toUpperCase()
+                                                            .indexOf(
+                                                                inputValue.toUpperCase()
+                                                            ) !== -1
+                                                    }
+                                                    onSelect={(value) => {
+                                                        form.setFieldsValue({
+                                                            idCardNumber: value,
+                                                        })
+                                                        debouncedSearch(value)
+                                                    }}
+                                                    onChange={(value) => {
+                                                        form.setFieldsValue({
+                                                            idCardNumber: value,
+                                                        })
+                                                        debouncedSearch(value)
+                                                    }}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name="code"
+                                                label="Mã sinh viên / học viên"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message:
+                                                            'Vui lòng nhập mã sinh viên / học viên!',
+                                                    },
+                                                    {
+                                                        validator:
+                                                            validateStudentCode,
+                                                    },
+                                                ]}
                                                 className="mb-0"
                                             >
-                                                <Input placeholder="Nhập mã sinh viên" />
+                                                <Input placeholder="Nhập mã sinh viên / học viên" />
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
@@ -466,28 +1072,93 @@ const PutStudentModal = () => {
                                                 <Input placeholder="Nhập tên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
-                                            <FormItem
-                                                form={form}
-                                                name="dateOfBirth"
-                                                label="Ngày sinh"
-                                                className="mb-0"
-                                            >
-                                                <DatePicker
-                                                    format="DD/MM/YYYY"
-                                                    className="w-full"
-                                                    disabledDate={(date) =>
-                                                        date &&
-                                                        date >
-                                                            dayjs().endOf('day')
-                                                    }
-                                                />
-                                            </FormItem>
-                                        </Col>
                                     </Row>
                                 </Col>
 
-                                <Col span={12} className="mt-6">
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="trainingObjectTypeId"
+                                        label="Đối tượng đào tạo"
+                                        className="mb-0"
+                                        required
+                                    >
+                                        <Select
+                                            placeholder="Chọn đối tượng đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (value) => ({
+                                                    value: value.id,
+                                                    label: value.name,
+                                                })
+                                            )}
+                                        />
+                                    </FormItem>
+                                </Col>
+
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="fixedClassId"
+                                        label="Lớp"
+                                        className="mb-0"
+                                        required
+                                    >
+                                        <Select
+                                            placeholder="Chọn lớp"
+                                            optionFilterProp="label"
+                                            onChange={handleFixedClassChange}
+                                            options={filteredFixedClasses.map(
+                                                (value) => ({
+                                                    value: value.id,
+                                                    label: `${value.code}-${value.name}`,
+                                                })
+                                            )}
+                                        />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="trainingCourseId"
+                                        label="Khóa"
+                                        className="mb-0"
+                                    >
+                                        <Select
+                                            placeholder="Chọn khóa"
+                                            options={filteredTrainingCourses.map(
+                                                (value) => ({
+                                                    value: value.id,
+                                                    label: value.name,
+                                                })
+                                            )}
+                                        />
+                                    </FormItem>
+                                </Col>
+
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="curriculumVersionId"
+                                        label="Chương trình đào tạo"
+                                        className="mb-0"
+                                    >
+                                        <Select
+                                            placeholder={
+                                                'Chọn chương trình đào tạo'
+                                            }
+                                            showSearch
+                                            optionFilterProp="label"
+                                            options={curriculumVersionData.map(
+                                                (value) => ({
+                                                    value: value.id,
+                                                    label: value.name,
+                                                })
+                                            )}
+                                        />
+                                    </FormItem>
+                                </Col>
+
+                                <Col span={12}>
                                     <FormItem
                                         form={form}
                                         name="status"
@@ -508,7 +1179,25 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12} className="mt-6">
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="dateOfBirth"
+                                        label="Ngày sinh"
+                                        className="mb-0"
+                                    >
+                                        <DatePicker
+                                            format="DD/MM/YYYY"
+                                            className="w-full"
+                                            disabledDate={(date) =>
+                                                date &&
+                                                date > dayjs().endOf('day')
+                                            }
+                                        />
+                                    </FormItem>
+                                </Col>
+
+                                <Col span={12}>
                                     <FormItem
                                         form={form}
                                         name="placeOfBirth"
@@ -536,16 +1225,6 @@ const PutStudentModal = () => {
                                         className="mb-0"
                                     >
                                         <Input placeholder="Nhập số hiệu sĩ quan / quân nhân" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="idCardNumber"
-                                        label="Số CCCD"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập số CCCD" />
                                     </FormItem>
                                 </Col>
 
@@ -582,86 +1261,6 @@ const PutStudentModal = () => {
                                                     label: i.name,
                                                 }
                                             })}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="trainingObjectTypeId"
-                                        label="Đối tượng đào tạo"
-                                        className="mb-0"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (value) => ({
-                                                    value: value.id,
-                                                    label: value.name,
-                                                })
-                                            )}
-                                        />
-                                    </FormItem>
-                                </Col>
-
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="fixedClassId"
-                                        label="Lớp"
-                                        className="mb-0"
-                                    >
-                                        <Select
-                                            placeholder="Chọn lớp"
-                                            optionFilterProp="label"
-                                            onChange={handleFixedClassChange}
-                                            options={filteredFixedClasses.map(
-                                                (value) => ({
-                                                    value: value.id,
-                                                    label: `${value.code}-${value.name}`,
-                                                })
-                                            )}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="trainingCourseId"
-                                        label="Khóa"
-                                        className="mb-0"
-                                    >
-                                        <Select
-                                            placeholder="Chọn khóa"
-                                            options={trainingCourseData.map(
-                                                (value) => ({
-                                                    value: value.id,
-                                                    label: value.name,
-                                                })
-                                            )}
-                                        />
-                                    </FormItem>
-                                </Col>
-
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="curriculumVersionId"
-                                        label="Phiên bản chương trình đào tạo"
-                                        className="mb-0"
-                                    >
-                                        <Select
-                                            placeholder={
-                                                'Chọn phiên bản chương trình đào tạo'
-                                            }
-                                            showSearch
-                                            optionFilterProp="label"
-                                            options={curriculumVersionData.map(
-                                                (value) => ({
-                                                    value: value.id,
-                                                    label: value.name,
-                                                })
-                                            )}
                                         />
                                     </FormItem>
                                 </Col>
