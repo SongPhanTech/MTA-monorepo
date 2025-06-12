@@ -50,14 +50,6 @@ export default {
     "MON_HOC": "/mon-hoc",
     "NAM_HOC_KY_HOC": "/nam-hoc-ky-hoc",
     "PHIEN_BAN_CTDT": "/phien-ban-ctdt",
-<<<<<<< HEAD
-    "QL_GIANG_VIEN": "/ql-giang-vien",
-    "QL_HOC_VIEN": "/ql-hoc-vien",
-    "QL_SINH_VIEN": "/ql-sinh-vien",
-    "TEACHER_PROFILE_MANAGEMENT": "/teacher-profile-management",
-    "DS_LOP_MON_HOC": "/lop-mon-hoc/ds-lop-mon-hoc",
-    "QL_DIEM_LOP_MON_HOC": "/lop-mon-hoc/ql-diem-lop-mon-hoc"
-=======
     "QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
     "QL_SINH_VIEN": "/quan-ly-ho-so//ql-sinh-vien",
     "QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
@@ -82,7 +74,8 @@ export default {
     "DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_KY_SU": "/danh-muc-ho-so/chuc-danh-cmnv-ngach-ky-su",
     "DANH_MUC_HO_SO_CAC_TRUONG_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-truong-dao-tao-bac-dai-hoc",
     "DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-chuyen-nganh-dao-tao-bac-dai-hoc",
->>>>>>> 4fee6e2a02d2cbe8e3204b9b113e4df2f584dc43
+    "DS_LOP_MON_HOC": "/lop-mon-hoc/ds-lop-mon-hoc",
+    "QL_DIEM_LOP_MON_HOC": "/lop-mon-hoc/ql-diem-lop-mon-hoc"
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
