@@ -22,6 +22,7 @@ import {
     Popconfirm,
     Select,
     Tabs,
+    Tag,
     type TabsProps,
     message,
 } from 'antd'
@@ -162,11 +163,11 @@ function Page() {
                             </Button>
                             <Button
                                 className={cn(
-                                    'border rounded px-4 py-1 font-medium flex items-center gap-2',
+                                    'border rounded px-4 py-1 font-medium',
                                     filters.status ===
                                         $Enums.DocumentStatus.PENDING
-                                        ? 'bg-[#f8ba00] text-white border-[#f8ba00]'
-                                        : 'text-[#f8ba00] border-[#f8ba00]'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
                                 )}
                                 onClick={() =>
                                     setFilters((prev) => ({
@@ -176,17 +177,14 @@ function Page() {
                                 }
                             >
                                 Chờ duyệt
-                                {/* <span className="w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                                    {pendingCount}
-                                </span> */}
                             </Button>
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
                                     filters.status ===
                                         $Enums.DocumentStatus.DENY
-                                        ? 'bg-red-500 text-white border-red-500'
-                                        : 'text-red-500 border-red-500'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
                                 )}
                                 onClick={() =>
                                     setFilters((prev) => ({
@@ -283,48 +281,31 @@ function Page() {
                                         },
                                     }),
                                     render: (value: $Enums.DocumentStatus) => {
-                                        const statusMap: Record<
-                                            $Enums.DocumentStatus,
-                                            {
-                                                label: string
-                                                textColor: string
-                                                bgColor: string
-                                                borderColor: string
-                                            }
-                                        > = {
+                                        const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
                                                 label: 'Đã duyệt',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-primary',
-                                                borderColor: 'border-primary',
+                                                color: 'green',
                                             },
                                             [$Enums.DocumentStatus.PENDING]: {
                                                 label: 'Chờ duyệt',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-[#f8ba00]',
-                                                borderColor: 'border-[#f8ba00]',
+                                                color: 'gold',
                                             },
                                             [$Enums.DocumentStatus.DENY]: {
                                                 label: 'Từ chối',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-red-500',
-                                                borderColor: 'border-red-500',
+                                                color: 'red',
                                             },
                                         }
-
                                         const status = statusMap[value] || {
                                             label: 'Không xác định',
-                                            textColor: 'text-gray-700',
-                                            bgColor: 'bg-gray-100',
-                                            borderColor: 'border-gray-300',
+                                            color: 'default',
                                         }
-
                                         return (
-                                            <div
-                                                className={`${status.textColor} ${status.bgColor} ${status.borderColor} border rounded-md px-2 py-1 w-fit`}
+                                            <Tag
+                                                color={status.color}
+                                                className="px-3 py-1 text-sm rounded"
                                             >
                                                 {status.label}
-                                            </div>
+                                            </Tag>
                                         )
                                     },
                                 },
