@@ -205,7 +205,7 @@ export default function TrainingProgramCatalog() {
                                     className="h-[40px]"
                                 >
                                     <PlusOutlined />
-                                    Thêm danh mục
+                                    Thêm chương trình
                                 </Button>
                             </Flex>
                         </Col>
@@ -253,10 +253,16 @@ export default function TrainingProgramCatalog() {
                                 width: 120,
                             },
                             {
-                                title: 'Tổng số tín chỉ phải đạt',
-                                dataIndex: 'numberOfSemesters',
+                                title: 'Số tín chỉ bắt buộc',
+                                dataIndex: 'requiredCredits',
                                 align: 'center',
-                                width: 180,
+                                width: 140,
+                            },
+                            {
+                                title: 'Số tín chỉ tự chọn',
+                                dataIndex: 'electiveCredits',
+                                align: 'center',
+                                width: 140,
                             },
                             {
                                 title: 'Mô tả',
@@ -367,6 +373,7 @@ export default function TrainingProgramCatalog() {
                                             versionId: '',
                                         })
                                     }}
+                                    title="Thêm mới phiên bản"
                                 />
                                 <EditIcon
                                     onClick={(e) => {

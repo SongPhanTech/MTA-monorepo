@@ -27,6 +27,8 @@ import AddStudentModal from './add-student'
 import PutStudentModal from './put-student'
 import PutUserProfileStaffModal from './put-staff-modal'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
+import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
+import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -56,4 +58,7 @@ export {
     AddStudentModal,
     PutStudentModal,
     PutCurriculum,
+    PutTrainingBlockOnCurriculumVersion,
+    PutUserProfileStaffModal,
+    PutTrainingBlockSubject,
 }
