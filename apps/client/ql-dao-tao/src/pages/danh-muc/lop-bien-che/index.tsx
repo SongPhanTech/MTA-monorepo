@@ -40,6 +40,7 @@ import {
     Tooltip,
     message,
     TreeSelect,
+    Tag,
 } from 'antd'
 import dayjs from 'dayjs'
 import _, { filter } from 'lodash'
@@ -502,6 +503,20 @@ export default function FixedClassPage({
                                 dataIndex: 'description',
                                 width: 100,
                                 align: 'center',
+                            },
+                            {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 130,
+                                render: (value, record) => {
+                                    return !record?.active ? (
+                                        <Tag color="error">Không hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="success">
+                                            Đang hoạt động
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',

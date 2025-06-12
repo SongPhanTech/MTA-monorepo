@@ -15,7 +15,6 @@ import {
 import type {
     TrainingCourse,
     TrainingObjectType,
-    TrainingCourseStatus,
 } from '@workspace/db'
 
 import {
@@ -143,25 +142,7 @@ export default function TrainingCoursePage() {
             })
         }
     }
-    async function handleStatusChange(
-        id: string,
-        newStatus: TrainingCourseStatus
-    ) {
-        try {
-            showSpinner()
-            await updateTrainingCourse({
-                where: {
-                    id,
-                },
-                data: {
-                    status: newStatus,
-                },
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
+
     const options = Object.entries(KHOA_HL_STATUS).map(
         ([value, { label, color }]) => ({
             value,
@@ -303,6 +284,12 @@ export default function TrainingCoursePage() {
                                 width: 150,
                             },
                             {
+                                title: 'Mô tả',
+                                width: 100,
+                                align: 'center',
+                                dataIndex: 'description',
+                            },
+                            {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 175,
@@ -315,12 +302,6 @@ export default function TrainingCoursePage() {
                                         </Tag>
                                     )
                                 },
-                            },
-                            {
-                                title: 'Mô tả',
-                                width: 100,
-                                align: 'center',
-                                dataIndex: 'description',
                             },
                             {
                                 title: 'Thao tác',
