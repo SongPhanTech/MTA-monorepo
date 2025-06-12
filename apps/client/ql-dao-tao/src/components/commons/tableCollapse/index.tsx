@@ -35,7 +35,7 @@ function generateKey(prefix = 'key') {
     return `${uniqueId(prefix)}`
 }
 const TableCollapse = <T extends Data>({
-    data,
+    data = [],
     headerTitleKey,
     headerRight,
     pagination,
@@ -53,17 +53,12 @@ const TableCollapse = <T extends Data>({
     ...rest
 }: TableProps<T>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
-    useEffect(() => {
-        if (defaultExpandAll) setExpandedKeys(data?.map((d) => d.id) || [])
-    }, [defaultExpandAll, data])
 
     const handleExpand = (expanded: boolean, record: T) => {
         const children = record[childrenFieldName]
 
         if (!Array.isArray(children) || children?.length === 0) return
         setExpandedKeys((prev) => {
-            console.log(111, record.id)
-
             if (expanded && record.key) {
                 // Mở rộng thêm key
                 return [...prev, record.key]
@@ -73,90 +68,79 @@ const TableCollapse = <T extends Data>({
         })
     }
 
-    // const dataWithKey = useMemo(() => {
-    //     if (!data) return []
+    const dataWithKey = useMemo(() => {
+        if (!data) return []
 
-    //     return data.map((item) => {
-    //         const children = item[childrenFieldName] as Data[] | undefined
-    //         const hasChildren = Array.isArray(children)
-    //         // Nếu item không có key thì tạo key mới
-    //         if (!item.key) {
-    //             item.key = generateKey('parent')
-    //         }
+        return data.map((item) => {
+            const children = item[childrenFieldName] as Data[] | undefined
+            const hasChildren = Array.isArray(children)
+            // Nếu item không có key thì tạo key mới
+            if (!item.key) {
+                item.key = item.id
+            }
 
-    //         if (hasChildren) {
-    //             const childrenArray = children?.map((child) => {
-    //                 if (!child.key) {
-    //                     child.key = generateKey('child')
-    //                 }
-    //                 return {
-    //                     ...child,
-    //                     type: 'child',
-    //                 }
-    //             })
-    //             // Đảm bảo trường children được đặt đúng tên
-    //             const newItem = {
-    //                 ...item,
-    //                 type: 'parent',
-    //                 [childrenFieldName]: childrenArray,
-    //             }
-    //             return newItem
-    //         }
-    //         // Item không có children thì chắc chắn là child
-    //         if (!item.key) {
-    //             item.key = generateKey('child')
-    //         }
-    //         return {
-    //             ...item,
-    //             type: 'child',
-    //         }
-    //     })
-    // }, [data, childrenFieldName])
+            if (hasChildren) {
+                const childrenArray = children?.map((child) => {
+                    if (!child.key) {
+                        child.key = child.id
+                    }
+                    return {
+                        ...child,
+                        $type: 'child',
+                    }
+                })
+                // Đảm bảo trường children được đặt đúng tên
+                const newItem = {
+                    ...item,
+                    $type: 'parent',
+                    [childrenFieldName]: childrenArray,
+                }
+                return newItem
+            }
+            // Item không có children thì chắc chắn là child
+            if (!item.key) {
+                item.key = item.id
+            }
+            return {
+                ...item,
+                $type: 'child',
+            }
+        })
+    }, [data, childrenFieldName])
 
-    // const allChildren = useMemo(() => {
-    //     const children: Data[] = []
-    //     if (!dataWithKey) return children
-    //     for (const item of dataWithKey) {
-    //         const itemChildren = item[childrenFieldName] as Data[] | undefined
-    //         if (item.type === 'parent' && Array.isArray(itemChildren)) {
-    //             children.push(...itemChildren)
-    //         } else if (item.type === 'child') {
-    //             children.push(item)
-    //         }
-    //     }
-    //     return children
-    // }, [dataWithKey, childrenFieldName])
+    useEffect(() => {
+        if (defaultExpandAll && dataWithKey.length > 0)
+            setExpandedKeys(dataWithKey.map((d) => d.key as React.Key))
+    }, [defaultExpandAll, dataWithKey])
+
+    const allChildren = useMemo(() => {
+        const children: Data[] = []
+        if (!dataWithKey) return children
+        for (const item of dataWithKey) {
+            const itemChildren = item[childrenFieldName] as Data[] | undefined
+            if (item.$type === 'parent' && Array.isArray(itemChildren)) {
+                children.push(...itemChildren)
+            } else if (item.$type === 'child') {
+                children.push(item)
+            }
+        }
+        return children
+    }, [dataWithKey, childrenFieldName])
 
     const columns: ColumnsType<T> = useMemo(() => {
         const baseColumns: ColumnsType<T> = [
             {
                 title: 'STT',
-                width: 10,
                 align: 'center',
-                fixed: 'left',
-                // render: (_, record) => {
-                //     // const children = record[childrenFieldName]
-                //     // if (Array.isArray(children)) {
-                //     //     return (
-                //     //         <div className="flex items-center justify-between">
-                //     //             <strong className="select-none sticky left-[30px]">
-                //     //                 {typeof headerTitleKey === 'function'
-                //     //                     ? headerTitleKey(record)
-                //     //                     : (record[headerTitleKey] as ReactNode)}
-                //     //             </strong>
-                //     //             <div className="select-none sticky right-[10px]">
-                //     //                 {headerRight}
-                //     //             </div>
-                //     //         </div>
-                //     //     )
-                //     // }
-                //     const order = allChildren.findIndex(
-                //         (item) => item.key === record.key
-                //     )
-                //     return order >= 0
-                //         ? order + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE
-                //         : null
-                // },
+                className: 'sticky left-0 z-50',
+                render: (_, record) => {
+                    const order = allChildren.findIndex(
+                        (item) => item.key === record.key
+                    )
+                    return order >= 0
+                        ? order + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE
+                        : ''
+                },
             },
             ...(rest.columns as ColumnsType<T>),
         ]
@@ -167,12 +151,12 @@ const TableCollapse = <T extends Data>({
             onCell: (record: T) => ({
                 colSpan: Array.isArray(record[childrenFieldName])
                     ? index === 0
-                        ? baseColumns?.length - 1
+                        ? baseColumns.length
                         : 0
                     : 1,
             }),
         }))
-    }, [rest.columns, childrenFieldName])
+    }, [rest.columns, childrenFieldName, allChildren, currentPage])
 
     return (
         <>
@@ -188,7 +172,7 @@ const TableCollapse = <T extends Data>({
                     y: scrollable ? maxHeight : undefined,
                 }}
                 bordered
-                data={data}
+                data={dataWithKey}
                 pagination={pagination}
                 onRow={(record) => {
                     const children = record[childrenFieldName]
@@ -279,6 +263,9 @@ const TableCollapse = <T extends Data>({
                 }
                 .ant-table-cell[colspan] {
                     text-align: left !important;
+                }
+                .ant-table-row > td:first-child:not(:hover) {
+                    background-color: white;
                 }
             `}
             </style>

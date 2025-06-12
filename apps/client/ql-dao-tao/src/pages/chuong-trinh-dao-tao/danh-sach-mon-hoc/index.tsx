@@ -215,6 +215,7 @@ export default function SubjectList() {
                         headerTitleKey="name"
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
+                        defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã',

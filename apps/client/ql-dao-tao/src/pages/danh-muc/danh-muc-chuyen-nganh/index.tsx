@@ -263,7 +263,6 @@ export default function TrainingMajorPage() {
                                 title: 'Mã chuyên ngành',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
                             },
                             {
                                 title: 'Tên chuyên ngành',
@@ -340,6 +339,7 @@ export default function TrainingMajorPage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 130,
+                                fixed: 'right',
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
@@ -350,7 +350,6 @@ export default function TrainingMajorPage() {
                                     )
                                 },
                             },
-
                             {
                                 title: 'Thao tác',
                                 width: 100,
