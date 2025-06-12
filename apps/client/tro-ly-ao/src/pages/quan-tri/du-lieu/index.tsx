@@ -22,6 +22,7 @@ import {
     Popconfirm,
     Select,
     Tabs,
+    Tag,
     type TabsProps,
     message,
 } from 'antd'
@@ -132,6 +133,17 @@ function Page() {
                             </Button>
                         </div>
                         <div className="flex items-center gap-2 mb-4">
+                            <Input
+                                placeholder="Tìm theo tên tài liệu"
+                                allowClear
+                                onPressEnter={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        title: e.currentTarget.value,
+                                    }))
+                                }
+                                style={{ width: 300 }}
+                            />
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
@@ -151,11 +163,11 @@ function Page() {
                             </Button>
                             <Button
                                 className={cn(
-                                    'border rounded px-4 py-1 font-medium flex items-center gap-2',
+                                    'border rounded px-4 py-1 font-medium',
                                     filters.status ===
                                         $Enums.DocumentStatus.PENDING
-                                        ? 'bg-[#f8ba00] text-white border-[#f8ba00]'
-                                        : 'text-[#f8ba00] border-[#f8ba00]'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
                                 )}
                                 onClick={() =>
                                     setFilters((prev) => ({
@@ -165,17 +177,14 @@ function Page() {
                                 }
                             >
                                 Chờ duyệt
-                                {/* <span className="w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                                    {pendingCount}
-                                </span> */}
                             </Button>
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
                                     filters.status ===
                                         $Enums.DocumentStatus.DENY
-                                        ? 'bg-red-500 text-white border-red-500'
-                                        : 'text-red-500 border-red-500'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
                                 )}
                                 onClick={() =>
                                     setFilters((prev) => ({
@@ -186,27 +195,12 @@ function Page() {
                             >
                                 Từ chối
                             </Button>
-                            <Input
-                                placeholder="Tìm theo tên tài liệu"
-                                allowClear
-                                onPressEnter={(e) =>
-                                    setFilters((prev) => ({
-                                        ...prev,
-                                        title: e.currentTarget.value,
-                                    }))
-                                }
-                                style={{ width: 300 }}
-                            />
                         </div>
                         <Table
                             rowKey="id"
                             onRow={(item) => ({
                                 className: 'cursor-pointer hover:bg-gray-50',
-                                onClick: (e) => {
-                                    e.stopPropagation()
-                                    // setSelectedDocument(item)
-                                    openPreviewTaiLieu(item.id)
-                                },
+                                onClick: () => openPreviewTaiLieu(item.id),
                             })}
                             columns={[
                                 {
@@ -283,48 +277,31 @@ function Page() {
                                         },
                                     }),
                                     render: (value: $Enums.DocumentStatus) => {
-                                        const statusMap: Record<
-                                            $Enums.DocumentStatus,
-                                            {
-                                                label: string
-                                                textColor: string
-                                                bgColor: string
-                                                borderColor: string
-                                            }
-                                        > = {
+                                        const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
                                                 label: 'Đã duyệt',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-primary',
-                                                borderColor: 'border-primary',
+                                                color: 'green',
                                             },
                                             [$Enums.DocumentStatus.PENDING]: {
                                                 label: 'Chờ duyệt',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-[#f8ba00]',
-                                                borderColor: 'border-[#f8ba00]',
+                                                color: 'gold',
                                             },
                                             [$Enums.DocumentStatus.DENY]: {
                                                 label: 'Từ chối',
-                                                textColor: 'text-white',
-                                                bgColor: 'bg-red-500',
-                                                borderColor: 'border-red-500',
+                                                color: 'red',
                                             },
                                         }
-
                                         const status = statusMap[value] || {
                                             label: 'Không xác định',
-                                            textColor: 'text-gray-700',
-                                            bgColor: 'bg-gray-100',
-                                            borderColor: 'border-gray-300',
+                                            color: 'default',
                                         }
-
                                         return (
-                                            <div
-                                                className={`${status.textColor} ${status.bgColor} ${status.borderColor} border rounded-md px-2 py-1 w-fit`}
+                                            <Tag
+                                                color={status.color}
+                                                className="px-3 py-1 text-sm rounded"
                                             >
                                                 {status.label}
-                                            </div>
+                                            </Tag>
                                         )
                                     },
                                 },
@@ -366,21 +343,28 @@ function Page() {
                             onRow={(item) => {
                                 return {
                                     className: 'cursor-pointer',
-                                    onClick: (e) => {
-                                        e.stopPropagation()
-                                        setSelectedFAQ(item)
-                                    },
+                                    onClick: () => openPutCauHoi(item.id),
                                 }
                             }}
                             columns={[
                                 {
+                                    title: 'STT',
+                                    dataIndex: 'index',
+                                    width: 40,
+                                    align: 'center',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
                                     title: 'Câu hỏi',
                                     dataIndex: 'question',
                                     className: 'cursor-pointer',
+                                    width: 300,
                                 },
                                 {
                                     title: 'Loại câu hỏi',
                                     dataIndex: 'type',
+                                    width: 200,
+                                    align: 'center',
                                     render: (value) => {
                                         return DOCUMENT_TYPE.find(
                                             (item) => item.value === value
@@ -390,17 +374,56 @@ function Page() {
                                 {
                                     title: 'Câu trả lời',
                                     dataIndex: 'answer',
+                                    render: (value) =>
+                                        value?.length > 200
+                                            ? `${value.slice(0, 200)}...`
+                                            : value,
                                 },
                                 {
                                     title: 'Người tải lên',
                                     dataIndex: 'uploadedBy',
+                                    width: 140,
                                     render: (value) => value.name,
                                 },
                                 {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
+                                    width: 140,
                                     render: (value) =>
                                         formatDateReadable(value),
+                                },
+                                {
+                                    title: 'Trạng thái',
+                                    dataIndex: 'status',
+                                    width: 120,
+                                    render: (value: $Enums.DocumentStatus) => {
+                                        const statusMap = {
+                                            [$Enums.DocumentStatus.APPROVE]: {
+                                                label: 'Đã duyệt',
+                                                color: 'green',
+                                            },
+                                            [$Enums.DocumentStatus.PENDING]: {
+                                                label: 'Chờ duyệt',
+                                                color: 'gold',
+                                            },
+                                            [$Enums.DocumentStatus.DENY]: {
+                                                label: 'Từ chối',
+                                                color: 'red',
+                                            },
+                                        }
+                                        const status = statusMap[value] || {
+                                            label: 'Không xác định',
+                                            color: 'default',
+                                        }
+                                        return (
+                                            <Tag
+                                                color={status.color}
+                                                className="px-3 py-1 text-sm rounded"
+                                            >
+                                                {status.label}
+                                            </Tag>
+                                        )
+                                    },
                                 },
                             ]}
                             data={faqs}
@@ -412,21 +435,28 @@ function Page() {
                             onRow={(item) => {
                                 return {
                                     className: 'cursor-pointer',
-                                    onClick: (e) => {
-                                        e.stopPropagation()
-                                        setSelectedFAQ(item)
-                                    },
+                                    onClick: () => openPutCauHoi(item.id),
                                 }
                             }}
                             columns={[
                                 {
+                                    title: 'STT',
+                                    dataIndex: 'index',
+                                    width: 40,
+                                    align: 'center',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
                                     title: 'Câu hỏi',
                                     dataIndex: 'question',
                                     className: 'cursor-pointer',
+                                    width: 300,
                                 },
                                 {
                                     title: 'Loại câu hỏi',
                                     dataIndex: 'type',
+                                    width: 200,
+                                    align: 'center',
                                     render: (value) => {
                                         return DOCUMENT_TYPE.find(
                                             (item) => item.value === value
@@ -436,15 +466,21 @@ function Page() {
                                 {
                                     title: 'Câu trả lời',
                                     dataIndex: 'answer',
+                                    render: (value) =>
+                                        value?.length > 200
+                                            ? `${value.slice(0, 200)}...`
+                                            : value,
                                 },
                                 {
                                     title: 'Người tải lên',
                                     dataIndex: 'uploadedBy',
+                                    width: 140,
                                     render: (value) => value.name,
                                 },
                                 {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
+                                    width: 140,
                                     render: (value) =>
                                         formatDateReadable(value),
                                 },
@@ -452,8 +488,6 @@ function Page() {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
                                     width: 120,
-                                    className:
-                                        'text-center justify-center flex',
                                     onCell: (record) => ({
                                         onClick: (e) => {
                                             e.stopPropagation()
@@ -462,124 +496,39 @@ function Page() {
                                             )
                                         },
                                     }),
-                                    render: (value) => {
-                                        if (
-                                            value ===
-                                            $Enums.DocumentStatus.PENDING
-                                        ) {
-                                            return (
-                                                <div className="text-warning-600 bg-warning-100 rounded-md px-2 py-1 w-fit">
-                                                    Chờ duyệt
-                                                </div>
-                                            )
+                                    render: (value: $Enums.DocumentStatus) => {
+                                        const statusMap = {
+                                            [$Enums.DocumentStatus.APPROVE]: {
+                                                label: 'Đã duyệt',
+                                                color: 'green',
+                                            },
+                                            [$Enums.DocumentStatus.PENDING]: {
+                                                label: 'Chờ duyệt',
+                                                color: 'gold',
+                                            },
+                                            [$Enums.DocumentStatus.DENY]: {
+                                                label: 'Từ chối',
+                                                color: 'red',
+                                            },
                                         }
-                                        if (
-                                            value === $Enums.DocumentStatus.DENY
-                                        ) {
-                                            return (
-                                                <div className="text-danger-600 bg-danger-100 rounded-md px-2 py-1 w-fit">
-                                                    Từ chối
-                                                </div>
-                                            )
+                                        const status = statusMap[value] || {
+                                            label: 'Không xác định',
+                                            color: 'default',
                                         }
-                                        return 'Không xác định'
+                                        return (
+                                            <Tag
+                                                color={status.color}
+                                                className="px-3 py-1 text-sm rounded"
+                                            >
+                                                {status.label}
+                                            </Tag>
+                                        )
                                     },
                                 },
                             ]}
                             data={faqsPendingOrDeny}
                         />
                     </div>
-                    {!!selectedFAQ && (
-                        <div className="min-w-[460px] bg-white p-4 rounded-md shadow-md h-min-[100vh] relative">
-                            <div
-                                onClick={() => setSelectedFAQ(undefined)}
-                                className="absolute top-4 right-4 cursor-pointer"
-                            >
-                                <CloseCircleOutlined className="text-lg" />
-                            </div>
-                            <div className="flex flex-col justify-between h-full">
-                                <div className="flex flex-col gap-2">
-                                    <span className="font-semibold text-base">
-                                        Thông tin về tài liệu
-                                    </span>
-                                    <div>
-                                        <p className="font-semibold">
-                                            Loại tài liệu
-                                        </p>
-                                        <p>
-                                            {
-                                                DOCUMENT_TYPE.find(
-                                                    (item) =>
-                                                        item.value ===
-                                                        selectedFAQ.type
-                                                )?.label
-                                            }
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold">Câu hỏi</p>
-                                        <p>{selectedFAQ.question}</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold">
-                                            Câu trả lời
-                                        </p>
-                                        <p>{selectedFAQ.answer}</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold">
-                                            Ngày đăng
-                                        </p>
-                                        <p>
-                                            {formatDateReadable(
-                                                selectedFAQ.createdAt
-                                            )}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <Divider />
-                                    <div className="flex gap-2">
-                                        <Button
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                openPutCauHoi(selectedFAQ.id)
-                                            }}
-                                            className="bg-primary text-white flex-1 h-[40px]"
-                                        >
-                                            <EditIcon />
-                                            Chỉnh sửa
-                                        </Button>
-                                        <Popconfirm
-                                            placement="topLeft"
-                                            title="Xác nhận xóa dữ liệu?"
-                                            description="Dữ liệu sẽ bị xóa vĩnh viễn"
-                                            okText="Đồng ý"
-                                            cancelText="Hủy"
-                                            onConfirm={async () => {
-                                                try {
-                                                    await deleteFAQ({
-                                                        where: {
-                                                            id: selectedFAQ.id,
-                                                        },
-                                                    })
-                                                    setSelectedFAQ(undefined)
-                                                } catch (error) {
-                                                    message.error(
-                                                        'Xóa tài câu hỏi bại'
-                                                    )
-                                                }
-                                            }}
-                                        >
-                                            <Button className="w-[40px] h-[40px] p-0">
-                                                <Trash2 className="w-full h-[24px]" />
-                                            </Button>
-                                        </Popconfirm>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
             ),
         },

@@ -6,12 +6,14 @@ import { $Enums } from '@workspace/db'
 import {
     useCreateFAQ,
     useCreateManyFAQ,
+    useDeleteFAQ,
     useFindFirstFAQ,
     useFindUniqueFAQ,
     useUpdateFAQ,
     useUpdateManyFAQ,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, message } from 'antd'
+import { Col, Form, Input, Modal, message, Button, Popconfirm } from 'antd'
+import { Trash2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type FAQFormType = {
@@ -29,6 +31,7 @@ const PutCauHoi = () => {
     })
     const { mutateAsync: create } = useCreateFAQ()
     const { mutateAsync: update } = useUpdateFAQ()
+    const { mutateAsync: deleteFAQ } = useDeleteFAQ()
 
     const { data: detail } = useFindFirstFAQ({
         where: {
@@ -77,15 +80,77 @@ const PutCauHoi = () => {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
+    const handleDelete = async () => {
+        if (!id) return
+        try {
+            await deleteFAQ({ where: { id } })
+            message.success('Xoá tài liệu thành công')
+            onClose()
+        } catch (error) {
+            message.error('Xoá thất bại')
+        }
+    }
     return (
         <Modal
-            title="Thêm tài liệu"
+            title={
+                id && detail?.status === $Enums.DocumentStatus.APPROVE
+                    ? 'Chi tiết'
+                    : id
+                      ? 'Chỉnh sửa'
+                      : 'Thêm mới'
+            }
             open={isOpen}
             className={cn('min-w-[50vw]')}
-            okText="Đồng ý"
-            cancelText="Hủy"
             onCancel={onClose}
-            onOk={form.submit}
+            okText={
+                id && detail?.status === $Enums.DocumentStatus.APPROVE
+                    ? undefined
+                    : 'Đồng ý'
+            }
+            cancelText={
+                id && detail?.status === $Enums.DocumentStatus.APPROVE
+                    ? undefined
+                    : 'Hủy'
+            }
+            onOk={
+                id && detail?.status === $Enums.DocumentStatus.APPROVE
+                    ? undefined
+                    : form.submit
+            }
+            footer={
+                id ? (
+                    <div className="flex justify-between items-center">
+                        <Popconfirm
+                            title="Xác nhận xoá câu hỏi?"
+                            description="Hành động này sẽ không thể hoàn tác."
+                            okText="Đồng ý"
+                            cancelText="Hủy"
+                            onConfirm={handleDelete}
+                        >
+                            <Button
+                                //   danger
+                                type="default"
+                                className="w-[30px] h-[30px] p-0"
+                            >
+                                <Trash2 className="w-full h-[18px]" />
+                            </Button>
+                        </Popconfirm>
+                        {detail?.status === $Enums.DocumentStatus.APPROVE ? (
+                            <Button onClick={onClose}>Đóng</Button>
+                        ) : (
+                            <div className="flex gap-2">
+                                <Button onClick={onClose}>Hủy</Button>
+                                <Button
+                                    type="primary"
+                                    onClick={() => form.submit()}
+                                >
+                                    Đồng ý
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                ) : undefined
+            }
         >
             <Form
                 form={form}
