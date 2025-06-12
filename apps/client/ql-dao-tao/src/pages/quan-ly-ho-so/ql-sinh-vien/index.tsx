@@ -1,4 +1,8 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import {
+    DownloadOutlined,
+    UploadOutlined,
+    UserOutlined,
+} from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
@@ -25,6 +29,7 @@ import {
     Divider,
     Dropdown,
     Flex,
+    Image,
     Menu,
     Row,
     Tag,
@@ -44,6 +49,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/constant'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -501,6 +507,31 @@ export default function UserProfilePageDs() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
+                                title: 'Ảnh',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => {
+                                    const avatar = record.userProfile?.avatar
+
+                                    return avatar ? (
+                                        <Image
+                                            src={getMinioUrl(avatar)}
+                                            width={100}
+                                            height={80}
+                                        />
+                                    ) : (
+                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                                            <UserOutlined
+                                                style={{
+                                                    fontSize: 32,
+                                                    color: '#bfbfbf',
+                                                }}
+                                            />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 width: 120,
@@ -512,7 +543,7 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 render: (record) =>
                                     record.userProfile
-                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                             },
                             {

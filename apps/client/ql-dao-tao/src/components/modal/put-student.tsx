@@ -159,13 +159,6 @@ const PutStudentModal = () => {
             },
         })
 
-    const { data: existingStudents = [] } = useFindManyStudent({
-        select: {
-            id: true,
-            code: true,
-        },
-    })
-
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
@@ -182,7 +175,49 @@ const PutStudentModal = () => {
 
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
 
-    const { data: idCardNumberData = [] } = useFindManyUserProfile()
+    const { data: idCardNumberData = [] } = useFindManyUserProfile({
+        select: {
+            idCardNumber: true,
+            userType: true,
+            lastName: true,
+            firstName: true,
+        },
+        where: {
+            userType: {
+                in: ['CIVILIAN_STUDENT', 'MILITARY_STUDENT', 'CIVIL_STUDENT'],
+            },
+        },
+    })
+
+    //  Helper function để xác định userType dựa vào trainingObjectType
+    const getUserTypeFromTrainingObjectType = useCallback(
+        (trainingObjectTypeId: string) => {
+            const trainingObjectType = trainingObjectTypeData.find(
+                (type) => type.id === trainingObjectTypeId
+            )
+
+            if (!trainingObjectType) return 'CIVILIAN_STUDENT' // Default
+
+            //  Kiểm tra dựa vào tên hoặc code của đối tượng đào tạo
+            const typeName = trainingObjectType.name?.toLowerCase() || ''
+            const typeCode = trainingObjectType.code?.toLowerCase() || ''
+
+            // Kiểm tra xem có phải quân sự không
+            if (
+                typeName.includes('quân sự') ||
+                typeName.includes('military') ||
+                typeName.includes('học viên') ||
+                typeCode.includes('military') ||
+                typeCode.includes('qs') ||
+                typeCode.includes('hv')
+            ) {
+                return 'MILITARY_STUDENT' // Học viên quân sự
+            }
+
+            return 'CIVILIAN_STUDENT' // Sinh viên dân sự
+        },
+        [trainingObjectTypeData]
+    )
 
     const { data: studentData } = useFindUniqueStudent({
         where: { id: id || '' },
@@ -247,8 +282,13 @@ const PutStudentModal = () => {
 
     const buildUserProfileUpdateData = useCallback(
         (output: PutUserProfile, fileName?: string) => {
+            const userType = output.trainingObjectTypeId
+                ? getUserTypeFromTrainingObjectType(output.trainingObjectTypeId)
+                : 'CIVILIAN_STUDENT'
+
             return {
                 avatar: fileName || undefined,
+                userType: userType as $Enums.UserType,
                 firstName: output.firstName,
                 lastName: output.lastName,
                 dateOfBirth: output.dateOfBirth,
@@ -282,7 +322,7 @@ const PutStudentModal = () => {
                 academicRankTypeId: output.academicRankTypeId,
             }
         },
-        []
+        [getUserTypeFromTrainingObjectType]
     )
 
     const buildStudentUpdateData = useCallback((output: PutUserProfile) => {
@@ -502,31 +542,6 @@ const PutStudentModal = () => {
             form.setFieldValue('curriculumVersionId', newCurriculum)
         }
     }
-
-    const validateStudentCode = useCallback(
-        async (_: any, value: string) => {
-            if (!value) {
-                return Promise.resolve()
-            }
-
-            // Nếu đang ở chế độ update, bỏ qua validation cho chính mã đó
-            if (id && studentData?.code === value) {
-                return Promise.resolve()
-            }
-
-            // Kiểm tra mã đã tồn tại
-            const isExisting = existingStudents.some(
-                (student) => student.code === value
-            )
-
-            if (isExisting) {
-                return Promise.reject(new Error('Mã sinh viên đã tồn tại!'))
-            }
-
-            return Promise.resolve()
-        },
-        [existingStudents, id, studentData?.code]
-    )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -943,10 +958,6 @@ const PutStudentModal = () => {
                                                         required: true,
                                                         message:
                                                             'Vui lòng nhập mã sinh viên / học viên!',
-                                                    },
-                                                    {
-                                                        validator:
-                                                            validateStudentCode,
                                                     },
                                                 ]}
                                                 className="mb-0"

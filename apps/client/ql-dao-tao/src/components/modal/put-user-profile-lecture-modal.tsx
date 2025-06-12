@@ -18,8 +18,8 @@ import {
     type AcademicRankType,
     type Lecturer,
     type Prisma,
-    Organization,
-    LecturerType,
+    type Organization,
+    type LecturerType,
 } from '@workspace/db'
 import {
     useFindManyUserProfile,
@@ -37,6 +37,7 @@ import {
     useCreateLecturer,
     useFindManyLecturerType,
     useFindManyLecturer,
+    useCreateUserProfile,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -91,47 +92,6 @@ type ProfileWithRelations = UserProfile & {
         | null
 }
 
-type LecturerFormData = {
-    code: string | null
-    organizationId: string
-    lecturerTypeId: string
-    firstName: string
-    lastName: string
-    dateOfBirth: string | null
-    placeOfBirth: string | null
-    avatar: string | null
-    homeTown: string | null
-    idCardNumber: string | null
-    idCardDate: string | null
-    officerNumber: string | null
-    gender: string | null
-    permanentAddress: string | null
-    temporaryAddress: string | null
-    contactAddress: string | null
-    phoneNumber: string | null
-    email: string | null
-    familyPhone: string | null
-    familyName: string | null
-    unionDate: string | null
-    unionPlace: string | null
-    CPVJoinDate: string | null
-    officialCPVDate: string | null
-    CPVJoinPlace: string | null
-    tenureDate: string | null
-    enlistmentDate: string | null
-    dischargeDate: string | null
-    nationalityId: string | undefined
-    religionId: string | undefined
-    ethnicityId: string | undefined
-    rankId: string | undefined
-    levelId: string | undefined
-    academicDegreeTypeId: string | undefined
-    academicRankTypeId: string | undefined
-    rankDate: string | null
-    academicRankDate: string | null
-    academicDegreeDate: string | null
-}
-
 const PutUserProfileLectureModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
     const { isOpen, onClose, input } =
@@ -156,9 +116,6 @@ const PutUserProfileLectureModal = () => {
     const [idCardOptions, setIdCardOptions] = useState<
         { value: string; label: string }[]
     >([])
-    const [originalData, setOriginalData] = useState<LecturerFormData | null>(
-        null
-    )
 
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
@@ -197,13 +154,17 @@ const PutUserProfileLectureModal = () => {
         },
     })
 
-    const { data: idCardNumberData = [] } = useFindManyUserProfile()
-
-    // Validation: Kiểm tra mã giảng viên đã tồn tại
-    const { data: existingLecturers = [] } = useFindManyLecturer({
+    const { data: idCardNumberData = [] } = useFindManyUserProfile({
         select: {
-            id: true,
-            code: true,
+            idCardNumber: true,
+            userType: true,
+            lastName: true,
+            firstName: true,
+        },
+        where: {
+            userType: {
+                in: ['LECTURER'],
+            },
         },
     })
 
@@ -227,31 +188,6 @@ const PutUserProfileLectureModal = () => {
             },
         },
     })
-
-    const validateLecturerCode = useCallback(
-        async (_: unknown, value: string) => {
-            if (!value) {
-                return Promise.resolve()
-            }
-
-            // Nếu đang ở chế độ update, bỏ qua validation cho chính mã đó
-            if (id && lecturerData?.code === value) {
-                return Promise.resolve()
-            }
-
-            // Kiểm tra mã đã tồn tại
-            const isExisting = existingLecturers.some(
-                (lecturer) => lecturer.code === value
-            )
-
-            if (isExisting) {
-                return Promise.reject(new Error('Mã giảng viên đã tồn tại!'))
-            }
-
-            return Promise.resolve()
-        },
-        [existingLecturers, id, lecturerData?.code]
-    )
 
     useEffect(() => {
         if (idCardNumberData.length > 0) {
@@ -414,12 +350,110 @@ const PutUserProfileLectureModal = () => {
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
     const { mutateAsync: createLecturer } = useCreateLecturer()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const { mutateAsync: createUserProfile } = useCreateUserProfile()
 
     const buildUserProfileUpdateData = useCallback(
         (
             output: PutUserProfile,
             fileName?: string
         ): Prisma.UserProfileUpdateInput => {
+            return {
+                code: output.code,
+                avatar: fileName,
+                firstName: output.firstName,
+                lastName: output.lastName,
+                dateOfBirth: output.dateOfBirth,
+                placeOfBirth: output.placeOfBirth,
+                homeTown: output.homeTown,
+                idCardNumber: output.idCardNumber,
+                idCardDate: output.idCardDate,
+                officerNumber: output.officerNumber,
+                gender: output.gender,
+                permanentAddress: output.permanentAddress,
+                temporaryAddress: output.temporaryAddress,
+                contactAddress: output.contactAddress,
+                phoneNumber: output.phoneNumber,
+                email: output.email,
+                familyPhone: output.familyPhone,
+                familyName: output.familyName,
+                unionDate: output.unionDate,
+                unionPlace: output.unionPlace,
+                CPVJoinDate: output.CPVJoinDate,
+                officialCPVDate: output.officialCPVDate,
+                CPVJoinPlace: output.CPVJoinPlace,
+                tenureDate: output.tenureDate,
+                enlistmentDate: output.enlistmentDate,
+                dischargeDate: output.dischargeDate,
+                rankDate: output.rankDate,
+                academicRankDate: output.academicRankDate,
+                academicDegreeDate: output.academicDegreeDate,
+                userType: $Enums.UserType.LECTURER,
+                // Relations - chỉ set khi có giá trị
+                ...(output.nationalityId && {
+                    nationality: { connect: { id: output.nationalityId } },
+                }),
+                ...(output.religionId && {
+                    religion: { connect: { id: output.religionId } },
+                }),
+                ...(output.ethnicityId && {
+                    ethnicity: { connect: { id: output.ethnicityId } },
+                }),
+                ...(output.rankId && {
+                    rank: { connect: { id: output.rankId } },
+                }),
+                ...(output.levelId && {
+                    level: { connect: { id: output.levelId } },
+                }),
+                ...(output.academicDegreeTypeId && {
+                    academicDegreeType: {
+                        connect: { id: output.academicDegreeTypeId },
+                    },
+                }),
+                ...(output.academicRankTypeId && {
+                    academicRankType: {
+                        connect: { id: output.academicRankTypeId },
+                    },
+                }),
+            }
+        },
+        []
+    )
+
+    const buildLecturerUpdateData = useCallback(
+        (output: PutUserProfile): Prisma.LecturerUpdateInput => {
+            return {
+                code: output.code,
+                ...(output.organizationId && {
+                    organization: { connect: { id: output.organizationId } },
+                }),
+                ...(output.lecturerTypeId && {
+                    lecturerType: { connect: { id: output.lecturerTypeId } },
+                }),
+            }
+        },
+        []
+    )
+
+    const buildLecturerCreateData = useCallback(
+        (
+            output: PutUserProfile,
+            userProfileId: string
+        ): Prisma.LecturerCreateInput => {
+            return {
+                code: output.code,
+                userProfile: { connect: { id: userProfileId } },
+                organization: { connect: { id: output.organizationId } },
+                lecturerType: { connect: { id: output.lecturerTypeId } },
+            }
+        },
+        []
+    )
+
+    const buildUserProfileCreateData = useCallback(
+        (
+            output: PutUserProfile,
+            fileName?: string
+        ): Prisma.UserProfileCreateInput => {
             return {
                 code: output.code ?? undefined,
                 avatar: fileName ?? undefined,
@@ -451,58 +485,32 @@ const PutUserProfileLectureModal = () => {
                 academicRankDate: output.academicRankDate,
                 academicDegreeDate: output.academicDegreeDate,
                 userType: $Enums.UserType.LECTURER,
-                // Relations with proper connect/disconnect
-                nationality: output.nationalityId
-                    ? { connect: { id: output.nationalityId } }
-                    : undefined,
-                religion: output.religionId
-                    ? { connect: { id: output.religionId } }
-                    : undefined,
-                ethnicity: output.ethnicityId
-                    ? { connect: { id: output.ethnicityId } }
-                    : undefined,
-                rank: output.rankId
-                    ? { connect: { id: output.rankId } }
-                    : undefined,
-                level: output.levelId
-                    ? { connect: { id: output.levelId } }
-                    : undefined,
-                academicDegreeType: output.academicDegreeTypeId
-                    ? { connect: { id: output.academicDegreeTypeId } }
-                    : undefined,
-                academicRankType: output.academicRankTypeId
-                    ? { connect: { id: output.academicRankTypeId } }
-                    : undefined,
-            }
-        },
-        []
-    )
-
-    const buildLecturerUpdateData = useCallback(
-        (output: PutUserProfile): Prisma.LecturerUpdateInput => {
-            return {
-                code: output.code ?? undefined,
-                organization: output.organizationId
-                    ? { connect: { id: output.organizationId } }
-                    : undefined,
-                lecturerType: output.lecturerTypeId
-                    ? { connect: { id: output.lecturerTypeId } }
-                    : undefined,
-            }
-        },
-        []
-    )
-
-    const buildLecturerCreateData = useCallback(
-        (
-            output: PutUserProfile,
-            userProfileId: string
-        ): Prisma.LecturerCreateInput => {
-            return {
-                code: output.code,
-                userProfile: { connect: { id: userProfileId } },
-                organization: { connect: { id: output.organizationId } },
-                lecturerType: { connect: { id: output.lecturerTypeId } },
+                // Relations - chỉ connect khi có giá trị
+                ...(output.nationalityId && {
+                    nationality: { connect: { id: output.nationalityId } },
+                }),
+                ...(output.religionId && {
+                    religion: { connect: { id: output.religionId } },
+                }),
+                ...(output.ethnicityId && {
+                    ethnicity: { connect: { id: output.ethnicityId } },
+                }),
+                ...(output.rankId && {
+                    rank: { connect: { id: output.rankId } },
+                }),
+                ...(output.levelId && {
+                    level: { connect: { id: output.levelId } },
+                }),
+                ...(output.academicDegreeTypeId && {
+                    academicDegreeType: {
+                        connect: { id: output.academicDegreeTypeId },
+                    },
+                }),
+                ...(output.academicRankTypeId && {
+                    academicRankType: {
+                        connect: { id: output.academicRankTypeId },
+                    },
+                }),
             }
         },
         []
@@ -526,38 +534,59 @@ const PutUserProfileLectureModal = () => {
         }
         try {
             showSpinner()
-            const userProfileUpdateData = buildUserProfileUpdateData(
+
+            // Sử dụng các hàm build đã có sẵn
+            const userProfileData = buildUserProfileUpdateData(
                 output,
                 fileName ?? undefined
             )
             const lecturerUpdateData = buildLecturerUpdateData(output)
 
-            if (id) {
-                // UPDATE MODE
-                await updateLecturer({
-                    data: {
-                        ...lecturerUpdateData,
-                        userProfile: { update: userProfileUpdateData },
-                    },
-                    where: { id },
-                })
+            if (id && lecturerData) {
+                // UPDATE MODE - Cập nhật lecturer và userProfile
+                const promises = []
+
+                // Cập nhật UserProfile nếu có
+                if (lecturerData.userProfile?.id) {
+                    promises.push(
+                        updateUserProfile({
+                            data: userProfileData,
+                            where: { id: lecturerData.userProfile.id },
+                        })
+                    )
+                }
+
+                // Cập nhật Lecturer
+                promises.push(
+                    updateLecturer({
+                        data: lecturerUpdateData,
+                        where: { id },
+                    })
+                )
+
+                await Promise.all(promises)
                 message.success('Cập nhật giảng viên thành công')
             } else {
                 // CREATE MODE
                 if (foundProfile?.id) {
-                    // Existing profile
+                    // Profile đã tồn tại
                     if (foundProfile.lecturer?.id) {
-                        // Profile has lecturer -> Update existing lecturer
-                        await updateLecturer({
-                            data: {
-                                ...lecturerUpdateData,
-                                userProfile: { update: userProfileUpdateData },
-                            },
-                            where: { id: foundProfile.lecturer.id },
-                        })
+                        // Profile đã có lecturer -> Update cả 2
+                        const promises = [
+                            updateLecturer({
+                                data: lecturerUpdateData,
+                                where: { id: foundProfile.lecturer.id },
+                            }),
+                            updateUserProfile({
+                                data: userProfileData,
+                                where: { id: foundProfile.id },
+                            }),
+                        ]
+
+                        await Promise.all(promises)
                         message.success('Cập nhật giảng viên thành công')
                     } else {
-                        // Profile has no lecturer -> Create lecturer for existing profile
+                        // Profile chưa có lecturer -> Tạo lecturer mới và update profile
                         const lecturerCreateData = buildLecturerCreateData(
                             output,
                             foundProfile.id
@@ -566,7 +595,7 @@ const PutUserProfileLectureModal = () => {
                         const promises = [
                             createLecturer({ data: lecturerCreateData }),
                             updateUserProfile({
-                                data: userProfileUpdateData,
+                                data: userProfileData,
                                 where: { id: foundProfile.id },
                             }),
                         ]
@@ -575,13 +604,28 @@ const PutUserProfileLectureModal = () => {
                         message.success('Thêm giảng viên thành công')
                     }
                 } else {
-                    // Create completely new
-                    await createLecturer({
-                        data: {
-                            ...lecturerUpdateData,
-                            userProfile: { create: userProfileUpdateData },
-                        } as Prisma.LecturerCreateInput,
+                    // Tạo mới hoàn toàn - sử dụng CreateInput thay vì UpdateInput
+                    const userProfileCreateData = buildUserProfileCreateData(
+                        output,
+                        fileName ?? undefined
+                    )
+
+                    const userProfile = await createUserProfile({
+                        data: userProfileCreateData,
                     })
+
+                    if (
+                        userProfile &&
+                        output.organizationId &&
+                        output.lecturerTypeId
+                    ) {
+                        const lecturerCreateData = buildLecturerCreateData(
+                            output,
+                            userProfile.id
+                        )
+                        await createLecturer({ data: lecturerCreateData })
+                    }
+
                     message.success('Thêm mới giảng viên thành công')
                 }
             }
@@ -597,10 +641,10 @@ const PutUserProfileLectureModal = () => {
         hideSpinner()
     }
 
-    const difference = (
-        object: Record<PropertyKey, unknown>,
-        base: Record<PropertyKey, unknown>
-    ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
+    // const difference = (
+    //     object: Record<PropertyKey, unknown>,
+    //     base: Record<PropertyKey, unknown>
+    // ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
@@ -681,31 +725,8 @@ const PutUserProfileLectureModal = () => {
                     : null,
             }
 
-            // Lưu dữ liệu gốc để so sánh - convert dayjs to string for comparison
-            const originalFormData: LecturerFormData = {
-                ...formData,
-                dateOfBirth: formData.dateOfBirth?.format('YYYY-MM-DD') || null,
-                idCardDate: formData.idCardDate?.format('YYYY-MM-DD') || null,
-                unionDate: formData.unionDate?.format('YYYY-MM-DD') || null,
-                CPVJoinDate: formData.CPVJoinDate?.format('YYYY-MM-DD') || null,
-                officialCPVDate:
-                    formData.officialCPVDate?.format('YYYY-MM-DD') || null,
-                tenureDate: formData.tenureDate?.format('YYYY-MM-DD') || null,
-                enlistmentDate:
-                    formData.enlistmentDate?.format('YYYY-MM-DD') || null,
-                dischargeDate:
-                    formData.dischargeDate?.format('YYYY-MM-DD') || null,
-                rankDate: formData.rankDate?.format('YYYY-MM-DD') || null,
-                academicRankDate:
-                    formData.academicRankDate?.format('YYYY-MM-DD') || null,
-                academicDegreeDate:
-                    formData.academicDegreeDate?.format('YYYY-MM-DD') || null,
-            }
-            setOriginalData(originalFormData)
-
             form.setFieldsValue(formData)
 
-            // ✅ Set avatar nếu có
             if (userProfile.avatar) {
                 setAvatar([
                     {
@@ -859,10 +880,6 @@ const PutUserProfileLectureModal = () => {
                                                         required: true,
                                                         message:
                                                             'Vui lòng nhập mã giảng viên!',
-                                                    },
-                                                    {
-                                                        validator:
-                                                            validateLecturerCode,
                                                     },
                                                 ]}
                                                 className="mb-0"

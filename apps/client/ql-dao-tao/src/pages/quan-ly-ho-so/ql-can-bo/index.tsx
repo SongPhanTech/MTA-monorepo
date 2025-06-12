@@ -106,6 +106,9 @@ export default function StaffManagement() {
                 },
             },
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -408,7 +411,7 @@ export default function StaffManagement() {
                                 title: 'Họ và tên',
                                 render: (record) =>
                                     record.userProfile
-                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                                 align: 'center',
                                 width: 150,
