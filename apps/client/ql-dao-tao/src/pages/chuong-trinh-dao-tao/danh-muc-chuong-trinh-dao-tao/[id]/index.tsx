@@ -1,7 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import DeleteIcon from '@components/icons/delete'
 import {
-    PutSubjectListModal,
     PutTrainingBlockOnCurriculumVersion,
     PutTrainingBlockSubject,
 } from '@components/modal'
@@ -9,18 +8,15 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useUpdateTrainingCourse,
     useFindManyTrainingObjectType,
-    useFindManyTrainingBlock,
-    useCountTrainingBlock,
     useFindUniqueCurriculumVersion,
     useFindManyTrainingBlockOnCurriculumVersion,
     useCountTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
-    useUpdateSubject,
     useUpdateTrainingBlockSubject,
+    useFindManyOrganization,
 } from '@workspace/db/hooks'
-import type { ExamType, TrainingObjectType } from '@workspace/db'
+import type { ExamType } from '@workspace/db'
 import { BookPlus, Search } from 'lucide-react'
 import {
     Button,
@@ -32,6 +28,7 @@ import {
     Row,
     Tag,
     Tooltip,
+    TreeSelect,
     message,
 } from 'antd'
 import _ from 'lodash'
@@ -45,10 +42,12 @@ import { useRouter } from 'next/router'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useExamTypeOptions } from '@hooks/examType'
 import CreateIcon from '@components/icons/create'
+import { buildOrgTree } from '@lib/utils'
+import { FilterChuongTrinhDT } from '@components/filter'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
-    trainingObjectTypeId: string | undefined
+    managementOrganizationId: string | undefined
 }
 
 export default function TrainingProgramSubjects() {
@@ -58,7 +57,7 @@ export default function TrainingProgramSubjects() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined,
+        managementOrganizationId: undefined,
     })
 
     const { data: initialValue } = useFindUniqueCurriculumVersion({
@@ -77,7 +76,11 @@ export default function TrainingProgramSubjects() {
         include: {
             subjects: {
                 include: {
-                    subject: true,
+                    subject: {
+                        include: {
+                            managementOrganization: true,
+                        },
+                    },
                 },
             },
             trainingBlock: true,
@@ -94,6 +97,9 @@ export default function TrainingProgramSubjects() {
             curriculumVersionId: id as string,
         },
     })
+
+    const { data: manageOrgData = [], refetch: refetchManageOrg } =
+        useFindManyOrganization()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -176,6 +182,8 @@ export default function TrainingProgramSubjects() {
 
     console.log(processedData)
 
+    const treeData = buildOrgTree(manageOrgData)
+
     return (
         <div>
             <Divider>
@@ -215,32 +223,29 @@ export default function TrainingProgramSubjects() {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
+                                    <Form.Item name="managementOrganizationId">
+                                        <TreeSelect
+                                            placeholder="Chọn đơn vị quản lý"
+                                            allowClear
+                                            showSearch
+                                            treeDefaultExpandAll
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'managementOrganizationId',
+                                                    val
+                                                )
+                                            }
+                                            treeData={treeData}
+                                            filterTreeNode={(input, node) =>
+                                                (node.title as string)
+                                                    .toLowerCase()
+                                                    .includes(
+                                                        input.toLowerCase()
+                                                    )
+                                            }
                                             style={{
                                                 height: 40,
-                                                marginRight: 8,
                                             }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
                                         />
                                     </Form.Item>
                                 </Col>
@@ -276,39 +281,25 @@ export default function TrainingProgramSubjects() {
                         currentPage={currentPage}
                         columns={[
                             {
-                                title: 'ĐV QL',
-                                dataIndex: 'dvql',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'KTT',
-                                dataIndex: 'ktt',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Mã',
+                                title: 'Mã môn học',
                                 dataIndex: ['subject', 'code'],
-                                width: 100,
+                                width: 145,
                                 align: 'center',
                             },
                             {
-                                title: 'Mã TKB',
-                                dataIndex: 'code',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tên Môn Học',
+                                title: 'Tên môn học',
                                 dataIndex: ['subject', 'name'],
-                                width: 150,
+                                width: 200,
                                 align: 'center',
                             },
                             {
-                                title: 'Tên Viết Tắt',
-                                dataIndex: ['subject', 'shortName'],
-                                width: 150,
+                                title: 'ĐV QL',
+                                dataIndex: [
+                                    'subject',
+                                    'managementOrganization',
+                                    'name',
+                                ],
+                                width: 200,
                                 align: 'center',
                             },
                             {
@@ -323,24 +314,24 @@ export default function TrainingProgramSubjects() {
                                 width: 120,
                                 align: 'center',
                             },
-                            {
-                                title: 'Học kỳ giảng dạy',
-                                dataIndex: 'shortName',
-                                width: 140,
-                                align: 'center',
-                            },
-                            {
-                                title: 'BB/TC',
-                                dataIndex: 'shortName',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'ĐK',
-                                dataIndex: 'shortName',
-                                width: 100,
-                                align: 'center',
-                            },
+                            // {
+                            //     title: 'Học kỳ giảng dạy',
+                            //     dataIndex: 'shortName',
+                            //     width: 140,
+                            //     align: 'center',
+                            // },
+                            // {
+                            //     title: 'BB/TC',
+                            //     dataIndex: 'shortName',
+                            //     width: 100,
+                            //     align: 'center',
+                            // },
+                            // {
+                            //     title: 'ĐK',
+                            //     dataIndex: 'shortName',
+                            //     width: 100,
+                            //     align: 'center',
+                            // },
                             {
                                 title: 'Số tiết TKB',
                                 dataIndex: ['subject', 'period'],
@@ -348,53 +339,39 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết lý thuyết',
+                                title: 'LT',
                                 dataIndex: ['subject', 'numberOfTheory'],
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết thực hành',
-                                dataIndex: ['subject', 'numberOfPractice'],
-
-                                width: 100,
+                                title: 'BT',
+                                dataIndex: ['subject', 'numberOfPractical'],
+                                width: 80,
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết tự học',
+                                title: 'ThL',
                                 dataIndex: ['subject', 'numberOfSelfStudy'],
-
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                             },
                             {
-                                title: 'STTL',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
+                                title: 'TN, TH',
+                                dataIndex: ['subject', 'numberOfPractice'],
+                                width: 80,
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết bài tập lớn',
-                                dataIndex: ['subject', 'numberOfProject'],
-                                width: 100,
+                                title: 'Ôn',
+                                dataIndex: ['subject', 'numberOfReview'],
+                                width: 80,
                                 align: 'center',
                             },
                             {
-                                title: 'Hệ số học phần',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'DQ',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'TT',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
+                                title: 'KT, Thi',
+                                dataIndex: ['subject', 'numberOfExam'],
+                                width: 80,
                                 align: 'center',
                             },
                             {
@@ -404,24 +381,6 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 render: (record: ExamType) =>
                                     getExamTypeLabel(record),
-                            },
-                            {
-                                title: 'SDD',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Danh sách môn',
-                                dataIndex: 'numberOfPractice13',
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đề cương',
-                                dataIndex: 'numberOfPractice13',
-                                width: 100,
-                                align: 'center',
                             },
                             {
                                 title: 'Trạng thái',
