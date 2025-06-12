@@ -18,7 +18,11 @@ import {
     type AcademicRankType,
     type Lecturer,
     type Prisma,
-    Staff,
+    type Staff,
+    type StaffType,
+    type Organization,
+    type StaffPosition,
+    type FixedClass,
 } from '@workspace/db'
 import {
     useFindManyUserProfile,
@@ -77,6 +81,82 @@ export type PutUserProfile = UserProfile & {
 export interface PutUserProfileLectureProps {
     id: string | null
 }
+
+type ExistingProfileWithStaff = UserProfile & {
+    nationality?: Nationality | null
+    religion?: Religion | null
+    ethnicity?: Ethnicity | null
+    rank?: Rank | null
+    level?: Level | null
+    academicDegreeType?: AcademicDegreeType | null
+    academicRankType?: AcademicRankType | null
+    staff?:
+        | (Staff & {
+              organization?: Organization | null
+              staffType?: StaffType | null
+              staffPosition?: StaffPosition | null
+              fixedClass?: FixedClass[]
+              userProfile?: ProfileStaffRelation | null
+          })
+        | null
+}
+
+type ProfileStaffRelation = UserProfile & {
+    nationality?: Nationality | null
+    religion?: Religion | null
+    ethnicity?: Ethnicity | null
+    rank?: Rank | null
+    level?: Level | null
+    academicDegreeType?: AcademicDegreeType | null
+    academicRankType?: AcademicRankType | null
+}
+
+type FormData = {
+    // Staff fields
+    code?: string
+    organizationId?: string
+    staffTypeId?: string
+    staffPositionId?: string
+    fixedClassIds?: string[] // Chuyển đổi từ FixedClass[] thành string[]
+
+    // UserProfile fields
+    firstName?: string
+    lastName?: string
+    dateOfBirth?: dayjs.Dayjs | undefined
+    placeOfBirth?: string
+    avatar?: string
+    homeTown?: string
+    idCardNumber?: string
+    idCardDate?: dayjs.Dayjs | undefined
+    officerNumber?: string
+    gender?: $Enums.Gender
+    permanentAddress?: string
+    temporaryAddress?: string
+    contactAddress?: string
+    phoneNumber?: string
+    email?: string
+    familyPhone?: string
+    familyName?: string
+    unionDate?: dayjs.Dayjs | undefined
+    unionPlace?: string
+    CPVJoinDate?: dayjs.Dayjs | undefined
+    officialCPVDate?: dayjs.Dayjs | undefined
+    CPVJoinPlace?: string
+    tenureDate?: dayjs.Dayjs | undefined
+    enlistmentDate?: dayjs.Dayjs | undefined
+    dischargeDate?: dayjs.Dayjs | undefined
+    nationalityId?: string | undefined
+    religionId?: string | undefined
+    ethnicityId?: string | undefined
+    rankId?: string | undefined
+    levelId?: string | undefined
+    academicDegreeTypeId?: string | undefined
+    academicRankTypeId?: string | undefined
+    rankDate?: dayjs.Dayjs | undefined
+    academicRankDate?: dayjs.Dayjs | undefined
+    academicDegreeDate?: dayjs.Dayjs | undefined
+}
+
 const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
     const { isOpen, onClose, input } =
@@ -96,11 +176,12 @@ const PutUserProfileStaffModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const [searchIdCard, setSearchIdCard] = useState<string>('')
-    const [foundProfile, setFoundProfile] = useState<any>(null)
+    const [foundProfile, setFoundProfile] =
+        useState<ExistingProfileWithStaff | null>(null)
     const [idCardOptions, setIdCardOptions] = useState<
         { value: string; label: string }[]
     >([])
-    const [originalData, setOriginalData] = useState<any>(null)
+    const [originalData, setOriginalData] = useState<FormData | null>(null)
 
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
@@ -177,7 +258,7 @@ const PutUserProfileStaffModal = () => {
     })
 
     const validateStaffCode = useCallback(
-        async (_: any, value: string) => {
+        async (_: unknown, value: string) => {
             if (!value) {
                 return Promise.resolve()
             }
@@ -261,18 +342,7 @@ const PutUserProfileStaffModal = () => {
 
     // SỬA: Thêm fillProfileData function
     const fillProfileData = useCallback(
-        (
-            profile: UserProfile & {
-                nationality?: Nationality | null
-                religion?: Religion | null
-                ethnicity?: Ethnicity | null
-                rank?: Rank | null
-                level?: Level | null
-                academicDegreeType?: AcademicDegreeType | null
-                academicRankType?: AcademicRankType | null
-                staff?: any | null
-            }
-        ) => {
+        (profile: ExistingProfileWithStaff) => {
             form.setFieldsValue({
                 // Thông tin cơ bản từ UserProfile
                 firstName: profile.firstName,
@@ -507,24 +577,16 @@ const PutUserProfileStaffModal = () => {
             fileName = resPresignedUrl.fileName
         }
 
-        const fixedClassConnections = output.fixedClassIds?.length
-            ? {
-                  fixedClass: {
-                      set: output.fixedClassIds.map((id) => ({ id })),
-                  },
-              }
-            : {}
         try {
             showSpinner()
             if (id) {
-                // UPDATE MODE - Sử dụng 'set' cho update
                 const fixedClassConnections = output.fixedClassIds?.length
                     ? {
                           fixedClass: {
                               set: output.fixedClassIds.map((id) => ({ id })),
                           },
                       }
-                    : { fixedClass: { set: [] } } // Clear all if empty
+                    : { fixedClass: { set: [] } }
 
                 await updateStaff({
                     data: {
@@ -544,7 +606,6 @@ const PutUserProfileStaffModal = () => {
                                 connect: { id: output.staffPositionId },
                             },
                         }),
-                        // Update fixed classes với 'set'
                         ...fixedClassConnections,
                         userProfile: {
                             update: buildUserProfileUpdateData(
@@ -720,58 +781,64 @@ const PutUserProfileStaffModal = () => {
             const staff = staffData
 
             const formData = {
-                // Thông tin từ Staff
-                code: staff.code || userProfile.code,
+                code: staff.code ?? undefined,
                 organizationId: staff.organizationId,
                 staffTypeId: staff.staffTypeId,
                 staffPositionId: staff.staffPositionId,
-                // Lớp biên chế - chuyển đổi thành array IDs
                 fixedClassIds: staff.fixedClass?.map((fc) => fc.id) || [],
-
-                // Thông tin cơ bản từ UserProfile
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
+
                 dateOfBirth: userProfile.dateOfBirth
                     ? dayjs(userProfile.dateOfBirth)
-                    : null,
-                placeOfBirth: userProfile.placeOfBirth,
-                avatar: userProfile.avatar,
-                homeTown: userProfile.homeTown,
-                idCardNumber: userProfile.idCardNumber,
+                    : undefined,
+
+                placeOfBirth: userProfile.placeOfBirth ?? undefined,
+                avatar: userProfile.avatar ?? undefined,
+                homeTown: userProfile.homeTown ?? undefined,
+                idCardNumber: userProfile.idCardNumber ?? undefined,
+
                 idCardDate: userProfile.idCardDate
                     ? dayjs(userProfile.idCardDate)
-                    : null,
-                officerNumber: userProfile.officerNumber,
-                gender: userProfile.gender,
-                permanentAddress: userProfile.permanentAddress,
-                temporaryAddress: userProfile.temporaryAddress,
-                contactAddress: userProfile.contactAddress,
-                phoneNumber: userProfile.phoneNumber,
-                email: userProfile.email,
-                familyPhone: userProfile.familyPhone,
-                familyName: userProfile.familyName,
+                    : undefined,
 
-                // Thông tin Đoàn/Đảng/Nhập ngũ
+                officerNumber: userProfile.officerNumber ?? undefined,
+                gender: userProfile.gender ?? undefined,
+                permanentAddress: userProfile.permanentAddress ?? undefined,
+                temporaryAddress: userProfile.temporaryAddress ?? undefined,
+                contactAddress: userProfile.contactAddress ?? undefined,
+                phoneNumber: userProfile.phoneNumber ?? undefined,
+                email: userProfile.email ?? undefined,
+                familyPhone: userProfile.familyPhone ?? undefined,
+                familyName: userProfile.familyName ?? undefined,
+
                 unionDate: userProfile.unionDate
                     ? dayjs(userProfile.unionDate)
-                    : null,
-                unionPlace: userProfile.unionPlace,
+                    : undefined,
+
+                unionPlace: userProfile.unionPlace ?? undefined,
+
                 CPVJoinDate: userProfile.CPVJoinDate
                     ? dayjs(userProfile.CPVJoinDate)
-                    : null,
+                    : undefined,
+
                 officialCPVDate: userProfile.officialCPVDate
                     ? dayjs(userProfile.officialCPVDate)
-                    : null,
-                CPVJoinPlace: userProfile.CPVJoinPlace,
+                    : undefined,
+
+                CPVJoinPlace: userProfile.CPVJoinPlace ?? undefined,
+
                 tenureDate: userProfile.tenureDate
                     ? dayjs(userProfile.tenureDate)
-                    : null,
+                    : undefined,
+
                 enlistmentDate: userProfile.enlistmentDate
                     ? dayjs(userProfile.enlistmentDate)
-                    : null,
+                    : undefined,
+
                 dischargeDate: userProfile.dischargeDate
                     ? dayjs(userProfile.dischargeDate)
-                    : null,
+                    : undefined,
 
                 // Relations IDs
                 nationalityId: userProfile.nationality?.id,
@@ -782,19 +849,19 @@ const PutUserProfileStaffModal = () => {
                 academicDegreeTypeId: userProfile.academicDegreeType?.id,
                 academicRankTypeId: userProfile.academicRankType?.id,
 
-                // Lịch sử - Dates
                 rankDate: userProfile.rankDate
                     ? dayjs(userProfile.rankDate)
-                    : null,
+                    : undefined,
+
                 academicRankDate: userProfile.academicRankDate
                     ? dayjs(userProfile.academicRankDate)
-                    : null,
+                    : undefined,
+
                 academicDegreeDate: userProfile.academicDegreeDate
                     ? dayjs(userProfile.academicDegreeDate)
-                    : null,
+                    : undefined,
             }
 
-            // Lưu dữ liệu gốc để so sánh
             setOriginalData(formData)
             form.setFieldsValue(formData)
 

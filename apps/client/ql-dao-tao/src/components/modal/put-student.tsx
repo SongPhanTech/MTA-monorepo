@@ -245,6 +245,82 @@ const PutStudentModal = () => {
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
 
+    const buildUserProfileUpdateData = useCallback(
+        (output: PutUserProfile, fileName?: string) => {
+            return {
+                avatar: fileName || undefined,
+                firstName: output.firstName,
+                lastName: output.lastName,
+                dateOfBirth: output.dateOfBirth,
+                placeOfBirth: output.placeOfBirth,
+                homeTown: output.homeTown,
+                idCardNumber: output.idCardNumber,
+                idCardDate: output.idCardDate,
+                officerNumber: output.officerNumber,
+                gender: output.gender,
+                permanentAddress: output.permanentAddress,
+                temporaryAddress: output.temporaryAddress,
+                contactAddress: output.contactAddress,
+                phoneNumber: output.phoneNumber,
+                email: output.email,
+                nationalityId: output.nationalityId,
+                religionId: output.religionId,
+                ethnicityId: output.ethnicityId,
+                unionDate: output.unionDate,
+                unionPlace: output.unionPlace,
+                CPVJoinDate: output.CPVJoinDate,
+                officialCPVDate: output.officialCPVDate,
+                CPVJoinPlace: output.CPVJoinPlace,
+                tenureDate: output.tenureDate,
+                enlistmentDate: output.enlistmentDate,
+                dischargeDate: output.dischargeDate,
+                familyName: output.familyName,
+                familyPhone: output.familyPhone,
+                rankId: output.rankId,
+                levelId: output.levelId,
+                academicDegreeTypeId: output.academicDegreeTypeId,
+                academicRankTypeId: output.academicRankTypeId,
+            }
+        },
+        []
+    )
+
+    const buildStudentUpdateData = useCallback((output: PutUserProfile) => {
+        return {
+            code: output.code,
+            trainingObjectTypeId: output.trainingObjectTypeId,
+            fixedClassId: output.fixedClassId,
+            registrationAreaId: output.registrationAreaId,
+            curriculumVersionId: output.curriculumVersionId,
+            status: output.status,
+            ...(output.priorityObjectId && {
+                priorityObject: {
+                    set: [{ id: output.priorityObjectId }],
+                },
+            }),
+        }
+    }, [])
+
+    const buildStudentCreateData = useCallback(
+        (output: PutUserProfile, userProfileId: string) => {
+            return {
+                code: output.code,
+                userProfileId: userProfileId,
+                trainingObjectTypeId: output.trainingObjectTypeId,
+                fixedClassId: output.fixedClassId,
+                registrationAreaId: output.registrationAreaId,
+                curriculumVersionId: output.curriculumVersionId,
+                status: output.status || 'ENROLLED',
+                ...(output.priorityObjectId && {
+                    priorityObject: {
+                        connect: [{ id: output.priorityObjectId }],
+                    },
+                }),
+            }
+        },
+        []
+    )
+
     async function onOk(output?: PutUserProfile) {
         if (!output) return
         let fileName = output.avatar
@@ -264,70 +340,36 @@ const PutStudentModal = () => {
         }
         try {
             showSpinner()
+
+            const userProfileUpdateData = buildUserProfileUpdateData(
+                output,
+                fileName ?? undefined
+            )
+            const studentUpdateData = buildStudentUpdateData(output)
+
             if (id && studentData) {
-                // UPDATE MODE - existing logic
+                // UPDATE MODE
+                const promises = []
+
+                // Cập nhật UserProfile nếu có
                 if (studentData.userProfileId) {
-                    await updateUserProfile({
-                        data: {
-                            avatar: fileName || undefined,
-                            firstName: output.firstName,
-                            lastName: output.lastName,
-                            dateOfBirth: output.dateOfBirth,
-                            placeOfBirth: output.placeOfBirth,
-                            homeTown: output.homeTown,
-                            idCardNumber: output.idCardNumber,
-                            idCardDate: output.idCardDate,
-                            officerNumber: output.officerNumber,
-                            gender: output.gender,
-                            permanentAddress: output.permanentAddress,
-                            temporaryAddress: output.temporaryAddress,
-                            contactAddress: output.contactAddress,
-                            phoneNumber: output.phoneNumber,
-                            email: output.email,
-                            nationalityId: output.nationalityId,
-                            religionId: output.religionId,
-                            ethnicityId: output.ethnicityId,
-                            unionDate: output.unionDate,
-                            unionPlace: output.unionPlace,
-                            CPVJoinDate: output.CPVJoinDate,
-                            officialCPVDate: output.officialCPVDate,
-                            CPVJoinPlace: output.CPVJoinPlace,
-                            tenureDate: output.tenureDate,
-                            enlistmentDate: output.enlistmentDate,
-                            dischargeDate: output.dischargeDate,
-                            familyName: output.familyName,
-                            familyPhone: output.familyPhone,
-                            rankId: output.rankId,
-                            levelId: output.levelId,
-                            academicDegreeTypeId: output.academicDegreeTypeId,
-                            academicRankTypeId: output.academicRankTypeId,
-                        },
-                        where: {
-                            id: studentData.userProfileId,
-                        },
-                    })
+                    promises.push(
+                        updateUserProfile({
+                            data: userProfileUpdateData,
+                            where: { id: studentData.userProfileId },
+                        })
+                    )
                 }
 
                 // Cập nhật Student
-                await updateStudent({
-                    data: {
-                        code: output.code,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        fixedClassId: output.fixedClassId,
-                        registrationAreaId: output.registrationAreaId,
-                        curriculumVersionId: output.curriculumVersionId,
-                        status: output.status,
-                        ...(output.priorityObjectId && {
-                            priorityObject: {
-                                set: [{ id: output.priorityObjectId }],
-                            },
-                        }),
-                    },
-                    where: {
-                        id,
-                    },
-                })
+                promises.push(
+                    updateStudent({
+                        data: studentUpdateData,
+                        where: { id },
+                    })
+                )
 
+                await Promise.all(promises)
                 message.success('Cập nhật sinh viên thành công')
             } else {
                 // CREATE MODE
@@ -335,189 +377,51 @@ const PutStudentModal = () => {
                     // Có profile existing
                     if (foundProfile.educationAndTraining.length > 0) {
                         // Profile đã có student -> Update existing student
-                        await updateStudent({
-                            data: {
-                                code: output.code,
-                                trainingObjectTypeId:
-                                    output.trainingObjectTypeId,
-                                fixedClassId: output.fixedClassId,
-                                registrationAreaId: output.registrationAreaId,
-                                curriculumVersionId: output.curriculumVersionId,
-                                status: output.status,
-                                ...(output.priorityObjectId && {
-                                    priorityObject: {
-                                        set: [{ id: output.priorityObjectId }],
-                                    },
-                                }),
-                            },
-                            where: {
-                                id: foundProfile.educationAndTraining[0].id,
-                            },
-                        })
+                        const promises = [
+                            updateStudent({
+                                data: studentUpdateData,
+                                where: {
+                                    id: foundProfile.educationAndTraining[0].id,
+                                },
+                            }),
+                            updateUserProfile({
+                                data: userProfileUpdateData,
+                                where: { id: foundProfile.id },
+                            }),
+                        ]
 
-                        // Update profile với thông tin mới
-                        await updateUserProfile({
-                            data: {
-                                avatar: fileName || undefined,
-                                firstName: output.firstName,
-                                lastName: output.lastName,
-                                dateOfBirth: output.dateOfBirth,
-                                placeOfBirth: output.placeOfBirth,
-                                homeTown: output.homeTown,
-                                idCardNumber: output.idCardNumber,
-                                idCardDate: output.idCardDate,
-                                officerNumber: output.officerNumber,
-                                gender: output.gender,
-                                permanentAddress: output.permanentAddress,
-                                temporaryAddress: output.temporaryAddress,
-                                contactAddress: output.contactAddress,
-                                phoneNumber: output.phoneNumber,
-                                email: output.email,
-                                nationalityId: output.nationalityId,
-                                religionId: output.religionId,
-                                ethnicityId: output.ethnicityId,
-                                unionDate: output.unionDate,
-                                unionPlace: output.unionPlace,
-                                CPVJoinDate: output.CPVJoinDate,
-                                officialCPVDate: output.officialCPVDate,
-                                CPVJoinPlace: output.CPVJoinPlace,
-                                tenureDate: output.tenureDate,
-                                enlistmentDate: output.enlistmentDate,
-                                dischargeDate: output.dischargeDate,
-                                familyName: output.familyName,
-                                familyPhone: output.familyPhone,
-                                rankId: output.rankId,
-                                levelId: output.levelId,
-                                academicDegreeTypeId:
-                                    output.academicDegreeTypeId,
-                                academicRankTypeId: output.academicRankTypeId,
-                            },
-                            where: { id: foundProfile.id },
-                        })
-
+                        await Promise.all(promises)
                         message.success('Cập nhật sinh viên thành công')
                     } else {
                         // Profile chưa có student -> Tạo student mới cho profile existing
-                        await createStudent({
-                            data: {
-                                code: output.code,
-                                userProfileId: foundProfile.id,
-                                trainingObjectTypeId:
-                                    output.trainingObjectTypeId,
-                                fixedClassId: output.fixedClassId,
-                                registrationAreaId: output.registrationAreaId,
-                                curriculumVersionId: output.curriculumVersionId,
-                                status: output.status || 'ENROLLED',
-                                ...(output.priorityObjectId && {
-                                    priorityObject: {
-                                        connect: [
-                                            { id: output.priorityObjectId },
-                                        ],
-                                    },
-                                }),
-                            },
-                        })
+                        const studentCreateData = buildStudentCreateData(
+                            output,
+                            foundProfile.id
+                        )
 
-                        // Update profile với thông tin mới
-                        await updateUserProfile({
-                            data: {
-                                avatar: fileName || undefined,
-                                firstName: output.firstName,
-                                lastName: output.lastName,
-                                dateOfBirth: output.dateOfBirth,
-                                placeOfBirth: output.placeOfBirth,
-                                homeTown: output.homeTown,
-                                idCardNumber: output.idCardNumber,
-                                idCardDate: output.idCardDate,
-                                officerNumber: output.officerNumber,
-                                gender: output.gender,
-                                permanentAddress: output.permanentAddress,
-                                temporaryAddress: output.temporaryAddress,
-                                contactAddress: output.contactAddress,
-                                phoneNumber: output.phoneNumber,
-                                email: output.email,
-                                nationalityId: output.nationalityId,
-                                religionId: output.religionId,
-                                ethnicityId: output.ethnicityId,
-                                unionDate: output.unionDate,
-                                unionPlace: output.unionPlace,
-                                CPVJoinDate: output.CPVJoinDate,
-                                officialCPVDate: output.officialCPVDate,
-                                CPVJoinPlace: output.CPVJoinPlace,
-                                tenureDate: output.tenureDate,
-                                enlistmentDate: output.enlistmentDate,
-                                dischargeDate: output.dischargeDate,
-                                familyName: output.familyName,
-                                familyPhone: output.familyPhone,
-                                rankId: output.rankId,
-                                levelId: output.levelId,
-                                academicDegreeTypeId:
-                                    output.academicDegreeTypeId,
-                                academicRankTypeId: output.academicRankTypeId,
-                            },
-                            where: { id: foundProfile.id },
-                        })
+                        const promises = [
+                            createStudent({ data: studentCreateData }),
+                            updateUserProfile({
+                                data: userProfileUpdateData,
+                                where: { id: foundProfile.id },
+                            }),
+                        ]
 
+                        await Promise.all(promises)
                         message.success('Thêm sinh viên thành công')
                     }
                 } else {
-                    // Tạo mới hoàn toàn - existing logic
+                    // Tạo mới hoàn toàn
                     const userProfile = await createUserProfile({
-                        data: {
-                            avatar: fileName || undefined,
-                            firstName: output.firstName,
-                            lastName: output.lastName,
-                            dateOfBirth: output.dateOfBirth,
-                            placeOfBirth: output.placeOfBirth,
-                            homeTown: output.homeTown,
-                            idCardNumber: output.idCardNumber,
-                            idCardDate: output.idCardDate,
-                            officerNumber: output.officerNumber,
-                            gender: output.gender,
-                            permanentAddress: output.permanentAddress,
-                            temporaryAddress: output.temporaryAddress,
-                            contactAddress: output.contactAddress,
-                            phoneNumber: output.phoneNumber,
-                            email: output.email,
-                            nationalityId: output.nationalityId,
-                            religionId: output.religionId,
-                            ethnicityId: output.ethnicityId,
-                            unionDate: output.unionDate,
-                            unionPlace: output.unionPlace,
-                            CPVJoinDate: output.CPVJoinDate,
-                            officialCPVDate: output.officialCPVDate,
-                            CPVJoinPlace: output.CPVJoinPlace,
-                            tenureDate: output.tenureDate,
-                            enlistmentDate: output.enlistmentDate,
-                            dischargeDate: output.dischargeDate,
-                            familyName: output.familyName,
-                            familyPhone: output.familyPhone,
-                            rankId: output.rankId,
-                            levelId: output.levelId,
-                            academicDegreeTypeId: output.academicDegreeTypeId,
-                            academicRankTypeId: output.academicRankTypeId,
-                        },
+                        data: userProfileUpdateData,
                     })
+
                     if (userProfile) {
-                        await createStudent({
-                            data: {
-                                code: output.code,
-                                userProfileId: userProfile.id,
-                                trainingObjectTypeId:
-                                    output.trainingObjectTypeId,
-                                fixedClassId: output.fixedClassId,
-                                registrationAreaId: output.registrationAreaId,
-                                curriculumVersionId: output.curriculumVersionId,
-                                status: output.status || 'ENROLLED',
-                                ...(output.priorityObjectId && {
-                                    priorityObject: {
-                                        connect: [
-                                            { id: output.priorityObjectId },
-                                        ],
-                                    },
-                                }),
-                            },
-                        })
+                        const studentCreateData = buildStudentCreateData(
+                            output,
+                            userProfile.id
+                        )
+                        await createStudent({ data: studentCreateData })
                     }
 
                     message.success('Thêm sinh viên thành công')
