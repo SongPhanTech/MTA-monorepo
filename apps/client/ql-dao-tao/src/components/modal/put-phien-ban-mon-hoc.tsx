@@ -11,7 +11,17 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Switch, TreeSelect, Upload, type UploadProps, message } from 'antd'
+import {
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    Switch,
+    TreeSelect,
+    Upload,
+    type UploadProps,
+    message,
+} from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -22,33 +32,32 @@ import { InboxOutlined } from '@ant-design/icons'
 import Tabs from '@components/commons/tabar'
 dayjs.locale('vi')
 
-const { Dragger } = Upload;
+const { Dragger } = Upload
 
 const PutVersionSubjectModal = () => {
     const [form] = Form.useForm<PutSubjectVersion>()
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<{subjectId: string; subjectVersionId?: string}>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+    }>({
         tag: PutVersionSubjectModal.name,
         onClose: form.resetFields,
     })
 
-    const subjectId = input?.subjectId;
-    const subjectVersionId = input?.subjectVersionId;
+    const subjectId = input?.subjectId
+    const subjectVersionId = input?.subjectVersionId
 
     const { data: subjectVersion } = useFindUniqueSubjectVersion({
         where: { id: subjectVersionId },
     })
 
-    const [ active, setActive ] = useState(true)
+    const [active, setActive] = useState(true)
     const { showSpinner, hideSpinner } = useSpinner()
-    
-    const { options } = useExamTypeOptions();
+
+    const { options } = useExamTypeOptions()
 
     const { data: subject } = useFindUniqueSubject(
-        { where: { id: subjectId }},
+        { where: { id: subjectId } },
         { enabled: !!subjectId }
     )
 
@@ -57,21 +66,23 @@ const PutVersionSubjectModal = () => {
             subjectVersion: {
                 where: {
                     id: {
-                        not: subjectVersionId
-                    }
-                }
-            }
+                        not: subjectVersionId,
+                    },
+                },
+            },
         },
     })
 
-    const treeData = subjectData.map(subject => ({
-        title: subject.name,
-        value: subject.id,
-        children: subject.subjectVersion.map(version => ({
-            title: version.name,
-            value: version.id,
-        })) || [],
-    })) || [];
+    const treeData =
+        subjectData.map((subject) => ({
+            title: subject.name,
+            value: subject.id,
+            children:
+                subject.subjectVersion.map((version) => ({
+                    title: version.name,
+                    value: version.id,
+                })) || [],
+        })) || []
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
@@ -96,8 +107,10 @@ const PutVersionSubjectModal = () => {
                 numberOfReview: output.numberOfReview,
                 credit: output.credit,
                 period: output.period,
-                managementOrganizationId: subject ? subject.managementOrganizationId : "",
-                subjectId: subjectId ? subjectId : "",
+                managementOrganizationId: subject
+                    ? subject.managementOrganizationId
+                    : '',
+                subjectId: subjectId ? subjectId : '',
                 objectives: output.objectives,
                 learningOutcome: output.learningOutcome,
                 structure: output.structure,
@@ -134,7 +147,7 @@ const PutVersionSubjectModal = () => {
             form.setFieldsValue({
                 ...subjectVersion,
             })
-            setActive(subjectVersion.active);
+            setActive(subjectVersion.active)
         }
     }, [subjectVersion, form])
 
@@ -142,25 +155,25 @@ const PutVersionSubjectModal = () => {
         name: 'file',
         multiple: true,
         onChange(info) {
-            const { status } = info.file;
+            const { status } = info.file
             if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
+                console.log(info.file, info.fileList)
             }
             if (status === 'done') {
-            message.success(`${info.file.name} uploaded successfully.`);
+                message.success(`${info.file.name} uploaded successfully.`)
             } else if (status === 'error') {
-            message.error(`${info.file.name} upload failed.`);
+                message.error(`${info.file.name} upload failed.`)
             }
         },
         onDrop(e) {
-            console.log('Dropped files', e.dataTransfer.files);
+            console.log('Dropped files', e.dataTransfer.files)
         },
-    };
+    }
 
     const handleChange = (checked: boolean) => {
-        setActive(checked);
-        form.setFieldsValue({ active: checked });
-    };
+        setActive(checked)
+        form.setFieldsValue({ active: checked })
+    }
 
     return (
         <PutFormModal
@@ -169,7 +182,11 @@ const PutVersionSubjectModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={subjectVersionId ? `Sửa phiên bản môn học - ${subject?.name}` : `Thêm phiên bản môn học - ${subject?.name}`}
+            title={
+                subjectVersionId
+                    ? `Sửa phiên bản môn học - ${subject?.name}`
+                    : `Thêm phiên bản môn học - ${subject?.name}`
+            }
             className="w-[60vw]"
         >
             <Col span={12}>
@@ -178,7 +195,12 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="examType" label="Hình thức thi" required>
+                <FormItem
+                    form={form}
+                    name="examType"
+                    label="Hình thức thi"
+                    required
+                >
                     <Select
                         placeholder="Chọn hình thức thi"
                         options={options?.map((item) => ({
@@ -220,7 +242,9 @@ const PutVersionSubjectModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                         }
                     />
                 </Form.Item>
@@ -235,7 +259,9 @@ const PutVersionSubjectModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.title as string)
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                         }
                     />
                 </Form.Item>
@@ -246,16 +272,20 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="period" label="Số tiết" required >
-                    <InputNumber
-                        placeholder="Số tiết"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="period" label="Số tiết" required>
+                    <InputNumber placeholder="Số tiết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết" >
-                    <InputNumber placeholder="Số tiết lý thuyết" className="w-full" />
+                <FormItem
+                    form={form}
+                    name="numberOfTheory"
+                    label="Số tiết lý thuyết"
+                >
+                    <InputNumber
+                        placeholder="Số tiết lý thuyết"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -318,15 +348,21 @@ const PutVersionSubjectModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12} className='flex items-center'>
+            <Col span={12} className="flex items-center">
                 <FormItem
                     form={form}
                     name="active"
                     label=""
                     valuePropName="checked"
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Switch checked={active} onChange={handleChange}/>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+                        <Switch checked={active} onChange={handleChange} />
                         <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
                     </div>
                 </FormItem>
@@ -337,8 +373,12 @@ const PutVersionSubjectModal = () => {
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
-                        <p className="ant-upload-text">Chọn tệp hoặc kéo và thả tệp vào đây</p>
-                        <p className="ant-upload-hint">Định dạng XLSX, XLS (tối đa 5MB)</p>
+                        <p className="ant-upload-text">
+                            Chọn tệp hoặc kéo và thả tệp vào đây
+                        </p>
+                        <p className="ant-upload-hint">
+                            Định dạng XLSX, XLS (tối đa 5MB)
+                        </p>
                     </Dragger>
                 </FormItem>
             </Col>
@@ -348,11 +388,11 @@ const PutVersionSubjectModal = () => {
                         key: '1',
                         label: 'Mục tiêu',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="objectives"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập mục tiêu" />
+                            <FormItem form={form} name="objectives">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập mục tiêu"
+                                />
                             </FormItem>
                         ),
                     },
@@ -360,11 +400,11 @@ const PutVersionSubjectModal = () => {
                         key: '2',
                         label: 'Chuẩn đầu ra',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="learningOutcome"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập chuẩn đầu ra" />
+                            <FormItem form={form} name="learningOutcome">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập chuẩn đầu ra"
+                                />
                             </FormItem>
                         ),
                     },
@@ -372,11 +412,11 @@ const PutVersionSubjectModal = () => {
                         key: '3',
                         label: 'Cấu trúc chương trình đào',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="structure"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập cấu trúc chương trình đào" />
+                            <FormItem form={form} name="structure">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập cấu trúc chương trình đào"
+                                />
                             </FormItem>
                         ),
                     },
@@ -384,11 +424,11 @@ const PutVersionSubjectModal = () => {
                         key: '4',
                         label: 'Kế hoạch và phương pháp dạy học',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="guild"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập kế hoạch và phương pháp dạy học" />
+                            <FormItem form={form} name="guild">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập kế hoạch và phương pháp dạy học"
+                                />
                             </FormItem>
                         ),
                     },
@@ -396,11 +436,11 @@ const PutVersionSubjectModal = () => {
                         key: '5',
                         label: 'Đánh giá kết quả học tập',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="academicResults"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập đánh giá kết quả học tập" />
+                            <FormItem form={form} name="academicResults">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập đánh giá kết quả học tập"
+                                />
                             </FormItem>
                         ),
                     },
@@ -408,11 +448,11 @@ const PutVersionSubjectModal = () => {
                         key: '6',
                         label: 'Cơ sở vật chất, học liệu',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="materials"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập cơ sở vật chất, học liệu" />
+                            <FormItem form={form} name="materials">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập cơ sở vật chất, học liệu"
+                                />
                             </FormItem>
                         ),
                     },
@@ -420,11 +460,11 @@ const PutVersionSubjectModal = () => {
                         key: '7',
                         label: 'Quy định của học phần',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="rules"
-                            >
-                                <Input.TextArea rows={6} placeholder="Nhập quy định của học phần" />
+                            <FormItem form={form} name="rules">
+                                <Input.TextArea
+                                    rows={6}
+                                    placeholder="Nhập quy định của học phần"
+                                />
                             </FormItem>
                         ),
                     },

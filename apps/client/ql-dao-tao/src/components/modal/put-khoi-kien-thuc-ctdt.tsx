@@ -27,7 +27,7 @@ const PutTrainingBlock = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const [ active, setActive ] = useState(true)
+    const [active, setActive] = useState(true)
 
     const { data: trainingBlock } = useFindUniqueTrainingBlock(
         { where: { id } },
@@ -81,10 +81,10 @@ const PutTrainingBlock = () => {
         hideSpinner()
     }
 
-        const handleChange = (checked: boolean) => {
-        setActive(checked);
-        form.setFieldsValue({ active: checked });
-    };
+    const handleChange = (checked: boolean) => {
+        setActive(checked)
+        form.setFieldsValue({ active: checked })
+    }
 
     return (
         <PutFormModal
@@ -161,15 +161,21 @@ const PutTrainingBlock = () => {
                     <InputNumber placeholder="Thứ tự" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={12} className='flex items-center'>
+            <Col span={12} className="flex items-center">
                 <FormItem
                     form={form}
                     name="active"
                     label=""
                     valuePropName="checked"
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Switch checked={active} onChange={handleChange}/>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+                        <Switch checked={active} onChange={handleChange} />
                         <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
                     </div>
                 </FormItem>

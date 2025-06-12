@@ -32,19 +32,21 @@ const PutSubjectListModal = () => {
 
     const { data: organizationTypes = [] } = useFindManyOrganizationType({
         include: {
-            organizations: true
-        }}
-    )
+            organizations: true,
+        },
+    })
 
-    const treeData = organizationTypes.map(organizationType => ({
-        title: organizationType.name,
-        value: organizationType.id,
-        disabled: true,
-        children: organizationType.organizations.map(organization => ({
-            title: organization.name,
-            value: organization.id,
-        })) || [],
-    })) || [];
+    const treeData =
+        organizationTypes.map((organizationType) => ({
+            title: organizationType.name,
+            value: organizationType.id,
+            disabled: true,
+            children:
+                organizationType.organizations.map((organization) => ({
+                    title: organization.name,
+                    value: organization.id,
+                })) || [],
+        })) || []
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
@@ -148,11 +150,13 @@ const PutSubjectListModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) => {
-                            const isLeaf = !node.children;
+                            const isLeaf = !node.children
                             return (
-                            isLeaf &&
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
-                            );
+                                isLeaf &&
+                                (node.title as string)
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                            )
                         }}
                     />
                 </Form.Item>

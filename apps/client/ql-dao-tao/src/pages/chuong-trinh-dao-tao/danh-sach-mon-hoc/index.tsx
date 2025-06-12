@@ -40,7 +40,7 @@ export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        managementOrganizationId: ''
+        managementOrganizationId: '',
     })
     const { getExamTypeLabel } = useExamTypeOptions()
 
@@ -72,9 +72,9 @@ export default function SubjectList() {
     })
 
     const { onOpen: onOpenSubjectVersion } = useDisclosure<{
-        subjectId: string;
-        subjectVersionId?: string}
-    >({
+        subjectId: string
+        subjectVersionId?: string
+    }>({
         tag: PutVersionSubjectModal.name,
     })
 
@@ -84,7 +84,10 @@ export default function SubjectList() {
         onOpen()
     }
 
-    const handleModalSubjectVersion = (subjectId: string, subjectVersionId: string) => {
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string
+    ) => {
         onOpenSubjectVersion({ subjectId, subjectVersionId })
     }
 
@@ -315,42 +318,59 @@ export default function SubjectList() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, record ) =>{
-                                    const { id: subjectVersionId, subjectId } = record;
+                                render: (_, record) => {
+                                    const { id: subjectVersionId, subjectId } =
+                                        record
                                     return subjectVersionId ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
                                                 onClick={() =>
-                                                    onOpenSubjectVersion({ subjectId, subjectVersionId })
+                                                    onOpenSubjectVersion({
+                                                        subjectId,
+                                                        subjectVersionId,
+                                                    })
                                                 }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
                                                 popConfirm={{
-                                                    onConfirm: () => handleDelete(subjectVersionId),
+                                                    onConfirm: () =>
+                                                        handleDelete(
+                                                            subjectVersionId
+                                                        ),
                                                 }}
                                             />
                                         </Row>
-                                    ) : null;
+                                    ) : null
                                 },
                             },
                         ]}
                         headerRight={({ id: subjectId }) => (
-                            <Flex gap={8} align='center'>
-                                <Tooltip title="Thêm mới phiên bản môn học" placement="bottomLeft">
-                                    <BookPlus 
-                                        onClick={() => handleModalSubjectVersion(subjectId, "")}
-                                        className='cursor-pointer'
+                            <Flex gap={8} align="center">
+                                <Tooltip
+                                    title="Thêm mới phiên bản môn học"
+                                    placement="bottomLeft"
+                                >
+                                    <BookPlus
+                                        onClick={() =>
+                                            handleModalSubjectVersion(
+                                                subjectId,
+                                                ''
+                                            )
+                                        }
+                                        className="cursor-pointer"
                                     />
                                 </Tooltip>
-                                <EditIcon  
-                                    onClick={onOpen.bind(null, subjectId)} 
-                                    className="text-sm text-blue-700 cursor-pointer" 
+                                <EditIcon
+                                    onClick={onOpen.bind(null, subjectId)}
+                                    className="text-sm text-blue-700 cursor-pointer"
                                 />
-                                <DeleteIcon  
+                                <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () => handleDeleteSubject(subjectId),
-                                }} />
+                                        onConfirm: () =>
+                                            handleDeleteSubject(subjectId),
+                                    }}
+                                />
                             </Flex>
                         )}
                         data={processedData}
