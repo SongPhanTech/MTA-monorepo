@@ -60,7 +60,7 @@ const PutTrainingFieldModal = () => {
                 await updateTrainingField({
                     data: {
                         ...rest,
-                            trainingObjectTypes: {
+                        trainingObjectTypes: {
                             createMany: {
                                 data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({
@@ -86,7 +86,7 @@ const PutTrainingFieldModal = () => {
                 await createTrainingField({
                     data: {
                         ...rest,
-                           trainingObjectTypes: {
+                        trainingObjectTypes: {
                             createMany: {
                                 data: trainingObjectTypeIds.map(
                                     (trainingObjectTypeId) => ({

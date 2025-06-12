@@ -1,4 +1,3 @@
-import { CloseCircleOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import { PheDuyetTaiLieu, PreviewTaiLieu, PutCauHoi } from '@components/modal'
@@ -6,27 +5,15 @@ import PheDuyetCauHoiThuongGap from '@components/modal/phe-duyet-cau-hoi-thuong-
 import ThemTaiLieu from '@components/modal/them-tai-lieu'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import { formatDateReadable, formatNiceBytes, cn } from '@lib/utils'
+import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
     useCountDocument,
-    useDeleteFAQ,
+    useCountFAQ,
     useFindManyDocument,
     useFindManyFAQ,
-    useUpdateDocument,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Divider,
-    Input,
-    Popconfirm,
-    Select,
-    Tabs,
-    Tag,
-    type TabsProps,
-    message,
-} from 'antd'
-import { EditIcon, Trash2 } from 'lucide-react'
+import { Button, Input, Tabs, type TabsProps, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -40,6 +27,17 @@ function Page() {
     })
     const [tableParams, setTableParams] = useState({
         pagination: { current: 1, pageSize: 10, total: 10 },
+    })
+    // FAQ pagination/filter states
+    const [faqParams, setFaqParams] = useState({
+        pagination: { current: 1, pageSize: 10, total: 10 },
+    })
+    const [faqFilter, setFaqFilter] = useState<{
+        question: string
+        status: $Enums.DocumentStatus
+    }>({
+        question: '',
+        status: $Enums.DocumentStatus.APPROVE,
     })
     const { onOpen: openAddTaiLieu } = useDisclosure({
         tag: ThemTaiLieu.name,
@@ -61,8 +59,8 @@ function Page() {
         tag: PreviewTaiLieu.name,
     })
     const { data: totalCountDocument = 0 } = useCountDocument()
-    // Đếm số tài liệu chờ duyệt
-    const { data: pendingCount = 0 } = useCountDocument({
+    // Count pending documents
+    const { data: totalPendingDocument = 0 } = useCountDocument({
         where: { status: $Enums.DocumentStatus.PENDING },
     })
     const { data: documents = [] } = useFindManyDocument({
@@ -90,30 +88,33 @@ function Page() {
             },
         }))
     }, [totalCountDocument])
-
-    const { data: faqs = [] } = useFindManyFAQ({
-        include: {
-            uploadedBy: true,
-        },
-        where: {
-            status: $Enums.DocumentStatus.APPROVE,
-        },
+    const { data: totalCountFAQ = 0 } = useCountFAQ()
+    // Count pending FAQs
+    const { data: totalPendingFAQ = 0 } = useCountFAQ({
+        where: { status: $Enums.DocumentStatus.PENDING },
     })
-
-    const [selectedFAQ, setSelectedFAQ] = useState<(typeof faqs)[0]>()
-
-    const { data: faqsPendingOrDeny = [] } = useFindManyFAQ({
-        include: {
-            uploadedBy: true,
-        },
+    const { data: faqs = [] } = useFindManyFAQ({
+        include: { uploadedBy: true },
         where: {
-            status: {
-                in: [$Enums.DocumentStatus.PENDING, $Enums.DocumentStatus.DENY],
+            status: faqFilter.status,
+            question: {
+                contains: faqFilter.question,
+                mode: 'insensitive',
             },
         },
+        skip:
+            (faqParams.pagination.current - 1) * faqParams.pagination.pageSize,
+        take: faqParams.pagination.pageSize,
     })
-
-    const { mutateAsync: deleteFAQ } = useDeleteFAQ()
+    useEffect(() => {
+        setFaqParams((prev) => ({
+            ...prev,
+            pagination: {
+                ...prev.pagination,
+                total: totalCountFAQ,
+            },
+        }))
+    }, [totalCountFAQ])
 
     const items: TabsProps['items'] = [
         {
@@ -176,7 +177,7 @@ function Page() {
                                     }))
                                 }
                             >
-                                Chờ duyệt
+                                Chờ duyệt ({totalPendingDocument})
                             </Button>
                             <Button
                                 className={cn(
@@ -307,7 +308,10 @@ function Page() {
                                 },
                             ]}
                             data={documents || []}
-                            pagination={tableParams.pagination}
+                            pagination={{
+                                ...tableParams.pagination,
+                                total: totalCountDocument,
+                            }}
                             onChange={(pagination) =>
                                 setTableParams({
                                     pagination: {
@@ -326,17 +330,83 @@ function Page() {
             key: '2',
             label: 'Câu hỏi thường gặp',
             children: (
-                <div className="flex gap-1">
-                    <div className="bg-white p-4 rounded-md shadow-md flex-1">
-                        <div className="flex items-center justify-between">
-                            <span className="text-xl font-semibold text-gray-700">
-                                Câu hỏi thường gặp
-                            </span>
+                <div className="flex gap-1 h-full overflow-hidden">
+                    <div className="flex-1 overflow-auto pr-2">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-4">
+                                <span className="text-xl font-semibold text-gray-700">
+                                    Câu hỏi thường gặp
+                                </span>
+                            </div>
                             <Button
                                 onClick={() => openPutCauHoi()}
                                 type="primary"
                             >
                                 Thêm câu hỏi
+                            </Button>
+                        </div>
+                        <div className="flex items-center gap-2 mb-4">
+                            <Input
+                                placeholder="Tìm theo nội dung câu hỏi"
+                                allowClear
+                                onPressEnter={(e) =>
+                                    setFaqFilter((prev) => ({
+                                        ...prev,
+                                        question: e.currentTarget.value,
+                                    }))
+                                }
+                                style={{ width: 300 }}
+                            />
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium',
+                                    faqFilter.status ===
+                                        $Enums.DocumentStatus.APPROVE
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
+                                )}
+                                onClick={() =>
+                                    setFaqFilter((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.APPROVE,
+                                    }))
+                                }
+                            >
+                                Đã duyệt
+                            </Button>
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium',
+                                    faqFilter.status ===
+                                        $Enums.DocumentStatus.PENDING
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
+                                )}
+                                onClick={() =>
+                                    setFaqFilter((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.PENDING,
+                                    }))
+                                }
+                            >
+                                Chờ duyệt ({totalPendingFAQ})
+                            </Button>
+                            <Button
+                                className={cn(
+                                    'border rounded px-4 py-1 font-medium',
+                                    faqFilter.status ===
+                                        $Enums.DocumentStatus.DENY
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'text-primary border-primary'
+                                )}
+                                onClick={() =>
+                                    setFaqFilter((prev) => ({
+                                        ...prev,
+                                        status: $Enums.DocumentStatus.DENY,
+                                    }))
+                                }
+                            >
+                                Từ chối
                             </Button>
                         </div>
                         <Table
@@ -352,7 +422,11 @@ function Page() {
                                     dataIndex: 'index',
                                     width: 40,
                                     align: 'center',
-                                    render: (_, __, index) => index + 1,
+                                    render: (_, __, index) =>
+                                        (faqParams.pagination.current - 1) *
+                                            faqParams.pagination.pageSize +
+                                        index +
+                                        1,
                                 },
                                 {
                                     title: 'Câu hỏi',
@@ -388,102 +462,22 @@ function Page() {
                                 {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
-                                    width: 140,
+                                    width: 180,
                                     render: (value) =>
                                         formatDateReadable(value),
                                 },
-                                {
-                                    title: 'Trạng thái',
-                                    dataIndex: 'status',
-                                    width: 120,
-                                    render: (value: $Enums.DocumentStatus) => {
-                                        const statusMap = {
-                                            [$Enums.DocumentStatus.APPROVE]: {
-                                                label: 'Đã duyệt',
-                                                color: 'green',
-                                            },
-                                            [$Enums.DocumentStatus.PENDING]: {
-                                                label: 'Chờ duyệt',
-                                                color: 'gold',
-                                            },
-                                            [$Enums.DocumentStatus.DENY]: {
-                                                label: 'Từ chối',
-                                                color: 'red',
-                                            },
-                                        }
-                                        const status = statusMap[value] || {
-                                            label: 'Không xác định',
-                                            color: 'default',
-                                        }
-                                        return (
-                                            <Tag
-                                                color={status.color}
-                                                className="px-3 py-1 text-sm rounded"
-                                            >
-                                                {status.label}
-                                            </Tag>
-                                        )
-                                    },
-                                },
-                            ]}
-                            data={faqs}
-                        />
-                        <div className="text-xl font-semibold text-gray-700 mt-4">
-                            Câu hỏi chờ duyệt
-                        </div>
-                        <Table
-                            onRow={(item) => {
-                                return {
-                                    className: 'cursor-pointer',
-                                    onClick: () => openPutCauHoi(item.id),
-                                }
-                            }}
-                            columns={[
-                                {
-                                    title: 'STT',
-                                    dataIndex: 'index',
-                                    width: 40,
-                                    align: 'center',
-                                    render: (_, __, index) => index + 1,
-                                },
-                                {
-                                    title: 'Câu hỏi',
-                                    dataIndex: 'question',
-                                    className: 'cursor-pointer',
-                                    width: 300,
-                                },
-                                {
-                                    title: 'Loại câu hỏi',
-                                    dataIndex: 'type',
-                                    width: 200,
-                                    align: 'center',
-                                    render: (value) => {
-                                        return DOCUMENT_TYPE.find(
-                                            (item) => item.value === value
-                                        )?.label
-                                    },
-                                },
-                                {
-                                    title: 'Câu trả lời',
-                                    dataIndex: 'answer',
-                                    render: (value) =>
-                                        value?.length > 200
-                                            ? `${value.slice(0, 200)}...`
-                                            : value,
-                                },
-                                {
-                                    title: 'Người tải lên',
-                                    dataIndex: 'uploadedBy',
-                                    width: 140,
-                                    render: (value) => value.name,
-                                },
-                                {
-                                    title: 'Ngày tải lên',
-                                    dataIndex: 'createdAt',
-                                    width: 140,
-                                    render: (value) =>
-                                        formatDateReadable(value),
-                                },
+                                ...(faqFilter.status ===
+                                $Enums.DocumentStatus.DENY
+                                    ? [
+                                          {
+                                              title: 'Lý do từ chối',
+                                              dataIndex: 'reason',
+                                              width: 200,
+                                              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                                              render: (value: any) => value,
+                                          },
+                                      ]
+                                    : []),
                                 {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
@@ -491,9 +485,17 @@ function Page() {
                                     onCell: (record) => ({
                                         onClick: (e) => {
                                             e.stopPropagation()
-                                            openPheDuyetCauHoiThuongGap(
-                                                record.id
-                                            )
+                                            if (
+                                                record.status ===
+                                                    $Enums.DocumentStatus
+                                                        .PENDING ||
+                                                record.status ===
+                                                    $Enums.DocumentStatus.DENY
+                                            ) {
+                                                openPheDuyetCauHoiThuongGap(
+                                                    record.id
+                                                )
+                                            }
                                         },
                                     }),
                                     render: (value: $Enums.DocumentStatus) => {
@@ -518,7 +520,7 @@ function Page() {
                                         return (
                                             <Tag
                                                 color={status.color}
-                                                className="px-3 py-1 text-sm rounded"
+                                                className="px-3 py-1 text-sm rounded cursor-pointer"
                                             >
                                                 {status.label}
                                             </Tag>
@@ -526,7 +528,18 @@ function Page() {
                                     },
                                 },
                             ]}
-                            data={faqsPendingOrDeny}
+                            data={faqs}
+                            pagination={{
+                                ...faqParams.pagination,
+                                onChange: (page, pageSize) =>
+                                    setFaqParams({
+                                        pagination: {
+                                            current: page,
+                                            pageSize,
+                                            total: faqParams.pagination.total,
+                                        },
+                                    }),
+                            }}
                         />
                     </div>
                 </div>
