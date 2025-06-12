@@ -61,29 +61,29 @@ export default function TeachingAssignment() {
     const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
     const { getExamTypeLabel } = useExamTypeOptions()
     const { data = [], refetch } = useFindManySubjectClass({
-        // where: {
-        //     OR: [
-        //         { name: { contains: filters.searchText, mode: 'insensitive' } },
-        //         { code: { contains: filters.searchText, mode: 'insensitive' } },
-        //     ],
-        //     semester: {
-        //         id: filters.semesterStartId || undefined,
-        //         trainingCoursesStart: {
-        //             some: {
-        //                 id: filters.trainingCourseId || undefined,
-        //             },
-        //         },
-        //     },
-        //     subject: {
-        //         managementOrganization: {
-        //             trainingMajors: {
-        //                 some: {
-        //                     id: filters.trainingMajorId || undefined,
-        //                 },
-        //             },
-        //         },
-        //     },
-        // },
+        where: {
+            OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+            semester: {
+                id: filters.semesterStartId || undefined,
+                trainingCoursesStart: {
+                    some: {
+                        id: filters.trainingCourseId || undefined,
+                    },
+                },
+            },
+            subject: {
+                managementOrganization: {
+                    trainingMajors: {
+                        some: {
+                            id: filters.trainingMajorId || undefined,
+                        },
+                    },
+                },
+            },
+        },
         include: {
             semester: true,
             mainLecturer: true,
