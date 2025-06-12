@@ -1,10 +1,13 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import {
+    DownloadOutlined,
+    UploadOutlined,
+    UserOutlined,
+} from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    AddStudentModal,
     PutStudentModal,
 } from '@components/modal'
 import {
@@ -26,6 +29,7 @@ import {
     Divider,
     Dropdown,
     Flex,
+    Image,
     Menu,
     Row,
     Tag,
@@ -45,6 +49,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/constant'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -183,7 +188,6 @@ export default function UserProfilePageDs() {
         const selectedClass = FixedClassData?.find((cls) => cls.id === value)
 
         if (selectedClass?.trainingCourseId) {
-            const currentCourse = selectedTrainingCourse
             const newCourse = selectedClass.trainingCourseId
 
             // Tự động set khóa học tương ứng với lớp
@@ -254,8 +258,9 @@ export default function UserProfilePageDs() {
             trainingCourseId?: string
             fixedClassId?: string
         }
+        id?: string | null
     }>({
-        tag: AddStudentModal.name,
+        tag: PutStudentModal.name,
     })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
@@ -268,6 +273,11 @@ export default function UserProfilePageDs() {
         })
     const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
         tag?: string
+        preSelectedValues?: {
+            trainingObjectTypeId?: string
+            trainingCourseId?: string
+            fixedClassId?: string
+        }
         id: string | null
     }>({
         tag: PutStudentModal.name,
@@ -379,12 +389,6 @@ export default function UserProfilePageDs() {
                 </Menu.Item>
             ))}
         </Menu>
-    )
-    const options = Object.entries(TRANG_THAI_HOC_VIEN).map(
-        ([value, { label, color }]) => ({
-            value,
-            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-        })
     )
 
     return (
@@ -503,6 +507,31 @@ export default function UserProfilePageDs() {
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
+                                title: 'Ảnh',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => {
+                                    const avatar = record.userProfile?.avatar
+
+                                    return avatar ? (
+                                        <Image
+                                            src={getMinioUrl(avatar)}
+                                            width={100}
+                                            height={80}
+                                        />
+                                    ) : (
+                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                                            <UserOutlined
+                                                style={{
+                                                    fontSize: 32,
+                                                    color: '#bfbfbf',
+                                                }}
+                                            />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 width: 120,
@@ -514,7 +543,7 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 render: (record) =>
                                     record.userProfile
-                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                             },
                             {

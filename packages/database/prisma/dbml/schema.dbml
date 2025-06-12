@@ -410,9 +410,13 @@ Table SubjectClass {
   endDate DateTime
   subject SubjectVersion [not null]
   subjectId String [not null]
-  examDate DateTime
+  schedule SubjectClassSchedule [not null]
   semester Semester [not null]
   semesterId String [not null]
+  lecturerAssignmentDeadline DateTime
+  examDate DateTime
+  room Room
+  roomId String
   mainLecturer Lecturer
   lecturerId String
   extraLecturer Lecturer
@@ -507,8 +511,52 @@ Table TrainingLocation {
   updatedAt DateTime [not null]
   name String [unique, not null]
   students Student [not null]
+  buildings Building [not null]
 
   Note: 'địa điểm đào tạo'
+}
+
+Table Building {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  floor Int
+  trainingLocation TrainingLocation
+  trainingLocationId String
+  rooms Room [not null]
+
+  indexes {
+    (trainingLocationId, name) [unique]
+  }
+}
+
+Table Room {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  trainingRoom Boolean [not null, default: true]
+  computerRoom Boolean [not null, default: false]
+  laboratoryRoom Boolean [not null, default: false]
+  examRoom Boolean [not null, default: false]
+  capacity Int [not null]
+  examCapacity Int
+  building Building
+  buildingId String
+  subjectClasses SubjectClass [not null]
+
+  indexes {
+    (buildingId, name) [unique]
+  }
 }
 
 Table TrainingField {
@@ -1405,6 +1453,12 @@ Enum SubjectRequirementType {
   Elective
 }
 
+Enum SubjectClassSchedule {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
 Enum StudentStatus {
   ENROLLED
   GRADUATED
@@ -1558,9 +1612,15 @@ Ref: SubjectClass.subjectId > SubjectVersion.id
 
 Ref: SubjectClass.semesterId > Semester.id
 
+Ref: SubjectClass.roomId > Room.id
+
 Ref: SubjectClass.lecturerId > Lecturer.id
 
 Ref: SubjectClass.extraLecturerId > Lecturer.id
+
+Ref: Building.trainingLocationId > TrainingLocation.id
+
+Ref: Room.buildingId > Building.id
 
 Ref: TrainingField.organizationId > Organization.id
 

@@ -18,7 +18,11 @@ import {
     type AcademicRankType,
     type Lecturer,
     type Prisma,
-    Staff,
+    type Staff,
+    type StaffType,
+    type Organization,
+    type StaffPosition,
+    type FixedClass,
 } from '@workspace/db'
 import {
     useFindManyUserProfile,
@@ -31,16 +35,13 @@ import {
     useFindManyLevel,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
-    useFindUniqueLecturer,
-    useUpdateLecturer,
-    useCreateLecturer,
-    useFindManyLecturerType,
     useFindManyStaffType,
     useFindManyStaffPosition,
     useFindManyFixedClass,
     useFindUniqueStaff,
     useUpdateStaff,
     useCreateStaff,
+    useFindManyStaff,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -80,6 +81,24 @@ export type PutUserProfile = UserProfile & {
 export interface PutUserProfileLectureProps {
     id: string | null
 }
+
+type ExistingProfileWithStaff = UserProfile & {
+    nationality?: Nationality | null
+    religion?: Religion | null
+    ethnicity?: Ethnicity | null
+    rank?: Rank | null
+    level?: Level | null
+    academicDegreeType?: AcademicDegreeType | null
+    academicRankType?: AcademicRankType | null
+    staff?:
+        | (Staff & {
+              fixedClass?: FixedClass[]
+          })
+        | null
+}
+
+type StaffFrom = Staff & UserProfile
+
 const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
     const { isOpen, onClose, input } =
@@ -99,11 +118,12 @@ const PutUserProfileStaffModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const [searchIdCard, setSearchIdCard] = useState<string>('')
-    const [foundProfile, setFoundProfile] = useState<any>(null)
+    const [foundProfile, setFoundProfile] =
+        useState<ExistingProfileWithStaff | null>(null)
     const [idCardOptions, setIdCardOptions] = useState<
         { value: string; label: string }[]
     >([])
-    const [originalData, setOriginalData] = useState<any>(null)
+    const [originalData, setOriginalData] = useState<StaffFrom>()
 
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyNationality()
@@ -147,7 +167,19 @@ const PutUserProfileStaffModal = () => {
         },
     })
 
-    const { data: idCardNumberData = [] } = useFindManyUserProfile()
+    const { data: idCardNumberData = [] } = useFindManyUserProfile({
+        select: {
+            idCardNumber: true,
+            firstName: true,
+            lastName: true,
+            userType: true,
+        },
+        where: {
+            userType: {
+                in: ['STAFF'],
+            },
+        },
+    })
 
     const { data: existingProfiles } = useFindManyUserProfile({
         where: {
@@ -176,10 +208,23 @@ const PutUserProfileStaffModal = () => {
         if (idCardNumberData.length > 0) {
             const options = idCardNumberData
                 .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
-                .map((profile) => ({
-                    value: profile.idCardNumber,
-                    label: profile.idCardNumber,
-                }))
+                .map((profile) => {
+                    // Tạo full name từ lastName + firstName
+                    const fullName =
+                        `${profile.lastName || ''} ${profile.firstName || ''}`.trim()
+
+                    // Tạo label: "Họ tên - Số CCCD"
+                    const label = fullName
+                        ? `${fullName} - ${profile.idCardNumber}`
+                        : profile.idCardNumber // Fallback nếu không có tên
+
+                    return {
+                        value: profile.idCardNumber,
+                        label: label,
+                        searchText:
+                            `${fullName} ${profile.idCardNumber}`.toLowerCase(),
+                    }
+                })
             setIdCardOptions(options)
         }
     }, [idCardNumberData])
@@ -219,52 +264,25 @@ const PutUserProfileStaffModal = () => {
 
     // SỬA: Thêm fillProfileData function
     const fillProfileData = useCallback(
-        (
-            profile: UserProfile & {
-                nationality?: Nationality | null
-                religion?: Religion | null
-                ethnicity?: Ethnicity | null
-                rank?: Rank | null
-                level?: Level | null
-                academicDegreeType?: AcademicDegreeType | null
-                academicRankType?: AcademicRankType | null
-                staff?: any | null // Staff type với includes
-            }
-        ) => {
+        (profile: ExistingProfileWithStaff) => {
             form.setFieldsValue({
-                // Thông tin cơ bản từ UserProfile
-                firstName: profile.firstName,
-                lastName: profile.lastName,
+                ...profile,
+
                 code: profile.code || '',
                 dateOfBirth: profile.dateOfBirth
                     ? dayjs(profile.dateOfBirth)
                     : null,
-                placeOfBirth: profile.placeOfBirth,
-                homeTown: profile.homeTown,
-                idCardNumber: profile.idCardNumber,
                 idCardDate: profile.idCardDate
                     ? dayjs(profile.idCardDate)
                     : null,
-                officerNumber: profile.officerNumber,
-                gender: profile.gender,
-                permanentAddress: profile.permanentAddress,
-                temporaryAddress: profile.temporaryAddress,
-                contactAddress: profile.contactAddress,
-                phoneNumber: profile.phoneNumber,
-                email: profile.email,
-                familyPhone: profile.familyPhone,
-                familyName: profile.familyName,
 
-                // Thông tin Đoàn/Đảng
                 unionDate: profile.unionDate ? dayjs(profile.unionDate) : null,
-                unionPlace: profile.unionPlace,
                 CPVJoinDate: profile.CPVJoinDate
                     ? dayjs(profile.CPVJoinDate)
                     : null,
                 officialCPVDate: profile.officialCPVDate
                     ? dayjs(profile.officialCPVDate)
                     : null,
-                CPVJoinPlace: profile.CPVJoinPlace,
                 tenureDate: profile.tenureDate
                     ? dayjs(profile.tenureDate)
                     : null,
@@ -274,17 +292,6 @@ const PutUserProfileStaffModal = () => {
                 dischargeDate: profile.dischargeDate
                     ? dayjs(profile.dischargeDate)
                     : null,
-
-                // Relations
-                nationalityId: profile.nationality?.id,
-                religionId: profile.religion?.id,
-                ethnicityId: profile.ethnicity?.id,
-                rankId: profile.rank?.id,
-                levelId: profile.level?.id,
-                academicDegreeTypeId: profile.academicDegreeType?.id,
-                academicRankTypeId: profile.academicRankType?.id,
-
-                // Dates for history
                 rankDate: profile.rankDate ? dayjs(profile.rankDate) : null,
                 academicRankDate: profile.academicRankDate
                     ? dayjs(profile.academicRankDate)
@@ -293,7 +300,14 @@ const PutUserProfileStaffModal = () => {
                     ? dayjs(profile.academicDegreeDate)
                     : null,
 
-                // ✅ Thông tin staff nếu có (thay vì lecturer)
+                nationalityId: profile.nationality?.id,
+                religionId: profile.religion?.id,
+                ethnicityId: profile.ethnicity?.id,
+                rankId: profile.rank?.id,
+                levelId: profile.level?.id,
+                academicDegreeTypeId: profile.academicDegreeType?.id,
+                academicRankTypeId: profile.academicRankType?.id,
+
                 ...(profile.staff && {
                     organizationId: profile.staff.organizationId,
                     staffTypeId: profile.staff.staffTypeId,
@@ -343,36 +357,43 @@ const PutUserProfileStaffModal = () => {
         fileName?: string
     ) => {
         const newData = {
-            code: output.code,
-            avatar: fileName,
+            avatar: fileName || undefined,
             firstName: output.firstName,
             lastName: output.lastName,
             dateOfBirth: output.dateOfBirth,
-            placeOfBirth: output.placeOfBirth,
-            homeTown: output.homeTown,
-            idCardNumber: output.idCardNumber,
+            placeOfBirth: output.placeOfBirth ?? undefined,
+            homeTown: output.homeTown ?? undefined,
+            idCardNumber: output.idCardNumber ?? undefined,
             idCardDate: output.idCardDate,
-            officerNumber: output.officerNumber,
-            gender: output.gender,
-            permanentAddress: output.permanentAddress,
-            temporaryAddress: output.temporaryAddress,
-            contactAddress: output.contactAddress,
-            phoneNumber: output.phoneNumber,
-            email: output.email,
-            familyPhone: output.familyPhone,
-            familyName: output.familyName,
+            officerNumber: output.officerNumber ?? undefined,
+            gender: output.gender ?? undefined,
+            permanentAddress: output.permanentAddress ?? undefined,
+            temporaryAddress: output.temporaryAddress ?? undefined,
+            contactAddress: output.contactAddress ?? undefined,
+            phoneNumber: output.phoneNumber ?? undefined,
+            email: output.email ?? undefined,
+            familyName: output.familyName ?? undefined,
+            familyPhone: output.familyPhone ?? undefined,
+
+            // ✅ Party/Military dates
             unionDate: output.unionDate,
-            unionPlace: output.unionPlace,
+            unionPlace: output.unionPlace ?? undefined,
             CPVJoinDate: output.CPVJoinDate,
             officialCPVDate: output.officialCPVDate,
-            CPVJoinPlace: output.CPVJoinPlace,
+            CPVJoinPlace: output.CPVJoinPlace ?? undefined,
             tenureDate: output.tenureDate,
             enlistmentDate: output.enlistmentDate,
             dischargeDate: output.dischargeDate,
+
+            // ✅ History dates
             rankDate: output.rankDate,
-            academicRankDate: output.academicRankDate,
             academicDegreeDate: output.academicDegreeDate,
+            academicRankDate: output.academicRankDate,
+
+            // ✅ User type
             userType: $Enums.UserType.STAFF,
+
+            // ✅ Relations với proper connect syntax
             ...(output.nationalityId && {
                 nationality: { connect: { id: output.nationalityId } },
             }),
@@ -446,7 +467,7 @@ const PutUserProfileStaffModal = () => {
         output: PutUserProfile,
         fileName?: string
     ) => ({
-        ...buildUserProfileUpdateData(output, fileName), // ✅ Sử dụng lại function trên
+        ...buildUserProfileUpdateData(output, fileName),
     })
 
     async function onOk(output?: PutUserProfile) {
@@ -466,17 +487,17 @@ const PutUserProfileStaffModal = () => {
             fileName = resPresignedUrl.fileName
         }
 
-        const fixedClassConnections = output.fixedClassIds?.length
-            ? {
-                  fixedClass: {
-                      set: output.fixedClassIds.map((id) => ({ id })),
-                  },
-              }
-            : {}
         try {
             showSpinner()
             if (id) {
-                // UPDATE MODE
+                const fixedClassConnections = output.fixedClassIds?.length
+                    ? {
+                          fixedClass: {
+                              set: output.fixedClassIds.map((id) => ({ id })),
+                          },
+                      }
+                    : { fixedClass: { set: [] } }
+
                 await updateStaff({
                     data: {
                         code: output.code,
@@ -495,7 +516,6 @@ const PutUserProfileStaffModal = () => {
                                 connect: { id: output.staffPositionId },
                             },
                         }),
-                        // Update fixed classes
                         ...fixedClassConnections,
                         userProfile: {
                             update: buildUserProfileUpdateData(
@@ -513,6 +533,17 @@ const PutUserProfileStaffModal = () => {
                     // Có profile existing
                     if (foundProfile.staff?.id) {
                         // Profile đã có staff -> Update existing staff
+                        const fixedClassConnections = output.fixedClassIds
+                            ?.length
+                            ? {
+                                  fixedClass: {
+                                      set: output.fixedClassIds.map((id) => ({
+                                          id,
+                                      })),
+                                  },
+                              }
+                            : { fixedClass: { set: [] } }
+
                         await updateStaff({
                             data: {
                                 code: output.code,
@@ -531,7 +562,6 @@ const PutUserProfileStaffModal = () => {
                                         connect: { id: output.staffPositionId },
                                     },
                                 }),
-                                // Update fixed classes
                                 ...fixedClassConnections,
                                 userProfile: {
                                     update: buildUserProfileUpdateData(
@@ -545,6 +575,17 @@ const PutUserProfileStaffModal = () => {
                         message.success('Cập nhật cán bộ thành công')
                     } else {
                         // Profile chưa có staff -> Tạo staff mới cho profile existing
+                        const fixedClassConnections = output.fixedClassIds
+                            ?.length
+                            ? {
+                                  fixedClass: {
+                                      connect: output.fixedClassIds.map(
+                                          (id) => ({ id })
+                                      ),
+                                  },
+                              }
+                            : {}
+
                         await createStaff({
                             data: {
                                 code: output.code,
@@ -563,7 +604,7 @@ const PutUserProfileStaffModal = () => {
                                         connect: { id: output.staffPositionId },
                                     },
                                 }),
-                                // Connect fixed classes
+                                // Connect fixed classes trong create
                                 ...fixedClassConnections,
                                 userProfile: {
                                     connect: { id: foundProfile.id },
@@ -584,6 +625,16 @@ const PutUserProfileStaffModal = () => {
                     }
                 } else {
                     // Tạo mới hoàn toàn
+                    const fixedClassConnections = output.fixedClassIds?.length
+                        ? {
+                              fixedClass: {
+                                  connect: output.fixedClassIds.map((id) => ({
+                                      id,
+                                  })),
+                              },
+                          }
+                        : {}
+
                     await createStaff({
                         data: {
                             code: output.code,
@@ -602,7 +653,7 @@ const PutUserProfileStaffModal = () => {
                                     connect: { id: output.staffPositionId },
                                 },
                             }),
-                            // Connect fixed classes
+                            // Connect fixed classes trong create
                             ...fixedClassConnections,
                             userProfile: {
                                 create: buildUserProfileData(
@@ -618,7 +669,7 @@ const PutUserProfileStaffModal = () => {
 
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Lecturer'],
+                queryKey: ['Staff'],
             })
             onClose()
         } catch (error) {
@@ -640,58 +691,64 @@ const PutUserProfileStaffModal = () => {
             const staff = staffData
 
             const formData = {
-                // Thông tin từ Staff
-                code: staff.code || userProfile.code,
+                code: staff.code ?? undefined,
                 organizationId: staff.organizationId,
                 staffTypeId: staff.staffTypeId,
                 staffPositionId: staff.staffPositionId,
-                // Lớp biên chế - chuyển đổi thành array IDs
                 fixedClassIds: staff.fixedClass?.map((fc) => fc.id) || [],
-
-                // Thông tin cơ bản từ UserProfile
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
+
                 dateOfBirth: userProfile.dateOfBirth
                     ? dayjs(userProfile.dateOfBirth)
-                    : null,
-                placeOfBirth: userProfile.placeOfBirth,
-                avatar: userProfile.avatar,
-                homeTown: userProfile.homeTown,
-                idCardNumber: userProfile.idCardNumber,
+                    : undefined,
+
+                placeOfBirth: userProfile.placeOfBirth ?? undefined,
+                avatar: userProfile.avatar ?? undefined,
+                homeTown: userProfile.homeTown ?? undefined,
+                idCardNumber: userProfile.idCardNumber ?? undefined,
+
                 idCardDate: userProfile.idCardDate
                     ? dayjs(userProfile.idCardDate)
-                    : null,
-                officerNumber: userProfile.officerNumber,
-                gender: userProfile.gender,
-                permanentAddress: userProfile.permanentAddress,
-                temporaryAddress: userProfile.temporaryAddress,
-                contactAddress: userProfile.contactAddress,
-                phoneNumber: userProfile.phoneNumber,
-                email: userProfile.email,
-                familyPhone: userProfile.familyPhone,
-                familyName: userProfile.familyName,
+                    : undefined,
 
-                // Thông tin Đoàn/Đảng/Nhập ngũ
+                officerNumber: userProfile.officerNumber ?? undefined,
+                gender: userProfile.gender ?? undefined,
+                permanentAddress: userProfile.permanentAddress ?? undefined,
+                temporaryAddress: userProfile.temporaryAddress ?? undefined,
+                contactAddress: userProfile.contactAddress ?? undefined,
+                phoneNumber: userProfile.phoneNumber ?? undefined,
+                email: userProfile.email ?? undefined,
+                familyPhone: userProfile.familyPhone ?? undefined,
+                familyName: userProfile.familyName ?? undefined,
+
                 unionDate: userProfile.unionDate
                     ? dayjs(userProfile.unionDate)
-                    : null,
-                unionPlace: userProfile.unionPlace,
+                    : undefined,
+
+                unionPlace: userProfile.unionPlace ?? undefined,
+
                 CPVJoinDate: userProfile.CPVJoinDate
                     ? dayjs(userProfile.CPVJoinDate)
-                    : null,
+                    : undefined,
+
                 officialCPVDate: userProfile.officialCPVDate
                     ? dayjs(userProfile.officialCPVDate)
-                    : null,
-                CPVJoinPlace: userProfile.CPVJoinPlace,
+                    : undefined,
+
+                CPVJoinPlace: userProfile.CPVJoinPlace ?? undefined,
+
                 tenureDate: userProfile.tenureDate
                     ? dayjs(userProfile.tenureDate)
-                    : null,
+                    : undefined,
+
                 enlistmentDate: userProfile.enlistmentDate
                     ? dayjs(userProfile.enlistmentDate)
-                    : null,
+                    : undefined,
+
                 dischargeDate: userProfile.dischargeDate
                     ? dayjs(userProfile.dischargeDate)
-                    : null,
+                    : undefined,
 
                 // Relations IDs
                 nationalityId: userProfile.nationality?.id,
@@ -702,19 +759,19 @@ const PutUserProfileStaffModal = () => {
                 academicDegreeTypeId: userProfile.academicDegreeType?.id,
                 academicRankTypeId: userProfile.academicRankType?.id,
 
-                // Lịch sử - Dates
                 rankDate: userProfile.rankDate
                     ? dayjs(userProfile.rankDate)
-                    : null,
+                    : undefined,
+
                 academicRankDate: userProfile.academicRankDate
                     ? dayjs(userProfile.academicRankDate)
-                    : null,
+                    : undefined,
+
                 academicDegreeDate: userProfile.academicDegreeDate
                     ? dayjs(userProfile.academicDegreeDate)
-                    : null,
+                    : undefined,
             }
 
-            // Lưu dữ liệu gốc để so sánh
             setOriginalData(formData)
             form.setFieldsValue(formData)
 
@@ -867,7 +924,13 @@ const PutUserProfileStaffModal = () => {
                                                 form={form}
                                                 name="code"
                                                 label="Mã cán bộ"
-                                                required
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message:
+                                                            'Vui lòng nhập mã cán bộ!',
+                                                    },
+                                                ]}
                                                 className="mb-0"
                                             >
                                                 <Input placeholder="Nhập mã giảng viên" />

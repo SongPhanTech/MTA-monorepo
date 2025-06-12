@@ -23,7 +23,6 @@ import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutOpenClassModal from './put-mo-lop'
-import AddStudentModal from './add-student'
 import PutStudentModal from './put-student'
 import PutUserProfileStaffModal from './put-staff-modal'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
@@ -55,7 +54,6 @@ export {
     PutCurriculumVersion,
     PutVersionSubjectModal,
     PutOpenClassModal,
-    AddStudentModal,
     PutStudentModal,
     PutCurriculum,
     PutTrainingBlockOnCurriculumVersion,
