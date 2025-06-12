@@ -413,6 +413,27 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'lop-mon-hoc',
+                label: 'Quản lý điểm',
+                icon: CalendarFold,
+                children: [
+                    {
+                        id: 'ds-lop-mon-hoc',
+                        label: 'Danh sách lớp môn học',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .DS_LOP_MON_HOC,
+                        description: 'Danh sách lớp môn học',
+                    },
+                    {
+                        id: 'ql-diem-lop-mon-hoc',
+                        label: 'Điểm lớp môn học',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QL_DIEM_LOP_MON_HOC,
+                        description: 'Điểm lớp môn học',
+                    },
+                ],
+            },
+            {
                 id: 'milestone',
                 label: 'Mốc huấn luyện',
                 icon: Flag,
