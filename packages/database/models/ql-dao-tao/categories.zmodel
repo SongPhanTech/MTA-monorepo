@@ -163,6 +163,19 @@ model TrainingRank extends Base {
   @@schema("ql-dao-tao")
 }
 
+/// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ
+model ScoreConvert extends Base {
+  score10From Float
+  score10To   Float
+  score4      Float
+  scoreChar   String
+
+  startDate   DateTime
+  endDate     DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
 /// Nội dung tính tải đào tạo
 // TODO: add relations
 model TrainingKPI extends Base {
