@@ -20,14 +20,15 @@ import {
 } from '@ant-design/icons'
 import { X, Search } from 'lucide-react'
 import Select from '@components/commons/select'
-import TreeSelectFixClass from '@components/commons/fix-class-selected-multi/TreeSelectFixClass'
-
+import TreeSelectFixClassMulti from '@components/commons/fix-class-selected/TreeSelectFixClassMulti'
+import TreeSelectLecture from '@components/commons/lecture-selected-multi/TreeSelectLecture'
 import {
     useFindManySchoolYear,
     useFindManySemester,
     useFindManyOrganizationType,
     useFindManyOrganization,
     useFindManyTrainingObjectType,
+    useFindManyLecturer
 } from '@workspace/db/hooks'
 import { buildOrgTree } from '@lib/utils'
 const { Text } = Typography
@@ -39,6 +40,7 @@ export type FilterProps = {
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
+    LectureId: string | null //Giảng viên
 }
 
 interface Props {
@@ -158,9 +160,7 @@ const FilterSubjectClass = (props: Props) => {
             },
         })
     
-        const { data: manageOrgData = [], refetch: refetchManageOrg } =
-                useFindManyOrganization()
-            const treeData = buildOrgTree(manageOrgData)
+    
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -259,7 +259,7 @@ const FilterSubjectClass = (props: Props) => {
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectFixClass
+                                    <TreeSelectFixClassMulti
                                         schoolYearId={form.getFieldValue('KhoaId') || undefined}
                                         placeholder='Chọn lớp quản lý'
                                     />
@@ -321,6 +321,19 @@ const FilterSubjectClass = (props: Props) => {
                                                 label: item.label,
                                             }
                                         })}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label="Giảng viên"
+                                    name="LectureId"
+                                    labelCol={{ span: 7 }}
+                                    wrapperCol={{ span: 17 }}
+                                    labelAlign="left"
+                                >
+                                    <TreeSelectLecture
+                                        placeholder='Chọn giảng viên'
                                     />
                                 </Form.Item>
                             </Col>

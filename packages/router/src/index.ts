@@ -349,6 +349,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục chuyên ngành',
                     },
                     {
+                        id: 'danh-muc-chuyen-doi-diem',
+                        label: 'Bảng chuyển đổi điểm',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUYEN_DOI_DIEM,
+                        description: 'Bảng chuyển đổi điểm',
+                    },
+                    {
                         id: 'khoa-huan-luyen',
                         label: 'Danh mục khoá đào tạo',
                         icon: BookOutlined,
@@ -432,6 +439,13 @@ const NAVIGATION: NavigationType = {
                 icon: CalendarFold,
                 children: [
                     {
+                        id: 'khoa-nhap-diem',
+                        label: 'Mở/Khóa nhập điểm',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .KHOA_NHAP_DIEM,
+                        description: 'Mở/Khóa nhập điểm',
+                    },
+                    {
                         id: 'ds-lop-mon-hoc',
                         label: 'Danh sách lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
@@ -440,10 +454,17 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'ql-diem-lop-mon-hoc',
-                        label: 'Điểm lớp môn học',
+                        label: 'Nhập điểm lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .QL_DIEM_LOP_MON_HOC,
-                        description: 'Điểm lớp môn học',
+                        description: 'Nhập điểm lớp môn học',
+                    },
+                    {
+                        id: 'ql-diem-ren-luyen',
+                        label: 'Nhập điểm rèn luyện',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QL_DIEM_REN_LUYEN,
+                        description: 'Nhập điểm rèn luyện',
                     },
                 ],
             },

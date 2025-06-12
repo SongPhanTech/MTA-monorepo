@@ -44,48 +44,6 @@ export default function SubjectClass() {
         subjectClassId: null,
     })
 
-    //#region  Cũ 
-
-
-    // const { data = [], refetch } = useFindManyTrainingField({
-    //     where: {
-    //         ...(filters.searchText && filters.searchText !== ''
-    //             ? { name: { contains: filters.searchText } }
-    //             : {}),
-    //         ...(filters.searchText && filters.searchText !== ''
-    //             ? { code: { contains: filters.searchText } }
-    //             : {}),
-    //         ...(filters.trainingCourseId
-    //             ? { trainingCourseId: filters.trainingCourseId }
-    //             : {}),
-    //     },
-    //     include: {
-    //         organization: true,
-    //     },
-    //     orderBy: {
-    //         createdAt: 'desc',
-    //     },
-    //     take: numberOfPages,
-    //     skip: (currentPage - 1) * numberOfPages,
-    // })
-
-    // const { data: count } = useCountTrainingField({
-    //     where: {
-    //         ...(filters.searchText && filters.searchText !== ''
-    //             ? { name: { contains: filters.searchText } }
-    //             : {}),
-    //         ...(filters.searchText && filters.searchText !== ''
-    //             ? { code: { contains: filters.searchText } }
-    //             : {}),
-    //     },
-    // })
-
-    // const debouncedRefetch = useCallback(
-    //     _.debounce(() => {
-    //         refetch()
-    //     }, 500),
-    //     []
-    // )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -124,72 +82,29 @@ export default function SubjectClass() {
     }
 
     const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+        useFindManyTrainingObjectType(
+            {
+                where: {
+                    deletedAt: null,
+                },
+            }
+        )
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-
-    const { data: semesterData = [] } = useFindManySemester()
-
-    const dataFake = [
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
         {
-            id: 1,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            danhSachLop: [
-                { name: '003560 01 (53)' },
-                { name: '003560 02 (53)' },
-            ],
-            stc: 3,
-            chuongTrinhDaoTao: [
-                { name: 'Đạn' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            cacLopCoMon: [
-                { name: 'Đạn 1' },
-                { name: 'Đạn 2' },
-                { name: 'Đạn 3' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            svNo: 0,
-            tongSV: 81,
-            soLMH: 4,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-        {
-            id: 2,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            danhSachLop: ['003560 01 (53)', '003560 02 (53)'],
-            stc: 3,
-            chuongTrinhDaoTao: [
-                { name: 'Đạn' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            cacLopCoMon: [
-                { name: 'Đạn 1' },
-                { name: 'Đạn 2' },
-                { name: 'Đạn 3' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            svNo: 0,
-            tongSV: 81,
-            soLMH: 4,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-    ]
+            where: {
+                deletedAt: null,
+            },
+        }
+    )
 
+    const { data: semesterData = [] } = useFindManySemester(
+        {
+            where: {
+                deletedAt: null,
+            },
+        }
+    )
     //#endregion
 
     //#region Mới
@@ -207,6 +122,7 @@ export default function SubjectClass() {
             ),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            deletedAt: null,
         },
         include: {
             subject: {
@@ -242,6 +158,7 @@ export default function SubjectClass() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
                 : {}),
+                deletedAt: null,
         },
     })
 

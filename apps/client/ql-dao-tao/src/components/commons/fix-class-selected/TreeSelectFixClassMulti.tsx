@@ -19,7 +19,7 @@ interface CustomTreeSelectProps {
   onPopupScroll?: TreeSelectProps['onPopupScroll'];
 }
 
-const TreeSelectFixClass: React.FC<CustomTreeSelectProps> = ({
+const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
   placeholder = 'Please select',
   schoolYearId,
   style = { width: '100%' },
@@ -111,4 +111,4 @@ const TreeSelectFixClass: React.FC<CustomTreeSelectProps> = ({
   );
 };
 
-export default TreeSelectFixClass;
+export default TreeSelectFixClassMulti;
