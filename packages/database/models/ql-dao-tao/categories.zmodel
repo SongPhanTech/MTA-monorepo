@@ -53,9 +53,43 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name     String    @unique
+  name      String     @unique
 
-  students Student[]
+  students  Student[]
+  buildings Building[]
+  @@schema("ql-dao-tao")
+}
+
+model Building extends Base {
+  name               String
+  floor              Int?
+
+  trainingLocation   TrainingLocation? @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId String?
+
+  rooms              Room[]
+
+  @@unique([trainingLocationId, name])
+  @@schema("ql-dao-tao")
+}
+
+model Room extends Base {
+  name           String
+
+  trainingRoom   Boolean        @default(true)
+  computerRoom   Boolean        @default(false)
+  laboratoryRoom Boolean        @default(false)
+  examRoom       Boolean        @default(false)
+
+  capacity       Int
+  examCapacity   Int?
+
+  building       Building?      @relation(fields: [buildingId], references: [id])
+  buildingId     String?
+
+  subjectClasses SubjectClass[]
+
+  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 

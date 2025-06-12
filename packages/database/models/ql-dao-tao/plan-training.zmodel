@@ -314,26 +314,39 @@ model TrainingBlockSubject extends Base {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassSchedule {
+  MORNING
+  AFTERNOON
+  EVENING
+
+  @@schema("ql-dao-tao")
+}
+
 /// Lớp môn học
 model SubjectClass extends Base {
-  name                String
-  startDate           DateTime
-  endDate             DateTime?
-  subject             SubjectVersion        @relation(fields: [subjectId], references: [id])
-  subjectId           String
+  name                       String
+  startDate                  DateTime
+  endDate                    DateTime?
+  subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subjectId                  String
+  schedule                   SubjectClassSchedule
 
-  examDate            DateTime?
+  semester                   Semester              @relation(fields: [semesterId], references: [id])
+  semesterId                 String
 
-  semester            Semester              @relation(fields: [semesterId], references: [id])
-  semesterId          String
+  lecturerAssignmentDeadline DateTime?
+  examDate                   DateTime?
 
-  mainLecturer        Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId          String?
+  room                       Room?                 @relation(fields: [roomId], references: [id])
+  roomId                     String?
 
-  extraLecturer       Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId     String?
+  mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId                 String?
 
-  subjectClassStudent SubjectClassStudent[]
+  extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId            String?
+
+  subjectClassStudent        SubjectClassStudent[]
   @@schema("ql-dao-tao")
 }
 

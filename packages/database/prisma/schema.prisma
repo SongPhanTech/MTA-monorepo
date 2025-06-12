@@ -69,6 +69,14 @@ enum SubjectRequirementType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassSchedule {
+  MORNING
+  AFTERNOON
+  EVENING
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentStatus {
   ENROLLED
   GRADUATED
@@ -607,26 +615,30 @@ model TrainingBlockSubject {
 
 /// Lớp môn học
 model SubjectClass {
-  id                  String                @id() @default(cuid())
-  code                String?               @unique()
-  active              Boolean               @default(true)
-  description         String?               @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt()
-  name                String
-  startDate           DateTime
-  endDate             DateTime?
-  subject             SubjectVersion        @relation(fields: [subjectId], references: [id])
-  subjectId           String
-  examDate            DateTime?
-  semester            Semester              @relation(fields: [semesterId], references: [id])
-  semesterId          String
-  mainLecturer        Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId          String?
-  extraLecturer       Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId     String?
-  subjectClassStudent SubjectClassStudent[]
+  id                         String                @id() @default(cuid())
+  code                       String?               @unique()
+  active                     Boolean               @default(true)
+  description                String?               @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt()
+  name                       String
+  startDate                  DateTime
+  endDate                    DateTime?
+  subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subjectId                  String
+  schedule                   SubjectClassSchedule
+  semester                   Semester              @relation(fields: [semesterId], references: [id])
+  semesterId                 String
+  lecturerAssignmentDeadline DateTime?
+  examDate                   DateTime?
+  room                       Room?                 @relation(fields: [roomId], references: [id])
+  roomId                     String?
+  mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId                 String?
+  extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId            String?
+  subjectClassStudent        SubjectClassStudent[]
 
   @@schema("ql-dao-tao")
 }
@@ -713,16 +725,58 @@ model TrainingForm {
 
 /// địa điểm đào tạo
 model TrainingLocation {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String    @unique()
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
   students    Student[]
+  buildings   Building[]
 
+  @@schema("ql-dao-tao")
+}
+
+model Building {
+  id                 String            @id() @default(cuid())
+  code               String?           @unique()
+  active             Boolean           @default(true)
+  description        String?           @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt()
+  name               String
+  floor              Int?
+  trainingLocation   TrainingLocation? @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId String?
+  rooms              Room[]
+
+  @@unique([trainingLocationId, name])
+  @@schema("ql-dao-tao")
+}
+
+model Room {
+  id             String         @id() @default(cuid())
+  code           String?        @unique()
+  active         Boolean        @default(true)
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt()
+  name           String
+  trainingRoom   Boolean        @default(true)
+  computerRoom   Boolean        @default(false)
+  laboratoryRoom Boolean        @default(false)
+  examRoom       Boolean        @default(false)
+  capacity       Int
+  examCapacity   Int?
+  building       Building?      @relation(fields: [buildingId], references: [id])
+  buildingId     String?
+  subjectClasses SubjectClass[]
+
+  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 
