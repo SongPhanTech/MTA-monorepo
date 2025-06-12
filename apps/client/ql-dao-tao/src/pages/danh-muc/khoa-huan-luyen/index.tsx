@@ -12,10 +12,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type {
-    TrainingCourse,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 
 import {
     Button,

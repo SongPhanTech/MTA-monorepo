@@ -5,6 +5,7 @@ import { $Enums } from '@workspace/db'
 import { useUpdateDocument, useUpdateFAQ } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, Radio, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useState } from 'react'
 type PheDuyetCauHoiThuongGapFormType = {
     status: $Enums.DocumentStatus
     reason: string
@@ -20,11 +21,21 @@ const PheDuyetCauHoiThuongGap = () => {
     const { mutateAsync: update } = useUpdateFAQ()
 
     const [form] = Form.useForm<PheDuyetCauHoiThuongGapFormType>()
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const status = Form.useWatch('status', form)
 
     const onFinish = async (values: PheDuyetCauHoiThuongGapFormType) => {
+        setIsSubmitting(true)
         try {
+            if (values.status === $Enums.DocumentStatus.APPROVE) {
+                await fetchFaqVectorizeFaqVectorizePost({
+                    queryParams: {
+                        documentId,
+                    },
+                })
+            }
+
             await update({
                 where: {
                     id: documentId,
@@ -37,19 +48,18 @@ const PheDuyetCauHoiThuongGap = () => {
                             : values.reason,
                 },
             })
+
             if (values.status === $Enums.DocumentStatus.APPROVE) {
-                await fetchFaqVectorizeFaqVectorizePost({
-                    queryParams: {
-                        documentId,
-                    },
-                })
                 message.success('Phê duyệt câu hỏi thường gặp thành công')
             } else {
                 message.success('Từ chối câu hỏi thường gặp')
             }
+
             onClose()
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Phê duyệt không thành công, vui lòng kiểm tra lại')
+        } finally {
+            setIsSubmitting(false)
         }
     }
     return (
@@ -61,6 +71,7 @@ const PheDuyetCauHoiThuongGap = () => {
             cancelText="Hủy"
             onCancel={onClose}
             onOk={form.submit}
+            confirmLoading={isSubmitting}
         >
             <div className="flex gap-4 justify-between">
                 <Form
