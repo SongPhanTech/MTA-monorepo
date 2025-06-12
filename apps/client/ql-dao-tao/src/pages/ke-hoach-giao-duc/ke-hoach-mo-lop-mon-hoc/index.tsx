@@ -1,72 +1,110 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import EditIcon from '@components/icons/edit'
+import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { SchoolYear, Semester, TrainingObjectType } from '@workspace/db'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
-    useFindManyTrainingObjectType,
+    useFindManySchoolYear,
+    useFindManySubjectVersion,
     useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
-import { CalendarPlus, Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
+import { useForm } from 'antd/es/form/Form'
 import _ from 'lodash'
+import { CalendarPlus, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { CalendarOutlined } from '@ant-design/icons'
-import { PutOpenClassModal } from '@components/modal'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-// const { Option } = Select;
+
 interface FilterProps {
-    searchText: string | null
-    trainingCourseId: string | null
+    searchText?: string
+    trainingCourseId?: string
+    schoolYearId?: string
+    semesterId?: string
 }
 
 export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingCourseId: null,
+
+    const [form] = useForm<FilterProps>()
+
+    const { data: schoolYears } = useFindManySchoolYear({
+        include: { semesters: { orderBy: { order: 'asc' } } },
+        orderBy: { order: 'asc' },
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingCourseId
-                ? { trainingCourseId: filters.trainingCourseId }
-                : {}),
-        },
-        include: {
-            organization: true,
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+    const schoolYearId = Form.useWatch('schoolYearId', form)
+    // const semesterId = Form.useWatch('semesterId',form)
 
-    const { data: count } = useCountTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
+    const { data = [], refetch } = useFindManySubjectVersion(
+        {
+            where: {
+                AND: [
+                    {
+                        OR: form.getFieldValue('searchText')
+                            ? [
+                                  {
+                                      name: {
+                                          contains:
+                                              form.getFieldValue('searchText'),
+                                      },
+                                  },
+                                  {
+                                      code: {
+                                          contains:
+                                              form.getFieldValue('searchText'),
+                                      },
+                                  },
+                              ]
+                            : [],
+                    },
+                ],
+            },
+            include: {
+                subjectClass: {
+                    where: { semesterId: form.getFieldValue('semesterId') },
+                },
+                managementOrganization: true,
+                trainingBlocks: {
+                    include: {
+                        trainingBlockOnCurriculumVersion: {
+                            include: { curriculumVersion: true },
+                        },
+                    },
+                },
+            },
+            orderBy: { code: 'asc' },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-    })
+        {
+            enabled: !!form.getFieldValue('semesterId'),
+        }
+    )
+
+    useEffect(() => {
+        console.log(111)
+
+        if (schoolYears?.length) {
+            const lastSchoolYear = schoolYears[schoolYears.length - 1]
+            form.setFieldValue('schoolYearId', lastSchoolYear.id)
+
+            if (lastSchoolYear.semesters.length) {
+                const lastSemester =
+                    lastSchoolYear.semesters[
+                        lastSchoolYear.semesters.length - 1
+                    ]
+                form.setFieldValue('semesterId', lastSemester.id)
+            }
+        }
+    }, [schoolYears, form])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -103,78 +141,10 @@ export default function SubjectOpeningPlan() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-
-    const dataFake = [
-        {
-            id: 1,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            danhSachLop: [
-                { name: '003560 01 (53)' },
-                { name: '003560 02 (53)' },
-            ],
-            stc: 3,
-            chuongTrinhDaoTao: [
-                { name: 'Đạn' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            cacLopCoMon: [
-                { name: 'Đạn 1' },
-                { name: 'Đạn 2' },
-                { name: 'Đạn 3' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            svNo: 0,
-            tongSV: 81,
-            soLMH: 4,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-        {
-            id: 2,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            danhSachLop: ['003560 01 (53)', '003560 02 (53)'],
-            stc: 3,
-            chuongTrinhDaoTao: [
-                { name: 'Đạn' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            cacLopCoMon: [
-                { name: 'Đạn 1' },
-                { name: 'Đạn 2' },
-                { name: 'Đạn 3' },
-                { name: 'Công nghệ chế tạo máy' },
-                { name: 'Công nghệ chế tạo dạn' },
-                { name: 'Công nghệ vật liệu' },
-                { name: 'Phòng hóa' },
-            ],
-            svNo: 0,
-            tongSV: 81,
-            soLMH: 4,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-    ]
 
     return (
         <div>
@@ -182,92 +152,149 @@ export default function SubjectOpeningPlan() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
-                                            }
-                                            placeholder="Nhập tên lớp..."
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
+                            <Form
+                                form={form}
+                                onValuesChange={(filter: FilterProps) => {
+                                    if (filter.schoolYearId) {
+                                        const schoolYear = schoolYears?.find(
+                                            (item) =>
+                                                item.id === filter.schoolYearId
+                                        )
+                                        const lastSemester =
+                                            schoolYear?.semesters?.[
+                                                schoolYear.semesters.length - 1
+                                            ]
+
+                                        if (lastSemester) {
+                                            form.setFieldValue(
+                                                'semesterId',
+                                                lastSemester.id
+                                            )
+                                            debouncedRefetch()
+                                            form.focusField('semesterId')
+                                        }
+                                    } else {
+                                        debouncedRefetch()
+                                    }
+                                }}
+                            >
+                                <Flex>
+                                    <Col span={6}>
+                                        <Form.Item name="searchText">
+                                            <Input
+                                                id="search"
+                                                placeholder="Nhập tên lớp..."
+                                                style={{ height: 40 }}
+                                                prefix={
+                                                    <Search
+                                                        size={15}
+                                                        style={{
+                                                            color: 'rgba(0, 0, 0, 0.25)',
+                                                        }}
+                                                    />
+                                                }
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="schoolYearId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <Select
+                                                placeholder="Chọn năm học"
+                                                options={schoolYears?.map(
+                                                    (i: SchoolYear) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                style={{ height: 40 }}
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="semesterId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <Select
+                                                placeholder="Chọn học kỳ"
+                                                options={schoolYears
+                                                    ?.find(
+                                                        ({ id }) =>
+                                                            id === schoolYearId
+                                                    )
+                                                    ?.semesters.map(
+                                                        ({
+                                                            id,
+                                                            code,
+                                                        }: Semester) => ({
+                                                            value: id,
+                                                            label: code,
+                                                        })
+                                                    )}
+                                                style={{ height: 40 }}
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="trainingObjectId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <Select
+                                                placeholder="Chọn đối tượng đào tạo"
+                                                options={trainingObjectTypeData.map(
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                style={{ height: 40 }}
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="trainingCourseId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <Select
+                                                placeholder="Khoá đào tạo"
+                                                options={trainingCourseData.map(
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                style={{ height: 40 }}
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                </Flex>
+                            </Form>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
@@ -305,22 +332,27 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Mã môn học',
-                                dataIndex: 'maMonHoc',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: 'tenMonHoc',
+                                dataIndex: 'name',
                                 width: 150,
                             },
                             {
                                 title: 'Danh sách lớp môn học',
-                                dataIndex: 'danhSachLop',
+                                dataIndex: 'subjectClass',
                                 width: 200,
                                 render: (values: { name: string }[]) => (
-                                    <ul style={{ paddingLeft: 16, margin: 0 }}>
-                                        {values.map((val) => (
+                                    <ul
+                                        style={{
+                                            paddingLeft: 16,
+                                            margin: 0,
+                                        }}
+                                    >
+                                        {values?.map((val) => (
                                             <li key={val.name}>{val.name}</li>
                                         ))}
                                     </ul>
@@ -328,13 +360,16 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Số tín chỉ',
-                                dataIndex: 'stc',
+                                dataIndex: 'credit',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Chương trình đào tạo',
-                                dataIndex: 'chuongTrinhDaoTao',
+                                dataIndex: [
+                                    'trainingBlocks',
+                                    'trainingBlockOnCurriculumVersion',
+                                ],
                                 width: 200,
                                 render: (values: { name: string }[]) => (
                                     <ul
@@ -344,30 +379,30 @@ export default function SubjectOpeningPlan() {
                                             listStyleType: 'disc',
                                         }}
                                     >
-                                        {values.map((val) => (
+                                        {values?.map((val) => (
                                             <li key={val.name}>{val.name}</li>
                                         ))}
                                     </ul>
                                 ),
                             },
-                            {
-                                title: 'Các lớp có môn',
-                                dataIndex: 'cacLopCoMon',
-                                width: 200,
-                                render: (classes: { name: string }[]) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                            listStyleType: 'disc',
-                                        }}
-                                    >
-                                        {classes.map((cls) => (
-                                            <li key={cls.name}>{cls.name}</li>
-                                        ))}
-                                    </ul>
-                                ),
-                            },
+                            // {
+                            //     title: 'Các lớp có môn',
+                            //     dataIndex: 'cacLopCoMon',
+                            //     width: 200,
+                            //     render: (classes: { name: string }[]) => (
+                            //         <ul
+                            //             style={{
+                            //                 paddingLeft: 16,
+                            //                 margin: 0,
+                            //                 listStyleType: 'disc',
+                            //             }}
+                            //         >
+                            //             {classes.map((cls) => (
+                            //                 <li key={cls.name}>{cls.name}</li>
+                            //             ))}
+                            //         </ul>
+                            //     ),
+                            // },
                             {
                                 title: 'SV nợ',
                                 dataIndex: 'svNo',
@@ -382,13 +417,13 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Số lớp môn học',
-                                dataIndex: 'soLMH',
+                                dataIndex: ['subjectClass', 'length'],
                                 width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'donViPhuTrach',
+                                dataIndex: ['managementOrganization', 'name'],
                                 width: 200,
                             },
                             {
@@ -415,11 +450,11 @@ export default function SubjectOpeningPlan() {
                                 },
                             },
                         ]}
-                        data={dataFake}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
-                            total: count,
+                            // total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
                             showTotal: (total, range) =>
