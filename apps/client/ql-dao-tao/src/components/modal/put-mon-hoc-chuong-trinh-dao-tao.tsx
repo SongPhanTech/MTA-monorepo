@@ -3,15 +3,12 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
-    useCreateTrainingBlockOnCurriculumVersion,
     useCreateTrainingBlockSubject,
-    useFindManySubject,
     useFindManySubjectVersion,
     useFindUniqueTrainingBlockSubject,
-    useUpdateTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, InputNumber, message, Select } from 'antd'
+import { Checkbox, Col, Form, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import {
     SubjectRequirementType,
@@ -47,8 +44,6 @@ const PutTrainingBlockSubject = () => {
 
     const { data: subjectVersionData = [], refetch } =
         useFindManySubjectVersion()
-
-    console.log(initialValue)
 
     useEffect(() => {
         if (initialValue) {
