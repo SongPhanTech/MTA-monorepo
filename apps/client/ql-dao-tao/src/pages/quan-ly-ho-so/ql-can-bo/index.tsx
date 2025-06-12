@@ -58,6 +58,41 @@ export default function StaffManagement() {
     })
 
     const { data, refetch } = useFindManyStaff({
+        where: {
+            AND: [
+                ...(filters.searchText
+                    ? [
+                          {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      ]
+                    : []),
+                ...(filters.organizationText
+                    ? [
+                          {
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
+            ],
+        },
         include: {
             organization: true,
             staffType: true,
@@ -71,11 +106,50 @@ export default function StaffManagement() {
                 },
             },
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountStaff({})
+    const { data: count } = useCountStaff({
+        where: {
+            AND: [
+                ...(filters.searchText
+                    ? [
+                          {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      ]
+                    : []),
+                ...(filters.organizationText
+                    ? [
+                          {
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
+            ],
+        },
+    })
 
     const { mutateAsync: updateStaff } = useUpdateStaff()
 
@@ -321,7 +395,7 @@ export default function StaffManagement() {
                                 },
                             },
                             {
-                                title: 'Mã giảng viên',
+                                title: 'Mã cán bộ',
                                 dataIndex: 'code',
                                 align: 'center',
                                 width: 120,
@@ -337,7 +411,7 @@ export default function StaffManagement() {
                                 title: 'Họ và tên',
                                 render: (record) =>
                                     record.userProfile
-                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                                 align: 'center',
                                 width: 150,

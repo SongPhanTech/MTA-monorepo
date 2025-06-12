@@ -524,7 +524,7 @@ export default function UserProfilePageLecture() {
                                 title: 'Họ và tên',
                                 render: (record) =>
                                     record.userProfile
-                                        ? `${record.userProfile.firstName} ${record.userProfile.lastName}`
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                                 align: 'center',
                                 width: 150,
