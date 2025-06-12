@@ -3,13 +3,23 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
+    useCountSubjectClass,
+    useFindManySubjectClass,
+    useUpdateSubjectClass,
     useFindManyTrainingObjectType,
     useFindManyTrainingCourse,
+    useFindManyLecturer,
+    useFindManyCurriculumVersion,
+    useFindManySemester,
+    useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    SubjectClass,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import { Search } from 'lucide-react'
 import {
     Button,
@@ -24,14 +34,17 @@ import {
 } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import { CalendarOutlined, CheckOutlined } from '@ant-design/icons'
+import { useExamTypeOptions } from '@hooks/examType'
 // const { Option } = Select;
 interface FilterProps {
-    searchText: string | null
+    searchText: string | undefined
     trainingCourseId: string | null
+    semesterStartId: string | null
+    trainingMajorId: string | null
 }
 
 export default function TeachingAssignment() {
@@ -40,22 +53,46 @@ export default function TeachingAssignment() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingCourseId: null,
+        semesterStartId: null,
+        trainingMajorId: null,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingCourseId
-                ? { trainingCourseId: filters.trainingCourseId }
-                : {}),
-        },
+    const [isEdit, setIsEdit] = useState(false);
+    const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
+    const { getExamTypeLabel } = useExamTypeOptions()
+    const { data = [], refetch } = useFindManySubjectClass({
+        // where: {
+        //     OR: [
+        //         { name: { contains: filters.searchText, mode: 'insensitive' } },
+        //         { code: { contains: filters.searchText, mode: 'insensitive' } },
+        //     ],
+        //     semester: {
+        //         id: filters.semesterStartId || undefined,
+        //         trainingCoursesStart: {
+        //             some: {
+        //                 id: filters.trainingCourseId || undefined,
+        //             },
+        //         },
+        //     },
+        //     subject: {
+        //         managementOrganization: {
+        //             trainingMajors: {
+        //                 some: {
+        //                     id: filters.trainingMajorId || undefined,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // },
         include: {
-            organization: true,
+            semester: true,
+            mainLecturer: true,
+            subject: {
+                include: {
+                    managementOrganization: true,
+                },
+            },
+            extraLecturer: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -64,14 +101,29 @@ export default function TeachingAssignment() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
+    const { data: count } = useCountSubjectClass({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
+            OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+            semester: {
+                id: filters.semesterStartId || undefined,
+                trainingCoursesStart: {
+                    some: {
+                        id: filters.trainingCourseId || undefined,
+                    },
+                },
+            },
+            subject: {
+                managementOrganization: {
+                    trainingMajors: {
+                        some: {
+                            id: filters.trainingMajorId || undefined,
+                        },
+                    },
+                },
+            },
         },
     })
 
@@ -84,7 +136,7 @@ export default function TeachingAssignment() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateTrainingCourse } = useUpdateSubjectClass()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -110,162 +162,203 @@ export default function TeachingAssignment() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: semesterData = [], refetch: refetchSemesters } =
+        useFindManySemester({
+            where: {},
+            include: {
+                schoolYear: true,
+            },
+        })
 
+    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
+        useFindManyTrainingMajor()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const dataFake = [
-        {
-            id: 1,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            maLMH: '003560 01',
-            pcgd: true,
-            stc: 3,
-            gv1: 'gv1',
-            kipHoc: 'Sáng',
-            diaDiem: 1,
-            gvNhapDiem: 'Nguyễn Quang Uy',
-            hanPCGD: '29/09/2025',
-            thi: 'Thi viết',
-            diemBangNhau: true,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-        {
-            id: 2,
-            maMonHoc: '003603',
-            tenMonHoc: 'Toán rời rạc',
-            maLMH: '003560 02',
-            gv1: 'gv2',
-            stc: 3,
-            donViPhuTrach: 'Bộ môn Khoa học máy tính',
-        },
-    ]
+    const { data: lecturerData = [], refetch: refetchLecturer } =
+        useFindManyLecturer({
+            include: {
+                userProfile: true,
+            },
+        })
+    async function handleStatusChange(
+           
+        ) {
+            try {
+                showSpinner()
+                console.log(dataSubmit)
+                // await updateTrainingCourse({
+                   
+                //     data: {
+                //         status: newStatus,
+                //     },
+                // })
+            } catch (error) {
+                message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            }
+            hideSpinner()
+        }
 
-    const lecturerOptions = [
-        { label: 'Nguyễn Văn A', value: 'gv1' },
-        { label: 'Trần Thị B', value: 'gv2' },
-        { label: 'Lê Văn C', value: 'gv3' },
-    ]
+        const handleChangeLecturer=(record:SubjectClass,value:string|undefined)=>{
+            if(value){
+                const itemChange=lecturerData.find(i=>i?.id===value);
+                setDataSubmit(prev =>
+                    prev.map(subjectClass =>
+                        subjectClass.id === record.id ? { ...subjectClass, lecturerId: value ,mainLecturer: itemChange} : subjectClass
+                    )
+                );
+            }else {
+                const result=dataSubmit.filter(i=>i?.id!==record.id);
+                    setDataSubmit(prev =>
+                         prev.map(subjectClass =>
+                        subjectClass.id === record.id ? { ...subjectClass, lecturerId: null ,mainLecturer: null} : subjectClass
+                    )
+                    );
+            }
+        }
+
+        const handleChangeExtraLecturer=(record:SubjectClass,value:string|undefined)=>{
+            if(value){
+                const itemChange=lecturerData.find(i=>i?.id===value);
+                setDataSubmit(prev =>
+                    prev.map(subjectClass =>
+                        subjectClass.id === record.id ? { ...subjectClass, extraLecturerId: value ,extraLecturer: itemChange} : subjectClass
+                    )
+                );
+            }else {
+                setDataSubmit(prev =>
+                        prev.map(subjectClass =>
+                    subjectClass.id === record.id ? { ...subjectClass, extraLecturerId: null ,extraLecturer: null} : subjectClass
+                )
+                );
+            }
+        }
+
+        const handleCancel=()=>{
+            setIsEdit(false);
+            setDataSubmit([...data])
+        }
+
+         // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+         useEffect(() => {
+            if (data) {
+                setDataSubmit([...data])
+            }
+        }, [data?.length])
 
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
-                                            }
-                                            placeholder="Nhập tên lớp..."
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
+                        <Col span={6}>
+                                <Input
+                                    id="search"
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
+                                    style={{ width: '100%' }}
+                                    placeholder="Tìm kiếm"
+                                    allowClear
+                                />
                         </Col>
+                        <Col span={4}>
+                                <Select
+                                    placeholder="Chọn kỳ học bắt đầu"
+                                    options={semesterData.map((i) => {
+                                        return {
+                                            value: i.id,
+                                            label: `${i.name} năm ${i.schoolYear.name}`,
+                                        }
+                                    })}
+                                    style={{ width: '100%' }}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'semesterStartId',
+                                            val
+                                        )
+                                    }
+                                />
+                        </Col>
+                        <Col span={4}>
+                                <Select
+                                    placeholder="Chọn khóa"
+                                    options={trainingCourseData.map(
+                                        (i: TrainingCourse) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        }
+                                    )}
+                                    style={{ width: '100%' }}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingCourseId',
+                                            val
+                                        )
+                                    }
+                                    allowClear
+                                />
+                        </Col>
+                        <Col span={4}>
+                                <Select
+                                    placeholder="Chọn chuyên ngành"
+                                    options={trainingMajorData.map(
+                                        (i: TrainingMajor) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        }
+                                    )}
+                                    style={{ width: '100%' }}
+                                    onChange={(val) =>
+                                        handleFilterChange(
+                                            'trainingMajorId',
+                                            val
+                                        )
+                                    }
+                                />
+                        </Col>
+
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button
                                     //TODO: handle export
                                     type="primary"
-                                    className="h-[40px]"
                                 >
                                     <EditIcon stroke="white" />
                                     Nhập
                                 </Button>
-                                <Button
-                                    //TODO: handle save
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
-                                    Lưu
-                                </Button>
-                                <Button
-                                    //TODO: handle cancel
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
-                                    Hủy
-                                </Button>
+                                {isEdit ? (
+                                    <>
+                                        <Button
+                                            //TODO: handle save
+                                            onClick={() => handleStatusChange()}
+                                            type="primary"
+                                        >
+                                            Lưu
+                                        </Button>
+                                        <Button
+                                            //TODO: handle cancel
+                                            onClick={() => handleCancel()}
+                                            type="primary"
+                                        >
+                                            Hủy
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        onClick={() => setIsEdit(true)}
+                                        //TODO: handle save
+                                        type="primary"
+                                    >
+                                        Sửa
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -288,65 +381,84 @@ export default function TeachingAssignment() {
                             },
                             {
                                 title: 'PCGD',
-                                dataIndex: 'pcgd',
                                 align: 'center',
                                 width: 100,
-                                render: (value) => {
-                                    return value ? (
-                                        <CheckOutlined className="text-[#028850]" />
-                                    ) : (
-                                        ''
-                                    )
-                                },
+                                render: (value: boolean) => (
+                                    <Checkbox checked={!!value} />
+                                ),
                             },
                             {
                                 title: 'Mã lớp môn học',
-                                dataIndex: 'maLMH',
+                                dataIndex: 'code',
                                 width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: 'tenMonHoc',
+                                dataIndex: 'name',
                                 width: 150,
-                            },
-                            {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'stc',
-                                width: 120,
                                 align: 'center',
                             },
                             {
+                                title: 'Số tín chỉ',
+                                dataIndex: 'subject',
+                                width: 120,
+                                align: 'center',
+                                render: (value) =>
+                                    value?.credit ? value?.credit : '',
+                            },
+                            {
                                 title: 'Giảng viên 1',
-                                dataIndex: 'gv1',
                                 width: 200,
-                                render: (value, index) => (
+                                align: 'center',
+                                render: (record) => (
                                     <Select
                                         style={{ width: '100%' }}
-                                        options={lecturerOptions}
-                                        value={value || undefined}
+                                        options={lecturerData.map((i) => {
+                                            return {
+                                                value: i?.id,
+                                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                            }
+                                        })}
+                                        value={record.lecturerId}
                                         placeholder="Chọn giảng viên"
-                                        onChange={(selectedValue) => {
-                                            console.log(
-                                                `Selected ${selectedValue} for row ${index}`
-                                            )
-                                        }}
+                                        onChange={(selectedValue)=>handleChangeLecturer(record,selectedValue)}
+                                        disabled={!isEdit}
                                     />
                                 ),
                             },
                             {
                                 title: 'Giảng viên 2',
-                                dataIndex: 'gv2',
-                                width: 150,
+                                width: 200,
+                                align: 'center',
+                                render: (record) => (
+                                    <Select
+                                        style={{ width: '100%' }}
+                                        options={lecturerData.map((i) => {
+                                            return {
+                                                value: i?.id,
+                                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                            }
+                                        })}
+                                        value={record.extraLecturerId || undefined}
+                                        placeholder="Chọn giảng viên"
+                                        onChange={(selectedValue)=>handleChangeExtraLecturer(record,selectedValue)}
+                                        disabled={!isEdit}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Hình thức thi',
-                                dataIndex: 'thi',
+                                dataIndex: 'subject',
+                                align: 'center',
                                 width: 120,
+                                render: (value) =>
+                                    getExamTypeLabel(value?.examType) || '',
                             },
                             {
                                 title: 'Kíp học',
                                 dataIndex: 'kipHoc',
+                                align: 'center',
                                 width: 100,
                             },
                             {
@@ -357,6 +469,7 @@ export default function TeachingAssignment() {
                             {
                                 title: 'Giảng viên nhập điểm',
                                 dataIndex: 'gvNhapDiem',
+                                align: 'center',
                                 width: 150,
                             },
                             {
@@ -371,16 +484,23 @@ export default function TeachingAssignment() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'donViPhuTrach',
+                                dataIndex: 'subject',
                                 width: 200,
+                                render: (value) =>
+                                    value?.managementOrganization?.name
+                                        ? value?.managementOrganization?.name
+                                        : '',
                             },
                             {
                                 title: 'Điểm bằng nhau',
-                                dataIndex: 'diemBangNhau',
+                                dataIndex: 'subject',
                                 width: 150,
                                 align: 'center',
-                                render: (value: boolean) => (
-                                    <Checkbox checked={value} disabled />
+                                render: (value) => (
+                                    <Checkbox
+                                        checked={value.subjectEquivalentType}
+                                        disabled
+                                    />
                                 ),
                             },
                             {
@@ -389,7 +509,7 @@ export default function TeachingAssignment() {
                                 width: 150,
                             },
                         ]}
-                        data={dataFake}
+                        data={dataSubmit}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

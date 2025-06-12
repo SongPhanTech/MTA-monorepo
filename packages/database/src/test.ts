@@ -2,7 +2,17 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-await prisma.$executeRaw`
-    UPDATE "ql-nguoi-dung"."UserProfile"
-    SET "fullname" = concat("firstName", ' ', "lastName");
-  `
+const semester = await prisma.semester.findFirstOrThrow();
+const subject = await prisma.subjectVersion.findFirstOrThrow();
+
+const c = await prisma.subjectClass.create({
+  data: {
+    name: 'CNTT61',
+    startDate: new Date(),
+    semesterId: semester.id,
+    schedule: 'MORNING',
+    subjectId: subject.id,
+  }
+})
+
+console.log(c);
