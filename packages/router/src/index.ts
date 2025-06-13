@@ -352,7 +352,7 @@ const NAVIGATION: NavigationType = {
                         id: 'danh-muc-chuyen-doi-diem',
                         label: 'Bảng chuyển đổi điểm',
                         icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_CHUYEN_DOI_DIEM,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                         description: 'Bảng chuyển đổi điểm',
                     },
                     {
@@ -442,28 +442,28 @@ const NAVIGATION: NavigationType = {
                         id: 'khoa-nhap-diem',
                         label: 'Mở/Khóa nhập điểm',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .KHOA_NHAP_DIEM,
+                            .QUAN_LY_DIEM_KHOA_NHAP_DIEM,
                         description: 'Mở/Khóa nhập điểm',
                     },
                     {
                         id: 'ds-lop-mon-hoc',
                         label: 'Danh sách lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .DS_LOP_MON_HOC,
+                            .QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         description: 'Danh sách lớp môn học',
                     },
                     {
                         id: 'ql-diem-lop-mon-hoc',
                         label: 'Nhập điểm lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .QL_DIEM_LOP_MON_HOC,
+                            .QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         description: 'Nhập điểm lớp môn học',
                     },
                     {
                         id: 'ql-diem-ren-luyen',
                         label: 'Nhập điểm rèn luyện',
                         path: ROUTER_PATH.QL_DAO_TAO
-                            .QL_DIEM_REN_LUYEN,
+                            .QUAN_LY_DIEM_QL_DIEM_REN_LUYEN,
                         description: 'Nhập điểm rèn luyện',
                     },
                 ],

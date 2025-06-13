@@ -139,18 +139,28 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
     data: {
       id: string;
       code?: string | null;
+      /**
+       * @default true
+       */
+      active?: boolean;
       description?: string | null;
       deletedAt?: string | null;
       /**
-       * @default 2025-06-12T12:50:33.485Z
+       * @default 2025-06-13T08:24:21.615Z
        */
       createdAt?: string | null;
       updatedAt: string | null;
       name: string;
+      summary?: string | null;
+      startYear?: number | null;
+      /**
+       * @default false
+       */
+      graduated?: boolean | null;
       /**
        * @default 0
        */
-      classSize?: number;
+      initSize?: number;
     }[];
     count: number;
   });
@@ -402,6 +412,133 @@ export const useExportStudentFixedClassDocx = <TData = undefined,>(
   });
 };
 
+export type LecturerAssignmentError = Fetcher.ErrorWrapper<undefined>;
+
+export type LecturerAssignmentResponse = Schemas.TeachingAssignmentResponse[];
+
+export type LecturerAssignmentRequestBody = Schemas.TeachingAssignmentRequest[];
+
+export type LecturerAssignmentVariables = {
+  body?: LecturerAssignmentRequestBody;
+} & DaotaoContext["fetcherOptions"];
+
+/**
+ * Phân công giảng dạy
+ */
+export const fetchLecturerAssignment = (
+  variables: LecturerAssignmentVariables,
+  signal?: AbortSignal,
+) =>
+  daotaoFetch<
+    LecturerAssignmentResponse,
+    LecturerAssignmentError,
+    LecturerAssignmentRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/subject-class/teaching-assignment",
+    method: "put",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Phân công giảng dạy
+ */
+export const useLecturerAssignment = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      LecturerAssignmentResponse,
+      LecturerAssignmentError,
+      LecturerAssignmentVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    LecturerAssignmentResponse,
+    LecturerAssignmentError,
+    LecturerAssignmentVariables
+  >({
+    mutationFn: (variables: LecturerAssignmentVariables) =>
+      fetchLecturerAssignment({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type OpenSubjectClassQueryParams = {
+  semesterId: Schemas.SemesterId;
+  trainingCourseId?: Schemas.TrainingCourseId;
+  trainingMajorId?: Schemas.TrainingMajorId;
+  search?: Schemas.Search;
+  page: Schemas.Page;
+  pageSize: Schemas.PageSize;
+};
+
+export type OpenSubjectClassError = Fetcher.ErrorWrapper<undefined>;
+
+export type OpenSubjectClassResponse = (void | null)[];
+
+export type OpenSubjectClassVariables = {
+  queryParams: OpenSubjectClassQueryParams;
+} & DaotaoContext["fetcherOptions"];
+
+/**
+ * Lấy danh sách lớp môn học đã mở
+ */
+export const fetchOpenSubjectClass = (
+  variables: OpenSubjectClassVariables,
+  signal?: AbortSignal,
+) =>
+  daotaoFetch<
+    OpenSubjectClassResponse,
+    OpenSubjectClassError,
+    undefined,
+    {},
+    OpenSubjectClassQueryParams,
+    {}
+  >({
+    url: "/api/subject-class/open-subject-class",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Lấy danh sách lớp môn học đã mở
+ */
+export const useOpenSubjectClass = <TData = OpenSubjectClassResponse,>(
+  variables: OpenSubjectClassVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      OpenSubjectClassResponse,
+      OpenSubjectClassError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDaotaoContext(options);
+  return reactQuery.useQuery<
+    OpenSubjectClassResponse,
+    OpenSubjectClassError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/api/subject-class/open-subject-class",
+      operationId: "openSubjectClass",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchOpenSubjectClass({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/api/fixed-class/docx-list-student-fixed-class-labels";
@@ -412,4 +549,9 @@ export type QueryOperation =
       path: "/api/fixed-class/export-docx-list-student-fixed-class";
       operationId: "exportStudentFixedClassDocx";
       variables: ExportStudentFixedClassDocxVariables;
+    }
+  | {
+      path: "/api/subject-class/open-subject-class";
+      operationId: "openSubjectClass";
+      variables: OpenSubjectClassVariables;
     };
