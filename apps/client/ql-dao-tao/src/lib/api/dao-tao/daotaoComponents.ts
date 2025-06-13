@@ -3,22 +3,22 @@
  *
  * @version 1.0.0
  */
-import * as reactQuery from '@tanstack/react-query'
-import { useDaotaoContext, DaotaoContext } from './daotaoContext'
-import type * as Fetcher from './daotaoFetcher'
-import { daotaoFetch } from './daotaoFetcher'
-import type * as Schemas from './daotaoSchemas'
+import * as reactQuery from "@tanstack/react-query";
+import { useDaotaoContext, DaotaoContext } from "./daotaoContext";
+import type * as Fetcher from "./daotaoFetcher";
+import { daotaoFetch } from "./daotaoFetcher";
+import type * as Schemas from "./daotaoSchemas";
 
 export type UploadExcelCreateUserProfileError = Fetcher.ErrorWrapper<{
-    status: 400
-    payload: {
-        message: string
-    }
-}>
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
 
 export type UploadExcelCreateUserProfileVariables = {
-    body: Schemas.UploadExcelCreateUserProfile
-} & DaotaoContext['fetcherOptions']
+  body: Schemas.UploadExcelCreateUserProfile;
+} & DaotaoContext["fetcherOptions"];
 
 /**
  * Thêm mới danh sách học viên/sinh viên
@@ -26,22 +26,22 @@ export type UploadExcelCreateUserProfileVariables = {
  *  [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType
  */
 export const fetchUploadExcelCreateUserProfile = (
-    variables: UploadExcelCreateUserProfileVariables,
-    signal?: AbortSignal
+  variables: UploadExcelCreateUserProfileVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        Schemas.ListOfundefined,
-        UploadExcelCreateUserProfileError,
-        Schemas.UploadExcelCreateUserProfile,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/UserProfile/upload-excel-create-user-profile',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    Schemas.ListOfundefined,
+    UploadExcelCreateUserProfileError,
+    Schemas.UploadExcelCreateUserProfile,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/UserProfile/upload-excel-create-user-profile",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 /**
  * Thêm mới danh sách học viên/sinh viên
@@ -49,96 +49,90 @@ export const fetchUploadExcelCreateUserProfile = (
  *  [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType
  */
 export const useUploadExcelCreateUserProfile = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            Schemas.ListOfundefined,
-            UploadExcelCreateUserProfileError,
-            UploadExcelCreateUserProfileVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.ListOfundefined,
+      UploadExcelCreateUserProfileError,
+      UploadExcelCreateUserProfileVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useDaotaoContext()
-    return reactQuery.useMutation<
-        Schemas.ListOfundefined,
-        UploadExcelCreateUserProfileError,
-        UploadExcelCreateUserProfileVariables
-    >({
-        mutationFn: (variables: UploadExcelCreateUserProfileVariables) =>
-            fetchUploadExcelCreateUserProfile({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    Schemas.ListOfundefined,
+    UploadExcelCreateUserProfileError,
+    UploadExcelCreateUserProfileVariables
+  >({
+    mutationFn: (variables: UploadExcelCreateUserProfileVariables) =>
+      fetchUploadExcelCreateUserProfile({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type UploadExcelUpdateUserProfileError = Fetcher.ErrorWrapper<{
-    status: 400
-    payload: {
-        message: string
-    }
-}>
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
 
 export type UploadExcelUpdateUserProfileVariables = {
-    body: Schemas.UploadExcelUpdateUserProfile
-} & DaotaoContext['fetcherOptions']
+  body: Schemas.UploadExcelUpdateUserProfile;
+} & DaotaoContext["fetcherOptions"];
 
 /**
  * Cập nhật thông tin học viên/sinh viên
  */
 export const fetchUploadExcelUpdateUserProfile = (
-    variables: UploadExcelUpdateUserProfileVariables,
-    signal?: AbortSignal
+  variables: UploadExcelUpdateUserProfileVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        Schemas.ListOfundefined,
-        UploadExcelUpdateUserProfileError,
-        Schemas.UploadExcelUpdateUserProfile,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/UserProfile/upload-excel-update-user-profile',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    Schemas.ListOfundefined,
+    UploadExcelUpdateUserProfileError,
+    Schemas.UploadExcelUpdateUserProfile,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/UserProfile/upload-excel-update-user-profile",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 /**
  * Cập nhật thông tin học viên/sinh viên
  */
 export const useUploadExcelUpdateUserProfile = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            Schemas.ListOfundefined,
-            UploadExcelUpdateUserProfileError,
-            UploadExcelUpdateUserProfileVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.ListOfundefined,
+      UploadExcelUpdateUserProfileError,
+      UploadExcelUpdateUserProfileVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useDaotaoContext()
-    return reactQuery.useMutation<
-        Schemas.ListOfundefined,
-        UploadExcelUpdateUserProfileError,
-        UploadExcelUpdateUserProfileVariables
-    >({
-        mutationFn: (variables: UploadExcelUpdateUserProfileVariables) =>
-            fetchUploadExcelUpdateUserProfile({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    Schemas.ListOfundefined,
+    UploadExcelUpdateUserProfileError,
+    UploadExcelUpdateUserProfileVariables
+  >({
+    mutationFn: (variables: UploadExcelUpdateUserProfileVariables) =>
+      fetchUploadExcelUpdateUserProfile({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type UploadExcelCreateFixedClassError = Fetcher.ErrorWrapper<{
-    status: 400
-    payload: {
-        message: string
-    }
-}>
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
 
 export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
     (Schemas.PaginationQuery & {
@@ -172,8 +166,8 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
     })
 
 export type UploadExcelCreateFixedClassVariables = {
-    body: Schemas.UploadExcelCreateFixedClass
-} & DaotaoContext['fetcherOptions']
+  body: Schemas.UploadExcelCreateFixedClass;
+} & DaotaoContext["fetcherOptions"];
 
 /**
  * Thêm mới danh sách lớp biên chế
@@ -181,22 +175,22 @@ export type UploadExcelCreateFixedClassVariables = {
  *  [trainingCourseId] là id của khoá học, lấy trong bảng TrainingCourse
  */
 export const fetchUploadExcelCreateFixedClass = (
-    variables: UploadExcelCreateFixedClassVariables,
-    signal?: AbortSignal
+  variables: UploadExcelCreateFixedClassVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        UploadExcelCreateFixedClassResponse,
-        UploadExcelCreateFixedClassError,
-        Schemas.UploadExcelCreateFixedClass,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/fixed-class/FixedClass/upload-excel-create-fixed-class',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    UploadExcelCreateFixedClassResponse,
+    UploadExcelCreateFixedClassError,
+    Schemas.UploadExcelCreateFixedClass,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/fixed-class/FixedClass/upload-excel-create-fixed-class",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 /**
  * Thêm mới danh sách lớp biên chế
@@ -204,222 +198,346 @@ export const fetchUploadExcelCreateFixedClass = (
  *  [trainingCourseId] là id của khoá học, lấy trong bảng TrainingCourse
  */
 export const useUploadExcelCreateFixedClass = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            UploadExcelCreateFixedClassResponse,
-            UploadExcelCreateFixedClassError,
-            UploadExcelCreateFixedClassVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      UploadExcelCreateFixedClassResponse,
+      UploadExcelCreateFixedClassError,
+      UploadExcelCreateFixedClassVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useDaotaoContext()
-    return reactQuery.useMutation<
-        UploadExcelCreateFixedClassResponse,
-        UploadExcelCreateFixedClassError,
-        UploadExcelCreateFixedClassVariables
-    >({
-        mutationFn: (variables: UploadExcelCreateFixedClassVariables) =>
-            fetchUploadExcelCreateFixedClass({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    UploadExcelCreateFixedClassResponse,
+    UploadExcelCreateFixedClassError,
+    UploadExcelCreateFixedClassVariables
+  >({
+    mutationFn: (variables: UploadExcelCreateFixedClassVariables) =>
+      fetchUploadExcelCreateFixedClass({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
-export type ClassDivisionError = Fetcher.ErrorWrapper<undefined>
+export type ClassDivisionError = Fetcher.ErrorWrapper<undefined>;
 
-export type ClassDivisionResponse = (void | null)[]
+export type ClassDivisionResponse = (void | null)[];
 
 export type ClassDivisionVariables = {
-    body: Schemas.ClassDivision
-} & DaotaoContext['fetcherOptions']
+  body: Schemas.ClassDivision;
+} & DaotaoContext["fetcherOptions"];
 
 /**
  * Phân chia học viên vào các lớp
  */
 export const fetchClassDivision = (
-    variables: ClassDivisionVariables,
-    signal?: AbortSignal
+  variables: ClassDivisionVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        ClassDivisionResponse,
-        ClassDivisionError,
-        Schemas.ClassDivision,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/fixed-class/upload-excel-update-user-profile',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    ClassDivisionResponse,
+    ClassDivisionError,
+    Schemas.ClassDivision,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/fixed-class/upload-excel-update-user-profile",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 /**
  * Phân chia học viên vào các lớp
  */
 export const useClassDivision = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            ClassDivisionResponse,
-            ClassDivisionError,
-            ClassDivisionVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      ClassDivisionResponse,
+      ClassDivisionError,
+      ClassDivisionVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useDaotaoContext()
-    return reactQuery.useMutation<
-        ClassDivisionResponse,
-        ClassDivisionError,
-        ClassDivisionVariables
-    >({
-        mutationFn: (variables: ClassDivisionVariables) =>
-            fetchClassDivision({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    ClassDivisionResponse,
+    ClassDivisionError,
+    ClassDivisionVariables
+  >({
+    mutationFn: (variables: ClassDivisionVariables) =>
+      fetchClassDivision({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type DocxListStudentFixedClassLabelsError =
-    Fetcher.ErrorWrapper<undefined>
+  Fetcher.ErrorWrapper<undefined>;
 
 export type DocxListStudentFixedClassLabelsVariables =
-    DaotaoContext['fetcherOptions']
+  DaotaoContext["fetcherOptions"];
 
 export const fetchDocxListStudentFixedClassLabels = (
-    variables: DocxListStudentFixedClassLabelsVariables,
-    signal?: AbortSignal
+  variables: DocxListStudentFixedClassLabelsVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        Schemas.SerializedFields,
-        DocxListStudentFixedClassLabelsError,
-        undefined,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/fixed-class/docx-list-student-fixed-class-labels',
-        method: 'get',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    Schemas.SerializedFields,
+    DocxListStudentFixedClassLabelsError,
+    undefined,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/fixed-class/docx-list-student-fixed-class-labels",
+    method: "get",
+    ...variables,
+    signal,
+  });
 
 export const useDocxListStudentFixedClassLabels = <
-    TData = Schemas.SerializedFields,
+  TData = Schemas.SerializedFields,
 >(
-    variables: DocxListStudentFixedClassLabelsVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            Schemas.SerializedFields,
-            DocxListStudentFixedClassLabelsError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: DocxListStudentFixedClassLabelsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SerializedFields,
+      DocxListStudentFixedClassLabelsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } =
-        useDaotaoContext(options)
-    return reactQuery.useQuery<
-        Schemas.SerializedFields,
-        DocxListStudentFixedClassLabelsError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/api/fixed-class/docx-list-student-fixed-class-labels',
-            operationId: 'docxListStudentFixedClassLabels',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchDocxListStudentFixedClassLabels(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDaotaoContext(options);
+  return reactQuery.useQuery<
+    Schemas.SerializedFields,
+    DocxListStudentFixedClassLabelsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/api/fixed-class/docx-list-student-fixed-class-labels",
+      operationId: "docxListStudentFixedClassLabels",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchDocxListStudentFixedClassLabels(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type ExportStudentFixedClassDocxQueryParams = {
-    fixedClassId: Schemas.FixedClassId
-}
+  fixedClassId: Schemas.FixedClassId;
+};
 
 export type ExportStudentFixedClassDocxError = Fetcher.ErrorWrapper<
-    | {
-          status: 400
-          payload: {
-              message: string
-          }
-      }
-    | {
-          status: 404
-          payload: {
-              message: string
-          }
-      }
->
+  | {
+      status: 400;
+      payload: {
+        message: string;
+      };
+    }
+  | {
+      status: 404;
+      payload: {
+        message: string;
+      };
+    }
+>;
 
 export type ExportStudentFixedClassDocxVariables = {
-    queryParams: ExportStudentFixedClassDocxQueryParams
-} & DaotaoContext['fetcherOptions']
+  queryParams: ExportStudentFixedClassDocxQueryParams;
+} & DaotaoContext["fetcherOptions"];
 
 /**
  * Xuất file docx danh sách sinh viên trong lớp biên chế
  */
 export const fetchExportStudentFixedClassDocx = (
-    variables: ExportStudentFixedClassDocxVariables,
-    signal?: AbortSignal
+  variables: ExportStudentFixedClassDocxVariables,
+  signal?: AbortSignal,
 ) =>
-    daotaoFetch<
-        undefined,
-        ExportStudentFixedClassDocxError,
-        undefined,
-        {},
-        ExportStudentFixedClassDocxQueryParams,
-        {}
-    >({
-        url: '/api/fixed-class/export-docx-list-student-fixed-class',
-        method: 'get',
-        ...variables,
-        signal,
-    })
+  daotaoFetch<
+    undefined,
+    ExportStudentFixedClassDocxError,
+    undefined,
+    {},
+    ExportStudentFixedClassDocxQueryParams,
+    {}
+  >({
+    url: "/api/fixed-class/export-docx-list-student-fixed-class",
+    method: "get",
+    ...variables,
+    signal,
+  });
 
 /**
  * Xuất file docx danh sách sinh viên trong lớp biên chế
  */
-export const useExportStudentFixedClassDocx = <TData = undefined>(
-    variables: ExportStudentFixedClassDocxVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            undefined,
-            ExportStudentFixedClassDocxError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+export const useExportStudentFixedClassDocx = <TData = undefined,>(
+  variables: ExportStudentFixedClassDocxVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      undefined,
+      ExportStudentFixedClassDocxError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } =
-        useDaotaoContext(options)
-    return reactQuery.useQuery<
-        undefined,
-        ExportStudentFixedClassDocxError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/api/fixed-class/export-docx-list-student-fixed-class',
-            operationId: 'exportStudentFixedClassDocx',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchExportStudentFixedClassDocx(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDaotaoContext(options);
+  return reactQuery.useQuery<
+    undefined,
+    ExportStudentFixedClassDocxError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/api/fixed-class/export-docx-list-student-fixed-class",
+      operationId: "exportStudentFixedClassDocx",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchExportStudentFixedClassDocx(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type LecturerAssignmentError = Fetcher.ErrorWrapper<undefined>;
+
+export type LecturerAssignmentResponse = Schemas.TeachingAssignmentResponse[];
+
+export type LecturerAssignmentRequestBody = Schemas.TeachingAssignmentRequest[];
+
+export type LecturerAssignmentVariables = {
+  body?: LecturerAssignmentRequestBody;
+} & DaotaoContext["fetcherOptions"];
+
+/**
+ * Phân công giảng dạy
+ */
+export const fetchLecturerAssignment = (
+  variables: LecturerAssignmentVariables,
+  signal?: AbortSignal,
+) =>
+  daotaoFetch<
+    LecturerAssignmentResponse,
+    LecturerAssignmentError,
+    LecturerAssignmentRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/subject-class/teaching-assignment",
+    method: "put",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Phân công giảng dạy
+ */
+export const useLecturerAssignment = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      LecturerAssignmentResponse,
+      LecturerAssignmentError,
+      LecturerAssignmentVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useDaotaoContext();
+  return reactQuery.useMutation<
+    LecturerAssignmentResponse,
+    LecturerAssignmentError,
+    LecturerAssignmentVariables
+  >({
+    mutationFn: (variables: LecturerAssignmentVariables) =>
+      fetchLecturerAssignment({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type OpenSubjectClassQueryParams = {
+  semesterId: Schemas.SemesterId;
+  trainingCourseId?: Schemas.TrainingCourseId;
+  trainingMajorId?: Schemas.TrainingMajorId;
+  search?: Schemas.Search;
+  page: Schemas.Page;
+  pageSize: Schemas.PageSize;
+};
+
+export type OpenSubjectClassError = Fetcher.ErrorWrapper<undefined>;
+
+export type OpenSubjectClassResponse = (void | null)[];
+
+export type OpenSubjectClassVariables = {
+  queryParams: OpenSubjectClassQueryParams;
+} & DaotaoContext["fetcherOptions"];
+
+/**
+ * Lấy danh sách lớp môn học đã mở
+ */
+export const fetchOpenSubjectClass = (
+  variables: OpenSubjectClassVariables,
+  signal?: AbortSignal,
+) =>
+  daotaoFetch<
+    OpenSubjectClassResponse,
+    OpenSubjectClassError,
+    undefined,
+    {},
+    OpenSubjectClassQueryParams,
+    {}
+  >({
+    url: "/api/subject-class/open-subject-class",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Lấy danh sách lớp môn học đã mở
+ */
+export const useOpenSubjectClass = <TData = OpenSubjectClassResponse,>(
+  variables: OpenSubjectClassVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      OpenSubjectClassResponse,
+      OpenSubjectClassError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDaotaoContext(options);
+  return reactQuery.useQuery<
+    OpenSubjectClassResponse,
+    OpenSubjectClassError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/api/subject-class/open-subject-class",
+      operationId: "openSubjectClass",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchOpenSubjectClass({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type LecturerAssignmentError = Fetcher.ErrorWrapper<undefined>
 
@@ -549,6 +667,7 @@ export const useOpenSubjectClass = <TData = OpenSubjectClassResponse>(
 }
 
 export type QueryOperation =
+
     | {
           path: '/api/fixed-class/docx-list-student-fixed-class-labels'
           operationId: 'docxListStudentFixedClassLabels'
@@ -564,3 +683,4 @@ export type QueryOperation =
           operationId: 'openSubjectClass'
           variables: OpenSubjectClassVariables
       }
+

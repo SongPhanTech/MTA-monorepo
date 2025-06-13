@@ -4,34 +4,34 @@
  * @version 0.1.0
  */
 export type BodyChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-    {
-        id_document?: string
-    }
+  {
+    id_document?: string;
+  };
 
 export type BodyFaqVectorizeFaqVectorizePost = {
-    id_document?: string
-}
+  id_document?: string;
+};
 
 export type BodyHoiDapHoiDapPost = {
-    prompt?: string
-    type_data?: string
-    conversation_id?: string
-}
+  prompt?: string;
+  type_data?: string;
+  conversation_id?: string;
+};
 
 export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
-    prompt?: string
-}
+  prompt?: string;
+};
 
 export type BodyTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = {
-    prompt?: string
-}
+  prompt?: string;
+};
 
 export type HTTPValidationError = {
-    detail?: ValidationError[]
-}
+  detail?: ValidationError[];
+};
 
 export type ValidationError = {
-    loc: (string | number)[]
-    msg: string
-    type: string
-}
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+};

@@ -118,7 +118,18 @@ function buildOrgTree(
             children: buildOrgTree(list, item.id),
         }))
 }
-
+// function buildOrgTree(
+//     list: Array<{ id: string; name: string; parentId: string | null }>,
+//     parentId = '0'
+// ): Array<{ title: string; value: string; children: any[] }> {
+//     return list
+//         .filter((item) => (item.parentId ?? '0') === parentId)
+//         .map((item) => ({
+//             title: item.name,
+//             value: item.id,
+//             children: buildOrgTree(list, item.id),
+//         }))
+// }
 export {
     formatDate,
     formatDateReadable,

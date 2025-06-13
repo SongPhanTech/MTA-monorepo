@@ -4,50 +4,50 @@
  * @version 1.0.0
  */
 export type DocumentType =
-    | 'GENERAL_ADMISSIONS_INFORMATION'
-    | 'ADMISSIONS_RULES_AND_REGULATIONS'
-    | 'TRAINING_RULES_AND_REGULATIONS'
-    | 'EXAMINATION_RULES_AND_REGULATIONS'
-    | 'ACADEMY_INFORMATION'
-    | 'TRAINING_PROGRAMS_INFORMATION'
-    | 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS'
-    | 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS'
-    | 'FREQUENTLY_ASKED_QUESTIONS'
-    | 'PARTY_WORK_AND_POLITICAL_WORK'
-    | 'INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY'
-    | 'IN_THE_FACULTY_HANDBOOK'
-    | 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE'
-    | 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS'
-    | 'EXTRACTIVE_TEXT_SUMMARIZATION'
-    | 'ABSTRACTIVE_TEXT_SUMMARIZATION'
+  | "GENERAL_ADMISSIONS_INFORMATION"
+  | "ADMISSIONS_RULES_AND_REGULATIONS"
+  | "TRAINING_RULES_AND_REGULATIONS"
+  | "EXAMINATION_RULES_AND_REGULATIONS"
+  | "ACADEMY_INFORMATION"
+  | "TRAINING_PROGRAMS_INFORMATION"
+  | "REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS"
+  | "REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS"
+  | "FREQUENTLY_ASKED_QUESTIONS"
+  | "PARTY_WORK_AND_POLITICAL_WORK"
+  | "INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY"
+  | "IN_THE_FACULTY_HANDBOOK"
+  | "TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE"
+  | "DETECTION_AND_CORRECTION_OF_TEXT_ERRORS"
+  | "EXTRACTIVE_TEXT_SUMMARIZATION"
+  | "ABSTRACTIVE_TEXT_SUMMARIZATION";
 
 export type HTTPValidationError = {
-    detail?: ValidationError[]
-}
+  detail?: ValidationError[];
+};
 
 export type SimilarDocumentResponse = {
-    id: string
-    score: number
-}
+  id: string;
+  score: number;
+};
 
 export type SimilarFQAResponse = {
-    id: string
-    score: number
-}
+  id: string;
+  score: number;
+};
 
 export type ValidationError = {
-    loc: (string | number)[]
-    msg: string
-    type: string
-}
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+};
 
 export type SrcRoutersDocumentDocumentReaderResponse = {
-    body?: string | null
-    message?: string | null
-    document_simmilar?: any[] | null
-}
+  body?: string | null;
+  message?: string | null;
+  document_simmilar?: any[] | null;
+};
 
 export type SrcRoutersUtilDocumentReaderResponse = {
-    body?: string | null
-    message?: string | null
-}
+  body?: string | null;
+  message?: string | null;
+};
