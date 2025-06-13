@@ -97,31 +97,36 @@ export default function Page() {
 
             if (!response.body) {
                 message.error('Không có nội dung phản hồi')
+                setBotTyping(false)
+                setLoading(false)
                 return
             }
+
+            setBotTyping(false)
+            setLoading(false)
 
             const botId = Date.now()
             setMessages((prev) => [
                 ...prev,
-                { id: botId, role: 'BOT', content: '' },
+                {
+                    id: botId,
+                    role: 'BOT',
+                    content: '...',
+                },
             ])
 
-            try {
-                await readStreamWithLiveUpdate(
-                    response.body,
-                    (chunk, fullText) => {
-                        setMessages((prev) =>
-                            prev.map((msg) =>
-                                msg.id === botId
-                                    ? { ...msg, content: fullText }
-                                    : msg
-                            )
+            await readStreamWithLiveUpdate(
+                response.body,
+                async (chunk, fullText) => {
+                    setMessages((prev) =>
+                        prev.map((msg) =>
+                            msg.id === botId
+                                ? { ...msg, content: fullText }
+                                : msg
                         )
-                    }
-                )
-            } finally {
-                setBotTyping(false)
-            }
+                    )
+                }
+            )
         } catch (err) {
             if (err instanceof Error && err.name === 'AbortError') {
                 message.warning('Đã hủy yêu cầu')
@@ -129,8 +134,6 @@ export default function Page() {
                 console.error(err)
                 message.error('Đã xảy ra lỗi khi gửi tin nhắn')
             }
-        } finally {
-            setLoading(false)
         }
     }
 
@@ -253,16 +256,16 @@ export default function Page() {
                             )}
                         />
                     )}
-                </div>
-
-                {botTyping && (
-                    <div className="flex justify-center items-center gap-2 pb-4">
-                        <div className="px-4 py-2 bg-[#D5DAE7] text-black rounded-md max-w-xs">
-                            <Spin size="small" />
-                            <span className="ml-2">Đang trả lời...</span>
+                    {botTyping && (
+                        <div className="flex justify-center items-center py-2">
+                            <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl">
+                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0s]" />
+                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]" />
+                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.4s]" />
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
                 <ChatInput
                     input={input}
