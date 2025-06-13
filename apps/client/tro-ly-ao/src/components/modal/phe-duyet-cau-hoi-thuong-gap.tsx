@@ -31,7 +31,7 @@ const PheDuyetCauHoiThuongGap = () => {
             if (values.status === $Enums.DocumentStatus.APPROVE) {
                 await fetchFaqVectorizeFaqVectorizePost({
                     queryParams: {
-                        documentId,
+                        id_document: documentId,
                     },
                 })
             }
