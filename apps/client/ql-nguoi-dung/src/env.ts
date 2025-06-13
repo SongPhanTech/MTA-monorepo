@@ -25,6 +25,7 @@ export const env = createEnv({
         NEXT_PUBLIC_API_BASE_URL: z.string().url(),
         NEXT_PUBLIC_MY_ACCOUNT: z.string().url(),
         NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
+        NEXT_PUBLIC_TRO_LY_AO_URL: z.string().url(),
     },
 
     /**
@@ -43,6 +44,7 @@ export const env = createEnv({
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+        NEXT_PUBLIC_TRO_LY_AO_URL: process.env.NEXT_PUBLIC_TRO_LY_AO_URL,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
