@@ -462,7 +462,7 @@ const PutFixedClassModal = () => {
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: i?.userProfile?.fullname,
+                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}
@@ -472,11 +472,11 @@ const PutFixedClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="staffManagementId" label="CBQL">
                     <Select
-                        placeholder="Chọn giáo viên chủ nhiệm"
+                        placeholder="Chọn cán bộ quản lý"
                         options={staffData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: i?.userProfile?.fullname,
+                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}
