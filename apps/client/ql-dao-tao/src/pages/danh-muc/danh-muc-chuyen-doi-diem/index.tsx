@@ -44,44 +44,42 @@ export default function TrainingFieldPage() {
     const { data = [], refetch } = useFindManyScoreConvert({
         where: {
             active:
-                filters.active === "true"
+                filters.active === 'true'
                     ? true
-                    : filters.active === "false"
-                        ? false
-                        : undefined,
+                    : filters.active === 'false'
+                      ? false
+                      : undefined,
             ...(filters.searchText && filters.searchText.trim() !== ''
                 ? {
-                    AND: [
-                        { score10From: { lte: Number(filters.searchText) } },
-                        { score10To: { gte: Number(filters.searchText) } },
-                    ],
-                }
+                      AND: [
+                          { score10From: { lte: Number(filters.searchText) } },
+                          { score10To: { gte: Number(filters.searchText) } },
+                      ],
+                  }
                 : {}),
             // deletedAt: null,
-        }
-
+        },
     })
 
     const { data: count } = useCountScoreConvert({
         where: {
             active:
-                filters.active === "true"
+                filters.active === 'true'
                     ? true
-                    : filters.active === "false"
-                        ? false
-                        : undefined,
+                    : filters.active === 'false'
+                      ? false
+                      : undefined,
             ...(filters.searchText && filters.searchText.trim() !== ''
                 ? {
-                    AND: [
-                        { score10From: { lte: Number(filters.searchText) } },
-                        { score10To: { gte: Number(filters.searchText) } },
-                    ],
-                }
+                      AND: [
+                          { score10From: { lte: Number(filters.searchText) } },
+                          { score10To: { gte: Number(filters.searchText) } },
+                      ],
+                  }
                 : {}),
             // deletedAt: null,
-        }
+        },
     })
-
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -128,8 +126,6 @@ export default function TrainingFieldPage() {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
-
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -174,7 +170,10 @@ export default function TrainingFieldPage() {
                                         style={{ width: 200 }}
                                         options={DataActive.map((item) => ({
                                             label: item.name,
-                                            value: item.value === undefined ? undefined : item.value.toString(),
+                                            value:
+                                                item.value === undefined
+                                                    ? undefined
+                                                    : item.value.toString(),
                                         }))}
                                         onChange={(value) =>
                                             handleFilterChange('active', value)
@@ -238,9 +237,7 @@ export default function TrainingFieldPage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không áp dụng</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang áp dụng
-                                        </Tag>
+                                        <Tag color="success">Đang áp dụng</Tag>
                                     )
                                 },
                             },
@@ -250,9 +247,7 @@ export default function TrainingFieldPage() {
                                 width: 150,
                                 render: ({ startDate }) =>
                                     startDate
-                                        ? dayjs(startDate).format(
-                                            'DD/MM/YYYY'
-                                        )
+                                        ? dayjs(startDate).format('DD/MM/YYYY')
                                         : '',
                             },
                             {

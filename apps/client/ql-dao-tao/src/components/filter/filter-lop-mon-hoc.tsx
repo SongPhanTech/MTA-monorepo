@@ -28,7 +28,7 @@ import {
     useFindManyOrganizationType,
     useFindManyOrganization,
     useFindManyTrainingObjectType,
-    useFindManyLecturer
+    useFindManyLecturer,
 } from '@workspace/db/hooks'
 import { buildOrgTree } from '@lib/utils'
 const { Text } = Typography
@@ -83,7 +83,7 @@ const ExamType = [
         value: 'Other',
         label: 'Loại khác',
     },
-];
+]
 
 const FilterSubjectClass = (props: Props) => {
     const { onFilterChange, onSearchChange } = props
@@ -124,43 +124,45 @@ const FilterSubjectClass = (props: Props) => {
                 startDate: 'desc',
             },
         })
-    const { data: organizationTypeData = [], refetch: refetchOrganizationType } =
-        useFindManyOrganizationType()
-    const { data: organizationDataKhoa = [], refetch: refetchOrganizationKhoa } =
-        useFindManyOrganization(
-            {
-                include: {
-                    type: true,
-                },
-                where: {
-                    type: {
-                        code: 'KHOA',
-                    },
-                },
-            }
-        )
-    const { data: organizationDataBoMon = [], refetch: refetchOrganizationBoMon } =
-        useFindManyOrganization(
-            {
-                include: {
-                    type: true,
-                },
-                where: {
-                    parentId: form.getFieldValue('KhoaId') || undefined,
-                    type: {
-                        code: 'BOMON',
-                    },
-                },
-            }
-        )
-    const { data: trainingObjectTypeData = [], refetch: refetchTrainingTypeObject } =
-        useFindManyTrainingObjectType({
-            orderBy: {
-                name: 'asc',
+    const {
+        data: organizationTypeData = [],
+        refetch: refetchOrganizationType,
+    } = useFindManyOrganizationType()
+    const {
+        data: organizationDataKhoa = [],
+        refetch: refetchOrganizationKhoa,
+    } = useFindManyOrganization({
+        include: {
+            type: true,
+        },
+        where: {
+            type: {
+                code: 'KHOA',
             },
-        })
-    
-    
+        },
+    })
+    const {
+        data: organizationDataBoMon = [],
+        refetch: refetchOrganizationBoMon,
+    } = useFindManyOrganization({
+        include: {
+            type: true,
+        },
+        where: {
+            parentId: form.getFieldValue('KhoaId') || undefined,
+            type: {
+                code: 'BOMON',
+            },
+        },
+    })
+    const {
+        data: trainingObjectTypeData = [],
+        refetch: refetchTrainingTypeObject,
+    } = useFindManyTrainingObjectType({
+        orderBy: {
+            name: 'asc',
+        },
+    })
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -223,12 +225,14 @@ const FilterSubjectClass = (props: Props) => {
                                 >
                                     <Select
                                         placeholder="Chọn khoa"
-                                        options={organizationDataKhoa.map((item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
+                                        options={organizationDataKhoa.map(
+                                            (item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label: item.name,
+                                                }
                                             }
-                                        })}
+                                        )}
                                     />
                                 </Form.Item>
                             </Col>
@@ -242,12 +246,14 @@ const FilterSubjectClass = (props: Props) => {
                                 >
                                     <Select
                                         placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map((item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
+                                        options={trainingObjectTypeData.map(
+                                            (item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label: item.name,
+                                                }
                                             }
-                                        })}
+                                        )}
                                     />
                                 </Form.Item>
                             </Col>
@@ -260,8 +266,11 @@ const FilterSubjectClass = (props: Props) => {
                                     labelAlign="left"
                                 >
                                     <TreeSelectFixClassMulti
-                                        schoolYearId={form.getFieldValue('KhoaId') || undefined}
-                                        placeholder='Chọn lớp quản lý'
+                                        schoolYearId={
+                                            form.getFieldValue('KhoaId') ||
+                                            undefined
+                                        }
+                                        placeholder="Chọn lớp quản lý"
                                     />
                                 </Form.Item>
                             </Col>
@@ -296,12 +305,14 @@ const FilterSubjectClass = (props: Props) => {
                                 >
                                     <Select
                                         placeholder="Chọn bộ môn"
-                                        options={organizationDataBoMon.map((item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
+                                        options={organizationDataBoMon.map(
+                                            (item) => {
+                                                return {
+                                                    value: item.id,
+                                                    label: item.name,
+                                                }
                                             }
-                                        })}
+                                        )}
                                     />
                                 </Form.Item>
                             </Col>
@@ -332,9 +343,7 @@ const FilterSubjectClass = (props: Props) => {
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectLecture
-                                        placeholder='Chọn giảng viên'
-                                    />
+                                    <TreeSelectLecture placeholder="Chọn giảng viên" />
                                 </Form.Item>
                             </Col>
                         </Col>

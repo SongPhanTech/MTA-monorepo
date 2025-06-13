@@ -11,11 +11,21 @@ import {
     useCountSubjectClass,
     useFindManyFixedClass,
     useFindManyStudent,
-    useFindFirstSemester
+    useFindFirstSemester,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType, Semester } from '@workspace/db'
 import { CalendarPlus, Search, Save } from 'lucide-react'
-import { Button, Checkbox, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tag,
+    message,
+} from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
 import _, { includes } from 'lodash'
 import type React from 'react'
@@ -41,9 +51,15 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
-    const [selectedSemester, setSelectedSemester] = useState<Semester | undefined>(undefined)
+    const [selectedFixedClass, setSelectedFixedClass] = useState<
+        string | undefined
+    >(undefined)
+    const [selectedSemesterId, setSelectedSemesterId] = useState<
+        string | undefined
+    >(undefined)
+    const [selectedSemester, setSelectedSemester] = useState<
+        Semester | undefined
+    >(undefined)
     const [arrMonth, setArrMonth] = useState<any[]>([])
     const [suaDiemCu, setSuaDiemCu] = useState<boolean>(false)
     const [nhapDiemMoi, setNhapDiemMoi] = useState<boolean>(false)
@@ -79,34 +95,34 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } =
+        useFindManyTrainingObjectType()
 
     const { data: schoolYearData = [] } = useFindManySchoolYear({
         orderBy: {
             startDate: 'desc',
         },
     })
-    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
-        {
+    const { data: semesterData = [], refetch: refetchSemester } =
+        useFindManySemester({
             where: {
                 schoolYearId: filters.schoolYearId || undefined,
             },
             orderBy: {
                 startDate: 'desc',
             },
-        }
-    )
+        })
 
     const { data: subjectClassData = [] } = useFindManyFixedClass({
         where: {
-            ...(
-                filters.searchText && filters.searchText !== '' ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                } : {}
-            ),
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
+                : {}),
             // ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             // ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             deletedAt: null,
@@ -129,7 +145,7 @@ export default function SubjectClassScore() {
             //         ],
             //     } : {}
             // ),
-            fixedClassId: selectedFixedClass || "",
+            fixedClassId: selectedFixedClass || '',
             deletedAt: null,
         },
         include: {
@@ -144,10 +160,7 @@ export default function SubjectClassScore() {
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-
     })
-
-
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -173,7 +186,10 @@ export default function SubjectClassScore() {
             showSpinner()
             console.log('Selected Fixed Class ID:', id)
             if (id[0].includes('class-')) {
-                console.log('Selected Fixed Class ID:', id[0].replace('class-', ''))
+                console.log(
+                    'Selected Fixed Class ID:',
+                    id[0].replace('class-', '')
+                )
                 setSelectedFixedClass(id[0].replace('class-', ''))
             }
             await refetch()
@@ -190,7 +206,6 @@ export default function SubjectClassScore() {
             setSelectedSemesterId(id)
             const semester = semesterData.find((sem: Semester) => sem.id === id)
             setSelectedSemester(semester)
-
 
             await refetch()
         } catch (error) {
@@ -209,28 +224,30 @@ export default function SubjectClassScore() {
     }
     useEffect(() => {
         if (selectedSemester) {
-            const startDate = new Date(selectedSemester.startDate);
-            const endDate = selectedSemester.endDate ? new Date(selectedSemester.endDate) : new Date();
-            const months = [];
+            const startDate = new Date(selectedSemester.startDate)
+            const endDate = selectedSemester.endDate
+                ? new Date(selectedSemester.endDate)
+                : new Date()
+            const months = []
 
-            let currentDate = new Date(startDate);
+            let currentDate = new Date(startDate)
             while (currentDate <= endDate) {
                 months.push({
                     month: currentDate.getMonth() + 1,
                     year: currentDate.getFullYear(),
-                });
-                currentDate.setMonth(currentDate.getMonth() + 1);
+                })
+                currentDate.setMonth(currentDate.getMonth() + 1)
             }
 
-            setArrMonth(months);
+            setArrMonth(months)
         } else {
-            setArrMonth([]);
+            setArrMonth([])
         }
-    }, [selectedSemester]);
+    }, [selectedSemester])
     // Hàm tạo tên tháng
     // Hàm tạo tiêu đề cột tháng
     const getMonthName = ({ month, year }: { month: number; year: number }) =>
-        `Tháng ${month.toString().padStart(2, '0')}/${year}`;
+        `Tháng ${month.toString().padStart(2, '0')}/${year}`
 
     // Tạo cột động cho các tháng
     const monthColumns = arrMonth.map((month) => ({
@@ -241,14 +258,14 @@ export default function SubjectClassScore() {
         render: (_: any, record: any) => {
             // Placeholder: Thay bằng logic thực tế, ví dụ: record.monthData?.[`${month}_${year}`]
             if (nhapDiemMoi) {
-                return <Input placeholder="Nhập điểm" />;
-            }
-            else {
-                return record.monthData?.[`${month.month}_${month.year}`] || 'N/A';
-
+                return <Input placeholder="Nhập điểm" />
+            } else {
+                return (
+                    record.monthData?.[`${month.month}_${month.year}`] || 'N/A'
+                )
             }
         },
-    }));
+    }))
 
     return (
         <div>
@@ -264,7 +281,11 @@ export default function SubjectClassScore() {
                 <Col span={20} className="flex justify-end">
                     <Row>
                         <Col span={24}>
-                            <Row gutter={[16, 16]} align="top" justify="space-between">
+                            <Row
+                                gutter={[16, 16]}
+                                align="top"
+                                justify="space-between"
+                            >
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
@@ -304,7 +325,9 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Năm học"
                                                     options={schoolYearData.map(
-                                                        (i: TrainingObjectType) => ({
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -334,7 +357,9 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Học kỳ"
                                                     options={semesterData.map(
-                                                        (i: TrainingObjectType) => ({
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -343,7 +368,9 @@ export default function SubjectClassScore() {
                                                         height: 40,
                                                     }}
                                                     onChange={(val) =>
-                                                        handleChangeSemester(val)
+                                                        handleChangeSemester(
+                                                            val
+                                                        )
                                                     }
                                                     allowClear
                                                 />
@@ -360,7 +387,9 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Chọn đối tượng đào tạo"
                                                     options={trainingObjectTypeData.map(
-                                                        (i: TrainingObjectType) => ({
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -381,18 +410,28 @@ export default function SubjectClassScore() {
 
                                         <Col span={4} className="flex">
                                             <FilterSubjectClass
-                                                onFilterChange={handleFilterChange} onSearchChange={undefined} />
+                                                onFilterChange={
+                                                    handleFilterChange
+                                                }
+                                                onSearchChange={undefined}
+                                            />
                                         </Col>
                                     </Flex>
                                 </Col>
 
                                 <Col span={6}>
                                     <Flex justify="end" gap={4}>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button
+                                            type="primary"
+                                            className="h-[40px]"
+                                        >
                                             <Save stroke="white" />
                                             Lưu
                                         </Button>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button
+                                            type="primary"
+                                            className="h-[40px]"
+                                        >
                                             <EditIcon stroke="white" />
                                             Nhập từ file danh sách
                                         </Button>
@@ -411,10 +450,18 @@ export default function SubjectClassScore() {
                                         style={{ width: 200, marginRight: 8 }}
                                     />
 
-                                    <Checkbox checked={nhapDiemMoi} onChange={handleChangeNhapDiemMoi} className="text-sm">
+                                    <Checkbox
+                                        checked={nhapDiemMoi}
+                                        onChange={handleChangeNhapDiemMoi}
+                                        className="text-sm"
+                                    >
                                         Nhập tháng mới
                                     </Checkbox>
-                                    <Checkbox checked={suaDiemCu} onChange={handleChangeSuaDiemCu} className="text-sm">
+                                    <Checkbox
+                                        checked={suaDiemCu}
+                                        onChange={handleChangeSuaDiemCu}
+                                        className="text-sm"
+                                    >
                                         Nhập sửa điểm tháng cũ
                                     </Checkbox>
                                 </Col>
@@ -444,7 +491,8 @@ export default function SubjectClassScore() {
                                         render: (_, __, index) =>
                                             index +
                                             1 +
-                                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                            (currentPage - 1) *
+                                                DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -457,13 +505,23 @@ export default function SubjectClassScore() {
                                         title: 'Họ và tên',
                                         dataIndex: 'name',
                                         width: 150,
-                                        render: (text, record) =>
+                                        render: (text, record) => (
                                             <>
-                                                {record.userProfile?.lastName || ''} {record.userProfile?.firstName || ''} <br />
+                                                {record.userProfile?.lastName ||
+                                                    ''}{' '}
+                                                {record.userProfile
+                                                    ?.firstName || ''}{' '}
+                                                <br />
                                                 {record.userProfile?.dateOfBirth
-                                                    ? new Date(record.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                                                    ? new Date(
+                                                          record.userProfile
+                                                              .dateOfBirth
+                                                      ).toLocaleDateString(
+                                                          'vi-VN'
+                                                      )
                                                     : ''}
                                             </>
+                                        ),
                                     },
                                     {
                                         title: 'Tên lớp',
@@ -471,9 +529,10 @@ export default function SubjectClassScore() {
                                         width: 150,
                                         align: 'center',
                                         render: (text, record) =>
-                                            record.fixedClass?.name || 'Chưa có lớp',
+                                            record.fixedClass?.name ||
+                                            'Chưa có lớp',
                                     },
-                                    ...monthColumns
+                                    ...monthColumns,
                                 ]}
                                 data={dataTable}
                                 pagination={{
@@ -490,7 +549,6 @@ export default function SubjectClassScore() {
                     </Row>
                 </Col>
             </Row>
-
         </div>
     )
 }

@@ -11,11 +11,21 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
     useCountSubjectClass,
-    useFindManySchoolYear
+    useFindManySchoolYear,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { CalendarPlus, Search, Save } from 'lucide-react'
-import { Button, Checkbox, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tag,
+    message,
+} from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
 import _, { includes } from 'lodash'
 import type React from 'react'
@@ -40,7 +50,9 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
+    const [selectedFixedClass, setSelectedFixedClass] = useState<
+        string | undefined
+    >(undefined)
 
     const [nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
     const [nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
@@ -98,41 +110,42 @@ export default function SubjectClassScore() {
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
     const { data: schoolYearData = [] } = useFindManySchoolYear({
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
+    const { data: semesterData = [], refetch: refetchSemester } =
+        useFindManySemester({
+            where: {
+                schoolYearId: filters.schoolYearId || undefined,
+            },
             orderBy: {
                 startDate: 'desc',
             },
         })
-        const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
-            {
-                where: {
-                    schoolYearId: filters.schoolYearId || undefined,
-                },
-                orderBy: {
-                    startDate: 'desc',
-                },
-            }
-        )
 
     //#region Mới
     /* Mới */
 
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
-            ...(
-                filters.searchText && filters.searchText !== '' ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                } : {}
-            ),
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
+                : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             deletedAt: null,
         },
         include: {
             subject: {
-                include: { managementOrganization: { include: { parent: true } } }
+                include: {
+                    managementOrganization: { include: { parent: true } },
+                },
             },
             mainLecturer: {
                 include: { userProfile: true },
@@ -158,7 +171,7 @@ export default function SubjectClassScore() {
             //         ],
             //     } : {}
             // ),
-            subjectClassId: selectedFixedClass || "",
+            subjectClassId: selectedFixedClass || '',
             deletedAt: null,
         },
         include: {
@@ -184,7 +197,6 @@ export default function SubjectClassScore() {
         // },
         // take: numberOfPages,
         // skip: (currentPage - 1) * numberOfPages,
-
     })
 
     console.log('subjectClassData', subjectClassData)
@@ -205,7 +217,7 @@ export default function SubjectClassScore() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
                 : {}),
-                deletedAt: null,
+            deletedAt: null,
         },
     })
 
@@ -258,7 +270,11 @@ export default function SubjectClassScore() {
                 <Col span={20} className="flex justify-end">
                     <Row>
                         <Col span={24}>
-                            <Row gutter={[16, 16]} align="top" justify="space-between">
+                            <Row
+                                gutter={[16, 16]}
+                                align="top"
+                                justify="space-between"
+                            >
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
@@ -288,35 +304,37 @@ export default function SubjectClassScore() {
                                             </Form.Item>
                                         </Col>
                                         <Col span={8}>
-                                                                            <Form.Item
-                                                                                className="mb-0"
-                                                                                name="schoolYearId"
-                                                                                labelCol={{ span: 24 }}
-                                                                                wrapperCol={{ span: 24 }}
-                                                                                labelAlign="left"
-                                                                            >
-                                                                                <Select
-                                                                                    placeholder="Năm học"
-                                                                                    options={schoolYearData.map(
-                                                                                        (i: TrainingObjectType) => ({
-                                                                                            value: i.id,
-                                                                                            label: i.name,
-                                                                                        })
-                                                                                    )}
-                                                                                    style={{
-                                                                                        height: 40,
-                                                                                    }}
-                                                                                    allowClear
-                                                                                    onChange={(val) => {
-                                                                                        handleFilterChange(
-                                                                                            'schoolYearId',
-                                                                                            val
-                                                                                        )
-                                                                                        refetchSemester()
-                                                                                    }}
-                                                                                />
-                                                                            </Form.Item>
-                                                                        </Col>
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="schoolYearId"
+                                                labelCol={{ span: 24 }}
+                                                wrapperCol={{ span: 24 }}
+                                                labelAlign="left"
+                                            >
+                                                <Select
+                                                    placeholder="Năm học"
+                                                    options={schoolYearData.map(
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
+                                                            value: i.id,
+                                                            label: i.name,
+                                                        })
+                                                    )}
+                                                    style={{
+                                                        height: 40,
+                                                    }}
+                                                    allowClear
+                                                    onChange={(val) => {
+                                                        handleFilterChange(
+                                                            'schoolYearId',
+                                                            val
+                                                        )
+                                                        refetchSemester()
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                        </Col>
                                         <Col span={8}>
                                             <Form.Item
                                                 className="mb-0"
@@ -328,7 +346,9 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Học kỳ"
                                                     options={semesterData.map(
-                                                        (i: TrainingObjectType) => ({
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -357,7 +377,9 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Chọn đối tượng đào tạo"
                                                     options={trainingObjectTypeData.map(
-                                                        (i: TrainingObjectType) => ({
+                                                        (
+                                                            i: TrainingObjectType
+                                                        ) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -377,18 +399,28 @@ export default function SubjectClassScore() {
                                         </Col>
                                         <Col span={4} className="flex">
                                             <FilterSubjectClass
-                                                onFilterChange={handleFilterChange} onSearchChange={undefined} />
+                                                onFilterChange={
+                                                    handleFilterChange
+                                                }
+                                                onSearchChange={undefined}
+                                            />
                                         </Col>
                                     </Flex>
                                 </Col>
 
                                 <Col span={6}>
                                     <Flex justify="end" gap={4}>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button
+                                            type="primary"
+                                            className="h-[40px]"
+                                        >
                                             <Save stroke="white" />
                                             Lưu
                                         </Button>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button
+                                            type="primary"
+                                            className="h-[40px]"
+                                        >
                                             <EditIcon stroke="white" />
                                             Nhập từ file danh sách
                                         </Button>
@@ -397,19 +429,39 @@ export default function SubjectClassScore() {
                             </Row>
                             <Row className="mt-4">
                                 <Col span={20} className="flex">
-                                    <Checkbox checked={nhapDiemCC} onChange={handleChangeNhapDiemCC} className="text-sm">
+                                    <Checkbox
+                                        checked={nhapDiemCC}
+                                        onChange={handleChangeNhapDiemCC}
+                                        className="text-sm"
+                                    >
                                         Nhập điểm CC
                                     </Checkbox>
-                                    <Checkbox checked={nhapDiemTX} onChange={handleChangeNhapDiemTX} className="text-sm">
+                                    <Checkbox
+                                        checked={nhapDiemTX}
+                                        onChange={handleChangeNhapDiemTX}
+                                        className="text-sm"
+                                    >
                                         Nhập điểm TX
                                     </Checkbox>
-                                    <Checkbox checked={nhapDiemThi} onChange={handleChangeNhapDiemThi} className="text-sm">
+                                    <Checkbox
+                                        checked={nhapDiemThi}
+                                        onChange={handleChangeNhapDiemThi}
+                                        className="text-sm"
+                                    >
                                         Nhập điểm thi
                                     </Checkbox>
-                                    <Checkbox checked={nhapDiemCong} onChange={handleChangeNhapDiemCong} className="text-sm">
+                                    <Checkbox
+                                        checked={nhapDiemCong}
+                                        onChange={handleChangeNhapDiemCong}
+                                        className="text-sm"
+                                    >
                                         Nhập điểm cộng
                                     </Checkbox>
-                                    <Checkbox checked={camThi} onChange={handleChangeCamThi} className="text-sm">
+                                    <Checkbox
+                                        checked={camThi}
+                                        onChange={handleChangeCamThi}
+                                        className="text-sm"
+                                    >
                                         Cấm thi/Hoãn thi/Đình chỉ
                                     </Checkbox>
                                 </Col>
@@ -439,7 +491,8 @@ export default function SubjectClassScore() {
                                         render: (_, __, index) =>
                                             index +
                                             1 +
-                                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                            (currentPage - 1) *
+                                                DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -460,8 +513,12 @@ export default function SubjectClassScore() {
                                         dataIndex: 'tenMonHoc',
                                         width: 150,
                                         render: (text, record) =>
-                                            record.student?.userProfile?.dateOfBirth
-                                                ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                                            record.student?.userProfile
+                                                ?.dateOfBirth
+                                                ? new Date(
+                                                      record.student.userProfile
+                                                          .dateOfBirth
+                                                  ).toLocaleDateString('vi-VN')
                                                 : '',
                                     },
                                     {
@@ -470,7 +527,8 @@ export default function SubjectClassScore() {
                                         width: 150,
                                         align: 'center',
                                         render: (text, record) =>
-                                            record.student?.fixedClass?.name || 'Chưa có lớp',
+                                            record.student?.fixedClass?.name ||
+                                            'Chưa có lớp',
                                     },
                                     {
                                         title: 'Điểm CC',
@@ -482,7 +540,9 @@ export default function SubjectClassScore() {
                                                 return (
                                                     <Input
                                                         type="number"
-                                                        style={{ width: '100%' }}
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
                                                         min={0.0}
                                                         max={10}
                                                         step="0.1"
@@ -490,23 +550,44 @@ export default function SubjectClassScore() {
                                                             // Handle input change for CC score
                                                         }}
                                                         onBlur={(e) => {
-                                                            const { value } = e.target;
-                                                            const numericValue = parseFloat(value);
-                                                            const regex = /^(\d{1,2}(\.\d)?|10)$/;
-                                                            if (!regex.test(value) || isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
-                                                                e.target.style.borderColor = 'red';
-                                                                message.error('Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .');
+                                                            const { value } =
+                                                                e.target
+                                                            const numericValue =
+                                                                parseFloat(
+                                                                    value
+                                                                )
+                                                            const regex =
+                                                                /^(\d{1,2}(\.\d)?|10)$/
+                                                            if (
+                                                                !regex.test(
+                                                                    value
+                                                                ) ||
+                                                                isNaN(
+                                                                    numericValue
+                                                                ) ||
+                                                                numericValue <
+                                                                    0 ||
+                                                                numericValue >
+                                                                    10
+                                                            ) {
+                                                                e.target.style.borderColor =
+                                                                    'red'
+                                                                message.error(
+                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                )
                                                             } else {
-                                                                e.target.style.borderColor = '';
+                                                                e.target.style.borderColor =
+                                                                    ''
                                                             }
                                                         }}
                                                     />
                                                 )
+                                            } else {
+                                                return (
+                                                    record.attendanceScore || ''
+                                                )
                                             }
-                                            else {
-                                                return record.attendanceScore || ''
-                                            }
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Điểm TX',
@@ -518,28 +599,49 @@ export default function SubjectClassScore() {
                                                 return (
                                                     <Input
                                                         type="number"
-                                                        style={{ width: '100%' }}
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
                                                         onChange={(e) => {
                                                             // Handle input change for TX score
                                                         }}
                                                         onBlur={(e) => {
-                                                            const { value } = e.target;
-                                                            const numericValue = parseFloat(value);
-                                                            const regex = /^(\d{1,2}(\.\d)?|10)$/;
-                                                            if (!regex.test(value) || isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
-                                                                e.target.style.borderColor = 'red';
-                                                                message.error('Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .');
+                                                            const { value } =
+                                                                e.target
+                                                            const numericValue =
+                                                                parseFloat(
+                                                                    value
+                                                                )
+                                                            const regex =
+                                                                /^(\d{1,2}(\.\d)?|10)$/
+                                                            if (
+                                                                !regex.test(
+                                                                    value
+                                                                ) ||
+                                                                isNaN(
+                                                                    numericValue
+                                                                ) ||
+                                                                numericValue <
+                                                                    0 ||
+                                                                numericValue >
+                                                                    10
+                                                            ) {
+                                                                e.target.style.borderColor =
+                                                                    'red'
+                                                                message.error(
+                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                )
                                                             } else {
-                                                                e.target.style.borderColor = '';
+                                                                e.target.style.borderColor =
+                                                                    ''
                                                             }
                                                         }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return record.midtermScore || ''
                                             }
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Điểm thi',
@@ -551,28 +653,49 @@ export default function SubjectClassScore() {
                                                 return (
                                                     <Input
                                                         type="number"
-                                                        style={{ width: '100%' }}
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
                                                         onChange={(e) => {
                                                             // Handle input change for exam score
                                                         }}
                                                         onBlur={(e) => {
-                                                            const { value } = e.target;
-                                                            const numericValue = parseFloat(value);
-                                                            const regex = /^(\d{1,2}(\.\d)?|10)$/;
-                                                            if (!regex.test(value) || isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
-                                                                e.target.style.borderColor = 'red';
-                                                                message.error('Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .');
+                                                            const { value } =
+                                                                e.target
+                                                            const numericValue =
+                                                                parseFloat(
+                                                                    value
+                                                                )
+                                                            const regex =
+                                                                /^(\d{1,2}(\.\d)?|10)$/
+                                                            if (
+                                                                !regex.test(
+                                                                    value
+                                                                ) ||
+                                                                isNaN(
+                                                                    numericValue
+                                                                ) ||
+                                                                numericValue <
+                                                                    0 ||
+                                                                numericValue >
+                                                                    10
+                                                            ) {
+                                                                e.target.style.borderColor =
+                                                                    'red'
+                                                                message.error(
+                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                )
                                                             } else {
-                                                                e.target.style.borderColor = '';
+                                                                e.target.style.borderColor =
+                                                                    ''
                                                             }
                                                         }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return record.finalScore || ''
                                             }
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Điểm cộng',
@@ -584,29 +707,49 @@ export default function SubjectClassScore() {
                                                 return (
                                                     <Input
                                                         type="number"
-                                                        style={{ width: '100%' }}
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
                                                         onChange={(e) => {
                                                             // Handle input change for bonus score
                                                         }}
                                                         onBlur={(e) => {
-                                                            const { value } = e.target;
-                                                            const numericValue = parseFloat(value);
-                                                            const regex = /^(\d{1,2}(\.\d)?|10)$/;
-                                                            if (!regex.test(value) || isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
-                                                                e.target.style.borderColor = 'red';
-                                                                message.error('Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .');
+                                                            const { value } =
+                                                                e.target
+                                                            const numericValue =
+                                                                parseFloat(
+                                                                    value
+                                                                )
+                                                            const regex =
+                                                                /^(\d{1,2}(\.\d)?|10)$/
+                                                            if (
+                                                                !regex.test(
+                                                                    value
+                                                                ) ||
+                                                                isNaN(
+                                                                    numericValue
+                                                                ) ||
+                                                                numericValue <
+                                                                    0 ||
+                                                                numericValue >
+                                                                    10
+                                                            ) {
+                                                                e.target.style.borderColor =
+                                                                    'red'
+                                                                message.error(
+                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                )
                                                             } else {
-                                                                e.target.style.borderColor = '';
+                                                                e.target.style.borderColor =
+                                                                    ''
                                                             }
                                                         }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return ''
                                             }
-                                        }
-
+                                        },
                                     },
                                     {
                                         title: 'Điểm HP',
@@ -626,11 +769,9 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                >
-
-                                                </Checkbox>
+                                                ></Checkbox>
                                             )
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Hoãn thi',
@@ -644,10 +785,9 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                >
-                                                </Checkbox>
+                                                ></Checkbox>
                                             )
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Đình chỉ',
@@ -661,32 +801,32 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                >
-                                                </Checkbox>
+                                                ></Checkbox>
                                             )
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Ghi chú lý do',
                                         dataIndex: 'code',
                                         width: 150,
                                         align: 'center',
-                                       render: (text, record) => {
+                                        render: (text, record) => {
                                             if (camThi) {
                                                 return (
                                                     <Input
-                                                        placeholder='Nhập ghi chú lý do'
-                                                        style={{ width: '100%' }}
+                                                        placeholder="Nhập ghi chú lý do"
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
                                                         onChange={(e) => {
                                                             // Handle input change for bonus score
                                                         }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return record.description || ''
                                             }
-                                        }
+                                        },
                                     },
                                     // {
                                     //     title: 'Thao tác',
@@ -727,7 +867,6 @@ export default function SubjectClassScore() {
                     </Row>
                 </Col>
             </Row>
-
         </div>
     )
 }

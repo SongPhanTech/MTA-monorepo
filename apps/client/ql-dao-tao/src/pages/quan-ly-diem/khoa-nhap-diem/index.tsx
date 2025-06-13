@@ -11,10 +11,15 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
     useCountSubjectClass,
-    useFindManySchoolYear
+    useFindManySchoolYear,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
-import { CalendarPlus, Search, LockKeyhole, LockKeyholeOpen } from 'lucide-react'
+import {
+    CalendarPlus,
+    Search,
+    LockKeyhole,
+    LockKeyholeOpen,
+} from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
 import _, { includes } from 'lodash'
 import type React from 'react'
@@ -93,21 +98,17 @@ export default function SubjectClass() {
             startDate: 'desc',
         },
     })
-    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
-        {
+    const { data: semesterData = [], refetch: refetchSemester } =
+        useFindManySemester({
             where: {
                 schoolYearId: filters.schoolYearId || undefined,
             },
             orderBy: {
                 startDate: 'desc',
             },
-        }
-    )
+        })
 
-    const handleChangeLocked = async (id: string, isLocked: boolean) => {
-
-    }
-
+    const handleChangeLocked = async (id: string, isLocked: boolean) => {}
 
     //#endregion
 
@@ -116,21 +117,23 @@ export default function SubjectClass() {
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
-            ...(
-                filters.searchText && filters.searchText !== '' ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                } : {}
-            ),
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
+                : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             deletedAt: null,
         },
         include: {
             subject: {
-                include: { managementOrganization: { include: { parent: true } } }
+                include: {
+                    managementOrganization: { include: { parent: true } },
+                },
             },
             mainLecturer: {
                 include: { userProfile: true },
@@ -164,7 +167,6 @@ export default function SubjectClass() {
                 : {}),
         },
     })
-
 
     /* Mới */
     // #endregion
@@ -328,7 +330,9 @@ export default function SubjectClass() {
                                 </Col>
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass
-                                        onFilterChange={handleFilterChange} onSearchChange={undefined} />
+                                        onFilterChange={handleFilterChange}
+                                        onSearchChange={undefined}
+                                    />
                                 </Col>
                             </Flex>
                         </Col>
@@ -355,7 +359,9 @@ export default function SubjectClass() {
                             marginBottom: 16,
                         }}
                     >
-                        Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1 tuần, hạn nhập điểm thi tự động đặt là trước ngày kết thúc lớp 1 tuần
+                        Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1
+                        tuần, hạn nhập điểm thi tự động đặt là trước ngày kết
+                        thúc lớp 1 tuần
                     </p>
                     <Table
                         rowKey="id"
@@ -445,11 +451,7 @@ export default function SubjectClass() {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
                                         : 'Chưa có giảng viên chính'
-                                    return (
-                                        <span>
-                                            {mainLecturer}
-                                        </span>
-                                    )
+                                    return <span>{mainLecturer}</span>
                                 },
                             },
 
@@ -472,12 +474,15 @@ export default function SubjectClass() {
                                 align: 'center',
                                 render: (date) =>
                                     date
-                                        ? new Date(date).toLocaleDateString('vi-VN', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                        })
-                                        : ''
+                                        ? new Date(date).toLocaleDateString(
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
@@ -485,11 +490,16 @@ export default function SubjectClass() {
                                 width: 150,
                                 align: 'center',
                                 render: (date) =>
-                                    date ? new Date(date).toLocaleDateString('vi-VN', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                    }) : ''
+                                    date
+                                        ? new Date(date).toLocaleDateString(
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Bộ môn',
@@ -499,7 +509,9 @@ export default function SubjectClass() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.name || 'Chưa có bộ môn'}
+                                            {record.subject
+                                                ?.managementOrganization
+                                                ?.name || 'Chưa có bộ môn'}
                                         </span>
                                     )
                                 },
@@ -512,7 +524,9 @@ export default function SubjectClass() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.parent?.name || 'Chưa có khoa'}
+                                            {record.subject
+                                                ?.managementOrganization?.parent
+                                                ?.name || 'Chưa có khoa'}
                                         </span>
                                     )
                                 },
@@ -524,14 +538,20 @@ export default function SubjectClass() {
                                 fixed: 'right',
                                 align: 'center',
                                 render: (text, record) => {
-                                    if (record.active === true || record.active === 'active') {
+                                    if (
+                                        record.active === true ||
+                                        record.active === 'active'
+                                    ) {
                                         return (
-                                            <Tag color="green">Đang hoạt động</Tag>
+                                            <Tag color="green">
+                                                Đang hoạt động
+                                            </Tag>
                                         )
-                                    } else if (record.active === false || record.active === 'inactive') {
-                                        return (
-                                            <Tag color="red">Kết thúc</Tag>
-                                        )
+                                    } else if (
+                                        record.active === false ||
+                                        record.active === 'inactive'
+                                    ) {
+                                        return <Tag color="red">Kết thúc</Tag>
                                     }
                                     return ''
                                 },
@@ -550,14 +570,22 @@ export default function SubjectClass() {
                                                     onClick={() => {
                                                         Modal.confirm({
                                                             title: 'Xác nhận',
-                                                            content: 'Bạn có chắc chắn muốn mở khóa nhập điểm CC, TX không?',
+                                                            content:
+                                                                'Bạn có chắc chắn muốn mở khóa nhập điểm CC, TX không?',
                                                             okText: 'Có',
                                                             cancelText: 'Không',
-                                                            onOk: () => handleChangeLocked(id, false),
+                                                            onOk: () =>
+                                                                handleChangeLocked(
+                                                                    id,
+                                                                    false
+                                                                ),
                                                         })
                                                     }}
                                                 >
-                                                    <LockKeyhole size={16} strokeWidth={2} />
+                                                    <LockKeyhole
+                                                        size={16}
+                                                        strokeWidth={2}
+                                                    />
                                                     Sửa điểm CC, TX
                                                 </Row>
                                                 <Row
@@ -565,14 +593,22 @@ export default function SubjectClass() {
                                                     onClick={() => {
                                                         Modal.confirm({
                                                             title: 'Xác nhận',
-                                                            content: 'Bạn có chắc chắn muốn mở khóa nhập điểm thi không?',
+                                                            content:
+                                                                'Bạn có chắc chắn muốn mở khóa nhập điểm thi không?',
                                                             okText: 'Có',
                                                             cancelText: 'Không',
-                                                            onOk: () => handleChangeLocked(id, false),
+                                                            onOk: () =>
+                                                                handleChangeLocked(
+                                                                    id,
+                                                                    false
+                                                                ),
                                                         })
                                                     }}
                                                 >
-                                                    <LockKeyhole size={16} strokeWidth={2} />
+                                                    <LockKeyhole
+                                                        size={16}
+                                                        strokeWidth={2}
+                                                    />
                                                     Sửa điểm thi
                                                 </Row>
                                                 <Row
@@ -580,14 +616,22 @@ export default function SubjectClass() {
                                                     onClick={() => {
                                                         Modal.confirm({
                                                             title: 'Xác nhận',
-                                                            content: 'Bạn có chắc chắn muốn khóa điểm không?',
+                                                            content:
+                                                                'Bạn có chắc chắn muốn khóa điểm không?',
                                                             okText: 'Có',
                                                             cancelText: 'Không',
-                                                            onOk: () => handleChangeLocked(id, true),
+                                                            onOk: () =>
+                                                                handleChangeLocked(
+                                                                    id,
+                                                                    true
+                                                                ),
                                                         })
                                                     }}
                                                 >
-                                                    <LockKeyholeOpen size={16} strokeWidth={2} />
+                                                    <LockKeyholeOpen
+                                                        size={16}
+                                                        strokeWidth={2}
+                                                    />
                                                     Khóa điểm
                                                 </Row>
                                             </div>
