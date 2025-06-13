@@ -49,7 +49,26 @@ export default function SubjectList() {
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              subjectVersion: {
+                                  some: {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
                 : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
@@ -243,6 +262,12 @@ export default function SubjectList() {
                                 width: 200,
                             },
                             {
+                                title: 'Mã TKB',
+                                dataIndex: '',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'credit',
                                 width: 150,
@@ -295,6 +320,15 @@ export default function SubjectList() {
                                 dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
+                                filters: [
+                                    {
+                                        text: 'tự luận',
+                                        value: 'OfflineWritten',
+                                    },
+                                    { text: 'vấn đáp', value: 'Practice' },
+                                ],
+                                onFilter: (value, record) =>
+                                    record.examType === value,
                                 render: (value: ExamType) =>
                                     getExamTypeLabel(value),
                             },
@@ -303,6 +337,12 @@ export default function SubjectList() {
                                 align: 'center',
                                 fixed: 'right',
                                 width: 150,
+                                filters: [
+                                    { text: 'Đang đào tạo', value: true },
+                                    { text: 'Ngừng đào tạo', value: false },
+                                ],
+                                onFilter: (value, record) =>
+                                    record.active === value,
                                 render: (record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>

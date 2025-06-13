@@ -4,6 +4,7 @@ import FilterChuongTrinhDT from './filter-chuong-trinh-dt'
 import FilterKhoa from './filter-khoa'
 import FilterSinhVien from './filter-sinh-vien'
 import FilterSubjectClass from './filter-lop-mon-hoc'
+import FilterMonHocCTDT from './filter-mon-hoc-ctdt'
 export {
     FilterLecture,
     FilterHocVien,
@@ -11,4 +12,5 @@ export {
     FilterKhoa,
     FilterSinhVien,
     FilterSubjectClass,
+    FilterMonHocCTDT,
 }

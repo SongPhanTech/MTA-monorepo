@@ -9,8 +9,9 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingBlock,
     useUpdateTrainingBlock,
+    useFindManyCurriculum,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import type { Curriculum, TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
@@ -20,10 +21,10 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlock } from '@components/modal'
-// const { Option } = Select;
 interface FilterProps {
     searchText: string | null
     trainingCourseId: string | null
+    trainingObjectTypeId: string | null
 }
 
 export default function TrainingBlock() {
@@ -31,6 +32,7 @@ export default function TrainingBlock() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingCourseId: null,
+        trainingObjectTypeId: null,
     })
 
     const { data: trainingBlockData, refetch } = useFindManyTrainingBlock({
@@ -43,6 +45,25 @@ export default function TrainingBlock() {
                       ],
                   }
                 : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                      curriculumVersions: {
+                          some: {
+                              curriculumVersion: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        },
+        include: {
+            curriculumVersions: {
+                include: {
+                    curriculumVersion: true,
+                },
+            },
         },
         orderBy: {
             priority: 'asc',
@@ -95,6 +116,7 @@ export default function TrainingBlock() {
         useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+    const { data: curriculumData = [] } = useFindManyCurriculum()
 
     return (
         <div>
@@ -148,12 +170,12 @@ export default function TrainingBlock() {
                                             style={{
                                                 height: 40,
                                             }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'trainingObjectTypeId',
+                                                    val
+                                                )
+                                            }
                                             allowClear
                                         />
                                     </Form.Item>
@@ -177,12 +199,12 @@ export default function TrainingBlock() {
                                             style={{
                                                 height: 40,
                                             }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'trainingCourseId',
+                                                    val
+                                                )
+                                            }
                                             allowClear
                                         />
                                     </Form.Item>
@@ -197,8 +219,8 @@ export default function TrainingBlock() {
                                     >
                                         <Select
                                             placeholder="Chương trình đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
+                                            options={curriculumData.map(
+                                                (i: Curriculum) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })

@@ -9,20 +9,13 @@ import {
     useUpdateCurriculum,
     useCountCurriculum,
     useUpdateCurriculumVersion,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import { $Enums } from '@workspace/db'
+import type { TrainingMajor, TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -35,7 +28,10 @@ import { useRouter } from 'next/router'
 import { ROUTER_PATH } from '@workspace/router'
 import CreateIcon from '@components/icons/create'
 interface FilterProps {
-    searchText: string | null
+    searchText: string | undefined
+    trainingObjectId: string | undefined
+    trainingCourseId: string | undefined
+    trainingMajorId: string | undefined
 }
 
 export default function TrainingProgramCatalog() {
@@ -44,17 +40,86 @@ export default function TrainingProgramCatalog() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+        trainingObjectId: '',
+        trainingCourseId: '',
+        trainingMajorId: '',
     })
 
     const { data = [], refetch } = useFindManyCurriculum({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              curriculumVersion: {
+                                  some: {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              code: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                ? {
+                      curriculumVersion: {
+                          some: {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                ? {
+                      curriculumVersion: {
+                          some: {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajorId && filters.trainingMajorId !== ''
+                ? {
+                      trainingMajorId: {
+                          contains: filters.trainingMajorId,
+                          mode: 'insensitive',
+                      },
+                  }
                 : {}),
         },
         include: {
             curriculumVersion: true,
             managementOrganization: true,
+            trainingMajor: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -66,10 +131,82 @@ export default function TrainingProgramCatalog() {
     const { data: count } = useCountCurriculum({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              curriculumVersion: {
+                                  some: {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              code: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                ? {
+                      curriculumVersion: {
+                          some: {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                ? {
+                      curriculumVersion: {
+                          some: {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajorId && filters.trainingMajorId !== ''
+                ? {
+                      trainingMajorId: {
+                          contains: filters.trainingMajorId,
+                          mode: 'insensitive',
+                      },
+                  }
                 : {}),
         },
     })
+
+    const { data: trainingObjectTypeData = [] } =
+        useFindManyTrainingObjectType()
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -195,6 +332,84 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
+                                <Col span={10}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingObjectId"
+                                    >
+                                        <Select
+                                            placeholder="Chọn đối tượng đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'trainingObjectTypeId',
+                                                    val
+                                                )
+                                            }
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingCourseId"
+                                    >
+                                        <Select
+                                            placeholder="Khoá đào tạo"
+                                            options={trainingCourseData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'trainingCourseId',
+                                                    val
+                                                )
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={10}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="trainingMajorId"
+                                    >
+                                        <Select
+                                            placeholder="Chọn chuyên ngành đào tạo"
+                                            options={trainingMajorData.map(
+                                                (i: TrainingMajor) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'trainingMajorId',
+                                                    val
+                                                )
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -226,7 +441,7 @@ export default function TrainingProgramCatalog() {
                                 title: 'Mã CTĐT',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 200,
+                                width: 120,
                             },
                             {
                                 title: 'Tên chương trình',
