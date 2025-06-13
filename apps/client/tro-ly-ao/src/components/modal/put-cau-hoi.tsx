@@ -119,8 +119,8 @@ const PutCauHoi = () => {
             }
             footer={
                 id ? (
-                    <div className="flex justify-between items-center">
-                        <Popconfirm
+                    <div className="flex justify-end items-center">
+                        {/* <Popconfirm
                             title="Xác nhận xoá câu hỏi?"
                             description="Hành động này sẽ không thể hoàn tác."
                             okText="Đồng ý"
@@ -134,7 +134,7 @@ const PutCauHoi = () => {
                             >
                                 <Trash2 className="w-full h-[18px]" />
                             </Button>
-                        </Popconfirm>
+                        </Popconfirm> */}
                         {detail?.status === $Enums.DocumentStatus.APPROVE ? (
                             <Button onClick={onClose}>Đóng</Button>
                         ) : (

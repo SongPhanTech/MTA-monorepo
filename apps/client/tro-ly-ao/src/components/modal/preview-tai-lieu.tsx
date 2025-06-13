@@ -107,7 +107,7 @@ const PreviewTaiLieu = () => {
                         <ArrowDownOutlined />
                         Tải xuống
                     </Button>
-                    <Popconfirm
+                    {/* <Popconfirm
                         placement="topLeft"
                         title="Xác nhận xóa dữ liệu?"
                         description="Dữ liệu sẽ bị xóa vĩnh viễn"
@@ -127,7 +127,7 @@ const PreviewTaiLieu = () => {
                         <Button className="w-[40px] h-[40px] p-0">
                             <Trash2 className="w-full h-[24px]" />
                         </Button>
-                    </Popconfirm>
+                    </Popconfirm> */}
                 </div>
             </div>
         </Modal>

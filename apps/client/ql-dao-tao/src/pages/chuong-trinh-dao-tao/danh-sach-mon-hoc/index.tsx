@@ -7,51 +7,52 @@ import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Curriculum, ExamType } from '@workspace/db'
+import type { Organization, ExamType } from '@workspace/db'
 import {
-    useFindManyCurriculum,
+    useFindManyOrganization,
     useFindManySubject,
+    useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import {
     Button,
-    Checkbox,
     Col,
     Flex,
     Form,
     Input,
     Row,
     Tag,
+    Tooltip,
     message,
 } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     searchText: string | null
-    trainingObjectTypeId: string | undefined
+    managementOrganizationId: string | null
 }
 
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined,
+        managementOrganizationId: '',
     })
     const { getExamTypeLabel } = useExamTypeOptions()
 
-    const { data: curriculum = [] } = useFindManyCurriculum()
+    const { data: organization = [] } = useFindManyOrganization()
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? { name: { contains: filters.searchText } }
                 : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
+            ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
         },
         include: {
@@ -70,7 +71,10 @@ export default function SubjectList() {
         tag: PutSubjectListModal.name,
     })
 
-    const { onOpen: onOpenSubjectVersion } = useDisclosure<string>({
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+    }>({
         tag: PutVersionSubjectModal.name,
     })
 
@@ -80,11 +84,15 @@ export default function SubjectList() {
         onOpen()
     }
 
-    const handleModalSubjectVersion = () => {
-        onOpenSubjectVersion()
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string
+    ) => {
+        onOpenSubjectVersion({ subjectId, subjectVersionId })
     }
 
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
+    const { mutateAsync: updateSubject } = useUpdateSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -96,6 +104,25 @@ export default function SubjectList() {
                     deletedAt: new Date(),
                 },
             })
+            message.success('Xóa thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    async function handleDeleteSubject(id: string) {
+        try {
+            showSpinner()
+            await updateSubject({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -138,7 +165,7 @@ export default function SubjectList() {
                                                     e.target.value
                                                 )
                                             }
-                                            placeholder="Nhập tên ngành..."
+                                            placeholder="Nhập tên môn..."
                                             style={{
                                                 height: 40,
                                                 marginRight: 8,
@@ -158,15 +185,15 @@ export default function SubjectList() {
                                 <Col span={12}>
                                     <Form.Item
                                         className="mb-0"
-                                        name="trainingObjectId"
+                                        name="managementOrganizationId"
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
                                         labelAlign="left"
                                     >
                                         <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={curriculum.map(
-                                                (i: Curriculum) => ({
+                                            placeholder="Chọn đơn vị quản lý"
+                                            options={organization.map(
+                                                (i: Organization) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })
@@ -175,12 +202,12 @@ export default function SubjectList() {
                                                 height: 40,
                                                 marginRight: 8,
                                             }}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'managementOrganizationId',
+                                                    val
+                                                )
+                                            }
                                             allowClear
                                         />
                                     </Form.Item>
@@ -189,13 +216,6 @@ export default function SubjectList() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button
-                                    onClick={handleModalSubjectVersion}
-                                    className="border-primary text-primary h-[40px]"
-                                >
-                                    <PlusOutlined />
-                                    Thêm phiên bản môn học
-                                </Button>
                                 <Button
                                     onClick={handleModal}
                                     type="primary"
@@ -218,22 +238,9 @@ export default function SubjectList() {
                         defaultExpandAll
                         columns={[
                             {
-                                title: 'Mã',
-                                dataIndex: 'code',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Mã TKB',
-                                dataIndex: 'maTKB',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'ĐTDT',
-                                dataIndex: 'dtdt',
-                                width: 150,
-                                align: 'center',
+                                title: 'Tên phiên bản',
+                                dataIndex: 'name',
+                                width: 200,
                             },
                             {
                                 title: 'Số tín chỉ',
@@ -242,27 +249,45 @@ export default function SubjectList() {
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết thời khóa biểu',
-                                dataIndex: 'stc',
+                                title: 'Số tiết',
+                                dataIndex: 'period',
                                 width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết lý thuyết',
+                                title: 'LT',
                                 dataIndex: 'numberOfTheory',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                             },
                             {
-                                title: 'Số tiết thực hành',
+                                title: 'BT',
+                                dataIndex: 'numberOfPractical',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'ThL',
+                                dataIndex: 'numberOfSelfStudy',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'TN, TH',
                                 dataIndex: 'numberOfPractice',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                             },
                             {
-                                title: 'SV Max',
-                                dataIndex: 'svMax',
-                                width: 150,
+                                title: 'Ôn',
+                                dataIndex: 'numberOfReview',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'KT, Thi',
+                                dataIndex: 'numberOfExam',
+                                width: 120,
                                 align: 'center',
                             },
                             {
@@ -272,39 +297,6 @@ export default function SubjectList() {
                                 align: 'center',
                                 render: (value: ExamType) =>
                                     getExamTypeLabel(value),
-                            },
-                            {
-                                title: 'Điểm bằng nhau',
-                                dataIndex: 'thi',
-                                width: 150,
-                                align: 'center',
-                                render: (value: boolean) => (
-                                    <Checkbox checked={!!value} disabled />
-                                ),
-                            },
-                            {
-                                title: 'Số điểm đạt',
-                                dataIndex: 'sdd',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Hệ số điểm chuyên cần',
-                                dataIndex: 'coef_1',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Hệ số điểm thường xuyên',
-                                dataIndex: 'coef_2',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Hệ số điểm thi',
-                                dataIndex: 'coef_3',
-                                width: 150,
-                                align: 'center',
                             },
                             {
                                 title: 'Trạng thái',
@@ -326,34 +318,59 @@ export default function SubjectList() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) =>
-                                    id ? (
+                                render: (_, record) => {
+                                    const { id: subjectVersionId, subjectId } =
+                                        record
+                                    return subjectVersionId ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
                                                 onClick={() =>
-                                                    onOpenSubjectVersion(id)
+                                                    onOpenSubjectVersion({
+                                                        subjectId,
+                                                        subjectVersionId,
+                                                    })
                                                 }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () =>
-                                                        handleDelete(id),
+                                                        handleDelete(
+                                                            subjectVersionId
+                                                        ),
                                                 }}
                                             />
                                         </Row>
-                                    ) : null,
+                                    ) : null
+                                },
                             },
                         ]}
-                        headerRight={({ id }) => (
-                            <Flex>
-                                <Button
-                                    onClick={() => handleModalSubjectVersion()}
-                                    type="primary"
+                        headerRight={({ id: subjectId }) => (
+                            <Flex gap={8} align="center">
+                                <Tooltip
+                                    title="Thêm mới phiên bản môn học"
+                                    placement="bottomLeft"
                                 >
-                                    <PlusOutlined />
-                                    Thêm phiên bản môn học
-                                </Button>
+                                    <BookPlus
+                                        onClick={() =>
+                                            handleModalSubjectVersion(
+                                                subjectId,
+                                                ''
+                                            )
+                                        }
+                                        className="cursor-pointer"
+                                    />
+                                </Tooltip>
+                                <EditIcon
+                                    onClick={onOpen.bind(null, subjectId)}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () =>
+                                            handleDeleteSubject(subjectId),
+                                    }}
+                                />
                             </Flex>
                         )}
                         data={processedData}

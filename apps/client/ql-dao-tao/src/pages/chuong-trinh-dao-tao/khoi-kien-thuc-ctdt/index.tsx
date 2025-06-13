@@ -43,12 +43,6 @@ export default function TrainingBlock() {
                       ],
                   }
                 : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            ...(filters.trainingCourseId
-                ? { trainingCourseId: filters.trainingCourseId }
-                : {}),
         },
         orderBy: {
             priority: 'asc',

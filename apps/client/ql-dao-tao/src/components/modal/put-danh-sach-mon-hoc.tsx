@@ -5,17 +5,18 @@ import useSpinner from '@hooks/spinner'
 import type { Subject } from '@workspace/db'
 import {
     useCreateSubject,
-    useFindManyOrganization,
+    useFindManyOrganizationType,
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import Select from '@components/commons/select'
 import dayjs from 'dayjs'
 export type PutSubject = Subject
 import 'dayjs/locale/vi'
+import { includes } from 'lodash'
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
     const [form] = Form.useForm<PutSubject>()
@@ -29,7 +30,23 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organization = [] } = useFindManyOrganization()
+    const { data: organizationTypes = [] } = useFindManyOrganizationType({
+        include: {
+            organizations: true,
+        },
+    })
+
+    const treeData =
+        organizationTypes.map((organizationType) => ({
+            title: organizationType.name,
+            value: organizationType.id,
+            disabled: true,
+            children:
+                organizationType.organizations.map((organization) => ({
+                    title: organization.name,
+                    value: organization.id,
+                })) || [],
+        })) || []
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
@@ -68,9 +85,11 @@ const PutSubjectListModal = () => {
         hideSpinner()
     }
 
-    const { data: subject } = useFindUniqueSubject({
-        where: { id },
-    })
+    const { data: subject } = useFindUniqueSubject(
+        { where: { id } },
+        { enabled: !!id }
+    )
+
     useEffect(() => {
         if (subject) {
             form.setFieldsValue({
@@ -105,7 +124,7 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên môn học">
+                <FormItem form={form} name="name" label="Tên môn học" required>
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
@@ -120,20 +139,27 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={24}>
-                <FormItem
-                    form={form}
+                <Form.Item
                     name="managementOrganizationId"
                     label="Đơn vị quản lý"
                 >
-                    <Select
+                    <TreeSelect
+                        treeData={treeData}
+                        showSearch
                         placeholder="Chọn đơn vị quản lý"
-                        options={organization?.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
+                        style={{ width: '100%' }}
                         allowClear
+                        filterTreeNode={(input, node) => {
+                            const isLeaf = !node.children
+                            return (
+                                isLeaf &&
+                                (node.title as string)
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                            )
+                        }}
                     />
-                </FormItem>
+                </Form.Item>
             </Col>
             {/* {id && (
                 <Col span={24}>

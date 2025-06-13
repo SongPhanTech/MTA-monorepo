@@ -7,13 +7,13 @@ import {
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select } from 'antd'
+import { Col, Form, Input, InputNumber, message, Select, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { TrainingBlock } from '@workspace/db'
 import dayjs from 'dayjs'
 export type PutTrainingBlock = TrainingBlock
 import 'dayjs/locale/vi'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 dayjs.locale('vi')
 const PutTrainingBlock = () => {
     const [form] = Form.useForm<PutTrainingBlock>()
@@ -27,6 +27,7 @@ const PutTrainingBlock = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
+    const [active, setActive] = useState(true)
 
     const { data: trainingBlock } = useFindUniqueTrainingBlock(
         { where: { id } },
@@ -38,6 +39,7 @@ const PutTrainingBlock = () => {
             form.setFieldsValue({
                 ...trainingBlock,
             })
+            setActive(trainingBlock.active)
         }
     }, [trainingBlock, form])
 
@@ -77,6 +79,11 @@ const PutTrainingBlock = () => {
         }
 
         hideSpinner()
+    }
+
+    const handleChange = (checked: boolean) => {
+        setActive(checked)
+        form.setFieldsValue({ active: checked })
     }
 
     return (
@@ -154,20 +161,25 @@ const PutTrainingBlock = () => {
                     <InputNumber placeholder="Thứ tự" className="w-full" />
                 </FormItem>
             </Col>
-            {id && (
-                <Col span={24}>
-                    <FormItem form={form} name="active" label="Trạng thái">
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-            )}
+            <Col span={12} className="flex items-center">
+                <FormItem
+                    form={form}
+                    name="active"
+                    label=""
+                    valuePropName="checked"
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+                        <Switch checked={active} onChange={handleChange} />
+                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
+                    </div>
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }

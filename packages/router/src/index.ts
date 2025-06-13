@@ -349,17 +349,24 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục chuyên ngành',
                     },
                     {
+                        id: 'danh-muc-chuyen-doi-diem',
+                        label: 'Bảng chuyển đổi điểm',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                        description: 'Bảng chuyển đổi điểm',
+                    },
+                    {
                         id: 'khoa-huan-luyen',
                         label: 'Danh mục khoá đào tạo',
                         icon: BookOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.KHOA_HUAN_LUYEN,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
                         description: 'Danh mục khoá đào tạo',
                     },
                     {
                         id: 'lop-bien-che',
                         label: 'Quản lý lớp biên chế',
                         icon: TeamOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.LOP_BIEN_CHE,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                         description: 'Quản lý lớp biên chế',
                     },
                 ],
@@ -427,6 +434,41 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'lop-mon-hoc',
+                label: 'Quản lý điểm',
+                icon: CalendarFold,
+                children: [
+                    {
+                        id: 'khoa-nhap-diem',
+                        label: 'Mở/Khóa nhập điểm',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_DIEM_KHOA_NHAP_DIEM,
+                        description: 'Mở/Khóa nhập điểm',
+                    },
+                    {
+                        id: 'ds-lop-mon-hoc',
+                        label: 'Danh sách lớp môn học',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_DIEM_DS_LOP_MON_HOC,
+                        description: 'Danh sách lớp môn học',
+                    },
+                    {
+                        id: 'ql-diem-lop-mon-hoc',
+                        label: 'Nhập điểm lớp môn học',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        description: 'Nhập điểm lớp môn học',
+                    },
+                    {
+                        id: 'ql-diem-ren-luyen',
+                        label: 'Nhập điểm rèn luyện',
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_DIEM_QL_DIEM_REN_LUYEN,
+                        description: 'Nhập điểm rèn luyện',
+                    },
+                ],
+            },
+            {
                 id: 'milestone',
                 label: 'Mốc huấn luyện',
                 icon: Flag,
@@ -443,21 +485,22 @@ const NAVIGATION: NavigationType = {
                         id: 'user-profile-ds',
                         label: 'Quản lý hồ sơ sinh viên',
                         icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_SINH_VIEN,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
                         description: 'Quản lý hồ sơ sinh viên',
                     },
                     {
                         id: 'user-profile-lecture',
                         label: 'Quản lý hồ sơ giảng viên',
                         icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_GIANG_VIEN,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_HO_SO_QL_GIANG_VIEN,
                         description: 'Quản lý hồ sơ giảng viên',
                     },
                     {
                         id: 'user-profile-staff',
                         label: 'Quản lý hồ sơ cán bộ',
                         icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_CAN_BO,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_CAN_BO,
                         description: 'Quản lý hồ sơ cán bộ',
                     },
                 ],

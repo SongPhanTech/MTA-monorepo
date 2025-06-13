@@ -30,7 +30,7 @@ const PheDuyetTaiLieu = () => {
         try {
             await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
                 {
-                    queryParams: { documentId },
+                    queryParams: { id_document: documentId },
                 }
             )
 
@@ -68,7 +68,7 @@ const PheDuyetTaiLieu = () => {
             cancelText="Hủy"
             onCancel={onClose}
             onOk={form.submit}
-            confirmLoading={true}
+            confirmLoading={isSubmitting}
         >
             <div className="flex gap-4 justify-between">
                 <Form
