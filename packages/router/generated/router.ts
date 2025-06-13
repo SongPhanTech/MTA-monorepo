@@ -74,7 +74,7 @@ export default {
     "DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_KY_SU": "/danh-muc-ho-so/chuc-danh-cmnv-ngach-ky-su",
     "DANH_MUC_HO_SO_CAC_TRUONG_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-truong-dao-tao-bac-dai-hoc",
     "DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-chuyen-nganh-dao-tao-bac-dai-hoc",
-    "DS_LOP_MON_HOC": "/lop-mon-hoc/ds-lop-mon-hoc",
+    "DS_LOP_MON_HOC": "/quan-ly-diem/ds-lop-mon-hoc",
     "QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
     "KHOA_NHAP_DIEM": "/quan-ly-diem/khoa-nhap-diem",
     "DANH_MUC_CHUYEN_DOI_DIEM": "/danh-muc/danh-muc-chuyen-doi-diem",
