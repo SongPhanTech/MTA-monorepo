@@ -8,7 +8,6 @@ import PutUploadProfileModal from './put-upload-profile'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
-import PutCurriculumVersionModal from './put-phien-ban-ctdt'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutSubjectModal from './put-mon-hoc'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
@@ -37,7 +36,6 @@ export {
     PutUpdateProfileModal,
     PutUploadFixedClassModal,
     PutUploadDivisionModal,
-    PutCurriculumVersionModal,
     PutSubjectGroupModal,
     PutSubjectModal,
     PutUserProfileLectureModal,
