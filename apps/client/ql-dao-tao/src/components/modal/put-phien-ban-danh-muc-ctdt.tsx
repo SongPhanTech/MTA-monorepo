@@ -39,14 +39,7 @@ type CurriculumVersionInput = {
 }
 
 const PutCurriculumVersion = () => {
-    const [fileList, setFileList] = useState<File[]>([])
-
-    const handleRemoveFile = (index: number): void => {
-        const newList = [...fileList]
-        newList.splice(index, 1)
-        setFileList(newList)
-        form.setFieldValue('documentPaths', newList) // Cập nhật vào form
-    }
+    const [document, setDocument] = useState<string[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
     const { options: trainingLanguageOptions } = useTrainingLanguageOptions()
 
@@ -95,7 +88,7 @@ const PutCurriculumVersion = () => {
                         scoreToTakeExam: output.scoreToTakeExam,
                         scoreToPass: output.scoreToPass,
                         description: output.description,
-                        // documentPaths: output.documentPaths,
+                        documentPaths: output.documentPaths,
                         active: output.active,
                         electiveCredits: output.electiveCredits,
                         requiredCredits: output.requiredCredits,
@@ -132,7 +125,7 @@ const PutCurriculumVersion = () => {
                         scoreToTakeExam: output.scoreToTakeExam,
                         scoreToPass: output.scoreToPass,
                         description: output.description,
-                        // documentPaths: output.documentPaths,
+                        documentPaths: output.documentPaths,
                         active: output.active,
                         electiveCredits: output.electiveCredits,
                         requiredCredits: output.requiredCredits,
@@ -161,6 +154,7 @@ const PutCurriculumVersion = () => {
             form.setFieldsValue({
                 ...initialValue,
             })
+            setDocument(initialValue?.documentPaths)
             setActive(initialValue?.active)
         }
     }, [initialValue])
@@ -406,12 +400,7 @@ const PutCurriculumVersion = () => {
                     name="documentPaths"
                     label="Tài liệu đính kèm"
                 >
-                    <DocumentPaths
-                        form={form}
-                        fileList={fileList}
-                        setFileList={setFileList}
-                        handleRemoveFile={handleRemoveFile}
-                    />
+                    <DocumentPaths form={form} data={document} />
                 </FormItem>
             </Col>
             <Tabs
@@ -476,25 +465,29 @@ const PutCurriculumVersion = () => {
                     },
                 ]}
             />
-            <Col span={12} className="flex items-center">
-                <FormItem
-                    form={form}
-                    name="active"
-                    label=""
-                    valuePropName="checked"
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                        }}
+            {input?.versionId && (
+                <Col span={12} className="flex items-center">
+                    <FormItem
+                        form={form}
+                        name="active"
+                        label=""
+                        valuePropName="checked"
                     >
-                        <Switch checked={active} onChange={handleChange} />
-                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                    </div>
-                </FormItem>
-            </Col>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}
+                        >
+                            <Switch checked={active} onChange={handleChange} />
+                            <span>
+                                {active ? 'Đang đào tạo' : 'Ngừng đào tạo'}
+                            </span>
+                        </div>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }
