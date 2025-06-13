@@ -10,7 +10,8 @@ import {
     useFindManyTrainingCourse,
     useFindManySemester,
     useFindManySubjectClass,
-    useCountSubjectClass
+    useCountSubjectClass,
+    useFindManySchoolYear
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { CalendarPlus, Search, LockKeyhole, LockKeyholeOpen } from 'lucide-react'
@@ -31,6 +32,7 @@ interface FilterProps {
     semesterId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    schoolYearId: string | null
 }
 
 export default function SubjectClass() {
@@ -42,6 +44,7 @@ export default function SubjectClass() {
         semesterId: null,
         trainingObjectTypeId: null,
         subjectClassId: null,
+        schoolYearId: null,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -85,10 +88,15 @@ export default function SubjectClass() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const { data: semesterData = [] } = useFindManySemester(
+    const { data: schoolYearData = [] } = useFindManySchoolYear({
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
+    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
         {
             where: {
-                deletedAt: null,
+                schoolYearId: filters.schoolYearId || undefined,
             },
             orderBy: {
                 startDate: 'desc',
@@ -97,7 +105,7 @@ export default function SubjectClass() {
     )
 
     const handleChangeLocked = async (id: string, isLocked: boolean) => {
-        
+
     }
 
 
@@ -157,7 +165,7 @@ export default function SubjectClass() {
         },
     })
 
-    
+
     /* Mới */
     // #endregion
     const rowSelection = {
@@ -198,6 +206,36 @@ export default function SubjectClass() {
                                                 />
                                             }
                                             allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={8}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="schoolYearId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Năm học"
+                                            options={schoolYearData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            style={{
+                                                height: 40,
+                                            }}
+                                            allowClear
+                                            onChange={(val) => {
+                                                handleFilterChange(
+                                                    'schoolYearId',
+                                                    val
+                                                )
+                                                refetchSemester()
+                                            }}
                                         />
                                     </Form.Item>
                                 </Col>

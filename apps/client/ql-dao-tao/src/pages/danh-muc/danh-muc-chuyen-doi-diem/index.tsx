@@ -57,7 +57,7 @@ export default function TrainingFieldPage() {
                     ],
                 }
                 : {}),
-            deletedAt: null,
+            // deletedAt: null,
         }
 
     })
@@ -78,7 +78,7 @@ export default function TrainingFieldPage() {
                     ],
                 }
                 : {}),
-            deletedAt: null,
+            // deletedAt: null,
         }
     })
 

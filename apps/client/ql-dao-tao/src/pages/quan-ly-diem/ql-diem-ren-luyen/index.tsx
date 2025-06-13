@@ -3,9 +3,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-
-    useFindManySubjectClassStudent,
-    useUpdateTrainingCourse,
+    useFindManySchoolYear,
     useFindManyTrainingObjectType,
     useFindManyTrainingCourse,
     useFindManySemester,
@@ -29,10 +27,12 @@ import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import LopBienCheItem from './lop-bien-che'
+import DatePicker from '@components/commons/date-picker'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
     semesterId: string | null
+    schoolYearId?: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
 }
@@ -52,6 +52,7 @@ export default function SubjectClassScore() {
         semesterId: null,
         trainingObjectTypeId: null,
         subjectClassId: null,
+        schoolYearId: null,
     })
 
     const handleChangeSuaDiemCu = (e: CheckboxChangeEvent) => {
@@ -80,10 +81,18 @@ export default function SubjectClassScore() {
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: semesterData = [] } = useFindManySemester(
+    const { data: schoolYearData = [] } = useFindManySchoolYear({
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
+    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
         {
             where: {
-                deletedAt: null,
+                schoolYearId: filters.schoolYearId || undefined,
+            },
+            orderBy: {
+                startDate: 'desc',
             },
         }
     )
@@ -128,7 +137,7 @@ export default function SubjectClassScore() {
             fixedClass: true,
         },
         orderBy: {
-           userProfile: {
+            userProfile: {
                 // lastName: 'asc',
                 firstName: 'asc',
             },
@@ -182,7 +191,7 @@ export default function SubjectClassScore() {
             const semester = semesterData.find((sem: Semester) => sem.id === id)
             setSelectedSemester(semester)
 
-            
+
             await refetch()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -198,49 +207,48 @@ export default function SubjectClassScore() {
             console.log(selectedKeys)
         },
     }
-useEffect(() => {
-    if (selectedSemester) {
-      const startDate = new Date(selectedSemester.startDate);
-      const endDate = selectedSemester.endDate ? new Date(selectedSemester.endDate) : new Date();
-      const months = [];
-      
-      let currentDate = new Date(startDate);
-      while (currentDate <= endDate) {
-        months.push({
-          month: currentDate.getMonth() + 1,
-          year: currentDate.getFullYear(),
-        });
-        currentDate.setMonth(currentDate.getMonth() + 1);
-      }
-      
-      setArrMonth(months);
-    } else {
-      setArrMonth([]);
-    }
-  }, [selectedSemester]);
+    useEffect(() => {
+        if (selectedSemester) {
+            const startDate = new Date(selectedSemester.startDate);
+            const endDate = selectedSemester.endDate ? new Date(selectedSemester.endDate) : new Date();
+            const months = [];
+
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                months.push({
+                    month: currentDate.getMonth() + 1,
+                    year: currentDate.getFullYear(),
+                });
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            }
+
+            setArrMonth(months);
+        } else {
+            setArrMonth([]);
+        }
+    }, [selectedSemester]);
     // Hàm tạo tên tháng
-  // Hàm tạo tiêu đề cột tháng
-  const getMonthName = ({ month, year }: { month: number; year: number }) =>
-    `Tháng ${month.toString().padStart(2, '0')}/${year}`;
+    // Hàm tạo tiêu đề cột tháng
+    const getMonthName = ({ month, year }: { month: number; year: number }) =>
+        `Tháng ${month.toString().padStart(2, '0')}/${year}`;
 
-  // Tạo cột động cho các tháng
-  const monthColumns = arrMonth.map((month) => ({
-    title: getMonthName(month),
-    dataIndex: `month_${month.month}_${month.year}`,
-    width: 100,
-    align: 'center' as const,
-    render: (_: any, record: any) => {
-      // Placeholder: Thay bằng logic thực tế, ví dụ: record.monthData?.[`${month}_${year}`]
-      if(nhapDiemMoi) {
-        return <Input placeholder="Nhập điểm" />;
-      }
-      else
-      {
-        return record.monthData?.[`${month.month}_${month.year}`] || 'N/A';
+    // Tạo cột động cho các tháng
+    const monthColumns = arrMonth.map((month) => ({
+        title: getMonthName(month),
+        dataIndex: `month_${month.month}_${month.year}`,
+        width: 100,
+        align: 'center' as const,
+        render: (_: any, record: any) => {
+            // Placeholder: Thay bằng logic thực tế, ví dụ: record.monthData?.[`${month}_${year}`]
+            if (nhapDiemMoi) {
+                return <Input placeholder="Nhập điểm" />;
+            }
+            else {
+                return record.monthData?.[`${month.month}_${month.year}`] || 'N/A';
 
-      }
-    },
-  }));
+            }
+        },
+    }));
 
     return (
         <div>
@@ -282,6 +290,36 @@ useEffect(() => {
                                                         />
                                                     }
                                                     allowClear
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="schoolYearId"
+                                                labelCol={{ span: 24 }}
+                                                wrapperCol={{ span: 24 }}
+                                                labelAlign="left"
+                                            >
+                                                <Select
+                                                    placeholder="Năm học"
+                                                    options={schoolYearData.map(
+                                                        (i: TrainingObjectType) => ({
+                                                            value: i.id,
+                                                            label: i.name,
+                                                        })
+                                                    )}
+                                                    style={{
+                                                        height: 40,
+                                                    }}
+                                                    allowClear
+                                                    onChange={(val) => {
+                                                        handleFilterChange(
+                                                            'schoolYearId',
+                                                            val
+                                                        )
+                                                        refetchSemester()
+                                                    }}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -361,8 +399,18 @@ useEffect(() => {
                                     </Flex>
                                 </Col>
                             </Row>
-  <Row className="mt-4">
+                            <Row className="mt-4">
                                 <Col span={20} className="flex">
+                                    <DatePicker
+                                        // value={filters.startDate ? dayjs(filters.startDate) : null}
+                                        // onChange={(date) =>
+                                        //     handleFilterChange('startDate', date ? date.toISOString() : null)
+                                        // }
+                                        picker="month"
+                                        placeholder="Chọn tháng"
+                                        style={{ width: 200, marginRight: 8 }}
+                                    />
+
                                     <Checkbox checked={nhapDiemMoi} onChange={handleChangeNhapDiemMoi} className="text-sm">
                                         Nhập tháng mới
                                     </Checkbox>

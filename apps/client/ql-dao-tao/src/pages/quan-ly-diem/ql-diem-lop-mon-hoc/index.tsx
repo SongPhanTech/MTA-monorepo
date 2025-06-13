@@ -10,7 +10,8 @@ import {
     useFindManyTrainingCourse,
     useFindManySemester,
     useFindManySubjectClass,
-    useCountSubjectClass
+    useCountSubjectClass,
+    useFindManySchoolYear
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { CalendarPlus, Search, Save } from 'lucide-react'
@@ -30,6 +31,7 @@ import LopMonHocItem from './lop-mon-hoc'
 interface FilterProps {
     searchText: string | null
     semesterId: string | null
+    schoolYearId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
 }
@@ -51,6 +53,7 @@ export default function SubjectClassScore() {
         semesterId: null,
         trainingObjectTypeId: null,
         subjectClassId: null,
+        schoolYearId: null,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -94,7 +97,21 @@ export default function SubjectClassScore() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const { data: semesterData = [] } = useFindManySemester()
+    const { data: schoolYearData = [] } = useFindManySchoolYear({
+            orderBy: {
+                startDate: 'desc',
+            },
+        })
+        const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
+            {
+                where: {
+                    schoolYearId: filters.schoolYearId || undefined,
+                },
+                orderBy: {
+                    startDate: 'desc',
+                },
+            }
+        )
 
     //#region Mới
     /* Mới */
@@ -271,6 +288,36 @@ export default function SubjectClassScore() {
                                             </Form.Item>
                                         </Col>
                                         <Col span={8}>
+                                                                            <Form.Item
+                                                                                className="mb-0"
+                                                                                name="schoolYearId"
+                                                                                labelCol={{ span: 24 }}
+                                                                                wrapperCol={{ span: 24 }}
+                                                                                labelAlign="left"
+                                                                            >
+                                                                                <Select
+                                                                                    placeholder="Năm học"
+                                                                                    options={schoolYearData.map(
+                                                                                        (i: TrainingObjectType) => ({
+                                                                                            value: i.id,
+                                                                                            label: i.name,
+                                                                                        })
+                                                                                    )}
+                                                                                    style={{
+                                                                                        height: 40,
+                                                                                    }}
+                                                                                    allowClear
+                                                                                    onChange={(val) => {
+                                                                                        handleFilterChange(
+                                                                                            'schoolYearId',
+                                                                                            val
+                                                                                        )
+                                                                                        refetchSemester()
+                                                                                    }}
+                                                                                />
+                                                                            </Form.Item>
+                                                                        </Col>
+                                        <Col span={8}>
                                             <Form.Item
                                                 className="mb-0"
                                                 name="semesterId"
@@ -324,35 +371,6 @@ export default function SubjectClassScore() {
                                                             val
                                                         )
                                                     }
-                                                    allowClear
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Form.Item
-                                                className="mb-0"
-                                                name="trainingCourseId"
-                                                labelCol={{ span: 24 }}
-                                                wrapperCol={{ span: 24 }}
-                                                labelAlign="left"
-                                            >
-                                                <Select
-                                                    placeholder="Lớp MH"
-                                                    options={dataTable.map(
-                                                        (i: TrainingObjectType) => ({
-                                                            value: i.id,
-                                                            label: i.name,
-                                                        })
-                                                    )}
-                                                    style={{
-                                                        height: 40,
-                                                    }}
-                                                    // onChange={(val) =>
-                                                    //     handleFilterChange(
-                                                    //         'trainingObjectTypeId',
-                                                    //         val
-                                                    //     )
-                                                    // }
                                                     allowClear
                                                 />
                                             </Form.Item>
