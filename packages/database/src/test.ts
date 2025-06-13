@@ -1,18 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-
-const semester = await prisma.semester.findFirstOrThrow();
-const subject = await prisma.subjectVersion.findFirstOrThrow();
-
-const c = await prisma.subjectClass.create({
-  data: {
-    name: 'CNTT61',
+const data = Array.from({ length: 100 }, (_, i) => ({
+    code: `NH${2030 + i}`,
+    name: `Năm học ${2030 + i}`,
+    order: i + 100,
     startDate: new Date(),
-    semesterId: semester.id,
-    schedule: 'MORNING',
-    subjectId: subject.id,
-  }
+}))
+const years = await prisma.schoolYear.deleteMany({
+    where: {
+        order: {
+            gte: 100,
+        },
+    },
 })
 
-console.log(c);
+console.log(years)

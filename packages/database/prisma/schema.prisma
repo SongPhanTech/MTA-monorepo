@@ -19,6 +19,16 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
+enum SubjectClassStudentStatus {
+  Registered
+  Studying
+  NotPassed
+  Passed
+  CancelClass
+
+  @@schema("ql-dao-tao")
+}
+
 enum SemesterType {
   FIRST
   SECOND
@@ -303,21 +313,29 @@ model SurveyAnswer {
 
 /// học viên - lớp môn học
 model SubjectClassStudent {
-  id              String       @id() @default(cuid())
-  code            String?      @unique()
-  active          Boolean      @default(true)
-  description     String?      @db.Text()
+  id              String                    @id() @default(cuid())
+  code            String?                   @unique()
+  active          Boolean                   @default(true)
+  description     String?                   @db.Text()
   deletedAt       DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt()
-  subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt()
+  subjectClass    SubjectClass              @relation(fields: [subjectClassId], references: [id])
   subjectClassId  String
-  student         Student      @relation(fields: [studentId], references: [id])
+  student         Student                   @relation(fields: [studentId], references: [id])
   studentId       String
+  status          SubjectClassStudentStatus @default(Studying)
   attendanceScore Float?
   midtermScore    Float?
+  examScore       Float?
+  examScore2      Float?
+  bonusScore      Float?
   finalScore      Float?
+  examPostponed   Boolean                   @default(false)
+  examBanned      Boolean                   @default(false)
+  suspended       Boolean                   @default(false)
 
+  @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
 
@@ -632,6 +650,11 @@ model SubjectClass {
   semesterId                 String
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
+  scoreDeadline              DateTime?
+  examScoreDeadline          DateTime?
+  isLockScore                Boolean               @default(false)
+  isLockExamScore            Boolean               @default(true)
+  issuedScoreAt              DateTime?
   room                       Room?                 @relation(fields: [roomId], references: [id])
   roomId                     String?
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])

@@ -1,5 +1,7 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
+import DeleteIcon from '@components/icons/delete'
 import { PheDuyetTaiLieu, PreviewTaiLieu, PutCauHoi } from '@components/modal'
 import PheDuyetCauHoiThuongGap from '@components/modal/phe-duyet-cau-hoi-thuong-gap'
 import ThemTaiLieu from '@components/modal/them-tai-lieu'
@@ -10,10 +12,20 @@ import { $Enums } from '@workspace/db'
 import {
     useCountDocument,
     useCountFAQ,
+    useDeleteDocument,
+    useDeleteFAQ,
     useFindManyDocument,
     useFindManyFAQ,
 } from '@workspace/db/hooks'
-import { Button, Input, Tabs, type TabsProps, Tag } from 'antd'
+import {
+    Button,
+    Input,
+    message,
+    Tabs,
+    type TabsProps,
+    Tag,
+    Tooltip,
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -115,7 +127,29 @@ function Page() {
             },
         }))
     }, [totalCountFAQ])
-
+    const { mutateAsync: deleteDocument } = useDeleteDocument()
+    const handleDeleteDocument = async (id: string) => {
+        // TODO: Gọi API xoá tài liệu
+        try {
+            await deleteDocument({
+                where: { id },
+            })
+            message.success('Xoá tài liệu thành công')
+        } catch (error) {
+            message.error('Xóa tài liệu thất bại')
+        }
+    }
+    const { mutateAsync: deleteFAQ } = useDeleteFAQ()
+    const handleDeleteFAQ = async (id: string) => {
+        // TODO: Gọi API xoá câu hỏi
+        if (!id) return
+        try {
+            await deleteFAQ({ where: { id } })
+            message.success('xoá câu hỏi thành công')
+        } catch (error) {
+            message.error('Xoá câu hỏi thất bại')
+        }
+    }
     const items: TabsProps['items'] = [
         {
             key: '1',
@@ -199,10 +233,10 @@ function Page() {
                         </div>
                         <Table
                             rowKey="id"
-                            onRow={(item) => ({
-                                className: 'cursor-pointer hover:bg-gray-50',
-                                onClick: () => openPreviewTaiLieu(item.id),
-                            })}
+                            // onRow={(item) => ({
+                            //     className: 'cursor-pointer hover:bg-gray-50',
+                            //     onClick: () => openPreviewTaiLieu(item.id),
+                            // })}
                             columns={[
                                 {
                                     title: 'STT',
@@ -260,9 +294,8 @@ function Page() {
                                 {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
+                                    align: 'center',
                                     width: 120,
-                                    className:
-                                        'text-center justify-center flex',
                                     onCell: (record) => ({
                                         onClick: (e) => {
                                             e.stopPropagation()
@@ -305,6 +338,37 @@ function Page() {
                                             </Tag>
                                         )
                                     },
+                                },
+                                {
+                                    title: 'Thao tác',
+                                    key: 'action',
+                                    align: 'center',
+                                    width: 80,
+                                    render: (_, record) => (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Tooltip
+                                                title="Xem chi tiết"
+                                                placement="leftTop"
+                                            >
+                                                <EyeOutlined
+                                                    onClick={() =>
+                                                        openPreviewTaiLieu(
+                                                            record.id
+                                                        )
+                                                    }
+                                                    className="text-blue-700 cursor-pointer text-lg"
+                                                />
+                                            </Tooltip>
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteDocument(
+                                                            record.id
+                                                        ),
+                                                }}
+                                            />
+                                        </div>
+                                    ),
                                 },
                             ]}
                             data={documents || []}
@@ -410,12 +474,12 @@ function Page() {
                             </Button>
                         </div>
                         <Table
-                            onRow={(item) => {
-                                return {
-                                    className: 'cursor-pointer',
-                                    onClick: () => openPutCauHoi(item.id),
-                                }
-                            }}
+                            // onRow={(item) => {
+                            //     return {
+                            //         className: 'cursor-pointer',
+                            //         onClick: () => openPutCauHoi(item.id),
+                            //     }
+                            // }}
                             columns={[
                                 {
                                     title: 'STT',
@@ -481,6 +545,7 @@ function Page() {
                                 {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
+                                    align: 'center',
                                     width: 120,
                                     onCell: (record) => ({
                                         onClick: (e) => {
@@ -526,6 +591,35 @@ function Page() {
                                             </Tag>
                                         )
                                     },
+                                },
+                                {
+                                    title: 'Thao tác',
+                                    key: 'action',
+                                    align: 'center',
+                                    width: 80,
+                                    render: (_, record) => (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Tooltip
+                                                title="Xem chi tiết"
+                                                placement="leftTop"
+                                            >
+                                                <EyeOutlined
+                                                    onClick={() =>
+                                                        openPutCauHoi(record.id)
+                                                    }
+                                                    className="text-blue-700 cursor-pointer text-lg"
+                                                />
+                                            </Tooltip>
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteFAQ(
+                                                            record.id
+                                                        ),
+                                                }}
+                                            />
+                                        </div>
+                                    ),
                                 },
                             ]}
                             data={faqs}
