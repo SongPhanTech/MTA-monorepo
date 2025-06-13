@@ -202,8 +202,9 @@ export default function TeachingAssignment() {
             }else {
                 message.success('Phân công giảng dạy thành công')
             }
-            debouncedRefetch()
-            setIsEdit(false)
+            await refetch();
+            setIsEdit(false);
+            setDataSubmit([...data])
 
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
