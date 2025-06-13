@@ -437,6 +437,8 @@ Table SubjectClass {
   lecturerId String
   extraLecturer Lecturer
   extraLecturerId String
+  enterGradeLecturer Lecturer
+  enterGradeLecturerId String
   subjectClassStudent SubjectClassStudent [not null]
 
   Note: 'Lớp môn học'
@@ -1309,6 +1311,7 @@ Table Lecturer {
   lecturerTypeId String [not null]
   mainSubjectClasses SubjectClass [not null]
   extraSubjectClasses SubjectClass [not null]
+  enterGradeClasses SubjectClass [not null]
   manageFixedClass FixedClass [not null]
 }
 
@@ -1641,6 +1644,8 @@ Ref: SubjectClass.roomId > Room.id
 Ref: SubjectClass.lecturerId > Lecturer.id
 
 Ref: SubjectClass.extraLecturerId > Lecturer.id
+
+Ref: SubjectClass.enterGradeLecturerId > Lecturer.id
 
 Ref: Building.trainingLocationId > TrainingLocation.id
 

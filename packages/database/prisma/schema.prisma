@@ -661,6 +661,8 @@ model SubjectClass {
   lecturerId                 String?
   extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId            String?
+  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId       String?
   subjectClassStudent        SubjectClassStudent[]
 
   @@schema("ql-dao-tao")
@@ -1589,6 +1591,7 @@ model Lecturer {
   lecturerTypeId      String
   mainSubjectClasses  SubjectClass[] @relation("MainLecturer")
   extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
+  enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
   manageFixedClass    FixedClass[]   @relation("ManageLecturer")
 
   @@schema("ql-dao-tao")

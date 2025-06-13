@@ -1,8 +1,10 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
+const app = new OpenAPIHono({ strict: false })
+
 const teachingAssignment = createRoute({
-    operationId: 'teachingAssignment',
+    operationId: 'lecturerAssignment',
     path: '/teaching-assignment',
     method: 'put',
     description: 'Phân công giảng dạy',
@@ -13,26 +15,14 @@ const teachingAssignment = createRoute({
             content: {
                 'application/json': {
                     schema: z.array(
-                        z.object({
-                            subjectClassId: z
-                                .string()
-                                .openapi('subjectClassId', {
-                                    description: 'ID của lớp môn học',
-                                }),
-                            lectureId: z.string().openapi('lectureId', {
-                                description: 'ID của giảng viên',
-                            }),
-                            extraLectureId: z
-                                .string()
-                                .openapi('extraLectureId', {
-                                    description: 'ID của giảng viên phụ trách',
-                                }),
-                            enterGradeLecturerId: z
-                                .string()
-                                .openapi('enterGradeLecturerId', {
-                                    description: 'ID của giảng viên nhập điểm',
-                                }),
-                        })
+                        z
+                            .object({
+                                subjectClassId: z.string(),
+                                lecturerId: z.string(),
+                                extraLecturerId: z.string(),
+                                enterGradeLecturerId: z.string(),
+                            })
+                            .openapi('teachingAssignmentRequest')
                     ),
                 },
             },
@@ -43,16 +33,20 @@ const teachingAssignment = createRoute({
             content: {
                 'application/json': {
                     schema: z.array(
-                        z.object({
-                            subjectClassId: z
-                                .string()
-                                .openapi('subjectClassId', {
-                                    description: 'ID của lớp môn học',
-                                }),
-                            userProfileId: z.string().openapi('userProfileId', {
-                                description: 'ID của giảng viên',
-                            }),
-                        })
+                        z
+                            .object({
+                                subjectClassId: z
+                                    .string()
+                                    .openapi('subjectClassId', {
+                                        description: 'ID của lớp môn học',
+                                    }),
+                                userProfileId: z
+                                    .string()
+                                    .openapi('userProfileId', {
+                                        description: 'ID của giảng viên',
+                                    }),
+                            })
+                            .openapi('teachingAssignmentResponse')
                     ),
                 },
             },
@@ -64,31 +58,15 @@ const teachingAssignment = createRoute({
     },
 })
 
-const app = new OpenAPIHono({ strict: false })
-
 app.openapi(teachingAssignment, async (c) => {
     const data = c.req.valid('json')
     const result = await Promise.allSettled(
-        data.map(async (item) => {
-            const {
-                subjectClassId,
-                lectureId,
-                extraLectureId,
-                // TODO: Thêm trường enterGradeLecturerId trong db
-                enterGradeLecturerId,
-            } = item
-
-            // Kiểm tra xem lớp môn học có tồn tại không
-            const subjectClass = await prisma.subjectClass.update({
+        data.map(async ({ subjectClassId, ...lecturers }) =>
+            prisma.subjectClass.update({
                 where: { id: subjectClassId },
-                data: {
-                    extraLecturerId: extraLectureId,
-                    lecturerId: lectureId,
-                },
+                data: lecturers,
             })
-            // Cập nhật phân công giảng dạy
-            return subjectClass
-        })
+        )
     )
 
     const resultSuccess = result
