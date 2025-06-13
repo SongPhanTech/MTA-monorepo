@@ -199,7 +199,7 @@ app.openapi(uploadExcelCreateFixedClass, async (c) => {
     if (trainingCourse?.code !== cellValue) {
         return c.json({ message: 'Mã khoá học không trùng khớp' }, 400)
     }
-    if (trainingCourse?.status !== $Enums.TrainingCourseStatus.ACTIVE) {
+    if (!trainingCourse?.active) {
         return c.json({ message: 'khoá học đã đóng' }, 400)
     }
 
@@ -262,18 +262,18 @@ app.openapi(classDivision, async (c) => {
                 if (!userProfile) {
                     return `Không tìm thấy học viên ${row[1]}`
                 }
-                let fixedClassStudent =
-                    await prisma.fixedClassStudent.findFirst({
-                        where: {
-                            userProfileId: userProfile.id,
-                            fixedClassId: fixedClass.id,
-                        },
-                    })
+                let fixedClassStudent = await prisma.student.findFirst({
+                    where: {
+                        userProfileId: userProfile.id,
+                        fixedClassId: fixedClass.id,
+                    },
+                })
                 if (!fixedClassStudent) {
-                    fixedClassStudent = await prisma.fixedClassStudent.create({
+                    fixedClassStudent = await prisma.student.create({
                         data: {
                             fixedClassId: fixedClass.id,
                             userProfileId: userProfile.id,
+                            from: new Date(),
                         },
                     })
                 }

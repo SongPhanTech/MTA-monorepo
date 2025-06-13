@@ -9,7 +9,6 @@ import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
-    AddUserProfileLecture,
     PutUpdateProfileModal,
     PutUploadProfileModal,
     PutUserProfileLectureModal,

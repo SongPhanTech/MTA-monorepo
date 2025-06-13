@@ -109,9 +109,20 @@ Table SubjectClassStudent {
   subjectClassId String [not null]
   student Student [not null]
   studentId String [not null]
+  status SubjectClassStudentStatus [not null, default: 'Studying']
   attendanceScore Float
   midtermScore Float
+  examScore Float
+  examScore2 Float
+  bonusScore Float
   finalScore Float
+  examPostponed Boolean [not null, default: false]
+  examBanned Boolean [not null, default: false]
+  suspended Boolean [not null, default: false]
+
+  indexes {
+    (subjectClassId, studentId) [unique]
+  }
 
   Note: 'học viên - lớp môn học'
 }
@@ -415,12 +426,19 @@ Table SubjectClass {
   semesterId String [not null]
   lecturerAssignmentDeadline DateTime
   examDate DateTime
+  scoreDeadline DateTime
+  examScoreDeadline DateTime
+  isLockScore Boolean [not null, default: false]
+  isLockExamScore Boolean [not null, default: true]
+  issuedScoreAt DateTime
   room Room
   roomId String
   mainLecturer Lecturer
   lecturerId String
   extraLecturer Lecturer
   extraLecturerId String
+  enterGradeLecturer Lecturer
+  enterGradeLecturerId String
   subjectClassStudent SubjectClassStudent [not null]
 
   Note: 'Lớp môn học'
@@ -1293,6 +1311,7 @@ Table Lecturer {
   lecturerTypeId String [not null]
   mainSubjectClasses SubjectClass [not null]
   extraSubjectClasses SubjectClass [not null]
+  enterGradeClasses SubjectClass [not null]
   manageFixedClass FixedClass [not null]
 }
 
@@ -1413,6 +1432,14 @@ Table GroupToRole {
 Table PermissionToRole {
   permissionsId String [ref: > Permission.id]
   roleId String [ref: > Role.id]
+}
+
+Enum SubjectClassStudentStatus {
+  Registered
+  Studying
+  NotPassed
+  Passed
+  CancelClass
 }
 
 Enum SemesterType {
@@ -1617,6 +1644,8 @@ Ref: SubjectClass.roomId > Room.id
 Ref: SubjectClass.lecturerId > Lecturer.id
 
 Ref: SubjectClass.extraLecturerId > Lecturer.id
+
+Ref: SubjectClass.enterGradeLecturerId > Lecturer.id
 
 Ref: Building.trainingLocationId > TrainingLocation.id
 
