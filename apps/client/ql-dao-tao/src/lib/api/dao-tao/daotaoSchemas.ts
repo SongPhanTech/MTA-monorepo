@@ -12,30 +12,46 @@ export type ListOfundefined = PaginationQuery & {
     data: {
         id: string
         code?: string | null
+        /**
+         * @default true
+         */
+        active?: boolean
         description?: string | null
         deletedAt?: string | null
         /**
-         * @default 2025-06-12T04:20:44.830Z
+         * @default 2025-06-13T08:20:42.845Z
          */
         createdAt?: string | null
         updatedAt: string | null
+        userType:
+            | 'MILITARY_STUDENT'
+            | 'CIVILIAN_STUDENT'
+            | 'LECTURER'
+            | 'STAFF'
+            | 'PROFESSIONAL'
+            | 'CONTRACT'
+            | 'CIVIL_STUDENT'
+            | 'TEACHER'
+            | 'OTHER'
         avatar?: string | null
         firstName: string
         lastName: string
+        idCardNumber: string
+        fullname?: string | null
         dateOfBirth?: string | null
         placeOfBirth?: string | null
         homeTown?: string | null
-        idCardNumber?: string | null
         idCardDate?: string | null
-        officerNumber?: string | null
         gender?: 'Male' | 'Female' | null
         permanentAddress?: string | null
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
         email?: string | null
-        parentPhoneNumber?: string | null
-        parentName?: string | null
+        officerNumber?: string | null
+        rankDate?: string | null
+        academicDegreeDate?: string | null
+        academicRankDate?: string | null
         unionDate?: string | null
         unionPlace?: string | null
         CPVJoinDate?: string | null
@@ -44,14 +60,8 @@ export type ListOfundefined = PaginationQuery & {
         tenureDate?: string | null
         enlistmentDate?: string | null
         dischargeDate?: string | null
-        rankName?: string | null
-        educationLevel?: string | null
-        academicDegreeTypeName?: string | null
-        academicRankTypeName?: string | null
-        positionName?: string | null
-        positionCPVName?: string | null
-        organizationName?: string | null
-        organizationCPVName?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
     }[]
     count: number
 }
@@ -103,3 +113,59 @@ export type SerializedFields = SerializedField[]
  * ID của lớp biên chế
  */
 export type FixedClassId = string
+
+/**
+ * ID của lớp môn học
+ */
+export type SubjectClassId = string
+
+/**
+ * ID của giảng viên
+ */
+export type UserProfileId = string
+
+export type TeachingAssignmentResponse = {
+    subjectClassId: SubjectClassId
+    userProfileId: UserProfileId
+}
+
+export type TeachingAssignmentRequest = {
+    subjectClassId: string
+    lecturerId: string
+    extraLecturerId?: string
+    enterGradeLecturerId?: string
+}
+
+/**
+ * ID của học kỳ
+ */
+export type SemesterId = string
+
+/**
+ * ID ngành đào tạo
+ */
+export type TrainingCourseId = string
+
+/**
+ * ID của chuyên ngành đào tạo
+ */
+export type TrainingMajorId = string
+
+/**
+ * Từ khóa tìm kiếm
+ */
+export type Search = string
+
+/**
+ * Số trang
+ *
+ * @default 1
+ */
+export type Page = string
+
+/**
+ * Số lượng bản ghi trên mỗi trang
+ *
+ * @default 10
+ */
+export type PageSize = string
