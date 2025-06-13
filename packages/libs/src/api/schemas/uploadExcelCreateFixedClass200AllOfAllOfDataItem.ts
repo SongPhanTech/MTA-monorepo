@@ -9,6 +9,7 @@ export type UploadExcelCreateFixedClass200AllOfAllOfDataItem = {
     id: string
     /** @nullable */
     code?: string | null
+    active?: boolean
     /** @nullable */
     description?: string | null
     /** @nullable */
@@ -18,5 +19,11 @@ export type UploadExcelCreateFixedClass200AllOfAllOfDataItem = {
     /** @nullable */
     updatedAt: string | null
     name: string
-    classSize?: number
+    /** @nullable */
+    summary?: string | null
+    /** @nullable */
+    startYear?: number | null
+    /** @nullable */
+    graduated?: boolean | null
+    initSize?: number
 }

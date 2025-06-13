@@ -6,18 +6,41 @@ import './student'
 import './lecturer'
 import './staff'
 
+enum SubjectClassStudentStatus {
+  Registered
+  Studying
+  NotPassed
+  Passed
+  CancelClass
+
+  @@schema("ql-dao-tao")
+}
+
 /// học viên - lớp môn học
 model SubjectClassStudent extends Base {
-  subjectClass    SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClass    SubjectClass              @relation(fields: [subjectClassId], references: [id])
   subjectClassId  String
 
-  student         Student      @relation(fields: [studentId], references: [id])
+  student         Student                   @relation(fields: [studentId], references: [id])
   studentId       String
 
-  attendanceScore Float? // điểm chuyên cần
-  midtermScore    Float? // điểm giữa kỳ
-  finalScore      Float? // điểm thi
+  // cần cập nhật khi: huỷ lớp | thay đổi điểm
+  status          SubjectClassStudentStatus @default(Studying)
 
+  attendanceScore Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
+  midtermScore    Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
+  examScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
+  examScore2      Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ 2 (thi lại)
+
+  bonusScore      Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
+  // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
+  finalScore      Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm tổng kết
+
+  examPostponed   Boolean                   @default(false) // hoãn thi
+  examBanned      Boolean                   @default(false) // cấm thi
+  suspended       Boolean                   @default(false) // đình chỉ
+
+  @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
 
@@ -94,7 +117,7 @@ model FixedClass extends Base {
   startYear                Int?
   graduated                Boolean?           @default(false)
 
-  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String?
 
   managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
@@ -337,6 +360,18 @@ model SubjectClass extends Base {
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
 
+  scoreDeadline              DateTime? // hạn nhập điểm CC/TX: default 10 ngày trước ngày thi
+  examScoreDeadline          DateTime? // hạn nhập điểm thi: default 10 ngày sau ngày thi
+  
+  // cần khoá khi: hạn nhập điểm
+  isLockScore                Boolean               @default(false) // khoá điểm CC/TX
+  // cần khoá khi:  GV xuất phiếu điểm
+  isLockExamScore            Boolean               @default(true) // khoá điểm thi
+
+  // khi xuất phiếu điểm cuối cùng
+  issuedScoreAt              DateTime? // ngày xuất phiếu điểm
+
+
   room                       Room?                 @relation(fields: [roomId], references: [id])
   roomId                     String?
 
@@ -345,6 +380,9 @@ model SubjectClass extends Base {
 
   extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId            String?
+
+  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId       String?
 
   subjectClassStudent        SubjectClassStudent[]
   @@schema("ql-dao-tao")

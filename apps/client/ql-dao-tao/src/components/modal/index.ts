@@ -9,11 +9,9 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutCurriculumVersionModal from './put-phien-ban-ctdt'
-import PutCurriculumModal from './put-chuong-trinh-dt'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutSubjectModal from './put-mon-hoc'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
-import AddUserProfileLecture from './add-user-profile-lecture'
 import PutOrganizationUser from './put-organization-user'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import PutTrainingFieldModal from './put-nganh'
@@ -28,6 +26,7 @@ import PutUserProfileStaffModal from './put-staff-modal'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
+import PutConvertScore from './put-chuyen-doi-diem'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -40,11 +39,9 @@ export {
     PutUploadFixedClassModal,
     PutUploadDivisionModal,
     PutCurriculumVersionModal,
-    PutCurriculumModal,
     PutSubjectGroupModal,
     PutSubjectModal,
     PutUserProfileLectureModal,
-    AddUserProfileLecture,
     PutOrganizationUser,
     ThongTinBaoCaoModal,
     PutTrainingFieldModal,
@@ -59,4 +56,5 @@ export {
     PutTrainingBlockOnCurriculumVersion,
     PutUserProfileStaffModal,
     PutTrainingBlockSubject,
+    PutConvertScore
 }

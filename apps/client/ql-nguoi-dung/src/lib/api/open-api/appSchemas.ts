@@ -71,7 +71,9 @@ export type User = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.262Z
+
+   * @default 2025-06-13T08:20:42.799Z
+
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -93,7 +95,9 @@ export type UserCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.263Z
+
+   * @default 2025-06-13T08:20:42.800Z
+
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -116,7 +120,9 @@ export type UserUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.264Z
+
+   * @default 2025-06-13T08:20:42.801Z
+
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -145,7 +151,9 @@ export type ListOfundefined = PaginationQuery & {
     description?: string | null;
     deletedAt?: string | null;
     /**
-     * @default 2025-06-11T10:54:34.265Z
+
+     * @default 2025-06-13T08:20:42.801Z
+
      */
     createdAt?: string | null;
     updatedAt: string | null;
@@ -179,7 +187,9 @@ export type Group = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.267Z
+
+   * @default 2025-06-13T08:20:42.804Z
+
    */
   createdAt?: string | null;
   updatedAt: string | null;
@@ -192,7 +202,9 @@ export type GroupCreate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.267Z
+
+   * @default 2025-06-13T08:20:42.804Z
+
    */
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -207,7 +219,9 @@ export type GroupUpdate = {
   description?: string | null;
   deletedAt?: string | null;
   /**
-   * @default 2025-06-11T10:54:34.270Z
+
+   * @default 2025-06-13T08:20:42.804Z
+
    */
   createdAt?: string | null;
   updatedAt?: string | null;

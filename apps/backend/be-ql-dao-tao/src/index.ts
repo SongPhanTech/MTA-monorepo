@@ -11,6 +11,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 
 import FixedClassApp from './api/fixed-class'
+import SubjectClassApp from './api/subject-class'
 import UserProfileApp from './api/user-profile'
 import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
@@ -54,6 +55,7 @@ setupAuth(app)
 
 app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
+app.route('/api/subject-class', SubjectClassApp)
 
 app.use(
     '/api/model/*',
