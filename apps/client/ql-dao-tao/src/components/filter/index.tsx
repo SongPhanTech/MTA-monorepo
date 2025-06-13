@@ -10,5 +10,5 @@ export {
     FilterChuongTrinhDT,
     FilterKhoa,
     FilterSinhVien,
-    FilterSubjectClass
+    FilterSubjectClass,
 }

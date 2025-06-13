@@ -4,9 +4,9 @@
  * @version 1.0.0
  */
 export type PaginationQuery = {
-  page?: number;
-  limit?: number | null;
-};
+    page?: number
+    limit?: number | null
+}
 
 export type ListOfundefined = PaginationQuery & {
     data: {
@@ -19,7 +19,7 @@ export type ListOfundefined = PaginationQuery & {
         description?: string | null
         deletedAt?: string | null
         /**
-         * @default 2025-06-13T08:20:42.845Z
+         * @default 2025-06-13T09:59:44.957Z
          */
         createdAt?: string | null
         updatedAt: string | null
@@ -68,118 +68,60 @@ export type ListOfundefined = PaginationQuery & {
 
 export type UploadExcelCreateUserProfile = {
     /**
-     * @default true
+     * @format binary
      */
-    active?: boolean;
-    description?: string | null;
-    deletedAt?: string | null;
-    /**
-     * @default 2025-06-13T08:24:21.614Z
-     */
-    createdAt?: string | null;
-    updatedAt: string | null;
-    userType:
-      | "MILITARY_STUDENT"
-      | "CIVILIAN_STUDENT"
-      | "LECTURER"
-      | "STAFF"
-      | "PROFESSIONAL"
-      | "CONTRACT"
-      | "CIVIL_STUDENT"
-      | "TEACHER"
-      | "OTHER";
-    avatar?: string | null;
-    firstName: string;
-    lastName: string;
-    idCardNumber: string;
-    fullname?: string | null;
-    dateOfBirth?: string | null;
-    placeOfBirth?: string | null;
-    homeTown?: string | null;
-    idCardDate?: string | null;
-    gender?: "Male" | "Female" | null;
-    permanentAddress?: string | null;
-    temporaryAddress?: string | null;
-    contactAddress?: string | null;
-    phoneNumber?: string | null;
-    email?: string | null;
-    officerNumber?: string | null;
-    rankDate?: string | null;
-    academicDegreeDate?: string | null;
-    academicRankDate?: string | null;
-    unionDate?: string | null;
-    unionPlace?: string | null;
-    CPVJoinDate?: string | null;
-    officialCPVDate?: string | null;
-    CPVJoinPlace?: string | null;
-    tenureDate?: string | null;
-    enlistmentDate?: string | null;
-    dischargeDate?: string | null;
-    familyPhone?: string | null;
-    familyName?: string | null;
-  }[];
-  count: number;
-};
-
-export type UploadExcelCreateUserProfile = {
-  /**
-   * @format binary
-   */
-  file: Blob;
-  type: string;
-};
+    file: Blob
+    type: string
+}
 
 export type UploadExcelUpdateUserProfile = {
-  /**
-   * @format binary
-   */
-  file: Blob;
-};
+    /**
+     * @format binary
+     */
+    file: Blob
+}
 
 export type UploadExcelCreateFixedClass = {
-  /**
-   * @format binary
-   */
-  file: Blob;
-  trainingCourseId: string;
-};
+    /**
+     * @format binary
+     */
+    file: Blob
+    trainingCourseId: string
+}
 
 export type ClassDivision = {
-  /**
-   * @format binary
-   */
-  file: Blob;
-};
+    /**
+     * @format binary
+     */
+    file: Blob
+}
 
 export type SerializedField = {
-  path: string;
-  type: string;
-  description?: string;
-  items?: {
-    path: string;
-    type: string;
-    description?: string;
-  }[];
-};
+    path: string
+    type: string
+    description?: string
+    items?: {
+        path: string
+        type: string
+        description?: string
+    }[]
+}
 
-export type SerializedFields = SerializedField[];
+export type SerializedFields = SerializedField[]
 
 /**
  * ID của lớp biên chế
  */
-
 export type FixedClassId = string
 
 /**
  * ID của lớp môn học
  */
-
 export type SubjectClassId = string
 
 /**
  * ID của giảng viên
  */
-
 export type UserProfileId = string
 
 export type TeachingAssignmentResponse = {
@@ -197,25 +139,21 @@ export type TeachingAssignmentRequest = {
 /**
  * ID của học kỳ
  */
-
 export type SemesterId = string
 
 /**
  * ID ngành đào tạo
  */
-
 export type TrainingCourseId = string
 
 /**
  * ID của chuyên ngành đào tạo
  */
-
 export type TrainingMajorId = string
 
 /**
  * Từ khóa tìm kiếm
  */
-
 export type Search = string
 
 /**
@@ -223,7 +161,6 @@ export type Search = string
  *
  * @default 1
  */
-
 export type Page = string
 
 /**
@@ -231,6 +168,4 @@ export type Page = string
  *
  * @default 10
  */
-
 export type PageSize = string
-
