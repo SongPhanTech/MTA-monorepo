@@ -2,11 +2,14 @@ export const fetchInstance = async (
     url: string,
     options?: RequestInit
 ): Promise<Response> => {
+    const accessToken = localStorage.getItem('ACCESS_TOKEN')
+
     const payload: RequestInit = {
         ...options,
         credentials: 'include',
         headers: {
             ...options?.headers,
+            Authorization: `Bearer ${accessToken}`,
         },
     }
     return await fetch(url, payload)
@@ -43,7 +46,7 @@ export const customModelFetch = async <T>(
     url: string,
     options: RequestInit
 ): Promise<T> => {
-    const requestUrl = getUrl('https://api.model.x52.swantech.vn', url)
+    const requestUrl = getUrl('https://api.model.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
@@ -55,7 +58,7 @@ export const customUserFetch = async <T>(
     url: string,
     options: RequestInit
 ): Promise<T> => {
-    const requestUrl = getUrl('https://api.user.x52.swantech.vn', url)
+    const requestUrl = getUrl('https://api.user.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
@@ -67,7 +70,7 @@ export const customTrainingFetch = async <T>(
     url: string,
     options: RequestInit
 ): Promise<T> => {
-    const requestUrl = getUrl('https://api.daotao.x52.swantech.vn', url)
+    const requestUrl = getUrl('https://api.daotao.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
