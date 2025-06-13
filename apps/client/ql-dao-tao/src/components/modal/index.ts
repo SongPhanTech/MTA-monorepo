@@ -59,4 +59,5 @@ export {
     PutTrainingBlockOnCurriculumVersion,
     PutUserProfileStaffModal,
     PutTrainingBlockSubject,
+    PutConvertScore,
 }
