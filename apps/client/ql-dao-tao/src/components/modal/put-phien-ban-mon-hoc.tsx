@@ -18,7 +18,6 @@ import {
     InputNumber,
     Switch,
     TreeSelect,
-    Upload,
     type UploadProps,
     message,
 } from 'antd'
@@ -28,13 +27,12 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
 import { useExamTypeOptions } from '@hooks/examType'
-import { InboxOutlined } from '@ant-design/icons'
 import Tabs from '@components/commons/tabar'
+import DocumentPaths from '@components/commons/documentPaths'
 dayjs.locale('vi')
 
-const { Dragger } = Upload
-
 const PutVersionSubjectModal = () => {
+    const [document, setDocument] = useState<string[]>([])
     const [form] = Form.useForm<PutSubjectVersion>()
     const { isOpen, onClose, input } = useDisclosure<{
         subjectId: string
@@ -118,6 +116,7 @@ const PutVersionSubjectModal = () => {
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
+                documentPaths: output.documentPaths,
             }
 
             if (subjectVersionId) {
@@ -147,6 +146,7 @@ const PutVersionSubjectModal = () => {
             form.setFieldsValue({
                 ...subjectVersion,
             })
+            setDocument(subjectVersion.documentPaths)
             setActive(subjectVersion.active)
         }
     }, [subjectVersion, form])
@@ -367,19 +367,14 @@ const PutVersionSubjectModal = () => {
                     </div>
                 </FormItem>
             </Col>
+            {/*  */}
             <Col span={24}>
-                <FormItem form={form} name="documentPaths" label="Tài liệu">
-                    <Dragger {...props}>
-                        <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">
-                            Chọn tệp hoặc kéo và thả tệp vào đây
-                        </p>
-                        <p className="ant-upload-hint">
-                            Định dạng XLSX, XLS (tối đa 5MB)
-                        </p>
-                    </Dragger>
+                <FormItem
+                    form={form}
+                    name="documentPaths"
+                    label="Tài liệu đính kèm"
+                >
+                    <DocumentPaths form={form} data={document} />
                 </FormItem>
             </Col>
             <Tabs
