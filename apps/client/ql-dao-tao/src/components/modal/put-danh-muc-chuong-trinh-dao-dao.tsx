@@ -24,15 +24,7 @@ import DocumentPaths from '@components/commons/documentPaths'
 dayjs.locale('vi')
 
 const PutCurriculum = () => {
-    const [fileList, setFileList] = useState<File[]>([])
-
-    const handleRemoveFile = (index: number): void => {
-        const newList = [...fileList]
-        newList.splice(index, 1)
-        setFileList(newList)
-        form.setFieldValue('documentPaths', newList) // Cập nhật vào form
-    }
-
+    const [document, setDocument] = useState<string[]>([])
     const [form] = Form.useForm<PutCurriculum>()
     const {
         isOpen,
@@ -63,6 +55,7 @@ const PutCurriculum = () => {
                         trainingMajorId: output.trainingMajorId,
                         managementOrganizationId:
                             output.managementOrganizationId,
+                        documentPaths: output.documentPaths,
                     },
                     where: {
                         id,
@@ -78,6 +71,7 @@ const PutCurriculum = () => {
                         trainingMajorId: output.trainingMajorId,
                         managementOrganizationId:
                             output.managementOrganizationId,
+                        documentPaths: output.documentPaths,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -104,6 +98,7 @@ const PutCurriculum = () => {
             form.setFieldsValue({
                 ...initialData,
             })
+            setDocument(initialData?.documentPaths)
             setActive(initialData?.active)
         }
     }, [initialData])
@@ -194,33 +189,32 @@ const PutCurriculum = () => {
                     name="documentPaths"
                     label="Tài liệu đính kèm"
                 >
-                    <DocumentPaths
+                    <DocumentPaths form={form} data={document} />
+                </FormItem>
+            </Col>
+            {id && (
+                <Col span={12} className="flex items-center">
+                    <FormItem
                         form={form}
-                        fileList={fileList}
-                        setFileList={setFileList}
-                        handleRemoveFile={handleRemoveFile}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12} className="flex items-center">
-                <FormItem
-                    form={form}
-                    name="active"
-                    label=""
-                    valuePropName="checked"
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                        }}
+                        name="active"
+                        label=""
+                        valuePropName="checked"
                     >
-                        <Switch checked={active} onChange={handleChange} />
-                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                    </div>
-                </FormItem>
-            </Col>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}
+                        >
+                            <Switch checked={active} onChange={handleChange} />
+                            <span>
+                                {active ? 'Đang đào tạo' : 'Ngừng đào tạo'}
+                            </span>
+                        </div>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }
