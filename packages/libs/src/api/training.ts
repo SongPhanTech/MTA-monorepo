@@ -28,6 +28,8 @@ import type {
     ExportStudentFixedClassDocxParams,
     ListOfundefined,
     SerializedFields,
+    TeachingAssignmentRequest,
+    TeachingAssignmentResponse,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -915,4 +917,117 @@ export function useExportStudentFixedClassDocx<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * Phân công giảng dạy
+ * @summary Phân công giảng dạy
+ */
+export type lecturerAssignmentResponse200 = {
+    data: TeachingAssignmentResponse[]
+    status: 200
+}
+
+export type lecturerAssignmentResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type lecturerAssignmentResponseComposite =
+    | lecturerAssignmentResponse200
+    | lecturerAssignmentResponse400
+
+export type lecturerAssignmentResponse = lecturerAssignmentResponseComposite & {
+    headers: Headers
+}
+
+export const getLecturerAssignmentUrl = () => {
+    return '/api/subject-class/teaching-assignment'
+}
+
+export const lecturerAssignment = async (
+    teachingAssignmentRequest: TeachingAssignmentRequest[],
+    options?: RequestInit
+): Promise<lecturerAssignmentResponse> => {
+    return customTrainingFetch<lecturerAssignmentResponse>(
+        getLecturerAssignmentUrl(),
+        {
+            ...options,
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            },
+            body: JSON.stringify(teachingAssignmentRequest),
+        }
+    )
+}
+
+export const getLecturerAssignmentMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof lecturerAssignment>>,
+        TError,
+        { data: TeachingAssignmentRequest[] },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof lecturerAssignment>>,
+    TError,
+    { data: TeachingAssignmentRequest[] },
+    TContext
+> => {
+    const mutationKey = ['lecturerAssignment']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof lecturerAssignment>>,
+        { data: TeachingAssignmentRequest[] }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return lecturerAssignment(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type LecturerAssignmentMutationResult = NonNullable<
+    Awaited<ReturnType<typeof lecturerAssignment>>
+>
+export type LecturerAssignmentMutationBody = TeachingAssignmentRequest[]
+export type LecturerAssignmentMutationError = undefined
+
+/**
+ * @summary Phân công giảng dạy
+ */
+export const useLecturerAssignment = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof lecturerAssignment>>,
+            TError,
+            { data: TeachingAssignmentRequest[] },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof lecturerAssignment>>,
+    TError,
+    { data: TeachingAssignmentRequest[] },
+    TContext
+> => {
+    const mutationOptions = getLecturerAssignmentMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }

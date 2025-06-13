@@ -117,7 +117,7 @@ model FixedClass extends Base {
   startYear                Int?
   graduated                Boolean?           @default(false)
 
-  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khóa học
+  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String?
 
   managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
@@ -380,6 +380,9 @@ model SubjectClass extends Base {
 
   extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId            String?
+
+  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId       String?
 
   subjectClassStudent        SubjectClassStudent[]
   @@schema("ql-dao-tao")
