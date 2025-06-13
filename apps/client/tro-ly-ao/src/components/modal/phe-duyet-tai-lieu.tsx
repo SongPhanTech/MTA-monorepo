@@ -30,7 +30,7 @@ const PheDuyetTaiLieu = () => {
         try {
             await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
                 {
-                    queryParams: { documentId },
+                    queryParams: { id_document: documentId },
                 }
             )
 

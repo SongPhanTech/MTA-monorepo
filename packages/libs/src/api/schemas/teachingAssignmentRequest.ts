@@ -8,6 +8,6 @@
 export interface TeachingAssignmentRequest {
     subjectClassId: string
     lecturerId: string
-    extraLecturerId: string
-    enterGradeLecturerId: string
+    extraLecturerId?: string
+    enterGradeLecturerId?: string
 }
