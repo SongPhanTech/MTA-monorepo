@@ -2,6 +2,8 @@ import { z } from '@hono/zod-openapi'
 
 export const OpenSubjectClass = z
     .object({
+        trainingMajorId: z.string(),
+        trainingCourseId: z.string(),
         subjectVersionId: z.string(),
         subjectVersionName: z.string(),
         subjectVersionCredit: z.number(),
@@ -12,8 +14,13 @@ export const OpenSubjectClass = z
             })
         ),
         fixedClass: z.array(
-            z.object({ fixedClassId: z.string(), fixedClassName: z.string() })
+            z.object({
+                fixedClassId: z.string(),
+                fixedClassName: z.string(),
+                fixedClassCount: z.number(),
+            })
         ),
+        countStudent: z.number(),
     })
     .openapi('OpenSubjectClass')
 

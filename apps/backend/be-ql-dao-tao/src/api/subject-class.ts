@@ -189,7 +189,8 @@ app.openapi(openSubjectClass, async (c) => {
                     FC.name                              as fixed_class_name,
                     FC.code                              as fixed_class_code,
                     FC."trainingCourseId"                as training_course_id,
-                    C."trainingMajorId"                  as training_major_id
+                    C."trainingMajorId"                  as training_major_id,
+                    count(FC.id)                         as fixed_class_count
              from "ql-dao-tao"."SubjectVersion"
                       join "ql-dao-tao"."TrainingBlockSubject" TBS
                            on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
@@ -204,7 +205,7 @@ app.openapi(openSubjectClass, async (c) => {
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id)
-select json_build_object('training_major_id', training_major_id, 'training_course_id', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+select json_build_object('trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
                          'curriculumVersion', json_agg(
                                  json_build_object(
@@ -214,7 +215,7 @@ select json_build_object('training_major_id', training_major_id, 'training_cours
                                               ),
                          'fixedClass', json_agg(
                                  json_build_object(
-                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name
+                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count
                                  )
                                        )
        ) as data
@@ -245,6 +246,10 @@ group by subject_version_id, subject_version_code,
                                     t.curriculumVersionId ===
                                     value.curriculumVersionId
                             )
+                    ),
+                    countStudent: item.fixedClass.reduce(
+                        (acc, curr) => acc + curr.fixedClassCount,
+                        0
                     ),
                 })),
             success: true,
