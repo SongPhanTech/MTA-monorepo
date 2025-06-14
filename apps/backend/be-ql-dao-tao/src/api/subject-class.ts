@@ -186,39 +186,50 @@ app.openapi(openSubjectClass, async (c) => {
                     ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester,
                     FC."startYear"                       as fixed_class_start_year,
                     FC.id                                as fixed_class_id,
-                    FC.name                              as fixed_class_name
+                    FC.name                              as fixed_class_name,
+                    FC.code                              as fixed_class_code,
+                    FC."trainingCourseId"                as training_course_id,
+                    C."trainingMajorId"                  as training_major_id
              from "ql-dao-tao"."SubjectVersion"
                       join "ql-dao-tao"."TrainingBlockSubject" TBS
                            on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
                       join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
                            on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
                       join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
+                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
                       join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
                       join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
              where FC.active = true
-             group by "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
-                      "ql-dao-tao"."SubjectVersion".credit, CV.name, CV.id,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, FC.id, FC."startYear", FC."name")
-select json_build_object('subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+             group by CV.id, CV.name, FC.id, FC."startYear",
+                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
+                      "ql-dao-tao"."SubjectVersion".credit,
+                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id)
+select json_build_object('training_major_id', training_major_id, 'training_course_id', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
                          'curriculumVersion', json_agg(
                                  json_build_object(
                                          'curriculumVersionId', curriculum_version_id,
                                          'curriculumVersionName', curriculum_version_name
                                  )
-                                               ),
+                                              ),
                          'fixedClass', json_agg(
                                  json_build_object(
                                          'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name
                                  )
-                                        )
+                                       )
        ) as data
 from FCS
 where training_block_subject_semester = fixed_class_semester
+${trainingCourseId ? `and training_course_id = '${trainingCourseId}'` : ''}
+${search ? `and subject_version_name ilike '%${search}%'` : ''}
+${search ? `and subject_version_code ilike '%${search}%'` : ''}
+${search ? `and fixed_class_name ilike '%${search}%'` : ''}
+${search ? `and fixed_class_code ilike '%${search}%'` : ''}
+${trainingMajorId ? `and training_major_id = '${trainingMajorId}'` : ''}
 group by subject_version_id, subject_version_code,
-         subject_version_credit, subject_version_name
+         subject_version_credit, subject_version_name, training_major_id, training_course_id
          limit ${pageSize} offset (${page} - 1) * ${pageSize}
-         `)
+`)
 
     return c.json(
         {
