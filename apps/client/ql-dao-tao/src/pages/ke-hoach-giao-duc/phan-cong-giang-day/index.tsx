@@ -159,7 +159,6 @@ export default function TeachingAssignment() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -190,22 +189,24 @@ export default function TeachingAssignment() {
         try {
             showSpinner()
             const res: any = await lecturerAssignment(
-               dataSubmit.map((subjectClass) => ({
+                dataSubmit.map((subjectClass) => ({
                     subjectClassId: subjectClass.id,
                     lecturerId: subjectClass.lecturerId ?? '',
                     extraLecturerId: subjectClass.extraLecturerId ?? '',
-                    enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? '',
+                    enterGradeLecturerId:
+                        subjectClass.enterGradeLecturerId ?? '',
                 }))
             )
-            if(res?.data?.errors?.length) {
-                message.error(`${res?.data?.errors?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`)
-            }else {
+            if (res?.data?.errors?.length) {
+                message.error(
+                    `${res?.data?.errors?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
+                )
+            } else {
                 message.success('Phân công giảng dạy thành công')
             }
-            await refetch();
-            setIsEdit(false);
+            await refetch()
+            setIsEdit(false)
             setDataSubmit([...data])
-
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
