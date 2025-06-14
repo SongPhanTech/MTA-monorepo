@@ -1,3 +1,4 @@
+import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
@@ -8,17 +9,20 @@ import DefaultLayout from '@layouts/default-layout'
 import type { SchoolYear, Semester, TrainingObjectType } from '@workspace/db'
 import {
     useFindManySchoolYear,
-    useFindManySubjectVersion,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
+import {
+    openSubjectClass,
+    useOpenSubjectClass,
+} from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -41,57 +45,35 @@ export default function SubjectOpeningPlan() {
     })
 
     const schoolYearId = Form.useWatch('schoolYearId', form)
-    // const semesterId = Form.useWatch('semesterId',form)
 
-    const { data = [], refetch } = useFindManySubjectVersion(
+    const { data: res, refetch } = useOpenSubjectClass(
         {
-            where: {
-                AND: [
-                    {
-                        OR: form.getFieldValue('searchText')
-                            ? [
-                                  {
-                                      name: {
-                                          contains:
-                                              form.getFieldValue('searchText'),
-                                      },
-                                  },
-                                  {
-                                      code: {
-                                          contains:
-                                              form.getFieldValue('searchText'),
-                                      },
-                                  },
-                              ]
-                            : [],
-                    },
-                ],
-            },
-            include: {
-                subjectClass: {
-                    where: { semesterId: form.getFieldValue('semesterId') },
-                },
-                managementOrganization: true,
-                trainingBlocks: {
-                    include: {
-                        trainingBlockOnCurriculumVersion: {
-                            include: { curriculumVersion: true },
-                        },
-                    },
-                },
-            },
-            orderBy: { code: 'asc' },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
+            page: '1',
+            pageSize: '10',
+            semesterId: form.getFieldValue('semesterId'),
+            trainingCourseId: form.getFieldValue('trainingCourseId'),
+            search: form.getFieldValue('searchText'),
         },
-        {
-            enabled: !!form.getFieldValue('semesterId'),
-        }
+        {},
+        queryClient
     )
 
-    useEffect(() => {
-        console.log(111)
+    console.log(res?.data)
 
+    const data = useMemo(
+        () =>
+            res?.status === 200
+                ? res.data.data.map((subjectVersion) => ({
+                      id: subjectVersion.subjectVersionId,
+                      ...subjectVersion,
+                  }))
+                : [],
+        [res]
+    )
+
+    // const data = []
+
+    useEffect(() => {
         if (schoolYears?.length) {
             const lastSchoolYear = schoolYears[schoolYears.length - 1]
             form.setFieldValue('schoolYearId', lastSchoolYear.id)
@@ -319,6 +301,7 @@ export default function SubjectOpeningPlan() {
                             onChange: (selectedKeys) =>
                                 setSelectedRowKeys(selectedKeys),
                         }}
+                        data={data}
                         columns={[
                             {
                                 title: 'STT',
@@ -332,20 +315,26 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Mã môn học',
-                                dataIndex: 'code',
+                                // TODO: dataIndex: 'code'
+                                dataIndex: 'subjectVersionId',
                                 align: 'center',
                                 width: 150,
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: 'name',
+                                dataIndex: 'subjectVersionName',
                                 width: 150,
                             },
                             {
                                 title: 'Danh sách lớp môn học',
                                 dataIndex: 'subjectClass',
                                 width: 200,
-                                render: (values: { name: string }[]) => (
+                                render: (
+                                    values: {
+                                        subjectClassName: string
+                                        subjectClassCode: string
+                                    }[]
+                                ) => (
                                     <ul
                                         style={{
                                             paddingLeft: 16,
@@ -353,25 +342,28 @@ export default function SubjectOpeningPlan() {
                                         }}
                                     >
                                         {values?.map((val) => (
-                                            <li key={val.name}>{val.name}</li>
+                                            <li key={val.subjectClassName}>
+                                                {`${val.subjectClassName} ${val.subjectClassCode}`}
+                                            </li>
                                         ))}
                                     </ul>
                                 ),
                             },
                             {
                                 title: 'Số tín chỉ',
-                                dataIndex: 'credit',
+                                dataIndex: 'subjectVersionCredit',
                                 width: 150,
                                 align: 'center',
                             },
                             {
                                 title: 'Chương trình đào tạo',
-                                dataIndex: [
-                                    'trainingBlocks',
-                                    'trainingBlockOnCurriculumVersion',
-                                ],
+                                dataIndex: 'curriculumVersion',
                                 width: 200,
-                                render: (values: { name: string }[]) => (
+                                render: (
+                                    values: {
+                                        curriculumVersionName: string
+                                    }[]
+                                ) => (
                                     <ul
                                         style={{
                                             paddingLeft: 16,
@@ -380,7 +372,9 @@ export default function SubjectOpeningPlan() {
                                         }}
                                     >
                                         {values?.map((val) => (
-                                            <li key={val.name}>{val.name}</li>
+                                            <li key={val.curriculumVersionName}>
+                                                {val.curriculumVersionName}
+                                            </li>
                                         ))}
                                     </ul>
                                 ),
@@ -411,7 +405,7 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Tổng SV',
-                                dataIndex: 'tongSV',
+                                dataIndex: 'countStudent',
                                 width: 100,
                                 align: 'center',
                             },
@@ -423,6 +417,7 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
+                                // TODO:
                                 dataIndex: ['managementOrganization', 'name'],
                                 width: 200,
                             },
@@ -450,7 +445,6 @@ export default function SubjectOpeningPlan() {
                                 },
                             },
                         ]}
-                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

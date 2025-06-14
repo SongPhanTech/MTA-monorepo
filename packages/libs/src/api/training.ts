@@ -27,7 +27,7 @@ import type {
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
     ListOfundefined,
-    OpenSubjectClass200Item,
+    OpenSubjectClass,
     OpenSubjectClassParams,
     SerializedFields,
     TeachingAssignmentRequest,
@@ -1039,7 +1039,7 @@ export const useLecturerAssignment = <TError = void, TContext = unknown>(
  * @summary Lấy danh sách lớp môn học đã mở
  */
 export type openSubjectClassResponse200 = {
-    data: OpenSubjectClass200Item[]
+    data: OpenSubjectClass[]
     status: 200
 }
 
