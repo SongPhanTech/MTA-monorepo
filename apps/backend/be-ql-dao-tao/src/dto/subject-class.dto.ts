@@ -13,6 +13,13 @@ export const OpenSubjectClass = z
                 curriculumVersionName: z.string(),
             })
         ),
+        subjectClass: z.array(
+            z.object({
+                subjectClassId: z.string(),
+                subjectClassName: z.string(),
+                subjectClassCode: z.string(),
+            })
+        ),
         fixedClass: z.array(
             z.object({
                 fixedClassId: z.string(),
