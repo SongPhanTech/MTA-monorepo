@@ -184,12 +184,16 @@ app.openapi(openSubjectClass, async (c) => {
                     "ql-dao-tao"."SubjectVersion".name   as subject_version_name,
                     TBS.semester                         as training_block_subject_semester,
                     ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester,
+                    SC.id                                as subject_class_id,
+                    SC.code                              as subject_class_code,
+                    SC.name                              as subject_class_name,
                     FC."startYear"                       as fixed_class_start_year,
                     FC.id                                as fixed_class_id,
                     FC.name                              as fixed_class_name,
                     FC.code                              as fixed_class_code,
                     FC."trainingCourseId"                as training_course_id,
-                    C."trainingMajorId"                  as training_major_id
+                    C."trainingMajorId"                  as training_major_id,
+                    count(FC.id)                         as fixed_class_count
              from "ql-dao-tao"."SubjectVersion"
                       join "ql-dao-tao"."TrainingBlockSubject" TBS
                            on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
@@ -199,13 +203,21 @@ app.openapi(openSubjectClass, async (c) => {
                       join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
                       join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
                       join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
+                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
              where FC.active = true
              group by CV.id, CV.name, FC.id, FC."startYear",
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id)
-select json_build_object('training_major_id', training_major_id, 'training_course_id', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id)
+select json_build_object('trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
+                           'subjectClass', json_agg(
+                                 json_build_object(
+                                         'subjectClassId', subject_class_id,
+                                         'subjectClassCode', subject_class_code,
+                                         'subjectClassName', subject_class_name
+                                 )
+                                         ),
                          'curriculumVersion', json_agg(
                                  json_build_object(
                                          'curriculumVersionId', curriculum_version_id,
@@ -214,7 +226,7 @@ select json_build_object('training_major_id', training_major_id, 'training_cours
                                               ),
                          'fixedClass', json_agg(
                                  json_build_object(
-                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name
+                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count
                                  )
                                        )
        ) as data
@@ -240,11 +252,24 @@ group by subject_version_id, subject_version_code,
                     curriculumVersion: item.curriculumVersion.filter(
                         (value, index, self) =>
                             index ===
-                            self.findIndex(
-                                (t) =>
-                                    t.curriculumVersionId ===
-                                    value.curriculumVersionId
-                            )
+                                self.findIndex(
+                                    (t) =>
+                                        t.curriculumVersionId ===
+                                        value.curriculumVersionId
+                                ) && !!value.curriculumVersionId
+                    ),
+                    subjectClass: item.subjectClass.filter(
+                        (value, index, self) =>
+                            index ===
+                                self.findIndex(
+                                    (t) =>
+                                        t.subjectClassId ===
+                                        value.subjectClassId
+                                ) && !!value.subjectClassId
+                    ),
+                    countStudent: item.fixedClass.reduce(
+                        (acc, curr) => acc + curr.fixedClassCount,
+                        0
                     ),
                 })),
             success: true,
