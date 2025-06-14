@@ -34,12 +34,16 @@ const PheDuyetTaiLieu = () => {
                 setIsSubmitting(false)
                 return
             }
-            const result = await fetchChungkingAndVectorizeDocument(documentId)
 
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            if ((result as any)?.error === 'True') {
-                message.error('Đã xảy ra lỗi khi phê duyệt tài liệu')
-                return
+            if (values.status === $Enums.DocumentStatus.APPROVE) {
+                const result =
+                    await fetchChungkingAndVectorizeDocument(documentId)
+
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                if ((result as any)?.error === 'True') {
+                    message.error('Đã xảy ra lỗi khi phê duyệt tài liệu')
+                    return
+                }
             }
 
             await update({

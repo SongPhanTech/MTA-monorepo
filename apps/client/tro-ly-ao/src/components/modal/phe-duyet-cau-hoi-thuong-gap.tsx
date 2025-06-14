@@ -34,12 +34,16 @@ const PheDuyetCauHoiThuongGap = () => {
                 return
             }
 
-            const result = await fetchFAQDocument(documentId)
+            if (values.status === $Enums.DocumentStatus.APPROVE) {
+                const result = await fetchFAQDocument(documentId)
 
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            if ((result as any)?.error === 'True') {
-                message.error('Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp')
-                return
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                if ((result as any)?.error === 'True') {
+                    message.error(
+                        'Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp'
+                    )
+                    return
+                }
             }
 
             await update({

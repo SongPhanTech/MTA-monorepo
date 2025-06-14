@@ -297,6 +297,7 @@ function Page() {
                                     align: 'center',
                                     width: 120,
                                     onCell: (record) => ({
+                                        className: 'cursor-pointer',
                                         onClick: (e) => {
                                             e.stopPropagation()
                                             if (
