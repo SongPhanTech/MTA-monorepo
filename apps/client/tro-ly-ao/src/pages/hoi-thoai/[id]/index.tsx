@@ -109,7 +109,6 @@ export default function Page() {
                 },
             ])
             setTimeout(() => setLoading(false), 0)
-
         } catch (err) {
             if (err instanceof Error && err.name === 'AbortError') {
                 message.warning('Đã hủy yêu cầu')
@@ -239,16 +238,17 @@ export default function Page() {
                             )}
                         />
                     )}
-                    {loading && (
-                        <div className="flex justify-center items-center py-2">
-                            <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl">
-                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0s]" />
-                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]" />
-                                <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.4s]" />
-                            </div>
-                        </div>
-                    )}
                 </div>
+
+                {loading && (
+                    <div className="flex justify-center items-center py-4">
+                        <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl">
+                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0s]" />
+                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]" />
+                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.4s]" />
+                        </div>
+                    </div>
+                )}
 
                 <ChatInput
                     input={input}

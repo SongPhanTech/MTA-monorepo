@@ -1,11 +1,11 @@
-import { fetchFaqVectorizeFaqVectorizePost } from '@api/chat/chatComponents'
+import { fetchFAQDocument } from '@/api/chunking_and_vectorize'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useUpdateDocument, useUpdateFAQ } from '@workspace/db/hooks'
+import { useUpdateFAQ } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, Radio, message } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 type PheDuyetCauHoiThuongGapFormType = {
     status: $Enums.DocumentStatus
     reason: string
@@ -28,18 +28,18 @@ const PheDuyetCauHoiThuongGap = () => {
     const onFinish = async (values: PheDuyetCauHoiThuongGapFormType) => {
         setIsSubmitting(true)
         try {
-            if (values.status === $Enums.DocumentStatus.APPROVE) {
-                const result = await fetchFaqVectorizeFaqVectorizePost({
-                    queryParams: {
-                        id_document: documentId,
-                    },
-                })
+            if (!documentId) {
+                message.error('Không tìm thấy câu hỏi phê duyệt')
+                setIsSubmitting(false)
+                return
+            }
 
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                if ((result as any)?.error === 'True') {
-                    message.error('Không tìm thấy câu hỏi phê duyệt')
-                    return
-                }
+            const result = await fetchFAQDocument(documentId)
+
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            if ((result as any)?.error === 'True') {
+                message.error('Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp')
+                return
             }
 
             await update({
@@ -56,9 +56,9 @@ const PheDuyetCauHoiThuongGap = () => {
             })
 
             if (values.status === $Enums.DocumentStatus.APPROVE) {
-                message.success('Phê duyệt câu hỏi thường gặp thành công')
+                message.success('Phê duyệt tài liệu thành công')
             } else {
-                message.success('Từ chối câu hỏi thường gặp')
+                message.success('Từ chối tài liệu')
             }
 
             onClose()

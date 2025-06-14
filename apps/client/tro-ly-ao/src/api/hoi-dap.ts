@@ -1,3 +1,5 @@
+import { env } from '@/env'
+
 export async function fetchHoiDap({
     prompt,
     type_data,
@@ -15,11 +17,12 @@ export async function fetchHoiDap({
     formData.append('conversation_id', conversation_id)
 
     const response = await fetch(
-        'https://api.chat.chatbot.swantech.vn/hoi_dap',
+        // 'https://api.chat.chatbot.swantech.vn/hoi_dap',
+        `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/hoi_dap`,
         {
             method: 'POST',
             body: formData,
-            signal: signal, // Đảm bảo fetch sử dụng signal
+            signal: signal,
         }
     )
 
