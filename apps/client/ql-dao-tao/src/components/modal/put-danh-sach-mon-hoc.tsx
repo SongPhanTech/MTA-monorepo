@@ -12,11 +12,9 @@ import {
 import { Col, Form, Input, message, TreeSelect } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
 import dayjs from 'dayjs'
 export type PutSubject = Subject
 import 'dayjs/locale/vi'
-import { includes } from 'lodash'
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
     const [form] = Form.useForm<PutSubject>()
@@ -40,7 +38,7 @@ const PutSubjectListModal = () => {
         organizationTypes.map((organizationType) => ({
             title: organizationType.name,
             value: organizationType.id,
-            disabled: true,
+            selectable: false,
             children:
                 organizationType.organizations.map((organization) => ({
                     title: organization.name,
@@ -149,6 +147,7 @@ const PutSubjectListModal = () => {
                         placeholder="Chọn đơn vị quản lý"
                         style={{ width: '100%' }}
                         allowClear
+                        treeDefaultExpandAll
                         filterTreeNode={(input, node) => {
                             const isLeaf = !node.children
                             return (
@@ -158,6 +157,12 @@ const PutSubjectListModal = () => {
                                     .includes(input.toLowerCase())
                             )
                         }}
+                        // onChange={( extra ) => {
+                        //     const node = extra.triggerNode;
+                        //     if (node.props.children) {
+                        //         form.setFieldsValue({ managementOrganizationId: undefined });
+                        //     }
+                        // }}
                     />
                 </Form.Item>
             </Col>

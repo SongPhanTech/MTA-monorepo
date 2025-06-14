@@ -40,7 +40,7 @@ Important part: `generate` scripts in `packages/database` is need for zenstack a
 
 ## ✏️Sinh lại đường dẫn router:  packages/router/src/index.ts
 
-`cd MTA-monorepo; pnpm router:generate`
+`cd MTA-monorepo/packages/router; pnpm generate:router`
 
 ## ✏️Phát triển client
 

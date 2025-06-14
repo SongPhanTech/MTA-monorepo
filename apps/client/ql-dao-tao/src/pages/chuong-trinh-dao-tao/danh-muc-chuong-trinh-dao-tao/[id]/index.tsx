@@ -8,7 +8,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useFindManyTrainingObjectType,
     useFindUniqueCurriculumVersion,
     useFindManyTrainingBlockOnCurriculumVersion,
     useCountTrainingBlockOnCurriculumVersion,
@@ -35,19 +34,17 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
-import VersionProgramSubject from '@components/sub-pages/phien-ban-mon-hoc-chuong-trinh-dao-tao'
 import { useRouter } from 'next/router'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useExamTypeOptions } from '@hooks/examType'
-import CreateIcon from '@components/icons/create'
 import { buildOrgTree } from '@lib/utils'
-import { FilterChuongTrinhDT } from '@components/filter'
-// const { Option } = Select;
+import { FilterMonHocCTDT } from '@components/filter'
 interface FilterProps {
     searchText: string | null
     managementOrganizationId: string | undefined
+    trainingObjectId: string | undefined
+    trainingCourseId: string | undefined
 }
 
 export default function TrainingProgramSubjects() {
@@ -57,21 +54,92 @@ export default function TrainingProgramSubjects() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        managementOrganizationId: undefined,
+        managementOrganizationId: '',
+        trainingObjectId: '',
+        trainingCourseId: '',
     })
 
     const { data: initialValue } = useFindUniqueCurriculumVersion({
-        where: { id },
+        where: { id: Array.isArray(id) ? id[0] : id },
     })
 
     const { getExamTypeLabel } = useExamTypeOptions()
 
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
-            // name: {
-            //     contains: searchText,
-            // },
             curriculumVersionId: id as string,
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              trainingBlock: {
+                                  name: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              subjects: {
+                                  some: {
+                                      subject: {
+                                          OR: [
+                                              {
+                                                  name: {
+                                                      contains:
+                                                          filters.searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                              {
+                                                  code: {
+                                                      contains:
+                                                          filters.searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                          ],
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.managementOrganizationId &&
+            filters.managementOrganizationId !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  managementOrganizationId:
+                                      filters.managementOrganizationId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                ? {
+                      curriculumVersion: {
+                          trainingObjectTypeId: filters.trainingObjectId,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                ? {
+                      curriculumVersion: {
+                          fixedClasses: {
+                              some: {
+                                  trainingCourseId: {
+                                      contains: filters.trainingCourseId,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             subjects: {
@@ -95,11 +163,82 @@ export default function TrainingProgramSubjects() {
     const { data: count } = useCountTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id as string,
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              trainingBlock: {
+                                  name: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              subjects: {
+                                  some: {
+                                      subject: {
+                                          OR: [
+                                              {
+                                                  name: {
+                                                      contains:
+                                                          filters.searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                              {
+                                                  code: {
+                                                      contains:
+                                                          filters.searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                          ],
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.managementOrganizationId &&
+            filters.managementOrganizationId !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  managementOrganizationId:
+                                      filters.managementOrganizationId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                ? {
+                      curriculumVersion: {
+                          trainingObjectTypeId: filters.trainingObjectId,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                ? {
+                      curriculumVersion: {
+                          fixedClasses: {
+                              some: {
+                                  trainingCourseId: {
+                                      contains: filters.trainingCourseId,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+    const { data: manageOrgData = [] } = useFindManyOrganization()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -170,17 +309,12 @@ export default function TrainingProgramSubjects() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
-
     const processedData = useMemo(() => {
         return data?.map((item) => ({
             ...item,
             name: `KKT: ${item?.trainingBlock?.name}`,
         }))
     }, [data])
-
-    console.log(processedData)
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -249,6 +383,18 @@ export default function TrainingProgramSubjects() {
                                         />
                                     </Form.Item>
                                 </Col>
+                                <Col span={6}>
+                                    <Flex
+                                        justify="space-between"
+                                        align="center"
+                                    >
+                                        <FilterMonHocCTDT
+                                            filters={filters}
+                                            setFilters={setFilters}
+                                            debouncedRefetch={debouncedRefetch}
+                                        />
+                                    </Flex>
+                                </Col>
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -282,6 +428,12 @@ export default function TrainingProgramSubjects() {
                         columns={[
                             {
                                 title: 'Mã môn học',
+                                dataIndex: ['subject', 'code'],
+                                width: 145,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Mã TKB',
                                 dataIndex: ['subject', 'code'],
                                 width: 145,
                                 align: 'center',

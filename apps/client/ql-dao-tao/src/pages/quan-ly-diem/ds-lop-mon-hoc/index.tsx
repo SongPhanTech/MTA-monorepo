@@ -11,7 +11,7 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
     useCountSubjectClass,
-    useFindManySchoolYear
+    useFindManySchoolYear,
 } from '@workspace/db/hooks'
 import type { TrainingObjectType } from '@workspace/db'
 import { CalendarPlus, Search } from 'lucide-react'
@@ -46,7 +46,6 @@ export default function SubjectClass() {
         subjectClassId: null,
         schoolYearId: null,
     })
-
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -84,16 +83,7 @@ export default function SubjectClass() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType(
-            {
-                where: {
-                    deletedAt: null,
-                },
-            }
-        )
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType(
         {
             where: {
                 deletedAt: null,
@@ -101,21 +91,26 @@ export default function SubjectClass() {
         }
     )
 
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        where: {
+            deletedAt: null,
+        },
+    })
+
     const { data: schoolYearData = [] } = useFindManySchoolYear({
         orderBy: {
             startDate: 'desc',
         },
     })
-    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester(
-        {
+    const { data: semesterData = [], refetch: refetchSemester } =
+        useFindManySemester({
             where: {
                 schoolYearId: filters.schoolYearId || undefined,
             },
             orderBy: {
                 startDate: 'desc',
             },
-        }
-    )
+        })
     //#endregion
 
     //#region Mới
@@ -123,21 +118,23 @@ export default function SubjectClass() {
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
-            ...(
-                filters.searchText && filters.searchText !== '' ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                } : {}
-            ),
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
+                : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             deletedAt: null,
         },
         include: {
             subject: {
-                include: { managementOrganization: { include: { parent: true } } }
+                include: {
+                    managementOrganization: { include: { parent: true } },
+                },
             },
             mainLecturer: {
                 include: { userProfile: true },
@@ -335,7 +332,9 @@ export default function SubjectClass() {
                                 </Col>
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass
-                                        onFilterChange={handleFilterChange} onSearchChange={undefined} />
+                                        onFilterChange={handleFilterChange}
+                                        onSearchChange={undefined}
+                                    />
                                 </Col>
                             </Flex>
                         </Col>
@@ -443,11 +442,7 @@ export default function SubjectClass() {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
                                         : 'Chưa có giảng viên chính'
-                                    return (
-                                        <span>
-                                            {mainLecturer}
-                                        </span>
-                                    )
+                                    return <span>{mainLecturer}</span>
                                 },
                             },
                             {
@@ -456,14 +451,20 @@ export default function SubjectClass() {
                                 width: 150,
                                 align: 'center',
                                 render: (text, record) => {
-                                    if (record.active === true || record.active === 'active') {
+                                    if (
+                                        record.active === true ||
+                                        record.active === 'active'
+                                    ) {
                                         return (
-                                            <Tag color="green">Đang hoạt động</Tag>
+                                            <Tag color="green">
+                                                Đang hoạt động
+                                            </Tag>
                                         )
-                                    } else if (record.active === false || record.active === 'inactive') {
-                                        return (
-                                            <Tag color="red">Kết thúc</Tag>
-                                        )
+                                    } else if (
+                                        record.active === false ||
+                                        record.active === 'inactive'
+                                    ) {
+                                        return <Tag color="red">Kết thúc</Tag>
                                     }
                                     return ''
                                 },
@@ -486,12 +487,16 @@ export default function SubjectClass() {
                                 width: 150,
                                 align: 'center',
                                 render: (date) =>
-                                    date ?
-                                        new Date(date).toLocaleDateString('vi-VN', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                        }) : ''
+                                    date
+                                        ? new Date(date).toLocaleDateString(
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
@@ -499,11 +504,16 @@ export default function SubjectClass() {
                                 width: 150,
                                 align: 'center',
                                 render: (date) =>
-                                    date ? new Date(date).toLocaleDateString('vi-VN', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                    }) : ''
+                                    date
+                                        ? new Date(date).toLocaleDateString(
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Bộ môn',
@@ -513,7 +523,9 @@ export default function SubjectClass() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.name || 'Chưa có bộ môn'}
+                                            {record.subject
+                                                ?.managementOrganization
+                                                ?.name || 'Chưa có bộ môn'}
                                         </span>
                                     )
                                 },
@@ -526,7 +538,9 @@ export default function SubjectClass() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.parent?.name || 'Chưa có khoa'}
+                                            {record.subject
+                                                ?.managementOrganization?.parent
+                                                ?.name || 'Chưa có khoa'}
                                         </span>
                                     )
                                 },

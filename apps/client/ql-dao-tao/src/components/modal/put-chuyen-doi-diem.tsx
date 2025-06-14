@@ -92,7 +92,7 @@ const PutConvertScore = () => {
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
-        } 
+        }
     }, [level])
 
     return (
@@ -102,11 +102,18 @@ const PutConvertScore = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa chuyển đổi điểm' : 'Thêm mới chuyển đổi điểm'}
+            title={
+                id ? 'Chỉnh sửa chuyển đổi điểm' : 'Thêm mới chuyển đổi điểm'
+            }
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="score10From" label="Từ điểm" required>
+                <FormItem
+                    form={form}
+                    name="score10From"
+                    label="Từ điểm"
+                    required
+                >
                     <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
@@ -116,7 +123,12 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="score10To" label="Đến điểm" required>
+                <FormItem
+                    form={form}
+                    name="score10To"
+                    label="Đến điểm"
+                    required
+                >
                     <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
@@ -136,7 +148,12 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="scoreChar" label="Điểm chữ" required>
+                <FormItem
+                    form={form}
+                    name="scoreChar"
+                    label="Điểm chữ"
+                    required
+                >
                     <Input
                         placeholder="Nhập điểm chữ"
                         maxLength={2}
@@ -155,11 +172,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="endDate"
-                    label="Ngày kết thúc"
-                >
+                <FormItem form={form} name="endDate" label="Ngày kết thúc">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
@@ -174,11 +187,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="description"
-                    label="Mô tả"
-                >
+                <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
