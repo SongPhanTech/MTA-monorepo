@@ -25,7 +25,6 @@ export default function Page() {
         { id: number; role: string; content: string }[]
     >([])
     const [loading, setLoading] = useState(false)
-    const [botTyping, setBotTyping] = useState(false)
     const [abortController, setAbortController] =
         useState<AbortController | null>(null)
 
@@ -40,7 +39,7 @@ export default function Page() {
     })
 
     const handleSend = async () => {
-        if (!input.trim() || !id || botTyping) return
+        if (!input.trim() || !id || loading) return
 
         const currentInput = input
         setInput('')
@@ -58,7 +57,6 @@ export default function Page() {
     }
 
     const sendMessage = async (text: string, userMessageId: number) => {
-        setBotTyping(true)
         setLoading(true)
 
         const controller = new AbortController()
@@ -97,36 +95,21 @@ export default function Page() {
 
             if (!response.body) {
                 message.error('Không có nội dung phản hồi')
-                setBotTyping(false)
                 setLoading(false)
                 return
             }
 
-            setBotTyping(false)
-            setLoading(false)
-
-            const botId = Date.now()
+            const fullText = await response.text()
             setMessages((prev) => [
                 ...prev,
                 {
-                    id: botId,
+                    id: Date.now(),
                     role: 'BOT',
-                    content: '...',
+                    content: fullText,
                 },
             ])
+            setTimeout(() => setLoading(false), 0)
 
-            await readStreamWithLiveUpdate(
-                response.body,
-                async (chunk, fullText) => {
-                    setMessages((prev) =>
-                        prev.map((msg) =>
-                            msg.id === botId
-                                ? { ...msg, content: fullText }
-                                : msg
-                        )
-                    )
-                }
-            )
         } catch (err) {
             if (err instanceof Error && err.name === 'AbortError') {
                 message.warning('Đã hủy yêu cầu')
@@ -134,12 +117,12 @@ export default function Page() {
                 console.error(err)
                 message.error('Đã xảy ra lỗi khi gửi tin nhắn')
             }
+            setLoading(false)
         }
     }
 
     const handleStop = () => {
         abortController?.abort()
-        setBotTyping(false)
         setLoading(false)
     }
 
@@ -256,7 +239,7 @@ export default function Page() {
                             )}
                         />
                     )}
-                    {botTyping && (
+                    {loading && (
                         <div className="flex justify-center items-center py-2">
                             <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl">
                                 <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0s]" />
