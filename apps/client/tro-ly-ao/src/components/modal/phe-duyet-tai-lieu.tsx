@@ -28,11 +28,18 @@ const PheDuyetTaiLieu = () => {
     const onFinish = async (values: PheDuyetTaiLieuFormType) => {
         setIsSubmitting(true)
         try {
-            await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
-                {
-                    queryParams: { id_document: documentId },
-                }
-            )
+            const result =
+                await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
+                    {
+                        queryParams: { id_document: documentId },
+                    }
+                )
+
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            if ((result as any)?.error === 'True') {
+                message.error('Không tìm thấy tài liệu phê duyệt')
+                return
+            }
 
             await update({
                 where: {

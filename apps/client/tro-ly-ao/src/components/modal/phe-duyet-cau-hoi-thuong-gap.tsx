@@ -29,11 +29,17 @@ const PheDuyetCauHoiThuongGap = () => {
         setIsSubmitting(true)
         try {
             if (values.status === $Enums.DocumentStatus.APPROVE) {
-                await fetchFaqVectorizeFaqVectorizePost({
+                const result = await fetchFaqVectorizeFaqVectorizePost({
                     queryParams: {
                         id_document: documentId,
                     },
                 })
+
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                if ((result as any)?.error === 'True') {
+                    message.error('Không tìm thấy câu hỏi phê duyệt')
+                    return
+                }
             }
 
             await update({
