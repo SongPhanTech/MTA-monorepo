@@ -7,41 +7,41 @@ import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
-    type UserProfile,
-    type Nationality,
-    type Religion,
-    type Ethnicity,
     $Enums,
-    type Rank,
-    type Level,
     type AcademicDegreeType,
     type AcademicRankType,
-    type Lecturer,
-    type Prisma,
-    type Staff,
-    type StaffType,
-    type Organization,
-    type StaffPosition,
+    type Ethnicity,
     type FixedClass,
+    type Lecturer,
+    type Level,
+    type Nationality,
+    type Organization,
+    type Prisma,
+    type Rank,
+    type Religion,
+    type Staff,
+    type StaffPosition,
+    type StaffType,
+    type UserProfile,
 } from '@workspace/db'
 import {
-    useFindManyUserProfile,
-    useUpdateUserProfile,
-    useFindManyReligion,
-    useFindManyEthnicity,
-    useFindManyOrganization,
-    useFindManyNationality,
-    useFindManyRank,
-    useFindManyLevel,
+    useCreateStaff,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
-    useFindManyStaffType,
-    useFindManyStaffPosition,
+    useFindManyEthnicity,
     useFindManyFixedClass,
+    useFindManyLevel,
+    useFindManyNationality,
+    useFindManyOrganization,
+    useFindManyRank,
+    useFindManyReligion,
+    useFindManyStaff,
+    useFindManyStaffPosition,
+    useFindManyStaffType,
+    useFindManyUserProfile,
     useFindUniqueStaff,
     useUpdateStaff,
-    useCreateStaff,
-    useFindManyStaff,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -58,12 +58,12 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -91,10 +91,10 @@ type ExistingProfileWithStaff = UserProfile & {
     academicDegreeType?: AcademicDegreeType | null
     academicRankType?: AcademicRankType | null
     staff?:
-        | (Staff & {
-              fixedClass?: FixedClass[]
-          })
-        | null
+    | (Staff & {
+        fixedClass?: FixedClass[]
+    })
+    | null
 }
 
 type StaffFrom = Staff & UserProfile
@@ -492,10 +492,10 @@ const PutUserProfileStaffModal = () => {
             if (id) {
                 const fixedClassConnections = output.fixedClassIds?.length
                     ? {
-                          fixedClass: {
-                              set: output.fixedClassIds.map((id) => ({ id })),
-                          },
-                      }
+                        fixedClass: {
+                            set: output.fixedClassIds.map((id) => ({ id })),
+                        },
+                    }
                     : { fixedClass: { set: [] } }
 
                 await updateStaff({
@@ -536,12 +536,12 @@ const PutUserProfileStaffModal = () => {
                         const fixedClassConnections = output.fixedClassIds
                             ?.length
                             ? {
-                                  fixedClass: {
-                                      set: output.fixedClassIds.map((id) => ({
-                                          id,
-                                      })),
-                                  },
-                              }
+                                fixedClass: {
+                                    set: output.fixedClassIds.map((id) => ({
+                                        id,
+                                    })),
+                                },
+                            }
                             : { fixedClass: { set: [] } }
 
                         await updateStaff({
@@ -578,12 +578,12 @@ const PutUserProfileStaffModal = () => {
                         const fixedClassConnections = output.fixedClassIds
                             ?.length
                             ? {
-                                  fixedClass: {
-                                      connect: output.fixedClassIds.map(
-                                          (id) => ({ id })
-                                      ),
-                                  },
-                              }
+                                fixedClass: {
+                                    connect: output.fixedClassIds.map(
+                                        (id) => ({ id })
+                                    ),
+                                },
+                            }
                             : {}
 
                         await createStaff({
@@ -627,12 +627,12 @@ const PutUserProfileStaffModal = () => {
                     // Tạo mới hoàn toàn
                     const fixedClassConnections = output.fixedClassIds?.length
                         ? {
-                              fixedClass: {
-                                  connect: output.fixedClassIds.map((id) => ({
-                                      id,
-                                  })),
-                              },
-                          }
+                            fixedClass: {
+                                connect: output.fixedClassIds.map((id) => ({
+                                    id,
+                                })),
+                            },
+                        }
                         : {}
 
                     await createStaff({
@@ -772,6 +772,8 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
             }
 
+            // TODO: fix ts error
+            //@ts-ignore
             setOriginalData(formData)
             form.setFieldsValue(formData)
 
@@ -821,8 +823,8 @@ const PutUserProfileStaffModal = () => {
             title={id ? 'Chỉnh sửa cán bộ' : 'Thêm mới cán bộ'}
             className="w-[80vw]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Tabs className="w-full" defaultActiveKey="1">
                 <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
@@ -858,18 +860,18 @@ const PutUserProfileStaffModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                fileList.length > 0
+                                                    fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                          <p
-                                                              style={{
-                                                                  fontSize:
-                                                                      '0.65rem',
-                                                              }}
-                                                          >
-                                                              + Tải ảnh lên
-                                                          </p>
-                                                      )}
+                                                        <p
+                                                            style={{
+                                                                fontSize:
+                                                                    '0.65rem',
+                                                            }}
+                                                        >
+                                                            + Tải ảnh lên
+                                                        </p>
+                                                    )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -1051,7 +1053,7 @@ const PutUserProfileStaffModal = () => {
                                                     disabledDate={(date) =>
                                                         date &&
                                                         date >
-                                                            dayjs().endOf('day')
+                                                        dayjs().endOf('day')
                                                     }
                                                 />
                                             </FormItem>
@@ -1069,7 +1071,7 @@ const PutUserProfileStaffModal = () => {
                                                     disabledDate={(date) =>
                                                         date &&
                                                         date >
-                                                            dayjs().endOf('day')
+                                                        dayjs().endOf('day')
                                                     }
                                                 />
                                             </FormItem>

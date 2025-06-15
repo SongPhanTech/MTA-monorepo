@@ -1,6 +1,7 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
@@ -14,14 +15,13 @@ import {
     Flex,
     Form,
     Input,
-    message,
     Table,
     TreeSelect,
+    message,
 } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse
 import 'dayjs/locale/vi'
 dayjs.locale('vi')
@@ -46,35 +46,13 @@ const PutOpenClassModal = () => {
             showSpinner()
             if (id) {
                 await updateTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
-                        trainingLevelId: output.trainingLevelId,
-                    },
-                    where: {
-                        id,
-                    },
+                    data: output,
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingTypeId: output.trainingTypeId,
-                        trainingFormId: output.trainingFormId,
-                        trainingLevelId: output.trainingLevelId,
-                    },
+                    data: output,
                 })
                 message.success('Thêm mới thành công')
             }
@@ -97,8 +75,6 @@ const PutOpenClassModal = () => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                startDate: dayjs(level.startDate),
-                endDate: level.endDate ? dayjs(level.endDate) : undefined,
             })
         }
     }, [level])
@@ -135,8 +111,8 @@ const PutOpenClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingTypeId" label="Địa điểm">
+            {/* <Col span={12}>
+                <FormItem form={form} name="" label="Địa điểm">
                     <Select
                         placeholder="Chọn địa điểm"
                         options={[
@@ -174,7 +150,7 @@ const PutOpenClassModal = () => {
                         </Button>
                     </Flex>
                 </FormItem>
-            </Col>
+            </Col> */}
             <Table
                 rowKey="id"
                 id="training-category"

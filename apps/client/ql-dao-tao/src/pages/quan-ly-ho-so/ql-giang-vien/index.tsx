@@ -27,7 +27,6 @@ import {
 } from '@workspace/db/hooks'
 
 import EditIcon from '@components/icons/edit'
-import type { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
 import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import {
     Avatar,
@@ -49,9 +48,9 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-import { getMinioUrl } from '@workspace/constant'
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
+import { getMinioUrl } from '@workspace/constant'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
@@ -89,61 +88,61 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
-                          },
-                      ]
+                        {
+                            userProfile: {
+                                OR: [
+                                    {
+                                        firstName: {
+                                            contains: filters.searchText,
+                                        },
+                                    },
+                                    {
+                                        lastName: {
+                                            contains: filters.searchText,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                          {
-                              organization: {
-                                  name: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
-                          },
-                      ]
+                        {
+                            organization: {
+                                name: {
+                                    contains: filters.organizationText,
+                                },
+                            },
+                        },
+                    ]
                     : []),
                 ...(filters.nationalityId
                     ? [
-                          {
-                              userProfile: {
-                                  nationalityId: filters.nationalityId,
-                              },
-                          },
-                      ]
+                        {
+                            userProfile: {
+                                nationalityId: filters.nationalityId,
+                            },
+                        },
+                    ]
                     : []),
                 ...(filters.religionId
                     ? [
-                          {
-                              userProfile: {
-                                  religionId: filters.religionId,
-                              },
-                          },
-                      ]
+                        {
+                            userProfile: {
+                                religionId: filters.religionId,
+                            },
+                        },
+                    ]
                     : []),
                 ...(filters.ethnicityId
                     ? [
-                          {
-                              userProfile: {
-                                  ethnicityId: filters.ethnicityId,
-                              },
-                          },
-                      ]
+                        {
+                            userProfile: {
+                                ethnicityId: filters.ethnicityId,
+                            },
+                        },
+                    ]
                     : []),
             ],
         },
@@ -175,10 +174,10 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
-        useDisclosure<AddUserProfileLectureProps>({
-            tag: PutUserProfileLectureModal.name,
-        })
+    // const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
+    //     useDisclosure<AddUserProfileLectureProps>({
+    //         tag: PutUserProfileLectureModal.name,
+    //     })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
         useDisclosure<string>({
@@ -191,9 +190,9 @@ export default function UserProfilePageLecture() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
-        onOpenModalAdd()
-    }
+    // const handleModal = () => {
+    //     onOpenModalAdd()
+    // }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
             onOpenUpload('GV')
@@ -216,34 +215,34 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
-                          },
-                      ]
+                        {
+                            userProfile: {
+                                OR: [
+                                    {
+                                        firstName: {
+                                            contains: filters.searchText,
+                                        },
+                                    },
+                                    {
+                                        lastName: {
+                                            contains: filters.searchText,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                          {
-                              organization: {
-                                  name: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
-                          },
-                      ]
+                        {
+                            organization: {
+                                name: {
+                                    contains: filters.organizationText,
+                                },
+                            },
+                        },
+                    ]
                     : []),
             ],
         },
@@ -385,7 +384,7 @@ export default function UserProfilePageLecture() {
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button
-                                    onClick={handleModal}
+                                    // onClick={handleModal}
                                     type="primary"
                                     style={{ height: 40 }}
                                 >
@@ -535,9 +534,9 @@ export default function UserProfilePageLecture() {
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        record.userProfile
+                                            .gender as keyof typeof GENDER_MEAN
+                                        ]
                                         : '',
                             },
                             {
@@ -545,8 +544,8 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(
-                                              record.userProfile.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                            record.userProfile.dateOfBirth
+                                        ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,
@@ -574,9 +573,9 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
                                         ? dayjs(
-                                              record.userProfile
-                                                  .academicRankDate
-                                          ).format('DD/MM/YYYY')
+                                            record.userProfile
+                                                .academicRankDate
+                                        ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -594,9 +593,9 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.academicDegreeDate
                                         ? dayjs(
-                                              record.userProfile
-                                                  .academicDegreeDate
-                                          ).format('DD/MM/YYYY')
+                                            record.userProfile
+                                                .academicDegreeDate
+                                        ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -634,8 +633,8 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.rankDate
                                         ? dayjs(
-                                              record.userProfile.rankDate
-                                          ).format('DD/MM/YYYY')
+                                            record.userProfile.rankDate
+                                        ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,

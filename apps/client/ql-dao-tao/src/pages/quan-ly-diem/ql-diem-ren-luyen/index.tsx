@@ -1,20 +1,25 @@
+import { CalendarOutlined } from '@ant-design/icons'
+import DatePicker from '@components/commons/date-picker'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import EditIcon from '@components/icons/edit'
+import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Semester, TrainingObjectType } from '@workspace/db'
 import {
-    useFindManySchoolYear,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-    useFindManySemester,
-    useFindManySubjectClass,
     useCountSubjectClass,
-    useFindManyFixedClass,
-    useFindManyStudent,
     useFindFirstSemester,
+    useFindManyFixedClass,
+    useFindManySchoolYear,
+    useFindManySemester,
+    useFindManyStudent,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType, Semester } from '@workspace/db'
-import { CalendarPlus, Search, Save } from 'lucide-react'
 import {
     Button,
     Checkbox,
@@ -28,16 +33,11 @@ import {
 } from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
 import _, { includes } from 'lodash'
+import { CalendarPlus, Save, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { CalendarOutlined } from '@ant-design/icons'
-import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import LopBienCheItem from './lop-bien-che'
-import DatePicker from '@components/commons/date-picker'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | null
@@ -113,21 +113,28 @@ export default function SubjectClassScore() {
             },
         })
 
-    const { data: subjectClassData = [] } = useFindManyFixedClass({
+    // const { data: subjectClassData = [] } = useFindManyFixedClass({
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                      OR: [
-                          { name: { contains: filters.searchText } },
-                          { code: { contains: filters.searchText } },
-                      ],
-                  }
+                    OR: [
+                        { name: { contains: filters.searchText } },
+                        { code: { contains: filters.searchText } },
+                    ],
+                }
                 : {}),
             // ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             // ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             deletedAt: null,
         },
-
+        include: {
+            mainLecturer: {
+                include: {
+                    userProfile: true
+                }
+            }
+        },
         orderBy: {
             createdAt: 'desc',
         },
@@ -166,7 +173,7 @@ export default function SubjectClassScore() {
         _.debounce(() => {
             refetch()
         }, 500),
-        [refetch]
+        []
     )
 
     const { data: count } = useCountSubjectClass({
@@ -230,7 +237,7 @@ export default function SubjectClassScore() {
                 : new Date()
             const months = []
 
-            let currentDate = new Date(startDate)
+            const currentDate = new Date(startDate)
             while (currentDate <= endDate) {
                 months.push({
                     month: currentDate.getMonth() + 1,
@@ -259,11 +266,8 @@ export default function SubjectClassScore() {
             // Placeholder: Thay bằng logic thực tế, ví dụ: record.monthData?.[`${month}_${year}`]
             if (nhapDiemMoi) {
                 return <Input placeholder="Nhập điểm" />
-            } else {
-                return (
-                    record.monthData?.[`${month.month}_${month.year}`] || 'N/A'
-                )
             }
+            return record.monthData?.[`${month.month}_${month.year}`] || 'N/A'
         },
     }))
 
@@ -492,7 +496,7 @@ export default function SubjectClassScore() {
                                             index +
                                             1 +
                                             (currentPage - 1) *
-                                                DEFAULT_PAGINATE_SIZE,
+                                            DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -514,11 +518,11 @@ export default function SubjectClassScore() {
                                                 <br />
                                                 {record.userProfile?.dateOfBirth
                                                     ? new Date(
-                                                          record.userProfile
-                                                              .dateOfBirth
-                                                      ).toLocaleDateString(
-                                                          'vi-VN'
-                                                      )
+                                                        record.userProfile
+                                                            .dateOfBirth
+                                                    ).toLocaleDateString(
+                                                        'vi-VN'
+                                                    )
                                                     : ''}
                                             </>
                                         ),

@@ -3,10 +3,15 @@ import NAVIGATION, { type MenuItem } from '@workspace/router'
 import type { CascaderProps } from 'antd'
 import { Cascader } from 'antd'
 import type { BaseOptionType } from 'antd/es/cascader'
+import type { LucideProps } from 'lucide-react'
 
 type SearchSystemOptionType = BaseOptionType & {
-    Icon?: React.ForwardRefExoticComponent<
+    Icon?:
+    | React.ForwardRefExoticComponent<
         Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+    >
+    | React.ForwardRefExoticComponent<
+        Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
     >
     path?: string
 }

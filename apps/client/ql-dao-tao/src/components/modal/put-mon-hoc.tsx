@@ -48,12 +48,12 @@ const PutSubjectModal = () => {
                         subjectEquivalentType: output.subjectEquivalentType,
                         credit: +output.credit,
                         period: +output.period,
-                        numberOfTheory: +output.numberOfTheory,
-                        numberOfPractice: +output.numberOfPractice,
-                        numberOfSelfStudy: +output.numberOfSelfStudy,
-                        numberOfProject: +output.numberOfProject,
-                        numberOfInternship: +output.numberOfInternship,
-                        numberOfOther: +output.numberOfOther,
+                        // numberOfTheory: +output.numberOfTheory,
+                        // numberOfPractice: +output.numberOfPractice,
+                        // numberOfSelfStudy: +output.numberOfSelfStudy,
+                        // numberOfProject: +output.numberOfProject,
+                        // numberOfInternship: +output.numberOfInternship,
+                        // numberOfOther: +output.numberOfOther,
                     },
                     where: {
                         id,
@@ -223,7 +223,7 @@ const PutSubjectModal = () => {
                     <Input placeholder="Nhập số tiết tự học" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="numberOfProject"
@@ -242,7 +242,7 @@ const PutSubjectModal = () => {
                 >
                     <Input placeholder="Nhập số tiết thực tập" />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem
                     form={form}

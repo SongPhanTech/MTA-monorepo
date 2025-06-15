@@ -1,7 +1,5 @@
-import React from 'react'
-
 interface Item {
-    code: string
+    code: string | null
     name: string
     id: string
     lecture?: string
@@ -23,12 +21,8 @@ const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
 }
 
 interface LopMonHocItemProps {
-    dataTable: Array<{
-        code: string
-        id: string
-        name: string
-        mainLecturer: { userProfile: { firstName: string; lastName: string } }
-        lecture?: string
+    dataTable: Array<Item & {
+        mainLecturer: { userProfile: { firstName: string; lastName: string } } | null
     }>
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
@@ -40,19 +34,12 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     selectedItem,
 }) => {
     const data: Item[] = dataTable.map(
-        (item: {
-            mainLecturer: any
-            code: any
-            name: any
-            id: any
-        }) => ({
-            code: item.code,
-            name: item.name,
+        ({ mainLecturer, ...rest }) => ({
             lecture:
-                item.mainLecturer && item.mainLecturer.userProfile
-                    ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
+                mainLecturer?.userProfile
+                    ? `${mainLecturer.userProfile.lastName} ${mainLecturer.userProfile.firstName}`
                     : 'Chưa có giảng viên',
-            id: item.id,
+            ...rest
         })
     )
 
