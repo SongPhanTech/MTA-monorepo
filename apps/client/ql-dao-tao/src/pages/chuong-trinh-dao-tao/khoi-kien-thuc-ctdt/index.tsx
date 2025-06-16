@@ -40,7 +40,12 @@ export default function TrainingBlock() {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
-                          { name: { contains: filters.searchText } },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                           // { code: { contains: filters.searchText } },
                       ],
                   }
@@ -299,21 +304,31 @@ export default function TrainingBlock() {
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'priority',
+                                sorter: (
+                                    a: { priority: number },
+                                    b: { priority: number }
+                                ) => a.priority - b.priority,
                                 align: 'center',
                                 width: 100,
                             },
                             {
                                 title: 'Trạng thái',
+                                dataIndex: 'active',
                                 align: 'center',
                                 width: 140,
+                                filters: [
+                                    { text: 'Đang đào tạo', value: true },
+                                    { text: 'Ngừng đào tạo', value: false },
+                                ],
+                                filterMultiple: false,
+                                onFilter: (value, record) =>
+                                    record.active === value,
                                 fixed: 'right',
                                 render: (record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Không hoạt động</Tag>
+                                    return !record ? (
+                                        <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang đào tạo</Tag>
                                     )
                                 },
                             },
