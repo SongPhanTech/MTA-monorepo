@@ -209,7 +209,7 @@ app.openapi(openSubjectClass, async (c) => {
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id)
-select json_build_object('trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
                            'subjectClass', json_agg(
                                  json_build_object(

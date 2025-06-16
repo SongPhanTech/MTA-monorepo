@@ -6,6 +6,7 @@ export const OpenSubjectClass = z
         trainingCourseId: z.string(),
         subjectVersionId: z.string(),
         subjectVersionName: z.string(),
+        subjectVersionCode: z.string(),
         subjectVersionCredit: z.number(),
         curriculumVersion: z.array(
             z.object({
