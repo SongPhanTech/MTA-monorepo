@@ -6,13 +6,14 @@ type DeleteIconProps = {
 } & LucideProps
 const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
     return (
-        <Tooltip title="Xóa" placement="leftTop">
+        <Tooltip title="Xóa" placement="top">
             <Popconfirm
                 placement="topLeft"
                 title="Xác nhận xóa dữ liệu?"
                 description="Dữ liệu sẽ bị xóa vĩnh viễn"
                 okText="Đồng ý"
                 cancelText="Hủy"
+                onPopupClick={(e) => e.stopPropagation()}
                 {...popConfirm}
             >
                 <Trash2

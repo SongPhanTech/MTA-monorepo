@@ -1,14 +1,11 @@
-import React from 'react'
 import {
     Modal as AntdModal,
     type ModalProps as AntdModalProps,
-    Col,
     Form,
     type FormInstance,
-    Input,
+    type FormProps,
     Row,
 } from 'antd'
-import FormItem from '../form-item'
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type PutModalFormType = {}
@@ -18,6 +15,7 @@ export type ModalProps<T = PutModalFormType> = {
     layout?: 'horizontal' | 'vertical' // Cho phép truyền layout là horizontal hoặc vertical
     labelCol?: { span: number }
     wrapperCol?: { span: number }
+    formProps?: FormProps<T>
 } & AntdModalProps
 
 const PutFormModal = <T extends PutModalFormType>({
@@ -44,6 +42,7 @@ const PutFormModal = <T extends PutModalFormType>({
                 onFinish={onFinish}
                 labelCol={labelCol}
                 wrapperCol={wrapperCol}
+                {...rest.formProps}
             >
                 <Row gutter={16}>{children}</Row>
             </Form>

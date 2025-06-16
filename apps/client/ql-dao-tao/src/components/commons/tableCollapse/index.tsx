@@ -27,13 +27,11 @@ type TableProps<T extends Data> = {
     maxHeight?: number
     currentPage: number
     headerRight?: (record: T) => ReactNode | ReactNode[]
-    childrenFieldName?: string
+    childrenFieldName?: keyof T
     onRowDoubleClick?: (record: T) => void
     defaultExpandAll?: boolean
 } & TableAntdProps
-function generateKey(prefix = 'key') {
-    return `${uniqueId(prefix)}`
-}
+
 const TableCollapse = <T extends Data>({
     data = [],
     headerTitleKey,
@@ -132,6 +130,7 @@ const TableCollapse = <T extends Data>({
             {
                 title: 'STT',
                 align: 'center',
+                width: 60,
                 className: 'sticky left-0 z-50',
                 render: (_, record) => {
                     const order = allChildren.findIndex(
@@ -237,8 +236,8 @@ const TableCollapse = <T extends Data>({
                                         {typeof headerTitleKey === 'function'
                                             ? headerTitleKey(record)
                                             : ((record as T)[
-                                                  headerTitleKey as keyof T
-                                              ] as ReactNode)}
+                                                headerTitleKey as keyof T
+                                            ] as ReactNode)}
                                     </strong>
                                     <div
                                         onClick={(e) => e.stopPropagation()}
@@ -250,7 +249,7 @@ const TableCollapse = <T extends Data>({
                             </div>
                         ) : null
                     },
-                    childrenColumnName: childrenFieldName,
+                    childrenColumnName: childrenFieldName as string,
                     ...expandable,
                 }}
                 {...rest}
