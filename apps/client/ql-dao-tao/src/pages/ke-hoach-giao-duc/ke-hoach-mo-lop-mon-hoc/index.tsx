@@ -194,9 +194,7 @@ export default function SubjectOpeningPlan() {
                                                 )
                                             }
                                             placeholder="Nhập tên lớp..."
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -225,9 +223,6 @@ export default function SubjectOpeningPlan() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -254,9 +249,6 @@ export default function SubjectOpeningPlan() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -271,10 +263,8 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary" className="h-[40px]">
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" className="h-[40px]">
+                                <Button type="primary">Thêm mới</Button>
+                                <Button type="primary">
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>

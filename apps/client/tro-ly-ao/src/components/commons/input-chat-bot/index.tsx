@@ -1,12 +1,7 @@
-import {
-    ArrowUpOutlined,
-    MoreOutlined,
-    SendOutlined,
-    StopOutlined,
-} from '@ant-design/icons'
-import { Button } from 'antd'
+import { ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { Button, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface ChatInputProps {
     input: string
@@ -15,6 +10,8 @@ interface ChatInputProps {
     onSend: () => void
     onDelete?: () => void
     onStop?: () => void
+    isFaqMode?: boolean
+    onToggleFaqMode?: () => void
 }
 
 export default function ChatInput({
@@ -24,6 +21,8 @@ export default function ChatInput({
     onSend,
     onDelete,
     onStop,
+    isFaqMode = false,
+    onToggleFaqMode,
 }: ChatInputProps) {
     const router = useRouter()
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -84,12 +83,21 @@ export default function ChatInput({
 
                         {/* Dòng dưới: actions */}
                         <div className="flex justify-between items-center px-1">
-                            <Button
-                                onClick={() => console.log('more')}
-                                className="bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200"
-                                icon={<MoreOutlined className="text-[18px]" />}
-                            />
-
+                            <Tooltip title="Câu hỏi thường gặp">
+                                <Button
+                                    onClick={onToggleFaqMode}
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                        isFaqMode
+                                            ? 'bg-primary text-white hover:opacity-80'
+                                            : 'bg-gray-100 hover:bg-gray-200 text-[#aaa]'
+                                    }`}
+                                    icon={
+                                        <QuestionCircleOutlined
+                                            style={{ fontSize: 16 }}
+                                        />
+                                    }
+                                />
+                            </Tooltip>
                             {loading ? (
                                 <Button
                                     className="p-2"

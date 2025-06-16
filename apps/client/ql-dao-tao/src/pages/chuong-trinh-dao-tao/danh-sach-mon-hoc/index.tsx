@@ -212,10 +212,7 @@ export default function SubjectList() {
                                                 )
                                             }
                                             placeholder="Nhập tên môn..."
-                                            style={{
-                                                height: 40,
-                                                marginRight: 8,
-                                            }}
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -244,10 +241,6 @@ export default function SubjectList() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                                marginRight: 8,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'managementOrganizationId',
@@ -262,11 +255,7 @@ export default function SubjectList() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
                                 </Button>

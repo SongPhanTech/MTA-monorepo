@@ -1,7 +1,8 @@
-import { CheckOutlined, EyeOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { CheckOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
     PutFixedClassModal,
     PutUploadDivisionModal,
@@ -11,46 +12,24 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
-    TrainingCourse,
-    Organization,
-    FixedClass,
-    TrainingObjectType,
     CurriculumVersion,
+    TrainingCourse,
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCountFixedClass,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
-    useUpdateFixedClass,
     useFindManyOrganization,
     useFindManyTrainingCourse,
-    useFindManyTemplateFile,
     useFindManyTrainingObjectType,
-    useFindManyCurriculumVersion,
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Dropdown,
-    Flex,
-    Form,
-    Input,
-    Menu,
-    Row,
-    Tooltip,
-    message,
-    TreeSelect,
-    Tag,
-} from 'antd'
-import dayjs from 'dayjs'
-import _, { filter } from 'lodash'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import { buildOrgTree } from '@lib/utils'
-import EditIcon from '@components/icons/edit'
-import check from '@assets/images/checked.svg'
 export default function FixedClassPage({
     trainingCourse,
 }: { trainingCourse?: TrainingCourse }) {
@@ -396,6 +375,7 @@ export default function FixedClassPage({
                                 title: 'Mã lớp biên chế',
                                 align: 'center',
                                 width: 150,
+                                fixed: 'left',
                                 dataIndex: 'code',
                             },
                             {
@@ -507,6 +487,7 @@ export default function FixedClassPage({
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
+                                fixed: 'right',
                                 width: 130,
                                 render: (value, record) => {
                                     return !record?.active ? (
