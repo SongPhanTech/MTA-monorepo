@@ -76,7 +76,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     data: {
                         ...payload,
                         curriculumVersionId: payload?.curriculumVersionId || '',
-
                     },
                 })
                 message.success('Thêm mới thành công')
