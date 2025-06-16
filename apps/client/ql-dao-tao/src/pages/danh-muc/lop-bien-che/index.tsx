@@ -402,7 +402,7 @@ export default function FixedClassPage({
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -410,7 +410,7 @@ export default function FixedClassPage({
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -435,7 +435,7 @@ export default function FixedClassPage({
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
                                 align: 'center',
-                                width: 150,
+                                width: 250,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -453,20 +453,20 @@ export default function FixedClassPage({
                                     ),
                             },
                             {
-                                title: 'GVCN',
+                                title: 'Giáo viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
                             },
                             {
-                                title: 'CBQL',
+                                title: 'Cán bộ quản lý',
                                 dataIndex: 'staffManagement',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
@@ -476,12 +476,6 @@ export default function FixedClassPage({
                                 title: 'Năm bắt đầu',
                                 dataIndex: 'startYear',
                                 width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
-                                width: 100,
                                 align: 'center',
                             },
                             {
@@ -506,15 +500,6 @@ export default function FixedClassPage({
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {/* <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip> */}
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"

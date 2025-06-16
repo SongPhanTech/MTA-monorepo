@@ -189,6 +189,7 @@ const FilterSinhVien = (props: Props) => {
                         width: 300,
                         marginRight: 8,
                     }}
+                    className="py-0"
                     prefix={
                         <Search
                             size={15}

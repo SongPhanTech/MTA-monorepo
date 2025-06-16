@@ -13,13 +13,13 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 description="Dữ liệu sẽ bị xóa vĩnh viễn"
                 okText="Đồng ý"
                 cancelText="Hủy"
-                onPopupClick={(e) => e.stopPropagation()}
                 {...popConfirm}
             >
                 <Trash2
                     size={16}
                     strokeWidth={1.5}
                     className="text-base text-red-600 cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
                     {...props}
                 />
             </Popconfirm>

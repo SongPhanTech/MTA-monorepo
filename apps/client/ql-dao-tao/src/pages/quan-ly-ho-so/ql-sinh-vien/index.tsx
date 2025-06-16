@@ -410,7 +410,7 @@ export default function UserProfilePageDs() {
                         <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Đối tượng đào tạo"
-                                style={{ width: '100%', height: 40 }}
+                                style={{ width: '100%' }}
                                 options={TrainingOnjectTypeData?.map((item) => {
                                     return {
                                         value: item.id,
@@ -424,7 +424,7 @@ export default function UserProfilePageDs() {
                         <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Khóa đào tạo"
-                                style={{ width: '100%', height: 40 }}
+                                style={{ width: '100%' }}
                                 options={TrainingCourseData?.map((item) => {
                                     return {
                                         value: item.id,
@@ -438,7 +438,7 @@ export default function UserProfilePageDs() {
                         <Col flex="1 1" className="max-w-[300px]">
                             <Select
                                 placeholder="Lớp"
-                                style={{ width: '100%', height: 40 }}
+                                style={{ width: '100%' }}
                                 options={filteredFixedClassData?.map((item) => {
                                     return {
                                         value: item.id,
@@ -458,11 +458,7 @@ export default function UserProfilePageDs() {
                                 gap="8px"
                                 className="mt-1"
                             >
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    style={{ height: 40 }}
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
                                 <Dropdown
@@ -472,7 +468,6 @@ export default function UserProfilePageDs() {
                                     <Button
                                         type="primary"
                                         icon={<DownloadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -484,7 +479,6 @@ export default function UserProfilePageDs() {
                                     <Button
                                         type="primary"
                                         icon={<UploadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>

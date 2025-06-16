@@ -10,6 +10,7 @@ const EditIcon = (props: EditIconProps) => {
                 size={16}
                 strokeWidth={1.5}
                 className="text-base text-orange-500 cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
                 {...props}
             />
         </Tooltip>
