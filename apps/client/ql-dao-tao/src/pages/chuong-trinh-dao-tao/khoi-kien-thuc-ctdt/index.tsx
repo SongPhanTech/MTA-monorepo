@@ -39,23 +39,23 @@ export default function TrainingBlock() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        // { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          // { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.trainingObjectTypeId
                 ? {
-                    curriculumVersions: {
-                        some: {
-                            curriculumVersion: {
-                                trainingObjectTypeId:
-                                    filters.trainingObjectTypeId,
-                            },
-                        },
-                    },
-                }
+                      curriculumVersions: {
+                          some: {
+                              curriculumVersion: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
         },
         include: {
@@ -136,7 +136,7 @@ export default function TrainingBlock() {
                                                 )
                                             }
                                             placeholder="Nhập tên ngành..."
-                                            className='py-0'
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -231,10 +231,7 @@ export default function TrainingBlock() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
