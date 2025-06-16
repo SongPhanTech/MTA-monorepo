@@ -49,6 +49,11 @@ const rightTabsMap: Record<string, TabItem[]> = {
             label: 'Học viên có môn theo KHGD',
             content: <p>Học viên có môn theo KHGD</p>,
         },
+        {
+            key: '2',
+            label: 'Lớp đăng ký thiếu',
+            content: <p>Lớp đăng ký thiếu</p>,
+        },
     ],
 }
 
@@ -71,30 +76,28 @@ export default function RegisterClass() {
     }
 
     return (
-        <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Flex gap={8}>
-                        <Col span={activeLeftTab === '3' ? 24 : 14}>
-                            <Tabs
-                                activeKey={activeLeftTab}
-                                onChange={setActiveLeftTab}
-                            >
-                                {leftTabs.map((tab) => (
-                                    <Tabs.TabPane tab={tab.label} key={tab.key}>
-                                        {tab.content}
-                                    </Tabs.TabPane>
-                                ))}
-                            </Tabs>
-                        </Col>
+        <Row gutter={[16, 0]}>
+            <Col span={24}>
+                <Flex gap={8}>
+                    <Col span={activeLeftTab === '3' ? 24 : 14}>
+                        <Tabs
+                            activeKey={activeLeftTab}
+                            onChange={setActiveLeftTab}
+                        >
+                            {leftTabs.map((tab) => (
+                                <Tabs.TabPane tab={tab.label} key={tab.key}>
+                                    {tab.content}
+                                </Tabs.TabPane>
+                            ))}
+                        </Tabs>
+                    </Col>
 
-                        {activeLeftTab !== '3' && (
-                            <Col span={10}>{renderRightTabs()}</Col>
-                        )}
-                    </Flex>
-                </Col>
-            </Row>
-        </div>
+                    {activeLeftTab !== '3' && (
+                        <Col span={10}>{renderRightTabs()}</Col>
+                    )}
+                </Flex>
+            </Col>
+        </Row>
     )
 }
 
