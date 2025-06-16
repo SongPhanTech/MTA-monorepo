@@ -88,61 +88,61 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                        {
-                            userProfile: {
-                                OR: [
-                                    {
-                                        firstName: {
-                                            contains: filters.searchText,
-                                        },
-                                    },
-                                    {
-                                        lastName: {
-                                            contains: filters.searchText,
-                                        },
-                                    },
-                                ],
-                            },
-                        },
-                    ]
+                          {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                        {
-                            organization: {
-                                name: {
-                                    contains: filters.organizationText,
-                                },
-                            },
-                        },
-                    ]
+                          {
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.nationalityId
                     ? [
-                        {
-                            userProfile: {
-                                nationalityId: filters.nationalityId,
-                            },
-                        },
-                    ]
+                          {
+                              userProfile: {
+                                  nationalityId: filters.nationalityId,
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.religionId
                     ? [
-                        {
-                            userProfile: {
-                                religionId: filters.religionId,
-                            },
-                        },
-                    ]
+                          {
+                              userProfile: {
+                                  religionId: filters.religionId,
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.ethnicityId
                     ? [
-                        {
-                            userProfile: {
-                                ethnicityId: filters.ethnicityId,
-                            },
-                        },
-                    ]
+                          {
+                              userProfile: {
+                                  ethnicityId: filters.ethnicityId,
+                              },
+                          },
+                      ]
                     : []),
             ],
         },
@@ -215,34 +215,34 @@ export default function UserProfilePageLecture() {
             AND: [
                 ...(filters.searchText
                     ? [
-                        {
-                            userProfile: {
-                                OR: [
-                                    {
-                                        firstName: {
-                                            contains: filters.searchText,
-                                        },
-                                    },
-                                    {
-                                        lastName: {
-                                            contains: filters.searchText,
-                                        },
-                                    },
-                                ],
-                            },
-                        },
-                    ]
+                          {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.searchText,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      ]
                     : []),
                 ...(filters.organizationText
                     ? [
-                        {
-                            organization: {
-                                name: {
-                                    contains: filters.organizationText,
-                                },
-                            },
-                        },
-                    ]
+                          {
+                              organization: {
+                                  name: {
+                                      contains: filters.organizationText,
+                                  },
+                              },
+                          },
+                      ]
                     : []),
             ],
         },
@@ -534,9 +534,9 @@ export default function UserProfilePageLecture() {
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                        record.userProfile
-                                            .gender as keyof typeof GENDER_MEAN
-                                        ]
+                                              record.userProfile
+                                                  .gender as keyof typeof GENDER_MEAN
+                                          ]
                                         : '',
                             },
                             {
@@ -544,8 +544,8 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(
-                                            record.userProfile.dateOfBirth
-                                        ).format('DD/MM/YYYY')
+                                              record.userProfile.dateOfBirth
+                                          ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,
@@ -573,9 +573,9 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
                                         ? dayjs(
-                                            record.userProfile
-                                                .academicRankDate
-                                        ).format('DD/MM/YYYY')
+                                              record.userProfile
+                                                  .academicRankDate
+                                          ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -593,9 +593,9 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.academicDegreeDate
                                         ? dayjs(
-                                            record.userProfile
-                                                .academicDegreeDate
-                                        ).format('DD/MM/YYYY')
+                                              record.userProfile
+                                                  .academicDegreeDate
+                                          ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -633,8 +633,8 @@ export default function UserProfilePageLecture() {
                                 render: (_, record) =>
                                     record.userProfile?.rankDate
                                         ? dayjs(
-                                            record.userProfile.rankDate
-                                        ).format('DD/MM/YYYY')
+                                              record.userProfile.rankDate
+                                          ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,

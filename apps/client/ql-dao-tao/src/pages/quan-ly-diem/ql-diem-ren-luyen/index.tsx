@@ -118,11 +118,11 @@ export default function SubjectClassScore() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             // ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             // ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
@@ -131,9 +131,9 @@ export default function SubjectClassScore() {
         include: {
             mainLecturer: {
                 include: {
-                    userProfile: true
-                }
-            }
+                    userProfile: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -496,7 +496,7 @@ export default function SubjectClassScore() {
                                             index +
                                             1 +
                                             (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE,
+                                                DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -518,11 +518,11 @@ export default function SubjectClassScore() {
                                                 <br />
                                                 {record.userProfile?.dateOfBirth
                                                     ? new Date(
-                                                        record.userProfile
-                                                            .dateOfBirth
-                                                    ).toLocaleDateString(
-                                                        'vi-VN'
-                                                    )
+                                                          record.userProfile
+                                                              .dateOfBirth
+                                                      ).toLocaleDateString(
+                                                          'vi-VN'
+                                                      )
                                                     : ''}
                                             </>
                                         ),

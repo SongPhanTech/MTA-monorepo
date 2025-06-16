@@ -131,11 +131,11 @@ export default function SubjectClassScore() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
@@ -492,7 +492,7 @@ export default function SubjectClassScore() {
                                             index +
                                             1 +
                                             (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE,
+                                                DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -516,9 +516,9 @@ export default function SubjectClassScore() {
                                             record.student?.userProfile
                                                 ?.dateOfBirth
                                                 ? new Date(
-                                                    record.student.userProfile
-                                                        .dateOfBirth
-                                                ).toLocaleDateString('vi-VN')
+                                                      record.student.userProfile
+                                                          .dateOfBirth
+                                                  ).toLocaleDateString('vi-VN')
                                                 : '',
                                     },
                                     {
@@ -566,9 +566,9 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'
@@ -622,9 +622,9 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'
@@ -676,9 +676,9 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'
@@ -730,9 +730,9 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'

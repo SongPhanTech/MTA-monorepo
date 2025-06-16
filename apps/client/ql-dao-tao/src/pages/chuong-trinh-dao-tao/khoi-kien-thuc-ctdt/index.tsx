@@ -136,9 +136,7 @@ export default function TrainingBlock() {
                                                 )
                                             }
                                             placeholder="Nhập tên ngành..."
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -167,9 +165,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingObjectTypeId',
@@ -196,9 +191,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingCourseId',
@@ -225,9 +217,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -242,11 +231,7 @@ export default function TrainingBlock() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
