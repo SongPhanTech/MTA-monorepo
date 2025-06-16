@@ -49,7 +49,9 @@ export default function FixedClass() {
                                     prefix={
                                         <Search
                                             size={15}
-                                            style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                                            style={{
+                                                color: 'rgba(0, 0, 0, 0.25)',
+                                            }}
                                         />
                                     }
                                     allowClear
@@ -73,7 +75,9 @@ export default function FixedClass() {
                         align: 'center',
                         fixed: 'left',
                         render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            index +
+                            1 +
+                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
                     {
                         title: 'Tên lớp QL',

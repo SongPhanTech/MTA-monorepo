@@ -42,7 +42,6 @@ const dataFake1 = [
 export default function RegisterClassManager() {
     const [currentPage, setCurrentPage] = useState(1)
 
-
     return (
         <div>
             <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -57,7 +56,9 @@ export default function RegisterClassManager() {
                                     prefix={
                                         <Search
                                             size={15}
-                                            style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                                            style={{
+                                                color: 'rgba(0, 0, 0, 0.25)',
+                                            }}
                                         />
                                     }
                                     allowClear
@@ -77,7 +78,9 @@ export default function RegisterClassManager() {
                         align: 'center',
                         fixed: 'left',
                         render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            index +
+                            1 +
+                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
                     {
                         title: 'Lớp môn học',

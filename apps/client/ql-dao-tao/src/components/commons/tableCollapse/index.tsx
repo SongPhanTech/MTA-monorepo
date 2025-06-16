@@ -236,8 +236,8 @@ const TableCollapse = <T extends Data>({
                                         {typeof headerTitleKey === 'function'
                                             ? headerTitleKey(record)
                                             : ((record as T)[
-                                                headerTitleKey as keyof T
-                                            ] as ReactNode)}
+                                                  headerTitleKey as keyof T
+                                              ] as ReactNode)}
                                     </strong>
                                     <div
                                         onClick={(e) => e.stopPropagation()}

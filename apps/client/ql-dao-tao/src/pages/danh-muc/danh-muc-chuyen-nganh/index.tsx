@@ -81,13 +81,13 @@ export default function TrainingMajorPage() {
             ],
             ...(filters.trainingObjectTypeId
                 ? {
-                    trainingObjectTypes: {
-                        some: {
-                            trainingObjectTypeId:
-                                filters.trainingObjectTypeId,
-                        },
-                    },
-                }
+                      trainingObjectTypes: {
+                          some: {
+                              trainingObjectTypeId:
+                                  filters.trainingObjectTypeId,
+                          },
+                      },
+                  }
                 : {}),
         }),
         [filters]
@@ -124,9 +124,9 @@ export default function TrainingMajorPage() {
         () =>
             data.length
                 ? data.map(({ trainingMajors, ...trainingField }) => ({
-                    ...trainingField,
-                    children: trainingMajors,
-                }))
+                      ...trainingField,
+                      children: trainingMajors,
+                  }))
                 : [],
         [data]
     )
@@ -278,23 +278,23 @@ export default function TrainingMajorPage() {
                                 render: (value) =>
                                     value?.length > 0
                                         ? value.map(
-                                            (
-                                                i: TrainingObjectType & {
-                                                    trainingObjectType: TrainingObjectType
-                                                }
-                                            ) => {
-                                                return (
-                                                    <div key={i?.id}>
-                                                        -{' '}
-                                                        {
-                                                            i
-                                                                ?.trainingObjectType
-                                                                ?.name
-                                                        }
-                                                    </div>
-                                                )
-                                            }
-                                        )
+                                              (
+                                                  i: TrainingObjectType & {
+                                                      trainingObjectType: TrainingObjectType
+                                                  }
+                                              ) => {
+                                                  return (
+                                                      <div key={i?.id}>
+                                                          -{' '}
+                                                          {
+                                                              i
+                                                                  ?.trainingObjectType
+                                                                  ?.name
+                                                          }
+                                                      </div>
+                                                  )
+                                              }
+                                          )
                                         : '',
                             },
                             {

@@ -2,13 +2,11 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    TrainingLocation
-} from '@workspace/db'
+import type { TrainingLocation } from '@workspace/db'
 import {
     useCreateTrainingLocation,
     useFindUniqueTrainingLocation,
-    useUpdateTrainingLocation
+    useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, Radio, message } from 'antd'
 import { useEffect } from 'react'
@@ -34,7 +32,7 @@ const PutTrainingLocationModal = () => {
             if (id) {
                 await updateTrainingLocation({
                     data: {
-                        ...value
+                        ...value,
                     },
                     where: { id },
                 })
@@ -42,7 +40,7 @@ const PutTrainingLocationModal = () => {
             } else {
                 await createTrainingLocation({
                     data: {
-                        ...value
+                        ...value,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -61,9 +59,7 @@ const PutTrainingLocationModal = () => {
     const { data } = useFindUniqueTrainingLocation(
         {
             where: { id },
-            include: {
-
-            },
+            include: {},
         },
         { enabled: !!id }
     )
@@ -88,7 +84,9 @@ const PutTrainingLocationModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khu vực đào tạo' : 'Thêm mới khu vực đào tạo'}
+            title={
+                id ? 'Chỉnh sửa khu vực đào tạo' : 'Thêm mới khu vực đào tạo'
+            }
             className="w-[45vw]"
         >
             <Col span={12}>

@@ -25,8 +25,10 @@ import {
     useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -42,6 +44,8 @@ export default function FixedClassPage({
         trainingObjectTypeId: undefined,
         curriculumVersionId: undefined,
     })
+
+    const router = useRouter()
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             OR: [
@@ -360,6 +364,14 @@ export default function FixedClassPage({
                     <Table
                         rowKey="id"
                         id="fixed-class"
+                        onRowClick={(record) => {
+                            router.push(
+                                ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                                    '[id]',
+                                    record.id
+                                )
+                            )
+                        }}
                         columns={[
                             {
                                 title: 'STT',
