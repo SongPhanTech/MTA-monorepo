@@ -6,7 +6,7 @@ import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear, Semester, TrainingObjectType } from '@workspace/db'
+import type { SchoolYear, Semester, SubjectVersion, TrainingObjectType } from '@workspace/db'
 import {
     useFindManySchoolYear,
     useFindManyTrainingCourse,
@@ -17,7 +17,7 @@ import {
     openSubjectClass,
     useOpenSubjectClass,
 } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Flex, Form, Input, Row, TreeSelect, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
@@ -36,15 +36,13 @@ export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-
+    const [selectedSemeter, setSelectedSemeter] = useState({})
     const [form] = useForm<FilterProps>()
 
-    const { data: schoolYears } = useFindManySchoolYear({
+    const { data: schoolYears=[] } = useFindManySchoolYear({
         include: { semesters: { orderBy: { order: 'asc' } } },
         orderBy: { order: 'asc' },
     })
-
-    const schoolYearId = Form.useWatch('schoolYearId', form)
 
     const { data: res, refetch } = useOpenSubjectClass(
         {
@@ -57,21 +55,31 @@ export default function SubjectOpeningPlan() {
         {},
         queryClient
     )
+        const treeData=useMemo(()=>{
+        return schoolYears.map(i=>({
+            title:i?.name,key:i?.id,
+            value:i?.id,
+            selectable: false,
+            code:i?.code,
+            children:i?.semesters?.length ? i?.semesters.map(j=>({
+                title:j?.name,key:j?.id,
+                value:j?.id,
+                code:j?.code
+            })):[]
+        }))
+    },[schoolYears])
 
-    console.log(res?.data)
 
     const data = useMemo(
         () =>
             res?.status === 200
-                ? res.data.data.map((subjectVersion) => ({
+                ? res?.data?.data.map((subjectVersion) => ({
                       id: subjectVersion.subjectVersionId,
                       ...subjectVersion,
                   }))
                 : [],
         [res]
     )
-
-    // const data = []
 
     useEffect(() => {
         if (schoolYears?.length) {
@@ -83,7 +91,8 @@ export default function SubjectOpeningPlan() {
                     lastSchoolYear.semesters[
                         lastSchoolYear.semesters.length - 1
                     ]
-                form.setFieldValue('semesterId', lastSemester.id)
+                form.setFieldValue('semesterId', lastSemester.id);
+                setSelectedSemeter({id:lastSemester?.id,label:lastSemester.name,code:lastSemester.code,key:lastSemester.id});
             }
         }
     }, [schoolYears, form])
@@ -161,25 +170,16 @@ export default function SubjectOpeningPlan() {
                                 }}
                             >
                                 <Flex>
-                                    <Col span={6}>
+                                    <Col span={8}>
                                         <Form.Item name="searchText">
                                             <Input
                                                 id="search"
                                                 placeholder="Nhập tên lớp..."
-                                                style={{ height: 40 }}
-                                                prefix={
-                                                    <Search
-                                                        size={15}
-                                                        style={{
-                                                            color: 'rgba(0, 0, 0, 0.25)',
-                                                        }}
-                                                    />
-                                                }
                                                 allowClear
                                             />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={6}>
+                                    {/* <Col span={6}>
                                         <Form.Item
                                             className="mb-0"
                                             name="schoolYearId"
@@ -195,12 +195,11 @@ export default function SubjectOpeningPlan() {
                                                         label: i.name,
                                                     })
                                                 )}
-                                                style={{ height: 40 }}
                                                 allowClear
                                             />
                                         </Form.Item>
-                                    </Col>
-                                    <Col span={6}>
+                                    </Col> */}
+                                    <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
                                             name="semesterId"
@@ -208,28 +207,24 @@ export default function SubjectOpeningPlan() {
                                             wrapperCol={{ span: 24 }}
                                             labelAlign="left"
                                         >
-                                            <Select
-                                                placeholder="Chọn học kỳ"
-                                                options={schoolYears
-                                                    ?.find(
-                                                        ({ id }) =>
-                                                            id === schoolYearId
-                                                    )
-                                                    ?.semesters.map(
-                                                        ({
-                                                            id,
-                                                            code,
-                                                        }: Semester) => ({
-                                                            value: id,
-                                                            label: code,
-                                                        })
-                                                    )}
-                                                style={{ height: 40 }}
-                                                allowClear
+                                            <TreeSelect
+                                                placeholder="Chọn đơn vị phụ trách"
+                                                showSearch
+                                                treeDefaultExpandAll
+                                                treeData={treeData}
+                                                style={{ width: '100%' }}
+                                                filterTreeNode={(input, node) =>
+                                                    (node.title as string)
+                                                        .toLowerCase()
+                                                        .includes(input.toLowerCase())
+                                                }
+                                                onSelect={(value, node) =>
+                                                  setSelectedSemeter({...node,id:node.value})
+                                                }
                                             />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={6}>
+                                    <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
                                             name="trainingObjectId"
@@ -247,12 +242,12 @@ export default function SubjectOpeningPlan() {
                                                         label: i.name,
                                                     })
                                                 )}
-                                                style={{ height: 40 }}
                                                 allowClear
                                             />
+                                       
                                         </Form.Item>
                                     </Col>
-                                    <Col span={6}>
+                                    <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
                                             name="trainingCourseId"
@@ -270,7 +265,6 @@ export default function SubjectOpeningPlan() {
                                                         label: i.name,
                                                     })
                                                 )}
-                                                style={{ height: 40 }}
                                                 allowClear
                                             />
                                         </Form.Item>
@@ -280,10 +274,10 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary" className="h-[40px]">
+                                <Button type="primary" >
                                     Thêm mới
                                 </Button>
-                                <Button type="primary" className="h-[40px]">
+                                <Button type="primary" >
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>
@@ -316,7 +310,7 @@ export default function SubjectOpeningPlan() {
                             {
                                 title: 'Mã môn học',
                                 // TODO: dataIndex: 'code'
-                                dataIndex: 'subjectVersionId',
+                                dataIndex: 'subjectVersionCode',
                                 align: 'center',
                                 width: 150,
                             },
@@ -426,12 +420,12 @@ export default function SubjectOpeningPlan() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
+                                render: (record) => {
+                                    if (record?.id) {
                                         return (
                                             <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={handleModal}
+                                                onClick={onOpen.bind(null, {...record,semeter:selectedSemeter})}
                                             >
                                                 <CalendarPlus
                                                     size={16}

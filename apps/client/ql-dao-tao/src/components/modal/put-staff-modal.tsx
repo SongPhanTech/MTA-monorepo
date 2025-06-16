@@ -7,41 +7,41 @@ import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
-    type UserProfile,
-    type Nationality,
-    type Religion,
-    type Ethnicity,
     $Enums,
-    type Rank,
-    type Level,
     type AcademicDegreeType,
     type AcademicRankType,
-    type Lecturer,
-    type Prisma,
-    type Staff,
-    type StaffType,
-    type Organization,
-    type StaffPosition,
+    type Ethnicity,
     type FixedClass,
+    type Lecturer,
+    type Level,
+    type Nationality,
+    type Organization,
+    type Prisma,
+    type Rank,
+    type Religion,
+    type Staff,
+    type StaffPosition,
+    type StaffType,
+    type UserProfile,
 } from '@workspace/db'
 import {
-    useFindManyUserProfile,
-    useUpdateUserProfile,
-    useFindManyReligion,
-    useFindManyEthnicity,
-    useFindManyOrganization,
-    useFindManyNationality,
-    useFindManyRank,
-    useFindManyLevel,
+    useCreateStaff,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
-    useFindManyStaffType,
-    useFindManyStaffPosition,
+    useFindManyEthnicity,
     useFindManyFixedClass,
+    useFindManyLevel,
+    useFindManyNationality,
+    useFindManyOrganization,
+    useFindManyRank,
+    useFindManyReligion,
+    useFindManyStaff,
+    useFindManyStaffPosition,
+    useFindManyStaffType,
+    useFindManyUserProfile,
     useFindUniqueStaff,
     useUpdateStaff,
-    useCreateStaff,
-    useFindManyStaff,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -58,12 +58,12 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 

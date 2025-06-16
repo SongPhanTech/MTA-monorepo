@@ -1,25 +1,30 @@
+import { AnyCnameRecord } from 'node:dns'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import EditIcon from '@components/icons/edit'
 import {
     DEFAULT_PAGINATE_SIZE,
     SUBJECT_CLASS_SCHEDULE_TYPE,
 } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSubjectClass,
-    useFindManySubjectClass,
-    useFindManyTrainingCourse,
-    useFindManyLecturer,
-    useFindManySemester,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { formatDate } from '@lib/utils'
 import type {
     SubjectClass,
     SubjectClassSchedule,
     TrainingCourse,
     TrainingMajor,
 } from '@workspace/db'
-import { Search } from 'lucide-react'
+import {
+    useCountSubjectClass,
+    useFindManyLecturer,
+    useFindManySemester,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+} from '@workspace/db/hooks'
+import { lecturerAssignment } from '@workspace/libs/api/training'
 import {
     Button,
     Checkbox,
@@ -32,14 +37,9 @@ import {
     message,
 } from 'antd'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { useExamTypeOptions } from '@hooks/examType'
-import { formatDate } from '@lib/utils'
-import { lecturerAssignment } from '@workspace/libs/api/training'
-import { AnyCnameRecord } from 'node:dns'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
