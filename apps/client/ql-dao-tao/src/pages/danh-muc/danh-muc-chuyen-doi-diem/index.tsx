@@ -217,7 +217,6 @@ export default function TrainingFieldPage() {
                             },
                             {
                                 title: 'Điểm hệ 10',
-                                // dataIndex: 'score10',
                                 align: 'center',
                                 // width: 150,
                                 children: [
@@ -235,14 +234,14 @@ export default function TrainingFieldPage() {
                             },
                             {
                                 title: 'Điểm hệ 4',
-                                dataIndex: 'score4',
+                                dataIndex: 'base4',
                                 // width: 60,
                                 align: 'center',
                             },
                             {
                                 title: 'Điểm chữ',
                                 align: 'center',
-                                dataIndex: 'scoreChar',
+                                dataIndex: 'letter',
                                 // width: 60,
                             },
                             {

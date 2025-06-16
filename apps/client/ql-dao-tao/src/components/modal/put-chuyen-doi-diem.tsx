@@ -11,7 +11,16 @@ import {
     useFindUniqueScoreConvert,
     useUpdateScoreConvert,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
+import {
+    Checkbox,
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    Radio,
+    Switch,
+    message,
+} from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -88,7 +97,22 @@ const PutConvertScore = () => {
             }
             className="w-[30vw]"
         >
-            <Col span={24}>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingCourseId"
+                    label="Khoá học"
+                    required
+                >
+                    <Select
+                        options={trainingCourses?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="classification"
@@ -98,6 +122,7 @@ const PutConvertScore = () => {
                     <Input placeholder="Xuất sắc..." />
                 </FormItem>
             </Col>
+
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -117,8 +142,7 @@ const PutConvertScore = () => {
                 <FormItem
                     form={form}
                     name="base10Max"
-                    label="Đến"
-                    tooltip="Hệ 10 đến"
+                    label="Hệ 10 đến"
                     required
                 >
                     <InputNumber
@@ -149,18 +173,11 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khoá học"
-                    required
-                >
-                    <Select
-                        options={trainingCourses?.map(({ id, name }) => ({
-                            value: id,
-                            label: name,
-                        }))}
-                    />
+                <FormItem form={form} name="pass" label="Qua môn" required>
+                    <Radio.Group>
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -170,7 +187,7 @@ const PutConvertScore = () => {
                     label="Kích hoạt"
                     valuePropName="checked"
                 >
-                    <Switch checked />
+                    <Switch defaultValue={true} />
                 </FormItem>
             </Col>
             <Col span={24}>

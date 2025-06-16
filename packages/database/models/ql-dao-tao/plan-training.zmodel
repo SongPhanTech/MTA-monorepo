@@ -205,9 +205,10 @@ model CurriculumVersion extends Base {
   diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
   diplomaTypeId         String?
 
-  // TODO: Thêm các quy chế cho chương trình đào tạo
+  // TODO: maybe move to ScoreConvert
   scoreToTakeExam       Float? // Điểm tối thiểu để được thi
   scoreToPass           Float? // Điểm tối thiểu để qua môn
+  // TODO: Thêm các quy chế cho chương trình đào tạo
   requiredCredits       Int? // Số tín chỉ bắt buộc
   electiveCredits       Int? // Số tín chỉ tự chọn
 
