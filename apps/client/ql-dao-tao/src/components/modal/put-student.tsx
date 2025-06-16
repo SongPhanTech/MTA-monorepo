@@ -52,6 +52,7 @@ import {
     AutoComplete,
     Col,
     Collapse,
+    Divider,
     Form,
     Input,
     Row,
@@ -120,8 +121,49 @@ type ProfileWithRelations = UserProfile & {
     })[]
 }
 
+const tabs = [
+    { key: "1", label: "Thông tin cá nhân" },
+    { key: "2", label: "Học hàm, học vị" },
+    { key: "3", label: "Trình độ, chứng chỉ" },
+    { key: "4", label: "Quá trình công tác" },
+    { key: "5", label: "Quá trình đào tạo" },
+    { key: "6", label: "Khen thưởng - Kỷ luật" },
+    { key: "7", label: "Đối tượng chính sách" },
+    { key: "8", label: "Kê khai tài sản" },
+    { key: "9", label: "Thân nhân" },
+];
+
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutUserProfile>()
+
+    const [open, setOpen] = useState(true);
+    const [activeKey, setActiveKey] = useState("1");
+
+    const renderContent = (key: string) => {
+        switch (key) {
+            case "1":
+                return <div>Form: Thông tin cá nhân</div>;
+            case "2":
+                return <div>Form: Học hàm, học vị</div>;
+            case "3":
+                return <div>Form: Trình độ, chứng chỉ</div>;
+            case "4":
+                return <div>Form: Quá trình công tác</div>;
+            case "5":
+                return <div>Form: Quá trình đào tạo</div>;
+            case "6":
+                return <div>Form: Khen thưởng - Kỷ luật</div>;
+            case "7":
+                return <div>Form: Đối tượng chính sách</div>;
+            case "8":
+                return <div>Form: Kê khai tài sản</div>;
+            case "9":
+                return <div>Form: Thân nhân</div>;
+            default:
+                return null;
+        }
+    };
+
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutStudentModal.name,
         onClose: form.resetFields,
@@ -184,7 +226,7 @@ const PutStudentModal = () => {
         },
         where: {
             userType: {
-                in: ['CIVILIAN_STUDENT', 'MILITARY_STUDENT', 'CIVIL_STUDENT'],
+                in: ['CIVILIAN_STUDENT', 'MILITARY_STUDENT'],
             },
         },
     })
@@ -845,19 +887,58 @@ const PutStudentModal = () => {
             maskClosable={true}
             title={
                 id
-                    ? 'Chỉnh sửa sinh viên/ học viên'
-                    : 'Thêm sinh viên/ học viên'
+                    ? <span className='text-2xl'>Chỉnh sửa sinh viên/ học viên</span>
+                    : <span className='text-2xl'>Thêm sinh viên / học viên</span>
             }
-            className="w-[80vw]"
+            className="w-[90vw]"
             layout="vertical"
-            // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
-            // wrapperCol={{ span: 16 }} // input chiếm 18 cột
+        // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
+        // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Tabs className="w-full" defaultActiveKey="1">
-                <TabPane tab="Thông tin cá nhân" key="1" id="info-block">
-                    <Collapse defaultActiveKey={['1']} accordion>
-                        <Panel header="Thông tin cá nhân" key="1">
-                            <Row gutter={[16, 16]}>
+            <Row gutter={12} className='mt-6'>
+                <Col xs={24}
+                    md={6}
+                    lg={5}
+                    style={{ minWidth: 200 }}>
+                    <div className="space-y-2">
+                        {tabs.map((item) => {
+                            const isActive = item.key === activeKey;
+                            return (
+                                <div
+                                    key={item.key}
+                                    className="flex items-center gap-3 p-3 cursor-pointer"
+                                    onClick={() => setActiveKey(item.key)}
+                                >
+                                    <div
+                                        className={`w-8 h-8 rounded-sm flex items-center justify-center text-sm font-medium ${isActive
+                                            ? "bg-green-600 text-white shadow-[0_3px_6px_0_rgba(0,95,39,0.4)]"
+                                            : "bg-gray-200 text-gray-600"
+                                            }`}
+                                    >
+                                        {item.key}
+                                    </div>
+                                    <span
+                                        className={`text-sm font-medium ${isActive ? "text-green-600" : "text-gray-700"
+                                            }`}
+                                    >
+                                        {item.label}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </Col>
+
+                <Col xs={24} md={18} lg={19}>
+                    <Tabs activeKey={activeKey} onChange={setActiveKey}
+                        tabBarStyle={{
+                            display: "none"
+                        }}
+                        animated={{ tabPane: false }}
+                        destroyInactiveTabPane={false}
+                    >
+                        <TabPane tab="Thông tin cá nhân" key="1">
+                            <Row gutter={[10, 10]}>
                                 <Col span={4}>
                                     <div
                                         style={{
@@ -887,18 +968,18 @@ const PutStudentModal = () => {
                                                 }}
                                             >
                                                 {avatar.length > 0 ||
-                                                fileList.length > 0
+                                                    fileList.length > 0
                                                     ? ''
                                                     : fileList.length < 1 && (
-                                                          <p
-                                                              style={{
-                                                                  fontSize:
-                                                                      '0.65rem',
-                                                              }}
-                                                          >
-                                                              + Tải ảnh lên
-                                                          </p>
-                                                      )}
+                                                        <p
+                                                            style={{
+                                                                fontSize:
+                                                                    '0.65rem',
+                                                            }}
+                                                        >
+                                                            + Tải ảnh lên
+                                                        </p>
+                                                    )}
                                             </Upload>
                                         </Form.Item>
                                     </div>
@@ -906,7 +987,7 @@ const PutStudentModal = () => {
 
                                 <Col span={20}>
                                     <Row gutter={[10, 10]}>
-                                        <Col span={12}>
+                                        <Col sm={12} lg={12}>
                                             <FormItem
                                                 form={form}
                                                 name="idCardNumber"
@@ -948,7 +1029,7 @@ const PutStudentModal = () => {
                                                 />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col sm={12} lg={12}>
                                             <FormItem
                                                 form={form}
                                                 name="code"
@@ -965,7 +1046,7 @@ const PutStudentModal = () => {
                                                 <Input placeholder="Nhập mã sinh viên / học viên" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col sm={12} lg={12}>
                                             <FormItem
                                                 form={form}
                                                 name="lastName"
@@ -976,7 +1057,7 @@ const PutStudentModal = () => {
                                                 <Input placeholder="Nhập họ và tên đệm" />
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col sm={12} lg={12}>
                                             <FormItem
                                                 form={form}
                                                 name="firstName"
@@ -990,7 +1071,7 @@ const PutStudentModal = () => {
                                     </Row>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="trainingObjectTypeId"
@@ -1010,7 +1091,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="fixedClassId"
@@ -1031,7 +1112,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="trainingCourseId"
@@ -1050,7 +1131,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="curriculumVersionId"
@@ -1073,7 +1154,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="status"
@@ -1094,7 +1175,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="dateOfBirth"
@@ -1112,7 +1193,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="placeOfBirth"
@@ -1122,7 +1203,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập nơi sinh" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="homeTown"
@@ -1132,18 +1213,8 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập quê quán" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="officerNumber"
-                                        label="Số hiệu sĩ quan"
-                                        className="mb-0"
-                                    >
-                                        <Input placeholder="Nhập số hiệu sĩ quan / quân nhân" />
-                                    </FormItem>
-                                </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="idCardDate"
@@ -1160,7 +1231,20 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+
+                                <Col sm={12} lg={8}>
+                                    <FormItem
+                                        form={form}
+                                        name="officerNumber"
+                                        label="Số hiệu sĩ quan"
+                                        className="mb-0"
+                                    >
+                                        <Input placeholder="Nhập số hiệu sĩ quan / quân nhân" />
+                                    </FormItem>
+                                </Col>
+
+
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="gender"
@@ -1180,7 +1264,7 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="permanentAddress"
@@ -1190,7 +1274,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập địa chỉ thường trú" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="temporaryAddress"
@@ -1200,7 +1284,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập địa chỉ tạm trú" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="contactAddress"
@@ -1210,7 +1294,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập địa chỉ liên hệ" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="phoneNumber"
@@ -1220,7 +1304,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập số điện thoại" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="email"
@@ -1230,7 +1314,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập thư điện tử" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="priorityObjectId"
@@ -1254,7 +1338,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="registrationAreaId"
@@ -1278,7 +1362,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="nationalityId"
@@ -1302,7 +1386,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="religionId"
@@ -1326,7 +1410,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="ethnicityId"
@@ -1351,10 +1435,8 @@ const PutStudentModal = () => {
                                     </FormItem>
                                 </Col>
                             </Row>
-                        </Panel>
-                        <Panel header="Thông tin Đoàn/Đảng/Nhập ngũ" key="2">
                             <Row gutter={[16, 16]}>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="unionDate"
@@ -1371,7 +1453,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="unionPlace"
@@ -1381,7 +1463,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập nơi vào đoàn" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="CPVJoinDate"
@@ -1398,7 +1480,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="officialCPVDate"
@@ -1415,7 +1497,7 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="CPVJoinPlace"
@@ -1425,7 +1507,7 @@ const PutStudentModal = () => {
                                         <Input placeholder="Nhập nơi vào Đảng" />
                                     </FormItem>
                                 </Col>
-                                <Col span={12}>
+                                <Col sm={12} lg={8}>
                                     <FormItem
                                         form={form}
                                         name="tenureDate"
@@ -1442,192 +1524,255 @@ const PutStudentModal = () => {
                                         />
                                     </FormItem>
                                 </Col>
+
+                            </Row>
+
+                            <div className='mt-5'>
+                                <Collapse
+                                    ghost
+                                    className="bg-white"
+                                    accordion={true}
+                                >
+                                    <Panel
+                                        header={<span className="text-base font-medium text-gray-800">Nơi sinh</span>}
+                                        key="1"
+                                        className='border-none mb-2'
+                                    >
+                                        <Row gutter={[16, 16]}>
+                                            <Col span={8}>
+                                                <FormItem form={form} name="birthProvince" className="mb-0" label="Tỉnh/Thành phố">
+                                                    <Select
+                                                        placeholder="Chọn tỉnh/thành phố"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+                                                <FormItem form={form} name="birthDistrict" className="mb-0" label="Quận/Huyện">
+                                                    <Select
+                                                        placeholder="Chọn quận/huyện"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="birthWard" className="mb-0" label="Phường/Xã">
+                                                    <Select
+                                                        placeholder="Chọn phường/xã"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                    </Panel>
+
+                                    <Panel
+                                        header={<span className="text-base font-medium text-gray-800">Quê quán</span>}
+                                        key="2"
+                                        className='border-none mb-2'
+                                    >
+                                        <Row gutter={[16, 16]}>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="hometownProvince" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn tỉnh/thành phố"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="hometownDistrict" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn quận/huyện"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="hometownWard" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn phường/xã"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                    </Panel>
+
+                                    <Panel
+                                        header={<span className="text-base font-medium text-gray-800">Hộ khẩu thường trú</span>}
+                                        key="3"
+                                        className='border-none mb-2'
+                                    >
+                                        <Row gutter={[16, 16]}>
+                                            <Col span={8}>
+                                                <FormItem form={form} name="permanentProvince" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn tỉnh/thành phố"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="permanentDistrict" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn quận/huyện"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={8}>
+
+                                                <FormItem form={form} name="permanentWard" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn phường/xã"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                    </Panel>
+
+                                    <Panel
+                                        header={<span className="text-base font-medium text-gray-800">Nơi ở hiện nay</span>}
+                                        key="4"
+                                        className='border-none mb-2'
+                                    >
+                                        <Row gutter={[16, 16]}>
+                                            <Col span={6}>
+
+                                                <FormItem form={form} name="currentProvince" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn tỉnh/thành phố"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={6}>
+
+                                                <FormItem form={form} name="currentDistrict" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn quận/huyện"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={6}>
+
+                                                <FormItem form={form} name="currentWard" className="mb-0">
+                                                    <Select
+                                                        placeholder="Chọn phường/xã"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                            <Col span={6}>
+
+                                                <FormItem form={form} name="currentDetailAddress" className="mb-0">
+                                                    <Input
+                                                        placeholder="Nhập địa chỉ cụ thể"
+                                                        size="large"
+                                                        className="w-full"
+                                                    />
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                    </Panel>
+                                </Collapse>
+                            </div>
+                        </TabPane>
+
+                        <TabPane tab="Học hàm, học vị" key="2">
+                            <h3 className="text-lg font-semibold mb-4">Học hàm, học vị</h3>
+                            <Row gutter={[10, 10]}>
                                 <Col span={12}>
                                     <FormItem
                                         form={form}
-                                        name="enlistmentDate"
-                                        label="Ngày nhập ngũ"
+                                        name="academicRankTypeId"
+                                        label="Học hàm"
                                         className="mb-0"
                                     >
-                                        <DatePicker
-                                            format="DD/MM/YYYY"
-                                            className="w-full"
-                                            disabledDate={(date) =>
-                                                date &&
-                                                date > dayjs().endOf('day')
-                                            }
+                                        <Select
+                                            placeholder="Chọn học hàm"
+                                            allowClear
+                                            options={academicRankTypeData.map(rank => ({
+                                                value: rank.id,
+                                                label: rank.name
+                                            }))}
                                         />
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
                                     <FormItem
                                         form={form}
-                                        name="dischargeDate"
-                                        label="Ngày xuất ngũ"
+                                        name="academicDegreeTypeId"
+                                        label="Học vị"
                                         className="mb-0"
                                     >
-                                        <DatePicker
-                                            format="DD/MM/YYYY"
-                                            className="w-full"
-                                            disabledDate={(date) =>
-                                                date &&
-                                                date > dayjs().endOf('day')
-                                            }
+                                        <Select
+                                            placeholder="Chọn học vị"
+                                            allowClear
+                                            options={academicDegreeTypeData.map(degree => ({
+                                                value: degree.id,
+                                                label: degree.name
+                                            }))}
+                                        />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="rankId"
+                                        label="Cấp bậc"
+                                        className="mb-0"
+                                    >
+                                        <Select
+                                            placeholder="Chọn cấp bậc"
+                                            allowClear
+                                            options={rankData.map(rank => ({
+                                                value: rank.id,
+                                                label: rank.name
+                                            }))}
+                                        />
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem
+                                        form={form}
+                                        name="levelId"
+                                        label="Trình độ"
+                                        className="mb-0"
+                                    >
+                                        <Select
+                                            placeholder="Chọn trình độ"
+                                            allowClear
+                                            options={levelData.map(level => ({
+                                                value: level.id,
+                                                label: level.name
+                                            }))}
                                         />
                                     </FormItem>
                                 </Col>
                             </Row>
-                        </Panel>
-                    </Collapse>
-                </TabPane>
-                <TabPane tab="Thông tin gia đình" key="2">
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="familyName"
-                                label="Tên phụ huynh"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập tên phụ huynh" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="familyPhone"
-                                label="Số điện thoại phụ huynh"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập số điện thoại phụ huynh" />
-                            </FormItem>
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tab="Lịch sử" key="3">
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="rankId"
-                                label="Cấp bậc hàm"
-                                className="mb-0"
-                                normalize={(value) =>
-                                    value === undefined ? null : value
-                                }
-                            >
-                                <Select
-                                    placeholder="Chọn cấp bậc hàm"
-                                    options={rankData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="levelId"
-                                label="Trình độ học vấn"
-                                className="mb-0"
-                                normalize={(value) =>
-                                    value === undefined ? null : value
-                                }
-                            >
-                                <Select
-                                    placeholder="Chọn trình độ học vấn"
-                                    options={levelData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="academicDegreeTypeId"
-                                label="Học hàm"
-                                className="mb-0"
-                                normalize={(value) =>
-                                    value === undefined ? null : value
-                                }
-                            >
-                                <Select
-                                    placeholder="Chọn học hàm"
-                                    options={academicDegreeTypeData.map(
-                                        (i) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="academicRankTypeId"
-                                label="Học vị"
-                                className="mb-0"
-                                normalize={(value) =>
-                                    value === undefined ? null : value
-                                }
-                            >
-                                <Select
-                                    placeholder="Chọn học vị"
-                                    options={academicRankTypeData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                />
-                            </FormItem>
-                        </Col>
-                        {/* <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="positionName"
-                                label="Chức vụ nhân viên"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập chức vụ nhân viên" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="positionCPVId"
-                                label="Chức vụ Đảng"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập chức vụ Đảng" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="organizationName"
-                                label="Đơn vị"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập đơn vị" />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="organizationCPVName"
-                                label="Nơi sinh hoạt Đảng"
-                                className="mb-0"
-                            >
-                                <Input placeholder="Nhập nơi sinh hoạt Đảng" />
-                            </FormItem>
-                        </Col> */}
-                    </Row>
-                </TabPane>
-            </Tabs>
-        </PutFormModal>
+                        </TabPane>
+                    </Tabs>
+                </Col>
+            </Row>
+        </PutFormModal >
     )
 }
 

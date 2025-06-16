@@ -42,10 +42,13 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import {
     useCountStudent,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTemplateFile,
     useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
@@ -63,6 +66,7 @@ export default function UserProfilePageDs() {
     const [selectedTrainingCourse, setSelectedTrainingCourse] =
         useState<string>()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const { data = [], refetch } = useFindManyStudent({
         where: {
@@ -142,7 +146,7 @@ export default function UserProfilePageDs() {
         refetch()
     }
 
-    const { data: TrainingCourseData, refetch: refetchTrainingCourse } =
+    const { data: TrainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
             include: {
                 fixedClass: true,
@@ -176,11 +180,17 @@ export default function UserProfilePageDs() {
         refetch()
     }
 
-    const { data: FixedClassData } = useFindManyFixedClass({
+    const { data: FixedClassData = [] } = useFindManyFixedClass({
         include: {
             trainingCourse: true,
         },
     })
+
+    const { data: TrainingFieldData = [] } = useFindManyTrainingField()
+
+    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor()
+
+    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion()
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -540,7 +550,7 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Họ và tên',
                                 align: 'center',
-                                width: 150,
+                                width: 180,
                                 render: (record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -549,30 +559,46 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
-                                width: 100,
+                                width: 150,
                                 render: (record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(
-                                              record.userProfile.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                            record.userProfile.dateOfBirth
+                                        ).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
                                 title: 'Giới tính',
                                 align: 'center',
-                                width: 80,
+                                width: 100,
+                                filters: [
+                                    {
+                                        text: "Nam",
+                                        value: "Male"
+                                    },
+                                    {
+                                        text: "Nữ",
+                                        value: "Female"
+                                    }
+                                ],
+                                onFilter: (value, record) => record.userProfile.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        record.userProfile
+                                            .gender as keyof typeof GENDER_MEAN
+                                        ]
                                         : '',
                             },
                             {
                                 title: 'Đối tượng ĐT',
                                 align: 'center',
-                                width: 120,
+                                width: 130,
+                                filters: TrainingOnjectTypeData.map(item => ({
+                                    text: item.name,
+                                    value: item.name
+                                })),
+                                onFilter: (value, record) => record.trainingObjectType.name === value,
                                 render: (record) =>
                                     record.trainingObjectType
                                         ? record.trainingObjectType.name
@@ -581,7 +607,15 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Lớp',
                                 align: 'center',
-                                width: 140,
+                                width: 200,
+                                filters: FixedClassData.map(item => ({
+                                    text: `${item.code}-${item.name}`,
+                                    value: `${item.code}-${item.name}`
+                                })),
+                                onFilter: (value, record) => {
+                                    const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
+                                    return fiexedClass === value
+                                },
                                 render: (record) => {
                                     const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
                                     return fiexedClass || ''
@@ -591,6 +625,15 @@ export default function UserProfilePageDs() {
                                 title: 'Khóa',
                                 align: 'center',
                                 width: 100,
+                                filters: TrainingCourseData.map(item => ({
+                                    text: item.name,
+                                    value: item.name
+                                })),
+                                onFilter: (value, record) => {
+                                    const trainingCourseName =
+                                        record.fixedClass?.trainingCourse?.name
+                                    return trainingCourseName === value
+                                },
                                 render: (record) => {
                                     const trainingCourse =
                                         record.fixedClass?.trainingCourse
@@ -602,18 +645,38 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Ngành',
                                 align: 'center',
-                                width: 120,
-                                render: (record) => {
+                                width: 160,
+                                filters: TrainingFieldData.map(item => ({
+                                    text: item.name,
+                                    value: item.name
+                                })),
+                                onFilter: (value, record) => {
                                     const trainingField =
                                         record.trainingObjectType
                                             ?.trainingFields?.[0]?.trainingField
-                                    return trainingField?.name || ''
+                                    return trainingField?.name === value
+                                },
+                                render: (record) => {
+                                    const trainingField = record.trainingObjectType.trainingFields?.[0]?.trainingField
+                                    return trainingField
+                                        ? trainingField.name
+                                        : ''
                                 },
                             },
                             {
                                 title: 'Chuyên ngành',
                                 align: 'center',
-                                width: 130,
+                                width: 180,
+                                filters: TrainingMajorData.map(item => ({
+                                    text: item.name,
+                                    value: item.name
+                                })),
+                                onFilter: (value, record) => {
+                                    const trainingMajor =
+                                        record.trainingObjectType
+                                            ?.trainingMajors?.[0]?.trainingMajor
+                                    return trainingMajor?.name === value
+                                },
                                 render: (record) => {
                                     const trainingMajor =
                                         record.trainingObjectType
@@ -624,10 +687,14 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Chương trình đào tạo',
                                 align: 'center',
-                                width: 150,
+                                width: 180,
+                                filters: TrainingCurriculumVersionData.map(item => ({
+                                    text: item.name,
+                                    value: item.name
+                                })),
                                 render: (record) => {
-                                    const curriculum = record.curriculumVersion
-                                    return curriculum ? curriculum.name : ''
+                                    const curriculum = record.fixedClass?.curriculumVersion
+                                    return curriculum?.name || ''
                                 },
                             },
                             {
@@ -637,7 +704,7 @@ export default function UserProfilePageDs() {
                                 render: (_, record) => {
                                     const statusInfo =
                                         FIXED_CLASS_STUDENT_STATUS[
-                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                        record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                         ]
                                     return statusInfo ? (
                                         <Tag color={statusInfo.color}>
@@ -673,8 +740,12 @@ export default function UserProfilePageDs() {
                                 ),
                             },
                         ]}
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys)
+                        }}
                         data={data}
-                        scroll={{ x: 'max-content' }}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
