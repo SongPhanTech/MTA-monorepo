@@ -1,4 +1,3 @@
-import { CalendarOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
@@ -10,29 +9,18 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
-    useFindManyFixedClass,
     useFindManySchoolYear,
     useFindManySemester,
+    useFindManyStudentSubjectScore,
     useFindManySubjectClass,
-    useFindManySubjectClassStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
-import _, { includes } from 'lodash'
-import { CalendarPlus, Save, Search } from 'lucide-react'
+import _ from 'lodash'
+import { Save, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -161,7 +149,7 @@ export default function SubjectClassScore() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: dataTable = [], refetch } = useFindManySubjectClassStudent({
+    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore({
         where: {
             // ...(
             //     filters.searchText && filters.searchText !== '' ? {
@@ -562,7 +550,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -582,11 +570,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return (
-                                                    record.attendanceScore || ''
-                                                )
                                             }
+                                            return record.attendanceScore || ''
                                         },
                                     },
                                     {
@@ -618,7 +603,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -638,9 +623,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.midtermScore || ''
                                             }
+                                            return record.midtermScore || ''
                                         },
                                     },
                                     {
@@ -672,7 +656,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -692,9 +676,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.finalScore || ''
                                             }
+                                            return record.finalScore || ''
                                         },
                                     },
                                     {
@@ -726,7 +709,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -746,9 +729,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return ''
                                             }
+                                            return ''
                                         },
                                     },
                                     {
@@ -769,7 +751,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -785,7 +767,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -801,7 +783,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -823,9 +805,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.description || ''
                                             }
+                                            return record.description || ''
                                         },
                                     },
                                     // {

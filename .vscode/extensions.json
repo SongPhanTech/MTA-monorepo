@@ -4,6 +4,7 @@
     "streetsidesoftware.code-spell-checker",
     "streetsidesoftware.code-spell-checker-vietnamese",
     "prisma.prisma",
-    "zenstack.zenstack"
+    "zenstack.zenstack",
+    "aaron-bond.better-comments"
   ]
 }
