@@ -194,7 +194,7 @@ export default function SubjectOpeningPlan() {
                                                 )
                                             }
                                             placeholder="Nhập tên lớp..."
-                                            className='py-0'
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -263,10 +263,8 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary" >
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" >
+                                <Button type="primary">Thêm mới</Button>
+                                <Button type="primary">
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>

@@ -1,4 +1,4 @@
-import { fetchHoiDap } from '@/api/hoi-dap'
+import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 import { readStreamWithLiveUpdate } from '@/utils'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
@@ -19,7 +19,7 @@ export default function Page() {
     const router = useRouter()
     const { id } = router.query
     const scrollRef = useRef<HTMLDivElement>(null)
-
+    const [isFaqMode, setIsFaqMode] = useState(false)
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<
         { id: number; role: string; content: string }[]
@@ -58,9 +58,15 @@ export default function Page() {
 
     const sendMessage = async (text: string, userMessageId: number) => {
         setLoading(true)
-
         const controller = new AbortController()
         setAbortController(controller)
+
+        // Nếu đang ở chế độ FAQ + dùng fetchHoiDap ⇒ thêm "FAQ: "
+        const actualPrompt =
+            isFaqMode &&
+            fetchHoiDap === (isFaqMode ? fetchHoiDap : fetchHoiDapFaq)
+                ? `FAQ: ${text}`
+                : text
 
         try {
             await updateConversation({
@@ -69,7 +75,7 @@ export default function Page() {
                     message: {
                         create: [
                             {
-                                content: text,
+                                content: actualPrompt,
                                 sender: MessageSender.USER,
                             },
                         ],
@@ -77,37 +83,40 @@ export default function Page() {
                 },
             })
 
-            const response = await fetchHoiDap({
-                prompt: text,
+            const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
+                prompt: isFaqMode ? text : actualPrompt,
                 type_data: conversationCurrent?.type ?? '',
                 conversation_id: id as string,
                 signal: controller.signal,
             })
-
-            const contentType = response.headers.get('content-type')
-            if (contentType?.includes('application/json')) {
-                const json = await response.json()
-                if (json.error === 'True') {
-                    message.error('Đã xảy ra lỗi từ máy chủ')
-                    return
-                }
-            }
-
-            if (!response.body) {
-                message.error('Không có nội dung phản hồi')
+            if (!response.ok) {
+                message.error('Lỗi từ server')
                 setLoading(false)
                 return
             }
 
-            const fullText = await response.text()
+            let botReply = ''
+
+            if (isFaqMode) {
+                const json = await response.json()
+                if (json?.error === 'True') {
+                    message.error('Đã xảy ra lỗi từ máy chủ')
+                    return
+                }
+                botReply = json?.success_detail || 'Không có phản hồi'
+            } else {
+                botReply = await response.text()
+            }
+
             setMessages((prev) => [
                 ...prev,
                 {
                     id: Date.now(),
                     role: 'BOT',
-                    content: fullText,
+                    content: botReply,
                 },
             ])
+
             setTimeout(() => setLoading(false), 0)
         } catch (err) {
             if (err instanceof Error && err.name === 'AbortError') {
@@ -151,7 +160,7 @@ export default function Page() {
 
     return (
         <div className="flex flex-col h-full items-center bg-white">
-            <div className="w-full  flex flex-col h-full px-4">
+            <div className="w-full flex flex-col h-full px-4">
                 <div
                     ref={scrollRef}
                     className="flex-1 overflow-y-auto pb-4 no-scrollbar"
@@ -250,12 +259,21 @@ export default function Page() {
                     </div>
                 )}
 
+                {/* <ChatInput
+                    input={input}
+                    loading={loading}
+                    onInputChange={setInput}
+                    onSend={handleSend}
+                    onStop={handleStop}
+                /> */}
                 <ChatInput
                     input={input}
                     loading={loading}
                     onInputChange={setInput}
                     onSend={handleSend}
                     onStop={handleStop}
+                    isFaqMode={isFaqMode}
+                    onToggleFaqMode={() => setIsFaqMode((prev) => !prev)}
                 />
             </div>
         </div>
