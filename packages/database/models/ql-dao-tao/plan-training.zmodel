@@ -16,29 +16,35 @@ enum SubjectClassStudentStatus {
   @@schema("ql-dao-tao")
 }
 
-/// học viên - lớp môn học
-model SubjectClassStudent extends Base {
-  subjectClass    SubjectClass              @relation(fields: [subjectClassId], references: [id])
-  subjectClassId  String
+/// Điểm môn học SV - lớp môn học
+// Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
+// Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng
+model StudentSubjectScore extends Base {
+  subjectClass     SubjectClass?             @relation(fields: [subjectClassId], references: [id])
+  subjectClassId   String?
 
-  student         Student                   @relation(fields: [studentId], references: [id])
-  studentId       String
+  subjectVersion   SubjectVersion            @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+
+  student          Student                   @relation(fields: [studentId], references: [id])
+  studentId        String
 
   // cần cập nhật khi: huỷ lớp | thay đổi điểm
-  status          SubjectClassStudentStatus @default(Studying)
+  status           SubjectClassStudentStatus @default(Studying)
 
-  attendanceScore Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
-  midtermScore    Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
-  examScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
-  examScore2      Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ 2 (thi lại)
+  attendanceScore  Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
+  midtermScore     Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
+  examScore        Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
 
-  bonusScore      Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
+  bonusScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
-  finalScore      Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm tổng kết
+  // finalScore = (attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore
+  // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp finalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
+  finalScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm tổng kết
 
-  examPostponed   Boolean                   @default(false) // hoãn thi
-  examBanned      Boolean                   @default(false) // cấm thi
-  suspended       Boolean                   @default(false) // đình chỉ
+  examPostponed    Boolean                   @default(false) // hoãn thi
+  examBanned       Boolean                   @default(false) // cấm thi
+  suspended        Boolean                   @default(false) // đình chỉ
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -108,6 +114,7 @@ model TrainingCourse extends Base {
   trainingObjectTypeId String
 
   fixedClass           FixedClass[]
+  scoreConverts        ScoreConvert[]
   @@schema("ql-dao-tao")
 }
 /// lớp biên chế
@@ -262,7 +269,6 @@ enum ExamType {
 }
 
 /// Phiên bản môn học
-// Giao diện nhập điểm sẽ phụ thuộc vào hệ số (e.g. 1 hay 2 điểm giữa kỳ)
 model SubjectVersion extends Base {
   name                     String
   examType                 ExamType
@@ -306,6 +312,7 @@ model SubjectVersion extends Base {
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
 
   subjectClass             SubjectClass[]
+  studentSubjectScore      StudentSubjectScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -371,7 +378,6 @@ model SubjectClass extends Base {
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt              DateTime? // ngày xuất phiếu điểm
 
-
   room                       Room?                 @relation(fields: [roomId], references: [id])
   roomId                     String?
 
@@ -384,7 +390,7 @@ model SubjectClass extends Base {
   enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
   enterGradeLecturerId       String?
 
-  subjectClassStudent        SubjectClassStudent[]
+  subjectClassStudent        StudentSubjectScore[]
   @@schema("ql-dao-tao")
 }
 

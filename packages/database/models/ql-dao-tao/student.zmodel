@@ -21,7 +21,7 @@ model Student extends Base {
 
   fixedClass           FixedClass?           @relation(fields: [fixedClassId], references: [id])
   fixedClassId         String?
-  subjectClassStudent  SubjectClassStudent[]
+  subjectClassStudent  StudentSubjectScore[]
 
   userProfileId        String?
   userProfile          UserProfile?          @relation(fields: [userProfileId], references: [id])
