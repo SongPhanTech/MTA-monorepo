@@ -14,7 +14,7 @@ import DefaultLayout from '@layouts/default-layout'
 import type {
     CurriculumVersion,
     TrainingCourse,
-    TrainingObjectType
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCountFixedClass,
@@ -23,18 +23,9 @@ import {
     useFindManyOrganization,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
-    useUpdateFixedClass
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Row,
-    Tag
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'

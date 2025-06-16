@@ -236,7 +236,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 align: 'center',
                                 render: (value: any) =>
                                     SUBJECT_EQUIVALENT_TYPE[
-                                    value as keyof typeof SUBJECT_EQUIVALENT_TYPE
+                                        value as keyof typeof SUBJECT_EQUIVALENT_TYPE
                                     ],
                             },
                             {

@@ -49,71 +49,71 @@ export default function TrainingProgramCatalog() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            curriculumVersion: {
-                                some: {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                        {
-                                            code: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ],
-                }
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              curriculumVersion: {
+                                  some: {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              code: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  },
+                              },
+                          },
+                      ],
+                  }
                 : {}),
             ...(filters.trainingObjectId && filters.trainingObjectId !== ''
                 ? {
-                    curriculumVersion: {
-                        some: {
-                            trainingObjectTypeId: {
-                                contains: filters.trainingObjectId,
-                                mode: 'insensitive',
-                            },
-                        },
-                    },
-                }
+                      curriculumVersion: {
+                          some: {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
-                    curriculumVersion: {
-                        some: {
-                            fixedClasses: {
-                                some: {
-                                    trainingCourseId: {
-                                        contains: filters.trainingCourseId,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                            },
-                        },
-                    },
-                }
+                      curriculumVersion: {
+                          some: {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.trainingMajorId && filters.trainingMajorId !== ''
                 ? {
-                    trainingMajorId: {
-                        contains: filters.trainingMajorId,
-                        mode: 'insensitive',
-                    },
-                }
+                      trainingMajorId: {
+                          contains: filters.trainingMajorId,
+                          mode: 'insensitive',
+                      },
+                  }
                 : {}),
         },
         include: {
@@ -132,71 +132,71 @@ export default function TrainingProgramCatalog() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            curriculumVersion: {
-                                some: {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                        {
-                                            code: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    ],
-                }
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              curriculumVersion: {
+                                  some: {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              code: {
+                                                  contains: filters.searchText,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  },
+                              },
+                          },
+                      ],
+                  }
                 : {}),
             ...(filters.trainingObjectId && filters.trainingObjectId !== ''
                 ? {
-                    curriculumVersion: {
-                        some: {
-                            trainingObjectTypeId: {
-                                contains: filters.trainingObjectId,
-                                mode: 'insensitive',
-                            },
-                        },
-                    },
-                }
+                      curriculumVersion: {
+                          some: {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
-                    curriculumVersion: {
-                        some: {
-                            fixedClasses: {
-                                some: {
-                                    trainingCourseId: {
-                                        contains: filters.trainingCourseId,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                            },
-                        },
-                    },
-                }
+                      curriculumVersion: {
+                          some: {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.trainingMajorId && filters.trainingMajorId !== ''
                 ? {
-                    trainingMajorId: {
-                        contains: filters.trainingMajorId,
-                        mode: 'insensitive',
-                    },
-                }
+                      trainingMajorId: {
+                          contains: filters.trainingMajorId,
+                          mode: 'insensitive',
+                      },
+                  }
                 : {}),
         },
     })
@@ -280,8 +280,9 @@ export default function TrainingProgramCatalog() {
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
             router.push(
-                `${ROUTER_PATH.QL_DAO_TAO
-                    .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
+                `${
+                    ROUTER_PATH.QL_DAO_TAO
+                        .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
                 }/${record.id}`
             )
         }
@@ -290,10 +291,11 @@ export default function TrainingProgramCatalog() {
     const processedData = useMemo(() => {
         return data?.map((item) => ({
             ...item,
-            name: `${item?.name}${item?.managementOrganization?.name
-                ? ` - ${item?.managementOrganization?.name}`
-                : ''
-                }`,
+            name: `${item?.name}${
+                item?.managementOrganization?.name
+                    ? ` - ${item?.managementOrganization?.name}`
+                    : ''
+            }`,
         }))
     }, [data])
 
@@ -314,7 +316,7 @@ export default function TrainingProgramCatalog() {
                                                     e.target.value
                                                 )
                                             }
-                                            className='py-0'
+                                            className="py-0"
                                             placeholder="Nhập chương trình đào tạo"
                                             prefix={
                                                 <Search
@@ -401,10 +403,7 @@ export default function TrainingProgramCatalog() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm chương trình
                                 </Button>

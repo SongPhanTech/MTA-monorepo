@@ -50,25 +50,25 @@ export default function SubjectList() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            subjectVersion: {
-                                some: {
-                                    name: {
-                                        contains: filters.searchText,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                            },
-                        },
-                    ],
-                }
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              subjectVersion: {
+                                  some: {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
                 : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
@@ -159,10 +159,11 @@ export default function SubjectList() {
     const processedData = useMemo(() => {
         return SubjectData?.map((item) => ({
             ...item,
-            name: `${item?.name}${item?.managementOrganization?.name
-                ? ` - ${item?.managementOrganization?.name}`
-                : ''
-                }`,
+            name: `${item?.name}${
+                item?.managementOrganization?.name
+                    ? ` - ${item?.managementOrganization?.name}`
+                    : ''
+            }`,
         }))
     }, [SubjectData])
 
@@ -184,7 +185,7 @@ export default function SubjectList() {
                                                 )
                                             }
                                             placeholder="Nhập tên môn..."
-                                            className='py-0'
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -227,10 +228,7 @@ export default function SubjectList() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
                                 </Button>

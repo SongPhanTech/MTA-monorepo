@@ -1,9 +1,9 @@
-import axiosInstance from './axios-instance'
 import axios from 'axios'
+import { axiosInstanceChatbot } from './axios-instance'
 
 export const TimKiemTheoTuKhoa = async (prompt: string) => {
     try {
-        const response = await axiosInstance.post(
+        const response = await axiosInstanceChatbot.post(
             '/tim_kiem_theo_tu_khoa',
             new URLSearchParams({ prompt })
         )
