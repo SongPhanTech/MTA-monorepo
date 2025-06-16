@@ -117,7 +117,50 @@ export default function TrainingProgramCatalog() {
                 : {}),
         },
         include: {
-            curriculumVersion: true,
+            curriculumVersion: {
+                where: {
+                    ...(filters.searchText && filters.searchText !== ''
+                        ? {
+                              OR: [
+                                  {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      code: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+                    ...(filters.trainingObjectId &&
+                    filters.trainingObjectId !== ''
+                        ? {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingCourseId &&
+                    filters.trainingCourseId !== ''
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                },
+            },
             managementOrganization: true,
             trainingMajor: true,
         },
@@ -345,7 +388,7 @@ export default function TrainingProgramCatalog() {
                                             )}
                                             onChange={(val) =>
                                                 handleFilterChange(
-                                                    'trainingObjectTypeId',
+                                                    'trainingObjectId',
                                                     val
                                                 )
                                             }
