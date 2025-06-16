@@ -39,23 +39,23 @@ export default function TrainingBlock() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                      OR: [
-                          { name: { contains: filters.searchText } },
-                          // { code: { contains: filters.searchText } },
-                      ],
-                  }
+                    OR: [
+                        { name: { contains: filters.searchText } },
+                        // { code: { contains: filters.searchText } },
+                    ],
+                }
                 : {}),
             ...(filters.trainingObjectTypeId
                 ? {
-                      curriculumVersions: {
-                          some: {
-                              curriculumVersion: {
-                                  trainingObjectTypeId:
-                                      filters.trainingObjectTypeId,
-                              },
-                          },
-                      },
-                  }
+                    curriculumVersions: {
+                        some: {
+                            curriculumVersion: {
+                                trainingObjectTypeId:
+                                    filters.trainingObjectTypeId,
+                            },
+                        },
+                    },
+                }
                 : {}),
         },
         include: {
@@ -136,9 +136,7 @@ export default function TrainingBlock() {
                                                 )
                                             }
                                             placeholder="Nhập tên ngành..."
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            className='py-0'
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -167,9 +165,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingObjectTypeId',
@@ -196,9 +191,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingCourseId',
@@ -225,9 +217,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -245,7 +234,6 @@ export default function TrainingBlock() {
                                 <Button
                                     onClick={handleModal}
                                     type="primary"
-                                    className="h-[40px]"
                                 >
                                     <PlusOutlined />
                                     Thêm
