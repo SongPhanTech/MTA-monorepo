@@ -50,25 +50,25 @@ export default function SubjectList() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              subjectVersion: {
-                                  some: {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          },
-                      ],
-                  }
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            subjectVersion: {
+                                some: {
+                                    name: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                }
                 : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
@@ -159,11 +159,10 @@ export default function SubjectList() {
     const processedData = useMemo(() => {
         return SubjectData?.map((item) => ({
             ...item,
-            name: `${item?.name}${
-                item?.managementOrganization?.name
-                    ? ` - ${item?.managementOrganization?.name}`
-                    : ''
-            }`,
+            name: `${item?.name}${item?.managementOrganization?.name
+                ? ` - ${item?.managementOrganization?.name}`
+                : ''
+                }`,
         }))
     }, [SubjectData])
 
@@ -185,10 +184,7 @@ export default function SubjectList() {
                                                 )
                                             }
                                             placeholder="Nhập tên môn..."
-                                            style={{
-                                                height: 40,
-                                                marginRight: 8,
-                                            }}
+                                            className='py-0'
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -217,10 +213,6 @@ export default function SubjectList() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                                marginRight: 8,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'managementOrganizationId',
@@ -238,7 +230,6 @@ export default function SubjectList() {
                                 <Button
                                     onClick={handleModal}
                                     type="primary"
-                                    className="h-[40px]"
                                 >
                                     <PlusOutlined />
                                     Thêm
