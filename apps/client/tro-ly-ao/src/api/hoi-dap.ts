@@ -18,7 +18,7 @@ export async function fetchHoiDap({
 
     const response = await fetch(
         // 'https://api.chat.chatbot.swantech.vn/hoi_dap',
-        `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/hoi_dap`,
+        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap`,
         {
             method: 'POST',
             body: formData,
@@ -51,7 +51,7 @@ export async function fetchHoiDapFaq({
 
     const response = await fetch(
         // 'https://api.chat.chatbot.swantech.vn/hoi_dap',
-        `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/hoi_dap_faq`,
+        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_faq`,
         {
             method: 'POST',
             body: formData,

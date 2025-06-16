@@ -2,12 +2,12 @@
 import { env } from '@/env'
 import axios from 'axios'
 
-const axiosInstance = axios.create({
-    baseURL: `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011`,
+const axiosInstanceChatbot = axios.create({
+    baseURL: `${env.NEXT_PUBLIC_CHAT_BOT_URL}`,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
     },
     timeout: 5000,
 })
 
-export default axiosInstance
+export { axiosInstanceChatbot }
