@@ -4,12 +4,12 @@ export async function fetchXuLyVanBan({
     text,
     doc_type,
     conversationId,
-    signal, // thêm signal vào
+    signal,
 }: {
     text: string
     doc_type: string
     conversationId: string
-    signal?: AbortSignal // optional
+    signal?: AbortSignal
 }) {
     const params = new URLSearchParams({
         text,
@@ -18,10 +18,10 @@ export async function fetchXuLyVanBan({
     })
 
     const response = await fetch(
-        `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8010/util/nlp_task?${params.toString()}`,
+        `${env.NEXT_PUBLIC_DOC_CHAT_BOT_URL}/util/nlp_task?${params.toString()}`,
         {
             method: 'GET',
-            signal, // truyền signal vào đây
+            signal,
         }
     )
 

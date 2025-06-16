@@ -19,7 +19,7 @@ export const fetchChungkingAndVectorizeDocument = async (
 ) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/chungking_and_vectorize_document`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,
             id_document
         )
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -31,7 +31,7 @@ export const fetchChungkingAndVectorizeDocument = async (
 export const fetchFAQDocument = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/faq_vectorize`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/faq_vectorize`,
             id_document
         )
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -43,7 +43,7 @@ export const fetchFAQDocument = async (id_document: string) => {
 export const deleteVectorRecordHoiDap = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/xoa_ban_ghi_trong_vector_db_hoi_dap`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap`,
             id_document
         )
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -59,7 +59,7 @@ export const deleteVectorRecordHoiDap = async (id_document: string) => {
 export const deleteVectorRecordFAQ = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_TRO_LY_AO_URL}:8011/xoa_ban_ghi_trong_db_faq`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_db_faq`,
             id_document
         )
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

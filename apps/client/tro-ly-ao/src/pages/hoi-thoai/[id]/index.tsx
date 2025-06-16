@@ -1,5 +1,4 @@
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
-import { readStreamWithLiveUpdate } from '@/utils'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
@@ -9,7 +8,7 @@ import {
     useFindUniqueConversation,
     useUpdateConversation,
 } from '@workspace/db/hooks'
-import { Avatar, Button, List, Spin, message } from 'antd'
+import { Avatar, Button, List, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -44,7 +43,6 @@ export default function Page() {
         const currentInput = input
         setInput('')
 
-        // 1. Hiển thị ngay trên UI
         const userMessage = {
             id: Date.now(),
             role: 'USER',
@@ -52,7 +50,6 @@ export default function Page() {
         }
         setMessages((prev) => [...prev, userMessage])
 
-        // 2. Gửi bot trả lời (không block UI)
         await sendMessage(currentInput, userMessage.id)
     }
 
@@ -61,13 +58,6 @@ export default function Page() {
         const controller = new AbortController()
         setAbortController(controller)
 
-        // Nếu đang ở chế độ FAQ + dùng fetchHoiDap ⇒ thêm "FAQ: "
-        const actualPrompt =
-            isFaqMode &&
-            fetchHoiDap === (isFaqMode ? fetchHoiDap : fetchHoiDapFaq)
-                ? `FAQ: ${text}`
-                : text
-
         try {
             await updateConversation({
                 where: { id: id as string },
@@ -75,7 +65,7 @@ export default function Page() {
                     message: {
                         create: [
                             {
-                                content: actualPrompt,
+                                content: text,
                                 sender: MessageSender.USER,
                             },
                         ],
@@ -84,11 +74,12 @@ export default function Page() {
             })
 
             const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
-                prompt: isFaqMode ? text : actualPrompt,
+                prompt: text,
                 type_data: conversationCurrent?.type ?? '',
                 conversation_id: id as string,
                 signal: controller.signal,
             })
+
             if (!response.ok) {
                 message.error('Lỗi từ server')
                 setLoading(false)
