@@ -49,6 +49,46 @@ export const useHoiDapHoiDapPost = (
     })
 }
 
+export type HoiDapFaqHoiDapFaqPostError = Fetcher.ErrorWrapper<{
+    status: 422
+    payload: Schemas.HTTPValidationError
+}>
+
+export type HoiDapFaqHoiDapFaqPostVariables = ChatContext['fetcherOptions']
+
+export const fetchHoiDapFaqHoiDapFaqPost = (
+    variables: HoiDapFaqHoiDapFaqPostVariables,
+    signal?: AbortSignal
+) =>
+    chatFetch<void, HoiDapFaqHoiDapFaqPostError, undefined, {}, {}, {}>({
+        url: '/hoi_dap_faq',
+        method: 'post',
+        ...variables,
+        signal,
+    })
+
+export const useHoiDapFaqHoiDapFaqPost = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            void,
+            HoiDapFaqHoiDapFaqPostError,
+            HoiDapFaqHoiDapFaqPostVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useChatContext()
+    return reactQuery.useMutation<
+        void,
+        HoiDapFaqHoiDapFaqPostError,
+        HoiDapFaqHoiDapFaqPostVariables
+    >({
+        mutationFn: (variables: HoiDapFaqHoiDapFaqPostVariables) =>
+            fetchHoiDapFaqHoiDapFaqPost({ ...fetcherOptions, ...variables }),
+        ...options,
+    })
+}
+
 export type ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError =
     Fetcher.ErrorWrapper<{
         status: 422
@@ -241,6 +281,115 @@ export const useTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
             variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
         ) =>
             fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost({
+                ...fetcherOptions,
+                ...variables,
+            }),
+        ...options,
+    })
+}
+
+export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError =
+    Fetcher.ErrorWrapper<{
+        status: 422
+        payload: Schemas.HTTPValidationError
+    }>
+
+export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables =
+    ChatContext['fetcherOptions']
+
+export const fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost =
+    (
+        variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
+        signal?: AbortSignal
+    ) =>
+        chatFetch<
+            void,
+            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+            undefined,
+            {},
+            {},
+            {}
+        >({
+            url: '/xoa_ban_ghi_trong_vector_db_hoi_dap',
+            method: 'post',
+            ...variables,
+            signal,
+        })
+
+export const useXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            void,
+            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useChatContext()
+    return reactQuery.useMutation<
+        void,
+        XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+        XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+    >({
+        mutationFn: (
+            variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+        ) =>
+            fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost({
+                ...fetcherOptions,
+                ...variables,
+            }),
+        ...options,
+    })
+}
+
+export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError =
+    Fetcher.ErrorWrapper<{
+        status: 422
+        payload: Schemas.HTTPValidationError
+    }>
+
+export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables =
+    ChatContext['fetcherOptions']
+
+export const fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
+    variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
+    signal?: AbortSignal
+) =>
+    chatFetch<
+        void,
+        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+        undefined,
+        {},
+        {},
+        {}
+    >({
+        url: '/xoa_ban_ghi_trong_db_faq',
+        method: 'post',
+        ...variables,
+        signal,
+    })
+
+export const useXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            void,
+            XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+            XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useChatContext()
+    return reactQuery.useMutation<
+        void,
+        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
+    >({
+        mutationFn: (
+            variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
+        ) =>
+            fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost({
                 ...fetcherOptions,
                 ...variables,
             }),

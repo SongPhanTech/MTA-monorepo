@@ -3,23 +3,23 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
+    SubjectRequirementType,
+    type SubjectVersion,
+    type TrainingBlockSubject,
+} from '@workspace/db'
+import {
     useCreateTrainingBlockSubject,
     useFindManySubjectVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, InputNumber, message, Select } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import {
-    SubjectRequirementType,
-    type SubjectVersion,
-    type TrainingBlockSubject,
-} from '@workspace/db'
+import { Checkbox, Col, Form, InputNumber, Select, message } from 'antd'
 import dayjs from 'dayjs'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingBlockSubject = TrainingBlockSubject
 import 'dayjs/locale/vi'
-import { useEffect } from 'react'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
+import { useEffect } from 'react'
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -69,14 +69,14 @@ const PutTrainingBlockSubject = () => {
     const { mutateAsync: updateTrainingBlockSubject } =
         useUpdateTrainingBlockSubject()
     async function onOk(output?: PutTrainingBlockSubject) {
-        if (!output) return
+        if (!input || !output) return
 
         try {
             showSpinner()
             const payload = {
                 subjectId: output.subjectId,
                 trainingBlockOnCurriculumVersionId:
-                    input?.trainingBlockOnCurriculumVersionId,
+                    input.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
                 useForFinalScore: output?.useForFinalScore,

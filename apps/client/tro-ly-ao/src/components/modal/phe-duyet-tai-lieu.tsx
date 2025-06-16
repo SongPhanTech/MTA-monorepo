@@ -1,11 +1,12 @@
+import { fetchChungkingAndVectorizeDocument } from '@/api/chunking_and_vectorize'
 import { fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost } from '@api/chat/chatComponents'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useUpdateDocument } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, Radio, message } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 type PheDuyetTaiLieuFormType = {
     status: $Enums.DocumentStatus
     reason: string
@@ -28,11 +29,22 @@ const PheDuyetTaiLieu = () => {
     const onFinish = async (values: PheDuyetTaiLieuFormType) => {
         setIsSubmitting(true)
         try {
-            await fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
-                {
-                    queryParams: { id_document: documentId },
+            if (!documentId) {
+                message.error('Không tìm thấy tài liệu phê duyệt')
+                setIsSubmitting(false)
+                return
+            }
+
+            if (values.status === $Enums.DocumentStatus.APPROVE) {
+                const result =
+                    await fetchChungkingAndVectorizeDocument(documentId)
+
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                if ((result as any)?.error === 'True') {
+                    message.error('Đã xảy ra lỗi khi phê duyệt tài liệu')
+                    return
                 }
-            )
+            }
 
             await update({
                 where: {

@@ -772,6 +772,8 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
             }
 
+            // TODO: fix ts error
+            //@ts-ignore
             setOriginalData(formData)
             form.setFieldsValue(formData)
 

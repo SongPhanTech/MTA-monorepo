@@ -1,3 +1,7 @@
+import {
+    deleteVectorRecordFAQ,
+    deleteVectorRecordHoiDap,
+} from '@/api/chunking_and_vectorize'
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
@@ -20,11 +24,11 @@ import {
 import {
     Button,
     Input,
-    message,
     Tabs,
     type TabsProps,
     Tag,
     Tooltip,
+    message,
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -101,7 +105,6 @@ function Page() {
         }))
     }, [totalCountDocument])
     const { data: totalCountFAQ = 0 } = useCountFAQ()
-    // Count pending FAQs
     const { data: totalPendingFAQ = 0 } = useCountFAQ({
         where: { status: $Enums.DocumentStatus.PENDING },
     })
@@ -118,6 +121,46 @@ function Page() {
             (faqParams.pagination.current - 1) * faqParams.pagination.pageSize,
         take: faqParams.pagination.pageSize,
     })
+    const { mutateAsync: deleteDocument } = useDeleteDocument()
+    const handleDeleteDocument = async (id: string) => {
+        if (!id) return
+
+        try {
+            const vectorResult = await deleteVectorRecordHoiDap(id)
+
+            if (vectorResult?.error === 'True') {
+                message.error(
+                    vectorResult?.message ||
+                        'Đã xảy ra lỗi khi xoá vector tài liệu'
+                )
+                return
+            }
+
+            await deleteDocument({ where: { id } })
+            message.success('Xoá tài liệu thành công')
+        } catch (error) {
+            message.error('Xoá tài liệu thất bại')
+        }
+    }
+
+    const { mutateAsync: deleteFAQ } = useDeleteFAQ()
+    const handleDeleteFAQ = async (id: string) => {
+        if (!id) return
+        try {
+            const vectorResult = await deleteVectorRecordFAQ(id)
+            if (vectorResult?.error === 'True') {
+                message.error(
+                    vectorResult?.message ||
+                        'Đã xảy ra lỗi khi xoá vector câu hỏi'
+                )
+                return
+            }
+            await deleteFAQ({ where: { id } })
+            message.success('Xoá câu hỏi thành công')
+        } catch (error) {
+            message.error('Xoá câu hỏi thất bại')
+        }
+    }
     useEffect(() => {
         setFaqParams((prev) => ({
             ...prev,
@@ -127,29 +170,7 @@ function Page() {
             },
         }))
     }, [totalCountFAQ])
-    const { mutateAsync: deleteDocument } = useDeleteDocument()
-    const handleDeleteDocument = async (id: string) => {
-        // TODO: Gọi API xoá tài liệu
-        try {
-            await deleteDocument({
-                where: { id },
-            })
-            message.success('Xoá tài liệu thành công')
-        } catch (error) {
-            message.error('Xóa tài liệu thất bại')
-        }
-    }
-    const { mutateAsync: deleteFAQ } = useDeleteFAQ()
-    const handleDeleteFAQ = async (id: string) => {
-        // TODO: Gọi API xoá câu hỏi
-        if (!id) return
-        try {
-            await deleteFAQ({ where: { id } })
-            message.success('xoá câu hỏi thành công')
-        } catch (error) {
-            message.error('Xoá câu hỏi thất bại')
-        }
-    }
+
     const items: TabsProps['items'] = [
         {
             key: '1',
@@ -297,6 +318,7 @@ function Page() {
                                     align: 'center',
                                     width: 120,
                                     onCell: (record) => ({
+                                        className: 'cursor-pointer',
                                         onClick: (e) => {
                                             e.stopPropagation()
                                             if (

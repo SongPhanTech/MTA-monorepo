@@ -1,41 +1,29 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import EditIcon from '@components/icons/edit'
+import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingObjectType } from '@workspace/db'
 import {
-    useFindManyFixedClass,
-    useFindManySubjectClassStudent,
-    useUpdateTrainingCourse,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-    useFindManySemester,
-    useFindManySubjectClass,
     useCountSubjectClass,
     useFindManySchoolYear,
+    useFindManySemester,
+    useFindManyStudentSubjectScore,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
-import { CalendarPlus, Search, Save } from 'lucide-react'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
-import _, { includes } from 'lodash'
+import _ from 'lodash'
+import { Save, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { CalendarOutlined } from '@ant-design/icons'
-import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import LopMonHocItem from './lop-mon-hoc'
 // const { Option } = Select;
 interface FilterProps {
@@ -161,7 +149,7 @@ export default function SubjectClassScore() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: dataTable = [], refetch } = useFindManySubjectClassStudent({
+    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore({
         where: {
             // ...(
             //     filters.searchText && filters.searchText !== '' ? {
@@ -206,7 +194,7 @@ export default function SubjectClassScore() {
         _.debounce(() => {
             refetch()
         }, 500),
-        [refetch]
+        []
     )
 
     const { data: count } = useCountSubjectClass({
@@ -553,7 +541,7 @@ export default function SubjectClassScore() {
                                                             const { value } =
                                                                 e.target
                                                             const numericValue =
-                                                                parseFloat(
+                                                                Number.parseFloat(
                                                                     value
                                                                 )
                                                             const regex =
@@ -562,7 +550,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -582,11 +570,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return (
-                                                    record.attendanceScore || ''
-                                                )
                                             }
+                                            return record.attendanceScore || ''
                                         },
                                     },
                                     {
@@ -609,7 +594,7 @@ export default function SubjectClassScore() {
                                                             const { value } =
                                                                 e.target
                                                             const numericValue =
-                                                                parseFloat(
+                                                                Number.parseFloat(
                                                                     value
                                                                 )
                                                             const regex =
@@ -618,7 +603,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -638,9 +623,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.midtermScore || ''
                                             }
+                                            return record.midtermScore || ''
                                         },
                                     },
                                     {
@@ -663,7 +647,7 @@ export default function SubjectClassScore() {
                                                             const { value } =
                                                                 e.target
                                                             const numericValue =
-                                                                parseFloat(
+                                                                Number.parseFloat(
                                                                     value
                                                                 )
                                                             const regex =
@@ -672,7 +656,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -692,9 +676,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.finalScore || ''
                                             }
+                                            return record.finalScore || ''
                                         },
                                     },
                                     {
@@ -717,7 +700,7 @@ export default function SubjectClassScore() {
                                                             const { value } =
                                                                 e.target
                                                             const numericValue =
-                                                                parseFloat(
+                                                                Number.parseFloat(
                                                                     value
                                                                 )
                                                             const regex =
@@ -726,7 +709,7 @@ export default function SubjectClassScore() {
                                                                 !regex.test(
                                                                     value
                                                                 ) ||
-                                                                isNaN(
+                                                                Number.isNaN(
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
@@ -746,9 +729,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return ''
                                             }
+                                            return ''
                                         },
                                     },
                                     {
@@ -769,7 +751,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -785,7 +767,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -801,7 +783,7 @@ export default function SubjectClassScore() {
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
                                                     disabled={!camThi}
-                                                ></Checkbox>
+                                                />
                                             )
                                         },
                                     },
@@ -823,9 +805,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.description || ''
                                             }
+                                            return record.description || ''
                                         },
                                     },
                                     // {

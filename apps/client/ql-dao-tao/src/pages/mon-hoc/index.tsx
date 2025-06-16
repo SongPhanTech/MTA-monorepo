@@ -1,7 +1,9 @@
 import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutSubjectModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -9,13 +11,14 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { SchoolYear } from '@workspace/db'
 import {
     useCountSubjectVersion,
-    useFindManySubjectVersion,
-    useFindManySchoolYear,
-    useUpdateSubjectVersion,
     useFindManyOrganization,
+    useFindManySchoolYear,
+    useFindManySubjectVersion,
+    useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -34,9 +37,6 @@ import _, { filter } from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import { buildOrgTree } from '@lib/utils'
-import EditIcon from '@components/icons/edit'
 export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -55,7 +55,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
         },
         include: {
             managementOrganization: true,
-            subjectGroup: true,
+            subject: true,
         },
         orderBy: {
             createdAt: 'desc',

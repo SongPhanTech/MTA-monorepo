@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutMonHocSongHanhModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -47,7 +46,6 @@ export default function MonHocSongHanhPage({
             // },
         },
         include: {
-            curriculumVersionSubject: true,
             subject: true,
         },
         orderBy: {
@@ -60,19 +58,19 @@ export default function MonHocSongHanhPage({
     const count = 0
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<{
-        curriculumVersionSubjectId?: string | null | undefined // môn học chương trình
-        id?: string | null
-    }>({
-        tag: PutMonHocSongHanhModal.name,
-    })
+    // const { onOpen, onClose } = useDisclosure<{
+    //     curriculumVersionSubjectId?: string | null | undefined // môn học chương trình
+    //     id?: string | null
+    // }>({
+    //     tag: PutMonHocSongHanhModal.name,
+    // })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({
-            curriculumVersionSubjectId,
-        })
+        // onOpen({
+        //     curriculumVersionSubjectId,
+        // })
     }
     // const { mutateAsync: updateCoRequisiteSubject } =
     //     useUpdateCoRequisiteSubject()
@@ -161,10 +159,10 @@ export default function MonHocSongHanhPage({
                                             />
                                         </Tooltip> */}
                                         <EditIcon
-                                            onClick={onOpen.bind(
-                                                curriculumVersionSubjectId,
-                                                id
-                                            )}
+                                            // onClick={onOpen.bind(
+                                            //     curriculumVersionSubjectId,
+                                            //     id
+                                            // )}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon

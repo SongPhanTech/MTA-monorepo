@@ -6,13 +6,11 @@ import { PutConvertScore } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Organization, TrainingObjectType } from '@workspace/db'
 import {
-    useFindManyTrainingObjectType,
-    useUpdateTrainingField,
-    useUpdateScoreConvert,
-    useFindManyScoreConvert,
     useCountScoreConvert,
+    useFindManyScoreConvert,
+    useFindManyTrainingObjectType,
+    useUpdateScoreConvert,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import dayjs from 'dayjs'
@@ -52,13 +50,18 @@ export default function TrainingFieldPage() {
             ...(filters.searchText && filters.searchText.trim() !== ''
                 ? {
                       AND: [
-                          { score10From: { lte: Number(filters.searchText) } },
-                          { score10To: { gte: Number(filters.searchText) } },
+                          { base10Min: { lte: Number(filters.searchText) } },
+                          { base10Max: { gte: Number(filters.searchText) } },
                       ],
                   }
                 : {}),
             // deletedAt: null,
         },
+        include: { trainingCourse: true },
+        orderBy: [
+            { trainingCourse: { createdAt: 'desc' } },
+            { base10Max: 'desc' },
+        ],
     })
 
     const { data: count } = useCountScoreConvert({
@@ -72,8 +75,8 @@ export default function TrainingFieldPage() {
             ...(filters.searchText && filters.searchText.trim() !== ''
                 ? {
                       AND: [
-                          { score10From: { lte: Number(filters.searchText) } },
-                          { score10To: { gte: Number(filters.searchText) } },
+                          { base10Min: { lte: Number(filters.searchText) } },
+                          { base10Max: { gte: Number(filters.searchText) } },
                       ],
                   }
                 : {}),
@@ -122,9 +125,6 @@ export default function TrainingFieldPage() {
             return newFilters
         })
     }
-
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
 
     return (
         <div>
@@ -208,31 +208,46 @@ export default function TrainingFieldPage() {
                                     1 +
                                     (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
+
+                            {
+                                title: 'Khoá',
+                                dataIndex: ['trainingCourse', 'name'],
+                                align: 'center',
+                                // width: 150,
+                            },
                             {
                                 title: 'Điểm hệ 10',
-                                dataIndex: 'score10',
                                 align: 'center',
-                                width: 150,
-                                render: (text, record) => {
-                                    return `[${record.score10From} - ${record.score10To}]`
-                                },
+                                // width: 150,
+                                children: [
+                                    {
+                                        title: 'Từ',
+                                        dataIndex: 'base10Min',
+                                        align: 'center',
+                                    },
+                                    {
+                                        title: 'Đến',
+                                        dataIndex: 'base10Max',
+                                        align: 'center',
+                                    },
+                                ],
                             },
                             {
                                 title: 'Điểm hệ 4',
-                                dataIndex: 'score4',
-                                width: 60,
+                                dataIndex: 'base4',
+                                // width: 60,
                                 align: 'center',
                             },
                             {
                                 title: 'Điểm chữ',
                                 align: 'center',
-                                dataIndex: 'scoreChar',
-                                width: 60,
+                                dataIndex: 'letter',
+                                // width: 60,
                             },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 130,
+                                // width: 130,
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không áp dụng</Tag>
@@ -242,27 +257,8 @@ export default function TrainingFieldPage() {
                                 },
                             },
                             {
-                                title: 'Ngày áp dụng',
-                                align: 'center',
-                                width: 150,
-                                render: ({ startDate }) =>
-                                    startDate
-                                        ? dayjs(startDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Ngày kết thúc',
-                                dataIndex: 'endDate',
-                                align: 'center',
-                                width: 150,
-                                render: (endDate) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
                                 title: 'Thao tác',
-                                width: 100,
+                                // width: 100,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, { id }) => {

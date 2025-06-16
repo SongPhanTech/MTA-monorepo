@@ -40,7 +40,12 @@ export default function TrainingBlock() {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
-                          { name: { contains: filters.searchText } },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                           // { code: { contains: filters.searchText } },
                       ],
                   }
@@ -136,9 +141,7 @@ export default function TrainingBlock() {
                                                 )
                                             }
                                             placeholder="Nhập tên ngành..."
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            className="py-0"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -167,9 +170,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingObjectTypeId',
@@ -196,9 +196,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingCourseId',
@@ -225,9 +222,6 @@ export default function TrainingBlock() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -242,11 +236,7 @@ export default function TrainingBlock() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm
                                 </Button>
@@ -299,21 +289,31 @@ export default function TrainingBlock() {
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'priority',
+                                sorter: (
+                                    a: { priority: number },
+                                    b: { priority: number }
+                                ) => a.priority - b.priority,
                                 align: 'center',
                                 width: 100,
                             },
                             {
                                 title: 'Trạng thái',
+                                dataIndex: 'active',
                                 align: 'center',
                                 width: 140,
+                                filters: [
+                                    { text: 'Đang đào tạo', value: true },
+                                    { text: 'Ngừng đào tạo', value: false },
+                                ],
+                                filterMultiple: false,
+                                onFilter: (value, record) =>
+                                    record.active === value,
                                 fixed: 'right',
                                 render: (record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Không hoạt động</Tag>
+                                    return !record ? (
+                                        <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang đào tạo</Tag>
                                     )
                                 },
                             },

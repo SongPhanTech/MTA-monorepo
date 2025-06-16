@@ -364,6 +364,14 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục khoá đào tạo',
                     },
                     {
+                        id: 'danh-muc-danh-muc-phong-hoc',
+                        label: 'Danh mục phòng học',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .DANH_MUC_DANH_MUC_PHONG_HOC,
+                        description: 'Danh mục phòng học',
+                    },
+                    {
                         id: 'lop-bien-che',
                         label: 'Quản lý lớp biên chế',
                         icon: TeamOutlined,

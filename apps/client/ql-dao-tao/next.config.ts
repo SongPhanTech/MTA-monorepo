@@ -14,20 +14,17 @@ const nextConfig: NextConfig = {
     output: 'standalone',
     crossOrigin: 'anonymous',
     webpack: (config) => {
-        return {
-            ...config,
-            optimization: {
-                minimize: true,
-                minimizer: [
-                    new TerserPlugin({
-                        terserOptions: {
-                            // keep_classnames: true,
-                            keep_fnames: true,
-                        },
-                    }),
-                ],
-            },
-        }
+        config.optimization.minimize = true
+        config.optimization.minimizer = [
+            new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                    keep_fnames: true,
+                },
+                extractComments: false,
+            }),
+        ]
+        return config
     },
 }
 

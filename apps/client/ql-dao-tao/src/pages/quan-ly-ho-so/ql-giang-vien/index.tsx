@@ -27,7 +27,6 @@ import {
 } from '@workspace/db/hooks'
 
 import EditIcon from '@components/icons/edit'
-import type { AddUserProfileLectureProps } from '@components/modal/add-user-profile-lecture'
 import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import {
     Avatar,
@@ -49,9 +48,9 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-import { getMinioUrl } from '@workspace/constant'
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
+import { getMinioUrl } from '@workspace/constant'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
@@ -175,10 +174,10 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
-        useDisclosure<AddUserProfileLectureProps>({
-            tag: PutUserProfileLectureModal.name,
-        })
+    // const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
+    //     useDisclosure<AddUserProfileLectureProps>({
+    //         tag: PutUserProfileLectureModal.name,
+    //     })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
         useDisclosure<string>({
@@ -191,9 +190,9 @@ export default function UserProfilePageLecture() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
-        onOpenModalAdd()
-    }
+    // const handleModal = () => {
+    //     onOpenModalAdd()
+    // }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
             onOpenUpload('GV')
@@ -385,7 +384,7 @@ export default function UserProfilePageLecture() {
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button
-                                    onClick={handleModal}
+                                    // onClick={handleModal}
                                     type="primary"
                                     style={{ height: 40 }}
                                 >

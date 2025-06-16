@@ -73,7 +73,10 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createTrainingBlockOnCurriculumVersion({
-                    data: payload,
+                    data: {
+                        ...payload,
+                        curriculumVersionId: payload?.curriculumVersionId || '',
+                    },
                 })
                 message.success('Thêm mới thành công')
             }

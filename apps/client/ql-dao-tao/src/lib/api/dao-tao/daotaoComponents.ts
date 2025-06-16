@@ -152,7 +152,7 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
             description?: string | null
             deletedAt?: string | null
             /**
-             * @default 2025-06-13T09:59:44.958Z
+             * @default 2025-06-15T15:02:21.780Z
              */
             createdAt?: string | null
             updatedAt: string | null
@@ -488,7 +488,7 @@ export type OpenSubjectClassQueryParams = {
 
 export type OpenSubjectClassError = Fetcher.ErrorWrapper<undefined>
 
-export type OpenSubjectClassResponse = (void | null)[]
+export type OpenSubjectClassResponse = Schemas.OpenSubjectClass[]
 
 export type OpenSubjectClassVariables = {
     queryParams: OpenSubjectClassQueryParams
