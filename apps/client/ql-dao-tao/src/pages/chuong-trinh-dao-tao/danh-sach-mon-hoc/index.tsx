@@ -34,6 +34,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 interface FilterProps {
     searchText: string | null
     managementOrganizationId: string | null
+    examType: ExamType[] | null
+    active: boolean | null
 }
 
 export default function SubjectList() {
@@ -41,8 +43,10 @@ export default function SubjectList() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         managementOrganizationId: '',
+        examType: null,
+        active: null,
     })
-    const { getExamTypeLabel } = useExamTypeOptions()
+    const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
     const { data: organization = [] } = useFindManyOrganization()
 
@@ -72,6 +76,26 @@ export default function SubjectList() {
                 : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
+                : {}),
+            ...(filters.examType
+                ? {
+                      subjectVersion: {
+                          some: {
+                              examType: {
+                                  in: filters.examType,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(typeof filters.active === 'boolean'
+                ? {
+                      subjectVersion: {
+                          some: {
+                              active: filters.active,
+                          },
+                      },
+                  }
                 : {}),
         },
         include: {
@@ -148,7 +172,10 @@ export default function SubjectList() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
+    const handleFilterChange = (
+        key: string,
+        value: string | ExamType[] | boolean
+    ) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -244,10 +271,29 @@ export default function SubjectList() {
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         defaultExpandAll
+                        onChange={(pagination, filters) => {
+                            if (filters.examType) {
+                                handleFilterChange(
+                                    'examType',
+                                    filters.examType as ExamType[]
+                                )
+                            } else {
+                                handleFilterChange('examType', '')
+                            }
+
+                            const activeFilter = Array.isArray(filters.active)
+                                ? filters.active[0]
+                                : undefined
+                            handleFilterChange(
+                                'active',
+                                activeFilter as boolean | ''
+                            )
+                        }}
                         columns={[
                             {
                                 title: 'Tên phiên bản',
                                 dataIndex: 'name',
+                                // sorter: (a, b) => a.name - b.name,
                                 width: 200,
                             },
                             {
@@ -260,48 +306,62 @@ export default function SubjectList() {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'credit',
                                 width: 150,
+                                sorter: (a, b) => a.credit - b.credit,
                                 align: 'center',
                             },
                             {
                                 title: 'Số tiết',
                                 dataIndex: 'period',
                                 width: 150,
+                                sorter: (a, b) => a.period - b.period,
                                 align: 'center',
                             },
                             {
                                 title: 'LT',
                                 dataIndex: 'numberOfTheory',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfTheory - b.numberOfTheory,
                                 align: 'center',
                             },
                             {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfPractical - b.numberOfPractical,
                                 align: 'center',
                             },
                             {
                                 title: 'ThL',
                                 dataIndex: 'numberOfSelfStudy',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfSelfStudy - b.numberOfSelfStudy,
                                 align: 'center',
                             },
                             {
                                 title: 'TN, TH',
                                 dataIndex: 'numberOfPractice',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfPractice - b.numberOfPractice,
                                 align: 'center',
                             },
                             {
                                 title: 'Ôn',
                                 dataIndex: 'numberOfReview',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfReview - b.numberOfReview,
                                 align: 'center',
                             },
                             {
                                 title: 'KT, Thi',
                                 dataIndex: 'numberOfExam',
                                 width: 120,
+                                sorter: (a, b) =>
+                                    a.numberOfExam - b.numberOfExam,
                                 align: 'center',
                             },
                             {
@@ -309,20 +369,17 @@ export default function SubjectList() {
                                 dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
-                                filters: [
-                                    {
-                                        text: 'tự luận',
-                                        value: 'OfflineWritten',
-                                    },
-                                    { text: 'vấn đáp', value: 'Practice' },
-                                ],
-                                onFilter: (value, record) =>
-                                    record.examType === value,
+                                filters: examTypeFilters.map((opt) => ({
+                                    text: opt.label,
+                                    value: opt.value,
+                                })),
+                                filterSearch: true,
                                 render: (value: ExamType) =>
                                     getExamTypeLabel(value),
                             },
                             {
                                 title: 'Trạng thái',
+                                dataIndex: 'active',
                                 align: 'center',
                                 fixed: 'right',
                                 width: 150,
@@ -330,10 +387,10 @@ export default function SubjectList() {
                                     { text: 'Đang đào tạo', value: true },
                                     { text: 'Ngừng đào tạo', value: false },
                                 ],
-                                onFilter: (value, record) =>
-                                    record.active === value,
+                                filterMultiple: false,
+                                onFilter: () => true,
                                 render: (record) => {
-                                    return !record?.active ? (
+                                    return !record ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">
