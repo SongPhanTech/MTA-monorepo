@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import { $Enums } from '@workspace/db'
 
 export const OpenSubjectClass = z
     .object({
@@ -84,4 +85,32 @@ export const FixedClassBySubjectClassSemester = z
 
 export type FixedClassBySubjectClassSemester = z.infer<
     typeof FixedClassBySubjectClassSemester
+>
+
+export const EnrollFixedClassOnSubjectClass = z
+    .object({
+        description: z.string().nullable(),
+        code: z.string().nullable(),
+        status: z.nativeEnum($Enums.SubjectClassStudentStatus),
+        subjectClassId: z.string().nullable(),
+        id: z.string(),
+        active: z.boolean(),
+        deletedAt: z.coerce.date().nullable(),
+        createdAt: z.coerce.date(),
+        updatedAt: z.coerce.date(),
+        subjectVersionId: z.string(),
+        studentId: z.string(),
+        attendanceScore: z.number().nullable(),
+        midtermScore: z.number().nullable(),
+        examScore: z.number().nullable(),
+        bonusScore: z.number().nullable(),
+        finalScore: z.number().nullable(),
+        examPostponed: z.boolean(),
+        examBanned: z.boolean(),
+        suspended: z.boolean(),
+    })
+    .openapi('EnrollFixedClassOnSubjectClass')
+
+export type EnrollFixedClassOnSubjectClass = z.infer<
+    typeof EnrollFixedClassOnSubjectClass
 >

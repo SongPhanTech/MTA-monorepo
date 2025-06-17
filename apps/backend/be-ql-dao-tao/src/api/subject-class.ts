@@ -2,6 +2,7 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { $Enums } from '@workspace/db'
 import {
+    EnrollFixedClassOnSubjectClass,
     FixedClassBySubjectClassSemester,
     OpenSubjectClass,
 } from '../dto/subject-class.dto'
@@ -157,6 +158,46 @@ const fixedClassBySubjectClassSemester = createRoute({
                 },
             },
             description: 'Danh sách lớp quản lý theo học kỳ và lớp môn học',
+        },
+        400: {
+            description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
+const enrollFixedClassOnSubjectClass = createRoute({
+    operationId: 'enrollFixedClassOnSubjectClass',
+    path: '/enroll-fixed-class-on-subject-class',
+    method: 'post',
+    description: 'Đăng ký lớp môn học cho lớp quản lý',
+    tags: ['SubjectClass'],
+    summary: 'Đăng ký lớp môn học cho lớp quản lý',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        fixedClassIds: z
+                            .array(z.string())
+                            .openapi('fixedClassIds', {
+                                description: 'Danh sách ID lớp quản lý',
+                            }),
+                        subjectClassId: z.string().openapi('subjectClassId', {
+                            description: 'ID của lớp môn học',
+                        }),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.array(EnrollFixedClassOnSubjectClass),
+                },
+            },
+            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
@@ -455,6 +496,91 @@ group by fixed_class_id
     return c.json(
         {
             data: fixedClasses,
+            success: true,
+        },
+        200
+    )
+})
+
+app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
+    const { subjectClassId, fixedClassIds } = c.req.valid('json')
+    const fixedClasses = await prisma.fixedClass.findMany({
+        where: {
+            id: {
+                in: fixedClassIds,
+            },
+            active: true,
+            graduated: false,
+        },
+        include: {
+            students: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    })
+
+    if (
+        fixedClasses.length !== fixedClassIds.length ||
+        fixedClasses.length === 0
+    ) {
+        return c.json(
+            {
+                success: false,
+                message: 'Một hoặc nhiều lớp quản lý không tồn tại',
+            },
+            400
+        )
+    }
+
+    const subjectClass = await prisma.subjectClass.findUnique({
+        where: { id: subjectClassId },
+    })
+
+    if (!subjectClass) {
+        return c.json(
+            {
+                success: false,
+                message: 'Lớp môn học không tồn tại',
+            },
+            400
+        )
+    }
+
+    const res = await prisma.$transaction(async (tx) => {
+        await tx.subjectClass.update({
+            where: {
+                id: subjectClassId,
+            },
+            data: {
+                fixedClasses: {
+                    set: fixedClassIds.map((id) => ({ id })),
+                },
+            },
+        })
+        await tx.studentSubjectScore.deleteMany({
+            where: {
+                subjectClassId,
+                subjectVersionId: subjectClass.subjectId,
+                status: $Enums.SubjectClassStudentStatus.Registered,
+            },
+        })
+        return await tx.studentSubjectScore.createManyAndReturn({
+            data: fixedClasses
+                .flatMap((fixedClass) => fixedClass.students)
+                .map((student) => ({
+                    studentId: student.id,
+                    subjectClassId,
+                    subjectVersionId: subjectClass.subjectId,
+                    status: $Enums.SubjectClassStudentStatus.Registered,
+                })),
+        })
+    })
+
+    return c.json(
+        {
+            data: res,
             success: true,
         },
         200
