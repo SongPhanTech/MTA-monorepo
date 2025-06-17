@@ -76,7 +76,7 @@ export const FixedClassBySubjectClassSemester = z
                 }),
             }),
         }),
-
+        checked: z.boolean(),
         _count: z.object({
             students: z.number(),
         }),
@@ -93,44 +93,58 @@ export const StudentClassBySubjectClassSemester = z
         code: z.string(),
         active: z.boolean(),
         description: z.string().nullable(),
-        deletedAt: z.string().nullable(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-        name: z.string(),
-        summary: z.string().nullable(),
-        startYear: z.number(),
-        graduated: z.boolean(),
-        trainingCourseId: z.string(),
-        managementOrganizationId: z.string().nullable(),
-        lecturerManagementId: z.string().nullable(),
-        staffManagementId: z.string().nullable(),
-        initSize: z.number(),
+        deletedAt: z.coerce.date().nullable(),
+        createdAt: z.coerce.date(),
+        updatedAt: z.coerce.date(),
+        from: z.coerce.date().nullable(),
+        to: z.coerce.date().nullable(),
+        trainingLocationId: z.string().nullable(),
+        status: z.nativeEnum($Enums.StudentStatus), // cập nhật nếu có enum khác
+        fixedClassId: z.string(),
+        userProfileId: z.string(),
+        trainingLevelId: z.string().nullable(),
+        trainingObjectTypeId: z.string().nullable(),
+        trainingTypeId: z.string().nullable(),
+        trainingFormId: z.string().nullable(),
+        registrationAreaId: z.string().nullable(),
         curriculumVersionId: z.string(),
+        studyRankId: z.string().nullable(),
+        trainingRankId: z.string().nullable(),
 
-        trainingCourse: z.object({
+        userProfile: z.object({
             id: z.string(),
-            name: z.string(),
-            code: z.string(),
+            code: z.string().nullable(),
+            lastName: z.string(),
+            firstName: z.string(),
+            familyName: z.string().nullable(),
+            gender: z.nativeEnum($Enums.Gender),
+            dateOfBirth: z.coerce.date(),
         }),
-
-        curriculumVersion: z.object({
+        checked: z.boolean(),
+        fixedClass: z.object({
             id: z.string(),
             name: z.string(),
             code: z.string(),
-            curriculum: z.object({
+            trainingCourse: z.object({
                 id: z.string(),
                 name: z.string(),
                 code: z.string(),
-                trainingMajor: z.object({
+            }),
+            curriculumVersion: z.object({
+                id: z.string(),
+                name: z.string(),
+                code: z.string(),
+                curriculum: z.object({
                     id: z.string(),
                     name: z.string(),
                     code: z.string(),
+                    trainingMajor: z.object({
+                        id: z.string(),
+                        name: z.string(),
+                        code: z.string(),
+                    }),
                 }),
             }),
-        }),
-
-        _count: z.object({
-            students: z.number(),
         }),
     })
     .openapi('StudentClassBySubjectClassSemester')
@@ -141,25 +155,63 @@ export type StudentClassBySubjectClassSemester = z.infer<
 
 export const EnrollFixedClassOnSubjectClass = z
     .object({
-        description: z.string().nullable(),
-        code: z.string().nullable(),
-        status: z.nativeEnum($Enums.SubjectClassStudentStatus),
-        subjectClassId: z.string().nullable(),
         id: z.string(),
+        code: z.string(),
         active: z.boolean(),
+        description: z.string().nullable(),
         deletedAt: z.coerce.date().nullable(),
         createdAt: z.coerce.date(),
         updatedAt: z.coerce.date(),
-        subjectVersionId: z.string(),
-        studentId: z.string(),
-        attendanceScore: z.number().nullable(),
-        midtermScore: z.number().nullable(),
-        examScore: z.number().nullable(),
-        bonusScore: z.number().nullable(),
-        finalScore: z.number().nullable(),
-        examPostponed: z.boolean(),
-        examBanned: z.boolean(),
-        suspended: z.boolean(),
+        from: z.coerce.date().nullable(),
+        to: z.coerce.date().nullable(),
+        trainingLocationId: z.string().nullable(),
+        status: z.nativeEnum($Enums.StudentStatus), // cập nhật nếu có enum khác
+        fixedClassId: z.string(),
+        userProfileId: z.string(),
+        trainingLevelId: z.string().nullable(),
+        trainingObjectTypeId: z.string().nullable(),
+        trainingTypeId: z.string().nullable(),
+        trainingFormId: z.string().nullable(),
+        registrationAreaId: z.string().nullable(),
+        curriculumVersionId: z.string(),
+        studyRankId: z.string().nullable(),
+        trainingRankId: z.string().nullable(),
+
+        userProfile: z.object({
+            id: z.string(),
+            code: z.string().nullable(),
+            lastName: z.string(),
+            firstName: z.string(),
+            familyName: z.string().nullable(),
+            gender: z.nativeEnum($Enums.Gender),
+            dateOfBirth: z.coerce.date(),
+        }),
+
+        fixedClass: z.object({
+            id: z.string(),
+            name: z.string(),
+            code: z.string(),
+            trainingCourse: z.object({
+                id: z.string(),
+                name: z.string(),
+                code: z.string(),
+            }),
+            curriculumVersion: z.object({
+                id: z.string(),
+                name: z.string(),
+                code: z.string(),
+                curriculum: z.object({
+                    id: z.string(),
+                    name: z.string(),
+                    code: z.string(),
+                    trainingMajor: z.object({
+                        id: z.string(),
+                        name: z.string(),
+                        code: z.string(),
+                    }),
+                }),
+            }),
+        }),
     })
     .openapi('EnrollFixedClassOnSubjectClass')
 

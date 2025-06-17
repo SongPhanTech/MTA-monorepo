@@ -252,6 +252,51 @@ const enrollFixedClassOnSubjectClass = createRoute({
     },
 })
 
+const enrollStudentOnSubjectClass = createRoute({
+    operationId: 'enrollStudentOnSubjectClass',
+    path: '/enroll-student-on-subject-class',
+    method: 'post',
+    description: 'Đăng ký lớp môn học cho học viên',
+    tags: ['SubjectClass'],
+    summary: 'Đăng ký lớp môn học cho học viên',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        addStudentIds: z
+                            .array(z.string())
+                            .openapi('studentIds', {
+                                description: 'Danh sách ID học viên',
+                            }),
+                        removeStudentIds: z
+                            .array(z.string())
+                            .openapi('removeStudentIds', {
+                                description: 'Danh sách ID học viên cần xóa',
+                            }),
+                        subjectClassId: z.string().openapi('subjectClassId', {
+                            description: 'ID của lớp môn học',
+                        }),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.array(EnrollFixedClassOnSubjectClass),
+                },
+            },
+            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
+        },
+        400: {
+            description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
 app.openapi(teachingAssignment, async (c) => {
     const data = c.req.valid('json')
     const result = await Promise.allSettled(
@@ -532,6 +577,9 @@ group by fixed_class_id
                     },
                 },
             },
+            subjectClasses: {
+                select: { id: true },
+            },
             _count: {
                 select: {
                     students: true,
@@ -542,7 +590,12 @@ group by fixed_class_id
 
     return c.json(
         {
-            data: fixedClasses,
+            data: fixedClasses.map((e) => ({
+                ...e,
+                checked: e.subjectClasses.find(
+                    (sc) => sc.id === subjectClassId
+                ),
+            })),
             success: true,
         },
         200
@@ -641,6 +694,11 @@ group by fixed_class_id
                     dateOfBirth: true,
                 },
             },
+            subjectClassStudent: {
+                select: {
+                    subjectClassId: true,
+                },
+            },
             fixedClass: {
                 select: {
                     id: true,
@@ -681,7 +739,12 @@ group by fixed_class_id
 
     return c.json(
         {
-            data: students,
+            data: students.map((e) => ({
+                ...e,
+                checked: e.subjectClassStudent.find(
+                    (sCs) => sCs.subjectClassId === subjectClassId
+                ),
+            })),
             success: true,
         },
         200
@@ -760,6 +823,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
                     subjectVersionId: subjectClass.subjectId,
                     status: $Enums.SubjectClassStudentStatus.Registered,
                 })),
+            skipDuplicates: true,
         })
     })
 
@@ -771,5 +835,49 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         200
     )
 })
+app.openapi(enrollStudentOnSubjectClass, async (c) => {
+    const { subjectClassId, addStudentIds, removeStudentIds } =
+        c.req.valid('json')
 
+    const subjectClass = await prisma.subjectClass.findUnique({
+        where: { id: subjectClassId },
+    })
+
+    if (!subjectClass) {
+        return c.json(
+            {
+                success: false,
+                message: 'Lớp môn học không tồn tại',
+            },
+            400
+        )
+    }
+
+    const res = await prisma.$transaction(async (tx) => {
+        for (const studentId of removeStudentIds) {
+            await tx.studentSubjectScore.deleteMany({
+                where: {
+                    studentId,
+                },
+            })
+        }
+        return await tx.studentSubjectScore.createManyAndReturn({
+            data: addStudentIds.map((studentId) => ({
+                studentId: studentId,
+                subjectClassId,
+                subjectVersionId: subjectClass.subjectId,
+                status: $Enums.SubjectClassStudentStatus.Registered,
+            })),
+            skipDuplicates: true,
+        })
+    })
+
+    return c.json(
+        {
+            data: res,
+            success: true,
+        },
+        200
+    )
+})
 export default app
