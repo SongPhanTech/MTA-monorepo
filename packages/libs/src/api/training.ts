@@ -23,6 +23,8 @@ import type {
 import type {
     ClassDivision,
     ClassDivision200Item,
+    EnrollFixedClassOnSubjectClass,
+    EnrollFixedClassOnSubjectClassBody,
     ExportStudentFixedClassDocx400,
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
@@ -1460,4 +1462,123 @@ export function useFixedClassBySubjectClassSemester<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * Đăng ký lớp môn học cho lớp quản lý
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export type enrollFixedClassOnSubjectClassResponse200 = {
+    data: EnrollFixedClassOnSubjectClass[]
+    status: 200
+}
+
+export type enrollFixedClassOnSubjectClassResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type enrollFixedClassOnSubjectClassResponseComposite =
+    | enrollFixedClassOnSubjectClassResponse200
+    | enrollFixedClassOnSubjectClassResponse400
+
+export type enrollFixedClassOnSubjectClassResponse =
+    enrollFixedClassOnSubjectClassResponseComposite & {
+        headers: Headers
+    }
+
+export const getEnrollFixedClassOnSubjectClassUrl = () => {
+    return '/api/subject-class/enroll-fixed-class-on-subject-class'
+}
+
+export const enrollFixedClassOnSubjectClass = async (
+    enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollFixedClassOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
+        getEnrollFixedClassOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            },
+            body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
+        }
+    )
+}
+
+export const getEnrollFixedClassOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        TError,
+        { data: EnrollFixedClassOnSubjectClassBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollFixedClassOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        { data: EnrollFixedClassOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return enrollFixedClassOnSubjectClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
+>
+export type EnrollFixedClassOnSubjectClassMutationBody =
+    EnrollFixedClassOnSubjectClassBody
+export type EnrollFixedClassOnSubjectClassMutationError = undefined
+
+/**
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export const useEnrollFixedClassOnSubjectClass = <
+    TError = void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+            TError,
+            { data: EnrollFixedClassOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions =
+        getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
