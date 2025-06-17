@@ -34,5 +34,6 @@ export interface FixedClassBySubjectClassSemester {
     curriculumVersionId: string
     trainingCourse: FixedClassBySubjectClassSemesterTrainingCourse
     curriculumVersion: FixedClassBySubjectClassSemesterCurriculumVersion
+    checked: boolean
     _count: _FixedClassBySubjectClassSemesterCount
 }

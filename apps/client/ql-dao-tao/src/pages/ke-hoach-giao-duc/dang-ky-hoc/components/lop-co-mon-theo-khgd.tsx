@@ -1,12 +1,16 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
-import { useFixedClassBySubjectClassSemester } from '@workspace/libs/api/training'
+import { useEffect, useState } from 'react'
+import {
+    enrollFixedClassOnSubjectClass,
+    useFixedClassBySubjectClassSemester,
+} from '@workspace/libs/api/training'
 import { QueryClient } from '@tanstack/react-query'
+import type { FixedClassBySubjectClassSemester } from '@workspace/libs/api/schemas/fixedClassBySubjectClassSemester'
 // const { Option } = Select;
 
 interface FilterProps {
@@ -46,7 +50,16 @@ export default function FixedClass({
         queryClient
     )
 
-    console.log(fixedClass?.data?.data)
+    useEffect(() => {
+        if (fixedClass?.data?.data) {
+            const selectedKeys = fixedClass.data.data
+                .filter(
+                    (item: FixedClassBySubjectClassSemester) => item.checked
+                )
+                .map((item: FixedClassBySubjectClassSemester) => item.id)
+            setSelectedRowKeys(selectedKeys)
+        }
+    }, [fixedClass?.data?.data])
 
     // const debouncedRefetch = useCallback(
     //     _.debounce(() => {
@@ -61,6 +74,21 @@ export default function FixedClass({
             // debouncedRefetch()
             return newFilters
         })
+    }
+
+    const handleSave = async () => {
+        if (!subjectClassId) return
+
+        try {
+            await enrollFixedClassOnSubjectClass({
+                fixedClassIds: selectedRowKeys as string[],
+                subjectClassId,
+            })
+            message.success('Gán lớp cố định thành công!')
+            queryClient.invalidateQueries()
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi gán lớp cố định!')
+        }
     }
 
     return (
@@ -144,7 +172,11 @@ export default function FixedClass({
                 }}
             />
             <Flex justify="end" style={{ marginTop: 16 }}>
-                <Button type="primary" className="h-[32px] px-4">
+                <Button
+                    type="primary"
+                    className="h-[32px] px-4"
+                    onClick={handleSave}
+                >
                     Lưu
                 </Button>
             </Flex>
