@@ -10,6 +10,8 @@ import dayjs from 'dayjs'
 import { UserOutlined } from '@ant-design/icons'
 import { getMinioUrl } from '@workspace/constant'
 import { QueryClient } from '@tanstack/react-query'
+import { useStudentBySubjectClassSemester } from '@workspace/libs/api/training'
+import { StudentClassBySubjectClassSemester } from '@workspace/libs/api/schemas/studentClassBySubjectClassSemester'
 
 interface FilterProps {
     searchText: string | null
@@ -25,68 +27,14 @@ export default function StudentCourseByPlan({
     subjectClassId,
 }: StudentCourseByPlanProps) {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
 
-    const { data = [], refetch } = useFindManyStudent({
-        where: {
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
-            },
-        },
-        include: {
-            userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
-            fixedClass: {
-                include: {
-                    trainingCourse: true,
-                },
-            },
-            curriculumVersion: {
-                include: {
-                    curriculum: true,
-                },
-            },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
     const queryClient = new QueryClient()
 
-    const { data: fixedClass } = useStudent(
+    const { data: studentData, refetch } = useStudentBySubjectClassSemester(
         {
             semesterId: semesterId || '',
             subjectClassId: subjectClassId || '',
@@ -101,29 +49,7 @@ export default function StudentCourseByPlan({
         },
         queryClient
     )
-
-    const { data: count } = useCountStudent({
-        where: {
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
-            },
-        },
-    })
-
-    // console.log(fixedClassData);
+    const students = studentData?.data?.data
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -186,31 +112,6 @@ export default function StudentCourseByPlan({
                                 (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Ảnh',
-                            align: 'center',
-                            width: 120,
-                            render: (_, record) => {
-                                const avatar = record.userProfile?.avatar
-
-                                return avatar ? (
-                                    <Image
-                                        src={getMinioUrl(avatar)}
-                                        width={100}
-                                        height={80}
-                                    />
-                                ) : (
-                                    <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                                        <UserOutlined
-                                            style={{
-                                                fontSize: 32,
-                                                color: '#bfbfbf',
-                                            }}
-                                        />
-                                    </div>
-                                )
-                            },
-                        },
-                        {
                             title: 'Mã sinh viên',
                             dataIndex: 'code',
                             width: 120,
@@ -249,15 +150,6 @@ export default function StudentCourseByPlan({
                                     : '',
                         },
                         {
-                            title: 'Đối tượng ĐT',
-                            align: 'center',
-                            width: 120,
-                            render: (record) =>
-                                record.trainingObjectType
-                                    ? record.trainingObjectType.name
-                                    : '',
-                        },
-                        {
                             title: 'Lớp',
                             align: 'center',
                             width: 140,
@@ -277,36 +169,22 @@ export default function StudentCourseByPlan({
                             },
                         },
                         {
-                            title: 'Ngành',
-                            align: 'center',
-                            width: 120,
-                            render: (record) => {
-                                const trainingField =
-                                    record.trainingObjectType
-                                        ?.trainingFields?.[0]?.trainingField
-                                return trainingField?.name || ''
-                            },
-                        },
-                        {
                             title: 'Chuyên ngành',
                             align: 'center',
                             width: 130,
                             render: (record) => {
                                 const trainingMajor =
-                                    record.trainingObjectType
-                                        ?.trainingMajors?.[0]?.trainingMajor
+                                    record.fixedClass?.curriculumVersion
+                                        ?.curriculum?.trainingMajor
                                 return trainingMajor?.name || ''
                             },
                         },
                     ]}
-                    data={data}
+                    data={students}
                     scroll={{ x: 'max-content' }}
                     pagination={{
                         current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
                         onChange: setCurrentPage,
-                        onShowSizeChange: setNumberOfPages,
                     }}
                     rowSelection={{
                         selectedRowKeys,
