@@ -769,18 +769,6 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
             },
         },
     })
-    if (
-        fixedClasses.length !== fixedClassIds.length ||
-        fixedClasses.length === 0
-    ) {
-        return c.json(
-            {
-                success: false,
-                message: 'Một hoặc nhiều lớp quản lý không tồn tại',
-            },
-            400
-        )
-    }
 
     const subjectClass = await prisma.subjectClass.findUnique({
         where: { id: subjectClassId },
