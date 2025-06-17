@@ -10,9 +10,12 @@ export type EnrollFixedClassOnSubjectClassStatus =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnrollFixedClassOnSubjectClassStatus = {
-    Registered: 'Registered',
-    Studying: 'Studying',
-    NotPassed: 'NotPassed',
-    Passed: 'Passed',
-    CancelClass: 'CancelClass',
+    ENROLLED: 'ENROLLED',
+    GRADUATED: 'GRADUATED',
+    DEFERRED_STUDY: 'DEFERRED_STUDY',
+    SUSPENDED_STUDY: 'SUSPENDED_STUDY',
+    WITHDRAWN: 'WITHDRAWN',
+    TRANSFERRED: 'TRANSFERRED',
+    PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
+    ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
 } as const
