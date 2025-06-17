@@ -1,5 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
     PutFixedClassModal,
     PutUploadDivisionModal,
@@ -8,32 +9,31 @@ import {
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, Organization, FixedClass } from '@workspace/db'
+import { buildOrgTree } from '@lib/utils'
+import type { FixedClass, Organization, TrainingCourse } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
-    useUpdateFixedClass,
     useFindManyOrganization,
-    useFindManyTrainingCourse,
     useFindManyTemplateFile,
+    useFindManyTrainingCourse,
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import {
+    Checkbox,
     Col,
     Form,
     Input,
     Menu,
     Row,
-    message,
-    TreeSelect,
-    Checkbox,
     Tag,
+    TreeSelect,
+    message,
 } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { buildOrgTree } from '@lib/utils'
-import EditIcon from '@components/icons/edit'
 
 export default function MajorInforList({ infor }: any) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -52,7 +52,7 @@ export default function MajorInforList({ infor }: any) {
             managementOrganizationId: filters.managementOrganizationId,
         },
         include: {
-            fixedClassStudent: {
+            students: {
                 include: {
                     userProfile: true,
                 },
@@ -134,7 +134,7 @@ export default function MajorInforList({ infor }: any) {
         }
         hideSpinner()
     }
-    const handleFilterChange = (key: any, value: any) => {
+    const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()

@@ -1,4 +1,5 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
@@ -6,16 +7,26 @@ import type { ScoreConvert } from '@workspace/db'
 import {
     useCountScoreConvert,
     useCreateScoreConvert,
+    useFindManyTrainingCourse,
     useFindUniqueScoreConvert,
     useUpdateScoreConvert,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
-import DatePicker from '@components/commons/date-picker'
+import {
+    Checkbox,
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    Radio,
+    Switch,
+    message,
+} from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import dayjs from 'dayjs'
 export type PutConvertScoreFormType = ScoreConvert
 import 'dayjs/locale/vi'
+import Select from '@components/commons/select'
 dayjs.locale('vi')
 const PutConvertScore = () => {
     const [form] = Form.useForm<PutConvertScoreFormType>()
@@ -31,6 +42,9 @@ const PutConvertScore = () => {
 
     const { mutateAsync: createScoreConvert } = useCreateScoreConvert()
     const { mutateAsync: updateScoreConvert } = useUpdateScoreConvert()
+    const { data: trainingCourses } = useFindManyTrainingCourse({
+        where: { active: true },
+    })
 
     async function onOk(output?: PutConvertScoreFormType) {
         if (!output) return
@@ -38,33 +52,13 @@ const PutConvertScore = () => {
             showSpinner()
             if (id) {
                 await updateScoreConvert({
-                    data: {
-                        score10From: output.score10From,
-                        score10To: output.score10To,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        score4: output.score4,
-                        scoreChar: output.scoreChar,
-                        active: output.active,
-                    },
-                    where: {
-                        id,
-                    },
+                    data: output,
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createScoreConvert({
-                    data: {
-                        score10From: output.score10From,
-                        score10To: output.score10To,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        score4: output.score4,
-                        scoreChar: output.scoreChar,
-                        active: output.active,
-                    },
+                    data: output,
                 })
                 message.success('Thêm mới thành công')
             }
@@ -87,11 +81,7 @@ const PutConvertScore = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (level) {
-            form.setFieldsValue({
-                ...level,
-                startDate: dayjs(level.startDate),
-                endDate: level.endDate ? dayjs(level.endDate) : undefined,
-            })
+            form.setFieldsValue(level)
         }
     }, [level])
 
@@ -110,8 +100,34 @@ const PutConvertScore = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="score10From"
-                    label="Từ điểm"
+                    name="trainingCourseId"
+                    label="Khoá học"
+                    required
+                >
+                    <Select
+                        options={trainingCourses?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="classification"
+                    label="Xếp loại"
+                    required
+                >
+                    <Input placeholder="Xuất sắc..." />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="base10Min"
+                    label="Hệ 10 từ"
                     required
                 >
                     <InputNumber
@@ -125,8 +141,8 @@ const PutConvertScore = () => {
             <Col span={12}>
                 <FormItem
                     form={form}
-                    name="score10To"
-                    label="Đến điểm"
+                    name="base10Max"
+                    label="Hệ 10 đến"
                     required
                 >
                     <InputNumber
@@ -138,7 +154,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="score4" label="Điểm hệ 4" required>
+                <FormItem form={form} name="base4" label="Điểm hệ 4" required>
                     <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
@@ -148,12 +164,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="scoreChar"
-                    label="Điểm chữ"
-                    required
-                >
+                <FormItem form={form} name="letter" label="Điểm chữ" required>
                     <Input
                         placeholder="Nhập điểm chữ"
                         maxLength={2}
@@ -162,28 +173,21 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Ngày bắt đầu"
-                    required
-                >
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                <FormItem form={form} name="pass" label="Qua môn" required>
+                    <Radio.Group>
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="endDate" label="Ngày kết thúc">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
                 <FormItem
                     form={form}
                     name="active"
                     label="Kích hoạt"
                     valuePropName="checked"
                 >
-                    <Switch />
+                    <Switch defaultValue={true} />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -117,7 +117,50 @@ export default function TrainingProgramCatalog() {
                 : {}),
         },
         include: {
-            curriculumVersion: true,
+            curriculumVersion: {
+                where: {
+                    ...(filters.searchText && filters.searchText !== ''
+                        ? {
+                              OR: [
+                                  {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      code: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+                    ...(filters.trainingObjectId &&
+                    filters.trainingObjectId !== ''
+                        ? {
+                              trainingObjectTypeId: {
+                                  contains: filters.trainingObjectId,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingCourseId &&
+                    filters.trainingCourseId !== ''
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          contains: filters.trainingCourseId,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                },
+            },
             managementOrganization: true,
             trainingMajor: true,
         },
@@ -316,10 +359,8 @@ export default function TrainingProgramCatalog() {
                                                     e.target.value
                                                 )
                                             }
+                                            className="py-0"
                                             placeholder="Nhập chương trình đào tạo"
-                                            style={{
-                                                height: 40,
-                                            }}
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -347,13 +388,10 @@ export default function TrainingProgramCatalog() {
                                             )}
                                             onChange={(val) =>
                                                 handleFilterChange(
-                                                    'trainingObjectTypeId',
+                                                    'trainingObjectId',
                                                     val
                                                 )
                                             }
-                                            style={{
-                                                height: 40,
-                                            }}
                                             allowClear
                                         />
                                     </Form.Item>
@@ -371,9 +409,6 @@ export default function TrainingProgramCatalog() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingCourseId',
@@ -397,9 +432,6 @@ export default function TrainingProgramCatalog() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingMajorId',
@@ -414,11 +446,7 @@ export default function TrainingProgramCatalog() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    className="h-[40px]"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     <PlusOutlined />
                                     Thêm chương trình
                                 </Button>

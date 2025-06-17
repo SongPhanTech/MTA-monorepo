@@ -26,6 +26,9 @@ import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 import PutConvertScore from './put-chuyen-doi-diem'
+import PutTrainingLocationModal from './put-khu-vuc'
+import PutBuildingModal from './put-toa-nha'
+import PutRoomModal from './put-phong'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -55,4 +58,7 @@ export {
     PutUserProfileStaffModal,
     PutTrainingBlockSubject,
     PutConvertScore,
+    PutTrainingLocationModal,
+    PutBuildingModal,
+    PutRoomModal,
 }

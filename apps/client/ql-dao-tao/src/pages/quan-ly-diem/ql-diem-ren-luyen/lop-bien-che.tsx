@@ -1,7 +1,7 @@
 import React from 'react'
 import TreeFixClass from '@components/commons/fix-class-select/TreeFixClass'
 interface Item {
-    code: string
+    code: string | null
     name: string
     id: string
     lecture?: string

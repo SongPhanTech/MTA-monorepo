@@ -19,7 +19,7 @@ export type ListOfundefined = PaginationQuery & {
         description?: string | null
         deletedAt?: string | null
         /**
-         * @default 2025-06-13T09:59:44.957Z
+         * @default 2025-06-15T15:02:21.776Z
          */
         createdAt?: string | null
         updatedAt: string | null
@@ -134,6 +134,29 @@ export type TeachingAssignmentRequest = {
     lecturerId: string
     extraLecturerId?: string
     enterGradeLecturerId?: string
+}
+
+export type OpenSubjectClass = {
+    trainingMajorId: string
+    trainingCourseId: string
+    subjectVersionId: string
+    subjectVersionName: string
+    subjectVersionCredit: number
+    curriculumVersion: {
+        curriculumVersionId: string
+        curriculumVersionName: string
+    }[]
+    subjectClass: {
+        subjectClassId: string
+        subjectClassName: string
+        subjectClassCode: string
+    }[]
+    fixedClass: {
+        fixedClassId: string
+        fixedClassName: string
+        fixedClassCount: number
+    }[]
+    countStudent: number
 }
 
 /**

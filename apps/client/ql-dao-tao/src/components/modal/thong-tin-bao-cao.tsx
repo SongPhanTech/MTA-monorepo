@@ -1,8 +1,10 @@
-import { Modal, Table, message } from 'antd'
-import { useEffect, useState } from 'react'
+import { Column } from '@ant-design/plots/es/core/plots/column'
 import { fetchThongTinBaoCao } from '@api/userProfile'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import useSpinner from '@hooks/spinner'
+import { Modal, Table, message } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ThongTinBaoCaoModal = () => {
     const [labels, setLabels] = useState<any[]>([])
@@ -44,7 +46,7 @@ const ThongTinBaoCaoModal = () => {
         })
     }
 
-    const columns = [
+    const columns: ColumnsType = [
         {
             title: 'STT',
             dataIndex: 'index',

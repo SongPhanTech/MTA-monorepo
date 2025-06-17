@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { FilterOutlined, PlusOutlined } from '@ant-design/icons'
 import DeleteIcon from '@components/icons/delete'
 import {
     PutTrainingBlockOnCurriculumVersion,
@@ -11,9 +11,10 @@ import {
     useFindUniqueCurriculumVersion,
     useFindManyTrainingBlockOnCurriculumVersion,
     useCountTrainingBlockOnCurriculumVersion,
-    useUpdateTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockSubject,
     useFindManyOrganization,
+    useDeleteTrainingBlockOnCurriculumVersion,
+    useDeleteManyTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import type { ExamType } from '@workspace/db'
 import { BookPlus, Search } from 'lucide-react'
@@ -25,6 +26,7 @@ import {
     Form,
     Input,
     Row,
+    Select,
     Tag,
     Tooltip,
     TreeSelect,
@@ -45,6 +47,8 @@ interface FilterProps {
     managementOrganizationId: string | undefined
     trainingObjectId: string | undefined
     trainingCourseId: string | undefined
+    subjectCode: string | undefined
+    examTypes: string | undefined
 }
 
 export default function TrainingProgramSubjects() {
@@ -57,13 +61,15 @@ export default function TrainingProgramSubjects() {
         managementOrganizationId: '',
         trainingObjectId: '',
         trainingCourseId: '',
+        subjectCode: '',
+        examTypes: '',
     })
 
     const { data: initialValue } = useFindUniqueCurriculumVersion({
         where: { id: Array.isArray(id) ? id[0] : id },
     })
 
-    const { getExamTypeLabel } = useExamTypeOptions()
+    const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
@@ -140,9 +146,90 @@ export default function TrainingProgramSubjects() {
                       },
                   }
                 : {}),
+            ...(filters.subjectCode && filters.subjectCode !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  code: {
+                                      contains: filters.subjectCode,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.examTypes && filters.examTypes !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  examType: {
+                                      in: filters.examTypes
+                                          .split(',')
+                                          .filter(Boolean) as ExamType[],
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             subjects: {
+                where: {
+                    ...(filters.subjectCode && filters.subjectCode !== ''
+                        ? {
+                              subject: {
+                                  code: {
+                                      contains: filters.subjectCode,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.searchText && filters.searchText !== ''
+                        ? {
+                              subject: {
+                                  OR: [
+                                      {
+                                          name: {
+                                              contains: filters.searchText,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                      {
+                                          code: {
+                                              contains: filters.searchText,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                  ],
+                              },
+                          }
+                        : {}),
+                    ...(filters.managementOrganizationId &&
+                    filters.managementOrganizationId !== ''
+                        ? {
+                              subject: {
+                                  managementOrganizationId:
+                                      filters.managementOrganizationId,
+                              },
+                          }
+                        : {}),
+                    ...(filters.examTypes && filters.examTypes !== ''
+                        ? {
+                              subject: {
+                                  examType: {
+                                      in: filters.examTypes
+                                          .split(',')
+                                          .filter(Boolean) as ExamType[],
+                                  },
+                              },
+                          }
+                        : {}),
+                },
                 include: {
                     subject: {
                         include: {
@@ -154,7 +241,9 @@ export default function TrainingProgramSubjects() {
             trainingBlock: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            trainingBlock: {
+                priority: 'asc',
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -235,6 +324,35 @@ export default function TrainingProgramSubjects() {
                       },
                   }
                 : {}),
+            ...(filters.subjectCode && filters.subjectCode !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  code: {
+                                      contains: filters.subjectCode,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.examTypes && filters.examTypes !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  examType: {
+                                      in: filters.examTypes
+                                          .split(',')
+                                          .filter(Boolean) as ExamType[],
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -256,24 +374,28 @@ export default function TrainingProgramSubjects() {
     const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } =
         useDisclosure<{
             curriculumVersionId: string
-            trainingBlockOnCurriculumVersionId: string
+            trainingBlockOnCurriculumVersionId?: string
         }>({
             tag: PutTrainingBlockOnCurriculumVersion.name,
         })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateTrainingBlockOnCurriculumVersion } =
-        useUpdateTrainingBlockOnCurriculumVersion()
+    const { mutateAsync: deleteTrainingBlockOnCurriculumVersion } =
+        useDeleteTrainingBlockOnCurriculumVersion()
+    const { mutateAsync: deleteManyTrainingBlockSubject } =
+        useDeleteManyTrainingBlockSubject()
     async function handleDeleteTrainingBlockOnCurriculumVersion(id: string) {
         try {
             showSpinner()
-            await updateTrainingBlockOnCurriculumVersion({
+            await deleteManyTrainingBlockSubject({
+                where: {
+                    trainingBlockOnCurriculumVersionId: id,
+                },
+            })
+            await deleteTrainingBlockOnCurriculumVersion({
                 where: {
                     id,
-                },
-                data: {
-                    deletedAt: new Date(),
                 },
             })
         } catch (error) {
@@ -404,8 +526,6 @@ export default function TrainingProgramSubjects() {
                                         onOpenTrainingBlock({
                                             curriculumVersionId:
                                                 initialValue?.id as string,
-                                            trainingBlockOnCurriculumVersionId:
-                                                '',
                                         })
                                     }
                                     type="primary"
@@ -431,6 +551,79 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'code'],
                                 width: 145,
                                 align: 'center',
+                                filterDropdown: ({
+                                    setSelectedKeys,
+                                    selectedKeys,
+                                    confirm,
+                                    clearFilters,
+                                }) => (
+                                    <div className="p-2 flex flex-col">
+                                        <Input
+                                            placeholder="Nhập mã môn học"
+                                            value={selectedKeys[0]}
+                                            onChange={(e) =>
+                                                setSelectedKeys(
+                                                    e.target.value
+                                                        ? [e.target.value]
+                                                        : []
+                                                )
+                                            }
+                                            onPressEnter={() => {
+                                                handleFilterChange(
+                                                    'subjectCode',
+                                                    String(
+                                                        selectedKeys[0] || ''
+                                                    )
+                                                )
+                                                confirm()
+                                            }}
+                                            style={{
+                                                width: 188,
+                                                marginBottom: 8,
+                                            }}
+                                        />
+                                        <div className="flex justify-end gap-2">
+                                            <Button
+                                                size="small"
+                                                onClick={() => {
+                                                    if (clearFilters)
+                                                        clearFilters()
+                                                    handleFilterChange(
+                                                        'subjectCode',
+                                                        ''
+                                                    )
+                                                }}
+                                            >
+                                                Bỏ lọc
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    handleFilterChange(
+                                                        'subjectCode',
+                                                        String(
+                                                            selectedKeys[0] ||
+                                                                ''
+                                                        )
+                                                    )
+                                                    confirm()
+                                                }}
+                                            >
+                                                Lọc
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ),
+                                filterIcon: (filtered) => (
+                                    <FilterOutlined
+                                        style={{
+                                            color: filtered
+                                                ? '#1890ff'
+                                                : undefined,
+                                        }}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Mã TKB',
@@ -459,12 +652,24 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'credit'],
                                 width: 120,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.subject?.credit || 0
+                                    const sortB = b.subject?.credit || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Học kỳ dự kiến',
                                 dataIndex: 'semester',
-                                width: 120,
+                                width: 140,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.semester || 0
+                                    const sortB = b.semester || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             // {
                             //     title: 'Học kỳ giảng dạy',
@@ -487,44 +692,92 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Số tiết TKB',
                                 dataIndex: ['subject', 'period'],
-                                width: 100,
+                                width: 110,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.subject?.period || 0
+                                    const sortB = b.subject?.period || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'LT',
                                 dataIndex: ['subject', 'numberOfTheory'],
                                 width: 80,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.subject?.numberOfTheory || 0
+                                    const sortB = b.subject?.numberOfTheory || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'BT',
                                 dataIndex: ['subject', 'numberOfPractical'],
                                 width: 80,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA =
+                                        a.subject?.numberOfPractical || 0
+                                    const sortB =
+                                        b.subject?.numberOfPractical || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'ThL',
                                 dataIndex: ['subject', 'numberOfSelfStudy'],
                                 width: 80,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA =
+                                        a.subject?.numberOfSelfStudy || 0
+                                    const sortB =
+                                        b.subject?.numberOfSelfStudy || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'TN, TH',
                                 dataIndex: ['subject', 'numberOfPractice'],
-                                width: 80,
+                                width: 90,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA =
+                                        a.subject?.numberOfPractice || 0
+                                    const sortB =
+                                        b.subject?.numberOfPractice || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Ôn',
                                 dataIndex: ['subject', 'numberOfReview'],
                                 width: 80,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.subject?.numberOfReview || 0
+                                    const sortB = b.subject?.numberOfReview || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'KT, Thi',
                                 dataIndex: ['subject', 'numberOfExam'],
                                 width: 80,
                                 align: 'center',
+                                sorter: (a, b) => {
+                                    const sortA = a.subject?.numberOfExam || 0
+                                    const sortB = b.subject?.numberOfExam || 0
+                                    return sortA - sortB
+                                },
+                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Thi',
@@ -533,6 +786,72 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 render: (record: ExamType) =>
                                     getExamTypeLabel(record),
+                                filterDropdown: ({
+                                    setSelectedKeys,
+                                    selectedKeys,
+                                    confirm,
+                                }) => (
+                                    <div className="p-2">
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: 200 }}
+                                            placeholder="Chọn loại thi"
+                                            value={selectedKeys}
+                                            onChange={(values) =>
+                                                setSelectedKeys(values)
+                                            }
+                                            options={options}
+                                            allowClear
+                                            showSearch
+                                            optionFilterProp="label"
+                                            filterOption={(input, option) =>
+                                                !!option?.label &&
+                                                option.label
+                                                    .toLowerCase()
+                                                    .includes(
+                                                        input.toLowerCase()
+                                                    )
+                                            }
+                                        />
+                                        <div className="pt-2 flex gap-2 justify-end">
+                                            <Button
+                                                size="small"
+                                                onClick={() => {
+                                                    setSelectedKeys([])
+                                                    handleFilterChange(
+                                                        'examTypes',
+                                                        ''
+                                                    )
+                                                    confirm()
+                                                }}
+                                            >
+                                                Bỏ lọc
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    handleFilterChange(
+                                                        'examTypes',
+                                                        selectedKeys.join(',')
+                                                    )
+                                                    confirm()
+                                                }}
+                                            >
+                                                Lọc
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ),
+                                filterIcon: (filtered) => (
+                                    <FilterOutlined
+                                        style={{
+                                            color: filtered
+                                                ? '#1890ff'
+                                                : undefined,
+                                        }}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Trạng thái',
@@ -547,6 +866,29 @@ export default function TrainingProgramSubjects() {
                                         </Tag>
                                     )
                                 },
+                                filters: [
+                                    {
+                                        text: 'Đang hoạt động',
+                                        value: true,
+                                    },
+                                    {
+                                        text: 'Ngừng đào tạo',
+                                        value: false,
+                                    },
+                                ],
+                                filterMultiple: false,
+                                onFilter: (value, record) => {
+                                    return record.active === value
+                                },
+                                filterIcon: (filtered) => (
+                                    <FilterOutlined
+                                        style={{
+                                            color: filtered
+                                                ? '#1890ff'
+                                                : undefined,
+                                        }}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Thao tác',

@@ -12,6 +12,12 @@ export type BodyFaqVectorizeFaqVectorizePost = {
     id_document?: string
 }
 
+export type BodyHoiDapFaqHoiDapFaqPost = {
+    prompt?: string
+    type_data?: string
+    conversation_id?: string
+}
+
 export type BodyHoiDapHoiDapPost = {
     prompt?: string
     type_data?: string
@@ -24,6 +30,14 @@ export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
 
 export type BodyTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = {
     prompt?: string
+}
+
+export type BodyXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = {
+    id_document?: string
+}
+
+export type BodyXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = {
+    id_document?: string
 }
 
 export type HTTPValidationError = {

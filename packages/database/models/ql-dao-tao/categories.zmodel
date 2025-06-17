@@ -197,15 +197,30 @@ model TrainingRank extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ
+/// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc
+// | **Loại điểm** | **Thang điểm 10**       | **Điểm chữ** | **Thang điểm 4** |
+// |---------------|--------------------------|--------------|------------------|
+// | **Xuất sắc**  | Từ 9,0 đến 10            | A+           | 4.0              |
+// | **Giỏi**      | Từ 8,5 đến 8,9           | A            | 3.7              |
+// |               | Từ 8,0 đến 8,4           | B+           | 3.5              |
+// | **Khá**       | Từ 7,0 đến 7,9           | B            | 3.0              |
+// | **TBK**       | Từ 6,5 đến 6,9           | C+           | 2.5              |
+// | **TB**        | Từ 5,5 đến 6,4           | C            | 2.0              |
+// |               | Từ 5,0 đến 5,4           | D+           | 1.5              | (Được học cải thiện)
+// | **Yếu**       | Từ 4,0 đến 4,9           | D            | 1.0              | (Được học cải thiện)
+// | **Kém**       | Dưới 4,0                 | F            | 0.0              | (Không đạt)
 model ScoreConvert extends Base {
-  score10From Float
-  score10To   Float
-  score4      Float
-  scoreChar   String
+  classification      String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu; Kém
+  base10Min           Float
+  base10Max           Float
+  letter              String
+  base4               Float
 
-  startDate   DateTime
-  endDate     DateTime?
+  pass                Boolean
+  improvementRegister Boolean        @default(false) // có thể học cải thiện
+
+  trainingCourse      TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId    String
 
   @@schema("ql-dao-tao")
 }
