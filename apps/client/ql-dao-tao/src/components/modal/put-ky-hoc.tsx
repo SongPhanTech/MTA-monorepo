@@ -203,7 +203,7 @@ const PutSemesterModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={(input?.semesterId || !input?.schoolYearId) ? 12 : 24}>
+            <Col span={input?.semesterId || !input?.schoolYearId ? 12 : 24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
