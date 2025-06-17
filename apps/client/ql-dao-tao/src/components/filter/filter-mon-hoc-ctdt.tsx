@@ -2,50 +2,22 @@ import React, { useState } from 'react'
 import {
     Button,
     Flex,
-    Input,
     Popover,
-    //   Select,
     Space,
     Typography,
     Divider,
     Row,
     Col,
     Form,
-    TreeSelect,
-    Tag,
 } from 'antd'
-import {
-    FilterOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    ControlOutlined,
-} from '@ant-design/icons'
-import { X, Search } from 'lucide-react'
+import { FilterOutlined } from '@ant-design/icons'
+import { X } from 'lucide-react'
 import Select from '@components/commons/select'
 import {
-    useUpdateTrainingCourse,
-    useFindManyTrainingType,
     useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManySchoolYear,
-    useFindManyTrainingForm,
-    useFindManyOrganization,
-    useFindManyTrainingMajor,
     useFindManyTrainingCourse,
-    useFindManyCurriculumVersion,
 } from '@workspace/db/hooks'
-import type {
-    CurriculumVersion,
-    SchoolYear,
-    TrainingForm,
-    TrainingLevel,
-    TrainingMajor,
-    TrainingObjectType,
-    TrainingTime,
-    TrainingType,
-} from '@workspace/db'
-import { CTDT_STATUS, KHOA_HL_STATUS } from '@constants/constants'
-import { buildOrgTree } from '@lib/utils'
+import type { TrainingObjectType } from '@workspace/db'
 const { Text } = Typography
 
 interface FilterProps {
@@ -94,7 +66,6 @@ const FilterMonHocCTDT = (props: Props) => {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -120,14 +91,14 @@ const FilterMonHocCTDT = (props: Props) => {
 
             <div style={{ padding: '0 16px 10px' }}>
                 <Form form={form} layout="horizontal" className="mt-4">
-                    <Row gutter={[10, 0]}>
+                    <Row gutter={[10, 10]}>
                         <Col span={24}>
                             <Form.Item
                                 className="mb-2"
                                 label="Đối tượng đào tạo"
                                 name="trainingObjectId"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
+                                labelCol={{ span: 7 }}
+                                wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
                                 <Select
@@ -153,8 +124,8 @@ const FilterMonHocCTDT = (props: Props) => {
                                 className="mb-0"
                                 label="Khóa đào tạo"
                                 name="trainingCourseId"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
+                                labelCol={{ span: 7 }}
+                                wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
                                 <Select
@@ -216,6 +187,9 @@ const FilterMonHocCTDT = (props: Props) => {
                 overlayStyle={{
                     width: 450,
                 }}
+                overlayInnerStyle={{
+                    padding: 0,
+                }}
                 destroyTooltipOnHide
             >
                 <Button
@@ -224,6 +198,8 @@ const FilterMonHocCTDT = (props: Props) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        width: 40,
+                        height: 40,
                     }}
                 />
             </Popover>
