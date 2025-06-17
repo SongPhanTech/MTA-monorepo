@@ -34,3 +34,12 @@ export const OpenSubjectClass = z
     .openapi('OpenSubjectClass')
 
 export type OpenSubjectClass = z.infer<typeof OpenSubjectClass>
+export const FixedClassBySubjectClassSemester = z
+    .object({
+        fixedClassId: z.string(),
+    })
+    .openapi('FixedClassBySubjectClassSemester')
+
+export type FixedClassBySubjectClassSemester = z.infer<
+    typeof FixedClassBySubjectClassSemester
+>
