@@ -28,11 +28,17 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 
 // const { Option } = Select;
 interface FilterProps {
+    schoolYearId: string | null //Năm học
+    semesterId: string | null //Học kỳ
+    KhoaId: string | null //Khoa
+    BoMonId: string | null //Bộ môn
+    trainingObjectId: string | null //Đối tượng đào tạo
+    examTypeId: string | null //Hình thức thi
+    LectureId: string | null //Giảng viên
     searchText: string | null
-    semesterId: string | null
-    schoolYearId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    fixedClassId: string | null
 }
 
 export default function SubjectClass() {
@@ -45,6 +51,12 @@ export default function SubjectClass() {
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
+        KhoaId: null,
+        BoMonId: null,
+        trainingObjectId: null,
+        examTypeId: null,
+        LectureId: null,
+        fixedClassId: null,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -169,7 +181,14 @@ export default function SubjectClass() {
             deletedAt: null,
         },
     })
-
+    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+        setFilters((prev) => {
+            const updatedFilters = { ...prev, ...newFilters };
+            console.log('Filters applied:', updatedFilters);
+            debouncedRefetch();
+            return updatedFilters;
+        });
+    };
     /* Mới */
     // #endregion
     const rowSelection = {
@@ -332,8 +351,10 @@ export default function SubjectClass() {
                                 </Col>
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass
-                                        onFilterChange={handleFilterChange}
-                                        onSearchChange={undefined}
+                                        filters={filters}
+                                            onFilterChange={handleFilterChange}
+                                            onApply={handleFilterApply}
+
                                     />
                                 </Col>
                             </Flex>

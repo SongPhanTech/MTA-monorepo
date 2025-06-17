@@ -40,11 +40,17 @@ import LopBienCheItem from './lop-bien-che'
 import DatePicker from '@components/commons/date-picker'
 // const { Option } = Select;
 interface FilterProps {
+    schoolYearId: string | null //Năm học
+    semesterId: string | null //Học kỳ
+    KhoaId: string | null //Khoa
+    BoMonId: string | null //Bộ môn
+    trainingObjectId: string | null //Đối tượng đào tạo
+    examTypeId: string | null //Hình thức thi
+    LectureId: string | null //Giảng viên
     searchText: string | null
-    semesterId: string | null
-    schoolYearId?: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    fixedClassId: string | null
 }
 
 export default function SubjectClassScore() {
@@ -69,6 +75,12 @@ export default function SubjectClassScore() {
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
+        KhoaId: null,
+        BoMonId: null,
+        trainingObjectId: null,
+        examTypeId: null,
+        LectureId: null,
+        fixedClassId: null,
     })
 
     const handleChangeSuaDiemCu = (e: CheckboxChangeEvent) => {
@@ -266,14 +278,24 @@ export default function SubjectClassScore() {
             }
         },
     }))
-
+    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+        setFilters((prev) => {
+            const updatedFilters = { ...prev, ...newFilters };
+            console.log('Filters applied:', updatedFilters);
+            debouncedRefetch();
+            return updatedFilters;
+        });
+    };
     return (
         <div>
             {/* Từ ngày {selectedSemester?.startDate ? new Date(selectedSemester.startDate).toLocaleDateString('vi-VN') : ''} đến ngày {selectedSemester?.endDate ? new Date(selectedSemester.endDate).toLocaleDateString('vi-VN') : ''} */}
             <Row>
                 <Col span={4} className="flex">
                     <LopBienCheItem
-                        dataTable={subjectClassData}
+                        dataTable={subjectClassData.map(item => ({
+                            ...item,
+                            code: item.code || ''
+                        }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
                     />
@@ -413,7 +435,8 @@ export default function SubjectClassScore() {
                                                 onFilterChange={
                                                     handleFilterChange
                                                 }
-                                                onSearchChange={undefined}
+                                                filters={filters}
+                                                onApply={handleFilterApply}
                                             />
                                         </Col>
                                     </Flex>

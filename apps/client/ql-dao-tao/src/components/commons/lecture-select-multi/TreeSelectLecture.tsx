@@ -30,7 +30,6 @@ function buildOrgTree(
             value: item.id,
             selectable: item.parentId !== null,
             children: [
-                ...buildOrgTree(list, lecturers, item.id),
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
                     .map((lecturer) => ({
@@ -41,6 +40,8 @@ function buildOrgTree(
                         selectable: true,
                         children: [],
                     })),
+                ...buildOrgTree(list, lecturers, item.id),
+                
             ],
         }))
 }

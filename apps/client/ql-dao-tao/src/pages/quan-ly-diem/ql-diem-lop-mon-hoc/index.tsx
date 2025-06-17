@@ -39,11 +39,17 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import LopMonHocItem from './lop-mon-hoc'
 // const { Option } = Select;
 interface FilterProps {
+    schoolYearId: string | null //Năm học
+    semesterId: string | null //Học kỳ
+    KhoaId: string | null //Khoa
+    BoMonId: string | null //Bộ môn
+    trainingObjectId: string | null //Đối tượng đào tạo
+    examTypeId: string | null //Hình thức thi
+    LectureId: string | null //Giảng viên
     searchText: string | null
-    semesterId: string | null
-    schoolYearId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    fixedClassId: string | null
 }
 
 export default function SubjectClassScore() {
@@ -66,6 +72,12 @@ export default function SubjectClassScore() {
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
+        KhoaId: null,
+        BoMonId: null,
+        trainingObjectId: null,
+        examTypeId: null,
+        LectureId: null,
+        fixedClassId: null,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -247,7 +259,14 @@ export default function SubjectClassScore() {
     const handleChangeCamThi = (e: CheckboxChangeEvent) => {
         setCamThi(e.target.checked)
     }
-
+    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+        setFilters((prev) => {
+            const updatedFilters = { ...prev, ...newFilters };
+            console.log('Filters applied:', updatedFilters);
+            debouncedRefetch();
+            return updatedFilters;
+        });
+    };
     // #endregion
     const rowSelection = {
         selectedRowKeys,
@@ -262,7 +281,19 @@ export default function SubjectClassScore() {
             <Row>
                 <Col span={4} className="flex">
                     <LopMonHocItem
-                        dataTable={subjectClassData}
+                        dataTable={subjectClassData.map(item => ({
+                            id: item.id,
+                            name: item.name,
+                            code: item.code === null ? undefined : item.code,
+                            mainLecturer: item.mainLecturer 
+                                ? { 
+                                    userProfile: { 
+                                        firstName: item.mainLecturer.userProfile.firstName, 
+                                        lastName: item.mainLecturer.userProfile.lastName 
+                                    } 
+                                  }
+                                : { userProfile: { firstName: '', lastName: '' } },
+                        }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
                     />
@@ -402,7 +433,8 @@ export default function SubjectClassScore() {
                                                 onFilterChange={
                                                     handleFilterChange
                                                 }
-                                                onSearchChange={undefined}
+                                                filters={filters}
+                                                onApply={handleFilterApply}
                                             />
                                         </Col>
                                     </Flex>

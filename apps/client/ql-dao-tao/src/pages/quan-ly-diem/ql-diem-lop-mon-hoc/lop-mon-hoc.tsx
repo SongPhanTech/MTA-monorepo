@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Item {
-    code: string
+    code?: string
     name: string
     id: string
     lecture?: string
@@ -24,7 +24,7 @@ const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
 
 interface LopMonHocItemProps {
     dataTable: Array<{
-        code: string
+        code?: string
         id: string
         name: string
         mainLecturer: { userProfile: { firstName: string; lastName: string } }
@@ -42,11 +42,11 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     const data: Item[] = dataTable.map(
         (item: {
             mainLecturer: any
-            code: any
+            code?: any
             name: any
             id: any
         }) => ({
-            code: item.code,
+            code: item.code === null ? undefined : item.code,
             name: item.name,
             lecture:
                 item.mainLecturer && item.mainLecturer.userProfile
