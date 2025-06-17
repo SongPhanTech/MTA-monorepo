@@ -1,6 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
 import { Col, Flex, Row, Tabs } from 'antd'
-import type { TabsProps } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import RegisterClassManager from './components/dang-ky-hoc-cho-lop-quan-ly'

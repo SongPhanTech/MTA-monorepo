@@ -5,35 +5,55 @@ import { Search } from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Row, Tabs, Tag } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import TabPane from 'antd/es/tabs/TabPane'
+import { useFindManyFixedClass } from '@workspace/db/hooks'
 // const { Option } = Select;
 
 interface FilterProps {
     searchText: string | null
-    trainingCourseId: string | null
 }
-
-const dataFake2 = [
-    {
-        id: 1,
-        class: 'ANHTTT56',
-        kh: 'An ninh phần cứng',
-        cn: 'An ninh hệ thống thông tin',
-        sv: 40,
-    },
-    {
-        id: 2,
-        class: 'ANHTTT57',
-        kh: 'An ninh phần cứng 1',
-        cn: 'An ninh hệ thống thông tin 2',
-        sv: 50,
-    },
-]
 
 export default function FixedClass() {
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+    })
+
+    const { data: fixedClassData, refetch } = useFindManyFixedClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+        },
+        include: {
+            trainingCourse: true,
+            students: true,
+        },
+    })
+
+    // console.log(fixedClassData);
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
 
     return (
         <div>
@@ -45,6 +65,12 @@ export default function FixedClass() {
                                 <Input
                                     id="search"
                                     placeholder="Nhập tên lớp..."
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     style={{ height: 32 }}
                                     prefix={
                                         <Search
@@ -63,11 +89,12 @@ export default function FixedClass() {
             </Row>
             <Table
                 rowKey="id"
-                id="training-block"
+                id="fixed-class"
                 rowSelection={{
                     selectedRowKeys,
                     onChange: setSelectedRowKeys,
                 }}
+                dataSource={fixedClassData}
                 columns={[
                     {
                         title: 'STT',
@@ -81,14 +108,15 @@ export default function FixedClass() {
                     },
                     {
                         title: 'Tên lớp QL',
-                        dataIndex: 'class',
+                        dataIndex: 'name',
                         align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Khoá học',
-                        dataIndex: 'kh',
+                        dataIndex: 'trainingCourse',
                         width: 150,
+                        render: (record) => (record.name ? record.name : ''),
                     },
                     {
                         title: 'Chuyên ngành',
@@ -97,12 +125,12 @@ export default function FixedClass() {
                     },
                     {
                         title: 'Số HV, SV',
-                        dataIndex: 'sv',
+                        dataIndex: 'students',
                         align: 'center',
                         width: 120,
+                        render: (record) => (record ? record.length : ''),
                     },
                 ]}
-                dataSource={dataFake2}
                 pagination={{
                     current: currentPage,
                     onChange: setCurrentPage,

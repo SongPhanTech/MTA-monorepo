@@ -36,9 +36,12 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: initialValue } =
-        useFindUniqueTrainingBlockOnCurriculumVersion({
-            where: { id: input?.trainingBlockOnCurriculumVersionId },
-        })
+        useFindUniqueTrainingBlockOnCurriculumVersion(
+            {
+                where: { id: input?.trainingBlockOnCurriculumVersionId },
+            },
+            { enable: !!input?.trainingBlockOnCurriculumVersionId }
+        )
 
     const { data: trainingBlockData = [], refetch } = useFindManyTrainingBlock()
 

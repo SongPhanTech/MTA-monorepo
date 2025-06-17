@@ -1,57 +1,92 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import DefaultLayout from '@layouts/default-layout'
 import { Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tabs, Tag } from 'antd'
+import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
-import TabPane from 'antd/es/tabs/TabPane'
-// const { Option } = Select;
+import { useCallback, useState } from 'react'
+import {
+    useFindManySemester,
+    useFindManySubjectClass,
+} from '@workspace/db/hooks'
+import dayjs from 'dayjs'
+import type { Semester, SubjectClassSchedule } from '@workspace/db'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 
 interface FilterProps {
     searchText: string | null
-    trainingCourseId: string | null
+    semesterId: string | null
 }
-
-const dataFake1 = [
-    {
-        id: 1,
-        class: 'LMH1',
-        time: '10/02/2025',
-        kh: 'Sáng',
-        gv1: 'Đặng Lê Đình Trang',
-        credit: 4,
-        svMax: 50,
-        svReg: 47,
-        lqlđk: 'L11',
-    },
-    {
-        id: 2,
-        class: 'LMH12',
-        time: '09/02/2025',
-        kh: 'Sáng',
-        gv1: 'Đàm Quang Sang',
-        credit: 3,
-        svMax: 53,
-        svReg: 40,
-        lqlđk: 'L12',
-    },
-]
 
 export default function RegisterClassManager() {
     const [currentPage, setCurrentPage] = useState(1)
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+        semesterId: null,
+    })
+    const { getScheduleLabel, scheduleOptions } = useScheduleOptions()
+
+    const { data: subjectClassData, refetch } = useFindManySubjectClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.semesterId
+                ? {
+                      semesterId: filters.semesterId,
+                  }
+                : {}),
+        },
+        include: {
+            mainLecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            subject: true,
+        },
+    })
+
+    const { data: semester = [] } = useFindManySemester()
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    // console.log(subjectClassData);
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
 
     return (
         <div>
             <Row gutter={[16, 16]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
-                        <Col span={12}>
+                        <Col span={8}>
                             <Form.Item name="searchText">
                                 <Input
                                     id="search"
                                     placeholder="Nhập tên lớp..."
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     style={{ height: 32 }}
                                     prefix={
                                         <Search
@@ -65,12 +100,34 @@ export default function RegisterClassManager() {
                                 />
                             </Form.Item>
                         </Col>
+                        <Col span={8}>
+                            <Form.Item
+                                className="mb-0"
+                                name="semesterId"
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
+                                labelAlign="left"
+                            >
+                                <Select
+                                    placeholder="Chọn kì học"
+                                    options={semester.map((i: Semester) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    onChange={(val) =>
+                                        handleFilterChange('semesterId', val)
+                                    }
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
                     </Flex>
                 </Col>
             </Row>
             <Table
                 rowKey="id"
-                id="training-block"
+                id="subject-class"
+                dataSource={subjectClassData}
                 columns={[
                     {
                         title: 'STT',
@@ -84,28 +141,40 @@ export default function RegisterClassManager() {
                     },
                     {
                         title: 'Lớp môn học',
-                        dataIndex: 'class',
+                        dataIndex: 'name',
                         align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Thời gian học',
-                        dataIndex: 'time',
+                        dataIndex: 'startDate',
                         width: 150,
+                        render: (value: string) =>
+                            dayjs(value).format('DD/MM/YYYY'),
                     },
                     {
                         title: 'Kíp học',
-                        dataIndex: 'kh',
+                        dataIndex: 'schedule',
                         width: 150,
+                        align: 'center',
+                        // filters: scheduleOptions.map((opt) => ({
+                        //     text: opt.label,
+                        //     value: opt.value,
+                        // })),
+                        filterSearch: true,
+                        render: (value: SubjectClassSchedule) =>
+                            getScheduleLabel(value),
                     },
                     {
                         title: 'Giảng viên 1',
-                        dataIndex: 'gv1',
-                        width: 180,
+                        dataIndex: ['mainLecturer', 'userProfile'],
+                        width: 250,
+                        render: (record) =>
+                            record && `${record.code} - ${record.fullname}`,
                     },
                     {
                         title: 'Số tín chỉ',
-                        dataIndex: 'credit',
+                        dataIndex: ['subject', 'credit'],
                         align: 'center',
                         width: 120,
                     },
@@ -128,11 +197,6 @@ export default function RegisterClassManager() {
                         width: 150,
                     },
                 ]}
-                dataSource={dataFake1}
-                pagination={{
-                    current: currentPage,
-                    onChange: setCurrentPage,
-                }}
             />
         </div>
     )
