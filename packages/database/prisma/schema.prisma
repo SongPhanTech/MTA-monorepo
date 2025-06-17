@@ -453,6 +453,7 @@ model FixedClass {
   students                 Student[]
   curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
+  subjectClasses           SubjectClass[]
 
   @@schema("ql-dao-tao")
 }
@@ -667,6 +668,7 @@ model SubjectClass {
   enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
   enterGradeLecturerId       String?
   subjectClassStudent        StudentSubjectScore[]
+  fixedClasses               FixedClass[]
 
   @@schema("ql-dao-tao")
 }
