@@ -1,7 +1,10 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { $Enums } from '@workspace/db'
-import { OpenSubjectClass } from '../dto/subject-class.dto'
+import {
+    FixedClassBySubjectClassSemester,
+    OpenSubjectClass,
+} from '../dto/subject-class.dto'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -115,6 +118,52 @@ const openSubjectClass = createRoute({
     },
 })
 
+const fixedClassBySubjectClassSemester = createRoute({
+    operationId: 'fixedClassBySubjectClassSemester',
+    path: '/fixed-class-by-subject-class-semester',
+    method: 'get',
+    description: 'Lấy danh sách lớp quản lý theo học kỳ và lớp môn học',
+    tags: ['SubjectClass'],
+    summary: 'Lấy danh sách lớp quản lý theo học kỳ và lớp môn học',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của học kỳ',
+            }),
+            subjectClassId: z.string().openapi('subjectClassId', {
+                description: 'ID của lớp môn học',
+            }),
+            search: z
+                .string()
+                .openapi('search', {
+                    description: 'Từ khóa tìm kiếm',
+                })
+                .optional(),
+            page: z.string().openapi('page', {
+                description: 'Số trang',
+                default: '1',
+            }),
+            pageSize: z.string().openapi('pageSize', {
+                description: 'Số lượng bản ghi trên mỗi trang',
+                default: '10',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.array(FixedClassBySubjectClassSemester),
+                },
+            },
+            description: 'Danh sách lớp quản lý theo học kỳ và lớp môn học',
+        },
+        400: {
+            description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
 app.openapi(teachingAssignment, async (c) => {
     const data = c.req.valid('json')
     const result = await Promise.allSettled(
@@ -191,6 +240,8 @@ app.openapi(openSubjectClass, async (c) => {
                     FC.id                                as fixed_class_id,
                     FC.name                              as fixed_class_name,
                     FC.code                              as fixed_class_code,
+                    FC.active                            as active,
+                    FC.graduated                         as graduated,
                     FC."trainingCourseId"                as training_course_id,
                     C."trainingMajorId"                  as training_major_id,
                     count(FC.id)                         as fixed_class_count
@@ -231,7 +282,7 @@ select json_build_object('subjectVersionCode', subject_version_code,'trainingMaj
                                        )
        ) as data
 from FCS
-where training_block_subject_semester = fixed_class_semester
+where training_block_subject_semester = fixed_class_semester and active = true and graduated = false
 ${trainingCourseId ? `and training_course_id = '${trainingCourseId}'` : ''}
 ${search ? `and subject_version_name ilike '%${search}%'` : ''}
 ${search ? `and subject_version_code ilike '%${search}%'` : ''}
@@ -279,6 +330,131 @@ group by subject_version_id, subject_version_code,
                         0
                     ),
                 })),
+            success: true,
+        },
+        200
+    )
+})
+
+app.openapi(fixedClassBySubjectClassSemester, async (c) => {
+    const { semesterId, search, page, pageSize, subjectClassId } =
+        c.req.valid('query')
+
+    const semester = await prisma.semester.findUnique({
+        where: { id: semesterId },
+        include: {
+            schoolYear: true,
+        },
+    })
+
+    const subjectClass = await prisma.subjectClass.findUnique({
+        where: { id: subjectClassId },
+    })
+
+    if (!subjectClass) {
+        return c.json(
+            {
+                success: false,
+                message: 'Lớp môn học không tồn tại',
+            },
+            400
+        )
+    }
+
+    if (!semester) {
+        return c.json(
+            {
+                success: false,
+                message: 'Học kỳ không tồn tại',
+            },
+            400
+        )
+    }
+    const semesterYear = semester?.schoolYear.startDate.getFullYear()
+
+    const semesterType =
+        semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+
+    const res: Array<{
+        fixedClassId: string
+    }> = await prisma.$queryRawUnsafe(`
+            with FCS as (select SC.id                             as subject_class_id,
+                    FC.id                             as fixed_class_id,
+                    FC.name                           as fixed_class_name,
+                    FC.code                           as fixed_class_code,
+                    FC.active                         as active,
+                    FC.graduated                      as graduated,
+                    TBS.semester                      as training_block_subject_semester,
+                    ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester
+             from "ql-dao-tao"."SubjectVersion"
+                      join "ql-dao-tao"."TrainingBlockSubject" TBS
+                           on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
+                      join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                           on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
+                      join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
+                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
+                      join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
+                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
+             where FC.active = true
+             group by CV.id, CV.name, FC.id, FC."startYear", SC.id,
+                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
+                      "ql-dao-tao"."SubjectVersion".credit,
+                      "ql-dao-tao"."SubjectVersion".name, TBS.semester)
+select fixed_class_id as "fixedClassId"
+from FCS
+where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
+${search ? `and fixed_class_name ilike '%${search}%'` : ''}
+${search ? `and fixed_class_code ilike '%${search}%'` : ''}
+group by fixed_class_id
+         limit ${pageSize} offset (${page} - 1) * ${pageSize}
+`)
+
+    const fixedClasses = await prisma.fixedClass.findMany({
+        where: {
+            id: {
+                in: res.map((e) => e.fixedClassId),
+            },
+        },
+        include: {
+            trainingCourse: {
+                select: {
+                    id: true,
+                    name: true,
+                    code: true,
+                },
+            },
+            curriculumVersion: {
+                select: {
+                    id: true,
+                    name: true,
+                    code: true,
+                    curriculum: {
+                        select: {
+                            id: true,
+                            name: true,
+                            code: true,
+                            trainingMajor: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    code: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            _count: {
+                select: {
+                    students: true,
+                },
+            },
+        },
+    })
+
+    return c.json(
+        {
+            data: fixedClasses,
             success: true,
         },
         200

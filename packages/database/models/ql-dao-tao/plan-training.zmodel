@@ -38,7 +38,7 @@ model StudentSubjectScore extends Base {
 
   bonusScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
-  // finalScore = (attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore
+  // finalScore = if examScore < 4 ? examScore : (attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp finalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
   finalScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm tổng kết
 
@@ -141,6 +141,8 @@ model FixedClass extends Base {
 
   curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
+
+  subjectClasses           SubjectClass[]
 
   @@schema("ql-dao-tao")
 }
@@ -392,6 +394,7 @@ model SubjectClass extends Base {
   enterGradeLecturerId       String?
 
   subjectClassStudent        StudentSubjectScore[]
+  fixedClasses               FixedClass[]
   @@schema("ql-dao-tao")
 }
 
