@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './_fixedClassBySubjectClassSemesterCount'
 export * from './bucketItemDto'
 export * from './classDivision'
 export * from './classDivision200Item'
@@ -18,6 +19,12 @@ export * from './configsProvisioningInboundScim'
 export * from './exportStudentFixedClassDocx400'
 export * from './exportStudentFixedClassDocx404'
 export * from './exportStudentFixedClassDocxParams'
+export * from './fixedClassBySubjectClassSemester'
+export * from './fixedClassBySubjectClassSemesterCurriculumVersion'
+export * from './fixedClassBySubjectClassSemesterCurriculumVersionCurriculum'
+export * from './fixedClassBySubjectClassSemesterCurriculumVersionCurriculumTrainingMajor'
+export * from './fixedClassBySubjectClassSemesterParams'
+export * from './fixedClassBySubjectClassSemesterTrainingCourse'
 export * from './fixedClassId'
 export * from './getConfigs500'
 export * from './getSessionsByUserId400'
