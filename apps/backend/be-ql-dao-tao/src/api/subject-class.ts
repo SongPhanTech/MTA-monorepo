@@ -240,6 +240,8 @@ app.openapi(openSubjectClass, async (c) => {
                     FC.id                                as fixed_class_id,
                     FC.name                              as fixed_class_name,
                     FC.code                              as fixed_class_code,
+                    FC.active                            as active,
+                    FC.graduated                         as graduated,
                     FC."trainingCourseId"                as training_course_id,
                     C."trainingMajorId"                  as training_major_id,
                     count(FC.id)                         as fixed_class_count
@@ -280,7 +282,7 @@ select json_build_object('subjectVersionCode', subject_version_code,'trainingMaj
                                        )
        ) as data
 from FCS
-where training_block_subject_semester = fixed_class_semester
+where training_block_subject_semester = fixed_class_semester and active = true and graduated = false
 ${trainingCourseId ? `and training_course_id = '${trainingCourseId}'` : ''}
 ${search ? `and subject_version_name ilike '%${search}%'` : ''}
 ${search ? `and subject_version_code ilike '%${search}%'` : ''}
@@ -373,12 +375,15 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     const semesterType =
         semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
-    const res: FixedClassBySubjectClassSemester[] =
-        await prisma.$queryRawUnsafe(`
+    const res: Array<{
+        fixedClassId: string
+    }> = await prisma.$queryRawUnsafe(`
             with FCS as (select SC.id                             as subject_class_id,
                     FC.id                             as fixed_class_id,
                     FC.name                           as fixed_class_name,
                     FC.code                           as fixed_class_code,
+                    FC.active                         as active,
+                    FC.graduated                      as graduated,
                     TBS.semester                      as training_block_subject_semester,
                     ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester
              from "ql-dao-tao"."SubjectVersion"
@@ -397,7 +402,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester)
 select fixed_class_id as "fixedClassId"
 from FCS
-where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}'
+where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
 ${search ? `and fixed_class_name ilike '%${search}%'` : ''}
 ${search ? `and fixed_class_code ilike '%${search}%'` : ''}
 group by fixed_class_id
