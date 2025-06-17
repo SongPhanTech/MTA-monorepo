@@ -26,6 +26,7 @@ export const OpenSubjectClass = z
                 fixedClassId: z.string(),
                 fixedClassName: z.string(),
                 fixedClassCount: z.number(),
+                fixedClassSemester: z.number(),
             })
         ),
         countStudent: z.number(),

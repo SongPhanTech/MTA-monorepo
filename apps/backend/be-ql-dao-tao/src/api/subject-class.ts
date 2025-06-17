@@ -226,7 +226,7 @@ select json_build_object('subjectVersionCode', subject_version_code,'trainingMaj
                                               ),
                          'fixedClass', json_agg(
                                  json_build_object(
-                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count
+                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count,'fixedClassSemester', fixed_class_semester
                                  )
                                        )
        ) as data
@@ -249,6 +249,13 @@ group by subject_version_id, subject_version_code,
                 .map((e) => e.data)
                 .map((item) => ({
                     ...item,
+                    fixedClass: item.fixedClass.filter(
+                        (value, index, self) =>
+                            index ===
+                                self.findIndex(
+                                    (t) => t.fixedClassId === value.fixedClassId
+                                ) && !!value.fixedClassId
+                    ),
                     curriculumVersion: item.curriculumVersion.filter(
                         (value, index, self) =>
                             index ===
