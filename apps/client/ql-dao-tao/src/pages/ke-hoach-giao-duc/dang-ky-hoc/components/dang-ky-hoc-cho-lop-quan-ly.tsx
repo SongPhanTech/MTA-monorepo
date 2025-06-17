@@ -18,13 +18,21 @@ interface FilterProps {
     semesterId: string | null
 }
 
-export default function RegisterClassManager() {
+interface RegisterClassProps {
+    setSemesterId?: (id: string | null) => void
+    setSubjectClassId?: (id: string | null) => void
+}
+
+export default function RegisterClassManager({
+    setSemesterId,
+    setSubjectClassId,
+}: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
     })
-    const { getScheduleLabel, scheduleOptions } = useScheduleOptions()
+    const { getScheduleLabel } = useScheduleOptions()
 
     const { data: subjectClassData, refetch } = useFindManySubjectClass({
         where: {
@@ -128,6 +136,12 @@ export default function RegisterClassManager() {
                 rowKey="id"
                 id="subject-class"
                 dataSource={subjectClassData}
+                onRow={(record) => ({
+                    onClick: () => {
+                        setSemesterId?.(record.semesterId)
+                        setSubjectClassId?.(record.id)
+                    },
+                })}
                 columns={[
                     {
                         title: 'STT',

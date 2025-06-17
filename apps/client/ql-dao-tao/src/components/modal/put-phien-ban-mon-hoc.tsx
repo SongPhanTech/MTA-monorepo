@@ -3,7 +3,11 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
+import {
+    type Subject,
+    SubjectEquivalentType,
+    type SubjectVersion,
+} from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -76,7 +80,7 @@ const PutVersionSubjectModal = () => {
             title: subject.name,
             value: subject.id,
             children:
-                subject.subjectVersion.map((version) => ({
+                subject.subjectVersion.map((version: Subject) => ({
                     title: version.name,
                     value: version.id,
                 })) || [],

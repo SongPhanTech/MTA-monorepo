@@ -1,56 +1,64 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import DefaultLayout from '@layouts/default-layout'
 import { Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tabs, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
-import TabPane from 'antd/es/tabs/TabPane'
-import { useFindManyFixedClass } from '@workspace/db/hooks'
+import { useState } from 'react'
+import { useFixedClassBySubjectClassSemester } from '@workspace/libs/api/training'
+import { QueryClient } from '@tanstack/react-query'
 // const { Option } = Select;
 
 interface FilterProps {
     searchText: string | null
 }
 
-export default function FixedClass() {
+interface FixedClassProps {
+    semesterId?: string | null
+    subjectClassId?: string | null
+}
+
+export default function FixedClass({
+    semesterId,
+    subjectClassId,
+}: FixedClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
 
-    const { data: fixedClassData, refetch } = useFindManyFixedClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-        },
-        include: {
-            trainingCourse: true,
-            students: true,
-        },
-    })
+    const queryClient = new QueryClient()
 
-    // console.log(fixedClassData);
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
+    const { data: fixedClass } = useFixedClassBySubjectClassSemester(
+        {
+            semesterId: semesterId || '',
+            subjectClassId: subjectClassId || '',
+            // search: filters.searchText,
+            page: '1',
+            pageSize: '10',
+        },
+        {
+            query: {
+                enabled: !!semesterId && !!subjectClassId,
+            },
+        },
+        queryClient
     )
+
+    console.log(fixedClass?.data?.data)
+
+    // const debouncedRefetch = useCallback(
+    //     _.debounce(() => {
+    //         refetch()
+    //     }, 500),
+    //     []
+    // )
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
+            // debouncedRefetch()
             return newFilters
         })
     }
@@ -94,7 +102,7 @@ export default function FixedClass() {
                     selectedRowKeys,
                     onChange: setSelectedRowKeys,
                 }}
-                dataSource={fixedClassData}
+                dataSource={fixedClass?.data?.data}
                 columns={[
                     {
                         title: 'STT',
@@ -125,10 +133,9 @@ export default function FixedClass() {
                     },
                     {
                         title: 'Số HV, SV',
-                        dataIndex: 'students',
+                        dataIndex: ['_count', 'students'],
                         align: 'center',
                         width: 120,
-                        render: (record) => (record ? record.length : ''),
                     },
                 ]}
                 pagination={{

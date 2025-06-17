@@ -11,53 +11,65 @@ interface TabItem {
     content: React.ReactNode
 }
 
-const leftTabs: TabItem[] = [
-    {
-        key: '1',
-        label: 'Đăng ký học cho lớp quản lý',
-        content: <RegisterClassManager />,
-    },
-    {
-        key: '2',
-        label: 'Đăng ký học cho cá nhân',
-        content: <p>Đăng ký môn học cho cá nhân</p>,
-    },
-    {
-        key: '3',
-        label: 'Kết quả đăng ký học lớp quản lý',
-        content: <p>Xem kết quả đăng ký học của lớp quản lý</p>,
-    },
-]
-
-const rightTabsMap: Record<string, TabItem[]> = {
-    '1': [
-        {
-            key: '1',
-            label: 'Lớp có môn theo KHGD',
-            content: <FixedClass />,
-        },
-        {
-            key: '2',
-            label: 'Lớp đăng ký thiếu',
-            content: <p>Lớp đăng ký thiếu</p>,
-        },
-    ],
-    '2': [
-        {
-            key: '1',
-            label: 'Học viên có môn theo KHGD',
-            content: <p>Học viên có môn theo KHGD</p>,
-        },
-        {
-            key: '2',
-            label: 'Lớp đăng ký thiếu',
-            content: <p>Lớp đăng ký thiếu</p>,
-        },
-    ],
-}
-
 export default function RegisterClass() {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
+    const [semesterId, setSemesterId] = useState<string | null>(null)
+    const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
+
+    const leftTabs: TabItem[] = [
+        {
+            key: '1',
+            label: 'Đăng ký học cho lớp quản lý',
+            content: (
+                <RegisterClassManager
+                    setSemesterId={setSemesterId}
+                    setSubjectClassId={setSubjectClassId}
+                />
+            ),
+        },
+        {
+            key: '2',
+            label: 'Đăng ký học cho cá nhân',
+            content: <RegisterClassManager />,
+        },
+        {
+            key: '3',
+            label: 'Kết quả đăng ký học lớp quản lý',
+            content: <p>Xem kết quả đăng ký học của lớp quản lý</p>,
+        },
+    ]
+
+    const rightTabsMap: Record<string, TabItem[]> = {
+        '1': [
+            {
+                key: '1',
+                label: 'Lớp có môn theo KHGD',
+                content: (
+                    <FixedClass
+                        semesterId={semesterId}
+                        subjectClassId={subjectClassId}
+                    />
+                ),
+            },
+            {
+                key: '2',
+                label: 'Lớp đăng ký thiếu',
+                content: <p>Lớp đăng ký thiếu</p>,
+            },
+        ],
+        '2': [
+            {
+                key: '1',
+                label: 'Học viên có môn theo KHGD',
+                content: <p>Học viên có môn theo KHGD</p>,
+            },
+            {
+                key: '2',
+                label: 'Lớp đăng ký thiếu',
+                content: <p>Lớp đăng ký thiếu</p>,
+            },
+        ],
+    }
 
     const renderRightTabs = () => {
         const rightTabs = rightTabsMap[activeLeftTab]
