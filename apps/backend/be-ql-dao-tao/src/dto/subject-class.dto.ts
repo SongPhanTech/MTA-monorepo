@@ -87,6 +87,58 @@ export type FixedClassBySubjectClassSemester = z.infer<
     typeof FixedClassBySubjectClassSemester
 >
 
+export const StudentClassBySubjectClassSemester = z
+    .object({
+        id: z.string(),
+        code: z.string(),
+        active: z.boolean(),
+        description: z.string().nullable(),
+        deletedAt: z.string().nullable(),
+        createdAt: z.string(),
+        updatedAt: z.string(),
+        name: z.string(),
+        summary: z.string().nullable(),
+        startYear: z.number(),
+        graduated: z.boolean(),
+        trainingCourseId: z.string(),
+        managementOrganizationId: z.string().nullable(),
+        lecturerManagementId: z.string().nullable(),
+        staffManagementId: z.string().nullable(),
+        initSize: z.number(),
+        curriculumVersionId: z.string(),
+
+        trainingCourse: z.object({
+            id: z.string(),
+            name: z.string(),
+            code: z.string(),
+        }),
+
+        curriculumVersion: z.object({
+            id: z.string(),
+            name: z.string(),
+            code: z.string(),
+            curriculum: z.object({
+                id: z.string(),
+                name: z.string(),
+                code: z.string(),
+                trainingMajor: z.object({
+                    id: z.string(),
+                    name: z.string(),
+                    code: z.string(),
+                }),
+            }),
+        }),
+
+        _count: z.object({
+            students: z.number(),
+        }),
+    })
+    .openapi('StudentClassBySubjectClassSemester')
+
+export type StudentClassBySubjectClassSemester = z.infer<
+    typeof StudentClassBySubjectClassSemester
+>
+
 export const EnrollFixedClassOnSubjectClass = z
     .object({
         description: z.string().nullable(),
