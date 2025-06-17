@@ -2,6 +2,7 @@ import { AnyCnameRecord } from 'node:dns'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import { PutOpenSubjectClassModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     SUBJECT_CLASS_SCHEDULE_TYPE,
@@ -40,6 +41,7 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
@@ -68,22 +70,30 @@ export default function TeachingAssignment() {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             semester: {
-                id: filters.semesterStartId || undefined,
-                trainingCoursesStart: {
-                    some: {
-                        id: filters.trainingCourseId || undefined,
-                    },
-                },
+                ...(filters.semesterStartId
+                    ? { id: filters.semesterStartId }
+                    : {}),
+                ...(filters.trainingCourseId
+                    ? {
+                          trainingCoursesStart: {
+                              some: { id: filters.trainingCourseId },
+                          },
+                      }
+                    : {}),
             },
-            subject: {
-                managementOrganization: {
-                    trainingMajors: {
-                        some: {
-                            id: filters.trainingMajorId || undefined,
-                        },
-                    },
-                },
-            },
+            ...(filters.trainingMajorId
+                ? {
+                      subject: {
+                          managementOrganization: {
+                              trainingMajors: {
+                                  some: {
+                                      id: filters.trainingMajorId,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             semester: true,
@@ -284,6 +294,14 @@ export default function TeachingAssignment() {
         }
     }
 
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutOpenSubjectClassModal.name,
+    })
+
+    const handleModal = () => {
+        onOpen()
+    }
+
     const handleCancel = () => {
         setIsEdit(false)
         setDataSubmit([...data])
@@ -368,6 +386,13 @@ export default function TeachingAssignment() {
 
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() => handleModal()}
+                                    //TODO: handle save
+                                    type="primary"
+                                >
+                                    Thêm mới lớp MH
+                                </Button>
                                 <Button
                                     //TODO: handle export
                                     type="primary"

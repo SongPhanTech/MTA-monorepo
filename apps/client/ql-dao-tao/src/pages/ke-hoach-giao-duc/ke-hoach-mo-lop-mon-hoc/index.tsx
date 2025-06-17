@@ -6,7 +6,12 @@ import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear, Semester, SubjectVersion, TrainingObjectType } from '@workspace/db'
+import type {
+    SchoolYear,
+    Semester,
+    SubjectVersion,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useFindManySchoolYear,
     useFindManyTrainingCourse,
@@ -36,10 +41,10 @@ export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedSemeter, setSelectedSemeter] = useState({})
+    const [selectedSemester, setSelectedSemester] = useState<Semester>({})
     const [form] = useForm<FilterProps>()
 
-    const { data: schoolYears=[] } = useFindManySchoolYear({
+    const { data: schoolYears = [] } = useFindManySchoolYear({
         include: { semesters: { orderBy: { order: 'asc' } } },
         orderBy: { order: 'asc' },
     })
@@ -55,20 +60,23 @@ export default function SubjectOpeningPlan() {
         {},
         queryClient
     )
-        const treeData=useMemo(()=>{
-        return schoolYears.map(i=>({
-            title:i?.name,key:i?.id,
-            value:i?.id,
+    const treeData = useMemo(() => {
+        return schoolYears.map((i) => ({
+            title: i?.name,
+            key: i?.id,
+            value: i?.id,
             selectable: false,
-            code:i?.code,
-            children:i?.semesters?.length ? i?.semesters.map(j=>({
-                title:j?.name,key:j?.id,
-                value:j?.id,
-                code:j?.code
-            })):[]
+            code: i?.code,
+            children: i?.semesters?.length
+                ? i?.semesters.map((j) => ({
+                      title: j?.name,
+                      key: j?.id,
+                      value: j?.id,
+                      code: j?.code,
+                  }))
+                : [],
         }))
-    },[schoolYears])
-
+    }, [schoolYears])
 
     const data = useMemo(
         () =>
@@ -91,8 +99,13 @@ export default function SubjectOpeningPlan() {
                     lastSchoolYear.semesters[
                         lastSchoolYear.semesters.length - 1
                     ]
-                form.setFieldValue('semesterId', lastSemester.id);
-                setSelectedSemeter({id:lastSemester?.id,label:lastSemester.name,code:lastSemester.code,key:lastSemester.id});
+                form.setFieldValue('semesterId', lastSemester.id)
+                setSelectedSemester({
+                    id: lastSemester?.id,
+                    label: lastSemester.name,
+                    code: lastSemester.code,
+                    key: lastSemester.id,
+                })
             }
         }
     }, [schoolYears, form])
@@ -216,10 +229,15 @@ export default function SubjectOpeningPlan() {
                                                 filterTreeNode={(input, node) =>
                                                     (node.title as string)
                                                         .toLowerCase()
-                                                        .includes(input.toLowerCase())
+                                                        .includes(
+                                                            input.toLowerCase()
+                                                        )
                                                 }
                                                 onSelect={(value, node) =>
-                                                  setSelectedSemeter({...node,id:node.value})
+                                                    setSelectedSemester({
+                                                        ...node,
+                                                        id: node.value,
+                                                    })
                                                 }
                                             />
                                         </Form.Item>
@@ -244,7 +262,6 @@ export default function SubjectOpeningPlan() {
                                                 )}
                                                 allowClear
                                             />
-                                       
                                         </Form.Item>
                                     </Col>
                                     <Col span={8}>
@@ -274,10 +291,8 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary" >
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" >
+                                <Button type="primary">Thêm mới</Button>
+                                <Button type="primary">
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>
@@ -289,7 +304,6 @@ export default function SubjectOpeningPlan() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-category"
                         rowSelection={{
                             selectedRowKeys,
                             onChange: (selectedKeys) =>
@@ -299,7 +313,7 @@ export default function SubjectOpeningPlan() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -338,6 +352,32 @@ export default function SubjectOpeningPlan() {
                                         {values?.map((val) => (
                                             <li key={val.subjectClassName}>
                                                 {`${val.subjectClassName} ${val.subjectClassCode}`}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ),
+                            },
+                            {
+                                title: 'Danh sách lớp biên chế',
+                                dataIndex: 'fixedClass',
+                                width: 200,
+                                align: 'center',
+                                render: (
+                                    values: {
+                                        fixedClassId: string
+                                        fixedClassName: string
+                                        fixedClassCount: number
+                                    }[]
+                                ) => (
+                                    <ul
+                                        style={{
+                                            paddingLeft: 16,
+                                            margin: 0,
+                                        }}
+                                    >
+                                        {values?.map((val) => (
+                                            <li key={val.fixedClassName}>
+                                                {`${val.fixedClassName}`}
                                             </li>
                                         ))}
                                     </ul>
@@ -425,7 +465,10 @@ export default function SubjectOpeningPlan() {
                                         return (
                                             <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={onOpen.bind(null, {...record,semeter:selectedSemeter})}
+                                                onClick={onOpen.bind(null, {
+                                                    ...record,
+                                                    semester: selectedSemester,
+                                                })}
                                             >
                                                 <CalendarPlus
                                                     size={16}

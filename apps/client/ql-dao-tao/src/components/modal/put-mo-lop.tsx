@@ -55,17 +55,17 @@ export type PutOpenSubjectClassType = {
 
 export type OpenSubjectClassType = OpenSubjectClass & {
     studentCount: number
-    semeter: {
+    semester: {
         id: string
         name: string
-        value:string
-        key:string
-        code:string
+        value: string
+        key: string
+        code: string
     }
-    subjectClassScheduleId:SubjectClassSchedule
+    subjectClassScheduleId: SubjectClassSchedule
     schedule: SubjectClassSchedule
-    startDate?:Date
-    subjectVersionCode: string
+    startDate?: Date
+    subjectVersionCode?: string
 }
 
 const PutOpenClassModal = () => {
@@ -74,9 +74,7 @@ const PutOpenClassModal = () => {
         isOpen,
         onClose,
         input: dataClass,
-    } = useDisclosure<
-       OpenSubjectClassType
-    >({
+    } = useDisclosure<OpenSubjectClassType>({
         tag: PutOpenClassModal.name,
         onClose: form.resetFields,
     })
@@ -116,17 +114,16 @@ const PutOpenClassModal = () => {
                 //                 })
             } else {
                 console.log(dataSubmit)
-                    await createMany({
-                        data: dataSubmit.map((i) => ({
-                            name: i.subjectVersionName,
-                            startDate: new Date(),
-                            subjectId: i.subjectVersionId,
-                            schedule:  i.subjectClassScheduleId,
-                            semesterId: i.semeter.id,
-                            code:  i?.subjectVersionCode
-                        })),
-                    })
-             
+                await createMany({
+                    data: dataSubmit.map((i) => ({
+                        name: i.subjectVersionName,
+                        startDate: new Date(),
+                        subjectId: i.subjectVersionId,
+                        schedule: i.subjectClassScheduleId,
+                        semesterId: i.semester.id,
+                        code: i?.subjectVersionCode,
+                    })),
+                })
             }
 
             // // refetch() lại danh sách level
@@ -149,7 +146,7 @@ const PutOpenClassModal = () => {
                 result.push({
                     ...dataClass,
                     key: i + 1,
-                    subjectVersionCode: `${dataClass.subjectVersionCode} 0${i + 1}`,
+                    subjectVersionCode: `${dataClass?.subjectVersionCode} 0${i + 1}`,
                     maxStudent: cout,
                     subjectClassScheduleId: form.getFieldValue(
                         'subjectClassScheduleId'
@@ -171,7 +168,7 @@ const PutOpenClassModal = () => {
                 result.push({
                     ...dataClass,
                     key: i + 1,
-                    subjectVersionCode: `${dataClass.subjectVersionCode} 0${i + 1}`,
+                    subjectVersionCode: `${dataClass?.subjectVersionCode} 0${i + 1}`,
                     maxStudent: maxStudent,
                     subjectClassScheduleId: form.getFieldValue(
                         'subjectClassScheduleId'
@@ -182,6 +179,16 @@ const PutOpenClassModal = () => {
             }
             setDataSubmit(result)
         }
+    }
+
+    const handleChangeDate = (date: any, record: OpenSubjectClassType) => {
+        // record={...record,examDate:date.format('YYYY-MM-DD')}
+
+        console.log(date, record)
+    }
+
+    const handleChangeLocation = (value: string) => {
+        console.log(value)
     }
 
     const {
@@ -218,12 +225,12 @@ const PutOpenClassModal = () => {
             className="w-[80vw]"
         >
             <Col span={6}>
-                <div>Mã HK: {dataClass?.semeter?.code}</div>
+                <div>Mã HK: {dataClass?.semester?.code}</div>
             </Col>
-            <Col span={6}>{dataClass?.semeter?.name}</Col>
+            <Col span={6}>{dataClass?.semester?.name}</Col>
             <Col span={6}>Đơn vị phụ trách:</Col>
             <Col span={6}>Bộ môn: </Col>
-            <Col span={6}>Mã MH: {dataClass?.subjectVersionId}</Col>
+            <Col span={6}>Mã MH: {dataClass?.subjectVersionCode}</Col>
             <Col span={6}>Tên MH: {dataClass?.subjectVersionName}</Col>
             <Col span={6}>Tổng SV: {dataClass?.studentCount}</Col>
             <Col span={6}>Tổng SV nợ môn: 0</Col>
@@ -368,15 +375,17 @@ const PutOpenClassModal = () => {
                         },
                         {
                             title: 'Ngày thi',
-                            dataIndex: 'examDate',
                             width: 150,
                             align: 'center',
-                            render: (value) => (
+                            render: (record) => (
                                 <DatePicker
                                     format="DD/MM/YYYY"
                                     className="w-full"
                                     disabledDate={(date) =>
                                         date && date < dayjs().startOf('day')
+                                    }
+                                    onChange={(date) =>
+                                        handleChangeDate(date, record)
                                     }
                                 />
                             ),
@@ -387,7 +396,11 @@ const PutOpenClassModal = () => {
                             width: 150,
                             align: 'center',
                             render: () =>
-                                getExamTypeLabel(subjectVersionData?.examType),
+                                subjectVersionData?.examType
+                                    ? getExamTypeLabel(
+                                          subjectVersionData.examType
+                                      )
+                                    : '',
                         },
                         {
                             title: 'Phòng học',
@@ -404,6 +417,9 @@ const PutOpenClassModal = () => {
                                         }
                                     })}
                                     style={{ width: '100%' }}
+                                    onChange={(value) =>
+                                        handleChangeLocation(value)
+                                    }
                                 />
                             ),
                         },
