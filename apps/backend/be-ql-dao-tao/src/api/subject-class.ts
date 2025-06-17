@@ -592,7 +592,7 @@ group by fixed_class_id
         {
             data: fixedClasses.map((e) => ({
                 ...e,
-                checked: e.subjectClasses.find(
+                checked: !!e.subjectClasses.find(
                     (sc) => sc.id === subjectClassId
                 ),
             })),
@@ -741,7 +741,7 @@ group by fixed_class_id
         {
             data: students.map((e) => ({
                 ...e,
-                checked: e.subjectClassStudent.find(
+                checked: !!e.subjectClassStudent.find(
                     (sCs) => sCs.subjectClassId === subjectClassId
                 ),
             })),
