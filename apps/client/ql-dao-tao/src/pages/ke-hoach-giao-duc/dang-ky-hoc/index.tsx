@@ -4,6 +4,7 @@ import type React from 'react'
 import { useState } from 'react'
 import RegisterClassManager from './components/dang-ky-hoc-cho-lop-quan-ly'
 import FixedClass from './components/lop-co-mon-theo-khgd'
+import StudentCourseByPlan from './components/hoc-vien-co-mon-theo-khgd'
 
 interface TabItem {
     key: string
@@ -30,7 +31,12 @@ export default function RegisterClass() {
         {
             key: '2',
             label: 'Đăng ký học cho cá nhân',
-            content: <RegisterClassManager />,
+            content: (
+                <RegisterClassManager
+                    setSemesterId={setSemesterId}
+                    setSubjectClassId={setSubjectClassId}
+                />
+            ),
         },
         {
             key: '3',
@@ -61,7 +67,12 @@ export default function RegisterClass() {
             {
                 key: '1',
                 label: 'Học viên có môn theo KHGD',
-                content: <p>Học viên có môn theo KHGD</p>,
+                content: (
+                    <StudentCourseByPlan
+                        semesterId={semesterId}
+                        subjectClassId={subjectClassId}
+                    />
+                ),
             },
             {
                 key: '2',
@@ -88,23 +99,29 @@ export default function RegisterClass() {
 
     return (
         <Row gutter={[16, 0]}>
-            <Col span={24}>
-                <Flex gap={8}>
+            <Col span={24} className="!p-0">
+                <Flex>
                     <Col span={activeLeftTab === '3' ? 24 : 14}>
-                        <Tabs
-                            activeKey={activeLeftTab}
-                            onChange={setActiveLeftTab}
-                        >
-                            {leftTabs.map((tab) => (
-                                <Tabs.TabPane tab={tab.label} key={tab.key}>
-                                    {tab.content}
-                                </Tabs.TabPane>
-                            ))}
-                        </Tabs>
+                        <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
+                            <Tabs
+                                activeKey={activeLeftTab}
+                                onChange={setActiveLeftTab}
+                            >
+                                {leftTabs.map((tab) => (
+                                    <Tabs.TabPane tab={tab.label} key={tab.key}>
+                                        {tab.content}
+                                    </Tabs.TabPane>
+                                ))}
+                            </Tabs>
+                        </div>
                     </Col>
 
                     {activeLeftTab !== '3' && (
-                        <Col span={10}>{renderRightTabs()}</Col>
+                        <Col span={10}>
+                            <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
+                                {renderRightTabs()}
+                            </div>
+                        </Col>
                     )}
                 </Flex>
             </Col>
@@ -113,5 +130,5 @@ export default function RegisterClass() {
 }
 
 RegisterClass.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }
