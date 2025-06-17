@@ -156,45 +156,53 @@ const PutTrainingBlockSubject = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-6">
                     <span>Có sử dụng để tính điểm thi cuối kỳ hay không?</span>
                     <FormItem
                         form={form}
                         name="useForFinalScore"
                         valuePropName="checked"
+                        className="mb-0"
                     >
                         <Checkbox />
                     </FormItem>
                 </div>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-6">
                     <span>Có phải là môn học tốt nghiệp hay không?</span>
                     <FormItem
                         form={form}
                         name="graduation"
                         valuePropName="checked"
+                        className="mb-0"
                     >
                         <Checkbox />
                     </FormItem>
                 </div>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-6">
                     <span>Có phải là môn học đồ án hay không?</span>
                     <FormItem
                         form={form}
                         name="project"
                         valuePropName="checked"
+                        className="mb-0"
                     >
                         <Checkbox />
                     </FormItem>
                 </div>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-6">
                     <span>Có in trên bảng điểm hay không?</span>
-                    <FormItem form={form} name="print" valuePropName="checked">
+                    <FormItem
+                        form={form}
+                        name="print"
+                        valuePropName="checked"
+                        className="mb-0"
+                    >
                         <Checkbox />
                     </FormItem>
                 </div>
