@@ -1,39 +1,95 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import DefaultLayout from '@layouts/default-layout'
 import { Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tabs, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useState } from 'react'
-import TabPane from 'antd/es/tabs/TabPane'
+import { useEffect, useState } from 'react'
+import {
+    enrollFixedClassOnSubjectClass,
+    useFixedClassBySubjectClassSemester,
+} from '@workspace/libs/api/training'
+import { QueryClient } from '@tanstack/react-query'
+import type { FixedClassBySubjectClassSemester } from '@workspace/libs/api/schemas/fixedClassBySubjectClassSemester'
 // const { Option } = Select;
 
 interface FilterProps {
     searchText: string | null
-    trainingCourseId: string | null
 }
 
-const dataFake2 = [
-    {
-        id: 1,
-        class: 'ANHTTT56',
-        kh: 'An ninh phần cứng',
-        cn: 'An ninh hệ thống thông tin',
-        sv: 40,
-    },
-    {
-        id: 2,
-        class: 'ANHTTT57',
-        kh: 'An ninh phần cứng 1',
-        cn: 'An ninh hệ thống thông tin 2',
-        sv: 50,
-    },
-]
+interface FixedClassProps {
+    semesterId?: string | null
+    subjectClassId?: string | null
+}
 
-export default function FixedClass() {
+export default function FixedClass({
+    semesterId,
+    subjectClassId,
+}: FixedClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+    })
+
+    const queryClient = new QueryClient()
+
+    const { data: fixedClass } = useFixedClassBySubjectClassSemester(
+        {
+            semesterId: semesterId || '',
+            subjectClassId: subjectClassId || '',
+            // search: filters.searchText,
+            page: '1',
+            pageSize: '10',
+        },
+        {
+            query: {
+                enabled: !!semesterId && !!subjectClassId,
+            },
+        },
+        queryClient
+    )
+
+    useEffect(() => {
+        if (fixedClass?.data?.data) {
+            const selectedKeys = fixedClass.data.data
+                .filter(
+                    (item: FixedClassBySubjectClassSemester) => item.checked
+                )
+                .map((item: FixedClassBySubjectClassSemester) => item.id)
+            setSelectedRowKeys(selectedKeys)
+        }
+    }, [fixedClass?.data?.data])
+
+    // const debouncedRefetch = useCallback(
+    //     _.debounce(() => {
+    //         refetch()
+    //     }, 500),
+    //     []
+    // )
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            // debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const handleSave = async () => {
+        if (!subjectClassId) return
+
+        try {
+            await enrollFixedClassOnSubjectClass({
+                fixedClassIds: selectedRowKeys as string[],
+                subjectClassId,
+            })
+            message.success('Gán lớp cố định thành công!')
+            queryClient.invalidateQueries()
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi gán lớp cố định!')
+        }
+    }
 
     return (
         <div>
@@ -45,6 +101,12 @@ export default function FixedClass() {
                                 <Input
                                     id="search"
                                     placeholder="Nhập tên lớp..."
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
                                     style={{ height: 32 }}
                                     prefix={
                                         <Search
@@ -63,11 +125,12 @@ export default function FixedClass() {
             </Row>
             <Table
                 rowKey="id"
-                id="training-block"
+                id="fixed-class"
                 rowSelection={{
                     selectedRowKeys,
                     onChange: setSelectedRowKeys,
                 }}
+                dataSource={fixedClass?.data?.data}
                 columns={[
                     {
                         title: 'STT',
@@ -81,14 +144,15 @@ export default function FixedClass() {
                     },
                     {
                         title: 'Tên lớp QL',
-                        dataIndex: 'class',
+                        dataIndex: 'name',
                         align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Khoá học',
-                        dataIndex: 'kh',
+                        dataIndex: 'trainingCourse',
                         width: 150,
+                        render: (record) => (record.name ? record.name : ''),
                     },
                     {
                         title: 'Chuyên ngành',
@@ -97,19 +161,22 @@ export default function FixedClass() {
                     },
                     {
                         title: 'Số HV, SV',
-                        dataIndex: 'sv',
+                        dataIndex: ['_count', 'students'],
                         align: 'center',
                         width: 120,
                     },
                 ]}
-                dataSource={dataFake2}
                 pagination={{
                     current: currentPage,
                     onChange: setCurrentPage,
                 }}
             />
             <Flex justify="end" style={{ marginTop: 16 }}>
-                <Button type="primary" className="h-[32px] px-4">
+                <Button
+                    type="primary"
+                    className="h-[32px] px-4"
+                    onClick={handleSave}
+                >
                     Lưu
                 </Button>
             </Flex>

@@ -19,7 +19,7 @@ export type ListOfundefined = PaginationQuery & {
         description?: string | null
         deletedAt?: string | null
         /**
-         * @default 2025-06-15T15:02:21.776Z
+         * @default 2025-06-18T03:19:28.228Z
          */
         createdAt?: string | null
         updatedAt: string | null
@@ -141,6 +141,7 @@ export type OpenSubjectClass = {
     trainingCourseId: string
     subjectVersionId: string
     subjectVersionName: string
+    subjectVersionCode: string
     subjectVersionCredit: number
     curriculumVersion: {
         curriculumVersionId: string
@@ -155,6 +156,7 @@ export type OpenSubjectClass = {
         fixedClassId: string
         fixedClassName: string
         fixedClassCount: number
+        fixedClassSemester: number
     }[]
     countStudent: number
 }
@@ -192,3 +194,195 @@ export type Page = string
  * @default 10
  */
 export type PageSize = string
+
+export type FixedClassBySubjectClassSemester = {
+    id: string
+    code: string
+    active: boolean
+    description: string | null
+    deletedAt: string | null
+    createdAt: string
+    updatedAt: string
+    name: string
+    summary: string | null
+    startYear: number
+    graduated: boolean
+    trainingCourseId: string
+    managementOrganizationId: string | null
+    lecturerManagementId: string | null
+    staffManagementId: string | null
+    initSize: number
+    curriculumVersionId: string
+    trainingCourse: {
+        id: string
+        name: string
+        code: string
+    }
+    curriculumVersion: {
+        id: string
+        name: string
+        code: string
+        curriculum: {
+            id: string
+            name: string
+            code: string
+            trainingMajor: {
+                id: string
+                name: string
+                code: string
+            }
+        }
+    }
+    checked: boolean
+    _count: {
+        students: number
+    }
+}
+
+export type StudentClassBySubjectClassSemester = {
+    id: string
+    code: string
+    active: boolean
+    description: string | null
+    deletedAt: string | null
+    createdAt: string | null
+    updatedAt: string | null
+    from: string | null
+    to: string | null
+    trainingLocationId: string | null
+    status:
+        | 'ENROLLED'
+        | 'GRADUATED'
+        | 'DEFERRED_STUDY'
+        | 'SUSPENDED_STUDY'
+        | 'WITHDRAWN'
+        | 'TRANSFERRED'
+        | 'PENDING_GRADUATION_REVIEW'
+        | 'ACADEMIC_SUSPENSION'
+    fixedClassId: string
+    userProfileId: string
+    trainingLevelId: string | null
+    trainingObjectTypeId: string | null
+    trainingTypeId: string | null
+    trainingFormId: string | null
+    registrationAreaId: string | null
+    curriculumVersionId: string
+    studyRankId: string | null
+    trainingRankId: string | null
+    userProfile: {
+        id: string
+        code: string | null
+        lastName: string
+        firstName: string
+        familyName: string | null
+        gender: 'Male' | 'Female'
+        dateOfBirth: string | null
+    }
+    checked: boolean
+    fixedClass: {
+        id: string
+        name: string
+        code: string
+        trainingCourse: {
+            id: string
+            name: string
+            code: string
+        }
+        curriculumVersion: {
+            id: string
+            name: string
+            code: string
+            curriculum: {
+                id: string
+                name: string
+                code: string
+                trainingMajor: {
+                    id: string
+                    name: string
+                    code: string
+                }
+            }
+        }
+    }
+}
+
+export type EnrollFixedClassOnSubjectClass = {
+    id: string
+    code: string
+    active: boolean
+    description: string | null
+    deletedAt: string | null
+    createdAt: string | null
+    updatedAt: string | null
+    from: string | null
+    to: string | null
+    trainingLocationId: string | null
+    status:
+        | 'ENROLLED'
+        | 'GRADUATED'
+        | 'DEFERRED_STUDY'
+        | 'SUSPENDED_STUDY'
+        | 'WITHDRAWN'
+        | 'TRANSFERRED'
+        | 'PENDING_GRADUATION_REVIEW'
+        | 'ACADEMIC_SUSPENSION'
+    fixedClassId: string
+    userProfileId: string
+    trainingLevelId: string | null
+    trainingObjectTypeId: string | null
+    trainingTypeId: string | null
+    trainingFormId: string | null
+    registrationAreaId: string | null
+    curriculumVersionId: string
+    studyRankId: string | null
+    trainingRankId: string | null
+    userProfile: {
+        id: string
+        code: string | null
+        lastName: string
+        firstName: string
+        familyName: string | null
+        gender: 'Male' | 'Female'
+        dateOfBirth: string | null
+    }
+    fixedClass: {
+        id: string
+        name: string
+        code: string
+        trainingCourse: {
+            id: string
+            name: string
+            code: string
+        }
+        curriculumVersion: {
+            id: string
+            name: string
+            code: string
+            curriculum: {
+                id: string
+                name: string
+                code: string
+                trainingMajor: {
+                    id: string
+                    name: string
+                    code: string
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Danh sách ID lớp quản lý
+ */
+export type FixedClassIds = string[]
+
+/**
+ * Danh sách ID học viên
+ */
+export type StudentIds = string[]
+
+/**
+ * Danh sách ID học viên cần xóa
+ */
+export type RemoveStudentIds = string[]

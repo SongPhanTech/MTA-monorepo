@@ -426,6 +426,7 @@ Table SubjectClass {
   subject SubjectVersion [not null]
   subjectId String [not null]
   schedule SubjectClassSchedule [not null]
+  maxStudent Int [not null]
   semester Semester [not null]
   semesterId String [not null]
   lecturerAssignmentDeadline DateTime

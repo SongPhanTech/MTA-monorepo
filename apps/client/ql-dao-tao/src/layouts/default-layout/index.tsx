@@ -7,7 +7,6 @@ import { getDynamicTitle } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import NAVIGATION from '@workspace/router'
 import { SearchSystem } from '@workspace/ui'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
@@ -20,7 +19,13 @@ const DefaultLayout = ({
     children,
     className,
     headerChildren,
-}: { children: ReactNode; className?: string; headerChildren?: string }) => {
+    unLayout = false,
+}: {
+    children: ReactNode
+    className?: string
+    headerChildren?: string
+    unLayout?: boolean
+}) => {
     const router = useRouter()
     const currentPath = router.pathname
     const title = getDynamicTitle('QL_DAO_TAO', currentPath)
@@ -104,17 +109,21 @@ const DefaultLayout = ({
                         </div>
                     </Header>
                     <Content className="mx-2">
-                        <div
-                            className={cn(
-                                'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
-                                className
-                            )}
-                            style={{
-                                background: colorBgContainer,
-                            }}
-                        >
-                            {children}
-                        </div>
+                        {unLayout ? (
+                            children
+                        ) : (
+                            <div
+                                className={cn(
+                                    'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
+                                    className
+                                )}
+                                style={{
+                                    background: colorBgContainer,
+                                }}
+                            >
+                                {children}
+                            </div>
+                        )}
                     </Content>
                 </Layout>
             </Layout>
