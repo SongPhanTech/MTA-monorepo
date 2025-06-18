@@ -43,18 +43,20 @@ model StudentSubjectScore extends Base {
   finalScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
 
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
-  // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26)
+  // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
   examPostponed    Boolean                   @default(false) // hoãn thi
 
   // Điểm R là điểm áp dụng cho học phần mà học viên được phép miễn học và
   // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT. 
   exempted         Boolean                   @default(false) // được miễn học
 
-  // Điểm W được sử dụng để ghi chú cho học phần mà học viên đã làm đơn xin rút khỏi danh sách đăng ký đúng hạn và được chấp nhận
+  // Điểm W được sử dụng để ghi chú cho học phần mà học viên
+  // đã làm đơn xin rút khỏi danh sách đăng ký đúng hạn và được chấp nhận.
   withdrew         Boolean                   @default(false) // rút khỏi
 
-  // Điểm X được sử dụng đối với những học phần mà Phòng Đào tạo chưa nhận được kết quả học tập của học viên.
-  // if finalScore === null
+  // Điểm X được sử dụng đối với những học phần
+  // mà Phòng Đào tạo chưa nhận được kết quả học tập của học viên.
+  // ~ if finalScore === null
 
   examBanned       Boolean                   @default(false) // cấm thi
   suspended        Boolean                   @default(false) // đình chỉ

@@ -333,6 +333,8 @@ model StudentSubjectScore {
   bonusScore       Float?
   finalScore       Float?
   examPostponed    Boolean                   @default(false)
+  exempted         Boolean                   @default(false)
+  withdrew         Boolean                   @default(false)
   examBanned       Boolean                   @default(false)
   suspended        Boolean                   @default(false)
 
