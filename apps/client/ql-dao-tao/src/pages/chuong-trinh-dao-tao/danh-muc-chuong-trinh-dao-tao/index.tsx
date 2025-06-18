@@ -13,11 +13,7 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import type {
-    TrainingBlock,
-    TrainingMajor,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingMajor, TrainingObjectType } from '@workspace/db'
 import { Search } from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
