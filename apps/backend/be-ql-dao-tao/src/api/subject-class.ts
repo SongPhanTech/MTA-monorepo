@@ -603,7 +603,7 @@ group by fixed_class_id
                     (sc) => sc.id === subjectClassId
                 ),
             })),
-            count: res.length > 0 && res[0] ? res[0].full_count : 0,
+            count: res.length > 0 && res[0] ? Number(res[0].full_count) : 0,
             success: true,
         },
         200
@@ -754,7 +754,7 @@ group by fixed_class_id
                     (sCs) => sCs.subjectClassId === subjectClassId
                 ),
             })),
-            count: res.length > 0 && res[0] ? res[0].full_count : 0,
+            count: res.length > 0 && res[0] ? Number(res[0].full_count) : 0,
             success: true,
         },
         200
