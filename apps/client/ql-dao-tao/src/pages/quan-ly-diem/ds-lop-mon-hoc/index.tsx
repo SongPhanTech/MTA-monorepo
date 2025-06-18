@@ -11,28 +11,42 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
     useCountSubjectClass,
+    useUpdateSubjectClass,
     useFindManySchoolYear,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
-import { CalendarPlus, Search } from 'lucide-react'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
-import _, { includes } from 'lodash'
+import type { TrainingObjectType, SubjectClass } from '@workspace/db'
+import {
+    CalendarPlus,
+    Search,
+    LockKeyhole,
+    LockKeyholeOpen,
+} from 'lucide-react'
+import { Button, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
+import _, { forEach, includes } from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
 import { CalendarOutlined } from '@ant-design/icons'
 import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 
 // const { Option } = Select;
 interface FilterProps {
+    schoolYearId: string | null //Năm học
+    semesterId: string | null //Học kỳ
+    KhoaId: string | null //Khoa
+    BoMonId: string | null //Bộ môn
+    trainingObjectId: string | null //Đối tượng đào tạo
+    examTypeId: string | null //Hình thức thi
+    LectureIds: string[] //Giảng viên
     searchText: string | null
-    semesterId: string | null
-    schoolYearId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    fixedClassIds: string[]
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 export default function SubjectClass() {
@@ -45,6 +59,13 @@ export default function SubjectClass() {
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
+        KhoaId: null,
+        BoMonId: null,
+        trainingObjectId: null,
+        examTypeId: null,
+        LectureIds: [],
+        fixedClassIds: [],
+        examDateRange: undefined, // Khoảng thời gian thi
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -83,51 +104,60 @@ export default function SubjectClass() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType(
-        {
-            where: {
-                deletedAt: null,
-            },
-        }
-    )
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: {
-            deletedAt: null,
-        },
-    })
-
-    const { data: schoolYearData = [] } = useFindManySchoolYear({
-        orderBy: {
-            startDate: 'desc',
-        },
-    })
-    const { data: semesterData = [], refetch: refetchSemester } =
-        useFindManySemester({
-            where: {
-                schoolYearId: filters.schoolYearId || undefined,
-            },
-            orderBy: {
-                startDate: 'desc',
-            },
-        })
     //#endregion
 
     //#region Mới
     /* Mới */
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                      OR: [
-                          { name: { contains: filters.searchText } },
-                          { code: { contains: filters.searchText } },
-                      ],
-                  }
+                    OR: [
+                        { name: { contains: filters.searchText } },
+                        { code: { contains: filters.searchText } },
+                    ],
+                }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                    subjectClassStudent: {
+                        some: {
+                            student: {
+                                trainingObjectTypeId:
+                                    filters.trainingObjectTypeId,
+                            },
+                        },
+                    },
+                }
+                : {}),
+            ...(filters.LectureIds.length > 0
+                ? {
+                    OR: filters.LectureIds.map((id) => ({
+                        mainLecturer: { id },
+                    })),
+                }
+                : {}),
+            ...(filters.BoMonId
+                ? {
+                    subject: {
+                        managementOrganizationId: filters.BoMonId,
+                    },
+                }
+                : {}),
+            ...(filters.examDateRange
+                ? {
+                    examDate: {
+                        gte: filters.examDateRange[0],
+                        lte: filters.examDateRange[1],
+                    },
+                }
+                : {}),
             deletedAt: null,
         },
         include: {
@@ -142,6 +172,11 @@ export default function SubjectClass() {
             extraLecturer: {
                 include: { userProfile: true },
             },
+            subjectClassStudent: {
+                include: {
+                    student: { include: { userProfile: true } },
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -149,7 +184,8 @@ export default function SubjectClass() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    console.log('Data table:', dataTable)
+
+
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -169,7 +205,14 @@ export default function SubjectClass() {
             deletedAt: null,
         },
     })
-
+    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+        setFilters((prev) => {
+            const updatedFilters = { ...prev, ...newFilters };
+            console.log('Filters applied:', updatedFilters);
+            debouncedRefetch();
+            return updatedFilters;
+        });
+    };
     /* Mới */
     // #endregion
     const rowSelection = {
@@ -179,6 +222,82 @@ export default function SubjectClass() {
             console.log(selectedKeys)
         },
     }
+
+    const handleCheckExamDate = () => {
+        dataTable.forEach((item: SubjectClass) => {
+            if (item.examDate) {
+                if (!item.examScoreDeadline) {
+                    const examDate = new Date(item.examDate);
+                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    item.examScoreDeadline = examScoreDeadline;
+                    if (item.examScoreDeadline <= new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else {
+                        item.isLockExamScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { examScoreDeadline, isLockExamScore: item.isLockExamScore },
+                    }).catch((error) => {
+                        console.error('Error updating examScoreDeadline for item:', item.id, error);
+                    });
+                } else {
+                    const examDate = new Date(item.examDate);
+                    if (item.examScoreDeadline < new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else {
+                        item.isLockExamScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { isLockExamScore: item.isLockExamScore },
+                    }).catch((error) => {
+                        console.error('Error updating examScoreDeadline for item:', item.id, error);
+                    });
+                }
+                // Kiểm tra và cập nhật scoreDeadline
+                if (!item.scoreDeadline) {
+                    const examDate = new Date(item.examDate);
+                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    item.scoreDeadline = scoreDeadline;
+                    if (item.scoreDeadline < new Date()) {
+                        item.isLockScore = true;
+                    } else {
+                        item.isLockScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { scoreDeadline, isLockScore: item.isLockScore },
+                    }).catch((error) => {
+                        console.error('Error updating scoreDeadline for item:', item.id, error);
+                    });
+                } else {
+                    if (item.scoreDeadline < new Date()) {
+                        item.isLockScore = true;
+                    } else {
+                        item.isLockScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { isLockScore: item.isLockScore },
+                    }).catch((error) => {
+                        console.error('Error updating scoreDeadline for item:', item.id, error);
+                    });
+                }
+            } else {
+                console.log('No exam date found for item:', item);
+            }
+
+        });
+    }
+
+    useEffect(() => {
+        handleCheckExamDate();
+    }, []);
 
     return (
         <div>
@@ -216,61 +335,17 @@ export default function SubjectClass() {
                                 <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
-                                        name="schoolYearId"
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
                                         labelAlign="left"
                                     >
-                                        <Select
-                                            placeholder="Năm học"
-                                            options={schoolYearData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            allowClear
-                                            onChange={(val) => {
-                                                handleFilterChange(
-                                                    'schoolYearId',
-                                                    val
-                                                )
-                                                refetchSemester()
-                                            }}
+                                        <TreeSelectSemester
+                                            style={{ height: 40 }}
+                                            defaultValue={filters.semesterId || undefined}
+                                            onChange={(val) => handleFilterChange('semesterId', val)}
                                         />
                                     </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="semesterId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Học kỳ"
-                                            options={semesterData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                height: 40,
-                                            }}
-                                            onChange={(val) =>
-                                                handleFilterChange(
-                                                    'semesterId',
-                                                    val
-                                                )
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
+
                                 </Col>
                                 <Col span={8}>
                                     <Form.Item
@@ -332,8 +407,9 @@ export default function SubjectClass() {
                                 </Col>
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass
+                                        filters={filters}
                                         onFilterChange={handleFilterChange}
-                                        onSearchChange={undefined}
+                                        onApply={handleFilterApply}
                                     />
                                 </Col>
                             </Flex>
@@ -420,10 +496,10 @@ export default function SubjectClass() {
                                 align: 'center',
                                 render: (text, record) => {
                                     const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
+                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                         : 'Chưa có giảng viên chính'
                                     const extraLecturer = record.extraLecturer
-                                        ? `, ${record.extraLecturer.userProfile.firstName} ${record.extraLecturer.userProfile.lastName}`
+                                        ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
                                         : ''
                                     return (
                                         <span>
@@ -440,7 +516,7 @@ export default function SubjectClass() {
                                 align: 'center',
                                 render: (text, record) => {
                                     const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
+                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                         : 'Chưa có giảng viên chính'
                                     return <span>{mainLecturer}</span>
                                 },
@@ -489,13 +565,13 @@ export default function SubjectClass() {
                                 render: (date) =>
                                     date
                                         ? new Date(date).toLocaleDateString(
-                                              'vi-VN',
-                                              {
-                                                  year: 'numeric',
-                                                  month: '2-digit',
-                                                  day: '2-digit',
-                                              }
-                                          )
+                                            'vi-VN',
+                                            {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                            }
+                                        )
                                         : '',
                             },
                             {
@@ -506,13 +582,13 @@ export default function SubjectClass() {
                                 render: (date) =>
                                     date
                                         ? new Date(date).toLocaleDateString(
-                                              'vi-VN',
-                                              {
-                                                  year: 'numeric',
-                                                  month: '2-digit',
-                                                  day: '2-digit',
-                                              }
-                                          )
+                                            'vi-VN',
+                                            {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                            }
+                                        )
                                         : '',
                             },
                             {

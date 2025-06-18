@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Button,
     Flex,
@@ -11,6 +11,7 @@ import {
     Row,
     Col,
     Form,
+    DatePicker,
 } from 'antd'
 import {
     FilterOutlined,
@@ -18,10 +19,11 @@ import {
     SearchOutlined,
     ControlOutlined,
 } from '@ant-design/icons'
+import viVN from 'antd/locale/vi_VN'
 import { X, Search } from 'lucide-react'
 import Select from '@components/commons/select'
-import TreeSelectFixClassMulti from '@components/commons/fix-class-selected/TreeSelectFixClassMulti'
-import TreeSelectLecture from '@components/commons/lecture-selected-multi/TreeSelectLecture'
+import TreeSelectFixClassMulti from '@components/commons/fix-class-select/TreeSelectFixClassMulti'
+import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import {
     useFindManySchoolYear,
     useFindManySemester,
@@ -31,6 +33,15 @@ import {
     useFindManyLecturer,
 } from '@workspace/db/hooks'
 import { buildOrgTree } from '@lib/utils'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi'; // Import Vietnamese locale for dayjs
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+
 const { Text } = Typography
 
 export type FilterProps = {
@@ -40,14 +51,19 @@ export type FilterProps = {
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
-    LectureId: string | null //Giảng viên
+    LectureIds: string[]
+    searchText: string | null
+    trainingObjectTypeId: string | null
+    subjectClassId: string | null
+    fixedClassIds: string[]
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 interface Props {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     onFilterChange: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    onSearchChange: any
+
+    filters: FilterProps
+    onApply: (filters: FilterProps) => void
 }
 
 const ExamType = [
@@ -86,44 +102,61 @@ const ExamType = [
 ]
 
 const FilterSubjectClass = (props: Props) => {
-    const { onFilterChange, onSearchChange } = props
+    const { onFilterChange, filters, onApply, } = props
     const [form] = Form.useForm<FilterProps>()
     const [open, setOpen] = useState(false)
-
+    const [isActive, setIsActive] = useState(false)
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
     }
 
     const handleReset = () => {
-        form.resetFields()
+        form.setFieldsValue({
+            schoolYearId: null,
+            semesterId: null,
+            KhoaId: null,
+            BoMonId: null,
+            trainingObjectTypeId: null,
+            examTypeId: null,
+            LectureIds: [],
+            fixedClassIds: [],
+            examDateRange: undefined,
+        });
+
+        console.log('Reset filters', form.getFieldsValue())
+        onApply(form.getFieldsValue());
+        setOpen(false)
+        setIsActive(false)
     }
 
     const handleApply = () => {
-        console.log('filters', form.getFieldsValue())
-        onFilterChange(form.getFieldsValue())
+        console.log('Applying filters', form.getFieldsValue())
+        const formValues = form.getFieldsValue();
+        onApply(formValues);
         setOpen(false)
+        setIsActive(true)
     }
 
     const handleCancel = () => {
         form.resetFields()
         setOpen(false)
+        setIsActive(false)
     }
 
-    const { data: schoolYearData = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear({
-            orderBy: {
-                startDate: 'desc',
-            },
+    useEffect(() => {
+        console.log('Filter values updated:', filters)
+        form.setFieldsValue({
+            schoolYearId: filters.schoolYearId || null,
+            semesterId: filters.semesterId || null,
+            KhoaId: filters.KhoaId || null,
+            BoMonId: filters.BoMonId || null,
+            trainingObjectTypeId: filters.trainingObjectTypeId || null,
+            examTypeId: filters.examTypeId || null,
+            LectureIds: filters.LectureIds || [],
+            fixedClassIds: filters.fixedClassIds || [],
         })
-    const { data: semesterData = [], refetch: refetchSemester } =
-        useFindManySemester({
-            where: {
-                schoolYearId: form.getFieldValue('schoolYearId') || undefined,
-            },
-            orderBy: {
-                startDate: 'desc',
-            },
-        })
+    }, [filters, form])
+
     const {
         data: organizationTypeData = [],
         refetch: refetchOrganizationType,
@@ -164,6 +197,58 @@ const FilterSubjectClass = (props: Props) => {
         },
     })
 
+    const ApplyFilterExamDate = (examDateRange: [string, string] | null) => {
+        if (examDateRange && examDateRange.length === 2) {
+            const [startDate, endDate] = examDateRange;
+            return {
+                examDateRange: [
+                    dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                    dayjs(endDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                ],
+            };
+        }
+        return {
+            examDateRange: null,
+        };
+    }
+
+
+
+    const customViVNLocale = {
+        lang: {
+            locale: 'vi_VN',
+            placeholder: 'Chọn ngày',
+            rangePlaceholder: ['Từ ngày', 'Đến ngày'] as [string, string],
+            today: 'Hôm nay',
+            now: 'Bây giờ',
+            backToToday: 'Về hôm nay',
+            ok: 'Đồng ý',
+            clear: 'Xóa',
+            month: 'Tháng',
+            year: 'Năm',
+            timeSelect: 'Chọn giờ',
+            dateSelect: 'Chọn ngày',
+            monthSelect: 'Chọn tháng',
+            yearSelect: 'Chọn năm',
+            decadeSelect: 'Chọn thập kỷ',
+            yearFormat: 'YYYY',
+            dateFormat: 'DD/MM/YYYY',
+            dayFormat: 'D',
+            dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
+            monthBeforeYear: true,
+            previousMonth: 'Tháng trước',
+            nextMonth: 'Tháng sau',
+            previousYear: 'Năm trước',
+            nextYear: 'Năm sau',
+            previousDecade: 'Thập kỷ trước',
+            nextDecade: 'Thập kỷ sau',
+            previousCentury: 'Thế kỷ trước',
+            nextCentury: 'Thế kỷ sau',
+        },
+        timePickerLocale: {
+            placeholder: 'Chọn giờ',
+        },
+    };
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
             <div
@@ -192,59 +277,34 @@ const FilterSubjectClass = (props: Props) => {
                         <Col span={12}>
                             <Col span={24}>
                                 <Form.Item
-                                    label="Năm học"
-                                    name="schoolYearId"
+                                    label="Kỳ học"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <Select
-                                        placeholder="Chọn năm học"
-                                        options={schoolYearData.map((item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
-                                            }
-                                        })}
+                                    <TreeSelectSemester
+                                        placeholder="Chọn kỳ học"
+                                        style={{ width: '100%' }}
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        defaultValue={form.getFieldValue('semesterId') || undefined}
                                         onChange={(value) => {
-                                            form.setFieldsValue({
-                                                semesterId: undefined,
-                                            })
-                                            refetchSemester()
+                                            form.setFieldsValue({ semesterId: value })
                                         }}
+                                        disabled={true}
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col span={24}>
-                                <Form.Item
-                                    label="Khoa"
-                                    name="KhoaId"
-                                    labelCol={{ span: 7 }}
-                                    wrapperCol={{ span: 17 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn khoa"
-                                        options={organizationDataKhoa.map(
-                                            (item) => {
-                                                return {
-                                                    value: item.id,
-                                                    label: item.name,
-                                                }
-                                            }
-                                        )}
-                                    />
-                                </Form.Item>
-                            </Col>
+
                             <Col span={24}>
                                 <Form.Item
                                     label="Đối tượng đào tạo"
-                                    name="trainingObjectId"
+                                    name="trainingObjectTypeId"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
                                     <Select
+                                        disabled={true}
                                         placeholder="Chọn đối tượng đào tạo"
                                         options={trainingObjectTypeData.map(
                                             (item) => {
@@ -259,60 +319,44 @@ const FilterSubjectClass = (props: Props) => {
                             </Col>
                             <Col span={24}>
                                 <Form.Item
-                                    label="Lớp quản lý"
-                                    name="trainingObjectId"
+                                    label="Thời gian thi"
+                                    name="examDateRange"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectFixClassMulti
-                                        schoolYearId={
-                                            form.getFieldValue('KhoaId') ||
-                                            undefined
-                                        }
-                                        placeholder="Chọn lớp quản lý"
+                                    <DatePicker.RangePicker
+                                        placeholder={['Từ ngày', 'Đến ngày']}
+                                        style={{ width: '100%' }}
+                                        allowClear
+                                        onChange={(dates, dateStrings) => {
+                                            ApplyFilterExamDate(dates ? [dateStrings[0], dateStrings[1]] : null)
+                                        }}
+                                        locale={customViVNLocale}
+                                        format="DD/MM/YYYY"
                                     />
+
                                 </Form.Item>
                             </Col>
                         </Col>
                         <Col span={12}>
                             <Col span={24}>
                                 <Form.Item
-                                    label="Kỳ học"
-                                    name="semesterId"
-                                    labelCol={{ span: 7 }}
-                                    wrapperCol={{ span: 17 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn kỳ học"
-                                        options={semesterData.map((item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
-                                            }
-                                        })}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item
-                                    label="Bộ môn"
+                                    label="Đơn vị đào tạo"
                                     name="BoMonId"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <Select
+                                    <TreeSelectDepartment
                                         placeholder="Chọn bộ môn"
-                                        options={organizationDataBoMon.map(
-                                            (item) => {
-                                                return {
-                                                    value: item.id,
-                                                    label: item.name,
-                                                }
-                                            }
-                                        )}
+                                        style={{ width: '100%' }}
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        defaultValue={filters.BoMonId || undefined}
+                                        onChange={(value) => {
+                                            form.setFieldsValue({ BoMonId: value })
+                                            refetchOrganizationBoMon()
+                                        }}
                                     />
                                 </Form.Item>
                             </Col>
@@ -338,12 +382,15 @@ const FilterSubjectClass = (props: Props) => {
                             <Col span={24}>
                                 <Form.Item
                                     label="Giảng viên"
-                                    name="LectureId"
+                                    name="LectureIds"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectLecture placeholder="Chọn giảng viên" />
+                                    <TreeSelectLecture
+                                        placeholder="Chọn giảng viên"
+                                        defaultValue={filters.LectureIds}
+                                    />
                                 </Form.Item>
                             </Col>
                         </Col>
@@ -390,15 +437,18 @@ const FilterSubjectClass = (props: Props) => {
                 }}
                 destroyTooltipOnHide
                 align={{
-                    offset: [100, 0], // Di chuyển popup sang trái 300px
+                    offset: [100, 0],
                 }}
             >
                 <Button
                     icon={<FilterOutlined />}
                     style={{
+                        height: '40px',
+                        width: '40px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        backgroundColor: isActive ? '#4caf50' : '#ffffff',
                     }}
                 />
             </Popover>
