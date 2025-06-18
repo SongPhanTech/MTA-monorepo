@@ -7,6 +7,7 @@ import {
     OpenSubjectClass,
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
+import { ListOf } from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -39,22 +40,27 @@ const teachingAssignment = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(
-                        z
-                            .object({
-                                subjectClassId: z
-                                    .string()
-                                    .openapi('subjectClassId', {
-                                        description: 'ID của lớp môn học',
-                                    }),
-                                userProfileId: z
-                                    .string()
-                                    .openapi('userProfileId', {
-                                        description: 'ID của giảng viên',
-                                    }),
-                            })
-                            .openapi('teachingAssignmentResponse')
-                    ),
+                    schema: z.object({
+                        data: z.array(
+                            z
+                                .object({
+                                    subjectClassId: z
+                                        .string()
+                                        .openapi('subjectClassId', {
+                                            description: 'ID của lớp môn học',
+                                        }),
+                                    userProfileId: z
+                                        .string()
+                                        .openapi('userProfileId', {
+                                            description: 'ID của giảng viên',
+                                        }),
+                                })
+                                .openapi('teachingAssignmentResponse')
+                        ),
+                        success: z.boolean().openapi('success', {
+                            description: 'Trạng thái thành công của yêu cầu',
+                        }),
+                    }),
                 },
             },
             description: 'Danh sách phân công giảng dạy thành công',
@@ -109,7 +115,7 @@ const openSubjectClass = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(OpenSubjectClass),
+                    schema: ListOf(OpenSubjectClass),
                 },
             },
             description: 'Danh sách phân công giảng dạy thành công',
@@ -155,7 +161,7 @@ const fixedClassBySubjectClassSemester = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(FixedClassBySubjectClassSemester),
+                    schema: ListOf(FixedClassBySubjectClassSemester),
                 },
             },
             description: 'Danh sách lớp quản lý theo học kỳ và lớp môn học',
@@ -201,7 +207,7 @@ const studentBySubjectClassSemester = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(StudentClassBySubjectClassSemester),
+                    schema: ListOf(StudentClassBySubjectClassSemester),
                 },
             },
             description: 'Danh sách học sinh theo học kỳ và lớp môn học',
@@ -241,7 +247,7 @@ const enrollFixedClassOnSubjectClass = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(EnrollFixedClassOnSubjectClass),
+                    schema: ListOf(EnrollFixedClassOnSubjectClass),
                 },
             },
             description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
@@ -286,7 +292,7 @@ const enrollStudentOnSubjectClass = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(EnrollFixedClassOnSubjectClass),
+                    schema: ListOf(EnrollFixedClassOnSubjectClass),
                 },
             },
             description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
@@ -509,6 +515,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
         semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
     const res: Array<{
+        full_count: number
         fixedClassId: string
     }> = await prisma.$queryRawUnsafe(`
             with FCS as (select SC.id                             as subject_class_id,
@@ -533,7 +540,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester)
-select fixed_class_id as "fixedClassId"
+select count(*) OVER() AS full_count, fixed_class_id as "fixedClassId"
 from FCS
 where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
 ${search ? `and fixed_class_name ilike '%${search}%'` : ''}
@@ -596,6 +603,7 @@ group by fixed_class_id
                     (sc) => sc.id === subjectClassId
                 ),
             })),
+            count: res.length > 0 && res[0] ? res[0].full_count : 0,
             success: true,
         },
         200
@@ -643,6 +651,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
 
     const res: Array<{
         fixedClassId: string
+        full_count: number
     }> = await prisma.$queryRawUnsafe(`
             with FCS as (select SC.id                             as subject_class_id,
                     FC.id                             as fixed_class_id,
@@ -666,7 +675,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester)
-select fixed_class_id as "fixedClassId"
+select count(*) OVER() AS full_count, fixed_class_id as "fixedClassId"
 from FCS
 where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
 ${search ? `and fixed_class_name ilike '%${search}%'` : ''}
@@ -745,6 +754,7 @@ group by fixed_class_id
                     (sCs) => sCs.subjectClassId === subjectClassId
                 ),
             })),
+            count: res.length > 0 && res[0] ? res[0].full_count : 0,
             success: true,
         },
         200
@@ -823,6 +833,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         200
     )
 })
+
 app.openapi(enrollStudentOnSubjectClass, async (c) => {
     const { subjectClassId, addStudentIds, removeStudentIds } =
         c.req.valid('json')
