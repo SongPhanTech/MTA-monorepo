@@ -433,6 +433,7 @@ Table SubjectClass {
   examDate DateTime
   scoreDeadline DateTime
   examScoreDeadline DateTime
+  examType ExamType
   isLockScore Boolean [not null, default: false]
   isLockExamScore Boolean [not null, default: true]
   issuedScoreAt DateTime

@@ -657,6 +657,7 @@ model SubjectClass {
   examDate                   DateTime?
   scoreDeadline              DateTime?
   examScoreDeadline          DateTime?
+  examType                   ExamType?
   isLockScore                Boolean               @default(false)
   isLockExamScore            Boolean               @default(true)
   issuedScoreAt              DateTime?
