@@ -46,17 +46,17 @@ const PutCurriculum = () => {
         if (!output) return
         try {
             showSpinner()
+            const data = {
+                name: output.name,
+                englishName: output.englishName,
+                description: output.description,
+                trainingMajorId: output.trainingMajorId,
+                managementOrganizationId: output.managementOrganizationId,
+                documentPaths: output.documentPaths,
+            }
             if (id) {
                 await updateCurriculum({
-                    data: {
-                        name: output.name,
-                        englishName: output.englishName,
-                        description: output.description,
-                        trainingMajorId: output.trainingMajorId,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
-                        documentPaths: output.documentPaths,
-                    },
+                    data: data,
                     where: {
                         id,
                     },
@@ -64,15 +64,7 @@ const PutCurriculum = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createCurriculum({
-                    data: {
-                        name: output.name,
-                        englishName: output.englishName,
-                        description: output.description,
-                        trainingMajorId: output.trainingMajorId,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
-                        documentPaths: output.documentPaths,
-                    },
+                    data: data,
                 })
                 message.success('Thêm mới thành công')
             }

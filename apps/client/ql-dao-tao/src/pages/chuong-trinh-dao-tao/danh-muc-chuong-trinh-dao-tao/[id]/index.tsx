@@ -442,7 +442,7 @@ export default function TrainingProgramSubjects() {
 
     return (
         <div>
-            <Divider>
+            <Divider orientation="left" orientationMargin={0}>
                 Phiên bản chương trình đào tạo: {initialValue?.code} -{' '}
                 {initialValue?.name}
             </Divider>
@@ -545,6 +545,7 @@ export default function TrainingProgramSubjects() {
                         headerTitleKey="name"
                         childrenFieldName="subjects"
                         currentPage={currentPage}
+                        defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',

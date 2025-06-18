@@ -23,15 +23,22 @@ import type {
 import type {
     ClassDivision,
     ClassDivision200Item,
+    EnrollFixedClassOnSubjectClassBody,
+    EnrollStudentOnSubjectClassBody,
     ExportStudentFixedClassDocx400,
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
+    FixedClassBySubjectClassSemesterParams,
+    LecturerAssignment200,
+    ListOfEnrollFixedClassOnSubjectClass,
+    ListOfFixedClassBySubjectClassSemester,
+    ListOfOpenSubjectClass,
+    ListOfStudentClassBySubjectClassSemester,
     ListOfundefined,
-    OpenSubjectClass,
     OpenSubjectClassParams,
     SerializedFields,
+    StudentBySubjectClassSemesterParams,
     TeachingAssignmentRequest,
-    TeachingAssignmentResponse,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -926,7 +933,7 @@ export function useExportStudentFixedClassDocx<
  * @summary Phân công giảng dạy
  */
 export type lecturerAssignmentResponse200 = {
-    data: TeachingAssignmentResponse[]
+    data: LecturerAssignment200
     status: 200
 }
 
@@ -1039,7 +1046,7 @@ export const useLecturerAssignment = <TError = void, TContext = unknown>(
  * @summary Lấy danh sách lớp môn học đã mở
  */
 export type openSubjectClassResponse200 = {
-    data: OpenSubjectClass[]
+    data: ListOfOpenSubjectClass
     status: 200
 }
 
@@ -1238,4 +1245,678 @@ export function useOpenSubjectClass<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+/**
+ * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ */
+export type fixedClassBySubjectClassSemesterResponse200 = {
+    data: ListOfFixedClassBySubjectClassSemester
+    status: 200
+}
+
+export type fixedClassBySubjectClassSemesterResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type fixedClassBySubjectClassSemesterResponseComposite =
+    | fixedClassBySubjectClassSemesterResponse200
+    | fixedClassBySubjectClassSemesterResponse400
+
+export type fixedClassBySubjectClassSemesterResponse =
+    fixedClassBySubjectClassSemesterResponseComposite & {
+        headers: Headers
+    }
+
+export const getFixedClassBySubjectClassSemesterUrl = (
+    params: FixedClassBySubjectClassSemesterParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(
+                key,
+                value === null ? 'null' : value.toString()
+            )
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/fixed-class-by-subject-class-semester?${stringifiedParams}`
+        : '/api/subject-class/fixed-class-by-subject-class-semester'
+}
+
+export const fixedClassBySubjectClassSemester = async (
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: RequestInit
+): Promise<fixedClassBySubjectClassSemesterResponse> => {
+    return customTrainingFetch<fixedClassBySubjectClassSemesterResponse>(
+        getFixedClassBySubjectClassSemesterUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getFixedClassBySubjectClassSemesterQueryKey = (
+    params: FixedClassBySubjectClassSemesterParams
+) => {
+    return [
+        '/api/subject-class/fixed-class-by-subject-class-semester',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getFixedClassBySubjectClassSemesterQueryOptions = <
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getFixedClassBySubjectClassSemesterQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+    > = ({ signal }) =>
+        fixedClassBySubjectClassSemester(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FixedClassBySubjectClassSemesterQueryResult = NonNullable<
+    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+>
+export type FixedClassBySubjectClassSemesterQueryError = undefined
+
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof fixedClassBySubjectClassSemester>
+                    >,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof fixedClassBySubjectClassSemester>
+                    >,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ */
+
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(
+        params,
+        options
+    )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách học sinh theo học kỳ và lớp môn học
+ * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
+ */
+export type studentBySubjectClassSemesterResponse200 = {
+    data: ListOfStudentClassBySubjectClassSemester
+    status: 200
+}
+
+export type studentBySubjectClassSemesterResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type studentBySubjectClassSemesterResponseComposite =
+    | studentBySubjectClassSemesterResponse200
+    | studentBySubjectClassSemesterResponse400
+
+export type studentBySubjectClassSemesterResponse =
+    studentBySubjectClassSemesterResponseComposite & {
+        headers: Headers
+    }
+
+export const getStudentBySubjectClassSemesterUrl = (
+    params: StudentBySubjectClassSemesterParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(
+                key,
+                value === null ? 'null' : value.toString()
+            )
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/student-by-subject-class-semester?${stringifiedParams}`
+        : '/api/subject-class/student-by-subject-class-semester'
+}
+
+export const studentBySubjectClassSemester = async (
+    params: StudentBySubjectClassSemesterParams,
+    options?: RequestInit
+): Promise<studentBySubjectClassSemesterResponse> => {
+    return customTrainingFetch<studentBySubjectClassSemesterResponse>(
+        getStudentBySubjectClassSemesterUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getStudentBySubjectClassSemesterQueryKey = (
+    params: StudentBySubjectClassSemesterParams
+) => {
+    return [
+        '/api/subject-class/student-by-subject-class-semester',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getStudentBySubjectClassSemesterQueryOptions = <
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getStudentBySubjectClassSemesterQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+    > = ({ signal }) =>
+        studentBySubjectClassSemester(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type StudentBySubjectClassSemesterQueryResult = NonNullable<
+    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+>
+export type StudentBySubjectClassSemesterQueryError = undefined
+
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
+ */
+
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getStudentBySubjectClassSemesterQueryOptions(
+        params,
+        options
+    )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Đăng ký lớp môn học cho lớp quản lý
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export type enrollFixedClassOnSubjectClassResponse200 = {
+    data: ListOfEnrollFixedClassOnSubjectClass
+    status: 200
+}
+
+export type enrollFixedClassOnSubjectClassResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type enrollFixedClassOnSubjectClassResponseComposite =
+    | enrollFixedClassOnSubjectClassResponse200
+    | enrollFixedClassOnSubjectClassResponse400
+
+export type enrollFixedClassOnSubjectClassResponse =
+    enrollFixedClassOnSubjectClassResponseComposite & {
+        headers: Headers
+    }
+
+export const getEnrollFixedClassOnSubjectClassUrl = () => {
+    return '/api/subject-class/enroll-fixed-class-on-subject-class'
+}
+
+export const enrollFixedClassOnSubjectClass = async (
+    enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollFixedClassOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
+        getEnrollFixedClassOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            },
+            body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
+        }
+    )
+}
+
+export const getEnrollFixedClassOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        TError,
+        { data: EnrollFixedClassOnSubjectClassBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollFixedClassOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        { data: EnrollFixedClassOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return enrollFixedClassOnSubjectClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
+>
+export type EnrollFixedClassOnSubjectClassMutationBody =
+    EnrollFixedClassOnSubjectClassBody
+export type EnrollFixedClassOnSubjectClassMutationError = undefined
+
+/**
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export const useEnrollFixedClassOnSubjectClass = <
+    TError = void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+            TError,
+            { data: EnrollFixedClassOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions =
+        getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đăng ký lớp môn học cho học viên
+ * @summary Đăng ký lớp môn học cho học viên
+ */
+export type enrollStudentOnSubjectClassResponse200 = {
+    data: ListOfEnrollFixedClassOnSubjectClass
+    status: 200
+}
+
+export type enrollStudentOnSubjectClassResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type enrollStudentOnSubjectClassResponseComposite =
+    | enrollStudentOnSubjectClassResponse200
+    | enrollStudentOnSubjectClassResponse400
+
+export type enrollStudentOnSubjectClassResponse =
+    enrollStudentOnSubjectClassResponseComposite & {
+        headers: Headers
+    }
+
+export const getEnrollStudentOnSubjectClassUrl = () => {
+    return '/api/subject-class/enroll-student-on-subject-class'
+}
+
+export const enrollStudentOnSubjectClass = async (
+    enrollStudentOnSubjectClassBody: EnrollStudentOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollStudentOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollStudentOnSubjectClassResponse>(
+        getEnrollStudentOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            },
+            body: JSON.stringify(enrollStudentOnSubjectClassBody),
+        }
+    )
+}
+
+export const getEnrollStudentOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+        TError,
+        { data: EnrollStudentOnSubjectClassBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+    TError,
+    { data: EnrollStudentOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollStudentOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+        { data: EnrollStudentOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return enrollStudentOnSubjectClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollStudentOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>
+>
+export type EnrollStudentOnSubjectClassMutationBody =
+    EnrollStudentOnSubjectClassBody
+export type EnrollStudentOnSubjectClassMutationError = undefined
+
+/**
+ * @summary Đăng ký lớp môn học cho học viên
+ */
+export const useEnrollStudentOnSubjectClass = <
+    TError = void,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+            TError,
+            { data: EnrollStudentOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+    TError,
+    { data: EnrollStudentOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions =
+        getEnrollStudentOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }

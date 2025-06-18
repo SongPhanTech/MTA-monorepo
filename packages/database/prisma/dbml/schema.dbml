@@ -239,6 +239,7 @@ Table FixedClass {
   students Student [not null]
   curriculumVersion CurriculumVersion
   curriculumVersionId String
+  subjectClasses SubjectClass [not null]
 
   Note: 'lớp biên chế'
 }
@@ -425,6 +426,7 @@ Table SubjectClass {
   subject SubjectVersion [not null]
   subjectId String [not null]
   schedule SubjectClassSchedule [not null]
+  maxStudent Int [not null]
   semester Semester [not null]
   semesterId String [not null]
   lecturerAssignmentDeadline DateTime
@@ -443,6 +445,7 @@ Table SubjectClass {
   enterGradeLecturer Lecturer
   enterGradeLecturerId String
   subjectClassStudent StudentSubjectScore [not null]
+  fixedClasses FixedClass [not null]
 
   Note: 'Lớp môn học'
 }
@@ -1408,6 +1411,11 @@ Table BlockedIp {
   ipAddress String [unique, not null]
   reason String
   expiresAt DateTime
+}
+
+Table FixedClassToSubjectClass {
+  subjectclassesId String [ref: > SubjectClass.id]
+  fixedclassesId String [ref: > FixedClass.id]
 }
 
 Table PrerequisiteSubject {

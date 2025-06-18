@@ -67,32 +67,33 @@ const PutCurriculumVersion = () => {
         if (!output) return
         try {
             showSpinner()
+            const data = {
+                curriculumId: input?.curriculumId,
+                code: output.code,
+                name: output.name,
+                shortName: output?.shortName,
+                englishName: output.englishName,
+                trainingLanguage: output.trainingLanguage,
+                yearCreation: output.yearCreation,
+                yearApplication: output.yearApplication,
+                trainingObjectTypeId: output.trainingObjectTypeId,
+                trainingLevelId: output.trainingLevelId,
+                trainingTimeId: output.trainingTimeId,
+                coef_1: output.coef_1,
+                coef_2: output.coef_2,
+                coef_3: output.coef_3,
+                diplomaTypeId: output.diplomaTypeId,
+                scoreToTakeExam: output.scoreToTakeExam,
+                scoreToPass: output.scoreToPass,
+                description: output.description,
+                documentPaths: output.documentPaths,
+                active: output.active,
+                electiveCredits: output.electiveCredits,
+                requiredCredits: output.requiredCredits,
+            }
             if (input?.versionId) {
                 await updateCurriculumVersion({
-                    data: {
-                        curriculumId: input?.curriculumId,
-                        code: output.code,
-                        name: output.name,
-                        shortName: output?.shortName,
-                        englishName: output.englishName,
-                        trainingLanguage: output.trainingLanguage,
-                        yearCreation: output.yearCreation,
-                        yearApplication: output.yearApplication,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingLevelId: output.trainingLevelId,
-                        trainingTimeId: output.trainingTimeId,
-                        coef_1: output.coef_1,
-                        coef_2: output.coef_2,
-                        coef_3: output.coef_3,
-                        diplomaTypeId: output.diplomaTypeId,
-                        scoreToTakeExam: output.scoreToTakeExam,
-                        scoreToPass: output.scoreToPass,
-                        description: output.description,
-                        documentPaths: output.documentPaths,
-                        active: output.active,
-                        electiveCredits: output.electiveCredits,
-                        requiredCredits: output.requiredCredits,
-                    },
+                    data: data,
                     where: {
                         id: input?.versionId,
                     },
@@ -106,30 +107,7 @@ const PutCurriculumVersion = () => {
                     return
                 }
                 await createCurriculumVersion({
-                    data: {
-                        curriculumId: input.curriculumId,
-                        code: output.code,
-                        name: output.name,
-                        shortName: output?.shortName,
-                        englishName: output.englishName,
-                        trainingLanguage: output.trainingLanguage,
-                        yearCreation: output.yearCreation,
-                        yearApplication: output.yearApplication,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
-                        trainingLevelId: output.trainingLevelId,
-                        trainingTimeId: output.trainingTimeId,
-                        coef_1: output.coef_1,
-                        coef_2: output.coef_2,
-                        coef_3: output.coef_3,
-                        diplomaTypeId: output.diplomaTypeId,
-                        scoreToTakeExam: output.scoreToTakeExam,
-                        scoreToPass: output.scoreToPass,
-                        description: output.description,
-                        documentPaths: output.documentPaths,
-                        active: output.active,
-                        electiveCredits: output.electiveCredits,
-                        requiredCredits: output.requiredCredits,
-                    },
+                    data: data,
                 })
                 message.success('Thêm mới thành công')
             }

@@ -32,7 +32,6 @@ import {
 } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 function Page() {
     const [filters, setFilters] = useState<{
         title: string
@@ -534,7 +533,7 @@ function Page() {
                                 {
                                     title: 'Câu trả lời',
                                     dataIndex: 'answer',
-                                    render: (value) =>
+                                    render: (value: string) =>
                                         value?.length > 200
                                             ? `${value.slice(0, 200)}...`
                                             : value,
@@ -549,7 +548,7 @@ function Page() {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
                                     width: 180,
-                                    render: (value) =>
+                                    render: (value: string | Date) =>
                                         formatDateReadable(value),
                                 },
                                 ...(faqFilter.status ===
@@ -664,7 +663,7 @@ function Page() {
     ]
 
     return (
-        <div className="h-full overflow-hidden">
+        <div className="h-full">
             <Tabs
                 defaultActiveKey="1"
                 items={items}
