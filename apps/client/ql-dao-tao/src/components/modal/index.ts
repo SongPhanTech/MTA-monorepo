@@ -29,6 +29,7 @@ import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingLocationModal from './put-khu-vuc'
 import PutBuildingModal from './put-toa-nha'
 import PutRoomModal from './put-phong'
+import PutHocHamHocViModal from './quan-ly-ho-so/modals/put-hoc-ham-hoc-vi'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -61,4 +62,5 @@ export {
     PutTrainingLocationModal,
     PutBuildingModal,
     PutRoomModal,
+    PutHocHamHocViModal,
 }

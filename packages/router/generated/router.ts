@@ -70,6 +70,7 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_DANG_KY_HOC_CHO_LOP_QUAN_LY": "/ke-hoach-giao-duc/dang-ky-hoc/components/dang-ky-hoc-cho-lop-quan-ly",
+    "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_HOC_VIEN_CO_MON_THEO_KHGD": "/ke-hoach-giao-duc/dang-ky-hoc/components/hoc-vien-co-mon-theo-khgd",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_LOP_CO_MON_THEO_KHGD": "/ke-hoach-giao-duc/dang-ky-hoc/components/lop-co-mon-theo-khgd",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC": "/ke-hoach-giao-duc/dang-ky-hoc",
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
@@ -85,6 +86,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN_LOP_BIEN_CHE": "/quan-ly-diem/ql-diem-ren-luyen/lop-bien-che",
     "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien"
   },
   "QL_NGUOI_DUNG": {

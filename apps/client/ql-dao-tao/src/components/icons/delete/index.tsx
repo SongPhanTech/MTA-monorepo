@@ -18,7 +18,7 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 <Trash2
                     size={16}
                     strokeWidth={1.5}
-                    className="text-base text-red-600 cursor-pointer"
+                    className="text-sm text-red-600 cursor-pointer"
                     onClick={(e) => e.stopPropagation()}
                     {...props}
                 />

@@ -53,6 +53,10 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/constant'
+import LockIcon from '@components/icons/lock'
+import ViewIcon from '@components/icons/view'
+import { useRouter } from 'next/router'
+import { ROUTER_PATH } from '@workspace/router'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -61,6 +65,9 @@ export default function UserProfilePageDs() {
     const [filters, setFilters] = useState({
         searchText: '',
     })
+
+    const router = useRouter()
+
     const [selectedTrainingObjectType, setSelectedTrainingObjectType] =
         useState<string>()
     const [selectedTrainingCourse, setSelectedTrainingCourse] =
@@ -190,7 +197,8 @@ export default function UserProfilePageDs() {
 
     const { data: TrainingMajorData = [] } = useFindManyTrainingMajor()
 
-    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion()
+    const { data: TrainingCurriculumVersionData = [] } =
+        useFindManyCurriculumVersion()
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -557,8 +565,8 @@ export default function UserProfilePageDs() {
                                 render: (record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(
-                                            record.userProfile.dateOfBirth
-                                        ).format('DD/MM/YYYY')
+                                              record.userProfile.dateOfBirth
+                                          ).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -567,32 +575,34 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 filters: [
                                     {
-                                        text: "Nam",
-                                        value: "Male"
+                                        text: 'Nam',
+                                        value: 'Male',
                                     },
                                     {
-                                        text: "Nữ",
-                                        value: "Female"
-                                    }
+                                        text: 'Nữ',
+                                        value: 'Female',
+                                    },
                                 ],
-                                onFilter: (value, record) => record.userProfile.gender === value,
+                                onFilter: (value, record) =>
+                                    record.userProfile.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                        record.userProfile
-                                            .gender as keyof typeof GENDER_MEAN
-                                        ]
+                                              record.userProfile
+                                                  .gender as keyof typeof GENDER_MEAN
+                                          ]
                                         : '',
                             },
                             {
                                 title: 'Đối tượng ĐT',
                                 align: 'center',
                                 width: 130,
-                                filters: TrainingOnjectTypeData.map(item => ({
+                                filters: TrainingOnjectTypeData.map((item) => ({
                                     text: item.name,
-                                    value: item.name
+                                    value: item.name,
                                 })),
-                                onFilter: (value, record) => record.trainingObjectType.name === value,
+                                onFilter: (value, record) =>
+                                    record.trainingObjectType.name === value,
                                 render: (record) =>
                                     record.trainingObjectType
                                         ? record.trainingObjectType.name
@@ -602,9 +612,9 @@ export default function UserProfilePageDs() {
                                 title: 'Lớp',
                                 align: 'center',
                                 width: 200,
-                                filters: FixedClassData.map(item => ({
+                                filters: FixedClassData.map((item) => ({
                                     text: `${item.code}-${item.name}`,
-                                    value: `${item.code}-${item.name}`
+                                    value: `${item.code}-${item.name}`,
                                 })),
                                 onFilter: (value, record) => {
                                     const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
@@ -619,9 +629,9 @@ export default function UserProfilePageDs() {
                                 title: 'Khóa',
                                 align: 'center',
                                 width: 100,
-                                filters: TrainingCourseData.map(item => ({
+                                filters: TrainingCourseData.map((item) => ({
                                     text: item.name,
-                                    value: item.name
+                                    value: item.name,
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingCourseName =
@@ -640,54 +650,55 @@ export default function UserProfilePageDs() {
                                 title: 'Ngành',
                                 align: 'center',
                                 width: 160,
-                                filters: TrainingFieldData.map(item => ({
+                                filters: TrainingFieldData.map((item) => ({
                                     text: item.name,
-                                    value: item.name
+                                    value: item.name,
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingField =
-                                        record.trainingObjectType
-                                            ?.trainingFields?.[0]?.trainingField
-                                    return trainingField?.name === value
+                                        record.fixedClass.curriculumVersion
+                                            ?.curriculum?.trainingMajor
+                                            ?.trainingField?.name
+                                    return trainingField === value
                                 },
                                 render: (record) => {
-                                    const trainingField = record.trainingObjectType.trainingFields?.[0]?.trainingField
-                                    return trainingField
-                                        ? trainingField.name
-                                        : ''
+                                    return record.fixedClass.curriculumVersion
+                                        ?.curriculum?.trainingMajor
+                                        ?.trainingField?.name
                                 },
                             },
                             {
                                 title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 180,
-                                filters: TrainingMajorData.map(item => ({
+                                filters: TrainingMajorData.map((item) => ({
                                     text: item.name,
-                                    value: item.name
+                                    value: item.name,
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingMajor =
-                                        record.trainingObjectType
-                                            ?.trainingMajors?.[0]?.trainingMajor
-                                    return trainingMajor?.name === value
+                                        record.fixedClass?.curriculumVersion
+                                            ?.curriculum?.trainingMajor?.name
+                                    return trainingMajor === value
                                 },
                                 render: (record) => {
-                                    const trainingMajor =
-                                        record.trainingObjectType
-                                            ?.trainingMajors?.[0]?.trainingMajor
-                                    return trainingMajor?.name || ''
+                                    return record.fixedClass?.curriculumVersion
+                                        ?.curriculum?.trainingMajor?.name
                                 },
                             },
                             {
                                 title: 'Chương trình đào tạo',
                                 align: 'center',
                                 width: 180,
-                                filters: TrainingCurriculumVersionData.map(item => ({
-                                    text: item.name,
-                                    value: item.name
-                                })),
+                                filters: TrainingCurriculumVersionData.map(
+                                    (item) => ({
+                                        text: item.name,
+                                        value: item.name,
+                                    })
+                                ),
                                 render: (record) => {
-                                    const curriculum = record.fixedClass?.curriculumVersion
+                                    const curriculum =
+                                        record.fixedClass?.curriculumVersion
                                     return curriculum?.name || ''
                                 },
                             },
@@ -698,7 +709,7 @@ export default function UserProfilePageDs() {
                                 render: (_, record) => {
                                     const statusInfo =
                                         FIXED_CLASS_STUDENT_STATUS[
-                                        record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                         ]
                                     return statusInfo ? (
                                         <Tag color={statusInfo.color}>
@@ -718,6 +729,16 @@ export default function UserProfilePageDs() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <ViewIcon
+                                            onClick={() =>
+                                                router.push(
+                                                    ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
+                                                        '[id]',
+                                                        id
+                                                    )
+                                                )
+                                            }
+                                        />
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,
@@ -737,7 +758,8 @@ export default function UserProfilePageDs() {
                         rowKey="id"
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys)
+                            onChange: (selectedKeys) =>
+                                setSelectedRowKeys(selectedKeys),
                         }}
                         data={data}
                         pagination={{
