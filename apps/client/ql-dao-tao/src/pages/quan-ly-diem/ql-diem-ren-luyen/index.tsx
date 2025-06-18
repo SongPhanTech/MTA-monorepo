@@ -50,10 +50,10 @@ interface FilterProps {
     searchText: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
-    fixedClassIds: string[] 
+    fixedClassIds: string[]
     examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
-    
+
 export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -286,21 +286,21 @@ export default function SubjectClassScore() {
     }))
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters };
-            console.log('Filters applied:', updatedFilters);
-            debouncedRefetch();
-            return updatedFilters;
-        });
-    };
+            const updatedFilters = { ...prev, ...newFilters }
+            console.log('Filters applied:', updatedFilters)
+            debouncedRefetch()
+            return updatedFilters
+        })
+    }
     return (
         <div>
             {/* Từ ngày {selectedSemester?.startDate ? new Date(selectedSemester.startDate).toLocaleDateString('vi-VN') : ''} đến ngày {selectedSemester?.endDate ? new Date(selectedSemester.endDate).toLocaleDateString('vi-VN') : ''} */}
             <Row>
                 <Col span={4} className="flex">
                     <LopBienCheItem
-                        dataTable={subjectClassData.map(item => ({
+                        dataTable={subjectClassData.map((item) => ({
                             ...item,
-                            code: item.code || ''
+                            code: item.code || '',
                         }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}

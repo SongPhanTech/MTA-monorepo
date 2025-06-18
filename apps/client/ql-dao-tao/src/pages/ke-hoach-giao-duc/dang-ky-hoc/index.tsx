@@ -5,6 +5,7 @@ import { useState } from 'react'
 import RegisterClassManager from './components/dang-ky-hoc-cho-lop-quan-ly'
 import FixedClass from './components/lop-co-mon-theo-khgd'
 import StudentCourseByPlan from './components/hoc-vien-co-mon-theo-khgd'
+import RegisterResult from './components/ket-qua-dang-ky-hoc-lop-quan-ly'
 
 interface TabItem {
     key: string
@@ -41,7 +42,7 @@ export default function RegisterClass() {
         {
             key: '3',
             label: 'Kết quả đăng ký học lớp quản lý',
-            content: <p>Xem kết quả đăng ký học của lớp quản lý</p>,
+            content: <RegisterResult />,
         },
     ]
 
