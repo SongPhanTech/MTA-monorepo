@@ -36,11 +36,11 @@ import { buildOrgTree } from '@lib/utils'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 
-import dayjs from 'dayjs';
-import 'dayjs/locale/vi'; // Import Vietnamese locale for dayjs
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
-dayjs.extend(customParseFormat);
+dayjs.extend(customParseFormat)
 
 const { Text } = Typography
 
@@ -102,7 +102,7 @@ const ExamType = [
 ]
 
 const FilterSubjectClass = (props: Props) => {
-    const { onFilterChange, filters, onApply, } = props
+    const { onFilterChange, filters, onApply } = props
     const [form] = Form.useForm<FilterProps>()
     const [open, setOpen] = useState(false)
     const [isActive, setIsActive] = useState(false)
@@ -121,18 +121,18 @@ const FilterSubjectClass = (props: Props) => {
             LectureIds: [],
             fixedClassIds: [],
             examDateRange: undefined,
-        });
+        })
 
         console.log('Reset filters', form.getFieldsValue())
-        onApply(form.getFieldsValue());
+        onApply(form.getFieldsValue())
         setOpen(false)
         setIsActive(false)
     }
 
     const handleApply = () => {
         console.log('Applying filters', form.getFieldsValue())
-        const formValues = form.getFieldsValue();
-        onApply(formValues);
+        const formValues = form.getFieldsValue()
+        onApply(formValues)
         setOpen(false)
         setIsActive(true)
     }
@@ -199,20 +199,18 @@ const FilterSubjectClass = (props: Props) => {
 
     const ApplyFilterExamDate = (examDateRange: [string, string] | null) => {
         if (examDateRange && examDateRange.length === 2) {
-            const [startDate, endDate] = examDateRange;
+            const [startDate, endDate] = examDateRange
             return {
                 examDateRange: [
                     dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
                     dayjs(endDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
                 ],
-            };
+            }
         }
         return {
             examDateRange: null,
-        };
+        }
     }
-
-
 
     const customViVNLocale = {
         lang: {
@@ -248,7 +246,7 @@ const FilterSubjectClass = (props: Props) => {
         timePickerLocale: {
             placeholder: 'Chọn giờ',
         },
-    };
+    }
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
             <div
@@ -285,10 +283,18 @@ const FilterSubjectClass = (props: Props) => {
                                     <TreeSelectSemester
                                         placeholder="Chọn kỳ học"
                                         style={{ width: '100%' }}
-                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                        defaultValue={form.getFieldValue('semesterId') || undefined}
+                                        dropdownStyle={{
+                                            maxHeight: 400,
+                                            overflow: 'auto',
+                                        }}
+                                        defaultValue={
+                                            form.getFieldValue('semesterId') ||
+                                            undefined
+                                        }
                                         onChange={(value) => {
-                                            form.setFieldsValue({ semesterId: value })
+                                            form.setFieldsValue({
+                                                semesterId: value,
+                                            })
                                         }}
                                         disabled={true}
                                     />
@@ -330,12 +336,18 @@ const FilterSubjectClass = (props: Props) => {
                                         style={{ width: '100%' }}
                                         allowClear
                                         onChange={(dates, dateStrings) => {
-                                            ApplyFilterExamDate(dates ? [dateStrings[0], dateStrings[1]] : null)
+                                            ApplyFilterExamDate(
+                                                dates
+                                                    ? [
+                                                          dateStrings[0],
+                                                          dateStrings[1],
+                                                      ]
+                                                    : null
+                                            )
                                         }}
                                         locale={customViVNLocale}
                                         format="DD/MM/YYYY"
                                     />
-
                                 </Form.Item>
                             </Col>
                         </Col>
@@ -351,10 +363,17 @@ const FilterSubjectClass = (props: Props) => {
                                     <TreeSelectDepartment
                                         placeholder="Chọn bộ môn"
                                         style={{ width: '100%' }}
-                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                        defaultValue={filters.BoMonId || undefined}
+                                        dropdownStyle={{
+                                            maxHeight: 400,
+                                            overflow: 'auto',
+                                        }}
+                                        defaultValue={
+                                            filters.BoMonId || undefined
+                                        }
                                         onChange={(value) => {
-                                            form.setFieldsValue({ BoMonId: value })
+                                            form.setFieldsValue({
+                                                BoMonId: value,
+                                            })
                                             refetchOrganizationBoMon()
                                         }}
                                     />

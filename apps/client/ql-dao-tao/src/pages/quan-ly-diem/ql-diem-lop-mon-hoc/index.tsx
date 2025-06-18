@@ -23,7 +23,19 @@ import {
     LockKeyholeOpen,
     Save,
 } from 'lucide-react'
-import { Button, Checkbox, CheckboxChangeEvent, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Checkbox,
+    CheckboxChangeEvent,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Modal,
+    Row,
+    Tag,
+    message,
+} from 'antd'
 import _, { forEach, includes } from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
@@ -141,77 +153,77 @@ export default function SubjectClassScore() {
     /* Mới */
 
     const { data: subjectClassData = [] } = useFindManySubjectClass({
-            where: {
-                ...(filters.searchText && filters.searchText !== ''
-                    ? {
-                        OR: [
-                            { name: { contains: filters.searchText } },
-                            { code: { contains: filters.searchText } },
-                        ],
-                    }
-                    : {}),
-                ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-                ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-                ...(filters.trainingObjectTypeId
-                    ? {
-                        subjectClassStudent: {
-                            some: {
-                                student: {
-                                    trainingObjectTypeId:
-                                        filters.trainingObjectTypeId,
-                                },
-                            },
-                        },
-                    }
-                    : {}),
-                ...(filters.LectureIds.length > 0
-                    ? {
-                        OR: filters.LectureIds.map((id) => ({
-                            mainLecturer: { id },
-                        })),
-                    }
-                    : {}),
-                ...(filters.BoMonId
-                    ? {
-                        subject: {
-                            managementOrganizationId: filters.BoMonId,
-                        },
-                    }
-                    : {}),
-                ...(filters.examDateRange
-                    ? {
-                        examDate: {
-                            gte: filters.examDateRange[0],
-                            lte: filters.examDateRange[1],
-                        },
-                    }
-                    : {}),
-                deletedAt: null,
-            },
-            include: {
-                subject: {
-                    include: {
-                        managementOrganization: { include: { parent: true } },
-                    },
-                },
-                mainLecturer: {
-                    include: { userProfile: true },
-                },
-                extraLecturer: {
-                    include: { userProfile: true },
-                },
-                subjectClassStudent: {
-                    include: {
-                        student: { include: { userProfile: true } },
-                    },
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
+                : {}),
+            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.LectureIds.length > 0
+                ? {
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
+                : {}),
+            ...(filters.BoMonId
+                ? {
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
+                : {}),
+            ...(filters.examDateRange
+                ? {
+                      examDate: {
+                          gte: filters.examDateRange[0],
+                          lte: filters.examDateRange[1],
+                      },
+                  }
+                : {}),
+            deletedAt: null,
+        },
+        include: {
+            subject: {
+                include: {
+                    managementOrganization: { include: { parent: true } },
                 },
             },
-            orderBy: {
-                createdAt: 'desc',
+            mainLecturer: {
+                include: { userProfile: true },
             },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        })
+            extraLecturer: {
+                include: { userProfile: true },
+            },
+            subjectClassStudent: {
+                include: {
+                    student: { include: { userProfile: true } },
+                },
+            },
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore({
         where: {
@@ -301,12 +313,12 @@ export default function SubjectClassScore() {
     }
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters };
-            console.log('Filters applied:', updatedFilters);
-            debouncedRefetch();
-            return updatedFilters;
-        });
-    };
+            const updatedFilters = { ...prev, ...newFilters }
+            console.log('Filters applied:', updatedFilters)
+            debouncedRefetch()
+            return updatedFilters
+        })
+    }
     // #endregion
     const rowSelection = {
         selectedRowKeys,
@@ -321,18 +333,27 @@ export default function SubjectClassScore() {
             <Row>
                 <Col span={4} className="flex">
                     <LopMonHocItem
-                        dataTable={subjectClassData.map(item => ({
+                        dataTable={subjectClassData.map((item) => ({
                             id: item.id,
                             name: item.name,
                             code: item.code === null ? undefined : item.code,
-                            mainLecturer: item.mainLecturer 
-                                ? { 
-                                    userProfile: { 
-                                        firstName: item.mainLecturer.userProfile.firstName, 
-                                        lastName: item.mainLecturer.userProfile.lastName 
-                                    } 
+                            mainLecturer: item.mainLecturer
+                                ? {
+                                      userProfile: {
+                                          firstName:
+                                              item.mainLecturer.userProfile
+                                                  .firstName,
+                                          lastName:
+                                              item.mainLecturer.userProfile
+                                                  .lastName,
+                                      },
                                   }
-                                : { userProfile: { firstName: '', lastName: '' } },
+                                : {
+                                      userProfile: {
+                                          firstName: '',
+                                          lastName: '',
+                                      },
+                                  },
                         }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
