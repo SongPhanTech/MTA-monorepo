@@ -1,17 +1,29 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import { Search } from 'lucide-react'
-import { Col, Flex, Form, Image, Input, Row, Tag } from 'antd'
+import {
+    App,
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+} from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
-import { useCountStudent, useFindManyStudent } from '@workspace/db/hooks'
+import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { UserOutlined } from '@ant-design/icons'
-import { getMinioUrl } from '@workspace/constant'
 import { QueryClient } from '@tanstack/react-query'
-import { useStudentBySubjectClassSemester } from '@workspace/libs/api/training'
-import { StudentClassBySubjectClassSemester } from '@workspace/libs/api/schemas/studentClassBySubjectClassSemester'
+import {
+    enrollStudentOnSubjectClass,
+    useStudentBySubjectClassSemester,
+} from '@workspace/libs/api/training'
+import type { StudentClassBySubjectClassSemester } from '@workspace/libs/api/schemas/studentClassBySubjectClassSemester'
+import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 
 interface FilterProps {
     searchText: string | null
@@ -27,9 +39,27 @@ export default function StudentCourseByPlan({
     subjectClassId,
 }: StudentCourseByPlanProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>(
+        []
+    )
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+    })
+
+    const { data: initialValue } = useFindUniqueSubjectClass({
+        where: {
+            semesterId: semesterId as string,
+            id: subjectClassId as string,
+        },
+        include: {
+            mainLecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+        },
     })
 
     const queryClient = new QueryClient()
@@ -38,7 +68,7 @@ export default function StudentCourseByPlan({
         {
             semesterId: semesterId || '',
             subjectClassId: subjectClassId || '',
-            // search: filters.searchText,
+            search: filters.searchText || '',
             page: '1',
             pageSize: '10',
         },
@@ -66,8 +96,50 @@ export default function StudentCourseByPlan({
         })
     }
 
+    const handleSaveStudentClass = async () => {
+        if (!subjectClassId) return
+
+        const removedStudents = initialSelectedKeys.filter(
+            (key) => !selectedRowKeys.includes(key)
+        )
+
+        try {
+            await enrollStudentOnSubjectClass({
+                addStudentIds: selectedRowKeys as string[],
+                removeStudentIds: removedStudents as string[],
+                subjectClassId,
+            })
+            message.success('Gán học sinh vào lớp thành công!')
+            setInitialSelectedKeys(selectedRowKeys)
+            queryClient.invalidateQueries()
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi gán lớp cố định!')
+        }
+    }
+
+    useEffect(() => {
+        if (students) {
+            const checkedStudentIds = students
+                .filter(
+                    (item: StudentClassBySubjectClassSemester) => item.checked
+                )
+                .map((item: StudentClassBySubjectClassSemester) => item.id)
+
+            setSelectedRowKeys(checkedStudentIds)
+            setInitialSelectedKeys(checkedStudentIds)
+        }
+    }, [students])
+
     return (
-        <div>
+        <App>
+            {initialValue && (
+                <Divider>
+                    {initialValue?.code} - {initialValue?.name} - Kíp:{' '}
+                    {getScheduleLabel(initialValue?.schedule)} - Giảng viên:{' '}
+                    {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
+                    {initialValue?.mainLecturer?.userProfile?.firstName}
+                </Divider>
+            )}
             <Row gutter={[16, 16]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
@@ -100,6 +172,8 @@ export default function StudentCourseByPlan({
             </Row>
             <Col span={24}>
                 <Table
+                    rowKey="id"
+                    id="student-by-subject-class-semester"
                     columns={[
                         {
                             title: 'STT',
@@ -118,12 +192,36 @@ export default function StudentCourseByPlan({
                             align: 'center',
                         },
                         {
-                            title: 'Họ và tên',
+                            title: 'Họ',
                             align: 'center',
                             width: 150,
                             render: (record) =>
                                 record.userProfile
-                                    ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
+                                    ? `${record.userProfile.lastName}`
+                                    : '',
+                        },
+                        {
+                            title: 'Tên',
+                            align: 'center',
+                            width: 150,
+                            sorter: (
+                                a: StudentClassBySubjectClassSemester,
+                                b: StudentClassBySubjectClassSemester
+                            ) => {
+                                const nameA = a.userProfile
+                                    ? `${a.userProfile.firstName}`
+                                    : ''
+                                const nameB = b.userProfile
+                                    ? `${b.userProfile.firstName}`
+                                    : ''
+                                return nameA.localeCompare(nameB, 'vi', {
+                                    sensitivity: 'base',
+                                })
+                            },
+                            defaultSortOrder: 'ascend',
+                            render: (record) =>
+                                record.userProfile
+                                    ? `${record.userProfile.firstName}`
                                     : '',
                         },
                         {
@@ -180,7 +278,7 @@ export default function StudentCourseByPlan({
                             },
                         },
                     ]}
-                    data={students}
+                    data={students as unknown as Record<string, unknown>[]}
                     scroll={{ x: 'max-content' }}
                     pagination={{
                         current: currentPage,
@@ -188,10 +286,26 @@ export default function StudentCourseByPlan({
                     }}
                     rowSelection={{
                         selectedRowKeys,
-                        onChange: setSelectedRowKeys,
+                        onChange: (selectedKeys) => {
+                            setSelectedRowKeys(selectedKeys)
+                        },
                     }}
                 />
+                <Flex justify="end" style={{ marginTop: 16 }}>
+                    <Button
+                        type="primary"
+                        className="h-[32px] px-4"
+                        onClick={handleSaveStudentClass}
+                        disabled={
+                            !subjectClassId ||
+                            !semesterId ||
+                            selectedRowKeys.length <= 0
+                        }
+                    >
+                        Lưu
+                    </Button>
+                </Flex>
             </Col>
-        </div>
+        </App>
     )
 }
