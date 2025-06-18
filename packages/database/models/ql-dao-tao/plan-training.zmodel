@@ -38,11 +38,26 @@ model StudentSubjectScore extends Base {
 
   bonusScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
-  // finalScore = if examScore < 4 ? examScore : (attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore
+  // finalScore = if examScore < 4 ? examScore : Math.max((attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore, 10)
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp finalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
-  finalScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') // điểm tổng kết
+  finalScore       Float?                    @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
 
+  // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
+  // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
   examPostponed    Boolean                   @default(false) // hoãn thi
+
+  // Điểm R là điểm áp dụng cho học phần mà học viên được phép miễn học và
+  // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT. 
+  exempted         Boolean                   @default(false) // được miễn học
+
+  // Điểm W được sử dụng để ghi chú cho học phần mà học viên
+  // đã làm đơn xin rút khỏi danh sách đăng ký đúng hạn và được chấp nhận.
+  withdrew         Boolean                   @default(false) // rút khỏi
+
+  // Điểm X được sử dụng đối với những học phần
+  // mà Phòng Đào tạo chưa nhận được kết quả học tập của học viên.
+  // ~ if finalScore === null
+
   examBanned       Boolean                   @default(false) // cấm thi
   suspended        Boolean                   @default(false) // đình chỉ
 
@@ -259,9 +274,11 @@ enum SubjectEquivalentType { // loại môn học tương đương
 }
 
 /// loại hình thi
+// bảo đảm tối thiếu có 02 mã đề thi đối với hình thức thi tự luận
+// và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
 enum ExamType {
-  OfflineWritten // thi viết
-  OnlineWritten // thi viết trực tuyến
+  OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+  OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
   OfflineChoices // thi trắc nghiệm
   OnlineChoices // thi trắc nghiệm trực tuyến
   Oral // thi vấn đáp
@@ -368,11 +385,14 @@ model SubjectClass extends Base {
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
 
-  lecturerAssignmentDeadline DateTime?
-  examDate                   DateTime?
+  lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
+  examDate                   DateTime? // ngày thi
 
   scoreDeadline              DateTime? // hạn nhập điểm CC/TX: default 10 ngày trước ngày thi
   examScoreDeadline          DateTime? // hạn nhập điểm thi: default 10 ngày sau ngày thi
+
+  // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
+  examType                   ExamType?
   
   // cần khoá khi: hạn nhập điểm
   isLockScore                Boolean               @default(false) // khoá điểm CC/TX
