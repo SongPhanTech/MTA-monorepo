@@ -16,6 +16,7 @@ import {
     useCreateManySubjectClass,
     useFindManyRoom,
     useFindManySchoolYear,
+    useFindManySubjectClass,
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
 } from '@workspace/db/hooks'
@@ -66,10 +67,11 @@ const PutOpenSubjectClassModal = () => {
     >([])
     const [numberOfClass, setNumberOfClass] = useState<number | null>(null)
     const [maxStudent, setMaxStudent] = useState<number | null>(null)
-    const [selectedSemester, setSelectedSemester] = useState<Semester>()
+    const [selectedSemester, setSelectedSemester] = useState<
+        Semester & { key: number }
+    >()
     const [subjectVersion, setSubjectVersion] = useState<SubjectVersion>()
     const { mutateAsync: createMany } = useCreateManySubjectClass()
-    // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     async function onOk(output?: PutOpenSubjectClassType) {
         if (!output) return
         try {
@@ -84,6 +86,7 @@ const PutOpenSubjectClassModal = () => {
                     code: i?.code,
                     roomId: i?.roomId,
                     examDate: i?.examDate,
+                    maxStudent: i?.maxStudent,
                 })),
             })
             // refetch() lại danh sách level
@@ -148,15 +151,27 @@ const PutOpenSubjectClassModal = () => {
         }
     }
 
-    const handleChangeDate = (
-        date: Dayjs,
-        record: SubjectClass & { key: number }
-    ) => {
+    const handleChangeDateExam = (date: Dayjs, index: number) => {
         const result = dataSubmit.map((i) => {
-            if (i.key === record.key) {
+            if (i.key === index) {
                 return {
                     ...i,
                     examDate: date,
+                    scoreDeadline: date.add(-10, 'day'),
+                    examScoreDeadline: date.add(10, 'day'),
+                }
+            }
+            return i
+        })
+        setDataSubmit(result)
+    }
+
+    const handleChangeDate = (date: Dayjs, index: number, key: string) => {
+        const result = dataSubmit.map((i) => {
+            if (i.key === index) {
+                return {
+                    ...i,
+                    [key]: date,
                 }
             }
             return i
@@ -233,13 +248,6 @@ const PutOpenSubjectClassModal = () => {
         },
     })
 
-    // const { data: subjectVersionData } = useFindUniqueSubjectVersion({
-    //     where: { id: dataClass?.subjectVersionId },
-    //     include: {
-    //         subjectClass: true,
-    //     },
-    // })
-
     return (
         <PutFormModal
             open={isOpen}
@@ -282,7 +290,7 @@ const PutOpenSubjectClassModal = () => {
                         options={subjectVersionData.map((item) => {
                             return {
                                 ...item,
-                                label: item.name,
+                                label: `${item?.code} - ${item?.name}`,
                                 value: item.id,
                             }
                         })}
@@ -414,6 +422,12 @@ const PutOpenSubjectClassModal = () => {
                             render: () => <>{subjectVersion?.credit}</>,
                         },
                         {
+                            title: 'Số SV tối đa',
+                            dataIndex: 'maxStudent',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
                             title: 'SV nợ',
                             dataIndex: 'svNo',
                             width: 100,
@@ -443,6 +457,28 @@ const PutOpenSubjectClassModal = () => {
                                 ],
                         },
                         {
+                            title: 'Hạn PCGD',
+                            width: 150,
+                            align: 'center',
+                            render: (record) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.lecturerAssignmentDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            record?.key,
+                                            'lecturerAssignmentDeadline'
+                                        )
+                                    }
+                                />
+                            ),
+                        },
+                        {
                             title: 'Ngày thi',
                             width: 150,
                             align: 'center',
@@ -453,8 +489,53 @@ const PutOpenSubjectClassModal = () => {
                                     disabledDate={(date) =>
                                         date && date < dayjs().startOf('day')
                                     }
+                                    value={record.examDate}
                                     onChange={(date) =>
-                                        handleChangeDate(date, record)
+                                        handleChangeDateExam(date, record?.key)
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm CC/TX',
+                            width: 150,
+                            align: 'center',
+                            render: (record) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.scoreDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            record?.key,
+                                            'scoreDeadline'
+                                        )
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm',
+                            width: 150,
+                            align: 'center',
+                            render: (record) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.examScoreDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            record?.key,
+                                            'examScoreDeadline'
+                                        )
                                     }
                                 />
                             ),
@@ -474,7 +555,7 @@ const PutOpenSubjectClassModal = () => {
                             align: 'center',
                             render: (record) => (
                                 <Select
-                                    placeholder="Chọn chủ đề khảo sát"
+                                    placeholder="Chọn phòng học"
                                     options={roomData.map((i: Room) => {
                                         return {
                                             value: i.id,

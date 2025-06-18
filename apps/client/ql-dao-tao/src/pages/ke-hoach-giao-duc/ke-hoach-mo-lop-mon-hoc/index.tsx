@@ -40,8 +40,8 @@ interface FilterProps {
 export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedSemester, setSelectedSemester] = useState<Semester>({})
+    // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedSemester, setSelectedSemester] = useState({})
     const [form] = useForm<FilterProps>()
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
@@ -291,7 +291,7 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary">Thêm mới</Button>
+                                {/* <Button type="primary">Thêm mới</Button> */}
                                 <Button type="primary">
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
@@ -304,11 +304,6 @@ export default function SubjectOpeningPlan() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) =>
-                                setSelectedRowKeys(selectedKeys),
-                        }}
                         data={data}
                         columns={[
                             {
@@ -383,12 +378,7 @@ export default function SubjectOpeningPlan() {
                                     </ul>
                                 ),
                             },
-                            {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'subjectVersionCredit',
-                                width: 150,
-                                align: 'center',
-                            },
+
                             {
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
@@ -413,6 +403,13 @@ export default function SubjectOpeningPlan() {
                                     </ul>
                                 ),
                             },
+                            {
+                                title: 'Số tín chỉ',
+                                dataIndex: 'subjectVersionCredit',
+                                width: 150,
+                                align: 'center',
+                            },
+
                             // {
                             //     title: 'Các lớp có môn',
                             //     dataIndex: 'cacLopCoMon',
@@ -454,6 +451,7 @@ export default function SubjectOpeningPlan() {
                                 // TODO:
                                 dataIndex: ['managementOrganization', 'name'],
                                 width: 200,
+                                align: 'center',
                             },
                             {
                                 title: 'Thao tác',

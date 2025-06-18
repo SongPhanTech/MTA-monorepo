@@ -1,8 +1,12 @@
 import { AnyCnameRecord } from 'node:dns'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutOpenSubjectClassModal } from '@components/modal'
+import {
+    PutOneSubjectClassModal,
+    PutOpenSubjectClassModal,
+} from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     SUBJECT_CLASS_SCHEDULE_TYPE,
@@ -24,8 +28,13 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
+    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import { lecturerAssignment } from '@workspace/libs/api/training'
+import {
+    lecturerAssignment,
+    lecturerAssignmentResponse,
+    lecturerAssignmentResponse200,
+} from '@workspace/libs/api/training'
 import {
     Button,
     Checkbox,
@@ -126,6 +135,7 @@ export default function TeachingAssignment() {
                     },
                 },
             },
+            subjectClassStudent: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -198,6 +208,7 @@ export default function TeachingAssignment() {
     async function handleChangeData() {
         try {
             showSpinner()
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             const res: any = await lecturerAssignment(
                 dataSubmit.map((subjectClass) => ({
                     subjectClassId: subjectClass.id,
@@ -217,6 +228,23 @@ export default function TeachingAssignment() {
             await refetch()
             setIsEdit(false)
             setDataSubmit([...data])
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSubjectClass({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -297,6 +325,11 @@ export default function TeachingAssignment() {
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutOpenSubjectClassModal.name,
     })
+
+    const { onOpen: onOpenEditSubjectClass, onClose: onCloseEditSubjectClass } =
+        useDisclosure<string>({
+            tag: PutOneSubjectClassModal.name,
+        })
 
     const handleModal = () => {
         onOpen()
@@ -470,6 +503,7 @@ export default function TeachingAssignment() {
                                 width: 200,
                                 align: 'center',
                             },
+
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'subject',
@@ -477,6 +511,20 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 render: (value) =>
                                     value?.credit ? value?.credit : '',
+                            },
+                            {
+                                title: 'Số SV tối đa',
+                                dataIndex: 'maxStudent',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số SV',
+                                dataIndex: 'subjectClassStudent',
+                                width: 100,
+                                align: 'center',
+                                render: (value) =>
+                                    value?.length ? value?.length : '',
                             },
                             {
                                 title: 'Giảng viên 1',
@@ -567,6 +615,7 @@ export default function TeachingAssignment() {
                             {
                                 title: 'Địa điểm',
                                 dataIndex: 'room',
+                                align: 'center',
                                 width: 150,
                                 render: (value) =>
                                     value?.building?.trainingLocation?.name
@@ -609,13 +658,39 @@ export default function TeachingAssignment() {
                             {
                                 title: 'Phòng học',
                                 dataIndex: 'room',
+                                align: 'center',
                                 width: 100,
                                 render: (value) => value?.name || '',
                             },
                             {
+                                title: 'Ngày thi',
+                                dataIndex: 'examDate',
+                                align: 'center',
+                                width: 100,
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+
+                            {
                                 title: 'Hạn PCGD',
                                 dataIndex: 'lecturerAssignmentDeadline',
                                 width: 100,
+                                align: 'center',
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+                            {
+                                title: 'Hạn nhập điểm CC/TX',
+                                dataIndex: 'scoreDeadline',
+                                width: 150,
+                                align: 'center',
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+                            {
+                                title: 'Hạn nhập điểm thi',
+                                dataIndex: 'examScoreDeadline',
+                                width: 150,
                                 render: (value) =>
                                     value ? formatDate(value) : '',
                             },
@@ -623,6 +698,7 @@ export default function TeachingAssignment() {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'subject',
                                 width: 200,
+                                align: 'center',
                                 render: (value) =>
                                     value?.managementOrganization?.name
                                         ? value?.managementOrganization?.name
@@ -644,6 +720,47 @@ export default function TeachingAssignment() {
                                 title: 'Lớp liên kết',
                                 dataIndex: 'lopLienKet',
                                 width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, { id }) => {
+                                    if (id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                {/* <Tooltip
+                                                    title="Xem chi tiết"
+                                                    placement="leftTop"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={onOpen.bind(
+                                                            null,
+                                                            id
+                                                        )}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Tooltip> */}
+                                                <EditIcon
+                                                    onClick={onOpenEditSubjectClass.bind(
+                                                        null,
+                                                        id
+                                                    )}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDelete(id),
+                                                    }}
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
                             },
                         ]}
                         data={dataSubmit}

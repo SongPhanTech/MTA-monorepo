@@ -2,29 +2,23 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import DeleteIcon from '@components/icons/delete'
 // import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import {
     $Enums,
-    type ExamType,
     type Room,
-    type Semester,
+    type SubjectClass,
     type SubjectClassSchedule,
-    type TrainingCourse,
-    type TrainingObjectType,
+    type SubjectVersion,
 } from '@workspace/db'
 import {
     useCreateManySubjectClass,
-    useCreateSubjectClass,
-    useCreateSubjectVersion,
-    useCreateTrainingCourse,
     useFindManyRoom,
+    useFindManySubjectClass,
     useFindManyTrainingLocation,
     useFindUniqueSubjectVersion,
-    useFindUniqueTrainingCourse,
     useUpdateSubjectClass,
-    useUpdateSubjectVersion,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -35,11 +29,12 @@ import {
     Form,
     Input,
     InputNumber,
+    Row,
     Table,
     TreeSelect,
     message,
 } from 'antd'
-import dayjs from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -49,8 +44,11 @@ import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectCl
 dayjs.locale('vi')
 
 export type PutOpenSubjectClassType = {
-    subjectClassScheduleId: string
-    trainingLocationId: string
+    schedule: string
+    trainingLocationId: string | null
+    subjectVersionId: string
+    semesterId: string
+    totalStudent: number
 }
 
 export type OpenSubjectClassType = OpenSubjectClass & {
@@ -62,7 +60,6 @@ export type OpenSubjectClassType = OpenSubjectClass & {
         key: string
         code: string
     }
-    subjectClassScheduleId: SubjectClassSchedule
     schedule: SubjectClassSchedule
     startDate?: Date
     subjectVersionCode?: string
@@ -70,6 +67,7 @@ export type OpenSubjectClassType = OpenSubjectClass & {
 
 const PutOpenClassModal = () => {
     const [form] = Form.useForm<PutOpenSubjectClassType>()
+    const [formTable] = Form.useForm<SubjectClass>()
     const {
         isOpen,
         onClose,
@@ -80,57 +78,47 @@ const PutOpenClassModal = () => {
     })
     const { getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-    const [dataSubmit, setDataSubmit] = useState<OpenSubjectClassType[]>([])
+    const [dataSubmit, setDataSubmit] = useState<
+        (SubjectClass & { key: number })[]
+    >([])
     const [numberOfClass, setNumberOfClass] = useState<number | null>(null)
     const [maxStudent, setMaxStudent] = useState<number | null>(null)
+    const [isEdit, setIsEdit] = useState<boolean>(true)
     const { mutateAsync: createMany } = useCreateManySubjectClass()
-    // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     async function onOk(output?: PutOpenSubjectClassType) {
         if (!output) return
         try {
             showSpinner()
-            if (dataClass?.subjectClass?.length) {
-                //    await updateSubjectClass({
-                //                     data: {
-                //                         ...rest,
-                //                         trainingObjectTypes: {
-                //                             createMany: {
-                //                                 data: trainingObjectTypeIds.map(
-                //                                     (trainingObjectTypeId) => ({
-                //                                         trainingObjectTypeId,
-                //                                     })
-                //                                 ),
-                //                                 skipDuplicates: true,
-                //                             },
-                //                             deleteMany: {
-                //                                 trainingMajorId: id,
-                //                                 trainingObjectTypeId: {
-                //                                     notIn: trainingObjectTypeIds,
-                //                                 },
-                //                             },
-                //                         },
-                //                     },
-                //                     where: { id },
-                //                 })
-            } else {
+            if (!isEdit) {
                 console.log(dataSubmit)
-                await createMany({
-                    data: dataSubmit.map((i) => ({
-                        name: i.subjectVersionName,
-                        startDate: new Date(),
-                        subjectId: i.subjectVersionId,
-                        schedule: i.subjectClassScheduleId,
-                        semesterId: i.semester.id,
-                        code: i?.subjectVersionCode,
-                    })),
-                })
             }
-
-            // // refetch() lại danh sách level
-            // queryClient.invalidateQueries({
-            //     queryKey: ['TrainingCourse'],
-            // })
             onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+    const { data: subjectVersionData } = useFindUniqueSubjectVersion({
+        where: { id: dataClass?.subjectVersionId },
+        include: {
+            subjectClass: true,
+        },
+    })
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSubjectClass({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            const result = dataSubmit.filter((i) => i?.id !== id)
+            setDataSubmit(result)
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -139,20 +127,24 @@ const PutOpenClassModal = () => {
 
     const handleCreateTableForClass = () => {
         setMaxStudent(null)
+        setIsEdit(false)
         if (Number(numberOfClass) > 0) {
-            const cout = Math.ceil(100 / Number(numberOfClass))
+            const cout = Math.ceil(Number(100) / Number(numberOfClass))
             const result = []
             for (let i = 0; i < Number(numberOfClass); i++) {
                 result.push({
-                    ...dataClass,
                     key: i + 1,
-                    subjectVersionCode: `${dataClass?.subjectVersionCode} 0${i + 1}`,
-                    maxStudent: cout,
-                    subjectClassScheduleId: form.getFieldValue(
-                        'subjectClassScheduleId'
-                    ),
-                    trainingLocationId:
-                        form.getFieldValue('trainingLocationId'),
+                    code: `${subjectVersionData?.code} 0${i + 1}`,
+                    name: subjectVersionData?.name
+                        ? subjectVersionData?.name
+                        : '',
+                    maxStudent: Number(cout),
+                    startDate: new Date(),
+                    semesterId: dataClass?.semester.id,
+                    subjectId: subjectVersionData?.id,
+                    schedule: form.getFieldValue('schedule'),
+                    subject: subjectVersionData,
+                    semester: dataClass?.semester,
                 })
             }
             setDataSubmit(result)
@@ -161,36 +153,72 @@ const PutOpenClassModal = () => {
 
     const handleCreateTableForMaxStudent = () => {
         setNumberOfClass(null)
+        setIsEdit(false)
         if (Number(maxStudent) > 0) {
-            const cout = Math.ceil(100 / Number(maxStudent))
+            const cout = Math.ceil(Number(100) / Number(maxStudent))
             const result = []
             for (let i = 0; i < cout; i++) {
                 result.push({
-                    ...dataClass,
                     key: i + 1,
-                    subjectVersionCode: `${dataClass?.subjectVersionCode} 0${i + 1}`,
-                    maxStudent: maxStudent,
-                    subjectClassScheduleId: form.getFieldValue(
-                        'subjectClassScheduleId'
-                    ),
-                    trainingLocationId:
-                        form.getFieldValue('trainingLocationId'),
+                    code: `${subjectVersionData?.code} 0${i + 1}`,
+                    name: subjectVersionData?.name
+                        ? subjectVersionData?.name
+                        : '',
+                    maxStudent: Number(maxStudent),
+                    startDate: new Date(),
+                    semesterId: dataClass?.semester.id,
+                    subjectId: subjectVersionData?.id,
+                    schedule: form.getFieldValue('schedule'),
+                    subject: subjectVersionData,
+                    semester: dataClass?.semester,
                 })
             }
             setDataSubmit(result)
         }
     }
 
-    const handleChangeDate = (date: any, record: OpenSubjectClassType) => {
-        // record={...record,examDate:date.format('YYYY-MM-DD')}
-
-        console.log(date, record)
+    const handleChangeDateExam = (date: Dayjs, index: string) => {
+        const result = dataSubmit.map((i) => {
+            if (i?.id === index || i?.key === index) {
+                return {
+                    ...i,
+                    examDate: date,
+                    scoreDeadline: date.add(-10, 'day'),
+                    examScoreDeadline: date.add(10, 'day'),
+                }
+            }
+            return i
+        })
+        setDataSubmit(result)
     }
 
-    const handleChangeLocation = (value: string) => {
-        console.log(value)
+    const handleChangeDate = (date: Dayjs, index: string, key: string) => {
+        console.log(index, key)
+        const result = dataSubmit.map((i) => {
+            if (i.id === index || i?.key === index) {
+                return {
+                    ...i,
+                    [key]: date,
+                }
+            }
+            return i
+        })
+        setDataSubmit(result)
     }
 
+    const handleChangeLocation = (value: string, key: string) => {
+        const result = dataSubmit.map((i) => {
+            if (i.id === key) {
+                return {
+                    ...i,
+                    roomId: value,
+                }
+            }
+            return i
+        })
+        setDataSubmit(result)
+        console.log(result)
+    }
     const {
         data: trainingLocationData = [],
         refetch: refetchTrainingLocationData,
@@ -207,12 +235,43 @@ const PutOpenClassModal = () => {
         },
     })
 
-    const { data: subjectVersionData } = useFindUniqueSubjectVersion({
-        where: { id: dataClass?.subjectVersionId },
-        include: {
-            subjectClass: true,
-        },
-    })
+    const { data: subjectClassData = [], refetch: refetchSubjectClassData } =
+        useFindManySubjectClass(
+            {
+                where: {
+                    subjectId: dataClass?.subjectVersionId,
+                },
+                include: {
+                    subject: true,
+                    room: {
+                        include: {
+                            building: {
+                                include: {
+                                    trainingLocation: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            {
+                enabled: !!dataClass?.subjectVersionId,
+            }
+        )
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (subjectClassData?.length) {
+            setDataSubmit(
+                subjectClassData.map((i, index) => ({ ...i, key: index + 1 }))
+            )
+            form.setFieldsValue({
+                schedule: subjectClassData[0]?.schedule,
+                trainingLocationId:
+                    subjectClassData[0]?.room?.building?.trainingLocationId,
+            })
+        }
+    }, [subjectClassData])
 
     return (
         <PutFormModal
@@ -225,23 +284,33 @@ const PutOpenClassModal = () => {
             className="w-[80vw]"
         >
             <Col span={6}>
-                <div>Mã HK: {dataClass?.semester?.code}</div>
+                <div className="mb-3">Mã HK: {dataClass?.semester?.code}</div>
             </Col>
-            <Col span={6}>{dataClass?.semester?.name}</Col>
-            <Col span={6}>Đơn vị phụ trách:</Col>
-            <Col span={6}>Bộ môn: </Col>
-            <Col span={6}>Mã MH: {dataClass?.subjectVersionCode}</Col>
-            <Col span={6}>Tên MH: {dataClass?.subjectVersionName}</Col>
-            <Col span={6}>Tổng SV: {dataClass?.studentCount}</Col>
-            <Col span={6}>Tổng SV nợ môn: 0</Col>
+            <Col className="mb-3" span={6}>
+                {dataClass?.semester?.name}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Đơn vị phụ trách:
+            </Col>
+            <Col className="mb-3" span={6}>
+                Bộ môn:{' '}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Mã MH: {dataClass?.subjectVersionCode}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tên MH: {dataClass?.subjectVersionName}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tổng SV: {dataClass?.studentCount}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tổng SV nợ môn: 0
+            </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="subjectClassScheduleId"
-                    label="Kíp học"
-                    required
-                >
+                <FormItem form={form} name="schedule" label="Kíp học" required>
                     <Select
+                        disabled={!!dataSubmit?.length}
                         placeholder="Chọn kíp học"
                         options={Object.entries(
                             SUBJECT_CLASS_SCHEDULE_TYPE
@@ -260,7 +329,6 @@ const PutOpenClassModal = () => {
                     form={form}
                     name="trainingLocationId"
                     label="Địa điểm"
-                    required
                 >
                     <Select
                         placeholder="Chọn địa điểm"
@@ -283,12 +351,14 @@ const PutOpenClassModal = () => {
                         step={1}
                         min={0}
                         value={numberOfClass}
+                        disabled={!!dataSubmit?.length}
                         onChange={(value) => setNumberOfClass(value || 0)}
                     />
                     <Button
                         onClick={handleCreateTableForClass}
                         type="primary"
                         className="h-[32px]"
+                        disabled={!numberOfClass}
                     >
                         Thêm LMH theo số lớp
                     </Button>
@@ -303,12 +373,14 @@ const PutOpenClassModal = () => {
                         step={1}
                         min={0}
                         value={maxStudent}
+                        disabled={!!dataSubmit?.length}
                         onChange={(value) => setMaxStudent(value || 0)}
                     />
                     <Button
                         onClick={handleCreateTableForMaxStudent}
                         type="primary"
                         className="h-[32px]"
+                        disabled={!maxStudent}
                     >
                         Thêm LMH theo số SV tối đa
                     </Button>
@@ -329,19 +401,20 @@ const PutOpenClassModal = () => {
                         },
                         {
                             title: 'Mã LMH',
-                            dataIndex: 'subjectVersionCode',
+                            dataIndex: 'code',
                             width: 150,
                         },
                         {
                             title: 'Tên môn học',
-                            dataIndex: 'subjectVersionName',
+                            dataIndex: 'name',
                             width: 200,
                         },
                         {
                             title: 'Số tín chỉ',
-                            dataIndex: 'subjectVersionCredit',
+                            dataIndex: 'subject',
                             width: 100,
                             align: 'center',
+                            render: (value: SubjectVersion) => value?.credit,
                         },
                         {
                             title: 'SV nợ',
@@ -351,10 +424,10 @@ const PutOpenClassModal = () => {
                         },
                         {
                             title: 'Số tiết TKB',
-                            dataIndex: 'subjectVersionData',
+                            dataIndex: 'subject',
                             width: 100,
                             align: 'center',
-                            render: () => subjectVersionData?.period,
+                            render: (value: SubjectVersion) => value?.period,
                         },
                         {
                             title: 'Số SV max',
@@ -365,13 +438,35 @@ const PutOpenClassModal = () => {
 
                         {
                             title: 'Kíp học',
-                            dataIndex: 'subjectClassScheduleId',
+                            dataIndex: 'schedule',
                             width: 200,
                             align: 'center',
                             render: (value: SubjectClassSchedule) =>
                                 SUBJECT_CLASS_SCHEDULE_TYPE[
                                     value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
                                 ],
+                        },
+                        {
+                            title: 'Hạn PCGD',
+                            width: 150,
+                            align: 'center',
+                            render: (record, index) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.lecturerAssignmentDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            isEdit ? record?.id : record?.key,
+                                            'lecturerAssignmentDeadline'
+                                        )
+                                    }
+                                />
+                            ),
                         },
                         {
                             title: 'Ngày thi',
@@ -384,32 +479,78 @@ const PutOpenClassModal = () => {
                                     disabledDate={(date) =>
                                         date && date < dayjs().startOf('day')
                                     }
+                                    value={record.examDate}
                                     onChange={(date) =>
-                                        handleChangeDate(date, record)
+                                        handleChangeDateExam(
+                                            date,
+                                            isEdit ? record?.id : record?.key
+                                        )
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm CC/TX',
+                            width: 150,
+                            align: 'center',
+                            render: (record) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.scoreDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            record?.id,
+                                            'scoreDeadline'
+                                        )
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm',
+                            width: 150,
+                            align: 'center',
+                            render: (record) => (
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    className="w-full"
+                                    disabledDate={(date) =>
+                                        date && date < dayjs().startOf('day')
+                                    }
+                                    value={record.examScoreDeadline}
+                                    onChange={(date) =>
+                                        handleChangeDate(
+                                            date,
+                                            record?.id,
+                                            'examScoreDeadline'
+                                        )
                                     }
                                 />
                             ),
                         },
                         {
                             title: 'Hình thức thi',
-                            dataIndex: 'ExamType',
                             width: 150,
                             align: 'center',
                             render: () =>
                                 subjectVersionData?.examType
                                     ? getExamTypeLabel(
-                                          subjectVersionData.examType
+                                          subjectVersionData?.examType
                                       )
                                     : '',
                         },
                         {
                             title: 'Phòng học',
-                            dataIndex: 'phongHoc',
                             width: 200,
                             align: 'center',
-                            render: () => (
+                            render: (record) => (
                                 <Select
-                                    placeholder="Chọn chủ đề khảo sát"
+                                    placeholder="Chọn phòng học"
                                     options={roomData.map((i: Room) => {
                                         return {
                                             value: i.id,
@@ -418,7 +559,7 @@ const PutOpenClassModal = () => {
                                     })}
                                     style={{ width: '100%' }}
                                     onChange={(value) =>
-                                        handleChangeLocation(value)
+                                        handleChangeLocation(value, record?.id)
                                     }
                                 />
                             ),
@@ -430,8 +571,31 @@ const PutOpenClassModal = () => {
                             align: 'center',
                             render: (value) =>
                                 trainingLocationData.find(
-                                    (item) => item.id === value
+                                    (item) =>
+                                        item.id ===
+                                        form.getFieldValue('trainingLocationId')
                                 )?.name || '',
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            fixed: 'right',
+                            render: (_, { id }) => {
+                                if (id) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDelete(id),
+                                                }}
+                                            />
+                                        </Row>
+                                    )
+                                }
+                                return ''
+                            },
                         },
                     ]}
                     dataSource={dataSubmit}
