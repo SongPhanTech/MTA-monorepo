@@ -4,7 +4,7 @@ import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
 } from '@components/modal'
-import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
+import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 
@@ -67,7 +67,11 @@ export default function StudentScoreClassPage() {
                 },
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: {
+                                scoreConverts: true,
+                            },
+                        },
                     },
                 },
                 trainingObjectType: true,
@@ -84,7 +88,7 @@ export default function StudentScoreClassPage() {
                 some: {
                     subjectClassStudent: {
                         some: {
-                            studentId,
+                            studentId: studentId,
                         },
                     },
                 },
@@ -94,12 +98,11 @@ export default function StudentScoreClassPage() {
             subjectClasses: {
                 include: {
                     subjectClassStudent: {
+                        where: {
+                            studentId,
+                        },
                         include: {
-                            subjectVersion: {
-                                include: {
-                                    studentSubjectScore: true,
-                                },
-                            },
+                            subjectVersion: true,
                         },
                     },
                 },
@@ -109,6 +112,8 @@ export default function StudentScoreClassPage() {
             createdAt: 'asc',
         },
     })
+
+    console.log(data)
 
     type subjectClassesChild = (typeof data)[number]['subjectClasses'][number]
 
@@ -163,31 +168,55 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
+                                dataIndex: 'code',
                                 fixed: 'left',
                             },
                             {
                                 title: 'Tên môn học',
                                 align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'subjectVersion',
+                                    'name',
+                                ],
                                 fixed: 'left',
                             },
                             {
                                 title: 'Điểm chuyên cần',
                                 align: 'center',
-                                dataIndex: 'attendanceScore',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'attendanceScore',
+                                ],
                             },
                             {
                                 title: 'Điểm thường xuyên',
                                 align: 'center',
-                                dataIndex: 'midtermScore',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'midtermScore',
+                                ],
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
-                                dataIndex: 'examScore',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'examScore',
+                                ],
                             },
                             {
                                 title: 'Điểm hệ 10',
                                 align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'finalScore',
+                                ],
                             },
                             {
                                 title: 'Điểm hệ 4',
@@ -200,6 +229,11 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Ghi chú',
                                 align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'description',
+                                ],
                             },
                             {
                                 title: 'Trạng thái',
@@ -207,8 +241,9 @@ export default function StudentScoreClassPage() {
                                 width: 120,
                                 render: (_, record) => {
                                     const statusInfo =
-                                        FIXED_CLASS_STUDENT_STATUS[
-                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                        SUBJECT_CLASS_STUDENT_STATUS[
+                                            record.subjectClassStudent[0]
+                                                .status as keyof typeof SUBJECT_CLASS_STUDENT_STATUS
                                         ]
                                     return statusInfo ? (
                                         <Tag color={statusInfo.color}>
@@ -253,5 +288,7 @@ export default function StudentScoreClassPage() {
 }
 
 StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout headerChildren="Kết quả học tập">{page}</DefaultLayout>
+    )
 }
