@@ -1,4 +1,5 @@
 import { $Enums, PrismaClient } from '@prisma/client'
+import { scoreConversions } from './score-convert'
 
 const prisma = new PrismaClient()
 
@@ -492,7 +493,8 @@ async function main() {
     })
 
     // Seed TrainingCourse
-    await prisma.trainingCourse.createMany({
+    const trainingCourses = await prisma.trainingCourse.createManyAndReturn({
+        select: { id: true },
         skipDuplicates: true,
         data: [
             {
@@ -528,6 +530,17 @@ async function main() {
             },
         ],
     })
+
+    await Promise.all(
+        trainingCourses.map((trainingCourse) =>
+            prisma.scoreConvert.createMany({
+                data: scoreConversions.map((scoreConversion) => ({
+                    ...scoreConversion,
+                    trainingCourseId: trainingCourse.id,
+                })),
+            })
+        )
+    )
 
     // Seed FixedClass
     await prisma.fixedClass.createMany({
