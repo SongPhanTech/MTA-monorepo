@@ -113,7 +113,7 @@ export default function StudentCourseByPlan({
             setInitialSelectedKeys(selectedRowKeys)
             queryClient.invalidateQueries()
         } catch (error) {
-            message.error('Có lỗi xảy ra khi gán lớp cố định!')
+            message.error('Có lỗi xảy ra khi gán lớp!')
         }
     }
 
