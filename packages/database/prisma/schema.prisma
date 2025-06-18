@@ -650,6 +650,7 @@ model SubjectClass {
   subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
   subjectId                  String
   schedule                   SubjectClassSchedule
+  maxStudent                 Int
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
   lecturerAssignmentDeadline DateTime?
