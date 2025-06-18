@@ -32,7 +32,7 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
             .filter((fixedClass) => fixedClass.trainingCourseId === course.id)
             .map((fixedClass) => ({
                 title: fixedClass.name || `Lớp ${fixedClass.id}`, // Tên lớp cố định
-                key: `class-${fixedClass.id}`,
+                key: `${fixedClass.id}`,
             })),
     }))
 

@@ -11,9 +11,10 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
     useCountSubjectClass,
+    useUpdateSubjectClass,
     useFindManySchoolYear,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import type { TrainingObjectType, SubjectClass } from '@workspace/db'
 import {
     CalendarPlus,
     Search,
@@ -21,7 +22,7 @@ import {
     LockKeyholeOpen,
 } from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
-import _, { includes } from 'lodash'
+import _, { forEach, includes } from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import Select from '@components/commons/select'
@@ -31,6 +32,7 @@ import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import HanNhapDiem from './modal-han-nhap-diem'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -40,11 +42,12 @@ interface FilterProps {
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
-    LectureId: string | null //Giảng viên
+    LectureIds: string[] //Giảng viên
     searchText: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
-    fixedClassId: string | null
+    fixedClassIds: string[]
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 export default function SubjectClass() {
@@ -53,6 +56,9 @@ export default function SubjectClass() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm();
     const [filterStatus, setFilterStatus] = useState(false)
+    const [arrSubjectClass, setArrSubjectClass] = useState<string[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [editSubjectClass, setEditSubjectClass] = useState<SubjectClass | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
@@ -63,8 +69,9 @@ export default function SubjectClass() {
         BoMonId: null,
         trainingObjectId: null,
         examTypeId: null,
-        LectureId: null,
-        fixedClassId: null,
+        LectureIds: [],
+        fixedClassIds: [],
+        examDateRange: undefined, // Khoảng thời gian thi
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -78,6 +85,8 @@ export default function SubjectClass() {
     }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -122,6 +131,40 @@ export default function SubjectClass() {
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                    subjectClassStudent: {
+                        some: {
+                            student: {
+                                trainingObjectTypeId:
+                                    filters.trainingObjectTypeId,
+                            },
+                        },
+                    },
+                }
+                : {}),
+            ...(filters.LectureIds.length > 0
+                ? {
+                    OR: filters.LectureIds.map((id) => ({
+                        mainLecturer: { id },
+                    })),
+                }
+                : {}),
+            ...(filters.BoMonId
+                ? {
+                    subject: {
+                        managementOrganizationId: filters.BoMonId,
+                    },
+                }
+                : {}),
+            ...(filters.examDateRange
+                ? {
+                    examDate: {
+                        gte: filters.examDateRange[0],
+                        lte: filters.examDateRange[1],
+                    },
+                }
+                : {}),
             deletedAt: null,
         },
         include: {
@@ -136,6 +179,11 @@ export default function SubjectClass() {
             extraLecturer: {
                 include: { userProfile: true },
             },
+            subjectClassStudent: {
+                include: {
+                    student: { include: { userProfile: true } },
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -143,7 +191,7 @@ export default function SubjectClass() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
- 
+
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -197,10 +245,97 @@ export default function SubjectClass() {
             BoMonId: filters.BoMonId,
             trainingObjectId: filters.trainingObjectId,
             examTypeId: filters.examTypeId,
-            LectureId: filters.LectureId,
-            fixedClassId: filters.fixedClassId,
+            LectureIds: filters.LectureIds,
+            fixedClassIds: filters.fixedClassIds,
         });
     }, [filters]);
+
+    const handleApply = async (data: SubjectClass) => {
+        updateSubjectClass({
+            where: { id: data.id },
+            data: { examScoreDeadline: data.examScoreDeadline, scoreDeadline: data.scoreDeadline },
+        }).catch((error) => {
+            console.error('Error updating examScoreDeadline for item:', data.id, error);
+        });
+
+        console.log('Applying filters:', data);
+    }
+
+    const handleCheckExamDate = () => {
+        dataTable.forEach((item: SubjectClass) => {
+            if (item.examDate) {
+                if (!item.examScoreDeadline) {
+                    const examDate = new Date(item.examDate);
+                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    item.examScoreDeadline = examScoreDeadline;
+                    if (item.examScoreDeadline <=  new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else if (examDate >=  new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else {
+                        item.isLockExamScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { examScoreDeadline, isLockExamScore: item.isLockExamScore },
+                    }).catch((error) => {
+                        console.error('Error updating examScoreDeadline for item:', item.id, error);
+                    });
+                } else {
+                    const examDate = new Date(item.examDate);
+                    if (item.examScoreDeadline <  new Date(new Date().setHours(24, 0, 0, 0))) {
+                        item.isLockExamScore = true;
+                    } else if (examDate >=  new Date(new Date().setHours(24, 0, 0, 0))  ) {
+                        item.isLockExamScore = true;
+                    } else {
+                        item.isLockExamScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { isLockExamScore: item.isLockExamScore },
+                    }).catch((error) => {
+                        console.error('Error updating examScoreDeadline for item:', item.id, error);
+                    });
+                }
+                // Kiểm tra và cập nhật scoreDeadline
+                if (!item.scoreDeadline) {
+                    const examDate = new Date(item.examDate);
+                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    item.scoreDeadline = scoreDeadline;
+                    if (item.scoreDeadline < new Date()) {
+                        item.isLockScore = true;
+                    } else {
+                        item.isLockScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { scoreDeadline, isLockScore: item.isLockScore },
+                    }).catch((error) => {
+                        console.error('Error updating scoreDeadline for item:', item.id, error);
+                    });
+                } else {
+                    if (item.scoreDeadline < new Date()) {
+                        item.isLockScore = true;
+                    } else {
+                        item.isLockScore = false;
+                    }
+                    updateSubjectClass({
+                        where: { id: item.id },
+                        data: { isLockScore: item.isLockScore },
+                    }).catch((error) => {
+                        console.error('Error updating scoreDeadline for item:', item.id, error);
+                    });
+                }
+            } else {
+                console.log('No exam date found for item:', item);
+            }
+
+        });
+    }
+
+    useEffect(() => {
+        handleCheckExamDate();
+    }, []);
 
     return (
         <div>
@@ -342,8 +477,7 @@ export default function SubjectClass() {
                             }}
                         >
                             Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1
-                            tuần, hạn nhập điểm thi tự động đặt là trước ngày kết
-                            thúc lớp 1 tuần
+                            tuần, hạn nhập điểm thi tự động đặt là trước ngày thi lớp 1 tuần
                         </p>
                         <Table
                             rowKey="id"
@@ -411,10 +545,10 @@ export default function SubjectClass() {
                                     align: 'center',
                                     render: (text, record) => {
                                         const mainLecturer = record.mainLecturer
-                                            ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
+                                            ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                             : 'Chưa có giảng viên chính'
                                         const extraLecturer = record.extraLecturer
-                                            ? `, ${record.extraLecturer.userProfile.firstName} ${record.extraLecturer.userProfile.lastName}`
+                                            ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
                                             : ''
                                         return (
                                             <span>
@@ -431,7 +565,7 @@ export default function SubjectClass() {
                                     align: 'center',
                                     render: (text, record) => {
                                         const mainLecturer = record.mainLecturer
-                                            ? `${record.mainLecturer.userProfile.firstName} ${record.mainLecturer.userProfile.lastName}`
+                                            ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                             : 'Chưa có giảng viên chính'
                                         return <span>{mainLecturer}</span>
                                     },
@@ -517,7 +651,7 @@ export default function SubjectClass() {
                                     title: 'Trạng thái',
                                     dataIndex: 'trangThai',
                                     width: 150,
-                                    fixed: 'right',
+                                    // fixed: 'right',
                                     align: 'center',
                                     render: (text, record) => {
                                         if (
@@ -540,81 +674,23 @@ export default function SubjectClass() {
                                 },
                                 {
                                     title: 'Thao tác',
-                                    width: 500,
+                                    width: 100,
                                     align: 'center',
                                     fixed: 'right',
-                                    render: (_, { id }) => {
-                                        if (id) {
+                                    render: (text, record) => {
+                                        if (record.id) {
                                             return (
                                                 <div className="flex justify-center items-center gap-2">
                                                     <Row
-                                                        className="flex justify-center items-center gap-2 text-[#ff0000]"
-                                                        onClick={() => {
-                                                            Modal.confirm({
-                                                                title: 'Xác nhận',
-                                                                content:
-                                                                    'Bạn có chắc chắn muốn mở khóa nhập điểm CC, TX không?',
-                                                                okText: 'Có',
-                                                                cancelText: 'Không',
-                                                                onOk: () =>
-                                                                    handleChangeLocked(
-                                                                        id,
-                                                                        false
-                                                                    ),
-                                                            })
-                                                        }}
+                                                        className="flex justify-center items-center gap-2 text-[#028850]"
+                                                        onClick={() => { setIsModalOpen(true); setEditSubjectClass(record as SubjectClass) }}
                                                     >
-                                                        <LockKeyhole
-                                                            size={16}
-                                                            strokeWidth={2}
+                                                        <HanNhapDiem
+                                                            data={editSubjectClass}
+                                                            onFilterChange={handleFilterChange}
+                                                            onApply={handleApply}
                                                         />
-                                                        Sửa điểm CC, TX
-                                                    </Row>
-                                                    <Row
-                                                        className="flex justify-center items-center gap-2 text-[#ff0000]"
-                                                        onClick={() => {
-                                                            Modal.confirm({
-                                                                title: 'Xác nhận',
-                                                                content:
-                                                                    'Bạn có chắc chắn muốn mở khóa nhập điểm thi không?',
-                                                                okText: 'Có',
-                                                                cancelText: 'Không',
-                                                                onOk: () =>
-                                                                    handleChangeLocked(
-                                                                        id,
-                                                                        false
-                                                                    ),
-                                                            })
-                                                        }}
-                                                    >
-                                                        <LockKeyhole
-                                                            size={16}
-                                                            strokeWidth={2}
-                                                        />
-                                                        Sửa điểm thi
-                                                    </Row>
-                                                    <Row
-                                                        className="flex justify-center items-center gap-2 text-[#008000]"
-                                                        onClick={() => {
-                                                            Modal.confirm({
-                                                                title: 'Xác nhận',
-                                                                content:
-                                                                    'Bạn có chắc chắn muốn khóa điểm không?',
-                                                                okText: 'Có',
-                                                                cancelText: 'Không',
-                                                                onOk: () =>
-                                                                    handleChangeLocked(
-                                                                        id,
-                                                                        true
-                                                                    ),
-                                                            })
-                                                        }}
-                                                    >
-                                                        <LockKeyholeOpen
-                                                            size={16}
-                                                            strokeWidth={2}
-                                                        />
-                                                        Khóa điểm
+                                                        Đặt lại lịch nhập điểm
                                                     </Row>
                                                 </div>
                                             )
@@ -637,6 +713,7 @@ export default function SubjectClass() {
                     </Col>
                 </Row>
             </Form>
+
         </div >
     )
 }

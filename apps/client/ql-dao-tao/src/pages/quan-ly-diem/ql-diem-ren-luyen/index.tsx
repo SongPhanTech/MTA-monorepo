@@ -46,13 +46,14 @@ interface FilterProps {
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
-    LectureId: string | null //Giảng viên
+    LectureIds: string[] //Giảng viên
     searchText: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
-    fixedClassId: string | null
+    fixedClassIds: string[] 
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
-
+    
 export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -79,8 +80,9 @@ export default function SubjectClassScore() {
         BoMonId: null,
         trainingObjectId: null,
         examTypeId: null,
-        LectureId: null,
-        fixedClassId: null,
+        LectureIds: [],
+        fixedClassIds: [],
+        examDateRange: undefined,
     })
 
     const handleChangeSuaDiemCu = (e: CheckboxChangeEvent) => {

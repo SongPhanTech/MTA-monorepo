@@ -11,6 +11,7 @@ import {
     Row,
     Col,
     Form,
+    DatePicker,
 } from 'antd'
 import {
     FilterOutlined,
@@ -18,6 +19,7 @@ import {
     SearchOutlined,
     ControlOutlined,
 } from '@ant-design/icons'
+import viVN from 'antd/locale/vi_VN'
 import { X, Search } from 'lucide-react'
 import Select from '@components/commons/select'
 import TreeSelectFixClassMulti from '@components/commons/fix-class-select/TreeSelectFixClassMulti'
@@ -34,7 +36,11 @@ import { buildOrgTree } from '@lib/utils'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi'; // Import Vietnamese locale for dayjs
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+dayjs.extend(customParseFormat);
 
 const { Text } = Typography
 
@@ -45,11 +51,12 @@ export type FilterProps = {
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
-    LectureId: string | null //Giảng viên
+    LectureIds: string[]
     searchText: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
-    fixedClassId: string | null //Lớp quản lý
+    fixedClassIds: string[]
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 interface Props {
@@ -95,7 +102,7 @@ const ExamType = [
 ]
 
 const FilterSubjectClass = (props: Props) => {
-    const { onFilterChange, filters, onApply,  } = props
+    const { onFilterChange, filters, onApply, } = props
     const [form] = Form.useForm<FilterProps>()
     const [open, setOpen] = useState(false)
     const [isActive, setIsActive] = useState(false)
@@ -111,11 +118,15 @@ const FilterSubjectClass = (props: Props) => {
             BoMonId: null,
             trainingObjectTypeId: null,
             examTypeId: null,
-            LectureId: null,
-            fixedClassId: null,
+            LectureIds: [],
+            fixedClassIds: [],
+            examDateRange: undefined,
         });
+
         console.log('Reset filters', form.getFieldsValue())
         onApply(form.getFieldsValue());
+        setOpen(false)
+        setIsActive(false)
     }
 
     const handleApply = () => {
@@ -129,6 +140,7 @@ const FilterSubjectClass = (props: Props) => {
     const handleCancel = () => {
         form.resetFields()
         setOpen(false)
+        setIsActive(false)
     }
 
     useEffect(() => {
@@ -140,8 +152,8 @@ const FilterSubjectClass = (props: Props) => {
             BoMonId: filters.BoMonId || null,
             trainingObjectTypeId: filters.trainingObjectTypeId || null,
             examTypeId: filters.examTypeId || null,
-            LectureId: filters.LectureId || null,
-            fixedClassId: filters.fixedClassId || null,
+            LectureIds: filters.LectureIds || [],
+            fixedClassIds: filters.fixedClassIds || [],
         })
     }, [filters, form])
 
@@ -185,7 +197,58 @@ const FilterSubjectClass = (props: Props) => {
         },
     })
 
+    const ApplyFilterExamDate = (examDateRange: [string, string] | null) => {
+        if (examDateRange && examDateRange.length === 2) {
+            const [startDate, endDate] = examDateRange;
+            return {
+                examDateRange: [
+                    dayjs(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                    dayjs(endDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                ],
+            };
+        }
+        return {
+            examDateRange: null,
+        };
+    }
 
+
+
+    const customViVNLocale = {
+        lang: {
+            locale: 'vi_VN',
+            placeholder: 'Chọn ngày',
+            rangePlaceholder: ['Từ ngày', 'Đến ngày'] as [string, string],
+            today: 'Hôm nay',
+            now: 'Bây giờ',
+            backToToday: 'Về hôm nay',
+            ok: 'Đồng ý',
+            clear: 'Xóa',
+            month: 'Tháng',
+            year: 'Năm',
+            timeSelect: 'Chọn giờ',
+            dateSelect: 'Chọn ngày',
+            monthSelect: 'Chọn tháng',
+            yearSelect: 'Chọn năm',
+            decadeSelect: 'Chọn thập kỷ',
+            yearFormat: 'YYYY',
+            dateFormat: 'DD/MM/YYYY',
+            dayFormat: 'D',
+            dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
+            monthBeforeYear: true,
+            previousMonth: 'Tháng trước',
+            nextMonth: 'Tháng sau',
+            previousYear: 'Năm trước',
+            nextYear: 'Năm sau',
+            previousDecade: 'Thập kỷ trước',
+            nextDecade: 'Thập kỷ sau',
+            previousCentury: 'Thế kỷ trước',
+            nextCentury: 'Thế kỷ sau',
+        },
+        timePickerLocale: {
+            placeholder: 'Chọn giờ',
+        },
+    };
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
             <div
@@ -256,19 +319,23 @@ const FilterSubjectClass = (props: Props) => {
                             </Col>
                             <Col span={24}>
                                 <Form.Item
-                                    label="Lớp quản lý"
-                                    name="fixedClassId"
+                                    label="Thời gian thi"
+                                    name="examDateRange"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectFixClassMulti
-                                        schoolYearId={
-                                            form.getFieldValue('KhoaId') ||
-                                            undefined
-                                        }
-                                        placeholder="Chọn lớp quản lý"
+                                    <DatePicker.RangePicker
+                                        placeholder={['Từ ngày', 'Đến ngày']}
+                                        style={{ width: '100%' }}
+                                        allowClear
+                                        onChange={(dates, dateStrings) => {
+                                            ApplyFilterExamDate(dates ? [dateStrings[0], dateStrings[1]] : null)
+                                        }}
+                                        locale={customViVNLocale}
+                                        format="DD/MM/YYYY"
                                     />
+
                                 </Form.Item>
                             </Col>
                         </Col>
@@ -315,12 +382,15 @@ const FilterSubjectClass = (props: Props) => {
                             <Col span={24}>
                                 <Form.Item
                                     label="Giảng viên"
-                                    name="LectureId"
+                                    name="LectureIds"
                                     labelCol={{ span: 7 }}
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                    <TreeSelectLecture placeholder="Chọn giảng viên" />
+                                    <TreeSelectLecture
+                                        placeholder="Chọn giảng viên"
+                                        defaultValue={filters.LectureIds}
+                                    />
                                 </Form.Item>
                             </Col>
                         </Col>
@@ -367,7 +437,7 @@ const FilterSubjectClass = (props: Props) => {
                 }}
                 destroyTooltipOnHide
                 align={{
-                    offset: [100, 0], // Di chuyển popup sang trái 300px
+                    offset: [100, 0],
                 }}
             >
                 <Button
@@ -378,6 +448,7 @@ const FilterSubjectClass = (props: Props) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        backgroundColor: isActive ? '#4caf50' : '#ffffff',
                     }}
                 />
             </Popover>
