@@ -6,6 +6,7 @@ import { PutTrainingMajorModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
@@ -57,7 +58,6 @@ export default function TrainingMajorPage() {
         searchText: '',
         trainingObjectTypeId: undefined,
     })
-    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
     const trainingMajorWhere: Prisma.TrainingMajorWhereInput = useMemo(
         () => ({
@@ -79,16 +79,16 @@ export default function TrainingMajorPage() {
                     ],
                 },
             ],
-            ...(filters.trainingObjectTypeId
-                ? {
-                      trainingObjectTypes: {
-                          some: {
-                              trainingObjectTypeId:
-                                  filters.trainingObjectTypeId,
-                          },
-                      },
-                  }
-                : {}),
+            ...emptyObjectIf(
+                {
+                    trainingObjectTypes: {
+                        some: {
+                            trainingObjectTypeId: filters.trainingObjectTypeId,
+                        },
+                    },
+                },
+                !!filters.trainingObjectTypeId
+            ),
         }),
         [filters]
     )
@@ -120,24 +120,13 @@ export default function TrainingMajorPage() {
         where: { trainingMajors: { some: trainingMajorWhere } },
     })
 
-    const dataRaw = useMemo(
-        () =>
-            data.length
-                ? data.map(({ trainingMajors, ...trainingField }) => ({
-                      ...trainingField,
-                      children: trainingMajors,
-                  }))
-                : [],
-        [data]
-    )
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutTrainingMajorModal.name,
     })
 
@@ -168,7 +157,7 @@ export default function TrainingMajorPage() {
         })
     }
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     return (
@@ -247,8 +236,8 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="id"
-                        headerTitleKey={({ code, name, children }) =>
-                            `${code} - ${name} (${children.length})`
+                        headerTitleKey={({ code, name, trainingMajors }) =>
+                            `${code} - ${name} (${trainingMajors.length})`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
@@ -385,7 +374,8 @@ export default function TrainingMajorPage() {
                                 },
                             },
                         ]}
-                        data={dataRaw}
+                        childrenFieldName="trainingMajors"
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

@@ -30,17 +30,17 @@ function buildOrgTree(
             value: item.id,
             selectable: item.parentId !== null,
             children: [
-                ...buildOrgTree(list, lecturers, item.id),
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
                     .map((lecturer) => ({
                         title:
                             lecturer.userProfile?.fullName ||
                             'Giảng viên không tên',
-                        value: `lecturer-${lecturer.id}`,
+                        value: `${lecturer.id}`,
                         selectable: true,
                         children: [],
                     })),
+                ...buildOrgTree(list, lecturers, item.id),
             ],
         }))
 }
@@ -50,8 +50,8 @@ interface CustomTreeSelectProps {
     placeholder?: string
     style?: React.CSSProperties
     dropdownStyle?: React.CSSProperties
-    defaultValue?: string
-    onChange?: (value: string) => void
+    defaultValue?: string[]
+    onChange?: (value: string[]) => void
     onPopupScroll?: SelectProps['onPopupScroll']
 }
 
@@ -63,7 +63,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     onChange,
     onPopupScroll,
 }) => {
-    const [value, setValue] = useState<string | undefined>(defaultValue)
+    const [value, setValue] = useState<string[] | undefined>(defaultValue)
 
     // Lấy danh sách Organization (Khoa và Bộ môn)
     const {
@@ -119,7 +119,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         }
     }, [organizationsError, lecturersError])
 
-    const handleChange = (newValue: string) => {
+    const handleChange = (newValue: string[]) => {
         setValue(newValue)
         if (onChange) {
             onChange(newValue)
