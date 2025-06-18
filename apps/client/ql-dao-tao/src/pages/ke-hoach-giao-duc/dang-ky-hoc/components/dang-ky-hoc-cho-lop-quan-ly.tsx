@@ -175,6 +175,7 @@ export default function RegisterClassManager({
                         dataIndex: 'name',
                         align: 'center',
                         width: 200,
+                        fixed: 'left',
                     },
                     {
                         title: 'Thời gian học',
@@ -218,7 +219,8 @@ export default function RegisterClassManager({
                     {
                         title: 'Số SV đã ĐK',
                         align: 'center',
-                        width: 100,
+                        fixed: 'right',
+                        width: 120,
                         render: (record: SubjectClassData) =>
                             record?.fixedClasses?.reduce(
                                 (acc: number, curr) =>
@@ -229,6 +231,7 @@ export default function RegisterClassManager({
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
+                        fixed: 'right',
                         width: 150,
                         render: (record: SubjectClassData) =>
                             record.fixedClasses.map((e) => e.name).join(', '),
