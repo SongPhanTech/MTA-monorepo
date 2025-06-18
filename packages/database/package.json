@@ -16,9 +16,11 @@
   "dependencies": {
     "@prisma/client": "catalog:",
     "@zenstackhq/runtime": "catalog:",
+    "dayjs": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
     "@zenstackhq/openapi": "catalog:",
     "@zenstackhq/server": "catalog:",
     "@zenstackhq/tanstack-query": "catalog:",
