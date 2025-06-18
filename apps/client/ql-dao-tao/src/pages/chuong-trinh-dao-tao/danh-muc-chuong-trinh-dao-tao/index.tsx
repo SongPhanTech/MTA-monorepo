@@ -160,6 +160,21 @@ export default function TrainingProgramCatalog() {
                           }
                         : {}),
                 },
+                include: {
+                    trainingBlocks: {
+                        select: {
+                            subjects: {
+                                select: {
+                                    subject: {
+                                        select: {
+                                            credit: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
             managementOrganization: true,
             trainingMajor: true,
@@ -491,9 +506,41 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: 'Tổng tín chỉ',
-                                dataIndex: 'englishName',
                                 align: 'center',
                                 width: 120,
+                                render: ({ trainingBlocks = [] }) => {
+                                    const totalCredit = trainingBlocks.reduce(
+                                        (
+                                            total: number,
+                                            block: {
+                                                subjects?: {
+                                                    subject: { credit?: number }
+                                                }[]
+                                            }
+                                        ) => {
+                                            const blockCredit =
+                                                block?.subjects?.reduce(
+                                                    (
+                                                        sum: number,
+                                                        {
+                                                            subject,
+                                                        }: {
+                                                            subject: {
+                                                                credit?: number
+                                                            }
+                                                        }
+                                                    ) =>
+                                                        sum +
+                                                        (subject?.credit || 0),
+                                                    0
+                                                ) || 0
+                                            return total + blockCredit
+                                        },
+                                        0
+                                    )
+
+                                    return totalCredit
+                                },
                             },
                             {
                                 title: 'Số tín chỉ bắt buộc',

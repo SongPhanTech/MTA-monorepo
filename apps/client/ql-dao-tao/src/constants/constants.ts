@@ -1,5 +1,5 @@
 import { env } from '@/env'
-import { $Enums } from '@workspace/db'
+import { $Enums, SubjectClassStudentStatus } from '@workspace/db'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
@@ -125,6 +125,22 @@ const STUDENT_STATUS_OPTIONS = [
     },
 ]
 
+const SUBJECT_CLASS_STUDENT_STATUS = {
+    Registered: { label: 'Đã đăng ký', color: 'blue' },
+    Studying: { label: 'Đang học', color: 'cyan' },
+    NotPassed: { label: 'Chưa đạt', color: 'warning' },
+    Passed: { label: 'Đạt', color: 'success' },
+    CancelClass: { label: 'Hủy lớp', color: 'error' },
+} as const
+
+const SUBJECT_CLASS_STUDENT_STATUS_OPTIONS = [
+    { value: SubjectClassStudentStatus.Registered, label: 'Đã đăng ký' },
+    { value: SubjectClassStudentStatus.Studying, label: 'Đang học' },
+    { value: SubjectClassStudentStatus.NotPassed, label: 'Chưa đạt' },
+    { value: SubjectClassStudentStatus.Passed, label: 'Đạt' },
+    { value: SubjectClassStudentStatus.CancelClass, label: 'Hủy lớp' },
+]
+
 const SUBJECT_CLASS_SCHEDULE_TYPE = {
     MORNING: 'Sáng',
     AFTERNOONA: 'Chiều',
@@ -148,4 +164,6 @@ export {
     FIXED_CLASS_STUDENT_STATUS,
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
+    SUBJECT_CLASS_STUDENT_STATUS,
+    SUBJECT_CLASS_STUDENT_STATUS_OPTIONS,
 }
