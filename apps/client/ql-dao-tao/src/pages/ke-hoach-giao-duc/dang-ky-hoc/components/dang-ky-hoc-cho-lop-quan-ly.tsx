@@ -35,7 +35,7 @@ export default function RegisterClassManager({
     })
     const { getScheduleLabel } = useScheduleOptions()
 
-    const { data: subjectClassData, refetch } = useFindManySubjectClass({
+    const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
@@ -58,11 +58,18 @@ export default function RegisterClassManager({
                 },
             },
             subject: true,
+            fixedClasses: {
+                include: {
+                    _count: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
         },
     })
+
+    type SubjectClassData = (typeof subjectClassData)[number]
 
     const { data: semester = [] } = useFindManySemester()
 
@@ -210,15 +217,21 @@ export default function RegisterClassManager({
                     },
                     {
                         title: 'Số SV đã ĐK',
-                        dataIndex: '',
                         align: 'center',
                         width: 100,
+                        render: (record: SubjectClassData) =>
+                            record?.fixedClasses?.reduce(
+                                (acc: number, curr) =>
+                                    acc + (curr?._count?.students ?? 0),
+                                0
+                            ),
                     },
                     {
                         title: 'Lớp QL đã ĐK',
-                        dataIndex: '',
                         align: 'center',
                         width: 150,
+                        render: (record: SubjectClassData) =>
+                            record.fixedClasses.map((e) => e.name).join(', '),
                     },
                 ]}
             />
