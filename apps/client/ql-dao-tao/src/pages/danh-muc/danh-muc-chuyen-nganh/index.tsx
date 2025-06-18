@@ -76,12 +76,6 @@ export default function TrainingMajorPage() {
                                 mode: 'insensitive',
                             },
                         },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
                     ],
                 },
             ],

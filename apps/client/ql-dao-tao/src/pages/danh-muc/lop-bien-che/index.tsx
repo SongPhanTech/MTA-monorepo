@@ -1,7 +1,8 @@
-import { CheckOutlined, EyeOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
+import { CheckOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
     PutFixedClassModal,
     PutUploadDivisionModal,
@@ -11,46 +12,26 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
-    TrainingCourse,
-    Organization,
-    FixedClass,
-    TrainingObjectType,
     CurriculumVersion,
+    TrainingCourse,
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCountFixedClass,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
-    useUpdateFixedClass,
     useFindManyOrganization,
     useFindManyTrainingCourse,
-    useFindManyTemplateFile,
     useFindManyTrainingObjectType,
-    useFindManyCurriculumVersion,
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Dropdown,
-    Flex,
-    Form,
-    Input,
-    Menu,
-    Row,
-    Tooltip,
-    message,
-    TreeSelect,
-    Tag,
-} from 'antd'
-import dayjs from 'dayjs'
-import _, { filter } from 'lodash'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import _ from 'lodash'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import { buildOrgTree } from '@lib/utils'
-import EditIcon from '@components/icons/edit'
-import check from '@assets/images/checked.svg'
 export default function FixedClassPage({
     trainingCourse,
 }: { trainingCourse?: TrainingCourse }) {
@@ -63,6 +44,8 @@ export default function FixedClassPage({
         trainingObjectTypeId: undefined,
         curriculumVersionId: undefined,
     })
+
+    const router = useRouter()
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             OR: [
@@ -381,6 +364,14 @@ export default function FixedClassPage({
                     <Table
                         rowKey="id"
                         id="fixed-class"
+                        onRowClick={(record) => {
+                            router.push(
+                                ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                                    '[id]',
+                                    record.id
+                                )
+                            )
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -396,6 +387,7 @@ export default function FixedClassPage({
                                 title: 'Mã lớp biên chế',
                                 align: 'center',
                                 width: 150,
+                                fixed: 'left',
                                 dataIndex: 'code',
                             },
                             {
@@ -422,7 +414,7 @@ export default function FixedClassPage({
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -430,7 +422,7 @@ export default function FixedClassPage({
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -455,7 +447,7 @@ export default function FixedClassPage({
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
                                 align: 'center',
-                                width: 150,
+                                width: 250,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
                             },
@@ -473,20 +465,20 @@ export default function FixedClassPage({
                                     ),
                             },
                             {
-                                title: 'GVCN',
+                                title: 'Giáo viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
                             },
                             {
-                                title: 'CBQL',
+                                title: 'Cán bộ quản lý',
                                 dataIndex: 'staffManagement',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
@@ -499,14 +491,9 @@ export default function FixedClassPage({
                                 align: 'center',
                             },
                             {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
                                 title: 'Trạng thái',
                                 align: 'center',
+                                fixed: 'right',
                                 width: 130,
                                 render: (value, record) => {
                                     return !record?.active ? (
@@ -525,15 +512,6 @@ export default function FixedClassPage({
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {/* <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip> */}
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"

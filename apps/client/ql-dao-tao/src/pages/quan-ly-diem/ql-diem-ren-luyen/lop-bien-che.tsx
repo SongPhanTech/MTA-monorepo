@@ -22,9 +22,13 @@ const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
 }
 
 interface LopBienCheItemProps {
-    dataTable: Array<Item & {
-        mainLecturer: { userProfile: { firstName: string; lastName: string } } | null
-    }>
+    dataTable: Array<
+        Item & {
+            mainLecturer: {
+                userProfile: { firstName: string; lastName: string }
+            } | null
+        }
+    >
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
 }
@@ -34,17 +38,14 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     onChangeSelected,
     selectedItem,
 }) => {
-    const data: Item[] = dataTable.map(
-        (item) => ({
-            code: item.code,
-            name: item.name,
-            lecture:
-                item.mainLecturer?.userProfile
-                    ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
-                    : 'Chưa có giảng viên',
-            id: item.id,
-        })
-    )
+    const data: Item[] = dataTable.map((item) => ({
+        code: item.code,
+        name: item.name,
+        lecture: item.mainLecturer?.userProfile
+            ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
+            : 'Chưa có giảng viên',
+        id: item.id,
+    }))
 
     const renderItem = (item: Item) => (
         <div

@@ -20,6 +20,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import { PlusOutlined } from '@ant-design/icons'
 import { Search } from 'lucide-react'
 import Select from '@components/commons/select'
+import CreateIcon from '@components/icons/create'
 
 interface FilterProps {
     schoolYearId: string | undefined
@@ -82,10 +83,12 @@ function YearAndSemester() {
             tag: PutSchoolYearModal.name,
         })
 
-    const { onOpen: onOpenSemester, onClose: onCloseSemester } =
-        useDisclosure<string>({
-            tag: PutSemesterModal.name,
-        })
+    const { onOpen: onOpenSemester, onClose: onCloseSemester } = useDisclosure<{
+        schoolYearId: string
+        semesterId: string
+    }>({
+        tag: PutSemesterModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -154,7 +157,7 @@ function YearAndSemester() {
                                         onChange={(e) =>
                                             debouncedSearchText(e.target.value)
                                         }
-                                        placeholder="Nhập tên năm học"
+                                        placeholder="Nhập tên kỳ học..."
                                         style={{
                                             height: 40,
                                         }}
@@ -231,16 +234,19 @@ function YearAndSemester() {
                             title: 'Mã kỳ',
                             dataIndex: 'code',
                             align: 'center',
+                            width: 140,
                         },
                         {
                             title: 'Tên học kỳ',
                             dataIndex: 'name',
                             align: 'center',
+                            width: 340,
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             // dataIndex: 'startDate',
+                            width: 150,
                             render: ({ startDate }) =>
                                 dayjs(startDate).format('DD/MM/YYYY'),
                         },
@@ -248,6 +254,7 @@ function YearAndSemester() {
                             title: 'Thời gian kết thúc',
                             align: 'center',
                             // dataIndex: 'endDate',
+                            width: 170,
                             render: ({ endDate }) =>
                                 endDate
                                     ? dayjs(endDate).format('DD/MM/YYYY')
@@ -257,6 +264,7 @@ function YearAndSemester() {
                             title: 'Mô tả',
                             dataIndex: 'description',
                             align: 'center',
+                            width: 500,
                             render: (value) => (
                                 <span className="line-clamp-1">{value}</span>
                             ),
@@ -278,7 +286,8 @@ function YearAndSemester() {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
-                            render: (_, { id }) => (
+                            fixed: 'right',
+                            render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
                                     {/* <Tooltip
                                                     title="Xem chi tiết"
@@ -295,7 +304,10 @@ function YearAndSemester() {
                                     <EditIcon
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            onOpenSemester(id)
+                                            onOpenSemester({
+                                                schoolYearId: schoolYearId,
+                                                semesterId: id,
+                                            })
                                         }}
                                         className="text-sm text-blue-700 cursor-pointer"
                                     />
@@ -320,6 +332,33 @@ function YearAndSemester() {
                         onChange: setCurrentPage,
                         onShowSizeChange: setNumberOfPages,
                     }}
+                    headerRight={({ id }) => (
+                        <div className="flex gap-2.5 w-[80px] items-center">
+                            <CreateIcon
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onOpenSemester({
+                                        schoolYearId: id,
+                                        semesterId: '',
+                                    })
+                                }}
+                                title="Thêm năm học"
+                            />
+                            <EditIcon
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onOpenSchoolYear(id)
+                                }}
+                                className="text-sm text-blue-700 cursor-pointer"
+                            />
+                            <DeleteIcon
+                                popConfirm={{
+                                    onConfirm: () => handleDeleteSchoolYear(id),
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    )}
                 />
             </Col>
         </Row>

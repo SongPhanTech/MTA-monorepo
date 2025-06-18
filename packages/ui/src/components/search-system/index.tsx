@@ -7,12 +7,12 @@ import type { LucideProps } from 'lucide-react'
 
 type SearchSystemOptionType = BaseOptionType & {
     Icon?:
-    | React.ForwardRefExoticComponent<
-        Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-    >
-    | React.ForwardRefExoticComponent<
-        Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-    >
+        | React.ForwardRefExoticComponent<
+              Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+          >
+        | React.ForwardRefExoticComponent<
+              Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+          >
     path?: string
 }
 

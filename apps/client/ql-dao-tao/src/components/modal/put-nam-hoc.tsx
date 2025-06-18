@@ -35,16 +35,17 @@ const PutSchoolYearModal = () => {
         if (!output) return
         try {
             showSpinner()
+            const data = {
+                code: output.code,
+                name: output.name,
+                startDate: output.startDate,
+                endDate: output.endDate,
+                description: output.description,
+                order: output.order,
+            }
             if (id) {
                 await updateSchoolYear({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        order: output.order,
-                    },
+                    data: data,
                     where: {
                         id,
                     },
@@ -52,14 +53,7 @@ const PutSchoolYearModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createSchoolYear({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        order: output.order,
-                    },
+                    data: data,
                 })
                 message.success('Thêm mới thành công')
             }
