@@ -38,7 +38,7 @@ export default function FixedClass({
         {
             semesterId: semesterId || '',
             subjectClassId: subjectClassId || '',
-            // search: filters.searchText,
+            search: filters.searchText || '',
             page: '1',
             pageSize: '10',
         },
@@ -61,17 +61,9 @@ export default function FixedClass({
         }
     }, [fixedClass?.data?.data])
 
-    // const debouncedRefetch = useCallback(
-    //     _.debounce(() => {
-    //         refetch()
-    //     }, 500),
-    //     []
-    // )
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
-            // debouncedRefetch()
             return newFilters
         })
     }
@@ -87,7 +79,7 @@ export default function FixedClass({
             message.success('Gán lớp cố định thành công!')
             queryClient.invalidateQueries()
         } catch (error) {
-            message.error('Có lỗi xảy ra khi gán lớp cố định!')
+            message.error('Có lỗi xảy ra khi gán lớp!')
         }
     }
 

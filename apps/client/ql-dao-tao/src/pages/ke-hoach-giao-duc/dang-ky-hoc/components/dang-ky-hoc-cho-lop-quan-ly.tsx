@@ -28,6 +28,7 @@ export default function RegisterClassManager({
     setSubjectClassId,
 }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
@@ -58,6 +59,9 @@ export default function RegisterClassManager({
             },
             subject: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
     const { data: semester = [] } = useFindManySemester()
@@ -68,8 +72,6 @@ export default function RegisterClassManager({
         }, 500),
         []
     )
-
-    // console.log(subjectClassData);
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -140,11 +142,19 @@ export default function RegisterClassManager({
                     onClick: () => {
                         setSemesterId?.(record.semesterId)
                         setSubjectClassId?.(record.id)
+                        setSelectedRowKey(record.id)
                     },
+                    style: { cursor: 'pointer' },
+                    className:
+                        record.id === selectedRowKey
+                            ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
+                            : '',
                 })}
+                selectedRow={selectedRowKey}
                 columns={[
                     {
                         title: 'STT',
+                        dataIndex: '',
                         width: 60,
                         align: 'center',
                         fixed: 'left',
@@ -157,7 +167,7 @@ export default function RegisterClassManager({
                         title: 'Lớp môn học',
                         dataIndex: 'name',
                         align: 'center',
-                        width: 150,
+                        width: 200,
                     },
                     {
                         title: 'Thời gian học',
@@ -194,20 +204,20 @@ export default function RegisterClassManager({
                     },
                     {
                         title: 'Số SV max',
-                        dataIndex: 'svMax',
+                        dataIndex: 'maxStudent',
                         align: 'center',
                         width: 120,
                     },
                     {
                         title: 'Số SV đã ĐK',
-                        dataIndex: 'svReg',
+                        dataIndex: '',
                         align: 'center',
                         width: 100,
                     },
                     {
                         title: 'Lớp QL đã ĐK',
+                        dataIndex: '',
                         align: 'center',
-                        dataIndex: 'lqlđk',
                         width: 150,
                     },
                 ]}
