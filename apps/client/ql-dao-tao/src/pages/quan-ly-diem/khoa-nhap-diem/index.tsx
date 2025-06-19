@@ -54,11 +54,12 @@ export default function SubjectClass() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [form] = Form.useForm();
+    const [form] = Form.useForm()
     const [filterStatus, setFilterStatus] = useState(false)
     const [arrSubjectClass, setArrSubjectClass] = useState<string[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [editSubjectClass, setEditSubjectClass] = useState<SubjectClass | null>(null)
+    const [editSubjectClass, setEditSubjectClass] =
+        useState<SubjectClass | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
@@ -117,53 +118,53 @@ export default function SubjectClass() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const handleChangeLocked = async (id: string, isLocked: boolean) => { }
+    const handleChangeLocked = async (id: string, isLocked: boolean) => {}
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
-                    subjectClassStudent: {
-                        some: {
-                            student: {
-                                trainingObjectTypeId:
-                                    filters.trainingObjectTypeId,
-                            },
-                        },
-                    },
-                }
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.LectureIds.length > 0
                 ? {
-                    OR: filters.LectureIds.map((id) => ({
-                        mainLecturer: { id },
-                    })),
-                }
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
                 : {}),
             ...(filters.BoMonId
                 ? {
-                    subject: {
-                        managementOrganizationId: filters.BoMonId,
-                    },
-                }
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
                 : {}),
             ...(filters.examDateRange
                 ? {
-                    examDate: {
-                        gte: filters.examDateRange[0],
-                        lte: filters.examDateRange[1],
-                    },
-                }
+                      examDate: {
+                          gte: filters.examDateRange[0],
+                          lte: filters.examDateRange[1],
+                      },
+                  }
                 : {}),
             deletedAt: null,
         },
@@ -222,12 +223,12 @@ export default function SubjectClass() {
 
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters };
-            console.log('Filters applied:', updatedFilters);
-            debouncedRefetch();
-            return updatedFilters;
-        });
-    };
+            const updatedFilters = { ...prev, ...newFilters }
+            console.log('Filters applied:', updatedFilters)
+            debouncedRefetch()
+            return updatedFilters
+        })
+    }
 
     useEffect(() => {
         debouncedRefetch()
@@ -247,102 +248,145 @@ export default function SubjectClass() {
             examTypeId: filters.examTypeId,
             LectureIds: filters.LectureIds,
             fixedClassIds: filters.fixedClassIds,
-        });
-    }, [filters]);
+        })
+    }, [filters])
 
     const handleApply = async (data: SubjectClass) => {
         updateSubjectClass({
             where: { id: data.id },
-            data: { examScoreDeadline: data.examScoreDeadline, scoreDeadline: data.scoreDeadline },
+            data: {
+                examScoreDeadline: data.examScoreDeadline,
+                scoreDeadline: data.scoreDeadline,
+            },
         }).catch((error) => {
-            console.error('Error updating examScoreDeadline for item:', data.id, error);
-        });
+            console.error(
+                'Error updating examScoreDeadline for item:',
+                data.id,
+                error
+            )
+        })
 
-        console.log('Applying filters:', data);
+        console.log('Applying filters:', data)
     }
 
     const handleCheckExamDate = () => {
         dataTable.forEach((item: SubjectClass) => {
             if (item.examDate) {
                 if (!item.examScoreDeadline) {
-                    const examDate = new Date(item.examDate);
-                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-                    item.examScoreDeadline = examScoreDeadline;
-                    if (item.examScoreDeadline <=  new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
-                    } else if (examDate >=  new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
+                    const examDate = new Date(item.examDate)
+                    const examScoreDeadline = new Date(
+                        examDate.getTime() + 7 * 24 * 60 * 60 * 1000
+                    )
+                    item.examScoreDeadline = examScoreDeadline
+                    if (
+                        item.examScoreDeadline <=
+                        new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
+                    } else if (
+                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
                     } else {
-                        item.isLockExamScore = false;
+                        item.isLockExamScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
-                        data: { examScoreDeadline, isLockExamScore: item.isLockExamScore },
+                        data: {
+                            examScoreDeadline,
+                            isLockExamScore: item.isLockExamScore,
+                        },
                     }).catch((error) => {
-                        console.error('Error updating examScoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating examScoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 } else {
-                    const examDate = new Date(item.examDate);
-                    if (item.examScoreDeadline <  new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
-                    } else if (examDate >=  new Date(new Date().setHours(24, 0, 0, 0))  ) {
-                        item.isLockExamScore = true;
+                    const examDate = new Date(item.examDate)
+                    if (
+                        item.examScoreDeadline <
+                        new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
+                    } else if (
+                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
                     } else {
-                        item.isLockExamScore = false;
+                        item.isLockExamScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { isLockExamScore: item.isLockExamScore },
                     }).catch((error) => {
-                        console.error('Error updating examScoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating examScoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 }
                 // Kiểm tra và cập nhật scoreDeadline
                 if (!item.scoreDeadline) {
-                    const examDate = new Date(item.examDate);
-                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    item.scoreDeadline = scoreDeadline;
+                    const examDate = new Date(item.examDate)
+                    const scoreDeadline = new Date(
+                        examDate.getTime() - 7 * 24 * 60 * 60 * 1000
+                    )
+                    item.scoreDeadline = scoreDeadline
                     if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true;
+                        item.isLockScore = true
                     } else {
-                        item.isLockScore = false;
+                        item.isLockScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { scoreDeadline, isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error('Error updating scoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating scoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 } else {
                     if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true;
+                        item.isLockScore = true
                     } else {
-                        item.isLockScore = false;
+                        item.isLockScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error('Error updating scoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating scoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 }
             } else {
-                console.log('No exam date found for item:', item);
+                console.log('No exam date found for item:', item)
             }
-
-        });
+        })
     }
 
     useEffect(() => {
-        handleCheckExamDate();
-    }, []);
+        handleCheckExamDate()
+    }, [])
 
     return (
         <div>
             <Form form={form}>
                 <Row gutter={[16, 0]}>
                     <Col span={24}>
-                        <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Row
+                            gutter={[16, 16]}
+                            align="top"
+                            justify="space-between"
+                        >
                             <Col span={12}>
                                 <Flex>
                                     <Col span={8}>
@@ -380,11 +424,18 @@ export default function SubjectClass() {
                                         >
                                             <TreeSelectSemester
                                                 style={{ height: 40 }}
-                                                defaultValue={filters.semesterId || undefined}
-                                                onChange={(val) => handleFilterChange('semesterId', val)}
+                                                defaultValue={
+                                                    filters.semesterId ||
+                                                    undefined
+                                                }
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'semesterId',
+                                                        val
+                                                    )
+                                                }
                                             />
                                         </Form.Item>
-
                                     </Col>
                                     <Col span={8}>
                                         <Form.Item
@@ -397,7 +448,9 @@ export default function SubjectClass() {
                                             <Select
                                                 placeholder="Chọn đối tượng đào tạo"
                                                 options={trainingObjectTypeData.map(
-                                                    (i: TrainingObjectType) => ({
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
@@ -426,7 +479,9 @@ export default function SubjectClass() {
                                             <Select
                                                 placeholder="Lớp MH"
                                                 options={dataTable.map(
-                                                    (i: TrainingObjectType) => ({
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
@@ -477,7 +532,8 @@ export default function SubjectClass() {
                             }}
                         >
                             Hạn nhập điểm CC, TX tự động đặt là trước ngày thi 1
-                            tuần, hạn nhập điểm thi tự động đặt là trước ngày thi lớp 1 tuần
+                            tuần, hạn nhập điểm thi tự động đặt là trước ngày
+                            thi lớp 1 tuần
                         </p>
                         <Table
                             rowKey="id"
@@ -492,7 +548,8 @@ export default function SubjectClass() {
                                     render: (_, __, index) =>
                                         index +
                                         1 +
-                                        (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                        (currentPage - 1) *
+                                            DEFAULT_PAGINATE_SIZE,
                                 },
                                 {
                                     title: 'Mã lớp',
@@ -547,9 +604,10 @@ export default function SubjectClass() {
                                         const mainLecturer = record.mainLecturer
                                             ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                             : 'Chưa có giảng viên chính'
-                                        const extraLecturer = record.extraLecturer
-                                            ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
-                                            : ''
+                                        const extraLecturer =
+                                            record.extraLecturer
+                                                ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                                                : ''
                                         return (
                                             <span>
                                                 {mainLecturer}
@@ -577,11 +635,14 @@ export default function SubjectClass() {
                                     width: 150,
                                     align: 'center',
                                     render: (date) =>
-                                        new Date(date).toLocaleDateString('vi-VN', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                        }),
+                                        new Date(date).toLocaleDateString(
+                                            'vi-VN',
+                                            {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                            }
+                                        ),
                                 },
                                 {
                                     title: 'Ngày thi',
@@ -591,13 +652,13 @@ export default function SubjectClass() {
                                     render: (date) =>
                                         date
                                             ? new Date(date).toLocaleDateString(
-                                                'vi-VN',
-                                                {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                }
-                                            )
+                                                  'vi-VN',
+                                                  {
+                                                      year: 'numeric',
+                                                      month: '2-digit',
+                                                      day: '2-digit',
+                                                  }
+                                              )
                                             : '',
                                 },
                                 {
@@ -608,13 +669,13 @@ export default function SubjectClass() {
                                     render: (date) =>
                                         date
                                             ? new Date(date).toLocaleDateString(
-                                                'vi-VN',
-                                                {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                }
-                                            )
+                                                  'vi-VN',
+                                                  {
+                                                      year: 'numeric',
+                                                      month: '2-digit',
+                                                      day: '2-digit',
+                                                  }
+                                              )
                                             : '',
                                 },
                                 {
@@ -641,8 +702,9 @@ export default function SubjectClass() {
                                         return (
                                             <span>
                                                 {record.subject
-                                                    ?.managementOrganization?.parent
-                                                    ?.name || 'Chưa có khoa'}
+                                                    ?.managementOrganization
+                                                    ?.parent?.name ||
+                                                    'Chưa có khoa'}
                                             </span>
                                         )
                                     },
@@ -667,7 +729,9 @@ export default function SubjectClass() {
                                             record.active === false ||
                                             record.active === 'inactive'
                                         ) {
-                                            return <Tag color="red">Kết thúc</Tag>
+                                            return (
+                                                <Tag color="red">Kết thúc</Tag>
+                                            )
                                         }
                                         return ''
                                     },
@@ -683,12 +747,23 @@ export default function SubjectClass() {
                                                 <div className="flex justify-center items-center gap-2">
                                                     <Row
                                                         className="flex justify-center items-center gap-2 text-[#028850]"
-                                                        onClick={() => { setIsModalOpen(true); setEditSubjectClass(record as SubjectClass) }}
+                                                        onClick={() => {
+                                                            setIsModalOpen(true)
+                                                            setEditSubjectClass(
+                                                                record as SubjectClass
+                                                            )
+                                                        }}
                                                     >
                                                         <HanNhapDiem
-                                                            data={editSubjectClass}
-                                                            onFilterChange={handleFilterChange}
-                                                            onApply={handleApply}
+                                                            data={
+                                                                editSubjectClass
+                                                            }
+                                                            onFilterChange={
+                                                                handleFilterChange
+                                                            }
+                                                            onApply={
+                                                                handleApply
+                                                            }
                                                         />
                                                         Đặt lại lịch nhập điểm
                                                     </Row>
@@ -713,8 +788,7 @@ export default function SubjectClass() {
                     </Col>
                 </Row>
             </Form>
-
-        </div >
+        </div>
     )
 }
 

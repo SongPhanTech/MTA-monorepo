@@ -104,7 +104,8 @@ export default function SubjectClass() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } =
+        useFindManyTrainingObjectType()
 
     //#endregion
 
@@ -116,47 +117,47 @@ export default function SubjectClass() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
-                    subjectClassStudent: {
-                        some: {
-                            student: {
-                                trainingObjectTypeId:
-                                    filters.trainingObjectTypeId,
-                            },
-                        },
-                    },
-                }
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.LectureIds.length > 0
                 ? {
-                    OR: filters.LectureIds.map((id) => ({
-                        mainLecturer: { id },
-                    })),
-                }
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
                 : {}),
             ...(filters.BoMonId
                 ? {
-                    subject: {
-                        managementOrganizationId: filters.BoMonId,
-                    },
-                }
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
                 : {}),
             ...(filters.examDateRange
                 ? {
-                    examDate: {
-                        gte: filters.examDateRange[0],
-                        lte: filters.examDateRange[1],
-                    },
-                }
+                      examDate: {
+                          gte: filters.examDateRange[0],
+                          lte: filters.examDateRange[1],
+                      },
+                  }
                 : {}),
             deletedAt: null,
         },
@@ -185,8 +186,6 @@ export default function SubjectClass() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -207,12 +206,12 @@ export default function SubjectClass() {
     })
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters };
-            console.log('Filters applied:', updatedFilters);
-            debouncedRefetch();
-            return updatedFilters;
-        });
-    };
+            const updatedFilters = { ...prev, ...newFilters }
+            console.log('Filters applied:', updatedFilters)
+            debouncedRefetch()
+            return updatedFilters
+        })
+    }
     /* Mới */
     // #endregion
     const rowSelection = {
@@ -227,77 +226,109 @@ export default function SubjectClass() {
         dataTable.forEach((item: SubjectClass) => {
             if (item.examDate) {
                 if (!item.examScoreDeadline) {
-                    const examDate = new Date(item.examDate);
-                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-                    item.examScoreDeadline = examScoreDeadline;
-                    if (item.examScoreDeadline <= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
-                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
+                    const examDate = new Date(item.examDate)
+                    const examScoreDeadline = new Date(
+                        examDate.getTime() + 7 * 24 * 60 * 60 * 1000
+                    )
+                    item.examScoreDeadline = examScoreDeadline
+                    if (
+                        item.examScoreDeadline <=
+                        new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
+                    } else if (
+                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
                     } else {
-                        item.isLockExamScore = false;
+                        item.isLockExamScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
-                        data: { examScoreDeadline, isLockExamScore: item.isLockExamScore },
+                        data: {
+                            examScoreDeadline,
+                            isLockExamScore: item.isLockExamScore,
+                        },
                     }).catch((error) => {
-                        console.error('Error updating examScoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating examScoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 } else {
-                    const examDate = new Date(item.examDate);
-                    if (item.examScoreDeadline < new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
-                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true;
+                    const examDate = new Date(item.examDate)
+                    if (
+                        item.examScoreDeadline <
+                        new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
+                    } else if (
+                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
+                    ) {
+                        item.isLockExamScore = true
                     } else {
-                        item.isLockExamScore = false;
+                        item.isLockExamScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { isLockExamScore: item.isLockExamScore },
                     }).catch((error) => {
-                        console.error('Error updating examScoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating examScoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 }
                 // Kiểm tra và cập nhật scoreDeadline
                 if (!item.scoreDeadline) {
-                    const examDate = new Date(item.examDate);
-                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    item.scoreDeadline = scoreDeadline;
+                    const examDate = new Date(item.examDate)
+                    const scoreDeadline = new Date(
+                        examDate.getTime() - 7 * 24 * 60 * 60 * 1000
+                    )
+                    item.scoreDeadline = scoreDeadline
                     if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true;
+                        item.isLockScore = true
                     } else {
-                        item.isLockScore = false;
+                        item.isLockScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { scoreDeadline, isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error('Error updating scoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating scoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 } else {
                     if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true;
+                        item.isLockScore = true
                     } else {
-                        item.isLockScore = false;
+                        item.isLockScore = false
                     }
                     updateSubjectClass({
                         where: { id: item.id },
                         data: { isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error('Error updating scoreDeadline for item:', item.id, error);
-                    });
+                        console.error(
+                            'Error updating scoreDeadline for item:',
+                            item.id,
+                            error
+                        )
+                    })
                 }
             } else {
-                console.log('No exam date found for item:', item);
+                console.log('No exam date found for item:', item)
             }
-
-        });
+        })
     }
 
     useEffect(() => {
-        handleCheckExamDate();
-    }, []);
+        handleCheckExamDate()
+    }, [])
 
     return (
         <div>
@@ -341,11 +372,17 @@ export default function SubjectClass() {
                                     >
                                         <TreeSelectSemester
                                             style={{ height: 40 }}
-                                            defaultValue={filters.semesterId || undefined}
-                                            onChange={(val) => handleFilterChange('semesterId', val)}
+                                            defaultValue={
+                                                filters.semesterId || undefined
+                                            }
+                                            onChange={(val) =>
+                                                handleFilterChange(
+                                                    'semesterId',
+                                                    val
+                                                )
+                                            }
                                         />
                                     </Form.Item>
-
                                 </Col>
                                 <Col span={8}>
                                     <Form.Item
@@ -565,13 +602,13 @@ export default function SubjectClass() {
                                 render: (date) =>
                                     date
                                         ? new Date(date).toLocaleDateString(
-                                            'vi-VN',
-                                            {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                            }
-                                        )
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
                                         : '',
                             },
                             {
@@ -582,13 +619,13 @@ export default function SubjectClass() {
                                 render: (date) =>
                                     date
                                         ? new Date(date).toLocaleDateString(
-                                            'vi-VN',
-                                            {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                            }
-                                        )
+                                              'vi-VN',
+                                              {
+                                                  year: 'numeric',
+                                                  month: '2-digit',
+                                                  day: '2-digit',
+                                              }
+                                          )
                                         : '',
                             },
                             {

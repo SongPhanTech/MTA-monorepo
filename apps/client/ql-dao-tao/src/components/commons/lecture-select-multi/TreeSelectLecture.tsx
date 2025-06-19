@@ -41,7 +41,6 @@ function buildOrgTree(
                         children: [],
                     })),
                 ...buildOrgTree(list, lecturers, item.id),
-                
             ],
         }))
 }

@@ -2,9 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
 import { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import {
-    useFindManyOrganization,
-} from '@workspace/db/hooks'
+import { useFindManyOrganization } from '@workspace/db/hooks'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -28,31 +26,31 @@ const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
 
     // Lấy thông tin SchoolYear
     const {
-            data: organizationDataKhoa = [],
-            refetch: refetchOrganizationKhoa,
-        } = useFindManyOrganization({
-            include: {
-                type: true,
+        data: organizationDataKhoa = [],
+        refetch: refetchOrganizationKhoa,
+    } = useFindManyOrganization({
+        include: {
+            type: true,
+        },
+        where: {
+            type: {
+                code: 'KHOA',
             },
-            where: {
-                type: {
-                    code: 'KHOA',
-                },
+        },
+    })
+    const {
+        data: organizationDataBoMon = [],
+        refetch: refetchOrganizationBoMon,
+    } = useFindManyOrganization({
+        include: {
+            type: true,
+        },
+        where: {
+            type: {
+                code: 'BOMON',
             },
-        })
-        const {
-            data: organizationDataBoMon = [],
-            refetch: refetchOrganizationBoMon,
-        } = useFindManyOrganization({
-            include: {
-                type: true,
-            },
-            where: {
-                type: {
-                    code: 'BOMON',
-                },
-            },
-        })
+        },
+    })
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         const khoaList = organizationDataKhoa || []

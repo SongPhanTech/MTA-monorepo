@@ -2,10 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
 import { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import {
-    useFindManySchoolYear,
-    useFindManySemester,
-} from '@workspace/db/hooks'
+import { useFindManySchoolYear, useFindManySemester } from '@workspace/db/hooks'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -30,32 +27,35 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     const [value, setValue] = useState<string | undefined>(defaultValue)
 
     // Lấy thông tin SchoolYear
-    const { data: schoolYears } =
-        useFindManySchoolYear({
-            orderBy: { startDate: 'desc' },
-        })
-
-
-    const { data: semesters, isLoading: semesterLoading } = useFindManySemester({
+    const { data: schoolYears } = useFindManySchoolYear({
         orderBy: { startDate: 'desc' },
     })
 
+    const { data: semesters, isLoading: semesterLoading } = useFindManySemester(
+        {
+            orderBy: { startDate: 'desc' },
+        }
+    )
+
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
-        return schoolYears?.map((schoolYear) => ({
-            value: `schoolYear-${schoolYear.id}`,
-            title: schoolYear.name,
-            selectable: false, // Make the node unselectable without changing its color
-            children:
-            semesters
-                ?.filter(
-                (semester) => semester.schoolYearId === schoolYear.id
-                )
-                .map((semester) => ({
-                value: semester.id,
-                title: semester.name,
-                })) || [],
-        })) || []
+        return (
+            schoolYears?.map((schoolYear) => ({
+                value: `schoolYear-${schoolYear.id}`,
+                title: schoolYear.name,
+                selectable: false, // Make the node unselectable without changing its color
+                children:
+                    semesters
+                        ?.filter(
+                            (semester) =>
+                                semester.schoolYearId === schoolYear.id
+                        )
+                        .map((semester) => ({
+                            value: semester.id,
+                            title: semester.name,
+                        })) || [],
+            })) || []
+        )
     }, [schoolYears, semesters])
 
     const handleChange = (newValue: string) => {
@@ -93,9 +93,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
             onPopupScroll={handlePopupScroll}
             filterTreeNode={filterTreeNode}
             treeNodeFilterProp="title"
-            loading={
-                semesterLoading
-            }
+            loading={semesterLoading}
         />
     )
 }

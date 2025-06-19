@@ -10,8 +10,9 @@ import {
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import type { Semester, SubjectClassSchedule } from '@workspace/db'
+import type { ExamType, Semester, SubjectClassSchedule } from '@workspace/db'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useExamTypeOptions } from '@hooks/examType'
 
 interface FilterProps {
     searchText: string | null
@@ -34,6 +35,7 @@ export default function RegisterClassManager({
         semesterId: null,
     })
     const { getScheduleLabel } = useScheduleOptions()
+    const { getExamTypeLabel } = useExamTypeOptions()
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
@@ -209,6 +211,25 @@ export default function RegisterClassManager({
                         dataIndex: ['subject', 'credit'],
                         align: 'center',
                         width: 120,
+                    },
+                    {
+                        title: 'Hình thức thi',
+                        dataIndex: ['subject', 'examType'],
+                        align: 'center',
+                        width: 180,
+                        render: (value: ExamType) => getExamTypeLabel(value),
+                    },
+                    {
+                        title: 'Địa điểm',
+                        dataIndex: '',
+                        align: 'center',
+                        width: 180,
+                    },
+                    {
+                        title: 'Phòng học',
+                        dataIndex: '',
+                        align: 'center',
+                        width: 180,
                     },
                     {
                         title: 'Số SV max',

@@ -15,7 +15,7 @@ import {
     DatePicker,
     Modal,
     Switch,
-    Tag
+    Tag,
 } from 'antd'
 import {
     FilterOutlined,
@@ -24,18 +24,16 @@ import {
     ControlOutlined,
     CalendarOutlined,
 } from '@ant-design/icons'
-import {
-    useUpdateSubjectClass,
-} from '@workspace/db/hooks'
+import { useUpdateSubjectClass } from '@workspace/db/hooks'
 import { X, Search, Check, Calendar } from 'lucide-react'
 import type { SubjectClass } from '@workspace/db'
 const { Text } = Typography
-import dayjs from 'dayjs';
-import 'dayjs/locale/vi'; // Import Vietnamese locale for dayjs
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { date } from 'zod'
 
-dayjs.extend(customParseFormat);
+dayjs.extend(customParseFormat)
 // export type DataProps = {
 //     isLockExamScore?: boolean
 //     isLockScore?: boolean
@@ -64,48 +62,62 @@ const HanNhapDiem = (props: Props) => {
             isLockScore: false,
             examScoreDeadline: null,
             scoreDeadline: null,
-        });
+        })
 
         console.log('Reset filters', form.getFieldsValue())
-        onApply(form.getFieldsValue());
+        onApply(form.getFieldsValue())
         setOpen(false)
     }
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     const handleEditDate = () => {
-        if(data?.examDate) {
-        const examDate = new Date(data.examDate);
-            const examScoreDeadline = new Date(form.getFieldValue('examScoreDeadline'));
-            data.examScoreDeadline = examScoreDeadline;
-            if (data.examScoreDeadline <  new Date(new Date().setHours(24, 0, 0, 0))) {
-                data.isLockExamScore = true;
+        if (data?.examDate) {
+            const examDate = new Date(data.examDate)
+            const examScoreDeadline = new Date(
+                form.getFieldValue('examScoreDeadline')
+            )
+            data.examScoreDeadline = examScoreDeadline
+            if (
+                data.examScoreDeadline <
+                new Date(new Date().setHours(24, 0, 0, 0))
+            ) {
+                data.isLockExamScore = true
             } else if (examDate > new Date(new Date().setHours(24, 0, 0, 0))) {
-                data.isLockExamScore = true;
+                data.isLockExamScore = true
             } else {
-                data.isLockExamScore = false;
+                data.isLockExamScore = false
             }
 
-            const scoreDeadline = new Date(form.getFieldValue('scoreDeadline'));
-            data.scoreDeadline = scoreDeadline;
-            if (data.scoreDeadline <  new Date(new Date().setHours(24, 0, 0, 0))) {
-                data.isLockScore = true;
+            const scoreDeadline = new Date(form.getFieldValue('scoreDeadline'))
+            data.scoreDeadline = scoreDeadline
+            if (
+                data.scoreDeadline < new Date(new Date().setHours(24, 0, 0, 0))
+            ) {
+                data.isLockScore = true
             } else {
-                data.isLockScore = false;
+                data.isLockScore = false
             }
             updateSubjectClass({
                 where: { id: data.id },
-                data: { examScoreDeadline, isLockExamScore: data.isLockExamScore, scoreDeadline, isLockScore: data.isLockScore },
+                data: {
+                    examScoreDeadline,
+                    isLockExamScore: data.isLockExamScore,
+                    scoreDeadline,
+                    isLockScore: data.isLockScore,
+                },
             }).catch((error) => {
-                console.error('Error updating examScoreDeadline for item:', data.id, error);
-            });
+                console.error(
+                    'Error updating examScoreDeadline for item:',
+                    data.id,
+                    error
+                )
+            })
         }
     }
 
     const handleApply = () => {
-
         handleEditDate()
         setOpen(false)
         setIsActive(true)
-
     }
 
     const handleCancel = () => {
@@ -118,8 +130,12 @@ const HanNhapDiem = (props: Props) => {
         form.setFieldsValue({
             isLockExamScore: data?.isLockExamScore || false,
             isLockScore: data?.isLockScore || false,
-            examScoreDeadline: data?.examScoreDeadline ? dayjs(data.examScoreDeadline) : null,
-            scoreDeadline: data?.scoreDeadline ? dayjs(data.scoreDeadline) : null,
+            examScoreDeadline: data?.examScoreDeadline
+                ? dayjs(data.examScoreDeadline)
+                : null,
+            scoreDeadline: data?.scoreDeadline
+                ? dayjs(data.scoreDeadline)
+                : null,
         })
     }, [data, form])
 
@@ -135,7 +151,9 @@ const HanNhapDiem = (props: Props) => {
                     borderTopRightRadius: '10px',
                 }}
             >
-                <Text style={{ fontSize: '1rem' }}>Điều chỉnh hạn nhập điểm</Text>
+                <Text style={{ fontSize: '1rem' }}>
+                    Điều chỉnh hạn nhập điểm
+                </Text>
                 {/* <Button
                     type="text"
                     icon={<X size={20} />}
@@ -173,7 +191,7 @@ const HanNhapDiem = (props: Props) => {
                                     wrapperCol={{ span: 17 }}
                                     labelAlign="left"
                                 >
-                                     {data?.isLockExamScore ? (
+                                    {data?.isLockExamScore ? (
                                         <Tag color="red">Đã khóa</Tag>
                                     ) : (
                                         <Tag color="green">Chưa khóa</Tag>
@@ -195,7 +213,11 @@ const HanNhapDiem = (props: Props) => {
                                         placeholder="Chọn ngày"
                                         format="DD/MM/YYYY"
                                         onChange={(date, dateString) => {
-                                            console.log('Selected date:', date, dateString);
+                                            console.log(
+                                                'Selected date:',
+                                                date,
+                                                dateString
+                                            )
                                             form.setFieldsValue({
                                                 scoreDeadline: dayjs(date),
                                             })
