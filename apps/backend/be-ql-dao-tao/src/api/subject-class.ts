@@ -261,10 +261,10 @@ const putManySubjectClass = createRoute({
                     schema: z.array(
                         SubjectClassUpdateScalarSchema.extend({
                             id: z.string(),
-                            roomId: z.string().optional(),
-                            lecturerId: z.string().optional(),
-                            extraLecturerId: z.string().optional(),
-                            enterGradeLecturerId: z.string().optional(),
+                            roomId: z.string().nullish(),
+                            lecturerId: z.string().nullish(),
+                            extraLecturerId: z.string().nullish(),
+                            enterGradeLecturerId: z.string().nullish(),
                         }).openapi('subjectClasses')
                     ),
                 },
@@ -747,7 +747,7 @@ app.openapi(putManySubjectClass, async (c) => {
             await prisma.subjectClass.update({
                 where: { id: cls.id },
                 data: cls,
-                select: {},
+                select: { id: true },
             })
             return { success: true, id: cls.id }
         } catch (error) {
