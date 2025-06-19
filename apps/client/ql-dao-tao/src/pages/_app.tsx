@@ -1,7 +1,7 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
-import { API_BASE_URL, API_MODEL_BASE_URL } from '@constants/constants'
+import { API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
@@ -11,7 +11,6 @@ import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
 import { StoreProvider } from 'easy-peasy'
 import type { NextComponentType } from 'next'
-import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -19,6 +18,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import LoadingBar from 'react-top-loading-bar'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import * as modals from '@components/modal'
+import { SessionProvider } from '@workspace/auth/react'
 import '@assets/css/custom.css'
 
 dayjs.locale('vi')
@@ -65,7 +65,7 @@ function App({ Component, pageProps }: AppProps) {
     if (!isClient) return null
 
     return (
-        <SessionProvider session={pageProps.session}>
+        <SessionProvider>
             <StoreProvider store={store}>
                 <LoadingBar
                     color={colors.common.green}

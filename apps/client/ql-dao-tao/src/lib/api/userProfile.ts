@@ -1,13 +1,13 @@
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import { getStorage, removeStorage, setStorage } from '@lib/storage'
-import { getSession } from 'next-auth/react'
+import { getSession } from '@workspace/auth/react'
 
 export const fetchUploadFile = async (formData: FormData, url: string) => {
     let accessToken = getStorage('ACCESS_TOKEN')
     if (!accessToken) {
         const session = await getSession()
         if (session) {
-            accessToken = session.user.access_token
+            accessToken = session.access_token
             setStorage('ACCESS_TOKEN', accessToken)
         }
     }
@@ -34,7 +34,7 @@ export const fetchThongTinBaoCao = async () => {
     if (!accessToken) {
         const session = await getSession()
         if (session) {
-            accessToken = session.user.access_token
+            accessToken = session.access_token
             setStorage('ACCESS_TOKEN', accessToken)
         }
     }
@@ -62,7 +62,7 @@ export const exportHocVienLop = async (fixedClassId: string) => {
     if (!accessToken) {
         const session = await getSession()
         if (session) {
-            accessToken = session.user.access_token
+            accessToken = session.access_token
             setStorage('ACCESS_TOKEN', accessToken)
         }
     }

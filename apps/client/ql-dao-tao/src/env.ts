@@ -8,9 +8,7 @@ export const env = createEnv({
      */
     server: {
         ENVIROMENT: z.enum(['develop', 'test', 'product']).default('develop'),
-        AUTH_ASGARDEO_ISSUER: z.string().url(),
-        AUTH_ASGARDEO_ID: z.string(),
-        AUTH_ASGARDEO_SECRET: z.string(),
+        AUTH_ISSUER: z.string().url(),
     },
 
     /**
@@ -19,13 +17,11 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
-        NEXT_PUBLIC_AUTH_ASGARDEO_ISSUER: z.string().url(),
-        NEXT_PUBLIC_AUTH_ASGARDEO_ID: z.string(),
-        NEXT_PUBLIC_NEXTAUTH_URL: z.string().url(),
         NEXT_PUBLIC_API_BASE_URL: z.string().url(),
         NEXT_PUBLIC_API_MODEL_BASE_URL: z.string().url(),
         NEXT_PUBLIC_MY_ACCOUNT: z.string().url(),
         NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
+        NEXT_PUBLIC_AUTH_ISSUER: z.string().url().optional(),
     },
 
     /**
@@ -34,18 +30,13 @@ export const env = createEnv({
      */
     runtimeEnv: {
         ENVIROMENT: process.env.ENVIROMENT,
-        AUTH_ASGARDEO_ISSUER: process.env.AUTH_ASGARDEO_ISSUER,
-        AUTH_ASGARDEO_ID: process.env.AUTH_ASGARDEO_ID,
-        AUTH_ASGARDEO_SECRET: process.env.AUTH_ASGARDEO_SECRET,
-        NEXT_PUBLIC_AUTH_ASGARDEO_ISSUER:
-            process.env.NEXT_PUBLIC_AUTH_ASGARDEO_ISSUER,
-        NEXT_PUBLIC_AUTH_ASGARDEO_ID: process.env.NEXT_PUBLIC_AUTH_ASGARDEO_ID,
-        NEXT_PUBLIC_NEXTAUTH_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
         NEXT_PUBLIC_API_MODEL_BASE_URL:
             process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+        NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,
+        AUTH_ISSUER: process.env.AUTH_ISSUER,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
