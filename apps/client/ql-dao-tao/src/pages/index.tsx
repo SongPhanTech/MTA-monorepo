@@ -1,14 +1,14 @@
 import Loading from '@components/commons/loading'
 import { useMenuList } from '@hooks/menu-list'
 import type { NextPage } from 'next'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, useSession } from '@workspace/auth/react'
 import { useEffect } from 'react'
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
     const { status } = useSession()
     useEffect(() => {
         if (status === 'unauthenticated') {
-            signIn('asgardeo')
+            signIn()
         } else if (status === 'authenticated') {
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
@@ -16,7 +16,6 @@ const IndexPage: NextPage = () => {
             }
         }
     }, [status, menus])
-
     return <Loading />
 }
 export default IndexPage

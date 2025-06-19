@@ -1,8 +1,8 @@
-import { auth } from '@/auth'
 import { ROUTER_PATH } from '@workspace/router'
 import { type NextRequest, NextResponse } from 'next/server'
+import { auth } from '@workspace/auth/server'
 export default async function middleware(req: NextRequest) {
-    const session = await auth()
+    const session = await auth(req.cookies.get('x-token')?.value)
     if (!session && req.nextUrl.pathname !== ROUTER_PATH.QL_NGUOI_DUNG.INDEX) {
         return NextResponse.rewrite(
             new URL(ROUTER_PATH.QL_NGUOI_DUNG.INDEX, req.url)
