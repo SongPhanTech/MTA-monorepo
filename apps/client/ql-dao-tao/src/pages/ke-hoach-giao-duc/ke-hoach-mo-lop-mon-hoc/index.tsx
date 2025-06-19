@@ -23,7 +23,6 @@ import {
     useOpenSubjectClass,
 } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, Input, Row, TreeSelect, message } from 'antd'
-import { useForm } from 'antd/es/form/Form'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -38,26 +37,29 @@ interface FilterProps {
 }
 
 export default function SubjectOpeningPlan() {
+    const [form] = Form.useForm<FilterProps>()
+
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [selectedSemester, setSelectedSemester] = useState({})
-    const [form] = useForm<FilterProps>()
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
         include: { semesters: { orderBy: { order: 'asc' } } },
         orderBy: { order: 'asc' },
     })
-
+    const semesterId = Form.useWatch('semesterId', form)
+    //  const trainingCourseId = Form.useWatch('semesterId', form)
+    //   const searchText = Form.useWatch('semesterId', form)
     const { data: res, refetch } = useOpenSubjectClass(
         {
             page: '1',
             pageSize: '10',
-            semesterId: form.getFieldValue('semesterId'),
+            semesterId: semesterId as string,
             trainingCourseId: form.getFieldValue('trainingCourseId'),
             search: form.getFieldValue('searchText'),
         },
-        {},
+        { query: { enabled: !!semesterId } },
         queryClient
     )
     const treeData = useMemo(() => {
@@ -89,10 +91,10 @@ export default function SubjectOpeningPlan() {
         [res]
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (schoolYears?.length) {
             const lastSchoolYear = schoolYears[schoolYears.length - 1]
-            form.setFieldValue('schoolYearId', lastSchoolYear.id)
 
             if (lastSchoolYear.semesters.length) {
                 const lastSemester =
@@ -108,7 +110,7 @@ export default function SubjectOpeningPlan() {
                 })
             }
         }
-    }, [schoolYears, form])
+    }, [schoolYears])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -192,26 +194,6 @@ export default function SubjectOpeningPlan() {
                                             />
                                         </Form.Item>
                                     </Col>
-                                    {/* <Col span={6}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            name="schoolYearId"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <Select
-                                                placeholder="Chọn năm học"
-                                                options={schoolYears?.map(
-                                                    (i: SchoolYear) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col> */}
                                     <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
@@ -303,7 +285,7 @@ export default function SubjectOpeningPlan() {
 
                 <Col span={24}>
                     <Table
-                        rowKey="id"
+                        rowKey="subjectVersionId"
                         data={data}
                         columns={[
                             {
@@ -344,8 +326,9 @@ export default function SubjectOpeningPlan() {
                                             margin: 0,
                                         }}
                                     >
-                                        {values?.map((val) => (
-                                            <li key={val.subjectClassName}>
+                                        {values?.map((val, index) => (
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                            <li key={index}>
                                                 {`${val.subjectClassName} ${val.subjectClassCode}`}
                                             </li>
                                         ))}
@@ -370,8 +353,9 @@ export default function SubjectOpeningPlan() {
                                             margin: 0,
                                         }}
                                     >
-                                        {values?.map((val) => (
-                                            <li key={val.fixedClassName}>
+                                        {values?.map((val, index) => (
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                            <li key={index}>
                                                 {`${val.fixedClassName}`}
                                             </li>
                                         ))}
@@ -395,8 +379,9 @@ export default function SubjectOpeningPlan() {
                                             listStyleType: 'disc',
                                         }}
                                     >
-                                        {values?.map((val) => (
-                                            <li key={val.curriculumVersionName}>
+                                        {values?.map((val, index) => (
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                            <li key={index}>
                                                 {val.curriculumVersionName}
                                             </li>
                                         ))}

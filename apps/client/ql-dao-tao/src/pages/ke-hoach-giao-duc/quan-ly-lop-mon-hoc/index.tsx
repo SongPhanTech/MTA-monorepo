@@ -30,11 +30,7 @@ import {
     useFindManyTrainingMajor,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import {
-    lecturerAssignment,
-    lecturerAssignmentResponse,
-    lecturerAssignmentResponse200,
-} from '@workspace/libs/api/training'
+import { putManySubjectClass } from '@workspace/libs/api/training'
 import {
     Button,
     Checkbox,
@@ -209,18 +205,18 @@ export default function TeachingAssignment() {
         try {
             showSpinner()
             // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            const res: any = await lecturerAssignment(
+            const res = await putManySubjectClass(
                 dataSubmit.map((subjectClass) => ({
-                    subjectClassId: subjectClass.id,
-                    lecturerId: subjectClass.lecturerId ?? '',
-                    extraLecturerId: subjectClass.extraLecturerId ?? '',
+                    id: subjectClass.id,
+                    lecturerId: subjectClass.lecturerId ?? null,
+                    extraLecturerId: subjectClass.extraLecturerId ?? null,
                     enterGradeLecturerId:
-                        subjectClass.enterGradeLecturerId ?? '',
+                        subjectClass.enterGradeLecturerId ?? null,
                 }))
             )
-            if (res?.data?.errors?.length) {
+            if (res?.data?.failedIds?.length) {
                 message.error(
-                    `${res?.data?.errors?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
+                    `${res?.data?.failedIds?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
                 )
             } else {
                 message.success('Phân công giảng dạy thành công')
@@ -257,6 +253,7 @@ export default function TeachingAssignment() {
         objectIdName: string,
         objectName: string
     ) => {
+        console.log(record)
         if (value) {
             const itemChange = lecturerData.find((i) => i?.id === value)
 
@@ -352,7 +349,7 @@ export default function TeachingAssignment() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
+                        <Col span={4}>
                             <Input
                                 id="search"
                                 onChange={(e) =>
@@ -417,7 +414,7 @@ export default function TeachingAssignment() {
                             />
                         </Col>
 
-                        <Col span={6}>
+                        <Col span={8}>
                             <Flex justify="end" gap={4}>
                                 <Button
                                     onClick={() => handleModal()}
@@ -459,7 +456,7 @@ export default function TeachingAssignment() {
                                         type="primary"
                                         disabled={!dataSubmit.length}
                                     >
-                                        Sửa
+                                        PCGD
                                     </Button>
                                 )}
                             </Flex>
@@ -552,7 +549,7 @@ export default function TeachingAssignment() {
                                                 record,
                                                 selectedValue,
                                                 'lecturerId',
-                                                'lecturer'
+                                                'mainLecturer'
                                             )
                                         }
                                         disabled={!isEdit}
@@ -630,16 +627,35 @@ export default function TeachingAssignment() {
                                 render: (record) => (
                                     <Select
                                         style={{ width: '100%' }}
-                                        options={[
-                                            {
-                                                label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
-                                                value: record?.lecturerId,
-                                            },
-                                            {
-                                                label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
-                                                value: record?.extraLecturerId,
-                                            },
-                                        ]}
+                                        options={
+                                            record?.mainLecturer &&
+                                            record?.extraLecturer
+                                                ? [
+                                                      {
+                                                          label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                          value: record?.lecturerId,
+                                                      },
+                                                      {
+                                                          label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                          value: record?.extraLecturerId,
+                                                      },
+                                                  ]
+                                                : record?.mainLecturer
+                                                  ? [
+                                                        {
+                                                            label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                            value: record?.lecturerId,
+                                                        },
+                                                    ]
+                                                  : record?.extraLecturer
+                                                    ? [
+                                                          {
+                                                              label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                              value: record?.extraLecturerId,
+                                                          },
+                                                      ]
+                                                    : []
+                                        }
                                         value={
                                             record?.enterGradeLecturerId ||
                                             undefined
@@ -651,7 +667,7 @@ export default function TeachingAssignment() {
                                                 selectedValue
                                             )
                                         }
-                                        disabled={!isEdit}
+                                        disabled={!isEdit && record?.lecturerId}
                                     />
                                 ),
                             },

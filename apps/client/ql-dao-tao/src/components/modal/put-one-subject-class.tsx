@@ -13,6 +13,7 @@ import {
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
     useFindUniqueSubjectClass,
+    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { Col, DatePicker, Form, InputNumber, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -37,31 +38,41 @@ const PutOneSubjectClassModal = () => {
         tag: PutOneSubjectClassModal.name,
         onClose: form.resetFields,
     })
-    const { getExamTypeLabel } = useExamTypeOptions()
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     // const [enterGradeLecturerOptions, setEnterGradeLecturerOptions] = useState([])
     const [dataSubmit, setDataSubmit] = useState<
         (SubjectClass & { key: number })[]
     >([])
 
-    const { mutateAsync: createMany } = useCreateManySubjectClass()
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     async function onOk(output?: PutOneSubjectClassType) {
         if (!output) return
         try {
             showSpinner()
-            await createMany({
-                data: dataSubmit.map((i) => ({
-                    name: i.name,
-                    startDate: i.startDate,
-                    subjectId: i.subjectId,
-                    schedule: i.schedule,
-                    semesterId: i.semesterId,
-                    code: i?.code,
-                    roomId: i?.roomId,
-                    examDate: i?.examDate,
-                    maxStudent: i.maxStudent,
-                })),
+            await updateSubjectClass({
+                data: {
+                    startDate: output.startDate,
+                    subjectId: output.subjectId,
+                    schedule: output.schedule,
+                    semesterId: output.semesterId,
+                    code: output?.code,
+                    roomId: output?.roomId,
+                    maxStudent: output.maxStudent,
+                    examType: output?.examType,
+                    lecturerId: output?.lecturerId,
+                    extraLecturerId: output.extraLecturerId,
+                    enterGradeLecturerId: output?.enterGradeLecturerId,
+                    examDate: output?.examDate,
+                    scoreDeadline: output?.scoreDeadline,
+                    examScoreDeadline: output.examScoreDeadline,
+                    lecturerAssignmentDeadline:
+                        output.lecturerAssignmentDeadline,
+                },
+                where: {
+                    id,
+                },
             })
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
@@ -383,6 +394,19 @@ const PutOneSubjectClassModal = () => {
                         placeholder="DD/MM/YYYY"
                         format="DD/MM/YYYY"
                         className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="examType"
+                    label="Hình thức thi"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn hình thức thi"
+                        options={options}
                     />
                 </FormItem>
             </Col>
