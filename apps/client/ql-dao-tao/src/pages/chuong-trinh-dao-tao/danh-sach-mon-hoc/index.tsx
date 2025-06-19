@@ -384,8 +384,8 @@ export default function SubjectList() {
                                 fixed: 'right',
                                 width: 150,
                                 filters: [
-                                    { text: 'Đang đào tạo', value: true },
-                                    { text: 'Ngừng đào tạo', value: false },
+                                    { text: 'Đang hoạt động', value: true },
+                                    { text: 'Không hoạt động', value: false },
                                 ],
                                 filterMultiple: false,
                                 onFilter: () => true,
