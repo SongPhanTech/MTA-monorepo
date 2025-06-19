@@ -67,6 +67,7 @@ export default {
     "DANH_MUC_KHOA_HUAN_LUYEN": "/danh-muc/khoa-huan-luyen",
     "DANH_MUC_LOP_BIEN_CHE_ID": "/danh-muc/lop-bien-che/[id]",
     "DANH_MUC_LOP_BIEN_CHE": "/danh-muc/lop-bien-che",
+    "DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID": "/danh-muc/lop-bien-che/ket-qua-hoc-tap/[id]",
     "HOME": "/home",
     "INDEX": "/",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_DANG_KY_HOC_CHO_LOP_QUAN_LY": "/ke-hoach-giao-duc/dang-ky-hoc/components/dang-ky-hoc-cho-lop-quan-ly",

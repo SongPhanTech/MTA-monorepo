@@ -23,22 +23,22 @@ import type {
 import type {
     ClassDivision,
     ClassDivision200Item,
-    EnrollFixedClassOnSubjectClass,
     EnrollFixedClassOnSubjectClassBody,
     EnrollStudentOnSubjectClassBody,
     ExportStudentFixedClassDocx400,
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
-    FixedClassBySubjectClassSemester,
     FixedClassBySubjectClassSemesterParams,
+    LecturerAssignment200,
+    ListOfEnrollFixedClassOnSubjectClass,
+    ListOfFixedClassBySubjectClassSemester,
+    ListOfOpenSubjectClass,
+    ListOfStudentClassBySubjectClassSemester,
     ListOfundefined,
-    OpenSubjectClass,
     OpenSubjectClassParams,
     SerializedFields,
     StudentBySubjectClassSemesterParams,
-    StudentClassBySubjectClassSemester,
     TeachingAssignmentRequest,
-    TeachingAssignmentResponse,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -933,7 +933,7 @@ export function useExportStudentFixedClassDocx<
  * @summary Phân công giảng dạy
  */
 export type lecturerAssignmentResponse200 = {
-    data: TeachingAssignmentResponse[]
+    data: LecturerAssignment200
     status: 200
 }
 
@@ -1046,7 +1046,7 @@ export const useLecturerAssignment = <TError = void, TContext = unknown>(
  * @summary Lấy danh sách lớp môn học đã mở
  */
 export type openSubjectClassResponse200 = {
-    data: OpenSubjectClass[]
+    data: ListOfOpenSubjectClass
     status: 200
 }
 
@@ -1252,7 +1252,7 @@ export function useOpenSubjectClass<
  * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
  */
 export type fixedClassBySubjectClassSemesterResponse200 = {
-    data: FixedClassBySubjectClassSemester[]
+    data: ListOfFixedClassBySubjectClassSemester
     status: 200
 }
 
@@ -1472,7 +1472,7 @@ export function useFixedClassBySubjectClassSemester<
  * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
  */
 export type studentBySubjectClassSemesterResponse200 = {
-    data: StudentClassBySubjectClassSemester[]
+    data: ListOfStudentClassBySubjectClassSemester
     status: 200
 }
 
@@ -1688,7 +1688,7 @@ export function useStudentBySubjectClassSemester<
  * @summary Đăng ký lớp môn học cho lớp quản lý
  */
 export type enrollFixedClassOnSubjectClassResponse200 = {
-    data: EnrollFixedClassOnSubjectClass[]
+    data: ListOfEnrollFixedClassOnSubjectClass
     status: 200
 }
 
@@ -1807,7 +1807,7 @@ export const useEnrollFixedClassOnSubjectClass = <
  * @summary Đăng ký lớp môn học cho học viên
  */
 export type enrollStudentOnSubjectClassResponse200 = {
-    data: EnrollFixedClassOnSubjectClass[]
+    data: ListOfEnrollFixedClassOnSubjectClass
     status: 200
 }
 

@@ -118,6 +118,8 @@ Table StudentSubjectScore {
   bonusScore Float
   finalScore Float
   examPostponed Boolean [not null, default: false]
+  exempted Boolean [not null, default: false]
+  withdrew Boolean [not null, default: false]
   examBanned Boolean [not null, default: false]
   suspended Boolean [not null, default: false]
 
@@ -426,12 +428,14 @@ Table SubjectClass {
   subject SubjectVersion [not null]
   subjectId String [not null]
   schedule SubjectClassSchedule [not null]
+  maxStudent Int [not null]
   semester Semester [not null]
   semesterId String [not null]
   lecturerAssignmentDeadline DateTime
   examDate DateTime
   scoreDeadline DateTime
   examScoreDeadline DateTime
+  examType ExamType
   isLockScore Boolean [not null, default: false]
   isLockExamScore Boolean [not null, default: true]
   issuedScoreAt DateTime

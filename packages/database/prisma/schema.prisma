@@ -333,6 +333,8 @@ model StudentSubjectScore {
   bonusScore       Float?
   finalScore       Float?
   examPostponed    Boolean                   @default(false)
+  exempted         Boolean                   @default(false)
+  withdrew         Boolean                   @default(false)
   examBanned       Boolean                   @default(false)
   suspended        Boolean                   @default(false)
 
@@ -650,12 +652,14 @@ model SubjectClass {
   subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
   subjectId                  String
   schedule                   SubjectClassSchedule
+  maxStudent                 Int
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
   scoreDeadline              DateTime?
   examScoreDeadline          DateTime?
+  examType                   ExamType?
   isLockScore                Boolean               @default(false)
   isLockExamScore            Boolean               @default(true)
   issuedScoreAt              DateTime?

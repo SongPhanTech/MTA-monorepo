@@ -37,7 +37,7 @@ const Table = <T extends Record<string, unknown>>({
     ...rest
 }: TableProps<T>) => {
     return (
-        <TableAntd
+        <TableAntd<T>
             id={id}
             rowKey={rowKey}
             className="mt-4 custom-scrollbar"

@@ -152,7 +152,7 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
             description?: string | null
             deletedAt?: string | null
             /**
-             * @default 2025-06-15T15:02:21.780Z
+             * @default 2025-06-18T03:19:28.231Z
              */
             createdAt?: string | null
             updatedAt: string | null
@@ -548,6 +548,287 @@ export const useOpenSubjectClass = <TData = OpenSubjectClassResponse>(
     })
 }
 
+export type FixedClassBySubjectClassSemesterQueryParams = {
+    semesterId: Schemas.SemesterId
+    subjectClassId: Schemas.SubjectClassId
+    search?: Schemas.Search
+    page: Schemas.Page
+    pageSize: Schemas.PageSize
+}
+
+export type FixedClassBySubjectClassSemesterError =
+    Fetcher.ErrorWrapper<undefined>
+
+export type FixedClassBySubjectClassSemesterResponse =
+    Schemas.FixedClassBySubjectClassSemester[]
+
+export type FixedClassBySubjectClassSemesterVariables = {
+    queryParams: FixedClassBySubjectClassSemesterQueryParams
+} & DaotaoContext['fetcherOptions']
+
+/**
+ * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ */
+export const fetchFixedClassBySubjectClassSemester = (
+    variables: FixedClassBySubjectClassSemesterVariables,
+    signal?: AbortSignal
+) =>
+    daotaoFetch<
+        FixedClassBySubjectClassSemesterResponse,
+        FixedClassBySubjectClassSemesterError,
+        undefined,
+        {},
+        FixedClassBySubjectClassSemesterQueryParams,
+        {}
+    >({
+        url: '/api/subject-class/fixed-class-by-subject-class-semester',
+        method: 'get',
+        ...variables,
+        signal,
+    })
+
+/**
+ * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ */
+export const useFixedClassBySubjectClassSemester = <
+    TData = FixedClassBySubjectClassSemesterResponse,
+>(
+    variables: FixedClassBySubjectClassSemesterVariables,
+    options?: Omit<
+        reactQuery.UseQueryOptions<
+            FixedClassBySubjectClassSemesterResponse,
+            FixedClassBySubjectClassSemesterError,
+            TData
+        >,
+        'queryKey' | 'queryFn' | 'initialData'
+    >
+) => {
+    const { fetcherOptions, queryOptions, queryKeyFn } =
+        useDaotaoContext(options)
+    return reactQuery.useQuery<
+        FixedClassBySubjectClassSemesterResponse,
+        FixedClassBySubjectClassSemesterError,
+        TData
+    >({
+        queryKey: queryKeyFn({
+            path: '/api/subject-class/fixed-class-by-subject-class-semester',
+            operationId: 'fixedClassBySubjectClassSemester',
+            variables,
+        }),
+        queryFn: ({ signal }) =>
+            fetchFixedClassBySubjectClassSemester(
+                { ...fetcherOptions, ...variables },
+                signal
+            ),
+        ...options,
+        ...queryOptions,
+    })
+}
+
+export type StudentBySubjectClassSemesterQueryParams = {
+    semesterId: Schemas.SemesterId
+    subjectClassId: Schemas.SubjectClassId
+    search?: Schemas.Search
+    page: Schemas.Page
+    pageSize: Schemas.PageSize
+}
+
+export type StudentBySubjectClassSemesterError = Fetcher.ErrorWrapper<undefined>
+
+export type StudentBySubjectClassSemesterResponse =
+    Schemas.StudentClassBySubjectClassSemester[]
+
+export type StudentBySubjectClassSemesterVariables = {
+    queryParams: StudentBySubjectClassSemesterQueryParams
+} & DaotaoContext['fetcherOptions']
+
+/**
+ * Lấy danh sách học sinh theo học kỳ và lớp môn học
+ */
+export const fetchStudentBySubjectClassSemester = (
+    variables: StudentBySubjectClassSemesterVariables,
+    signal?: AbortSignal
+) =>
+    daotaoFetch<
+        StudentBySubjectClassSemesterResponse,
+        StudentBySubjectClassSemesterError,
+        undefined,
+        {},
+        StudentBySubjectClassSemesterQueryParams,
+        {}
+    >({
+        url: '/api/subject-class/student-by-subject-class-semester',
+        method: 'get',
+        ...variables,
+        signal,
+    })
+
+/**
+ * Lấy danh sách học sinh theo học kỳ và lớp môn học
+ */
+export const useStudentBySubjectClassSemester = <
+    TData = StudentBySubjectClassSemesterResponse,
+>(
+    variables: StudentBySubjectClassSemesterVariables,
+    options?: Omit<
+        reactQuery.UseQueryOptions<
+            StudentBySubjectClassSemesterResponse,
+            StudentBySubjectClassSemesterError,
+            TData
+        >,
+        'queryKey' | 'queryFn' | 'initialData'
+    >
+) => {
+    const { fetcherOptions, queryOptions, queryKeyFn } =
+        useDaotaoContext(options)
+    return reactQuery.useQuery<
+        StudentBySubjectClassSemesterResponse,
+        StudentBySubjectClassSemesterError,
+        TData
+    >({
+        queryKey: queryKeyFn({
+            path: '/api/subject-class/student-by-subject-class-semester',
+            operationId: 'studentBySubjectClassSemester',
+            variables,
+        }),
+        queryFn: ({ signal }) =>
+            fetchStudentBySubjectClassSemester(
+                { ...fetcherOptions, ...variables },
+                signal
+            ),
+        ...options,
+        ...queryOptions,
+    })
+}
+
+export type EnrollFixedClassOnSubjectClassError =
+    Fetcher.ErrorWrapper<undefined>
+
+export type EnrollFixedClassOnSubjectClassResponse =
+    Schemas.EnrollFixedClassOnSubjectClass[]
+
+export type EnrollFixedClassOnSubjectClassRequestBody = {
+    fixedClassIds: Schemas.FixedClassIds
+    subjectClassId: Schemas.SubjectClassId
+}
+
+export type EnrollFixedClassOnSubjectClassVariables = {
+    body: EnrollFixedClassOnSubjectClassRequestBody
+} & DaotaoContext['fetcherOptions']
+
+/**
+ * Đăng ký lớp môn học cho lớp quản lý
+ */
+export const fetchEnrollFixedClassOnSubjectClass = (
+    variables: EnrollFixedClassOnSubjectClassVariables,
+    signal?: AbortSignal
+) =>
+    daotaoFetch<
+        EnrollFixedClassOnSubjectClassResponse,
+        EnrollFixedClassOnSubjectClassError,
+        EnrollFixedClassOnSubjectClassRequestBody,
+        {},
+        {},
+        {}
+    >({
+        url: '/api/subject-class/enroll-fixed-class-on-subject-class',
+        method: 'post',
+        ...variables,
+        signal,
+    })
+
+/**
+ * Đăng ký lớp môn học cho lớp quản lý
+ */
+export const useEnrollFixedClassOnSubjectClass = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            EnrollFixedClassOnSubjectClassResponse,
+            EnrollFixedClassOnSubjectClassError,
+            EnrollFixedClassOnSubjectClassVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useDaotaoContext()
+    return reactQuery.useMutation<
+        EnrollFixedClassOnSubjectClassResponse,
+        EnrollFixedClassOnSubjectClassError,
+        EnrollFixedClassOnSubjectClassVariables
+    >({
+        mutationFn: (variables: EnrollFixedClassOnSubjectClassVariables) =>
+            fetchEnrollFixedClassOnSubjectClass({
+                ...fetcherOptions,
+                ...variables,
+            }),
+        ...options,
+    })
+}
+
+export type EnrollStudentOnSubjectClassError = Fetcher.ErrorWrapper<undefined>
+
+export type EnrollStudentOnSubjectClassResponse =
+    Schemas.EnrollFixedClassOnSubjectClass[]
+
+export type EnrollStudentOnSubjectClassRequestBody = {
+    addStudentIds: Schemas.StudentIds
+    removeStudentIds: Schemas.RemoveStudentIds
+    subjectClassId: Schemas.SubjectClassId
+}
+
+export type EnrollStudentOnSubjectClassVariables = {
+    body: EnrollStudentOnSubjectClassRequestBody
+} & DaotaoContext['fetcherOptions']
+
+/**
+ * Đăng ký lớp môn học cho học viên
+ */
+export const fetchEnrollStudentOnSubjectClass = (
+    variables: EnrollStudentOnSubjectClassVariables,
+    signal?: AbortSignal
+) =>
+    daotaoFetch<
+        EnrollStudentOnSubjectClassResponse,
+        EnrollStudentOnSubjectClassError,
+        EnrollStudentOnSubjectClassRequestBody,
+        {},
+        {},
+        {}
+    >({
+        url: '/api/subject-class/enroll-student-on-subject-class',
+        method: 'post',
+        ...variables,
+        signal,
+    })
+
+/**
+ * Đăng ký lớp môn học cho học viên
+ */
+export const useEnrollStudentOnSubjectClass = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            EnrollStudentOnSubjectClassResponse,
+            EnrollStudentOnSubjectClassError,
+            EnrollStudentOnSubjectClassVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useDaotaoContext()
+    return reactQuery.useMutation<
+        EnrollStudentOnSubjectClassResponse,
+        EnrollStudentOnSubjectClassError,
+        EnrollStudentOnSubjectClassVariables
+    >({
+        mutationFn: (variables: EnrollStudentOnSubjectClassVariables) =>
+            fetchEnrollStudentOnSubjectClass({
+                ...fetcherOptions,
+                ...variables,
+            }),
+        ...options,
+    })
+}
+
 export type QueryOperation =
     | {
           path: '/api/fixed-class/docx-list-student-fixed-class-labels'
@@ -563,4 +844,14 @@ export type QueryOperation =
           path: '/api/subject-class/open-subject-class'
           operationId: 'openSubjectClass'
           variables: OpenSubjectClassVariables
+      }
+    | {
+          path: '/api/subject-class/fixed-class-by-subject-class-semester'
+          operationId: 'fixedClassBySubjectClassSemester'
+          variables: FixedClassBySubjectClassSemesterVariables
+      }
+    | {
+          path: '/api/subject-class/student-by-subject-class-semester'
+          operationId: 'studentBySubjectClassSemester'
+          variables: StudentBySubjectClassSemesterVariables
       }
