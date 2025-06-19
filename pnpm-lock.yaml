@@ -954,6 +954,9 @@ importers:
       react-images-viewer:
         specifier: 'catalog:'
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.1.0(react@18.3.1)
       react-top-loading-bar:
         specifier: 'catalog:'
         version: 2.3.1(react@18.3.1)
@@ -6859,6 +6862,11 @@ packages:
 
   react-scrolllock@3.0.2:
     resolution: {integrity: sha512-ZShCKvt4bxxhqngaegHsZuoTIUDt4QOHd0saJ/cfJAu0LwCOoRaQfRZe9UPT/bpDE944u/GhuTWBmGaW9YER7Q==}
+
+  react-to-print@3.1.0:
+    resolution: {integrity: sha512-hiJZVmJtaRm9EHoUTG2bordyeRxVSGy9oFVV7fSvzOWwctPp6jbz2R6NFkaokaTYBxC7wTM/fMV5eCXsNpEwsA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ~19
 
   react-top-loading-bar@2.3.1:
     resolution: {integrity: sha512-rQk2Nm+TOBrM1C4E3e6KwT65iXyRSgBHjCkr2FNja1S51WaPulRA5nKj/xazuQ3x89wDDdGsrqkqy0RBIfd0xg==}
@@ -14408,6 +14416,10 @@ snapshots:
   react-scrolllock@3.0.2:
     dependencies:
       exenv: 1.2.2
+
+  react-to-print@3.1.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-top-loading-bar@2.3.1(react@18.3.1):
     dependencies:

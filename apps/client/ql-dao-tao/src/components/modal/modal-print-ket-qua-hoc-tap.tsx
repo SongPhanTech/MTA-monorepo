@@ -5,7 +5,6 @@ import type React from 'react'
 import { useRef } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
 import { useReactToPrint } from 'react-to-print'
-import { boolean } from 'zod'
 
 dayjs.locale('vi')
 
