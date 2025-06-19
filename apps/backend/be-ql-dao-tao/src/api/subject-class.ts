@@ -1,6 +1,7 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { prisma } from '..'
 import { $Enums } from '@workspace/db'
+import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
+import { prisma } from '..'
 import {
     EnrollFixedClassOnSubjectClass,
     FixedClassBySubjectClassSemester,
@@ -299,6 +300,42 @@ const enrollStudentOnSubjectClass = createRoute({
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
+const putManySubjectClass = createRoute({
+    operationId: 'putManySubjectClass',
+    path: '/',
+    method: 'put',
+    description: 'Cập nhật nhiều lớp môn học',
+    tags: ['SubjectClass'],
+    summary: 'Cập nhật nhiều lớp môn học',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.array(
+                        SubjectClassUpdateScalarSchema.extend({
+                            id: z.string(),
+                        }).openapi('subjectClasses')
+                    ),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        success: z.boolean(),
+                        failedIds: z.array(z.string()),
+                        message: z.string().optional(),
+                    }),
+                },
+            },
+            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
         },
     },
 })
@@ -875,6 +912,38 @@ app.openapi(enrollStudentOnSubjectClass, async (c) => {
         {
             data: res,
             success: true,
+        },
+        200
+    )
+})
+
+app.openapi(putManySubjectClass, async (c) => {
+    const classes = c.req.valid('json')
+
+    const updates = classes.map(async (cls) => {
+        try {
+            await prisma.subjectClass.update({
+                where: { id: cls.id },
+                data: cls,
+                select: {},
+            })
+            return { success: true, id: cls.id }
+        } catch (error) {
+            // TODO: send to sentry
+            return { success: false, id: cls.id }
+        }
+    })
+
+    const results = await Promise.all(updates)
+
+    const failedIds = results
+        .filter(({ success }) => !success)
+        .map(({ id }) => id)
+
+    return c.json(
+        {
+            success: failedIds.length === 0,
+            failedIds,
         },
         200
     )
