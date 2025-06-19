@@ -1,41 +1,16 @@
-import Table from '@components/commons/table'
-import {
-    PutStudentModal,
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-
-import { FilterSinhVien } from '@components/filter'
-import {
-    useFindManySemester,
-    useFindManyStudentSubjectScore,
-    useFindManyTemplateFile,
-    useFindUniqueStudent,
-    useUpdateStudent,
-} from '@workspace/db/hooks'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Divider,
-    Flex,
-    Menu,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookCheckIcon } from 'lucide-react'
+import { BookCheckIcon, Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import TableCollapse from '@components/commons/tableCollapse'
+import { useScoreConverter } from '@hooks/scoreConverter'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {
@@ -107,13 +82,26 @@ export default function StudentScoreClassPage() {
                     },
                 },
             },
+            trainingCoursesStart: {
+                include: {
+                    scoreConverts: {
+                        where: {
+                            trainingCourseId:
+                                (student?.fixedClass
+                                    ?.trainingCourseId as string) || '',
+                        },
+                    },
+                },
+            },
         },
         orderBy: {
             createdAt: 'asc',
         },
     })
 
-    console.log(data)
+    const { convertScore } = useScoreConverter(
+        data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
+    )
 
     type subjectClassesChild = (typeof data)[number]['subjectClasses'][number]
 
@@ -161,15 +149,18 @@ export default function StudentScoreClassPage() {
                 </Col>
                 <Col span={24}>
                     <TableCollapse
+                        rowKey="key"
                         currentPage={1}
-                        headerTitleKey={'name'}
+                        headerTitleKey="name"
                         childrenFieldName="subjectClasses"
+                        defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
                                 dataIndex: 'code',
                                 fixed: 'left',
+                                width: 120,
                             },
                             {
                                 title: 'Tên môn học',
@@ -181,6 +172,7 @@ export default function StudentScoreClassPage() {
                                     'name',
                                 ],
                                 fixed: 'left',
+                                width: 200,
                             },
                             {
                                 title: 'Điểm chuyên cần',
@@ -190,6 +182,7 @@ export default function StudentScoreClassPage() {
                                     '0',
                                     'attendanceScore',
                                 ],
+                                width: 130,
                             },
                             {
                                 title: 'Điểm thường xuyên',
@@ -199,6 +192,7 @@ export default function StudentScoreClassPage() {
                                     '0',
                                     'midtermScore',
                                 ],
+                                width: 150,
                             },
                             {
                                 title: 'Điểm thi',
@@ -208,6 +202,7 @@ export default function StudentScoreClassPage() {
                                     '0',
                                     'examScore',
                                 ],
+                                width: 100,
                             },
                             {
                                 title: 'Điểm hệ 10',
@@ -217,14 +212,54 @@ export default function StudentScoreClassPage() {
                                     '0',
                                     'finalScore',
                                 ],
+                                width: 100,
                             },
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'finalScore',
+                                ],
+                                width: 100,
+                                render: (value) => convertScore(value).base4,
                             },
                             {
                                 title: 'Điểm hệ chữ',
                                 align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'finalScore',
+                                ],
+                                width: 120,
+                                render: (value) => convertScore(value).letter,
+                            },
+                            {
+                                title: 'Kết quả',
+                                align: 'center',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'finalScore',
+                                ],
+                                width: 100,
+                                render: (value: number) => {
+                                    const result = convertScore(value)
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            {result.pass ? (
+                                                <Check
+                                                    size={18}
+                                                    color="green"
+                                                />
+                                            ) : (
+                                                <X size={18} color="red" />
+                                            )}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Ghi chú',
@@ -234,24 +269,37 @@ export default function StudentScoreClassPage() {
                                     '0',
                                     'description',
                                 ],
+                                width: 200,
+                                render: (value: string) => {
+                                    return (
+                                        <span className="line-clamp-1">
+                                            {value}
+                                        </span>
+                                    )
+                                },
                             },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => {
-                                    const statusInfo =
-                                        SUBJECT_CLASS_STUDENT_STATUS[
-                                            record.subjectClassStudent[0]
-                                                .status as keyof typeof SUBJECT_CLASS_STUDENT_STATUS
-                                        ]
-                                    return statusInfo ? (
-                                        <Tag color={statusInfo.color}>
-                                            {statusInfo.label}
-                                        </Tag>
-                                    ) : (
-                                        <Tag color="default">
-                                            Không xác định
+                                    const status =
+                                        record.subjectClassStudent?.[0]?.status
+
+                                    const statusInfo = status
+                                        ? SUBJECT_CLASS_STUDENT_STATUS[
+                                              status as keyof typeof SUBJECT_CLASS_STUDENT_STATUS
+                                          ]
+                                        : undefined
+
+                                    return (
+                                        <Tag
+                                            color={
+                                                statusInfo?.color ?? 'default'
+                                            }
+                                        >
+                                            {statusInfo?.label ??
+                                                'Không xác định'}
                                         </Tag>
                                     )
                                 },
@@ -276,7 +324,6 @@ export default function StudentScoreClassPage() {
                             },
                         ]}
                         data={data}
-                        scroll={{ x: 'max-content' }}
                         pagination={{
                             hideOnSinglePage: true,
                         }}
