@@ -1,6 +1,7 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { prisma } from '..'
 import { $Enums } from '@workspace/db'
+import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
+import { prisma } from '..'
 import {
     EnrollFixedClassOnSubjectClass,
     FixedClassBySubjectClassSemester,
@@ -8,7 +9,10 @@ import {
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
 import { ListOf } from '../zod/base'
-
+import {
+    getSubjectClassBySemester,
+    getFixedClassBySubjectClassSemester,
+} from '@workspace/db'
 const app = new OpenAPIHono({ strict: false })
 
 const teachingAssignment = createRoute({
@@ -303,6 +307,42 @@ const enrollStudentOnSubjectClass = createRoute({
     },
 })
 
+const putManySubjectClass = createRoute({
+    operationId: 'putManySubjectClass',
+    path: '/',
+    method: 'put',
+    description: 'Cập nhật nhiều lớp môn học',
+    tags: ['SubjectClass'],
+    summary: 'Cập nhật nhiều lớp môn học',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.array(
+                        SubjectClassUpdateScalarSchema.extend({
+                            id: z.string(),
+                        }).openapi('subjectClasses')
+                    ),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        success: z.boolean(),
+                        failedIds: z.array(z.string()),
+                        message: z.string().optional(),
+                    }),
+                },
+            },
+            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
+        },
+    },
+})
+
 app.openapi(teachingAssignment, async (c) => {
     const data = c.req.valid('json')
     const result = await Promise.allSettled(
@@ -361,77 +401,20 @@ app.openapi(openSubjectClass, async (c) => {
     const semesterType =
         semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
-    const res: {
+    const res = await prisma.$queryRawTyped<{
         data: OpenSubjectClass
-    }[] =
-        await prisma.$queryRawUnsafe(`with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
-                    "ql-dao-tao"."SubjectVersion".code   as subject_version_code,
-                    "ql-dao-tao"."SubjectVersion".credit as subject_version_credit,
-                    CV.id                                as curriculum_version_id,
-                    CV.name                              as curriculum_version_name,
-                    "ql-dao-tao"."SubjectVersion".name   as subject_version_name,
-                    TBS.semester                         as training_block_subject_semester,
-                    ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester,
-                    SC.id                                as subject_class_id,
-                    SC.code                              as subject_class_code,
-                    SC.name                              as subject_class_name,
-                    FC."startYear"                       as fixed_class_start_year,
-                    FC.id                                as fixed_class_id,
-                    FC.name                              as fixed_class_name,
-                    FC.code                              as fixed_class_code,
-                    FC.active                            as active,
-                    FC.graduated                         as graduated,
-                    FC."trainingCourseId"                as training_course_id,
-                    C."trainingMajorId"                  as training_major_id,
-                    count(FC.id)                         as fixed_class_count
-             from "ql-dao-tao"."SubjectVersion"
-                      join "ql-dao-tao"."TrainingBlockSubject" TBS
-                           on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
-                      join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                           on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
-                      join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
-                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
-                      join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
-                      join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
-                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
-             where FC.active = true
-             group by CV.id, CV.name, FC.id, FC."startYear",
-                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
-                      "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id)
-select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
-                         'subjectVersionCredit', subject_version_credit,
-                           'subjectClass', json_agg(
-                                 json_build_object(
-                                         'subjectClassId', subject_class_id,
-                                         'subjectClassCode', subject_class_code,
-                                         'subjectClassName', subject_class_name
-                                 )
-                                         ),
-                         'curriculumVersion', json_agg(
-                                 json_build_object(
-                                         'curriculumVersionId', curriculum_version_id,
-                                         'curriculumVersionName', curriculum_version_name
-                                 )
-                                              ),
-                         'fixedClass', json_agg(
-                                 json_build_object(
-                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count,'fixedClassSemester', fixed_class_semester
-                                 )
-                                       )
-       ) as data
-from FCS
-where training_block_subject_semester = fixed_class_semester and active = true and graduated = false
-${trainingCourseId ? `and training_course_id = '${trainingCourseId}'` : ''}
-${search ? `and subject_version_name ilike '%${search}%'` : ''}
-${search ? `and subject_version_code ilike '%${search}%'` : ''}
-${search ? `and fixed_class_name ilike '%${search}%'` : ''}
-${search ? `and fixed_class_code ilike '%${search}%'` : ''}
-${trainingMajorId ? `and training_major_id = '${trainingMajorId}'` : ''}
-group by subject_version_id, subject_version_code,
-         subject_version_credit, subject_version_name, training_major_id, training_course_id
-         limit ${pageSize} offset (${page} - 1) * ${pageSize}
-`)
+    }>(
+        getSubjectClassBySemester(
+            semesterYear,
+            semesterType,
+            trainingCourseId ?? null,
+            search ?? null,
+            trainingMajorId ?? null,
+            Number(page),
+            Number(pageSize)
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        ) as any
+    )
 
     return c.json(
         {
@@ -514,40 +497,20 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     const semesterType =
         semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
-    const res: Array<{
+    const res = await prisma.$queryRawTyped<{
         full_count: number
         fixedClassId: string
-    }> = await prisma.$queryRawUnsafe(`
-            with FCS as (select SC.id                             as subject_class_id,
-                    FC.id                             as fixed_class_id,
-                    FC.name                           as fixed_class_name,
-                    FC.code                           as fixed_class_code,
-                    FC.active                         as active,
-                    FC.graduated                      as graduated,
-                    TBS.semester                      as training_block_subject_semester,
-                    ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester
-             from "ql-dao-tao"."SubjectVersion"
-                      join "ql-dao-tao"."TrainingBlockSubject" TBS
-                           on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
-                      join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                           on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
-                      join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
-                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
-                      join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
-                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
-             where FC.active = true
-             group by CV.id, CV.name, FC.id, FC."startYear", SC.id,
-                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
-                      "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester)
-select count(*) OVER() AS full_count, fixed_class_id as "fixedClassId"
-from FCS
-where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
-${search ? `and fixed_class_name ilike '%${search}%'` : ''}
-${search ? `and fixed_class_code ilike '%${search}%'` : ''}
-group by fixed_class_id
-         limit ${pageSize} offset (${page} - 1) * ${pageSize}
-`)
+    }>(
+        getFixedClassBySubjectClassSemester(
+            semesterYear,
+            semesterType,
+            subjectClassId,
+            search ?? null,
+            Number(page),
+            Number(pageSize)
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        ) as any
+    )
 
     const fixedClasses = await prisma.fixedClass.findMany({
         where: {
@@ -649,40 +612,20 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
     const semesterType =
         semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
-    const res: Array<{
+    const res = await prisma.$queryRawTyped<{
         fixedClassId: string
         full_count: number
-    }> = await prisma.$queryRawUnsafe(`
-            with FCS as (select SC.id                             as subject_class_id,
-                    FC.id                             as fixed_class_id,
-                    FC.name                           as fixed_class_name,
-                    FC.code                           as fixed_class_code,
-                    FC.active                         as active,
-                    FC.graduated                      as graduated,
-                    TBS.semester                      as training_block_subject_semester,
-                    ((${semesterYear} - FC."startYear") * 2 + ${semesterType})    as fixed_class_semester
-             from "ql-dao-tao"."SubjectVersion"
-                      join "ql-dao-tao"."TrainingBlockSubject" TBS
-                           on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
-                      join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                           on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
-                      join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
-                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
-                      join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
-                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
-             where FC.active = true
-             group by CV.id, CV.name, FC.id, FC."startYear", SC.id,
-                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
-                      "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester)
-select count(*) OVER() AS full_count, fixed_class_id as "fixedClassId"
-from FCS
-where training_block_subject_semester = fixed_class_semester and subject_class_id = '${subjectClassId}' and active = true and graduated = false
-${search ? `and fixed_class_name ilike '%${search}%'` : ''}
-${search ? `and fixed_class_code ilike '%${search}%'` : ''}
-group by fixed_class_id
-         limit ${pageSize} offset (${page} - 1) * ${pageSize}
-`)
+    }>(
+        getFixedClassBySubjectClassSemester(
+            semesterYear,
+            semesterType,
+            subjectClassId,
+            search ?? null,
+            Number(page),
+            Number(pageSize)
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        ) as any
+    )
 
     const students = await prisma.student.findMany({
         where: {
@@ -875,6 +818,38 @@ app.openapi(enrollStudentOnSubjectClass, async (c) => {
         {
             data: res,
             success: true,
+        },
+        200
+    )
+})
+
+app.openapi(putManySubjectClass, async (c) => {
+    const classes = c.req.valid('json')
+
+    const updates = classes.map(async (cls) => {
+        try {
+            await prisma.subjectClass.update({
+                where: { id: cls.id },
+                data: cls,
+                select: {},
+            })
+            return { success: true, id: cls.id }
+        } catch (error) {
+            // TODO: send to sentry
+            return { success: false, id: cls.id }
+        }
+    })
+
+    const results = await Promise.all(updates)
+
+    const failedIds = results
+        .filter(({ success }) => !success)
+        .map(({ id }) => id)
+
+    return c.json(
+        {
+            success: failedIds.length === 0,
+            failedIds,
         },
         200
     )
