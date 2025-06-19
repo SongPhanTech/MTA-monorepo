@@ -225,6 +225,9 @@ catalogs:
     react-markdown:
       specifier: ^10.1.0
       version: 10.1.0
+    react-to-print:
+      specifier: ^3.1.0
+      version: 3.1.0
     react-top-loading-bar:
       specifier: ^2.3.1
       version: 2.3.1

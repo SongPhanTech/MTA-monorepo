@@ -2,20 +2,22 @@ import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, Modal, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon, Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
+import { ModalPrintToKQHT } from '@components/modal'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
+    const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
     const [filters, setFilters] = useState({
         searchText: '',
     })
@@ -140,7 +142,10 @@ export default function StudentScoreClassPage() {
                                 gap="8px"
                                 className="mt-1"
                             >
-                                <Button type="primary">
+                                <Button
+                                    type="primary"
+                                    onClick={() => setIsPrintModalOpen(true)}
+                                >
                                     In kết quả học tập
                                 </Button>
                             </Flex>
@@ -329,6 +334,10 @@ export default function StudentScoreClassPage() {
                         }}
                     />
                 </Col>
+                <ModalPrintToKQHT
+                    isPrintModalOpen={isPrintModalOpen}
+                    setIsPrintModalOpen={setIsPrintModalOpen}
+                />
             </Row>
         </div>
     )
