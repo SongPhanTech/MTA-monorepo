@@ -6,7 +6,8 @@ import { PutTrainingFieldModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Organization, TrainingObjectType } from '@workspace/db'
+import { emptyObjectIf } from '@workspace/constant'
+import type { Organization, Prisma, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
@@ -34,18 +35,25 @@ export default function TrainingFieldPage() {
         trainingObjectTypeId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
-            trainingObjectTypes: {
-                some: {
-                    trainingObjectTypeId: filters.trainingObjectTypeId,
+    const where: Prisma.TrainingFieldWhereInput = {
+        OR: [
+            { name: { contains: filters.searchText, mode: 'insensitive' } },
+            { code: { contains: filters.searchText, mode: 'insensitive' } },
+        ],
+        ...emptyObjectIf(
+            {
+                trainingObjectTypes: {
+                    some: {
+                        trainingObjectTypeId: filters.trainingObjectTypeId,
+                    },
                 },
             },
-        },
+            !!filters.trainingObjectTypeId
+        ),
+    }
+
+    const { data = [], refetch } = useFindManyTrainingField({
+        where,
         include: {
             organization: true,
             trainingObjectTypes: {
@@ -62,17 +70,7 @@ export default function TrainingFieldPage() {
     })
 
     const { data: count } = useCountTrainingField({
-        where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
-            trainingObjectTypes: {
-                some: {
-                    trainingObjectTypeId: filters.trainingObjectTypeId,
-                },
-            },
-        },
+        where,
     })
 
     const debouncedRefetch = useCallback(
@@ -81,7 +79,7 @@ export default function TrainingFieldPage() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutTrainingFieldModal.name,
     })
 
@@ -116,7 +114,7 @@ export default function TrainingFieldPage() {
         })
     }
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     return (

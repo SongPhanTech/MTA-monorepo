@@ -39,14 +39,17 @@ import {
     Menu,
     Row,
     Tag,
+    Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { BookCheckIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { ROUTER_PATH } from '@workspace/router'
 
 dayjs.locale('vi')
 export default function StudentFixedClassPage() {
@@ -507,6 +510,20 @@ export default function StudentFixedClassPage() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Kết quả học tập">
+                                            <BookCheckIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    router.push(
+                                                        ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
+                                                            '[id]',
+                                                            id
+                                                        )
+                                                    )
+                                                }}
+                                                size={16}
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,

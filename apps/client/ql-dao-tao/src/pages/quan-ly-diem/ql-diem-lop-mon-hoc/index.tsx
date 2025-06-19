@@ -1,37 +1,67 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import EditIcon from '@components/icons/edit'
-import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
 import {
-    useCountSubjectClass,
-    useFindManySchoolYear,
-    useFindManySemester,
-    useFindManyStudentSubjectScore,
-    useFindManySubjectClass,
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
+    useCountTrainingField,
+    useFindManyTrainingField,
     useUpdateTrainingCourse,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingCourse,
+    useFindManySemester,
+    useFindManySubjectClass,
+    useCountSubjectClass,
+    useUpdateSubjectClass,
+    useFindManySchoolYear,
+    useFindManyStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd'
-import type { CheckboxChangeEvent } from 'antd'
-import _ from 'lodash'
-import { Save, Search } from 'lucide-react'
+import type { TrainingObjectType, SubjectClass } from '@workspace/db'
+import {
+    CalendarPlus,
+    Search,
+    LockKeyhole,
+    LockKeyholeOpen,
+    Save,
+} from 'lucide-react'
+import {
+    Button,
+    Checkbox,
+    CheckboxChangeEvent,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Modal,
+    Row,
+    Tag,
+    message,
+} from 'antd'
+import _, { forEach, includes } from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import Select from '@components/commons/select'
+import EditIcon from '@components/icons/edit'
+import { CalendarOutlined } from '@ant-design/icons'
+import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import LopMonHocItem from './lop-mon-hoc'
+
 // const { Option } = Select;
 interface FilterProps {
+    schoolYearId: string | null //Năm học
+    semesterId: string | null //Học kỳ
+    KhoaId: string | null //Khoa
+    BoMonId: string | null //Bộ môn
+    trainingObjectId: string | null //Đối tượng đào tạo
+    examTypeId: string | null //Hình thức thi
+    LectureIds: string[] //Giảng viên
     searchText: string | null
-    semesterId: string | null
-    schoolYearId: string | null
     trainingObjectTypeId: string | null
     subjectClassId: string | null
+    fixedClassIds: string[]
+    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 export default function SubjectClassScore() {
@@ -54,6 +84,13 @@ export default function SubjectClassScore() {
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
+        KhoaId: null,
+        BoMonId: null,
+        trainingObjectId: null,
+        examTypeId: null,
+        LectureIds: [],
+        fixedClassIds: [],
+        examDateRange: undefined, // Khoảng thời gian thi
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -127,6 +164,40 @@ export default function SubjectClassScore() {
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.LectureIds.length > 0
+                ? {
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
+                : {}),
+            ...(filters.BoMonId
+                ? {
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
+                : {}),
+            ...(filters.examDateRange
+                ? {
+                      examDate: {
+                          gte: filters.examDateRange[0],
+                          lte: filters.examDateRange[1],
+                      },
+                  }
+                : {}),
             deletedAt: null,
         },
         include: {
@@ -140,6 +211,11 @@ export default function SubjectClassScore() {
             },
             extraLecturer: {
                 include: { userProfile: true },
+            },
+            subjectClassStudent: {
+                include: {
+                    student: { include: { userProfile: true } },
+                },
             },
         },
         orderBy: {
@@ -235,7 +311,14 @@ export default function SubjectClassScore() {
     const handleChangeCamThi = (e: CheckboxChangeEvent) => {
         setCamThi(e.target.checked)
     }
-
+    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+        setFilters((prev) => {
+            const updatedFilters = { ...prev, ...newFilters }
+            console.log('Filters applied:', updatedFilters)
+            debouncedRefetch()
+            return updatedFilters
+        })
+    }
     // #endregion
     const rowSelection = {
         selectedRowKeys,
@@ -250,7 +333,28 @@ export default function SubjectClassScore() {
             <Row>
                 <Col span={4} className="flex">
                     <LopMonHocItem
-                        dataTable={subjectClassData}
+                        dataTable={subjectClassData.map((item) => ({
+                            id: item.id,
+                            name: item.name,
+                            code: item.code === null ? undefined : item.code,
+                            mainLecturer: item.mainLecturer
+                                ? {
+                                      userProfile: {
+                                          firstName:
+                                              item.mainLecturer.userProfile
+                                                  .firstName,
+                                          lastName:
+                                              item.mainLecturer.userProfile
+                                                  .lastName,
+                                      },
+                                  }
+                                : {
+                                      userProfile: {
+                                          firstName: '',
+                                          lastName: '',
+                                      },
+                                  },
+                        }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
                     />
@@ -390,7 +494,8 @@ export default function SubjectClassScore() {
                                                 onFilterChange={
                                                     handleFilterChange
                                                 }
-                                                onSearchChange={undefined}
+                                                filters={filters}
+                                                onApply={handleFilterApply}
                                             />
                                         </Col>
                                     </Flex>

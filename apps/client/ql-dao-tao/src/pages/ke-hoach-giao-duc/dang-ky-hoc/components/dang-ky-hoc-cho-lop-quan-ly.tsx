@@ -10,8 +10,9 @@ import {
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import type { Semester, SubjectClassSchedule } from '@workspace/db'
+import type { ExamType, Semester, SubjectClassSchedule } from '@workspace/db'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useExamTypeOptions } from '@hooks/examType'
 
 interface FilterProps {
     searchText: string | null
@@ -28,13 +29,15 @@ export default function RegisterClassManager({
     setSubjectClassId,
 }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
     })
     const { getScheduleLabel } = useScheduleOptions()
+    const { getExamTypeLabel } = useExamTypeOptions()
 
-    const { data: subjectClassData, refetch } = useFindManySubjectClass({
+    const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
@@ -57,8 +60,18 @@ export default function RegisterClassManager({
                 },
             },
             subject: true,
+            fixedClasses: {
+                include: {
+                    _count: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: 'desc',
         },
     })
+
+    type SubjectClassData = (typeof subjectClassData)[number]
 
     const { data: semester = [] } = useFindManySemester()
 
@@ -68,8 +81,6 @@ export default function RegisterClassManager({
         }, 500),
         []
     )
-
-    // console.log(subjectClassData);
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -140,11 +151,19 @@ export default function RegisterClassManager({
                     onClick: () => {
                         setSemesterId?.(record.semesterId)
                         setSubjectClassId?.(record.id)
+                        setSelectedRowKey(record.id)
                     },
+                    style: { cursor: 'pointer' },
+                    className:
+                        record.id === selectedRowKey
+                            ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
+                            : '',
                 })}
+                selectedRow={selectedRowKey}
                 columns={[
                     {
                         title: 'STT',
+                        dataIndex: '',
                         width: 60,
                         align: 'center',
                         fixed: 'left',
@@ -157,7 +176,8 @@ export default function RegisterClassManager({
                         title: 'Lớp môn học',
                         dataIndex: 'name',
                         align: 'center',
-                        width: 150,
+                        width: 200,
+                        fixed: 'left',
                     },
                     {
                         title: 'Thời gian học',
@@ -193,22 +213,49 @@ export default function RegisterClassManager({
                         width: 120,
                     },
                     {
+                        title: 'Hình thức thi',
+                        dataIndex: ['subject', 'examType'],
+                        align: 'center',
+                        width: 180,
+                        render: (value: ExamType) => getExamTypeLabel(value),
+                    },
+                    {
+                        title: 'Địa điểm',
+                        dataIndex: '',
+                        align: 'center',
+                        width: 180,
+                    },
+                    {
+                        title: 'Phòng học',
+                        dataIndex: '',
+                        align: 'center',
+                        width: 180,
+                    },
+                    {
                         title: 'Số SV max',
-                        dataIndex: 'svMax',
+                        dataIndex: 'maxStudent',
                         align: 'center',
                         width: 120,
                     },
                     {
                         title: 'Số SV đã ĐK',
-                        dataIndex: 'svReg',
                         align: 'center',
-                        width: 100,
+                        fixed: 'right',
+                        width: 120,
+                        render: (record: SubjectClassData) =>
+                            record?.fixedClasses?.reduce(
+                                (acc: number, curr) =>
+                                    acc + (curr?._count?.students ?? 0),
+                                0
+                            ),
                     },
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        dataIndex: 'lqlđk',
+                        fixed: 'right',
                         width: 150,
+                        render: (record: SubjectClassData) =>
+                            record.fixedClasses.map((e) => e.name).join(', '),
                     },
                 ]}
             />

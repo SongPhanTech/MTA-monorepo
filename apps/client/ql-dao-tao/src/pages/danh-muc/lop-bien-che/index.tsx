@@ -20,13 +20,12 @@ import {
     useCountFixedClass,
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
-    useFindManyOrganization,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -92,17 +91,11 @@ export default function FixedClassPage({
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+    const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse()
-    const {
-        data: curriculumVersionData = [],
-        refetch: refetchCurriculumVersion,
-    } = useFindManyCurriculumVersion()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
 
     const { data: count } = useCountFixedClass({
         where: {
@@ -124,28 +117,21 @@ export default function FixedClassPage({
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } =
-        useDisclosure<string>({
-            tag: PutUploadFixedClassModal.name,
-        })
-    const { onOpen: onOpenDivision, onClose: onCloseDivision } =
-        useDisclosure<string>({
-            tag: PutUploadDivisionModal.name,
-        })
+    const { onOpen: onOpenFixedClass } = useDisclosure<string>({
+        tag: PutUploadFixedClassModal.name,
+    })
+    const { onOpen: onOpenDivision } = useDisclosure<string>({
+        tag: PutUploadDivisionModal.name,
+    })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
     }
-    const handleModalUploadFixedClass = () => {
-        onOpenFixedClass()
-    }
-    const handleModalDivision = () => {
-        onOpenDivision()
-    }
+
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
         try {
@@ -241,9 +227,6 @@ export default function FixedClassPage({
 
     return (
         <div>
-            {/* <Divider orientation="left" orientationMargin={0}>
-                Lớp biên chế
-            </Divider> */}
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -403,9 +386,9 @@ export default function FixedClassPage({
                                 align: 'center',
                             },
                             {
-                                title: 'ĐTĐT',
-                                align: 'left',
-                                width: 100,
+                                title: 'Đối tượng đào tạo',
+                                align: 'center',
+                                width: 180,
                                 render: (record) =>
                                     record?.trainingCourse?.trainingObjectType
                                         ?.name || '',
@@ -421,7 +404,7 @@ export default function FixedClassPage({
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
-                                align: 'center',
+                                align: 'left',
                                 width: 200,
                                 render: (value) =>
                                     value?.name ? value?.name : '',
@@ -431,9 +414,9 @@ export default function FixedClassPage({
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'curriculumVersion',
-                                render: (value) =>
-                                    value?.trainingLevel?.trainingMajor?.name ||
-                                    '',
+                                render: (_, record) =>
+                                    record.curriculumVersion.curriculum
+                                        .trainingMajor?.name || '',
                             },
                             {
                                 title: 'Trình độ đào tạo',
@@ -513,7 +496,10 @@ export default function FixedClassPage({
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
-                                            onClick={onOpen.bind(null, id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpen(id)
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon

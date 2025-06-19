@@ -1,5 +1,6 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutConvertScore } from '@components/modal'
@@ -9,6 +10,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountScoreConvert,
     useFindManyScoreConvert,
+    useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateScoreConvert,
 } from '@workspace/db/hooks'
@@ -39,29 +41,47 @@ export default function TrainingFieldPage() {
         active: 'true',
     })
 
-    const { data = [], refetch } = useFindManyScoreConvert({
+    const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            active:
-                filters.active === 'true'
-                    ? true
-                    : filters.active === 'false'
-                      ? false
-                      : undefined,
-            ...(filters.searchText && filters.searchText.trim() !== ''
-                ? {
-                      AND: [
-                          { base10Min: { lte: Number(filters.searchText) } },
-                          { base10Max: { gte: Number(filters.searchText) } },
-                      ],
-                  }
-                : {}),
+            scoreConverts: {
+                some: {
+                    active:
+                        filters.active === 'true'
+                            ? true
+                            : filters.active === 'false'
+                              ? false
+                              : undefined,
+                    ...(filters.searchText && filters.searchText.trim() !== ''
+                        ? {
+                              AND: [
+                                  {
+                                      base10Min: {
+                                          lte: Number(filters.searchText),
+                                      },
+                                  },
+                                  {
+                                      base10Max: {
+                                          gte: Number(filters.searchText),
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+                },
+            },
             // deletedAt: null,
         },
-        include: { trainingCourse: true },
-        orderBy: [
-            { trainingCourse: { createdAt: 'desc' } },
-            { base10Max: 'desc' },
-        ],
+        include: {
+            scoreConverts: {
+                orderBy: [
+                    { trainingCourse: { createdAt: 'desc' } },
+                    { base10Max: 'desc' },
+                ],
+            },
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
     const { data: count } = useCountScoreConvert({
@@ -101,7 +121,6 @@ export default function TrainingFieldPage() {
     }
     const { mutateAsync: UpdateScoreConvert } = useUpdateScoreConvert()
     async function handleDelete(id: string) {
-        console.log('id', id)
         try {
             showSpinner()
             await UpdateScoreConvert({
@@ -193,61 +212,32 @@ export default function TrainingFieldPage() {
                 </Col>
 
                 <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="training-category"
+                    <TableCollapse
                         data={data}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 50,
+                                title: 'Điểm hệ 10 từ',
+                                dataIndex: 'base10Min',
                                 align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-
-                            {
-                                title: 'Khoá',
-                                dataIndex: ['trainingCourse', 'name'],
-                                align: 'center',
-                                // width: 150,
                             },
                             {
-                                title: 'Điểm hệ 10',
+                                title: 'Điểm hệ 10 đến',
+                                dataIndex: 'base10Max',
                                 align: 'center',
-                                // width: 150,
-                                children: [
-                                    {
-                                        title: 'Từ',
-                                        dataIndex: 'base10Min',
-                                        align: 'center',
-                                    },
-                                    {
-                                        title: 'Đến',
-                                        dataIndex: 'base10Max',
-                                        align: 'center',
-                                    },
-                                ],
                             },
                             {
                                 title: 'Điểm hệ 4',
                                 dataIndex: 'base4',
-                                // width: 60,
                                 align: 'center',
                             },
                             {
                                 title: 'Điểm chữ',
                                 align: 'center',
                                 dataIndex: 'letter',
-                                // width: 60,
                             },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                // width: 130,
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không áp dụng</Tag>
@@ -258,7 +248,7 @@ export default function TrainingFieldPage() {
                             },
                             {
                                 title: 'Thao tác',
-                                // width: 100,
+                                width: 100,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, { id }) => {
@@ -297,6 +287,10 @@ export default function TrainingFieldPage() {
                                 },
                             },
                         ]}
+                        defaultExpandAll
+                        headerTitleKey={'name'}
+                        currentPage={currentPage}
+                        childrenFieldName="scoreConverts"
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

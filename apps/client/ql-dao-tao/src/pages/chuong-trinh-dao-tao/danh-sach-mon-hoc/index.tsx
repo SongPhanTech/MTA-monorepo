@@ -291,6 +291,12 @@ export default function SubjectList() {
                         }}
                         columns={[
                             {
+                                title: 'Mã môn học',
+                                dataIndex: 'code',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
                                 title: 'Tên phiên bản',
                                 dataIndex: 'name',
                                 // sorter: (a, b) => a.name - b.name,

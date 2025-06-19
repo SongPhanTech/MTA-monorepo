@@ -25,7 +25,7 @@ type TableProps<T extends Data> = {
     selectedRow?: string | null
     scrollable?: boolean
     maxHeight?: number
-    currentPage: number
+    currentPage?: number
     headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: keyof T
     onRowDoubleClick?: (record: T) => void
@@ -137,7 +137,10 @@ const TableCollapse = <T extends Data>({
                         (item) => item.key === record.key
                     )
                     return order >= 0
-                        ? order + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE
+                        ? order +
+                              1 +
+                              ((pagination?.current || currentPage || 1) - 1) *
+                                  DEFAULT_PAGINATE_SIZE
                         : ''
                 },
             },
@@ -155,7 +158,13 @@ const TableCollapse = <T extends Data>({
                     : 1,
             }),
         }))
-    }, [rest.columns, childrenFieldName, allChildren, currentPage])
+    }, [
+        rest.columns,
+        childrenFieldName,
+        allChildren,
+        currentPage,
+        pagination?.current,
+    ])
 
     return (
         <>

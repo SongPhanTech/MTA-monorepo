@@ -76,15 +76,17 @@ const PutVersionSubjectModal = () => {
     })
 
     const treeData =
-        subjectData.map((subject) => ({
-            title: subject.name,
-            value: subject.id,
-            children:
-                subject.subjectVersion.map((version: Subject) => ({
-                    title: version.name,
-                    value: version.id,
-                })) || [],
-        })) || []
+        subjectData
+            .filter((subject) => subject.subjectVersion.length > 0)
+            .map((subject) => ({
+                title: subject.name,
+                value: subject.id,
+                children:
+                    subject.subjectVersion.map((version: SubjectVersion) => ({
+                        title: version.name,
+                        value: version.id,
+                    })) || [],
+            })) || []
 
     const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
@@ -234,7 +236,7 @@ const PutVersionSubjectModal = () => {
             </Col> */}
             <Col span={12}>
                 <Form.Item
-                    name="prerequisiteSubjects"
+                    name="prerequisiteSubjectIds"
                     label="Môn học tiên quyết"
                 >
                     <TreeSelect
@@ -254,7 +256,10 @@ const PutVersionSubjectModal = () => {
                 </Form.Item>
             </Col>
             <Col span={12}>
-                <Form.Item name="sh" label="Môn học song hành">
+                <Form.Item
+                    name="coRequisiteSubjectIds"
+                    label="Môn học song hành"
+                >
                     <TreeSelect
                         treeData={treeData}
                         treeCheckable={true}

@@ -6,6 +6,7 @@
     "source.organizeImports.biome": "explicit"
   },
   "cSpell.words": [
+    "CTĐT",
     "Docxtemplater",
     "SCIM"
   ],
@@ -23,5 +24,8 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
   }
 }
