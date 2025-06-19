@@ -9,7 +9,9 @@
             "generated/**/*",
             "open-api/**/*",
             "*.json",
-            "lib/api/**/*"
+            "lib/api/**/*",
+            ".env",
+            ".env.*"
         ]
     },
     "vcs": {
