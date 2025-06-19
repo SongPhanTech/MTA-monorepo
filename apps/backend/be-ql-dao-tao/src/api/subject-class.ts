@@ -1,5 +1,9 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { $Enums } from '@workspace/db'
+import {
+    getFixedClassBySubjectClassSemester,
+    getSubjectClassBySemester,
+} from '@workspace/db/sql'
 import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
 import { prisma } from '..'
 import {
@@ -9,71 +13,7 @@ import {
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
 import { ListOf } from '../zod/base'
-import {
-    getSubjectClassBySemester,
-    getFixedClassBySubjectClassSemester,
-} from '@workspace/db'
 const app = new OpenAPIHono({ strict: false })
-
-const teachingAssignment = createRoute({
-    operationId: 'lecturerAssignment',
-    path: '/teaching-assignment',
-    method: 'put',
-    description: 'Phân công giảng dạy',
-    tags: ['SubjectClass'],
-    summary: 'Phân công giảng dạy',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z.array(
-                        z
-                            .object({
-                                subjectClassId: z.string(),
-                                lecturerId: z.string(),
-                                extraLecturerId: z.string().optional(),
-                                enterGradeLecturerId: z.string().optional(),
-                            })
-                            .openapi('teachingAssignmentRequest')
-                    ),
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        data: z.array(
-                            z
-                                .object({
-                                    subjectClassId: z
-                                        .string()
-                                        .openapi('subjectClassId', {
-                                            description: 'ID của lớp môn học',
-                                        }),
-                                    userProfileId: z
-                                        .string()
-                                        .openapi('userProfileId', {
-                                            description: 'ID của giảng viên',
-                                        }),
-                                })
-                                .openapi('teachingAssignmentResponse')
-                        ),
-                        success: z.boolean().openapi('success', {
-                            description: 'Trạng thái thành công của yêu cầu',
-                        }),
-                    }),
-                },
-            },
-            description: 'Danh sách phân công giảng dạy thành công',
-        },
-        400: {
-            description: 'Yêu cầu không hợp lệ',
-        },
-    },
-})
 
 const openSubjectClass = createRoute({
     operationId: 'openSubjectClass',
@@ -321,6 +261,10 @@ const putManySubjectClass = createRoute({
                     schema: z.array(
                         SubjectClassUpdateScalarSchema.extend({
                             id: z.string(),
+                            roomId: z.string().nullish(),
+                            lecturerId: z.string().nullish(),
+                            extraLecturerId: z.string().nullish(),
+                            enterGradeLecturerId: z.string().nullish(),
                         }).openapi('subjectClasses')
                     ),
                 },
@@ -341,34 +285,6 @@ const putManySubjectClass = createRoute({
             description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
         },
     },
-})
-
-app.openapi(teachingAssignment, async (c) => {
-    const data = c.req.valid('json')
-    const result = await Promise.allSettled(
-        data.map(async ({ subjectClassId, ...lecturers }) =>
-            prisma.subjectClass.update({
-                where: { id: subjectClassId },
-                data: lecturers,
-            })
-        )
-    )
-
-    const resultSuccess = result
-        .filter((item) => item.status === 'fulfilled')
-        .map((item) => item.value)
-
-    const resultError = result.filter((item) => item.status === 'rejected')
-
-    return c.json(
-        {
-            data: resultSuccess,
-            success: resultSuccess.length,
-            errors: resultError.map((item) => item.reason),
-            count: result.length,
-        },
-        200
-    )
 })
 
 app.openapi(openSubjectClass, async (c) => {
@@ -831,7 +747,7 @@ app.openapi(putManySubjectClass, async (c) => {
             await prisma.subjectClass.update({
                 where: { id: cls.id },
                 data: cls,
-                select: {},
+                select: { id: true },
             })
             return { success: true, id: cls.id }
         } catch (error) {
@@ -841,17 +757,10 @@ app.openapi(putManySubjectClass, async (c) => {
     })
 
     const results = await Promise.all(updates)
-
     const failedIds = results
         .filter(({ success }) => !success)
         .map(({ id }) => id)
 
-    return c.json(
-        {
-            success: failedIds.length === 0,
-            failedIds,
-        },
-        200
-    )
+    return c.json({ success: failedIds.length === 0, failedIds }, 200)
 })
 export default app
