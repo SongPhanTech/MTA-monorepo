@@ -3,7 +3,7 @@ import { useStoreActions } from '@redux/hook'
 import { $Enums } from '@workspace/db'
 import { useFindManyGroup } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@workspace/auth/react'
 import { useEffect, useMemo } from 'react'
 const useMenuList = () => {
     const { data } = useSession()
@@ -14,7 +14,7 @@ const useMenuList = () => {
         where: {
             users: {
                 every: {
-                    ssoId: data?.user.user_id,
+                    ssoId: data?.sub,
                 },
             },
         },

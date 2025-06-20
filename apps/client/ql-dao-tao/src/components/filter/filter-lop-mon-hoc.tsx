@@ -1,40 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { FilterOutlined } from '@ant-design/icons'
+import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
+import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
+import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import {
+    useFindManyOrganization,
+    useFindManyOrganizationType,
+    useFindManyTrainingObjectType,
+} from '@workspace/db/hooks'
 import {
     Button,
+    Col,
+    DatePicker,
+    Divider,
     Flex,
-    Input,
+    Form,
     Popover,
+    Row,
     //   Select,
     Space,
     Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
-    DatePicker,
 } from 'antd'
-import {
-    FilterOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    ControlOutlined,
-} from '@ant-design/icons'
-import viVN from 'antd/locale/vi_VN'
-import { X, Search } from 'lucide-react'
-import Select from '@components/commons/select'
-import TreeSelectFixClassMulti from '@components/commons/fix-class-select/TreeSelectFixClassMulti'
-import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
-import {
-    useFindManySchoolYear,
-    useFindManySemester,
-    useFindManyOrganizationType,
-    useFindManyOrganization,
-    useFindManyTrainingObjectType,
-    useFindManyLecturer,
-} from '@workspace/db/hooks'
-import { buildOrgTree } from '@lib/utils'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
+import { X } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs
@@ -66,6 +54,7 @@ interface Props {
     onApply: (filters: FilterProps) => void
 }
 
+// TODO: use useExamTypeOptions instead
 const ExamType = [
     {
         value: 'OfflineWritten',

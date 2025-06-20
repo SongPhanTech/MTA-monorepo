@@ -9,7 +9,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
 import MinIOApp from './api/minio'
-import { setupAuth } from './middlewares/auth'
+import { jwtAuth } from '@workspace/auth/hono'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
 
@@ -32,11 +32,21 @@ app.use(
     })
 )
 
+const config = {
+    keycloak: {
+        url: process.env.KEYCLOAK_URL || 'http://localhost:8080',
+        realm: process.env.KEYCLOAK_REALM || 'swantech',
+        clientId: process.env.KEYCLOAK_CLIENT_ID || 'fe-test-local',
+    },
+}
+const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
+const jwksUri = `${issuer}/protocol/openid-connect/certs`
+const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use('*', checkIp)
-
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
 setupOpenApi(app)
-setupAuth(app)
+// setupAuth(app)
 
 app.route('/api/minio', MinIOApp)
 

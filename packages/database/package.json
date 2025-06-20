@@ -2,11 +2,12 @@
   "name": "@workspace/db",
   "version": "0.0.0",
   "scripts": {
-    "generate": "zenstack generate",
+    "generate": "zenstack generate && prisma generate --sql",
     "db:push": "prisma db push --skip-generate"
   },
   "exports": {
     ".": "./src/index.ts",
+    "./sql": "./src/typedSql.ts",
     "./zod": "./generated/zod/index.ts",
     "./zod/models": "./generated/zod/models/index.ts",
     "./zod/enums": "./generated/zod/enums/index.ts",
