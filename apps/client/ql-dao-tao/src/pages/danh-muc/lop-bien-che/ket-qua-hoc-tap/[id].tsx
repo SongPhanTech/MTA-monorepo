@@ -10,16 +10,22 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon, Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
-import type React from 'react'
 import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
-    const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
     const [filters, setFilters] = useState({
         searchText: '',
+    })
+
+    const { onOpen, onClose } = useDisclosure<{
+        dataTable: any
+        dataStudent: any
+    }>({
+        tag: ModalPrintToKQHT.name,
     })
 
     const { data: student } = useFindUniqueStudent(
@@ -31,6 +37,7 @@ export default function StudentScoreClassPage() {
                 userProfile: true,
                 curriculumVersion: {
                     include: {
+                        trainingLevel: true,
                         curriculum: {
                             include: {
                                 trainingMajor: {
@@ -52,6 +59,7 @@ export default function StudentScoreClassPage() {
                     },
                 },
                 trainingObjectType: true,
+                trainingForm: true,
             },
         },
         {
@@ -73,11 +81,15 @@ export default function StudentScoreClassPage() {
         },
         include: {
             subjectClasses: {
-                include: {
+                where: {
                     subjectClassStudent: {
-                        where: {
+                        some: {
                             studentId,
                         },
+                    },
+                },
+                include: {
+                    subjectClassStudent: {
                         include: {
                             subjectVersion: true,
                         },
@@ -144,7 +156,12 @@ export default function StudentScoreClassPage() {
                             >
                                 <Button
                                     type="primary"
-                                    onClick={() => setIsPrintModalOpen(true)}
+                                    onClick={() =>
+                                        onOpen({
+                                            dataTable: data,
+                                            dataStudent: student,
+                                        })
+                                    }
                                 >
                                     In kết quả học tập
                                 </Button>
@@ -163,7 +180,12 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
-                                dataIndex: 'code',
+                                dataIndex: [
+                                    'subjectClassStudent',
+                                    '0',
+                                    'subjectVersion',
+                                    'code',
+                                ],
                                 fixed: 'left',
                                 width: 120,
                             },
@@ -334,10 +356,6 @@ export default function StudentScoreClassPage() {
                         }}
                     />
                 </Col>
-                <ModalPrintToKQHT
-                    isPrintModalOpen={isPrintModalOpen}
-                    setIsPrintModalOpen={setIsPrintModalOpen}
-                />
             </Row>
         </div>
     )
