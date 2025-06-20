@@ -1,7 +1,8 @@
 import Loading from '@components/commons/loading'
 import { useMenuList } from '@hooks/menu-list'
-import type { NextPage } from 'next'
 import { signIn, useSession } from '@workspace/auth/react'
+import { message } from 'antd'
+import type { NextPage } from 'next'
 import { useEffect } from 'react'
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
