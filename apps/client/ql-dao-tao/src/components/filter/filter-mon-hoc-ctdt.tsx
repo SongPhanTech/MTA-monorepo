@@ -17,7 +17,7 @@ import {
     Typography,
 } from 'antd'
 import { X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {

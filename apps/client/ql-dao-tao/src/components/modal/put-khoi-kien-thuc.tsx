@@ -12,7 +12,7 @@ import {
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Select, message } from 'antd'
+import { Col, Form, InputNumber, Select, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingBlockOnCurriculumVersion =

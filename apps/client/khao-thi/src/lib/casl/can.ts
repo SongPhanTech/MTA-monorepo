@@ -1,4 +1,3 @@
-import { useMenuList } from '@hooks/menu-list'
 import type { $Enums } from '@workspace/db'
 import NAVIGATION, { type ROUTER_PATH } from '@workspace/router'
 import { useMemo } from 'react'

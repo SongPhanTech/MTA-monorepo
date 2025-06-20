@@ -8,7 +8,7 @@ import {
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Select, Switch, message } from 'antd'
+import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingBlock = TrainingBlock

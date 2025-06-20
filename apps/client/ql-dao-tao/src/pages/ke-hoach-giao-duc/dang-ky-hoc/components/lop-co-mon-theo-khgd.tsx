@@ -7,7 +7,6 @@ import {
     useFixedClassBySubjectClassSemester,
 } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
-import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'

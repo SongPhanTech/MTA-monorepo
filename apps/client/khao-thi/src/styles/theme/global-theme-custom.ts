@@ -1,5 +1,3 @@
-import { Header } from 'antd/es/layout/layout'
-
 const lightThemeCustom = {
     token: {
         colorPrimary: '#005f37',

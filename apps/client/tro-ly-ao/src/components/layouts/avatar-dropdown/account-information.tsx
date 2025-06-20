@@ -1,7 +1,6 @@
 import { env } from '@/env'
 import { UserOutlined } from '@ant-design/icons'
 import Link from 'next/link'
-import React from 'react'
 
 function AccountInformation() {
     return (

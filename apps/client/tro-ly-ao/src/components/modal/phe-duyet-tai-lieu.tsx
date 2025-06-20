@@ -1,5 +1,4 @@
 import { fetchChungkingAndVectorizeDocument } from '@/api/chunking_and_vectorize'
-import { fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost } from '@api/chat/chatComponents'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'

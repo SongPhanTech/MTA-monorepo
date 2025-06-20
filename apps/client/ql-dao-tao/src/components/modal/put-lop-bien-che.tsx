@@ -1,13 +1,10 @@
 import { queryClient } from '@api/index'
-import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type {
-    CurriculumVersion,
     FixedClass,
-    Lecturer,
     TrainingCourse,
     TrainingMajor,
     TrainingObjectType,

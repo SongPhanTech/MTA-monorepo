@@ -1,5 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons'
-import Table, { type TableParamsAntdType } from '@components/commons/table'
+import Table from '@components/commons/table'
 import FilterSurvey, {
     type FilterSurveyProps,
 } from '@components/filter/filter-survey'
@@ -13,20 +12,10 @@ import {
     useFindManySurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Row, message } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type Filter = FilterSurveyProps & {
     searchText: string

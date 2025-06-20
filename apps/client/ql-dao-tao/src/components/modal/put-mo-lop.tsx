@@ -119,8 +119,7 @@ const PutOpenClassModal = () => {
                         })),
                 })
             } else {
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                const res: any = await putManySubjectClass(
+                const res = await putManySubjectClass(
                     form
                         .getFieldValue('list')
                         .map((i: SubjectClass, index: number) => ({

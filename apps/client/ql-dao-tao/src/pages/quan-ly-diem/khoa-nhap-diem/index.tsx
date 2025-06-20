@@ -1,9 +1,7 @@
-import { CalendarOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import EditIcon from '@components/icons/edit'
 import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -11,24 +9,14 @@ import DefaultLayout from '@layouts/default-layout'
 import type { SubjectClass, TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
-    useCountTrainingField,
-    useFindManySchoolYear,
-    useFindManySemester,
     useFindManySubjectClass,
-    useFindManyTrainingCourse,
-    useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useUpdateSubjectClass,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
-import _, { forEach, includes } from 'lodash'
-import {
-    CalendarPlus,
-    LockKeyhole,
-    LockKeyholeOpen,
-    Search,
-} from 'lucide-react'
+import { Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

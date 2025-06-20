@@ -1,5 +1,4 @@
 import { queryClient } from '@api/index'
-import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -13,7 +12,6 @@ import {
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
-import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSurveyQuestionTyoe = SurveyQuestion

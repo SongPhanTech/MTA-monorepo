@@ -1,4 +1,3 @@
-import { CalendarOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
@@ -11,29 +10,16 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Semester, TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
-    useFindFirstSemester,
-    useFindManyFixedClass,
     useFindManySchoolYear,
     useFindManySemester,
     useFindManyStudent,
     useFindManySubjectClass,
-    useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
-import _, { includes } from 'lodash'
-import { CalendarPlus, Save, Search } from 'lucide-react'
+import _ from 'lodash'
+import { Save, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

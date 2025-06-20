@@ -1,13 +1,5 @@
 import { env } from '@/env'
-import {
-    DeleteFilled,
-    FileExcelFilled,
-    FileFilled,
-    FilePdfFilled,
-    FilePptFilled,
-    FileWordFilled,
-    PlusOutlined,
-} from '@ant-design/icons'
+import { DeleteFilled } from '@ant-design/icons'
 import DocxIcon from '@assets/images/docx.svg'
 import PptIcon from '@assets/images/ppt.svg'
 import TxtIcon from '@assets/images/txt.svg'

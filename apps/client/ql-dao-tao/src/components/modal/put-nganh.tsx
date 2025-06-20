@@ -6,7 +6,6 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import type { TrainingField, TrainingObjectType } from '@workspace/db'
-import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingField,
     useFindManyOrganization,
@@ -14,16 +13,7 @@ import {
     useFindUniqueTrainingField,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import {
-    Col,
-    Flex,
-    Form,
-    Input,
-    Radio,
-    Switch,
-    TreeSelect,
-    message,
-} from 'antd'
+import { Col, Form, Input, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

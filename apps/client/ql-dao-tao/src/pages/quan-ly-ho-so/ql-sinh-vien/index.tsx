@@ -14,11 +14,9 @@ import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
     GENDER_MEAN,
-    TRANG_THAI_HOC_VIEN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { UserProfile } from '@workspace/db'
 
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'

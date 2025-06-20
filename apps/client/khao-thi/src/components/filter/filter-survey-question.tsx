@@ -1,20 +1,8 @@
-import {
-    CloseOutlined,
-    ControlOutlined,
-    FilterOutlined,
-    SearchOutlined,
-} from '@ant-design/icons'
-import DatePicker from '@components/commons/date-picker'
+import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import {
-    useFindManyEthnicity,
-    useFindManyNationality,
-    useFindManyPriorityObject,
-    useFindManyReligion,
     useFindManySurvey,
-    useFindManySurveyObjectType,
     useFindManySurveyQuestionType,
-    useFindManySurveyTopic,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -30,7 +18,7 @@ import {
     Typography,
 } from 'antd'
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const { Text } = Typography
 

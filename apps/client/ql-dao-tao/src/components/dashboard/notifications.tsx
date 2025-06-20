@@ -1,7 +1,6 @@
 import { NotificationOutlined } from '@ant-design/icons'
-import { Alert, Card, Space } from 'antd'
+import { Alert, Space } from 'antd'
 import Link from 'next/link'
-import React from 'react'
 interface NotificationData {
     ID: number
     title: string

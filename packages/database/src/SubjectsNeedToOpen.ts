@@ -1,5 +1,4 @@
 import { $Enums, PrismaClient } from '@prisma/client'
-import dayjs from 'dayjs'
 
 const prisma = new PrismaClient()
 // Query tìm các môn học cần mở lớp theo học kỳ

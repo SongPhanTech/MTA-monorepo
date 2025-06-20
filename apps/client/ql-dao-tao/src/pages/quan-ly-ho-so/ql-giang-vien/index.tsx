@@ -1,11 +1,9 @@
 import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 import {
     DownloadOutlined,
-    EyeOutlined,
     UploadOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
@@ -18,28 +16,22 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountLecturer,
-    useCountUserProfile,
     useFindManyLecturer,
     useFindManyTemplateFile,
-    useFindManyUserProfile,
     useUpdateLecturer,
-    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 
 import EditIcon from '@components/icons/edit'
 import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import {
-    Avatar,
     Button,
     Col,
-    Divider,
     Dropdown,
     Flex,
     Image,
     Input,
     Menu,
     Row,
-    Tag,
     message,
 } from 'antd'
 import dayjs from 'dayjs'

@@ -1,7 +1,7 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutBuildingModal, PutTrainingMajorModal } from '@components/modal'
+import { PutBuildingModal } from '@components/modal'
 import PutTrainingLocationModal from '@components/modal/put-khu-vuc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -12,7 +12,6 @@ import {
     useFindManyTrainingLocation,
     useUpdateBuilding,
     useUpdateTrainingLocation,
-    useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import {

@@ -5,7 +5,6 @@ import PutFormModal, {
 import Select from '@components/commons/select'
 import { useFindFirstGroup } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
-import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutNhomNguoiDungFormType = {
     name: string

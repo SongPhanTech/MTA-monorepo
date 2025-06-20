@@ -1,6 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -10,9 +7,7 @@ import {
     SUBJECT_EQUIVALENT_TYPE,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { SchoolYear } from '@workspace/db'
 import {
     useCountSubjectVersion,
     useFindManyOrganization,
@@ -28,13 +23,10 @@ import {
     Form,
     Input,
     Row,
-    Tooltip,
     TreeSelect,
     message,
 } from 'antd'
-import dayjs from 'dayjs'
-import _, { filter } from 'lodash'
-import type React from 'react'
+import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectVersionPage({ subjectInfo }: any) {

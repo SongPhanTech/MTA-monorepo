@@ -1,8 +1,7 @@
 import { DownOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
+import type { TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
-import { uniqueId } from 'lodash'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import Table from '../table'
 

@@ -192,7 +192,6 @@ export default function TeachingAssignment() {
     async function handleChangeData() {
         try {
             showSpinner()
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             const res = await putManySubjectClass(
                 dataSubmit.map((subjectClass) => ({
                     id: subjectClass.id,

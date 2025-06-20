@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutSurveyQuestionTypeModal } from '@components/modal'
@@ -9,20 +8,10 @@ import {
     useFindManySurveyQuestionType,
     useUpdateSurveyQuestionType,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import { EditIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabLoaiCauHoiKhaoSat() {

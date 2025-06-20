@@ -38,12 +38,10 @@ import {
     useFindManyRank,
     useFindManyRegistrationArea,
     useFindManyReligion,
-    useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindManyUserProfile,
     useFindUniqueStudent,
-    useFindUniqueUserProfile,
     useUpdateStudent,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'

@@ -10,7 +10,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { FixedClass, Organization, TrainingCourse } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
@@ -19,17 +18,7 @@ import {
     useFindManyTrainingCourse,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import {
-    Checkbox,
-    Col,
-    Form,
-    Input,
-    Menu,
-    Row,
-    Tag,
-    TreeSelect,
-    message,
-} from 'antd'
+import { Checkbox, Col, Form, Input, Row, Tag, TreeSelect, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'

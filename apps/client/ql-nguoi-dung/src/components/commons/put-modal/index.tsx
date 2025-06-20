@@ -1,14 +1,10 @@
 import {
     Modal as AntdModal,
     type ModalProps as AntdModalProps,
-    Col,
     Form,
     type FormInstance,
-    Input,
     Row,
 } from 'antd'
-import React from 'react'
-import FormItem from '../form-item'
 
 export type PutModalFormType = {
     description: string

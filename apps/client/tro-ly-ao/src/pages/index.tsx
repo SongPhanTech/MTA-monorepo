@@ -4,7 +4,6 @@ import { ROUTER_PATH } from '@workspace/router'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import TroLyAo from './tro-ly-ao'
 
 export default function Page() {
     const router = useRouter()

@@ -14,17 +14,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Typography,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'

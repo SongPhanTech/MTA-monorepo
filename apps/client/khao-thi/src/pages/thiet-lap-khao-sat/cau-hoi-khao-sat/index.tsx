@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import FilterSurveyQuestion, {
     type FilterSurveyQuestionProps,
@@ -11,23 +10,12 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountSurveyQuestion,
-    useCreateManySurveyAnswer,
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Row, message } from 'antd'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type Filter = FilterSurveyQuestionProps & {
     searchText: string

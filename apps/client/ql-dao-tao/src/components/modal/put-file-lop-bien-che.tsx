@@ -7,9 +7,8 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TrainingCourse } from '@workspace/db'
 import { useFindManyTrainingCourse } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, Upload, message } from 'antd'
+import { Button, Col, Form, Upload, message } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
-import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutUploadFixedClass = {

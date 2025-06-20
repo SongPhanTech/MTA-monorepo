@@ -2,7 +2,6 @@ import { NotificationOutlined } from '@ant-design/icons'
 import { Alert, Card, Space } from 'antd'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import React from 'react'
 const fakeData: any = [
     {
         id: 1,

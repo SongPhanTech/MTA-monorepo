@@ -1,4 +1,3 @@
-import { Column } from '@ant-design/plots/es/core/plots/column'
 import { fetchThongTinBaoCao } from '@api/userProfile'
 import useSpinner from '@hooks/spinner'
 import { Modal, Table, message } from 'antd'

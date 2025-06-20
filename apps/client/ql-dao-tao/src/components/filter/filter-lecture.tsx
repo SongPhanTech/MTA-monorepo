@@ -1,9 +1,4 @@
-import {
-    CloseOutlined,
-    ControlOutlined,
-    FilterOutlined,
-    SearchOutlined,
-} from '@ant-design/icons'
+import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import {
     useFindManyEthnicity,
@@ -25,7 +20,7 @@ import {
     Typography,
 } from 'antd'
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const { Text } = Typography
 

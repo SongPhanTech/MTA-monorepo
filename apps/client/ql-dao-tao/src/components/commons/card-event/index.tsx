@@ -6,7 +6,6 @@ import {
     SendOutlined,
 } from '@ant-design/icons'
 import { Card, ConfigProvider, Popconfirm, Tooltip } from 'antd'
-import React from 'react'
 interface CardDashBoardProps {
     time?: string
     date?: string

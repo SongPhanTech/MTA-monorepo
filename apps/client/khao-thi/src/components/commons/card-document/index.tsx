@@ -4,7 +4,6 @@ import { DeleteFilled } from '@ant-design/icons'
 import { cn } from '@lib/utils'
 import type { Document } from '@workspace/db'
 import { Image, Popconfirm } from 'antd'
-import ImageNext from 'next/image'
 import { useCallback, useMemo } from 'react'
 import { FileUploadIcon } from '../upload'
 type CardDocumentProps = {

@@ -1,9 +1,4 @@
-import {
-    CloseOutlined,
-    ControlOutlined,
-    FilterOutlined,
-    SearchOutlined,
-} from '@ant-design/icons'
+import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import { KHOA_HL_STATUS } from '@constants/constants'
 import type {
@@ -18,7 +13,6 @@ import {
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
     useFindManyTrainingType,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -34,7 +28,7 @@ import {
     Typography,
 } from 'antd'
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {

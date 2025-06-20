@@ -1,7 +1,7 @@
 import { MoreOutlined, SendOutlined, StopOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Menu, Spin } from 'antd'
+import { Button, Dropdown, Menu } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface ChatInputProps {
     input: string

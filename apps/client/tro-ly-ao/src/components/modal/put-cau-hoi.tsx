@@ -5,15 +5,11 @@ import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
     useCreateFAQ,
-    useCreateManyFAQ,
     useDeleteFAQ,
     useFindFirstFAQ,
-    useFindUniqueFAQ,
     useUpdateFAQ,
-    useUpdateManyFAQ,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, Modal, Popconfirm, message } from 'antd'
-import { Trash2 } from 'lucide-react'
+import { Button, Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 type FAQFormType = {

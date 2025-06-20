@@ -1,13 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { fetchUploadExcelCreateUserProfile } from '@api/dao-tao/daotaoComponents'
 import { queryClient } from '@api/index'
-import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type UserType } from '@workspace/db'
-import { Button, Col, Form, Input, Upload, message } from 'antd'
-import { useEffect, useState } from 'react'
+import { $Enums } from '@workspace/db'
+import { Button, Col, Form, Upload, message } from 'antd'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUploadProfile = {
     file: File

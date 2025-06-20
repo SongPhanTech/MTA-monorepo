@@ -22,7 +22,7 @@ import {
     Typography,
 } from 'antd'
 import { X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs

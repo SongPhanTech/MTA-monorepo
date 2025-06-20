@@ -1,9 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCreateChatBotConfig,
     useCreateManyChatBotConfig,
-    useFindFirstChatBotConfig,
     useFindManyChatBotConfig,
     useUpdateChatBotConfig,
 } from '@workspace/db/hooks'

@@ -26,7 +26,6 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutCurriculumVersion = CurriculumVersion
 import 'dayjs/locale/vi'
-import type React from 'react'
 import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'

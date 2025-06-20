@@ -27,7 +27,6 @@ import {
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
     useFindManyEthnicity,
-    useFindManyLecturer,
     useFindManyLecturerType,
     useFindManyLevel,
     useFindManyNationality,

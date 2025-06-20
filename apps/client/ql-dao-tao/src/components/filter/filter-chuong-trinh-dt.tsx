@@ -1,30 +1,21 @@
-import {
-    CloseOutlined,
-    ControlOutlined,
-    FilterOutlined,
-    SearchOutlined,
-} from '@ant-design/icons'
+import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
-import { CTDT_STATUS, KHOA_HL_STATUS } from '@constants/constants'
+import { CTDT_STATUS } from '@constants/constants'
 import { buildOrgTree } from '@lib/utils'
 import type {
     SchoolYear,
-    TrainingForm,
     TrainingLevel,
     TrainingMajor,
     TrainingObjectType,
     TrainingTime,
-    TrainingType,
 } from '@workspace/db'
 import {
     useFindManyOrganization,
     useFindManySchoolYear,
-    useFindManyTrainingForm,
     useFindManyTrainingLevel,
     useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
     useFindManyTrainingType,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -42,7 +33,7 @@ import {
     Typography,
 } from 'antd'
 import { Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {
