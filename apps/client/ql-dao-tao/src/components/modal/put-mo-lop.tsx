@@ -266,7 +266,12 @@ const PutOpenClassModal = () => {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (subjectClassData?.length) {
+            const totalStudent = subjectClassData.reduce(
+                (total, item) => total + Number(dataClass?.countStudent),
+                0
+            )
             form.setFieldsValue({
+                totalStudent: totalStudent,
                 schedule: subjectClassData[0]?.schedule,
                 trainingLocationId:
                     subjectClassData[0]?.room?.building?.trainingLocationId,
