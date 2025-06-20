@@ -4,6 +4,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import {
+    ModalGPASemester,
     PutFixedClassModal,
     PutUploadDivisionModal,
     PutUploadFixedClassModal,
@@ -120,6 +121,9 @@ export default function FixedClassPage({
     const { onOpen } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
+    const { onOpen: onOpenGPASemester } = useDisclosure<string>({
+        tag: ModalGPASemester.name,
+    })
     const { onOpen: onOpenFixedClass } = useDisclosure<string>({
         tag: PutUploadFixedClassModal.name,
     })
@@ -130,6 +134,10 @@ export default function FixedClassPage({
 
     const handleModal = () => {
         onOpen()
+    }
+
+    const handleOpenGPASemester = () => {
+        onOpenGPASemester()
     }
 
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -317,7 +325,13 @@ export default function FixedClassPage({
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={handleOpenGPASemester}
+                                    type="primary"
+                                >
+                                    GPA kỳ học
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
