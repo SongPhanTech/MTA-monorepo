@@ -1,5 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import { PutSurveyQuestionTypeModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
@@ -13,17 +15,15 @@ import {
     Flex,
     Form,
     Input,
-    message,
     Row,
     Tag,
     Tooltip,
+    message,
 } from 'antd'
 import _ from 'lodash'
-import DeleteIcon from '@components/icons/delete'
-import { useMemo, useState } from 'react'
-import { PutSurveyQuestionTypeModal } from '@components/modal'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { EditIcon } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabLoaiCauHoiKhaoSat() {
     const [currentPage, setCurrentPage] = useState(1)

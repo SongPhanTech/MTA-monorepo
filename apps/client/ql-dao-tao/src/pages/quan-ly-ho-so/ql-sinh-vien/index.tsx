@@ -6,9 +6,9 @@ import {
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
+    PutStudentModal,
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutStudentModal,
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -23,6 +23,16 @@ import type { UserProfile } from '@workspace/db'
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
 import EditIcon from '@components/icons/edit'
+import { getMinioUrl } from '@workspace/constant'
+import {
+    useCountStudent,
+    useFindManyFixedClass,
+    useFindManyStudent,
+    useFindManyTemplateFile,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateStudent,
+} from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -40,16 +50,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import {
-    useCountStudent,
-    useFindManyFixedClass,
-    useFindManyStudent,
-    useFindManyTemplateFile,
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useUpdateStudent,
-} from '@workspace/db/hooks'
-import { getMinioUrl } from '@workspace/constant'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {

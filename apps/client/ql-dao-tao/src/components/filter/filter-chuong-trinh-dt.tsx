@@ -1,37 +1,12 @@
-import React, { useState } from 'react'
 import {
-    Button,
-    Flex,
-    Input,
-    Popover,
-    //   Select,
-    Space,
-    Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
-    TreeSelect,
-    Tag,
-} from 'antd'
-import {
-    FilterOutlined,
     CloseOutlined,
-    SearchOutlined,
     ControlOutlined,
+    FilterOutlined,
+    SearchOutlined,
 } from '@ant-design/icons'
-import { X, Search } from 'lucide-react'
 import Select from '@components/commons/select'
-import {
-    useUpdateTrainingCourse,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManySchoolYear,
-    useFindManyTrainingForm,
-    useFindManyOrganization,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { CTDT_STATUS, KHOA_HL_STATUS } from '@constants/constants'
+import { buildOrgTree } from '@lib/utils'
 import type {
     SchoolYear,
     TrainingForm,
@@ -41,8 +16,33 @@ import type {
     TrainingTime,
     TrainingType,
 } from '@workspace/db'
-import { CTDT_STATUS, KHOA_HL_STATUS } from '@constants/constants'
-import { buildOrgTree } from '@lib/utils'
+import {
+    useFindManyOrganization,
+    useFindManySchoolYear,
+    useFindManyTrainingForm,
+    useFindManyTrainingLevel,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingType,
+    useUpdateTrainingCourse,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Popover,
+    Row,
+    //   Select,
+    Space,
+    Tag,
+    TreeSelect,
+    Typography,
+} from 'antd'
+import { Search, X } from 'lucide-react'
+import React, { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {
@@ -60,9 +60,9 @@ interface FilterProps {
 
 interface Props {
     filters: FilterProps
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     setFilters: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     debouncedRefetch: any
 }
 

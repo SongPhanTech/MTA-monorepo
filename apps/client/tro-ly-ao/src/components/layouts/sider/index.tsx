@@ -1,9 +1,9 @@
 import type { MenuItem } from '@workspace/router'
 import { Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
+import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
 
 const { Sider } = Layout
 

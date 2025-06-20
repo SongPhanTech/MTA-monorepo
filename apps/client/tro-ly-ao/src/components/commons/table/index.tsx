@@ -13,7 +13,6 @@ type TableProps<T> = {
     }
 } & Omit<TableAntdProps<T>, 'columns'>
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const Table = <T extends Record<PropertyKey, any>>({
     columns = [],
     data,

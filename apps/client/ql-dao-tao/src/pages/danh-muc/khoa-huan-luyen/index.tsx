@@ -6,14 +6,17 @@ import { PutTrainingCourseModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 
+import Select from '@components/commons/select'
+import EditIcon from '@components/icons/edit'
+import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import {
     Button,
     Col,
@@ -29,13 +32,10 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search, X } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { X, Search } from 'lucide-react'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined

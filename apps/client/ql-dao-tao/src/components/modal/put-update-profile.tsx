@@ -5,7 +5,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { $Enums, type UserType } from '@workspace/db'
-import { Col, Form, Input, message, Upload, Button } from 'antd'
+import { Button, Col, Form, Input, Upload, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUpdateProfile = {

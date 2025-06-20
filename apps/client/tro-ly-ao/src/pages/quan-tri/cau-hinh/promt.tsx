@@ -1,3 +1,4 @@
+import { EditOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
@@ -8,16 +9,15 @@ import {
     useUpdateManyPrompt,
 } from '@workspace/db/hooks'
 import {
+    Input as AntdInput,
     Button,
     Col,
     Form,
     Input,
-    message,
     Row,
-    Input as AntdInput,
+    message,
 } from 'antd'
-import { EditOutlined } from '@ant-design/icons'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type PromptFormType = {
     prompt: string

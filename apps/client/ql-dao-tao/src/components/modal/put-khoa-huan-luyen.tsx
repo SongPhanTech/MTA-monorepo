@@ -1,27 +1,27 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type {
-    TrainingCourse,
     SchoolYear,
-    TrainingObjectType,
     Semester,
+    TrainingCourse,
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCreateTrainingCourse,
-    useFindUniqueTrainingCourse,
     useFindManySchoolYear,
-    useUpdateTrainingCourse,
-    useFindManyTrainingObjectType,
     useFindManySemester,
+    useFindManyTrainingObjectType,
+    useFindUniqueTrainingCourse,
+    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, Radio, Switch, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
 }

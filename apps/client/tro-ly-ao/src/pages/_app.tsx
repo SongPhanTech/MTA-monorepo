@@ -4,6 +4,7 @@ import { colors } from '@constants/colors'
 import { API_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
+import * as modals from '@components/modal'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
@@ -16,9 +17,8 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
-import LoadingBar from 'react-top-loading-bar'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
-import * as modals from '@components/modal'
+import LoadingBar from 'react-top-loading-bar'
 
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {

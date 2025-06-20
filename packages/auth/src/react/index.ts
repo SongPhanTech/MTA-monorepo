@@ -1,5 +1,5 @@
-import { SessionProvider, useSession } from './provider'
 import type { Session, SessionStatus } from '..'
+import { SessionProvider, useSession } from './provider'
 const signIn = async () => {
     window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin`
 }

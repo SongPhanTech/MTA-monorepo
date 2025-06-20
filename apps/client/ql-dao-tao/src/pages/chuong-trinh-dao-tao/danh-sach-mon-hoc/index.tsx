@@ -7,7 +7,7 @@ import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Organization, ExamType } from '@workspace/db'
+import type { ExamType, Organization } from '@workspace/db'
 import {
     useFindManyOrganization,
     useFindManySubject,

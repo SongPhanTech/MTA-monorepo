@@ -1,23 +1,23 @@
+import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
+import type { SurveyQuestion } from '@workspace/db'
+import {
+    useCreateManySurveyAnswer,
+    useFindManySurveyQuestion,
+} from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Card,
     Checkbox,
     Input,
-    message,
     Radio,
     Space,
     Typography,
+    message,
 } from 'antd'
-import { useState } from 'react'
-import {
-    useFindManySurveyQuestion,
-    useCreateManySurveyAnswer,
-} from '@workspace/db/hooks'
-import type { SurveyQuestion } from '@workspace/db'
-import useSpinner from '@hooks/spinner'
-import { ROUTER_PATH } from '@workspace/router'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 const { Title } = Typography
 

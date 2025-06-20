@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     Modal as AntdModal,
     type ModalProps as AntdModalProps,
@@ -8,6 +7,7 @@ import {
     Input,
     Row,
 } from 'antd'
+import React from 'react'
 import FormItem from '../form-item'
 
 export type PutModalFormType = {

@@ -12,7 +12,7 @@ import {
     useUpdateFAQ,
     useUpdateManyFAQ,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, message, Button, Popconfirm } from 'antd'
+import { Button, Col, Form, Input, Modal, Popconfirm, message } from 'antd'
 import { Trash2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

@@ -1,16 +1,16 @@
+import { UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TrainingCourse } from '@workspace/db'
 import { useFindManyTrainingCourse } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Upload, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Button, Col, Form, Input, Upload, message } from 'antd'
+import type { UploadFile } from 'antd/es/upload/interface'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import type { UploadFile } from 'antd/es/upload/interface'
-import { fetchUploadFile } from '@api/userProfile'
 
 export type PutUploadFixedClass = {
     trainingCourseId: string

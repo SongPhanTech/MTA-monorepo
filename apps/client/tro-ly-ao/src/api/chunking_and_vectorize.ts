@@ -22,7 +22,6 @@ export const fetchChungkingAndVectorizeDocument = async (
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,
             id_document
         )
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     } catch (error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API' }
     }
@@ -34,7 +33,6 @@ export const fetchFAQDocument = async (id_document: string) => {
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/faq_vectorize`,
             id_document
         )
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     } catch (error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API FAQ' }
     }
@@ -46,7 +44,6 @@ export const deleteVectorRecordHoiDap = async (id_document: string) => {
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap`,
             id_document
         )
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     } catch (error: any) {
         return {
             status: 500,
@@ -62,7 +59,6 @@ export const deleteVectorRecordFAQ = async (id_document: string) => {
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_db_faq`,
             id_document
         )
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     } catch (error: any) {
         return { status: 500, error: 'True', message: 'Lỗi xóa bản ghi FAQ' }
     }

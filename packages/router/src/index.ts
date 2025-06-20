@@ -1,18 +1,17 @@
 import {
     ApartmentOutlined,
     BookOutlined,
+    FileTextOutlined,
     IdcardOutlined,
     MessageOutlined,
-    FileTextOutlined,
-    ReadOutlined,
     PieChartOutlined,
+    ReadOutlined,
     ScheduleOutlined,
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
-import ROUTER_PATH from '../generated/router'
 // biome-ignore lint/style/useImportType: <explanation>
 import {
     BookCheckIcon,
@@ -23,6 +22,7 @@ import {
     LayoutDashboard,
     LucideProps,
 } from 'lucide-react'
+import ROUTER_PATH from '../generated/router'
 import './index.css'
 interface MenuItem {
     id: string

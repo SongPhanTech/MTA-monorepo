@@ -1,11 +1,11 @@
-import DefaultLayout from '@layouts/default-layout'
-import { type TabsProps, Tabs } from 'antd'
 import {
     TabChuDeKhaoSat,
     TabDoiTuongKhaoSat,
     TabDotKhaoSat,
     TabLoaiCauHoiKhaoSat,
 } from '@components/features/thiet-lap-khao-sat'
+import DefaultLayout from '@layouts/default-layout'
+import { Tabs, type TabsProps } from 'antd'
 
 function Page() {
     const onChange = (key: string) => {

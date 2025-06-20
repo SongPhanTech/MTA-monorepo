@@ -1,23 +1,27 @@
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons'
+import TableCollapse from '@components/commons/tableCollapse'
+import { FilterMonHocCTDT } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
     PutTrainingBlockOnCurriculumVersion,
     PutTrainingBlockSubject,
 } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useFindUniqueCurriculumVersion,
-    useFindManyTrainingBlockOnCurriculumVersion,
-    useCountTrainingBlockOnCurriculumVersion,
-    useUpdateTrainingBlockSubject,
-    useFindManyOrganization,
-    useDeleteTrainingBlockOnCurriculumVersion,
-    useDeleteManyTrainingBlockSubject,
-} from '@workspace/db/hooks'
+import { buildOrgTree } from '@lib/utils'
 import type { ExamType } from '@workspace/db'
-import { BookPlus, Search } from 'lucide-react'
+import {
+    useCountTrainingBlockOnCurriculumVersion,
+    useDeleteManyTrainingBlockSubject,
+    useDeleteTrainingBlockOnCurriculumVersion,
+    useFindManyOrganization,
+    useFindManyTrainingBlockOnCurriculumVersion,
+    useFindUniqueCurriculumVersion,
+    useUpdateTrainingBlockSubject,
+} from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -33,15 +37,11 @@ import {
     message,
 } from 'antd'
 import _ from 'lodash'
+import { BookPlus, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import EditIcon from '@components/icons/edit'
-import { useRouter } from 'next/router'
-import TableCollapse from '@components/commons/tableCollapse'
-import { useExamTypeOptions } from '@hooks/examType'
-import { buildOrgTree } from '@lib/utils'
-import { FilterMonHocCTDT } from '@components/filter'
 interface FilterProps {
     searchText: string | null
     managementOrganizationId: string | undefined

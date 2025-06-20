@@ -8,8 +8,8 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
-import MinIOApp from './api/minio'
 import { jwtAuth } from '@workspace/auth/hono'
+import MinIOApp from './api/minio'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
 

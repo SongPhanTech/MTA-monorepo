@@ -11,7 +11,6 @@ import LockIcon from '@components/icons/lock'
 import { PutNguoiDungModal } from '@components/modal'
 import type { PutUserFormType } from '@components/modal/put-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
@@ -32,6 +31,7 @@ import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)

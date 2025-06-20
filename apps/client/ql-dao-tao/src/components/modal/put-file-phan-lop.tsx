@@ -7,7 +7,6 @@ import useSpinner from '@hooks/spinner'
 import { Button, Col, Form, Upload, type UploadFile, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUploadDivision = {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     file: UploadFile<any>[]
 }
 const PutUploadDivisionModal = () => {

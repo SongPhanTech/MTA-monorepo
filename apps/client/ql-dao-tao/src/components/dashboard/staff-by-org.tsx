@@ -1,6 +1,6 @@
+import { Column } from '@ant-design/plots'
 import type React from 'react'
 import { useRef } from 'react'
-import { Column } from '@ant-design/plots'
 
 interface ChartProps {
     className?: string

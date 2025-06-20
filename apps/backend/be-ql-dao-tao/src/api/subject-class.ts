@@ -328,7 +328,6 @@ app.openapi(openSubjectClass, async (c) => {
             trainingMajorId ?? null,
             Number(page),
             Number(pageSize)
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         ) as any
     )
 
@@ -424,7 +423,6 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
             search ?? null,
             Number(page),
             Number(pageSize)
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         ) as any
     )
 
@@ -539,7 +537,6 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
             search ?? null,
             Number(page),
             Number(pageSize)
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         ) as any
     )
 

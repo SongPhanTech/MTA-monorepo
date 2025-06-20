@@ -26,7 +26,7 @@ const ThongTinBaoCaoModal = () => {
                 message.error('Lỗi khi tải thông tin báo cáo')
             })
             .finally(() => hideSpinner())
-    }, [isOpen])
+    }, [isOpen, showSpinner, hideSpinner])
 
     const flattenSchema = (schema: any[], parentPath = ''): any[] => {
         return schema.flatMap((item, index) => {

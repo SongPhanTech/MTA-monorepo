@@ -1,26 +1,26 @@
 import { PlusOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutTrainingBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-    useFindManyTrainingBlock,
-    useUpdateTrainingBlock,
-    useFindManyCurriculum,
-} from '@workspace/db/hooks'
 import type { Curriculum, TrainingObjectType } from '@workspace/db'
-import { Search } from 'lucide-react'
+import {
+    useFindManyCurriculum,
+    useFindManyTrainingBlock,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateTrainingBlock,
+} from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { PutTrainingBlock } from '@components/modal'
 interface FilterProps {
     searchText: string | null
     trainingCourseId: string | null

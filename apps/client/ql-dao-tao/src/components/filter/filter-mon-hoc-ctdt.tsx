@@ -1,23 +1,23 @@
-import React, { useState } from 'react'
+import { FilterOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
+import type { TrainingObjectType } from '@workspace/db'
+import {
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+} from '@workspace/db/hooks'
 import {
     Button,
+    Col,
+    Divider,
     Flex,
+    Form,
     Popover,
+    Row,
     Space,
     Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
 } from 'antd'
-import { FilterOutlined } from '@ant-design/icons'
 import { X } from 'lucide-react'
-import Select from '@components/commons/select'
-import {
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-} from '@workspace/db/hooks'
-import type { TrainingObjectType } from '@workspace/db'
+import React, { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {
@@ -27,9 +27,9 @@ interface FilterProps {
 
 interface Props {
     filters: FilterProps
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     setFilters: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     debouncedRefetch: any
 }
 

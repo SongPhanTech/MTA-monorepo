@@ -1,37 +1,37 @@
+import { CalendarOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
+import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import EditIcon from '@components/icons/edit'
+import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { SubjectClass, TrainingObjectType } from '@workspace/db'
 import {
+    useCountSubjectClass,
     useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
+    useFindManySchoolYear,
     useFindManySemester,
     useFindManySubjectClass,
-    useCountSubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingObjectType,
     useUpdateSubjectClass,
-    useFindManySchoolYear,
+    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType, SubjectClass } from '@workspace/db'
-import {
-    CalendarPlus,
-    Search,
-    LockKeyhole,
-    LockKeyholeOpen,
-} from 'lucide-react'
 import { Button, Col, Flex, Form, Input, Modal, Row, Tag, message } from 'antd'
 import _, { forEach, includes } from 'lodash'
+import {
+    CalendarPlus,
+    LockKeyhole,
+    LockKeyholeOpen,
+    Search,
+} from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { CalendarOutlined } from '@ant-design/icons'
-import { PutOpenClassModal } from '@components/modal'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -49,7 +49,7 @@ interface FilterProps {
     examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
-export default function SubjectClass() {
+export default function ClassSubject() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -190,7 +190,7 @@ export default function SubjectClass() {
         _.debounce(() => {
             refetch()
         }, 500),
-        [refetch]
+        []
     )
 
     const { data: count } = useCountSubjectClass({
@@ -326,6 +326,7 @@ export default function SubjectClass() {
         })
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         handleCheckExamDate()
     }, [])
@@ -573,7 +574,8 @@ export default function SubjectClass() {
                                                 Đang hoạt động
                                             </Tag>
                                         )
-                                    } else if (
+                                    }
+                                    if (
                                         record.active === false ||
                                         record.active === 'inactive'
                                     ) {
@@ -699,6 +701,6 @@ export default function SubjectClass() {
     )
 }
 
-SubjectClass.getLayout = function getLayout(page: React.ReactElement) {
+ClassSubject.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

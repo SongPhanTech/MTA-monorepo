@@ -1,9 +1,9 @@
-import React from 'react'
-import { Tree, Spin } from 'antd'
 import {
-    useFindManyTrainingCourse,
     useFindManyFixedClass,
+    useFindManyTrainingCourse,
 } from '@workspace/db/hooks' // Thay bằng hook thực tế của bạn
+import { Spin, Tree } from 'antd'
+import type React from 'react'
 
 interface TreeFixClassProps {
     onChangeSelected: (selected: any) => void

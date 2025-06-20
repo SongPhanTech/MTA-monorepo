@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react'
 import {
     CloseOutlined,
     CloudUploadOutlined,
     PaperClipOutlined,
 } from '@ant-design/icons'
-import { message, Tooltip, Typography, Upload } from 'antd'
+import { Tooltip, Typography, Upload, message } from 'antd'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 const { Dragger } = Upload
 const { Link } = Typography
 
-import type { FormInstance } from 'antd/es/form'
 import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
+import type { FormInstance } from 'antd/es/form'
 
 interface DocumentPathsComponentProps {
     form: FormInstance

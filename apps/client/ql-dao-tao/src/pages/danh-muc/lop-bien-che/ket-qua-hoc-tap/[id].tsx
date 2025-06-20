@@ -8,6 +8,7 @@ import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 
+import TableCollapse from '@components/commons/tableCollapse'
 import { FilterSinhVien } from '@components/filter'
 import {
     useFindManySemester,
@@ -35,7 +36,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TableCollapse from '@components/commons/tableCollapse'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {

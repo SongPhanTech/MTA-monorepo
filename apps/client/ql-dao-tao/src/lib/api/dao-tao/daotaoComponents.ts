@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { useDaotaoContext, DaotaoContext } from './daotaoContext'
+import { type DaotaoContext, useDaotaoContext } from './daotaoContext'
 import type * as Fetcher from './daotaoFetcher'
 import { daotaoFetch } from './daotaoFetcher'
 import type * as Schemas from './daotaoSchemas'
@@ -230,7 +230,7 @@ export const useUploadExcelCreateFixedClass = (
 
 export type ClassDivisionError = Fetcher.ErrorWrapper<undefined>
 
-export type ClassDivisionResponse = (void | null)[]
+export type ClassDivisionResponse = (undefined | null)[]
 
 export type ClassDivisionVariables = {
     body: Schemas.ClassDivision

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
-import type { Session, SessionStatus } from '..'
 import { fetchSession } from '.'
+import type { Session, SessionStatus } from '..'
 const useSession = () => {
     const { status, data, error, setStatus, setData, setError } =
         useContext(SessionContext)
