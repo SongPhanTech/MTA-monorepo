@@ -1,10 +1,10 @@
-import { Form, Input, Button, Typography, message } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { useState } from 'react'
-import logo_mta from '@assets/images/logo_mta.png'
-import Image from 'next/image'
-import { fetchCreateUser } from '@api/open-api/appComponents'
 import { env } from '@/env'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { fetchCreateUser } from '@api/open-api/appComponents'
+import logo_mta from '@assets/images/logo_mta.png'
+import { Button, Form, Input, Typography, message } from 'antd'
+import Image from 'next/image'
+import { useState } from 'react'
 
 export type DangKyTaiKhoanFormType = {
     username: string

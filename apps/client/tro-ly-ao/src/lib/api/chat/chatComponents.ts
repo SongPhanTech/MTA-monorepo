@@ -4,7 +4,7 @@
  * @version 0.1.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { useChatContext, ChatContext } from './chatContext'
+import { type ChatContext, useChatContext } from './chatContext'
 import type * as Fetcher from './chatFetcher'
 import { chatFetch } from './chatFetcher'
 import type * as Schemas from './chatSchemas'

@@ -1,4 +1,3 @@
-import { AnyCnameRecord } from 'node:dns'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -31,23 +30,12 @@ import {
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Input, Row, message } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-// const { Option } = Select;
+
 interface FilterProps {
     searchText: string | undefined
     trainingCourseId: string | null

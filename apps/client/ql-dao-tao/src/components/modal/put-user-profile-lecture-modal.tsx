@@ -7,37 +7,37 @@ import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
-    type UserProfile,
-    type Nationality,
-    type Religion,
-    type Ethnicity,
     $Enums,
-    type Rank,
-    type Level,
     type AcademicDegreeType,
     type AcademicRankType,
+    type Ethnicity,
     type Lecturer,
-    type Prisma,
-    type Organization,
     type LecturerType,
+    type Level,
+    type Nationality,
+    type Organization,
+    type Prisma,
+    type Rank,
+    type Religion,
+    type UserProfile,
 } from '@workspace/db'
 import {
-    useFindManyUserProfile,
-    useUpdateUserProfile,
-    useFindManyReligion,
-    useFindManyEthnicity,
-    useFindManyOrganization,
-    useFindManyNationality,
-    useFindManyRank,
-    useFindManyLevel,
+    useCreateLecturer,
+    useCreateUserProfile,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
+    useFindManyEthnicity,
+    useFindManyLecturer,
+    useFindManyLecturerType,
+    useFindManyLevel,
+    useFindManyNationality,
+    useFindManyOrganization,
+    useFindManyRank,
+    useFindManyReligion,
+    useFindManyUserProfile,
     useFindUniqueLecturer,
     useUpdateLecturer,
-    useCreateLecturer,
-    useFindManyLecturerType,
-    useFindManyLecturer,
-    useCreateUserProfile,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -54,12 +54,12 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -646,7 +646,6 @@ const PutUserProfileLectureModal = () => {
     //     base: Record<PropertyKey, unknown>
     // ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
         if (lecturerData?.userProfile && id) {

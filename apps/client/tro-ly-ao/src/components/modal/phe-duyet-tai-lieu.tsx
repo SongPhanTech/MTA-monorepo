@@ -39,7 +39,6 @@ const PheDuyetTaiLieu = () => {
                 const result =
                     await fetchChungkingAndVectorizeDocument(documentId)
 
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 if ((result as any)?.error === 'True') {
                     message.error('Đã xảy ra lỗi khi phê duyệt tài liệu')
                     return

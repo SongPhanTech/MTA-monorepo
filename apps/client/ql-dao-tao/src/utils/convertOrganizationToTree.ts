@@ -87,7 +87,7 @@ export const findNodeById = (
 ): TreeNodeOrganization | null => {
     for (const node of data) {
         if (node.id === id) return node
-        if (node.children && node.children.length) {
+        if (node.children?.length) {
             const found = findNodeById(node.children, id)
             if (found) return found
         }
@@ -99,7 +99,7 @@ export const getAllDescendants = (
     node: TreeNodeOrganization
 ): TreeNodeOrganization[] => {
     let result: TreeNodeOrganization[] = []
-    if (node.children && node.children.length) {
+    if (node.children?.length) {
         for (const child of node.children) {
             result.push(child)
             result = result.concat(getAllDescendants(child))

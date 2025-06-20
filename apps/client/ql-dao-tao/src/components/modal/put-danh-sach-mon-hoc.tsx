@@ -9,10 +9,10 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import dayjs from 'dayjs'
 export type PutSubject = Subject
 import 'dayjs/locale/vi'
 dayjs.locale('vi')

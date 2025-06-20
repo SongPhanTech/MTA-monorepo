@@ -6,9 +6,9 @@ import PutGioiHanDiaChiMangDungModal, {
     type PutGioiHanDiaChiMangFormType,
 } from '@components/modal/put-gioi-han-dia-chi-mang'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { Can } from '@lib/casl/can'
 import { formatDateReadable } from '@lib/utils'
 import type { Prisma } from '@workspace/db'
 import {
@@ -30,7 +30,7 @@ import {
 } from 'antd'
 import _ from 'lodash'
 import { useState } from 'react'
-import { Can } from '@lib/casl/can'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)

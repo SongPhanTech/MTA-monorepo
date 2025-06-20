@@ -1,34 +1,34 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type {
-    FixedClass,
-    TrainingCourse,
-    TrainingObjectType,
-    TrainingMajor,
     CurriculumVersion,
+    FixedClass,
     Lecturer,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCreateFixedClass,
-    useFindUniqueFixedClass,
-    useUpdateFixedClass,
-    useFindManyOrganization,
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingMajor,
     useFindManyCurriculum,
     useFindManyLecturer,
+    useFindManyOrganization,
     useFindManyStaff,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useFindUniqueCurriculumVersion,
+    useFindUniqueFixedClass,
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, TreeSelect, Radio } from 'antd'
+import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null

@@ -6,7 +6,6 @@ import {
     MessageOutlined,
     PieChartOutlined,
     ReadOutlined,
-    ScheduleOutlined,
     SettingOutlined,
     TeamOutlined,
     UserOutlined,

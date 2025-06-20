@@ -1,12 +1,13 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
+import {
+    useFindManyLecturer,
+    useFindManyOrganization,
+} from '@workspace/db/hooks'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { SelectProps } from 'antd'
-import { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import {
-    useFindManyOrganization,
-    useFindManyLecturer,
-} from '@workspace/db/hooks'
 import { message } from 'antd'
+import type React from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgTree(
@@ -20,7 +21,7 @@ function buildOrgTree(
 ): Array<{
     title: string
     value: string
-    children: any[]
+    children: Record<string, unknown>[]
     selectable?: boolean
 }> {
     return list

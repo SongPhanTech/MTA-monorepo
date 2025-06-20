@@ -1,16 +1,13 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import DeleteIcon from '@components/icons/delete'
-// import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import {
-    $Enums,
-    type Room,
-    type SubjectClass,
-    type SubjectClassSchedule,
-    type SubjectVersion,
+import type {
+    Room,
+    SubjectClass,
+    SubjectClassSchedule,
+    SubjectVersion,
 } from '@workspace/db'
 import {
     useCreateManySubjectClass,
@@ -27,11 +24,9 @@ import {
     Empty,
     Flex,
     Form,
-    Input,
     InputNumber,
     Row,
     Table,
-    TreeSelect,
     message,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'

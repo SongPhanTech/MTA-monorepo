@@ -1,32 +1,32 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type { TrainingField, TrainingObjectType } from '@workspace/db'
 import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingField,
+    useFindManyOrganization,
+    useFindManyTrainingObjectType,
     useFindUniqueTrainingField,
     useUpdateTrainingField,
-    useFindManyTrainingObjectType,
-    useFindManyOrganization,
 } from '@workspace/db/hooks'
 import {
     Col,
+    Flex,
     Form,
     Input,
-    message,
-    Switch,
     Radio,
-    Flex,
+    Switch,
     TreeSelect,
+    message,
 } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { buildOrgTree } from '@lib/utils'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }

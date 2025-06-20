@@ -683,7 +683,6 @@ const PutUserProfileStaffModal = () => {
         base: Record<PropertyKey, unknown>
     ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
         if (staffData?.userProfile && id) {

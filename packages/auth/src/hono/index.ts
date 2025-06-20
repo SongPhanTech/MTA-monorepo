@@ -1,5 +1,5 @@
 import type { Context, MiddlewareHandler } from 'hono'
-import { jwtVerify, createRemoteJWKSet } from 'jose'
+import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { Session } from '..'
 
 const getJwtFromRequest = (c: Context): string | null => {

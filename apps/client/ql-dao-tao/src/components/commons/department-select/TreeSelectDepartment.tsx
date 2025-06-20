@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
+import { useFindManyOrganization } from '@workspace/db/hooks'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
-import { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import { useFindManyOrganization } from '@workspace/db/hooks'
+import type React from 'react'
+import { useMemo, useState } from 'react'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {

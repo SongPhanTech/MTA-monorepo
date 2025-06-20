@@ -1,5 +1,6 @@
 import type { Session, SessionStatus } from '..'
 import { SessionProvider, useSession } from './provider'
+
 const signIn = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin`
 }

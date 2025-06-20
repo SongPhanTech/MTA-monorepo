@@ -1,17 +1,17 @@
+import TableCollapse from '@components/commons/tableCollapse'
+import { ModalPrintToKQHT } from '@components/modal'
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
+import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Modal, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon, Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useRef, useState } from 'react'
-import TableCollapse from '@components/commons/tableCollapse'
-import { useScoreConverter } from '@hooks/scoreConverter'
-import { ModalPrintToKQHT } from '@components/modal'
+import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {

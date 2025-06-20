@@ -1,5 +1,5 @@
-import type { DaotaoContext } from './daotaoContext'
 import { fetchInstance } from '..'
+import type { DaotaoContext } from './daotaoContext'
 const baseUrl = 'https://api.daotao.mta.swantech.vn'
 
 export type ErrorWrapper<TError> =
@@ -53,7 +53,7 @@ export async function daotaoFetch<
                 .toLowerCase()
                 .includes('multipart/form-data')
         ) {
-            delete requestHeaders['Content-Type']
+            requestHeaders['Content-Type'] = undefined
         }
 
         const response = await fetchInstance(
@@ -88,10 +88,9 @@ export async function daotaoFetch<
 
         if (response.headers.get('content-type')?.includes('json')) {
             return await response.json()
-        } else {
-            // if it is not a json response, assume it is a blob and cast it to TData
-            return (await response.blob()) as unknown as TData
         }
+        // if it is not a json response, assume it is a blob and cast it to TData
+        return (await response.blob()) as unknown as TData
     } catch (e) {
         const errorObject: Error = {
             name: 'unknown' as const,

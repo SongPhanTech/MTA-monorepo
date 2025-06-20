@@ -7,7 +7,6 @@ import {
     Row,
 } from 'antd'
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type PutModalFormType = {}
 export type ModalProps<T = PutModalFormType> = {
     form: FormInstance<T>

@@ -1,34 +1,34 @@
-import React, { useState } from 'react'
 import {
-    Button,
-    Flex,
-    Input,
-    Popover,
-    //   Select,
-    Space,
-    Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
-} from 'antd'
-import {
-    FilterOutlined,
     CloseOutlined,
-    SearchOutlined,
     ControlOutlined,
+    FilterOutlined,
+    SearchOutlined,
 } from '@ant-design/icons'
-import { X, Search } from 'lucide-react'
+import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import {
+    useFindManyEthnicity,
     useFindManyNationality,
     useFindManyPriorityObject,
     useFindManyReligion,
-    useFindManyEthnicity,
-    useFindManySurveyTopic,
     useFindManySurveyObjectType,
+    useFindManySurveyTopic,
 } from '@workspace/db/hooks'
-import DatePicker from '@components/commons/date-picker'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Popover,
+    Row,
+    //   Select,
+    Space,
+    Typography,
+} from 'antd'
+import { Search, X } from 'lucide-react'
+import React, { useState } from 'react'
 
 const { Text } = Typography
 
@@ -40,9 +40,8 @@ export type FilterSurveyProps = {
 }
 
 interface Props {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     onFilterChange: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     onSearchChange: any
 }
 const options = [

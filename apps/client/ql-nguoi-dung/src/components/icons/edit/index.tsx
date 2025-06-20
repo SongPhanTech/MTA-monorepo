@@ -1,6 +1,6 @@
-import { Tooltip } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
+import { Tooltip } from 'antd'
 type EditIconProps = {} & Omit<AntdIconProps, 'ref'> &
     React.RefAttributes<HTMLSpanElement>
 

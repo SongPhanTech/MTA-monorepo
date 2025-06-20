@@ -109,7 +109,7 @@
     transform: rotate(45deg);
     width: 90px;
     height: 90px;
-    background-color: transparent;
+    /* background-color: transparent; */
     left: 0px;
     bottom: 0px;
     background: linear-gradient(

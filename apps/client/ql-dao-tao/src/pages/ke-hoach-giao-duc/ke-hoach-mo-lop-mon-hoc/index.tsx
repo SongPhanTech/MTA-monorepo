@@ -6,25 +6,17 @@ import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    SchoolYear,
-    Semester,
-    SubjectVersion,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useFindManySchoolYear,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import {
-    openSubjectClass,
-    useOpenSubjectClass,
-} from '@workspace/libs/api/training'
+import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, Input, Row, TreeSelect, message } from 'antd'
 import _ from 'lodash'
-import { CalendarPlus, Search } from 'lucide-react'
+import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

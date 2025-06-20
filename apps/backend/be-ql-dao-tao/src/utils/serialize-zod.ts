@@ -56,7 +56,6 @@ function getType(schema: ZodTypeAny): string {
     }
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function serializeZodSchema(schema: ZodObject<any>): SerializedField[] {
     const shape = schema.shape
     return Object.entries(shape).map(([key, value]) => {

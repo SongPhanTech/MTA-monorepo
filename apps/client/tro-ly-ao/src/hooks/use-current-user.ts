@@ -1,5 +1,5 @@
-import { useSession } from 'next-auth/react'
 import { useFindUniqueUser } from '@workspace/db/hooks'
+import { useSession } from 'next-auth/react'
 
 export const useCurrentUser = () => {
     const { data: session } = useSession()

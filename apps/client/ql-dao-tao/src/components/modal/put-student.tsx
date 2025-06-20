@@ -543,7 +543,6 @@ const PutStudentModal = () => {
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (studentData) {
             form.setFieldsValue({

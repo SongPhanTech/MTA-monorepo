@@ -46,9 +46,11 @@
     },
     "linter": {
         "rules": {
-            "a11y": {
-                "useKeyWithClickEvents": "off"
-            }
+            "recommended": true,
+            "correctness": { "noUnusedImports": "error" },
+            "complexity": { "noBannedTypes": "off", "noForEach": "off" },
+            "security": { "noDangerouslySetInnerHtml": "off" },
+            "suspicious": { "noExplicitAny": "off" }
         }
     }
 }

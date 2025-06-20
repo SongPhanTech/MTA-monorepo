@@ -2,11 +2,9 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-// import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { SubjectClass } from '@workspace/db'
 import {
-    useCreateManySubjectClass,
     useFindManyLecturer,
     useFindManyRoom,
     useFindManySemester,
@@ -16,7 +14,7 @@ import {
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { Col, DatePicker, Form, InputNumber, message } from 'antd'
-import dayjs, { type Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'

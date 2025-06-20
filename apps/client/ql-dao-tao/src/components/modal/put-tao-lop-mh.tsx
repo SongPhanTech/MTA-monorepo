@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-// import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type {
     Room,
@@ -16,7 +15,6 @@ import {
     useCreateManySubjectClass,
     useFindManyRoom,
     useFindManySchoolYear,
-    useFindManySubjectClass,
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
 } from '@workspace/db/hooks'
@@ -27,19 +25,17 @@ import {
     Empty,
     Flex,
     Form,
-    Input,
     InputNumber,
     Table,
     TreeSelect,
     message,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
-import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 dayjs.locale('vi')
 
 export type PutOpenSubjectClassType = {
@@ -285,7 +281,7 @@ const PutOpenSubjectClassModal = () => {
                     required
                 >
                     <Select
-                        disabled={selectedSemester?.id ? false : true}
+                        disabled={!selectedSemester?.id}
                         placeholder="Chọn môn học"
                         options={subjectVersionData.map((item) => {
                             return {

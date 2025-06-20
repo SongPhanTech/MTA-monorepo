@@ -1,7 +1,5 @@
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
-import type React from 'react'
 import { useRef } from 'react'
 import { PrinterOutlined } from '@ant-design/icons'
 import { useReactToPrint } from 'react-to-print'

@@ -303,7 +303,7 @@ export default function MajorInforList({ infor }: any) {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return record?.status === 'IN_ACTIVE' ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">

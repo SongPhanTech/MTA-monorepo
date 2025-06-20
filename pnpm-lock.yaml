@@ -255,6 +255,9 @@ catalogs:
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
+    xlsx:
+      specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      version: 0.20.3
     zenstack:
       specifier: ^2.15.1
       version: 2.15.1
@@ -1503,6 +1506,12 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../database
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.13
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
     devDependencies:
       '@types/node':
         specifier: 'catalog:'

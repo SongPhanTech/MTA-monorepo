@@ -30,9 +30,9 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
-import { useExamTypeOptions } from '@hooks/examType'
-import Tabs from '@components/commons/tabar'
 import DocumentPaths from '@components/commons/documentPaths'
+import Tabs from '@components/commons/tabar'
+import { useExamTypeOptions } from '@hooks/examType'
 dayjs.locale('vi')
 
 const PutVersionSubjectModal = () => {

@@ -1,4 +1,5 @@
 import ConfirmModal from './confirm-dialog'
+import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingMajorModal from './put-chuyen-nganh'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
@@ -27,8 +28,7 @@ import PutUserProfileStaffModal from './put-staff-modal'
 import PutStudentModal from './put-student'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
-import PutRoomModal from './put-phong'
-import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
+import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
@@ -66,5 +66,5 @@ export {
     PutBuildingModal,
     PutRoomModal,
     ModalPrintToKQHT,
-    PutOneSubjectClassModal
+    PutOneSubjectClassModal,
 }
