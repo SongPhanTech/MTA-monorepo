@@ -27,7 +27,8 @@ import PutUserProfileStaffModal from './put-staff-modal'
 import PutStudentModal from './put-student'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
-import PutUpdateProfileModal from './put-update-profile'
+import PutRoomModal from './put-phong'
+import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutUploadProfileModal from './put-upload-profile'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
@@ -64,5 +65,6 @@ export {
     PutTrainingLocationModal,
     PutBuildingModal,
     PutRoomModal,
-    PutOneSubjectClassModal,
+    ModalPrintToKQHT,
+    PutOneSubjectClassModal
 }
