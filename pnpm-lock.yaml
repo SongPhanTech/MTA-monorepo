@@ -444,6 +444,9 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.2.2
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
       '@workspace/biome-config':
         specifier: workspace:*
         version: link:../../../packages/biome-config

@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { SpanKind, context, trace } from '@opentelemetry/api'
+import { jwtAuth } from '@workspace/auth/hono'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -9,11 +10,9 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
-
 import FixedClassApp from './api/fixed-class'
 import SubjectClassApp from './api/subject-class'
 import UserProfileApp from './api/user-profile'
-import { setupAuth } from './middlewares/auth'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -45,13 +44,22 @@ app.use(
     })
 )
 
+const config = {
+    keycloak: {
+        url: process.env.KEYCLOAK_URL || 'http://localhost:8080',
+        realm: process.env.KEYCLOAK_REALM || 'swantech',
+        clientId: process.env.KEYCLOAK_CLIENT_ID || 'fe-test-local',
+    },
+}
+const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
+const jwksUri = `${issuer}/protocol/openid-connect/certs`
+const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
 
 setupOpenApi(app)
-
-setupAuth(app)
 
 app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
