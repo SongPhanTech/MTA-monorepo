@@ -7,6 +7,9 @@ const model: StoreModel = {
     imageViewer,
 }
 
-const store = createStore<StoreModel>(model)
+const store = createStore<StoreModel>(model, {
+    name: 'tro-ly-ao-store',
+    version: 1,
+})
 
 export default store

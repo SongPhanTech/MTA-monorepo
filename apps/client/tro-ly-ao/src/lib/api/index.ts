@@ -1,7 +1,7 @@
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import { getStorage, removeStorage, setStorage } from '@lib/storage'
 import { QueryClient } from '@tanstack/react-query'
-import { getSession } from 'next-auth/react'
+import { getSession } from '@workspace/auth/react'
 const queryClient = new QueryClient()
 
 const fetchInstance = async (url: string, options?: RequestInit) => {
@@ -9,7 +9,7 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
     if (!accessToken) {
         const data = await getSession()
         if (data) {
-            accessToken = data?.user.access_token
+            accessToken = data?.access_token
             setStorage('ACCESS_TOKEN', accessToken)
         }
     }

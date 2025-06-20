@@ -65,7 +65,7 @@ function App({ Component, pageProps }: AppProps) {
     if (!isClient) return null
 
     return (
-        <SessionProvider>
+        <SessionProvider session={pageProps.session}>
             <StoreProvider store={store}>
                 <LoadingBar
                     color={colors.common.green}
