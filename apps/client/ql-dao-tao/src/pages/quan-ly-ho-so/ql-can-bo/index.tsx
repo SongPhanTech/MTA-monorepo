@@ -303,7 +303,6 @@ export default function StaffManagement() {
                                     )
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
-                                style={{ height: 40 }}
                             />
                         </Col>
                         <Col span={10}>
@@ -315,11 +314,7 @@ export default function StaffManagement() {
 
                         <Col span={7}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                    style={{ height: 40 }}
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
 
@@ -332,7 +327,6 @@ export default function StaffManagement() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<DownloadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -346,7 +340,6 @@ export default function StaffManagement() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<UploadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>

@@ -208,6 +208,7 @@ const FilterLecture = (props: Props) => {
             <Input
                 placeholder="Tìm kiếm theo tên giảng viên..."
                 style={{ width: 300, marginRight: 8 }}
+                className="py-0"
                 prefix={
                     <Search
                         size={15}

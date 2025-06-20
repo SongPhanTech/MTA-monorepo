@@ -158,9 +158,7 @@ function YearAndSemester() {
                                             debouncedSearchText(e.target.value)
                                         }
                                         placeholder="Nhập tên kỳ học..."
-                                        style={{
-                                            height: 40,
-                                        }}
+                                        className="py-0"
                                         prefix={
                                             <Search
                                                 size={15}
@@ -185,9 +183,6 @@ function YearAndSemester() {
                                                 }
                                             }
                                         )}
-                                        style={{
-                                            height: 40,
-                                        }}
                                         onChange={(val) =>
                                             handleFilterChange(
                                                 'schoolYearId',
@@ -206,7 +201,7 @@ function YearAndSemester() {
                         <Flex justify="end" gap={10}>
                             <Button
                                 onClick={handleModal}
-                                className="border-primary text-primary h-[40px]"
+                                className="border-primary text-primary"
                             >
                                 <PlusOutlined />
                                 Thêm mới năm học
@@ -214,7 +209,6 @@ function YearAndSemester() {
                             <Button
                                 onClick={handleModalSemester}
                                 type="primary"
-                                className="h-[40px]"
                             >
                                 <PlusOutlined />
                                 Thêm mới kỳ học

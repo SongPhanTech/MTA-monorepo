@@ -363,7 +363,6 @@ export default function UserProfilePageLecture() {
                                     )
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
-                                style={{ height: 40 }}
                             />
                         </Col>
                         <Col span={10}>
@@ -378,7 +377,6 @@ export default function UserProfilePageLecture() {
                                 <Button
                                     // onClick={handleModal}
                                     type="primary"
-                                    style={{ height: 40 }}
                                 >
                                     Thêm mới
                                 </Button>
@@ -392,7 +390,6 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<DownloadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -406,7 +403,6 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<UploadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>
