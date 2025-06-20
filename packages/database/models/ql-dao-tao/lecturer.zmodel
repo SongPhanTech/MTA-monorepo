@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
@@ -16,7 +17,7 @@ model Lecturer extends Base {
   userProfile         UserProfile    @relation(fields: [userProfileId], references: [id])
   userProfileId       String         @unique
 
-  organization        Organization   @relation(fields: [organizationId], references: [id])
+  organization        DM_DonVi       @relation(fields: [organizationId], references: [Id])
   organizationId      String
 
   lecturerType        LecturerType   @relation(fields: [lecturerTypeId], references: [id])
@@ -40,13 +41,13 @@ model LecturerHistory extends Base {
   lectureCode    String?
   serviceDate    DateTime? // ngày vào ngành
 
-  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId  String        @unique
+  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId  String       @unique
 
-  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
   organizationId String?
 
-  lecturerType   LecturerType  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId String
 
   @@schema("ql-dao-tao")

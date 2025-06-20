@@ -1,0 +1,301 @@
+import '../ql-dao-tao/plan-training'
+import '../ql-nguoi-dung/profile'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/lecturer'
+import '../ql-dao-tao/staff'
+import '../ql-dao-tao/student'
+
+abstract model CoreBase {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  @@schema("ql-danh-muc")
+}
+
+model DM_CapBac extends CoreBase {
+  profiles UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_ChucDanh extends CoreBase {
+  iLoaiChucDanh    Int?               @default(0)
+  DM_ViTriCongViec DM_ViTriCongViec[]
+  userProfile      UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_ChucVu extends CoreBase {
+  userProfile UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_HocHam extends CoreBase {
+  profiles UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_HocVi extends CoreBase {
+  profiles UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_ChungChiTinHoc extends CoreBase {
+  @@schema("ql-danh-muc")
+}
+
+model DM_DanToc extends CoreBase {
+  sTenKhac     String?
+  sDiaChiCuTru String?
+
+  userProfile  UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_DonVi extends CoreBase {
+  sCode            String?
+  sTenVietTat      String?
+  sParentId        String?
+  sTruongDonVi     String?
+  sChucNangNhiemVu String?
+  sDiaChi          String?
+  DM_NhanVien      DM_NhanVien[]
+
+  parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
+  children         DM_DonVi[]        @relation("DM_DonVi_Parent")
+
+  lecturers        Lecturer[]
+  lecturerHistory  LecturerHistory[]
+  staffs           Staff[]
+  staffHistory     StaffHistory[]
+
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
+  subjectVersions  SubjectVersion[]
+  subjects         Subject[]
+  trainingFields   TrainingField[]
+  trainingMajors   TrainingMajor[]
+  @@index([sParentId], map: "IX_DM_DonVi_iParentId")
+  @@index([sMa], map: "IX_DM_DonVi_sMa")
+  @@schema("ql-danh-muc")
+}
+
+model DM_DonViHanhChinh extends CoreBase {
+  sTen_En  String?
+
+  tinh     DM_Tinh[]
+  huyen    DM_QuanHuyen[]
+  xaPhuong DM_XaPhuong[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_KhuVuc_DiaLy extends CoreBase {
+  sTen_En String?
+
+  tinh    DM_Tinh[]
+  student Student[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_NgoaiNgu extends CoreBase {
+  @@schema("ql-danh-muc")
+}
+
+model DM_TonGiao extends CoreBase {
+  userProfile UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_TrinhDoNgoaiNgu extends CoreBase {
+  sKhung String?
+  @@schema("ql-danh-muc")
+}
+
+model DM_TrinhDoTinHoc extends CoreBase {
+  @@schema("ql-danh-muc")
+}
+
+model DM_UngDung extends CoreBase {
+  sMoTa            String?
+  sLogoUrl         String?
+  sUrl             String?
+  bTatCaNguoiDung  Boolean? @default(false)
+  bTatCaNhanVien   Boolean? @default(false)
+  sClientId        String?
+  sClientSecret    String?
+  sRedirectDefault String?
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhanVien extends CoreBase {
+  sHoVaDem            String?
+  sTenDayDu           String?
+  dNgaySinh           DateTime?
+  iGioiTinh           Int?
+  sDiaChi             String?
+  sSDTDiDong          String?
+  sEmail              String?
+  bLaNguoiDung        Boolean?
+  DM_DonVi            DM_DonVi?            @relation(fields: [sDM_DonViId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_DonVi")
+  sDM_DonViId         String?
+  DM_ViTriCongViec    DM_ViTriCongViec?    @relation(fields: [sDM_ViTriCongViecId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_ViTriCongViec")
+  sDM_ViTriCongViecId String?
+  sQuanlyTrucTiepId   String?
+  sAvatarId           String?
+
+  taiKhoan            TaiKhoan?
+  NguoiDungTrongNhom  NguoiDungTrongNhom[]
+  Quyen_VaiTro        Quyen_VaiTro[]
+  nhatKyHoatDong      NhatKyHoatDong[]
+
+  @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
+  @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
+  @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
+  @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhomNguoiDung extends CoreBase {
+  vaiTroTrongNhom    VaiTroTrongNhom[]
+  nguoiDungTrongNhom NguoiDungTrongNhom[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhomUngDung extends CoreBase {
+  sMoTa String?
+  @@schema("ql-danh-muc")
+}
+
+model DM_QuocGia extends CoreBase {
+  sLanguage   String?
+
+  userProfile UserProfile[]
+  tinh        DM_Tinh[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_Tinh extends CoreBase {
+  quocGia              DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
+  sDM_QuocGiaId        String?
+  dM_KhuVuc_DiaLy      DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
+  iDM_KhuVucDiaLy_Id   String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+
+  huyen                DM_QuanHuyen[]
+  xaPhuong             DM_XaPhuong[]
+  userProfile          UserProfile[]
+
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@schema("ql-danh-muc")
+}
+
+model DM_QuanHuyen extends CoreBase {
+  dM_Tinh              DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
+  sDM_TinhId           String?
+  sDM_Tinh_Ma          String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+
+  xaPhuong             DM_XaPhuong[]
+  userProfile          UserProfile[]
+  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
+  @@schema("ql-danh-muc")
+}
+
+model DM_XaPhuong extends CoreBase {
+  sDM_TinhId           String?
+  quanHuyen            DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
+  sDM_QuanHuyenId      String?
+  sDM_QuanHuyen_Ma     String?
+  dM_Tinh              DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId            String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+
+  userProfile          UserProfile[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_VaiTro extends CoreBase {
+  Quyen_VaiTro    Quyen_VaiTro[]
+  VaiTroTrongNhom VaiTroTrongNhom[]
+  @@schema("ql-danh-muc")
+}
+
+model DM_ViTriCongViec extends CoreBase {
+  sDM_ChucDanhId  String?
+  sDM_NhomViTriId String
+  DM_NhanVien     DM_NhanVien[]
+  DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
+  @@schema("ql-danh-muc")
+}
+
+model NguoiDungTrongNhom extends CoreBase {
+  DM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhomNguoiDung")
+  sDM_NhomNguoiDungId String?
+  DM_NhanVien         DM_NhanVien?      @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhanVien")
+  sDM_NhanVienId      String?
+
+  @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
+  @@schema("ql-danh-muc")
+}
+
+model NhatKyHoatDong extends CoreBase {
+  DM_NhanVien    DM_NhanVien? @relation(fields: [sNhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
+  sNhanVienId    String?
+  dLogTime       DateTime?
+  iState         Int?
+  sObjectName    String?
+  sReferenceName String?
+  sDescription   String?
+  sIPAddress     String?
+  @@schema("ql-danh-muc")
+}
+
+model Policy extends CoreBase {
+  bXacThuc2YeuTo Boolean? @default(false)
+  bGioiHanTCIP   Boolean? @default(false)
+  bGioiHanTG     Boolean? @default(false)
+  iApDungChoUD   Int?     @default(0)
+  @@schema("ql-danh-muc")
+}
+
+model Quyen_VaiTro extends CoreBase {
+  sTenChucNang   String?      @default("N'Tên quyền'")
+  sDM_NhanVienId String?
+  sDM_VaiTroId   String?
+  fValue         Int?
+  DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
+  DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
+  @@schema("ql-danh-muc")
+}
+
+model TaiKhoan extends CoreBase {
+  sUserName      String?
+  sAvatar        String?
+  sDM_NhanVienId String?      @unique // TODO: maybe remove unique constraint
+
+  nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
+  @@schema("ql-danh-muc")
+}
+
+model VaiTroTrongNhom extends CoreBase {
+  dM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id])
+  sDM_NhomNguoiDungId String?
+  DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
+  sDM_VaiTroId        String?
+  @@schema("ql-danh-muc")
+}

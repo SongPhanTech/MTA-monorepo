@@ -1,225 +1,33 @@
 import { $Enums, PrismaClient } from '@prisma/client'
-import { scoreConversions } from './score-convert'
+import { scoreConversions } from './archived/score-convert'
 
 const prisma = new PrismaClient()
 
 async function main() {
-    // Seed OrganizationType
-    await prisma.organizationType.createMany({
-        skipDuplicates: true,
-        data: [
-            {
-                id: '550e8400-e29b-41d4-a716-446655440000',
-                name: 'Khoa',
-                code: 'K',
-                description: 'Khoa',
-                createdAt: new Date('2025-04-03T12:58:40.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440001',
-                name: 'Bộ môn',
-                code: 'BM',
-                description: 'Bộ môn',
-                createdAt: new Date('2025-04-03T12:58:41.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440002',
-                name: 'Phòng',
-                code: 'P',
-                description: 'Phòng',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440003',
-                name: 'Trung tâm',
-                code: 'TT',
-                description: 'Trung tâm',
-                createdAt: new Date('2025-04-03T12:58:43.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:43.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440004',
-                name: 'Viện',
-                code: 'V',
-                description: 'Viện',
-                createdAt: new Date('2025-04-03T12:58:44.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:44.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440005',
-                name: 'Trường',
-                code: 'T',
-                description: 'Trường',
-                createdAt: new Date('2025-04-03T12:58:45.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:45.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440006',
-                name: 'Đơn vị khác',
-                code: 'DVK',
-                description: 'Đơn vị khác',
-                createdAt: new Date('2025-04-03T12:58:46.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:46.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440007',
-                name: 'Tổ chức khác',
-                code: 'TOK',
-                description: 'Tổ chức khác',
-                createdAt: new Date('2025-04-03T12:58:47.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:47.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440008',
-                name: 'Hệ',
-                code: 'H',
-                description: 'Hệ',
-                createdAt: new Date('2025-04-03T12:58:48.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:48.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440009',
-                name: 'Tiểu đoàn',
-                code: 'd',
-                description: 'Tiểu đoàn',
-                createdAt: new Date('2025-04-03T12:58:49.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:49.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440010',
-                name: 'Đại đội',
-                code: 'C',
-                description: 'Đại đội',
-                createdAt: new Date('2025-04-03T12:58:50.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:50.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440011',
-                name: 'Ban',
-                code: 'B',
-                description: 'Ban',
-                createdAt: new Date('2025-04-03T12:58:51.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:51.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440012',
-                name: 'Lớp',
-                code: 'L',
-                description: 'Lớp',
-                createdAt: new Date('2025-04-03T12:58:52.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:52.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440013',
-                name: 'Đội',
-                code: 'D',
-                description: 'Đội',
-                createdAt: new Date('2025-04-03T12:58:53.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:53.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440015',
-                name: 'Trung đội',
-                code: 'TD',
-                description: 'Trung đội',
-                createdAt: new Date('2025-04-03T12:58:54.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:54.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440016',
-                name: 'Chi đoàn',
-                code: 'CD',
-                description: 'Chi đoàn',
-                createdAt: new Date('2025-04-03T12:58:55.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:55.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440017',
-                name: 'Chi hội',
-                code: 'CH',
-                description: 'Chi hội',
-                createdAt: new Date('2025-04-03T12:58:56.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:56.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440018',
-                name: 'Chi bộ',
-                code: 'CB',
-                description: 'Chi bộ',
-                createdAt: new Date('2025-04-03T12:58:57.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:57.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440019',
-                name: 'Đoàn thể khác',
-                code: 'ĐTK',
-                description: 'Đoàn thể khác',
-                createdAt: new Date('2025-04-03T12:58:58.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:58.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440020',
-                name: 'Đoàn',
-                code: 'Đ',
-                description: 'Đoàn',
-                createdAt: new Date('2025-04-03T12:58:59.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:59.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440021',
-                name: 'Đoàn thanh niên',
-                code: 'ĐTN',
-                description: 'Đoàn thanh niên',
-                createdAt: new Date('2025-04-03T12:59:00.507Z'),
-                updatedAt: new Date('2025-04-03T12:59:00.507Z'),
-            },
-            {
-                id: '550e8400-e29b-41d4-a716-446655440022',
-                name: 'Hội sinh viên',
-                code: 'HSV',
-                description: 'Hội sinh viên',
-                createdAt: new Date('2025-04-03T12:59:01.507Z'),
-                updatedAt: new Date('2025-04-03T12:59:01.507Z'),
-            },
-        ],
-    })
-
     // Seed Organization
-    await prisma.organization.createMany({
+    await prisma.dM_DonVi.createMany({
         skipDuplicates: true,
         data: [
             {
-                id: '550e8400-1234-41d4-a716-446655440000',
-                name: 'Học viện Kỹ thuật Quân sự',
-                code: 'MTA',
-                description: 'Học viện Kỹ thuật Quân sự',
-                typeId: '550e8400-e29b-41d4-a716-446655440005',
-                parentId: null,
-                createdAt: new Date('2025-04-03T12:58:40.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e8400-1234-41d4-a716-446655440000',
+                sTen: 'Học viện Kỹ thuật Quân sự',
+                sMa: 'MTA',
+                sGhiChu: 'Học viện Kỹ thuật Quân sự',
+                sParentId: null,
             },
             {
-                id: '550e8400-1234-41d4-a716-446655440001',
-                name: 'Khoa Công nghệ thông tin',
-                code: 'K31',
-                description: 'Khoa Công nghệ thông tin',
-                typeId: '550e8400-e29b-41d4-a716-446655440000',
-                parentId: '550e8400-1234-41d4-a716-446655440000',
-                createdAt: new Date('2025-04-03T12:58:41.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
+                Id: '550e8400-1234-41d4-a716-446655440001',
+                sTen: 'Khoa Công nghệ thông tin',
+                sMa: 'K31',
+                sGhiChu: 'Khoa Công nghệ thông tin',
+                sParentId: '550e8400-1234-41d4-a716-446655440000',
             },
             {
-                id: '550e8400-1234-41d4-a716-446655440002',
-                name: 'Khoa Vũ Khí',
-                code: 'K1',
-                description: 'Khoa Vũ Khí',
-                typeId: '550e8400-e29b-41d4-a716-446655440000',
-                parentId: '550e8400-1234-41d4-a716-446655440000',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
+                Id: '550e8400-1234-41d4-a716-446655440002',
+                sTen: 'Khoa Vũ Khí',
+                sMa: 'K1',
+                sGhiChu: 'Khoa Vũ Khí',
+                sParentId: '550e8400-1234-41d4-a716-446655440000',
             },
         ],
     })
@@ -690,148 +498,114 @@ async function main() {
     })
 
     // Seed RegistrationArea
-    await prisma.registrationArea.createMany({
+    await prisma.dM_KhuVuc_DiaLy.createMany({
         skipDuplicates: true,
         data: [
             {
-                id: '550e840a-e29b-41d4-a716-446655440000',
-                name: 'Khu vực 1',
-                code: 'KV1',
-                createdAt: new Date('2025-04-03T12:58:47.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840a-e29b-41d4-a716-446655440000',
+                sTen: 'Khu vực 1',
+                sMa: 'KV1',
             },
             {
-                id: '550e840a-e29b-41d4-a716-446655440001',
-                name: 'Khu vực 2',
-                code: 'KV2',
-                createdAt: new Date('2025-04-03T12:58:48.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840a-e29b-41d4-a716-446655440001',
+                sTen: 'Khu vực 2',
+                sMa: 'KV2',
             },
             {
-                id: '550e840a-e29b-41d4-a716-446655440002',
-                name: 'Khu vực 3',
-                code: 'KV3',
-                createdAt: new Date('2025-04-03T12:58:49.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840a-e29b-41d4-a716-446655440002',
+                sTen: 'Khu vực 3',
+                sMa: 'KV3',
             },
         ],
     })
 
     // Seed Nationality
-    await prisma.nationality.createMany({
+    await prisma.dM_QuocGia.createMany({
         skipDuplicates: true,
         data: [
             {
-                id: '550e840b-e29b-41d4-a716-446655440000',
-                name: 'Việt Nam',
-                code: 'VN',
-                createdAt: new Date('2025-04-03T12:58:50.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840b-e29b-41d4-a716-446655440000',
+                sTen: 'Việt Nam',
+                sMa: 'VN',
             },
             {
-                id: '550e840b-e29b-41d4-a716-446655440001',
-                name: 'Lào',
-                code: 'LAO',
-                createdAt: new Date('2025-04-03T12:58:51.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840b-e29b-41d4-a716-446655440001',
+                sTen: 'Lào',
+                sMa: 'LAO',
             },
             {
-                id: '550e840b-e29b-41d4-a716-446655440002',
-                name: 'Campuchia',
-                code: 'CAM',
-                createdAt: new Date('2025-04-03T12:58:52.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840b-e29b-41d4-a716-446655440002',
+                sTen: 'Campuchia',
+                sMa: 'CAM',
             },
             {
-                id: '550e840b-e29b-41d4-a716-446655440003',
-                name: 'Khác',
-                code: 'Khac',
-                createdAt: new Date('2025-04-03T12:58:53.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840b-e29b-41d4-a716-446655440003',
+                sTen: 'Khác',
+                sMa: 'Khac',
             },
         ],
     })
 
     // Seed Religion
-    await prisma.religion.createMany({
+    await prisma.dM_TonGiao.createMany({
         skipDuplicates: true,
         data: [
             {
-                id: '550e840c-e29b-41d4-a716-446655440000',
-                name: 'Phật giáo',
-                code: 'PG',
-                createdAt: new Date('2025-04-03T12:58:54.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840c-e29b-41d4-a716-446655440000',
+                sTen: 'Phật giáo',
+                sMa: 'PG',
             },
             {
-                id: '550e840c-e29b-41d4-a716-446655440001',
-                name: 'Thiên chúa giáo',
-                code: 'TCC',
-                createdAt: new Date('2025-04-03T12:58:55.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840c-e29b-41d4-a716-446655440001',
+                sTen: 'Thiên chúa giáo',
+                sMa: 'TCC',
             },
             {
-                id: '550e840c-e29b-41d4-a716-446655440002',
-                name: 'Hồi giáo',
-                code: 'HG',
-                createdAt: new Date('2025-04-03T12:58:56.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840c-e29b-41d4-a716-446655440002',
+                sTen: 'Hồi giáo',
+                sMa: 'HG',
             },
         ],
     })
 
     // Seed Ethnicity
-    await prisma.ethnicity.createMany({
+    await prisma.dM_DanToc.createMany({
         skipDuplicates: true,
         data: [
             {
-                id: '550e840d-e29b-41d4-a716-446655440000',
-                name: 'Kinh',
-                code: 'K',
-                createdAt: new Date('2025-04-03T12:58:57.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440000',
+                sTen: 'Kinh',
+                sMa: 'K',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440001',
-                name: 'Thái',
-                code: 'T',
-                createdAt: new Date('2025-04-03T12:58:58.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440001',
+                sTen: 'Thái',
+                sMa: 'T',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440002',
-                name: 'Khmer',
-                code: 'KHM',
-                createdAt: new Date('2025-04-03T12:58:59.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440002',
+                sTen: 'Khmer',
+                sMa: 'KHM',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440003',
-                name: 'Mường',
-                code: 'M',
-                createdAt: new Date('2025-04-03T12:59:00.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440003',
+                sTen: 'Mường',
+                sMa: 'M',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440004',
-                name: 'Tày',
-                code: 'TAY',
-                createdAt: new Date('2025-04-03T12:59:01.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440004',
+                sTen: 'Tày',
+                sMa: 'TAY',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440005',
-                name: 'Thổ',
-                code: 'THO',
-                createdAt: new Date('2025-04-03T12:59:02.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440005',
+                sTen: 'Thổ',
+                sMa: 'THO',
             },
             {
-                id: '550e840d-e29b-41d4-a716-446655440006',
-                name: 'Khác',
-                code: 'Khac',
-                createdAt: new Date('2025-04-03T12:59:03.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                Id: '550e840d-e29b-41d4-a716-446655440006',
+                sTen: 'Khác',
+                sMa: 'Khac',
             },
         ],
     })
@@ -892,10 +666,10 @@ async function main() {
         ],
     })
 
-    const organization = await prisma.organization.create({
+    const organization = await prisma.dM_DonVi.create({
         data: {
-            name: 'Khoa CNTT',
-            type: { create: { name: 'Khoa' } },
+            sTen: 'Khoa CNTT',
+            // type: { create: { name: 'Khoa' } },
         },
     })
 
@@ -911,28 +685,25 @@ async function main() {
                 'Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.',
             description:
                 'Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.',
-            managementOrganization: { connect: { id: organization.id } },
+            managementOrganization: { connect: { Id: organization.Id } },
 
             trainingMajor: {
-                connectOrCreate: {
-                    where: { code: 'CNTT' },
-                    create: {
-                        name: 'Công nghệ thông tin',
-                        code: 'CNTT',
-                        englishName: 'Information Technology',
-                        description:
-                            'Chuyên ngành Công nghệ thông tin tập trung vào phát triển phần mềm và quản trị hệ thống.',
-                        summary:
-                            'Chuyên ngành Công nghệ thông tin cung cấp kiến thức về lập trình, cơ sở dữ liệu, và mạng máy tính.',
-                        organization: { connect: { id: organization.id } },
-                        trainingField: {
-                            create: {
-                                name: 'Công nghệ thông tin',
-                                englishName: 'Information Technology',
-                                publishDate: new Date(),
-                                organization: {
-                                    connect: { id: organization.id },
-                                },
+                create: {
+                    name: 'Công nghệ thông tin',
+                    code: 'CNTT',
+                    englishName: 'Information Technology',
+                    description:
+                        'Chuyên ngành Công nghệ thông tin tập trung vào phát triển phần mềm và quản trị hệ thống.',
+                    summary:
+                        'Chuyên ngành Công nghệ thông tin cung cấp kiến thức về lập trình, cơ sở dữ liệu, và mạng máy tính.',
+                    organization: { connect: { Id: organization.Id } },
+                    trainingField: {
+                        create: {
+                            name: 'Công nghệ thông tin',
+                            englishName: 'Information Technology',
+                            publishDate: new Date(),
+                            organization: {
+                                connect: { Id: organization.Id },
                             },
                         },
                     },

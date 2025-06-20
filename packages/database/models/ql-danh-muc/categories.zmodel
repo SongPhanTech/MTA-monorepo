@@ -2,34 +2,34 @@ import '../base'
 import '../ql-nguoi-dung/profile'
 import '../ql-dao-tao/student'
 
-/// khu vực đăng ký (Bắc, Trung, Nam)
-model RegistrationArea extends Base {
-  name    String
+// /// khu vực đăng ký (Bắc, Trung, Nam)
+// model RegistrationArea extends Base {
+//   name    String
 
-  student Student[]
-  @@schema("ql-danh-muc")
-}
+//   student Student[]
+//   @@schema("ql-danh-muc")
+// }
 
-/// quốc tịch
-model Nationality extends Base {
-  name        String
-  userProfile UserProfile[]
-  @@schema("ql-danh-muc")
-}
+// /// quốc tịch
+// model Nationality extends Base {
+//   name        String
+//   userProfile UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
-/// tôn giáo
-model Religion extends Base {
-  name        String
-  userProfile UserProfile[]
-  @@schema("ql-danh-muc")
-}
+// /// tôn giáo
+// model Religion extends Base {
+//   name        String
+//   userProfile UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
-/// dân tộc
-model Ethnicity extends Base {
-  name        String
-  userProfile UserProfile[]
-  @@schema("ql-danh-muc")
-}
+// /// dân tộc
+// model Ethnicity extends Base {
+//   name        String
+//   userProfile UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
 enum Gender {
   Male
