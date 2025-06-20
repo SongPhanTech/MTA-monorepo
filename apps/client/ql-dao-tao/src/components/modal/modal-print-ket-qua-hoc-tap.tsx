@@ -1,7 +1,10 @@
+import { PrinterOutlined } from '@ant-design/icons'
+import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
+import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
-import { PrinterOutlined } from '@ant-design/icons'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 
 dayjs.locale('vi')
@@ -119,72 +122,176 @@ const mockScoreData = [
     },
 ]
 
-interface ModalPrintToKQHTProps {
-    isPrintModalOpen: boolean
-    setIsPrintModalOpen: (open: boolean) => void
+type ModalPrintToKQHTInput = {
+    dataTable: any
+    dataStudent: any
 }
 
-export default function ModalPrintToKQHT({
-    isPrintModalOpen,
-    setIsPrintModalOpen,
-}: ModalPrintToKQHTProps) {
+const ModalPrintToKQHT = () => {
+    const formattedDate = `..., ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
+
+    const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
+        tag: ModalPrintToKQHT.name,
+    })
+
+    console.log(input?.dataStudent)
+
+    const { data: subjectScoreData } = useFindUniqueCurriculumVersion({
+        where: {
+            id: input?.dataStudent?.curriculumVersionId,
+        },
+
+        include: {
+            trainingBlocks: {
+                include: {
+                    subjects: {
+                        include: {
+                            subject: {
+                                include: {
+                                    subjectClass: {
+                                        where: {
+                                            subjectClassStudent: {
+                                                every: {
+                                                    studentId:
+                                                        input?.dataStudent?.id,
+                                                },
+                                            },
+                                        },
+                                        include: {
+                                            subjectClassStudent: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    console.log(subjectScoreData)
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
+        pageStyle: `
+        @page {
+            size: A4;
+        }
+        @media print {
+            @page { margin: 1 1 1 1 !important; }
+            body, html, #root {
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .page {
+                page-break-after: auto !important;
+                break-after: auto !important;
+                min-height: 297mm;
+                width: 210mm;
+                padding: 15mm;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+            }
+        }
+      `,
     })
+
+    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
 
     const basicInfoCol1 = [
         {
             title: 'Họ và tên:',
-            value: <span className="font-medium">Trần Hữu Đức</span>,
+            value: (
+                <span className="font-medium">
+                    {input?.dataStudent?.userProfile?.lastName}{' '}
+                    {input?.dataStudent?.userProfile?.firstName}
+                </span>
+            ),
         },
         {
             title: 'Mã sinh viên:',
-            value: <span>18150064</span>,
+            value: <span>{input?.dataStudent?.code}</span>,
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: <span>Tiếng việt</span>,
+            value: (
+                <span>
+                    {getTrainingLanguageLabel(
+                        input?.dataStudent?.curriculumVersion?.trainingLanguage
+                    )}
+                </span>
+            ),
         },
         {
             title: 'Ngành đào tạo:',
-            value: '',
+            value: (
+                <span>
+                    {
+                        input?.dataStudent?.curriculumVersion?.curriculum
+                            ?.trainingMajor?.trainingField?.name
+                    }
+                </span>
+            ),
         },
         {
             title: 'Chuyên ngành:',
-            value: <span>Công nghệ dữ liệu</span>,
+            value: (
+                <span>
+                    {
+                        input?.dataStudent?.curriculumVersion?.curriculum
+                            ?.trainingMajor?.name
+                    }
+                </span>
+            ),
         },
     ]
 
     const basicInfoCol2 = [
         {
             title: 'Ngày sinh:',
-            value: <span>11/11/2025</span>,
+            value: (
+                <span>
+                    {dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format(
+                        'DD/MM/YYYY'
+                    )}
+                </span>
+            ),
         },
         {
-            title: 'Ngày nhập học:',
-            value: <span>11/12/2025</span>,
+            title: 'Năm nhập học:',
+            value: <span>{input?.dataStudent?.fixedClass?.startYear}</span>,
         },
         {
             title: 'Thời gian đào tạo:',
-            value: <span>5 năm</span>,
+            value: (
+                <span>{input?.dataStudent?.curriculumVersion?.time} năm</span>
+            ),
         },
         {
             title: 'Trình độ đào tạo:',
-            value: <span>Đại học</span>,
+            value: (
+                <span>
+                    {input?.dataStudent?.curriculumVersion?.trainingLevel?.name}
+                </span>
+            ),
         },
 
         {
             title: 'Hình thức đào tạo:',
-            value: <span>Chính quy</span>,
+            value: <span>{input?.dataStudent?.trainingForm?.name}</span>,
         },
     ]
 
     return (
         <Modal
-            open={isPrintModalOpen}
-            onCancel={() => setIsPrintModalOpen(false)}
+            open={isOpen}
+            onCancel={onClose}
             footer={null}
             width={900}
             style={{ top: 20 }}
@@ -229,8 +336,8 @@ export default function ModalPrintToKQHT({
                         (Kèm theo bằng tốt nghiệp số hiệu ...)
                     </div>
                 </div>
-                <div className="flex justify-between flex-col gap-5 md:flex-row mt-6">
-                    <div className="flex flex-col gap-2.5 w-full lg:w-[50%]">
+                <div className="flex justify-between gap-5 mt-6">
+                    <div className="flex flex-col gap-2.5 w-[50%]">
                         {basicInfoCol1?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
@@ -245,7 +352,7 @@ export default function ModalPrintToKQHT({
                             </div>
                         ))}
                     </div>
-                    <div className="flex flex-col gap-2.5 w-full lg:w-[50%]">
+                    <div className="flex flex-col gap-2.5 w-[50%]">
                         {basicInfoCol2?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
@@ -369,7 +476,7 @@ export default function ModalPrintToKQHT({
                     <div className="flex flex-col max-w-[70%]">
                         <div className="flex">
                             <div className="italic min-w-32">
-                                Tổng số tín chỉ:{' '}
+                                Tổng số tín chỉ:
                             </div>
                             <span className="font-bold">153</span>
                         </div>
@@ -381,17 +488,15 @@ export default function ModalPrintToKQHT({
                             <span className="font-bold">3,03</span>
                         </div>
                         <div className="flex">
-                            <div className="min-w-32">Xếp hạng: </div>
+                            <div className="min-w-32">Xếp hạng:</div>
                             <span className="font-bold">Khá</span>
                         </div>
                     </div>
                     <div className="flex flex-col text-center mt-5">
-                        <span className="italic">
-                            Hà Nội, ngày 06 tháng 01 năm 2025
-                        </span>
+                        <span className="italic">{formattedDate}</span>
                         <div className="uppercase font-bold flex flex-col">
                             <span>TL. GIÁM ĐỐC</span>
-                            <span>Trường phòng đào tạo</span>
+                            <span>Trưởng phòng đào tạo</span>
                         </div>
                         <div className="min-h-40 flex items-end justify-center">
                             <span>Đại tá, TS Nguyễn Trọng Lưu</span>
@@ -407,95 +512,187 @@ export default function ModalPrintToKQHT({
                     </p>
                     <p>- Hệ thống điểm được quy định theo:</p>
 
-                    <div className="mt-2 ml-6 text-sm">
-                        <div className="grid grid-cols-[160px_repeat(9,minmax(40px,1fr))] gap-x-4 font-medium">
-                            <div>Thang điểm chữ</div>
-                            <div>A+</div>
-                            <div>A</div>
-                            <div>B+</div>
-                            <div>B</div>
-                            <div>C+</div>
-                            <div>C</div>
-                            <div>D+</div>
-                            <div>D</div>
-                            <div>F</div>
+                    <div className="mt-2 text-sm">
+                        {/* Sắp xếp dữ liệu theo thứ tự từ cao xuống thấp */}
+                        {(() => {
+                            const sortedData = [
+                                ...(input?.dataTable?.[0]
+                                    ?.trainingCoursesStart?.[0]
+                                    ?.scoreConverts ?? []),
+                            ].sort((a, b) => b.base4 - a.base4)
 
-                            <div className="mt-2">Thang điểm 4</div>
-                            <div>4.0</div>
-                            <div>4.0</div>
-                            <div>3.5</div>
-                            <div>3.0</div>
-                            <div>2.5</div>
-                            <div>2.0</div>
-                            <div>1.5</div>
-                            <div>1.0</div>
-                            <div>0.0</div>
+                            return (
+                                <>
+                                    {/* Dòng Thang điểm chữ */}
+                                    <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 mb-2 items-center">
+                                        <div className="font-medium">
+                                            Thang điểm chữ
+                                        </div>
+                                        {sortedData.map((item) => (
+                                            <div
+                                                key={item.id}
+                                                className="text-center"
+                                            >
+                                                {item.letter}
+                                            </div>
+                                        ))}
+                                    </div>
 
-                            <div className="mt-2">Thang điểm 10</div>
-                            <div>9.0 – 10</div>
-                            <div>8.5 – 8.9</div>
-                            <div>8.0 – 8.4</div>
-                            <div>7.0 – 7.9</div>
-                            <div>6.5 – 6.9</div>
-                            <div>5.5 – 6.4</div>
-                            <div>5.0 – 5.4</div>
-                            <div>4.0 – 4.9</div>
-                            <div>&lt; 4.0</div>
-                        </div>
+                                    {/* Dòng Thang điểm 4 */}
+                                    <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 mb-2 items-center">
+                                        <div className="font-medium">
+                                            Thang điểm 4
+                                        </div>
+                                        {sortedData.map((item) => (
+                                            <div
+                                                key={item.id}
+                                                className="text-center"
+                                            >
+                                                {item.base4}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Dòng Thang điểm 10 */}
+                                    <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 items-center">
+                                        <div className="font-medium">
+                                            Thang điểm 10
+                                        </div>
+                                        {sortedData.map((item) => (
+                                            <div
+                                                key={item.id}
+                                                className="text-center"
+                                            >
+                                                {item.base10Min === 0
+                                                    ? `<${item.base10Max + 0.1}`
+                                                    : `${item.base10Min}${item.base10Max ? `-${item.base10Max}` : ''}`}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )
+                        })()}
                     </div>
 
-                    <p className="mt-4">
-                        - Phân loại tốt nghiệp theo thang điểm 4:
+                    <p className="mt-2">
+                        - Phân loại tốt nghiệp theo thang điểm 4: {(() => {
+                            const uniqueClassifications = new Set()
+
+                            return input?.dataTable?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
+                                ?.filter((item: any) => {
+                                    // Chỉ lấy từ Xuất sắc tới TB
+                                    const validClassifications = [
+                                        'Xuất sắc',
+                                        'Giỏi',
+                                        'Khá',
+                                        'TBK',
+                                        'TB',
+                                    ]
+                                    const isValid =
+                                        validClassifications.includes(
+                                            item.classification
+                                        )
+
+                                    // Loại bỏ trùng lặp
+                                    if (
+                                        isValid &&
+                                        !uniqueClassifications.has(
+                                            item.classification
+                                        )
+                                    ) {
+                                        uniqueClassifications.add(
+                                            item.classification
+                                        )
+                                        return true
+                                    }
+                                    return false
+                                })
+                                ?.sort((a: any, b: any) => b.base4 - a.base4)
+                                ?.map((item: any, index: any, array: any) => {
+                                    // Xác định tên hiển thị và khoảng điểm hệ 4
+                                    let displayName = item.classification
+                                    let range = ''
+
+                                    // Đổi tên hiển thị
+                                    if (item.classification === 'TBK')
+                                        displayName = 'Trung bình khá'
+                                    if (item.classification === 'TB')
+                                        displayName = 'Trung bình'
+
+                                    // Xác định khoảng điểm
+                                    switch (item.classification) {
+                                        case 'Xuất sắc':
+                                            range = '3.60-4.00'
+                                            break
+                                        case 'Giỏi':
+                                            range = '3.20-3.59'
+                                            break
+                                        case 'Khá':
+                                            range = '2.50-3.19'
+                                            break
+                                        case 'TBK':
+                                            range = '2.30-2.49'
+                                            break
+                                        case 'TB':
+                                            range = '2.00-2.29'
+                                            break
+                                        default:
+                                            range = ''
+                                    }
+
+                                    return (
+                                        <span
+                                            key={item.id || item.classification}
+                                        >
+                                            {displayName}: {range}
+                                            {index < array.length - 1
+                                                ? '; '
+                                                : ''}
+                                        </span>
+                                    )
+                                })
+                        })()}
+                        .(Loại tốt nghiệp có thể bị hạ mức theo quy chế đào tạo
+                        đại học của HVKTQS được áp dụng tại thời điểm xét tốt
+                        nghiệp).
                     </p>
-                    <div className="ml-6 mt-1 space-y-1">
-                        <p>Xuất sắc: 3.60 – 4.00</p>
-                        <p>Giỏi: 3.20 – 3.59</p>
-                        <p>Khá: 2.50 – 3.19</p>
-                        <p>Trung bình khá: 2.30 – 2.49</p>
-                        <p>
-                            Trung bình: 2.00 – 2.29 (Loại tốt nghiệp có thể ị hạ
-                            mức theo quy chế đào tạo đại học của HVKTQS được áp
-                            dụng tại thời điểm xét tốt nghiệp)
-                        </p>
-                    </div>
                 </div>
             </div>
             <style>
                 {`
-                @media print {
-    .page {
-      width: 210mm;
-      height: 297mm;
-      page-break-after: always;
-      background: white;
-      overflow: hidden;
-    }
-  }
-  thead {
-    display: table-header-group;
-  }
-  tfoot {
-    display: table-footer-group;
-  }
-  table {
-    page-break-inside: auto;
-  }
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
-  }
-  @media screen {
-    .page {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 10px auto;
-      padding: 20mm;
-      background: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-  }
+            @media print {
+                .page {
+                    width: 210mm;
+                    min-height: 297mm; 
+                    page-break-after: auto;
+                    background: white;
+                    overflow: visible;
+                }
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            @page {
+                size: A4;
+            }
+            @media screen {
+                .page {
+                    width: 210mm;
+                    min-height: 297mm;
+                    margin: 10px auto;
+                    padding: 20mm;
+                    background: white;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+            }
             `}
             </style>
         </Modal>
     )
 }
+
+export default ModalPrintToKQHT
