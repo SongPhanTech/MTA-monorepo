@@ -11,8 +11,7 @@ import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -65,6 +64,11 @@ export default function RegisterResult({
                     _count: true,
                 },
             },
+            room: {
+                include: {
+                    building: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -73,7 +77,22 @@ export default function RegisterResult({
 
     type SubjectClassData = (typeof subjectClassData)[number]
 
-    const { data: semester = [] } = useFindManySemester()
+    const { data: semester = [] } = useFindManySemester({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    useEffect(() => {
+        if (semester.length > 0 && !filters.semesterId) {
+            const latestSemesterId = semester[0].id
+            setFilters((prev) => {
+                const newFilters = { ...prev, semesterId: latestSemesterId }
+                debouncedRefetch()
+                return newFilters
+            })
+        }
+    }, [semester, filters])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -129,6 +148,7 @@ export default function RegisterResult({
                             >
                                 <Select
                                     placeholder="Chọn kì học"
+                                    value={filters.semesterId || undefined}
                                     options={semester.map((i: Semester) => ({
                                         value: i.id,
                                         label: i.name,
@@ -147,18 +167,18 @@ export default function RegisterResult({
                 rowKey="id"
                 id="subject-class"
                 dataSource={subjectClassData}
-                onRow={(record) => ({
-                    onClick: () => {
-                        setSemesterId?.(record.semesterId)
-                        setSubjectClassId?.(record.id)
-                        setSelectedRowKey(record.id)
-                    },
-                    style: { cursor: 'pointer' },
-                    className:
-                        record.id === selectedRowKey
-                            ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
-                            : '',
-                })}
+                // onRow={(record) => ({
+                //     onClick: () => {
+                //         setSemesterId?.(record.semesterId)
+                //         setSubjectClassId?.(record.id)
+                //         setSelectedRowKey(record.id)
+                //     },
+                //     style: { cursor: 'pointer' },
+                //     className:
+                //         record.id === selectedRowKey
+                //             ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
+                //             : '',
+                // })}
                 selectedRow={selectedRowKey}
                 columns={[
                     {
@@ -221,13 +241,13 @@ export default function RegisterResult({
                     },
                     {
                         title: 'Địa điểm',
-                        dataIndex: '',
+                        dataIndex: ['room', 'building', 'name'],
                         align: 'center',
                         width: 180,
                     },
                     {
                         title: 'Phòng học',
-                        dataIndex: '',
+                        dataIndex: ['room', 'name'],
                         align: 'center',
                         width: 180,
                     },

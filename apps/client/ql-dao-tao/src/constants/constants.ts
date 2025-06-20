@@ -143,7 +143,7 @@ const SUBJECT_CLASS_STUDENT_STATUS_OPTIONS = [
 
 const SUBJECT_CLASS_SCHEDULE_TYPE = {
     MORNING: 'Sáng',
-    AFTERNOONA: 'Chiều',
+    AFTERNOON: 'Chiều',
     EVENINGE: 'Tối',
 }
 

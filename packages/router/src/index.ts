@@ -6,7 +6,6 @@ import {
     MessageOutlined,
     PieChartOutlined,
     ReadOutlined,
-    ScheduleOutlined,
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
@@ -428,11 +427,11 @@ const NAVIGATION: NavigationType = {
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
-                        id: 'phan-cong-giang-day',
-                        label: 'Phân công giảng dạy',
+                        id: 'quan-ly-lop-mon-hoc',
+                        label: 'Quản lý lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                        description: 'Phân công giảng dạy',
+                        description: 'Quản lý lớp môn học',
                     },
                     {
                         id: 'dang-ky-hoc',

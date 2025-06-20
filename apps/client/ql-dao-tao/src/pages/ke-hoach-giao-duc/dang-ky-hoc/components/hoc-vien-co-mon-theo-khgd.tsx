@@ -1,7 +1,7 @@
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import { QueryClient } from '@tanstack/react-query'
 import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
 import type { StudentClassBySubjectClassSemester } from '@workspace/libs/api/schemas/studentClassBySubjectClassSemester'
 import {
@@ -62,8 +62,6 @@ export default function StudentCourseByPlan({
         },
     })
 
-    const queryClient = new QueryClient()
-
     const { data: studentData, refetch } = useStudentBySubjectClassSemester(
         {
             semesterId: semesterId || '',
@@ -111,7 +109,7 @@ export default function StudentCourseByPlan({
             })
             message.success('Gán học sinh vào lớp thành công!')
             setInitialSelectedKeys(selectedRowKeys)
-            queryClient.invalidateQueries()
+            queryClient.invalidateQueries({ queryKey: ['zenstack'] })
         } catch (error) {
             message.error('Có lỗi xảy ra khi gán lớp!')
         }
@@ -132,14 +130,15 @@ export default function StudentCourseByPlan({
 
     return (
         <App>
-            {initialValue && (
-                <Divider>
-                    {initialValue?.code} - {initialValue?.name} - Kíp:{' '}
-                    {getScheduleLabel(initialValue?.schedule)} - Giảng viên:{' '}
-                    {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
-                    {initialValue?.mainLecturer?.userProfile?.firstName}
-                </Divider>
-            )}
+            <Divider orientation="left" orientationMargin={0}>
+                {initialValue?.code} - {initialValue?.name} -{' '}
+                {initialValue?.schedule
+                    ? getScheduleLabel(initialValue.schedule)
+                    : ''}{' '}
+                - {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
+                {initialValue?.mainLecturer?.userProfile?.firstName}
+            </Divider>
+
             <Row gutter={[16, 16]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
@@ -190,6 +189,7 @@ export default function StudentCourseByPlan({
                             dataIndex: 'code',
                             width: 120,
                             align: 'center',
+                            fixed: 'left',
                         },
                         {
                             title: 'Họ',
