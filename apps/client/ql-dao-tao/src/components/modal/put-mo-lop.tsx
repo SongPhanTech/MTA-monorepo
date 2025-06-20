@@ -2,225 +2,675 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import DeleteIcon from '@components/icons/delete'
+// import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
-    useCreateTrainingCourse,
-    useFindUniqueTrainingCourse,
-    useUpdateTrainingCourse,
+    $Enums,
+    type Room,
+    type SubjectClass,
+    type SubjectClassSchedule,
+    type SubjectVersion,
+} from '@workspace/db'
+import {
+    useCreateManySubjectClass,
+    useFindManyRoom,
+    useFindManySubjectClass,
+    useFindManyTrainingLocation,
+    useFindUniqueSubjectVersion,
+    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import {
     Button,
     Col,
+    DatePicker,
+    Empty,
     Flex,
     Form,
     Input,
+    InputNumber,
+    Row,
     Table,
     TreeSelect,
     message,
 } from 'antd'
-import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import dayjs, { type Dayjs } from 'dayjs'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutTrainingCourse = TrainingCourse
 import 'dayjs/locale/vi'
+import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
+import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
+import { putManySubjectClass } from '@workspace/libs/api/training'
 dayjs.locale('vi')
 
+export type PutOpenSubjectClassType = {
+    schedule: string
+    trainingLocationId: string | null
+    subjectVersionId: string
+    semesterId: string
+    totalStudent: number
+}
+
+export type OpenSubjectClassType = OpenSubjectClass & {
+    studentCount: number
+    semester: {
+        id: string
+        name: string
+        value: string
+        key: string
+        code: string
+    }
+    schedule: SubjectClassSchedule
+    startDate?: Date
+    subjectVersionCode?: string
+}
+
+export type PutSubjectClass = {
+    list: (SubjectClass & { id: string | undefined | null })[]
+    schedule: string
+    trainingLocationId: string | null
+    subjectVersionId: string
+    semesterId: string
+    totalStudent: number
+    maxStudent: number
+    numberOfClass: number
+}
+
 const PutOpenClassModal = () => {
-    const [form] = Form.useForm<PutTrainingCourse>()
+    const [formTable] = Form.useForm<PutSubjectClass>()
+    const [form] = Form.useForm<PutSubjectClass>()
     const {
         isOpen,
         onClose,
-        input: id,
-    } = useDisclosure<string>({
+        input: dataClass,
+    } = useDisclosure<OpenSubjectClassType>({
         tag: PutOpenClassModal.name,
-        onClose: form.resetFields,
+        onClose: formTable.resetFields,
     })
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    async function onOk(output?: PutTrainingCourse) {
-        if (!output) return
+    const [isEdit, setIsEdit] = useState<boolean>(true)
+    const { mutateAsync: createMany } = useCreateManySubjectClass()
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    async function onOk(output?: PutSubjectClass) {
+        // if (!output) return
         try {
             showSpinner()
-            if (id) {
-                await updateTrainingCourse({
-                    data: output,
-                    where: { id },
+            if (!isEdit) {
+                await createMany({
+                    data: form
+                        .getFieldValue('list')
+                        .map((i: SubjectClass, index: number) => ({
+                            name: i.name,
+                            startDate: i.startDate,
+                            subjectId: i.subjectId,
+                            schedule: i.schedule,
+                            semesterId: i.semesterId,
+                            code: i?.code,
+                            roomId: i?.roomId,
+                            maxStudent: i?.maxStudent,
+                            examDate:
+                                formTable.getFieldValue('list')[index].examDate,
+                            examScoreDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .examScoreDeadline,
+                            lecturerAssignmentDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .lecturerAssignmentDeadline,
+                            scoreDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .scoreDeadline,
+                        })),
                 })
-                message.success('Cập nhật thành công')
             } else {
-                await createTrainingCourse({
-                    data: output,
-                })
-                message.success('Thêm mới thành công')
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                const res: any = await putManySubjectClass(
+                    form
+                        .getFieldValue('list')
+                        .map((i: SubjectClass, index: number) => ({
+                            id: i.id,
+                            startDate: i.startDate,
+                            subjectId: i.subjectId,
+                            schedule: i.schedule,
+                            semesterId: i.semesterId,
+                            code: i?.code,
+                            roomId: i?.roomId,
+                            maxStudent: i?.maxStudent,
+                            examDate:
+                                formTable.getFieldValue('list')[index].examDate,
+                            examScoreDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .examScoreDeadline,
+                            lecturerAssignmentDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .lecturerAssignmentDeadline,
+                            scoreDeadline:
+                                formTable.getFieldValue('list')[index]
+                                    .scoreDeadline,
+                        }))
+                )
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['TrainingCourse'],
-            })
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
-
-    const { data: level } = useFindUniqueTrainingCourse({
-        where: { id },
+    const { data: subjectVersionData } = useFindUniqueSubjectVersion({
+        where: { id: dataClass?.subjectVersionId },
+        include: {
+            subjectClass: true,
+        },
     })
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSubjectClass({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            // const result = dataSubmit.filter((i) => i?.id !== id)
+            // setDataSubmit(result)
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const handleCreateTableForClass = () => {
+        setIsEdit(false)
+        const numberOfClass = Number(formTable.getFieldValue('numberOfClass'))
+        if (numberOfClass > 0) {
+            const cout = Math.ceil(Number(100) / Number(numberOfClass))
+            const result = []
+            for (let i = 0; i < Number(numberOfClass); i++) {
+                result.push({
+                    key: i + 1,
+                    code: `${subjectVersionData?.code} 0${i + 1}`,
+                    name: subjectVersionData?.name
+                        ? subjectVersionData?.name
+                        : '',
+                    maxStudent: Number(cout),
+                    startDate: new Date(),
+                    semesterId: dataClass?.semester.id,
+                    subjectId: subjectVersionData?.id,
+                    schedule: formTable.getFieldValue('schedule'),
+                    subject: subjectVersionData,
+                    semester: dataClass?.semester,
+                })
+            }
+
+            formTable.setFieldValue('list', [...result])
+            form.setFieldsValue({ list: result })
+        }
+    }
+    const handleCreateTableForMaxStudent = () => {
+        setIsEdit(false)
+        const maxStudent = Number(formTable.getFieldValue('maxStudent'))
+        if (Number(maxStudent) > 0) {
+            const cout = Math.ceil(Number(100) / Number(maxStudent))
+            const result = []
+            for (let i = 0; i < cout; i++) {
+                result.push({
+                    key: i + 1,
+                    code: `${subjectVersionData?.code} 0${i + 1}`,
+                    name: subjectVersionData?.name
+                        ? subjectVersionData?.name
+                        : '',
+                    maxStudent: Number(maxStudent),
+                    startDate: new Date(),
+                    semesterId: dataClass?.semester.id,
+                    subjectId: subjectVersionData?.id,
+                    schedule: formTable.getFieldValue('schedule'),
+                    subject: subjectVersionData,
+                    semester: dataClass?.semester,
+                })
+            }
+            formTable.setFieldValue('list', result)
+            form.setFieldsValue({ list: result })
+        }
+    }
+
+    const handleChangeDateExam = (date: Dayjs, key: number) => {
+        const result = formTable
+            .getFieldValue('list')
+            .map((i: SubjectClass, index: number) => {
+                if (key === index) {
+                    return {
+                        ...i,
+                        examDate: date,
+                        scoreDeadline: date.add(-10, 'day'),
+                        examScoreDeadline: date.add(10, 'day'),
+                    }
+                }
+                return i
+            })
+        formTable.setFieldsValue({ list: result })
+    }
+
+    const handleChangeLocation = (value: string, key: string) => {}
+    const {
+        data: trainingLocationData = [],
+        refetch: refetchTrainingLocationData,
+    } = useFindManyTrainingLocation()
+
+    const TrainingLocationForm = Form.useWatch('trainingLocationId', formTable)
+
+    const { data: roomData = [], refetch: refetchRoomData } = useFindManyRoom({
+        where: {
+            trainingRoom: true,
+            building: {
+                trainingLocationId: TrainingLocationForm,
+            },
+        },
+    })
+
+    const { data: subjectClassData = [], refetch: refetchSubjectClassData } =
+        useFindManySubjectClass(
+            {
+                where: {
+                    subjectId: dataClass?.subjectVersionId,
+                },
+                include: {
+                    subject: true,
+                    room: {
+                        include: {
+                            building: {
+                                include: {
+                                    trainingLocation: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            {
+                enabled: !!dataClass?.subjectVersionId,
+            }
+        )
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if (level) {
+        if (subjectClassData?.length) {
+            formTable.setFieldsValue({
+                schedule: subjectClassData[0]?.schedule,
+                trainingLocationId:
+                    subjectClassData[0]?.room?.building?.trainingLocationId,
+                list: subjectClassData,
+            })
             form.setFieldsValue({
-                ...level,
+                schedule: subjectClassData[0]?.schedule,
+                trainingLocationId:
+                    subjectClassData[0]?.room?.building?.trainingLocationId,
+                list: subjectClassData,
             })
         }
-    }, [level])
+    }, [subjectClassData])
 
     return (
         <PutFormModal
             open={isOpen}
-            form={form}
+            form={formTable}
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
             title={'Mở lớp môn học'}
-            className="w-[60vw]"
+            className="w-[80vw]"
         >
             <Col span={6}>
-                <div>Mã HK: 242</div>
+                <div className="mb-3">Mã HK: {dataClass?.semester?.code}</div>
             </Col>
-            <Col span={6}>Học kỳ 2 năm 2024-2025</Col>
-            <Col span={6}>Đơn vị phụ trách:</Col>
-            <Col span={6}>Bộ môn...</Col>
-            <Col span={6}>Mã MH: ...</Col>
-            <Col span={6}>Tên MH: ...</Col>
-            <Col span={6}>Tổng SV: 80</Col>
-            <Col span={6}>Tổng SV nợ môn: 0</Col>
+            <Col className="mb-3" span={6}>
+                {dataClass?.semester?.name}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Đơn vị phụ trách:
+            </Col>
+            <Col className="mb-3" span={6}>
+                Bộ môn:{' '}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Mã MH: {dataClass?.subjectVersionCode}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tên MH: {dataClass?.subjectVersionName}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tổng SV: {dataClass?.countStudent}
+            </Col>
+            <Col className="mb-3" span={6}>
+                Tổng SV nợ môn: 0
+            </Col>
             <Col span={12}>
-                <FormItem form={form} name="name" label="Kíp học">
+                <FormItem
+                    form={formTable}
+                    name="schedule"
+                    label="Kíp học"
+                    required
+                >
                     <Select
                         placeholder="Chọn kíp học"
-                        options={[
-                            { label: 'Sáng', value: 'sang' },
-                            { label: 'Chiều', value: 'chieu' },
-                        ]}
+                        options={Object.entries(
+                            SUBJECT_CLASS_SCHEDULE_TYPE
+                        ).map(([key, value_]) => {
+                            return {
+                                label: value_,
+                                value: key,
+                            }
+                        })}
                         allowClear
                     />
                 </FormItem>
             </Col>
-            {/* <Col span={12}>
-                <FormItem form={form} name="" label="Địa điểm">
+            <Col span={12}>
+                <FormItem
+                    form={formTable}
+                    name="trainingLocationId"
+                    label="Địa điểm"
+                >
                     <Select
                         placeholder="Chọn địa điểm"
-                        options={[
-                            { label: '1', value: '1' },
-                            { label: '2', value: '2' },
-                        ]}
+                        options={trainingLocationData.map((item) => {
+                            return {
+                                label: item.name,
+                                value: item.id,
+                            }
+                        })}
                         allowClear
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Số lớp môn học"
-                >
-                    <Flex gap={8}>
-                        <Input placeholder="" />
-                        <Button type="primary" className="h-[32px]">
-                            Thêm LMH theo số lớp
-                        </Button>
-                    </Flex>
-                </FormItem>
+                <Flex gap={12} align="center">
+                    <span className="min-w-[100px]">Số LMH</span>
+                    <FormItem
+                        className="w-full mb-0"
+                        form={formTable}
+                        name="numberOfClass"
+                        label=""
+                    >
+                        <InputNumber
+                            style={{ width: '100%' }}
+                            placeholder="Nhập số lớp cần tạo"
+                            step={1}
+                            min={0}
+                        />
+                    </FormItem>
+                    <Button
+                        onClick={handleCreateTableForClass}
+                        type="primary"
+                        className="h-[32px]"
+                    >
+                        Thêm LMH theo số lớp
+                    </Button>
+                </Flex>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingTypeId"
-                    label="Số sinh viên tối đa"
-                >
-                    <Flex gap={8}>
-                        <Input placeholder="" />
-                        <Button type="primary" className="h-[32px]">
-                            Thêm LMH theo số SV tối đa
-                        </Button>
-                    </Flex>
-                </FormItem>
-            </Col> */}
-            <Table
-                rowKey="id"
-                id="training-category"
-                columns={[
-                    {
-                        title: 'Tên môn học',
-                        dataIndex: 'tenMonHoc',
-                        width: 150,
-                    },
-                    {
-                        title: 'Mã LMH',
-                        dataIndex: 'maLMH',
-                        width: 150,
-                    },
-                    {
-                        title: 'Số tín chỉ',
-                        dataIndex: 'stc',
-                        width: 150,
-                        align: 'center',
-                    },
-                    {
-                        title: 'SV nợ',
-                        dataIndex: 'svNo',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Số tiết TKB',
-                        dataIndex: 'soTietTKB',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Số SV max',
-                        dataIndex: 'max',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Phòng học',
-                        dataIndex: 'phongHoc',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Ngày thi',
-                        dataIndex: 'ngayThi',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Hình thức thi',
-                        dataIndex: 'thi',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Kíp học',
-                        dataIndex: 'kipHoc',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Địa điểm',
-                        dataIndex: 'diaDiem',
-                        width: 100,
-                        align: 'center',
-                    },
-                ]}
-            />
+                <Flex gap={12} align="center">
+                    <span className="min-w-[100px]">Số SV tối đa</span>
+                    <FormItem
+                        className="w-full mb-0"
+                        form={formTable}
+                        name="maxStudent"
+                        label=""
+                    >
+                        <InputNumber
+                            style={{ width: '100%' }}
+                            placeholder="Nhập số SV tối đa"
+                            step={1}
+                            min={0}
+                        />
+                    </FormItem>
+
+                    <Button
+                        onClick={handleCreateTableForMaxStudent}
+                        type="primary"
+                        className="h-[32px]"
+                    >
+                        Thêm LMH theo số SV tối đa
+                    </Button>
+                </Flex>
+            </Col>
+            <Col span={24}>
+                <Table
+                    rowKey="code"
+                    className="mt-6 custom-scrollbar"
+                    id="open-subject-class"
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 50,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã LMH',
+                            dataIndex: 'code',
+                            width: 150,
+                        },
+                        {
+                            title: 'Tên môn học',
+                            dataIndex: 'name',
+                            width: 200,
+                        },
+                        {
+                            title: 'Số tín chỉ',
+                            dataIndex: 'subject',
+                            width: 100,
+                            align: 'center',
+                            render: (value: SubjectVersion) => value?.credit,
+                        },
+                        {
+                            title: 'SV nợ',
+                            dataIndex: 'svNo',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số tiết TKB',
+                            dataIndex: 'subject',
+                            width: 100,
+                            align: 'center',
+                            render: (value: SubjectVersion) => value?.period,
+                        },
+                        {
+                            title: 'Số SV max',
+                            dataIndex: 'maxStudent',
+                            width: 100,
+                            align: 'center',
+                        },
+
+                        {
+                            title: 'Kíp học',
+                            dataIndex: 'schedule',
+                            width: 200,
+                            align: 'center',
+                            render: (value: SubjectClassSchedule) =>
+                                SUBJECT_CLASS_SCHEDULE_TYPE[
+                                    value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                ],
+                        },
+                        {
+                            title: 'Hạn PCGD',
+                            width: 150,
+                            align: 'center',
+                            render: (_, __, index) => (
+                                <Form.Item
+                                    className="w-full mb-0"
+                                    name={[
+                                        'list',
+                                        index,
+                                        'lecturerAssignmentDeadline',
+                                    ]}
+                                    label=""
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) =>
+                                            date &&
+                                            date < dayjs().startOf('day')
+                                        }
+                                    />
+                                </Form.Item>
+                            ),
+                        },
+                        {
+                            title: 'Ngày thi',
+                            width: 150,
+                            align: 'center',
+                            render: (record, __, index) => (
+                                <Form.Item
+                                    className="w-full mb-0"
+                                    name={['list', index, 'examDate']}
+                                    label=""
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) =>
+                                            date &&
+                                            date < dayjs().startOf('day')
+                                        }
+                                        onChange={(date) =>
+                                            handleChangeDateExam(date, index)
+                                        }
+                                    />
+                                </Form.Item>
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm CC/TX',
+                            width: 150,
+                            align: 'center',
+                            render: (record, __, index) => (
+                                <Form.Item
+                                    className="w-full mb-0"
+                                    name={['list', index, 'scoreDeadline']}
+                                    label=""
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) =>
+                                            date &&
+                                            date < dayjs().startOf('day')
+                                        }
+                                    />
+                                </Form.Item>
+                            ),
+                        },
+                        {
+                            title: 'Hạn nhập điểm',
+                            width: 150,
+                            align: 'center',
+                            render: (record, __, index) => (
+                                <Form.Item
+                                    className="w-full mb-0"
+                                    name={['list', index, 'examScoreDeadline']}
+                                    label=""
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) =>
+                                            date &&
+                                            date < dayjs().startOf('day')
+                                        }
+                                    />
+                                </Form.Item>
+                            ),
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            width: 150,
+                            align: 'center',
+                            render: (record, __, index) => (
+                                <Form.Item
+                                    className="w-full mb-0"
+                                    name={['list', index, 'examType']}
+                                    label=""
+                                >
+                                    <Select
+                                        placeholder="Chọn hình thức thi"
+                                        options={options}
+                                    />
+                                </Form.Item>
+                            ),
+                        },
+                        {
+                            title: 'Phòng học',
+                            width: 200,
+                            align: 'center',
+                            render: (record) => (
+                                <Select
+                                    placeholder="Chọn phòng học"
+                                    options={roomData.map((i: Room) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                        }
+                                    })}
+                                    style={{ width: '100%' }}
+                                    onChange={(value) =>
+                                        handleChangeLocation(value, record?.id)
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Địa điểm',
+                            dataIndex: 'trainingLocationId',
+                            width: 200,
+                            align: 'center',
+                            render: (value) =>
+                                trainingLocationData.find(
+                                    (item) =>
+                                        item.id ===
+                                        formTable.getFieldValue(
+                                            'trainingLocationId'
+                                        )
+                                )?.name || '',
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            fixed: 'right',
+                            render: (record) => {
+                                if (record?.id) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDelete(
+                                                            record?.id
+                                                        ),
+                                                }}
+                                            />
+                                        </Row>
+                                    )
+                                }
+                                return ''
+                            },
+                        },
+                    ]}
+                    dataSource={formTable.getFieldValue('list')}
+                    bordered
+                    locale={{
+                        emptyText: <Empty description="Không có dữ liệu" />,
+                    }}
+                    scroll={{ x: '100%', y: undefined }}
+                />
+            </Col>
         </PutFormModal>
     )
 }
