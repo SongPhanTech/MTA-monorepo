@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
@@ -38,7 +39,7 @@ model Student extends Base {
   trainingForm         TrainingForm?         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String?
 
-  registrationArea     RegistrationArea?     @relation(fields: [registrationAreaId], references: [id]) // khu vực đăng ký
+  registrationArea     DM_KhuVuc_DiaLy?      @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
   registrationAreaId   String?
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý

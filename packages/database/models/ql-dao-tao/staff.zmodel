@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
@@ -12,7 +13,7 @@ model Staff extends Base {
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique
 
-  organization    Organization  @relation(fields: [organizationId], references: [id])
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String
 
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
@@ -33,8 +34,8 @@ model StaffHistory extends Base {
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique
 
-  organization    Organization? @relation(fields: [organizationId], references: [id])
-  organizationId  String?
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String
 
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String

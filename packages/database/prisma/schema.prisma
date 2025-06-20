@@ -445,7 +445,7 @@ model FixedClass {
   graduated                Boolean?           @default(false)
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
-  managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?
   lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
@@ -471,7 +471,7 @@ model Curriculum {
   updatedAt                DateTime            @updatedAt()
   name                     String
   englishName              String?
-  managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId          String
@@ -560,7 +560,7 @@ model Subject {
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt()
   name                     String
-  managementOrganization   Organization     @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
   information              String?
   subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
@@ -597,7 +597,7 @@ model SubjectVersion {
   materials                String?
   rules                    String?
   documentPaths            String[]
-  managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id])
+  managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
@@ -826,7 +826,7 @@ model TrainingField {
   name                String
   englishName         String
   publishDate         DateTime
-  organization        Organization                        @relation(fields: [organizationId], references: [id])
+  organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
   organizationId      String
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
@@ -869,7 +869,7 @@ model TrainingMajor {
   numberCreditsRequired Int                                 @default(0)
   /// Số tín chỉ tự chọn
   numberCreditsElective Int                                 @default(0)
-  organization          Organization                        @relation(fields: [organizationId], references: [id])
+  organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
   organizationId        String
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
@@ -1043,7 +1043,7 @@ model Student {
   trainingTypeId       String?
   trainingForm         TrainingForm?         @relation(fields: [trainingFormId], references: [id])
   trainingFormId       String?
-  registrationArea     RegistrationArea?     @relation(fields: [registrationAreaId], references: [id])
+  registrationArea     DM_KhuVuc_DiaLy?      @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId   String?
   curriculumVersion    CurriculumVersion?    @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId  String?
@@ -1254,20 +1254,20 @@ model Feedback {
 }
 
 model UserProfile {
-  id                   String              @id() @default(cuid())
+  id                   String            @id() @default(cuid())
   code                 String?
-  active               Boolean             @default(true)
-  description          String?             @db.Text()
+  active               Boolean           @default(true)
+  description          String?           @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt()
-  user                 User?               @relation(fields: [userId], references: [id])
-  userId               String?             @unique()
-  userType             UserType            @default(OTHER)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt()
+  user                 User?             @relation(fields: [userId], references: [id])
+  userId               String?           @unique()
+  userType             UserType          @default(OTHER)
   avatar               String?
   firstName            String
   lastName             String
-  idCardNumber         String              @unique()
+  idCardNumber         String            @unique()
   fullname             String?
   dateOfBirth          DateTime?
   placeOfBirth         String?
@@ -1279,34 +1279,36 @@ model UserProfile {
   contactAddress       String?
   phoneNumber          String?
   email                String?
-  nationality          Nationality?        @relation(fields: [nationalityId], references: [id])
+  nationality          DM_TonGiao?       @relation(fields: [nationalityId], references: [Id])
   nationalityId        String?
-  religion             Religion?           @relation(fields: [religionId], references: [id])
+  religion             DM_QuocGia?       @relation(fields: [religionId], references: [Id])
   religionId           String?
-  ethnicity            Ethnicity?          @relation(fields: [ethnicityId], references: [id])
+  ethnicity            DM_DanToc?        @relation(fields: [ethnicityId], references: [Id])
   ethnicityId          String?
-  provinceHometown     Province?           @relation(fields: [provinceHometownId], references: [id])
+  provinceHometown     DM_Tinh?          @relation(fields: [provinceHometownId], references: [Id])
   provinceHometownId   String?
-  communeHometown      Commune?            @relation(fields: [communeHometownId], references: [id])
+  districtHometown     DM_QuanHuyen?     @relation(fields: [districtHometownId], references: [Id])
+  districtHometownId   String?
+  communeHometown      DM_XaPhuong?      @relation(fields: [communeHometownId], references: [Id])
   communeHometownId    String?
   officerNumber        String?
-  rank                 Rank?               @relation(fields: [rankId], references: [id])
+  rank                 DM_CapBac?        @relation(fields: [rankId], references: [Id])
   rankId               String?
   rankDate             DateTime?
-  academicDegreeType   AcademicDegreeType? @relation(fields: [academicDegreeTypeId], references: [id])
+  academicDegreeType   DM_HocVi?         @relation(fields: [academicDegreeTypeId], references: [Id])
   academicDegreeTypeId String?
   academicDegreeDate   DateTime?
-  academicRankType     AcademicRankType?   @relation(fields: [academicRankTypeId], references: [id])
+  academicRankType     DM_HocHam?        @relation(fields: [academicRankTypeId], references: [Id])
   academicRankTypeId   String?
   academicRankDate     DateTime?
-  level                Level?              @relation(fields: [levelId], references: [id])
+  level                DM_ChucDanh?      @relation(fields: [levelId], references: [Id])
   levelId              String?
   unionDate            DateTime?
   unionPlace           String?
   CPVJoinDate          DateTime?
   officialCPVDate      DateTime?
   CPVJoinPlace         String?
-  positionCPV          PositionCPV?        @relation(fields: [positionCPVId], references: [id])
+  positionCPV          DM_ChucVu?        @relation(fields: [positionCPVId], references: [Id])
   positionCPVId        String?
   tenureDate           DateTime?
   enlistmentDate       DateTime?
@@ -1325,155 +1327,792 @@ model UserProfile {
   @@schema("ql-nguoi-dung")
 }
 
-/// khu vực đăng ký (Bắc, Trung, Nam)
-model RegistrationArea {
-  id          String    @id() @default(cuid())
-  code        String?
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  student     Student[]
+model DM_CapBac {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-/// quốc tịch
-model Nationality {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
+model DM_ChucDanh {
+  Id               String             @id() @default(cuid())
+  sMa              String?
+  sTen             String?
+  sGhiChu          String?
+  iSTT             Int?               @default(0)
+  bActive          Boolean?           @default(true)
+  bDeleted         Boolean?           @default(false)
+  bSystem          Boolean?           @default(false)
+  iDictionaryKey   Int?               @default(0)
+  dNgayTao         DateTime?
+  dNgaySua         DateTime?
+  sNguoiTao        String?
+  sNguoiSua        String?
+  sThietBiTao      String?
+  sThietBiSua      String?
+  iLoaiChucDanh    Int?               @default(0)
+  DM_ViTriCongViec DM_ViTriCongViec[]
+  userProfile      UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-/// tôn giáo
-model Religion {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
+model DM_ChucVu {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  userProfile    UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-/// dân tộc
-model Ethnicity {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  userProfile UserProfile[]
+model DM_HocHam {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-model Province {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
-  Commune     Commune[]
+model DM_HocVi {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-model Commune {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  province    Province      @relation(fields: [provinceId], references: [id])
-  provinceId  String
-  profiles    UserProfile[]
-
-  @@unique([name, provinceId])
-  @@schema("ql-danh-muc")
-}
-
-model Level {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
+model DM_ChungChiTinHoc {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
 
   @@schema("ql-danh-muc")
 }
 
-/// cấp bậc hàm
-model Rank {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
+model DM_DanToc {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTenKhac       String?
+  sDiaChiCuTru   String?
+  userProfile    UserProfile[]
 
   @@schema("ql-danh-muc")
 }
 
-/// học hàm
-model AcademicDegreeType {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
+model DM_DonVi {
+  Id               String            @id() @default(cuid())
+  sMa              String?
+  sTen             String?
+  sGhiChu          String?
+  iSTT             Int?              @default(0)
+  bActive          Boolean?          @default(true)
+  bDeleted         Boolean?          @default(false)
+  bSystem          Boolean?          @default(false)
+  iDictionaryKey   Int?              @default(0)
+  dNgayTao         DateTime?
+  dNgaySua         DateTime?
+  sNguoiTao        String?
+  sNguoiSua        String?
+  sThietBiTao      String?
+  sThietBiSua      String?
+  sCode            String?
+  sTenVietTat      String?
+  sParentId        String?
+  sTruongDonVi     String?
+  sChucNangNhiemVu String?
+  sDiaChi          String?
+  DM_NhanVien      DM_NhanVien[]
+  parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
+  children         DM_DonVi[]        @relation("DM_DonVi_Parent")
+  lecturers        Lecturer[]
+  lecturerHistory  LecturerHistory[]
+  staffs           Staff[]
+  staffHistory     StaffHistory[]
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
+  subjectVersions  SubjectVersion[]
+  subjects         Subject[]
+  trainingFields   TrainingField[]
+  trainingMajors   TrainingMajor[]
+
+  @@index([sParentId], map: "IX_DM_DonVi_iParentId")
+  @@index([sMa], map: "IX_DM_DonVi_sMa")
+  @@schema("ql-danh-muc")
+}
+
+model DM_DonViHanhChinh {
+  Id             String         @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?           @default(0)
+  bActive        Boolean?       @default(true)
+  bDeleted       Boolean?       @default(false)
+  bSystem        Boolean?       @default(false)
+  iDictionaryKey Int?           @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen_En        String?
+  tinh           DM_Tinh[]
+  huyen          DM_QuanHuyen[]
+  xaPhuong       DM_XaPhuong[]
 
   @@schema("ql-danh-muc")
 }
 
-/// học vị
-model AcademicRankType {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
+model DM_KhuVuc_DiaLy {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen_En        String?
+  tinh           DM_Tinh[]
+  student        Student[]
 
   @@schema("ql-danh-muc")
+}
+
+model DM_NgoaiNgu {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_TonGiao {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  userProfile    UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_TrinhDoNgoaiNgu {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sKhung         String?
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_TrinhDoTinHoc {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_UngDung {
+  Id               String    @id() @default(cuid())
+  sMa              String?
+  sTen             String?
+  sGhiChu          String?
+  iSTT             Int?      @default(0)
+  bActive          Boolean?  @default(true)
+  bDeleted         Boolean?  @default(false)
+  bSystem          Boolean?  @default(false)
+  iDictionaryKey   Int?      @default(0)
+  dNgayTao         DateTime?
+  dNgaySua         DateTime?
+  sNguoiTao        String?
+  sNguoiSua        String?
+  sThietBiTao      String?
+  sThietBiSua      String?
+  sMoTa            String?
+  sLogoUrl         String?
+  sUrl             String?
+  bTatCaNguoiDung  Boolean?  @default(false)
+  bTatCaNhanVien   Boolean?  @default(false)
+  sClientId        String?
+  sClientSecret    String?
+  sRedirectDefault String?
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhanVien {
+  Id                  String               @id() @default(cuid())
+  sMa                 String?
+  sTen                String?
+  sGhiChu             String?
+  iSTT                Int?                 @default(0)
+  bActive             Boolean?             @default(true)
+  bDeleted            Boolean?             @default(false)
+  bSystem             Boolean?             @default(false)
+  iDictionaryKey      Int?                 @default(0)
+  dNgayTao            DateTime?
+  dNgaySua            DateTime?
+  sNguoiTao           String?
+  sNguoiSua           String?
+  sThietBiTao         String?
+  sThietBiSua         String?
+  sHoVaDem            String?
+  sTenDayDu           String?
+  dNgaySinh           DateTime?
+  iGioiTinh           Int?
+  sDiaChi             String?
+  sSDTDiDong          String?
+  sEmail              String?
+  bLaNguoiDung        Boolean?
+  DM_DonVi            DM_DonVi?            @relation(fields: [sDM_DonViId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_DonVi")
+  sDM_DonViId         String?
+  DM_ViTriCongViec    DM_ViTriCongViec?    @relation(fields: [sDM_ViTriCongViecId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_ViTriCongViec")
+  sDM_ViTriCongViecId String?
+  sQuanlyTrucTiepId   String?
+  sAvatarId           String?
+  taiKhoan            TaiKhoan?
+  NguoiDungTrongNhom  NguoiDungTrongNhom[]
+  Quyen_VaiTro        Quyen_VaiTro[]
+  nhatKyHoatDong      NhatKyHoatDong[]
+
+  @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
+  @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
+  @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
+  @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhomNguoiDung {
+  Id                 String               @id() @default(cuid())
+  sMa                String?
+  sTen               String?
+  sGhiChu            String?
+  iSTT               Int?                 @default(0)
+  bActive            Boolean?             @default(true)
+  bDeleted           Boolean?             @default(false)
+  bSystem            Boolean?             @default(false)
+  iDictionaryKey     Int?                 @default(0)
+  dNgayTao           DateTime?
+  dNgaySua           DateTime?
+  sNguoiTao          String?
+  sNguoiSua          String?
+  sThietBiTao        String?
+  sThietBiSua        String?
+  vaiTroTrongNhom    VaiTroTrongNhom[]
+  nguoiDungTrongNhom NguoiDungTrongNhom[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_NhomUngDung {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sMoTa          String?
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_QuocGia {
+  Id             String        @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sLanguage      String?
+  userProfile    UserProfile[]
+  tinh           DM_Tinh[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_Tinh {
+  Id                   String             @id() @default(cuid())
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?               @default(0)
+  bActive              Boolean?           @default(true)
+  bDeleted             Boolean?           @default(false)
+  bSystem              Boolean?           @default(false)
+  iDictionaryKey       Int?               @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  quocGia              DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
+  sDM_QuocGiaId        String?
+  dM_KhuVuc_DiaLy      DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
+  iDM_KhuVucDiaLy_Id   String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+  huyen                DM_QuanHuyen[]
+  xaPhuong             DM_XaPhuong[]
+  userProfile          UserProfile[]
+
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@schema("ql-danh-muc")
+}
+
+model DM_QuanHuyen {
+  Id                   String             @id() @default(cuid())
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?               @default(0)
+  bActive              Boolean?           @default(true)
+  bDeleted             Boolean?           @default(false)
+  bSystem              Boolean?           @default(false)
+  iDictionaryKey       Int?               @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  dM_Tinh              DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
+  sDM_TinhId           String?
+  sDM_Tinh_Ma          String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+  xaPhuong             DM_XaPhuong[]
+  userProfile          UserProfile[]
+
+  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
+  @@schema("ql-danh-muc")
+}
+
+model DM_XaPhuong {
+  Id                   String             @id() @default(cuid())
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?               @default(0)
+  bActive              Boolean?           @default(true)
+  bDeleted             Boolean?           @default(false)
+  bSystem              Boolean?           @default(false)
+  iDictionaryKey       Int?               @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  sDM_TinhId           String?
+  quanHuyen            DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
+  sDM_QuanHuyenId      String?
+  sDM_QuanHuyen_Ma     String?
+  dM_Tinh              DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId            String?
+  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId String?
+  userProfile          UserProfile[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_VaiTro {
+  Id              String            @id() @default(cuid())
+  sMa             String?
+  sTen            String?
+  sGhiChu         String?
+  iSTT            Int?              @default(0)
+  bActive         Boolean?          @default(true)
+  bDeleted        Boolean?          @default(false)
+  bSystem         Boolean?          @default(false)
+  iDictionaryKey  Int?              @default(0)
+  dNgayTao        DateTime?
+  dNgaySua        DateTime?
+  sNguoiTao       String?
+  sNguoiSua       String?
+  sThietBiTao     String?
+  sThietBiSua     String?
+  Quyen_VaiTro    Quyen_VaiTro[]
+  VaiTroTrongNhom VaiTroTrongNhom[]
+
+  @@schema("ql-danh-muc")
+}
+
+model DM_ViTriCongViec {
+  Id              String        @id() @default(cuid())
+  sMa             String?
+  sTen            String?
+  sGhiChu         String?
+  iSTT            Int?          @default(0)
+  bActive         Boolean?      @default(true)
+  bDeleted        Boolean?      @default(false)
+  bSystem         Boolean?      @default(false)
+  iDictionaryKey  Int?          @default(0)
+  dNgayTao        DateTime?
+  dNgaySua        DateTime?
+  sNguoiTao       String?
+  sNguoiSua       String?
+  sThietBiTao     String?
+  sThietBiSua     String?
+  sDM_ChucDanhId  String?
+  sDM_NhomViTriId String
+  DM_NhanVien     DM_NhanVien[]
+  DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
+
+  @@schema("ql-danh-muc")
+}
+
+model NguoiDungTrongNhom {
+  Id                  String            @id() @default(cuid())
+  sMa                 String?
+  sTen                String?
+  sGhiChu             String?
+  iSTT                Int?              @default(0)
+  bActive             Boolean?          @default(true)
+  bDeleted            Boolean?          @default(false)
+  bSystem             Boolean?          @default(false)
+  iDictionaryKey      Int?              @default(0)
+  dNgayTao            DateTime?
+  dNgaySua            DateTime?
+  sNguoiTao           String?
+  sNguoiSua           String?
+  sThietBiTao         String?
+  sThietBiSua         String?
+  DM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhomNguoiDung")
+  sDM_NhomNguoiDungId String?
+  DM_NhanVien         DM_NhanVien?      @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhanVien")
+  sDM_NhanVienId      String?
+
+  @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
+  @@schema("ql-danh-muc")
+}
+
+model NhatKyHoatDong {
+  Id             String       @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?         @default(0)
+  bActive        Boolean?     @default(true)
+  bDeleted       Boolean?     @default(false)
+  bSystem        Boolean?     @default(false)
+  iDictionaryKey Int?         @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  DM_NhanVien    DM_NhanVien? @relation(fields: [sNhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
+  sNhanVienId    String?
+  dLogTime       DateTime?
+  iState         Int?
+  sObjectName    String?
+  sReferenceName String?
+  sDescription   String?
+  sIPAddress     String?
+
+  @@schema("ql-danh-muc")
+}
+
+model Policy {
+  Id             String    @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  bXacThuc2YeuTo Boolean?  @default(false)
+  bGioiHanTCIP   Boolean?  @default(false)
+  bGioiHanTG     Boolean?  @default(false)
+  iApDungChoUD   Int?      @default(0)
+
+  @@schema("ql-danh-muc")
+}
+
+model Quyen_VaiTro {
+  Id             String       @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?         @default(0)
+  bActive        Boolean?     @default(true)
+  bDeleted       Boolean?     @default(false)
+  bSystem        Boolean?     @default(false)
+  iDictionaryKey Int?         @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTenChucNang   String?      @default("N'Tên quyền'")
+  sDM_NhanVienId String?
+  sDM_VaiTroId   String?
+  fValue         Int?
+  DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
+  DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
+
+  @@schema("ql-danh-muc")
+}
+
+model TaiKhoan {
+  Id             String       @id() @default(cuid())
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?         @default(0)
+  bActive        Boolean?     @default(true)
+  bDeleted       Boolean?     @default(false)
+  bSystem        Boolean?     @default(false)
+  iDictionaryKey Int?         @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sUserName      String?
+  sAvatar        String?
+  sDM_NhanVienId String?      @unique()
+  nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
+
+  @@schema("ql-danh-muc")
+}
+
+model VaiTroTrongNhom {
+  Id                  String            @id() @default(cuid())
+  sMa                 String?
+  sTen                String?
+  sGhiChu             String?
+  iSTT                Int?              @default(0)
+  bActive             Boolean?          @default(true)
+  bDeleted            Boolean?          @default(false)
+  bSystem             Boolean?          @default(false)
+  iDictionaryKey      Int?              @default(0)
+  dNgayTao            DateTime?
+  dNgaySua            DateTime?
+  sNguoiTao           String?
+  sNguoiSua           String?
+  sThietBiTao         String?
+  sThietBiSua         String?
+  dM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id])
+  sDM_NhomNguoiDungId String?
+  DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
+  sDM_VaiTroId        String?
+
+  @@schema("ql-danh-muc")
+}
+
+model Lecturer {
+  id                  String         @id() @default(cuid())
+  code                String?
+  active              Boolean        @default(true)
+  description         String?        @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt()
+  from                DateTime?
+  lectureID           String?        @unique()
+  serviceDate         DateTime?
+  userProfile         UserProfile    @relation(fields: [userProfileId], references: [id])
+  userProfileId       String         @unique()
+  organization        DM_DonVi       @relation(fields: [organizationId], references: [Id])
+  organizationId      String
+  lecturerType        LecturerType   @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId      String
+  mainSubjectClasses  SubjectClass[] @relation("MainLecturer")
+  extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
+  enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
+  manageFixedClass    FixedClass[]   @relation("ManageLecturer")
+
+  @@schema("ql-dao-tao")
+}
+
+model LecturerHistory {
+  id             String       @id() @default(cuid())
+  code           String?
+  active         Boolean      @default(true)
+  description    String?      @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt()
+  from           DateTime?
+  to             DateTime?
+  lectureID      String?
+  lectureCode    String?
+  serviceDate    DateTime?
+  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId  String       @unique()
+  organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
+  organizationId String?
+  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
+
+  @@schema("ql-dao-tao")
 }
 
 /// Loại giáo viên
@@ -1524,114 +2163,6 @@ model StaffPosition {
   @@schema("ql-danh-muc")
 }
 
-/// chức vụ Đảng
-model PositionCPV {
-  id          String        @id() @default(cuid())
-  code        String?
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
-  name        String
-  profiles    UserProfile[]
-
-  @@schema("ql-danh-muc")
-}
-
-/// loại đơn vị
-model OrganizationType {
-  id            String         @id() @default(cuid())
-  code          String?
-  active        Boolean        @default(true)
-  description   String?        @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt()
-  name          String
-  organizations Organization[]
-
-  @@schema("ql-danh-muc")
-}
-
-/// đơn vị
-model Organization {
-  id              String            @id() @default(cuid())
-  code            String?
-  active          Boolean           @default(true)
-  description     String?           @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt()
-  name            String            @unique()
-  type            OrganizationType  @relation(fields: [typeId], references: [id])
-  typeId          String
-  parent          Organization?     @relation("ParentChild", fields: [parentId], references: [id])
-  parentId        String?
-  children        Organization[]    @relation("ParentChild")
-  address         String?
-  lecturers       Lecturer[]
-  lecturerHistory LecturerHistory[]
-  staffs          Staff[]
-  staffHistory    StaffHistory[]
-  curriculum      Curriculum[]
-  fixedClass      FixedClass[]
-  subjectVersions SubjectVersion[]
-  subjects        Subject[]
-  trainingFields  TrainingField[]
-  trainingMajors  TrainingMajor[]
-
-  @@schema("ql-danh-muc")
-}
-
-model Lecturer {
-  id                  String         @id() @default(cuid())
-  code                String?
-  active              Boolean        @default(true)
-  description         String?        @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt()
-  from                DateTime?
-  lectureID           String?        @unique()
-  serviceDate         DateTime?
-  userProfile         UserProfile    @relation(fields: [userProfileId], references: [id])
-  userProfileId       String         @unique()
-  organization        Organization   @relation(fields: [organizationId], references: [id])
-  organizationId      String
-  lecturerType        LecturerType   @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId      String
-  mainSubjectClasses  SubjectClass[] @relation("MainLecturer")
-  extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
-  enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
-  manageFixedClass    FixedClass[]   @relation("ManageLecturer")
-
-  @@schema("ql-dao-tao")
-}
-
-model LecturerHistory {
-  id             String        @id() @default(cuid())
-  code           String?
-  active         Boolean       @default(true)
-  description    String?       @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt()
-  from           DateTime?
-  to             DateTime?
-  lectureID      String?
-  lectureCode    String?
-  serviceDate    DateTime?
-  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId  String        @unique()
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
-  lecturerType   LecturerType  @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId String
-
-  @@schema("ql-dao-tao")
-}
-
 model Staff {
   id              String        @id() @default(cuid())
   code            String?
@@ -1643,7 +2174,7 @@ model Staff {
   from            DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique()
-  organization    Organization  @relation(fields: [organizationId], references: [id])
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
   organizationId  String
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String
@@ -1666,8 +2197,8 @@ model StaffHistory {
   to              DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique()
-  organization    Organization? @relation(fields: [organizationId], references: [id])
-  organizationId  String?
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String
   staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])

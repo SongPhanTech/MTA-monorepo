@@ -8,12 +8,13 @@
     "lint": "biome lint --fix",
     "generate": "turbo run generate",
     "format": "biome format --write --verbose",
+    "check": "biome check --write --unsafe --files-ignore-unknown=true --organize-imports-enabled=false --no-errors-on-unmatched --colors=off --config-path ./biome.json",
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --write --unsafe --files-ignore-unknown=true --organize-imports-enabled=false --no-errors-on-unmatched --colors=off --config-path ./biome.json"
+      "pnpm check"
     ]
   },
   "devDependencies": {
