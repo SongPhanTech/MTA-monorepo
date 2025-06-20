@@ -1,5 +1,7 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import {
     useFindManySemester,
     useFindManySubjectClass,
@@ -147,7 +149,7 @@ export default function RegisterClassManager({
                                 <Select
                                     placeholder="Chọn kì học"
                                     value={filters.semesterId || undefined}
-                                    options={semester.map((i: Semester) => ({
+                                    options={semester.map((i) => ({
                                         value: i.id,
                                         label: i.name,
                                     }))}
@@ -214,8 +216,7 @@ export default function RegisterClassManager({
                         //     value: opt.value,
                         // })),
                         filterSearch: true,
-                        render: (value: SubjectClassSchedule) =>
-                            getScheduleLabel(value),
+                        render: (value) => getScheduleLabel(value),
                     },
                     {
                         title: 'Giảng viên 1',
@@ -235,7 +236,7 @@ export default function RegisterClassManager({
                         dataIndex: ['subject', 'examType'],
                         align: 'center',
                         width: 180,
-                        render: (value: ExamType) => getExamTypeLabel(value),
+                        render: (value) => getExamTypeLabel(value),
                     },
                     {
                         title: 'Địa điểm',
