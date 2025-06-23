@@ -1,4 +1,5 @@
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 import type { Session, SessionStatus } from '..'
 
 const SessionContext = React.createContext<{
@@ -23,6 +24,13 @@ const SessionProvider: React.FC<{
         session
     )
     const [status, setStatus] = React.useState<SessionStatus | null>(null)
+    const router = useRouter()
+    useEffect(() => {
+        if (router.pathname !== '/') {
+            localStorage.setItem('lastPage', router.pathname)
+        }
+    }, [router.pathname])
+
     return (
         <SessionContext.Provider
             value={{

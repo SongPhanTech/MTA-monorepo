@@ -429,7 +429,7 @@ export default function FixedClassPage({
                                 width: 150,
                                 dataIndex: 'curriculumVersion',
                                 render: (_, record) =>
-                                    record.curriculumVersion.curriculum
+                                    record.curriculumVersion?.curriculum
                                         .trainingMajor?.name || '',
                             },
                             {
