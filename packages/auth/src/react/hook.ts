@@ -10,16 +10,10 @@ export const useSession = () => {
         if (status === 'loading') return
         if (!status) {
             setStatus('loading')
-            fetchSession()
-                .then((result) => {
-                    setSessionState(result.data)
-                    setStatus('authenticated')
-                })
-                .catch((error) => {
-                    console.error('Failed to fetch session:', error)
-                    setSessionState(null)
-                    setStatus('unauthenticated')
-                })
+            fetchSession().then((result) => {
+                setSessionState(result.data)
+                setStatus(result.status)
+            })
         }
     }, [status])
 
