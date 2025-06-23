@@ -19,7 +19,7 @@ export const useSession = () => {
 
     const goToLastPage = useCallback(() => {
         const lastPage = localStorage.getItem('lastPage')
-        if (lastPage) {
+        if (lastPage && lastPage !== '/') {
             window.location.href = lastPage
             return true
         }
