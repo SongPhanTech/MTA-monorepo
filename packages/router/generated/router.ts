@@ -87,6 +87,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN_LOP_BIEN_CHE": "/quan-ly-diem/ql-diem-ren-luyen/lop-bien-che",
     "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien"
   },
   "QL_NGUOI_DUNG": {

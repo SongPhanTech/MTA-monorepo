@@ -39,7 +39,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
 import { getMinioUrl } from '@workspace/constant'
@@ -166,10 +165,9 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    // const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
-    //     useDisclosure<AddUserProfileLectureProps>({
-    //         tag: PutUserProfileLectureModal.name,
-    //     })
+    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
+        tag: PutUserProfileLectureModal.name,
+    })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
         useDisclosure<string>({
@@ -182,9 +180,9 @@ export default function UserProfilePageLecture() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    // const handleModal = () => {
-    //     onOpenModalAdd()
-    // }
+    const handleModal = () => {
+        onOpenModalAdd()
+    }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
             onOpenUpload('GV')
@@ -375,7 +373,7 @@ export default function UserProfilePageLecture() {
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button
-                                    // onClick={handleModal}
+                                    onClick={handleModal}
                                     type="primary"
                                 >
                                     Thêm mới
