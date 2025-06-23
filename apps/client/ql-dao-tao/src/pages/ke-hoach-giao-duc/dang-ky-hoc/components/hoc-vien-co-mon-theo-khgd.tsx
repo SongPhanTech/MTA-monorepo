@@ -153,7 +153,6 @@ export default function StudentCourseByPlan({
                                             e.target.value
                                         )
                                     }
-                                    style={{ height: 40 }}
                                     prefix={
                                         <Search
                                             size={15}

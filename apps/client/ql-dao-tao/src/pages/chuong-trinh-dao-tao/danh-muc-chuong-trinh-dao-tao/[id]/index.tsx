@@ -463,7 +463,6 @@ export default function TrainingProgramSubjects() {
                                             }
                                             placeholder="Nhập tên ngành..."
                                             style={{
-                                                height: 40,
                                                 marginRight: 8,
                                             }}
                                             prefix={
@@ -499,9 +498,6 @@ export default function TrainingProgramSubjects() {
                                                         input.toLowerCase()
                                                     )
                                             }
-                                            style={{
-                                                height: 40,
-                                            }}
                                         />
                                     </Form.Item>
                                 </Col>
