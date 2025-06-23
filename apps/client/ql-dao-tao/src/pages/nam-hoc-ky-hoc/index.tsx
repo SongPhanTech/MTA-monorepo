@@ -1,7 +1,13 @@
+import { PlusOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
+import TableCollapse from '@components/commons/tableCollapse'
+import CreateIcon from '@components/icons/create'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutSchoolYearModal, PutSemesterModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Flex, Form, Input, Row, message, Tag } from 'antd'
-import _ from 'lodash'
-import { useCallback, useState } from 'react'
 import type { SchoolYear } from '@workspace/db'
 import {
     useCountSchoolYear,
@@ -9,18 +15,12 @@ import {
     useUpdateSchoolYear,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { PutSchoolYearModal, PutSemesterModal } from '@components/modal'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
 import dayjs from 'dayjs'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import TableCollapse from '@components/commons/tableCollapse'
-import { PlusOutlined } from '@ant-design/icons'
+import _ from 'lodash'
 import { Search } from 'lucide-react'
-import Select from '@components/commons/select'
-import CreateIcon from '@components/icons/create'
+import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     schoolYearId: string | undefined
@@ -158,9 +158,7 @@ function YearAndSemester() {
                                             debouncedSearchText(e.target.value)
                                         }
                                         placeholder="Nhập tên kỳ học..."
-                                        style={{
-                                            height: 40,
-                                        }}
+                                        className="py-0"
                                         prefix={
                                             <Search
                                                 size={15}
@@ -185,9 +183,6 @@ function YearAndSemester() {
                                                 }
                                             }
                                         )}
-                                        style={{
-                                            height: 40,
-                                        }}
                                         onChange={(val) =>
                                             handleFilterChange(
                                                 'schoolYearId',
@@ -206,7 +201,7 @@ function YearAndSemester() {
                         <Flex justify="end" gap={10}>
                             <Button
                                 onClick={handleModal}
-                                className="border-primary text-primary h-[40px]"
+                                className="border-primary text-primary"
                             >
                                 <PlusOutlined />
                                 Thêm mới năm học
@@ -214,7 +209,6 @@ function YearAndSemester() {
                             <Button
                                 onClick={handleModalSemester}
                                 type="primary"
-                                className="h-[40px]"
                             >
                                 <PlusOutlined />
                                 Thêm mới kỳ học

@@ -1,18 +1,16 @@
 import {
     ApartmentOutlined,
     BookOutlined,
+    FileTextOutlined,
     IdcardOutlined,
     MessageOutlined,
-    FileTextOutlined,
-    ReadOutlined,
     PieChartOutlined,
-    ScheduleOutlined,
+    ReadOutlined,
     SettingOutlined,
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
-import ROUTER_PATH from '../generated/router'
 // biome-ignore lint/style/useImportType: <explanation>
 import {
     BookCheckIcon,
@@ -23,6 +21,7 @@ import {
     LayoutDashboard,
     LucideProps,
 } from 'lucide-react'
+import ROUTER_PATH from '../generated/router'
 import './index.css'
 interface MenuItem {
     id: string
@@ -428,11 +427,11 @@ const NAVIGATION: NavigationType = {
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
-                        id: 'phan-cong-giang-day',
-                        label: 'Phân công giảng dạy',
+                        id: 'quan-ly-lop-mon-hoc',
+                        label: 'Quản lý lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                        description: 'Phân công giảng dạy',
+                        description: 'Quản lý lớp môn học',
                     },
                     {
                         id: 'dang-ky-hoc',

@@ -1,33 +1,22 @@
-import Table, { type TableParamsAntdType } from '@components/commons/table'
+import Table from '@components/commons/table'
+import FilterSurvey, {
+    type FilterSurveyProps,
+} from '@components/filter/filter-survey'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import {
     useCountSurvey,
     useFindManySurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Row,
-    Tag,
-    Tooltip,
-} from 'antd'
-import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
-import { PutSurveyModal } from '@components/modal'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import useSpinner from '@hooks/spinner'
-import { EyeOutlined } from '@ant-design/icons'
-import DeleteIcon from '@components/icons/delete'
+import { Button, Col, Flex, Row, message } from 'antd'
 import dayjs from 'dayjs'
-import FilterSurvey, {
-    type FilterSurveyProps,
-} from '@components/filter/filter-survey'
-import EditIcon from '@components/icons/edit'
+import _ from 'lodash'
+import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 type Filter = FilterSurveyProps & {
     searchText: string
 }

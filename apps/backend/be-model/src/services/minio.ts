@@ -1,7 +1,7 @@
-import { type BucketItem, Client } from 'minio'
-import type { ListObjectDto, PresignedUrlDto, UrlDto } from '../dto/minio'
 import { randomUUIDv7 } from 'bun'
 import dayjs from 'dayjs'
+import { type BucketItem, Client } from 'minio'
+import type { ListObjectDto, PresignedUrlDto, UrlDto } from '../dto/minio'
 
 export class MinIOService {
     private readonly minioClient: Client

@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -9,21 +8,10 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountOrganizationType,
-    useFindManyOrganizationType,
+    useFindManyDM_DonViType,
     useUpdateOrganizationType,
-    useUpdateUser,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
@@ -34,7 +22,7 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [], refetch } = useFindManyOrganizationType({
+    const { data = [], refetch } = useFindManyDM_DonViType({
         where: {
             name: {
                 contains: searchText,

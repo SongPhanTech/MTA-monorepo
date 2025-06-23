@@ -21,7 +21,7 @@ export type AppFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {
 export async function appFetch<
     TData,
     TError,
-    // biome-ignore lint/complexity/noBannedTypes: <explanation>
+    
     TBody extends {} | FormData | undefined | null,
     THeaders extends {},
     TQueryParams extends {},

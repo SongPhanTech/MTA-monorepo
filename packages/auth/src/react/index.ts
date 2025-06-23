@@ -1,6 +1,7 @@
-import { SessionProvider, useSession } from './provider'
 import type { Session, SessionStatus } from '..'
-const signIn = async () => {
+import { useSession } from './hook'
+import SessionProvider from './provider'
+const signIn = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin`
 }
 const fetchSession = async (): Promise<{
@@ -33,11 +34,7 @@ const fetchSession = async (): Promise<{
 const signOut = async () => {}
 
 const getSession = async () => {
-    const session = await fetchSession()
-    if (session.status === 'unauthenticated') {
-        return null
-    }
-    return session.data
+    return (await fetchSession()).data
 }
 
 export {

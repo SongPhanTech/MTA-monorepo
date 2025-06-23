@@ -6,23 +6,31 @@ import {
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
+    PutStudentModal,
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutStudentModal,
 } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
     GENDER_MEAN,
-    TRANG_THAI_HOC_VIEN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { UserProfile } from '@workspace/db'
 
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
 import EditIcon from '@components/icons/edit'
+import { getMinioUrl } from '@workspace/constant'
+import {
+    useCountStudent,
+    useFindManyFixedClass,
+    useFindManyStudent,
+    useFindManyTemplateFile,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateStudent,
+} from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -53,7 +61,6 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/constant'
-import LockIcon from '@components/icons/lock'
 import ViewIcon from '@components/icons/view'
 import { useRouter } from 'next/router'
 import { ROUTER_PATH } from '@workspace/router'
@@ -128,11 +135,11 @@ export default function UserProfilePageDs() {
             fixedClass: {
                 include: {
                     trainingCourse: true,
-                },
-            },
-            curriculumVersion: {
-                include: {
-                    curriculum: true,
+                    curriculumVersion: {
+                        include: {
+                            curriculum: true,
+                        },
+                    },
                 },
             },
         },
@@ -332,6 +339,8 @@ export default function UserProfilePageDs() {
                 },
             })
         } catch (error) {
+            console.log(error)
+
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -697,9 +706,8 @@ export default function UserProfilePageDs() {
                                     })
                                 ),
                                 render: (record) => {
-                                    const curriculum =
-                                        record.fixedClass?.curriculumVersion
-                                    return curriculum?.name || ''
+                                    return record.fixedClass?.curriculumVersion
+                                        .curriculum.name
                                 },
                             },
                             {

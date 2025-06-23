@@ -1,10 +1,10 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { Button } from '@workspace/ui'
 import { Avatar, Dropdown, type MenuProps } from 'antd'
 import { usePathname } from 'next/navigation'
-import signOutAction from './sign-out'
 import AccountInformation from './account-information'
 import ChangePassword from './change-password'
-import { Button } from '@workspace/ui'
+import signOutAction from './sign-out'
 
 const items: MenuProps['items'] = [
     {

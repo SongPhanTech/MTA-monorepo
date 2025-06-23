@@ -1,51 +1,38 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import EditIcon from '@components/icons/edit'
+import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingObjectType } from '@workspace/db'
 import {
-    useCountTrainingField,
-    useFindManyTrainingField,
-    useUpdateTrainingCourse,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingCourse,
-    useFindManySemester,
-    useFindManySubjectClass,
     useCountSubjectClass,
-    useUpdateSubjectClass,
     useFindManySchoolYear,
+    useFindManySemester,
     useFindManyStudentSubjectScore,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
+    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingObjectType, SubjectClass } from '@workspace/db'
-import {
-    CalendarPlus,
-    Search,
-    LockKeyhole,
-    LockKeyholeOpen,
-    Save,
-} from 'lucide-react'
 import {
     Button,
     Checkbox,
-    CheckboxChangeEvent,
+    type CheckboxChangeEvent,
     Col,
     Flex,
     Form,
     Input,
-    Modal,
     Row,
-    Tag,
     message,
 } from 'antd'
-import _, { forEach, includes } from 'lodash'
+import _ from 'lodash'
+import { Save, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { CalendarOutlined } from '@ant-design/icons'
-import { PutOpenClassModal } from '@components/modal'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import LopMonHocItem from './lop-mon-hoc'
 
 // const { Option } = Select;

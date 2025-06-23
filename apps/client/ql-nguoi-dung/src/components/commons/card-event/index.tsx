@@ -1,5 +1,3 @@
-import { Card, ConfigProvider, Popconfirm, Tooltip } from 'antd'
-import React from 'react'
 import {
     CalendarOutlined,
     ClockCircleOutlined,
@@ -7,6 +5,7 @@ import {
     EditFilled,
     SendOutlined,
 } from '@ant-design/icons'
+import { Card, ConfigProvider, Popconfirm, Tooltip } from 'antd'
 interface CardDashBoardProps {
     time?: string
     date?: string

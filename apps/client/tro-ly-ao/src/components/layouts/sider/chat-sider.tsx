@@ -1,7 +1,5 @@
 import {
     DeleteFilled,
-    DeleteOutlined,
-    EditOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     MoreOutlined,

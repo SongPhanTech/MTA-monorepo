@@ -3,11 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import {
-    type Subject,
-    SubjectEquivalentType,
-    type SubjectVersion,
-} from '@workspace/db'
+import { SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -30,9 +26,9 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
-import { useExamTypeOptions } from '@hooks/examType'
-import Tabs from '@components/commons/tabar'
 import DocumentPaths from '@components/commons/documentPaths'
+import Tabs from '@components/commons/tabar'
+import { useExamTypeOptions } from '@hooks/examType'
 dayjs.locale('vi')
 
 const PutVersionSubjectModal = () => {

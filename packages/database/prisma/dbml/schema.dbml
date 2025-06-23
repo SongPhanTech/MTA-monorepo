@@ -231,7 +231,7 @@ Table FixedClass {
   graduated Boolean [default: false]
   trainingCourse TrainingCourse
   trainingCourseId String
-  managementOrganization Organization
+  managementOrganization DM_DonVi
   managementOrganizationId String
   lecturerManagement Lecturer
   lecturerManagementId String
@@ -256,7 +256,7 @@ Table Curriculum {
   updatedAt DateTime [not null]
   name String [not null]
   englishName String
-  managementOrganization Organization [not null]
+  managementOrganization DM_DonVi [not null]
   managementOrganizationId String [not null]
   trainingMajor TrainingMajor [not null]
   trainingMajorId String [not null]
@@ -341,7 +341,7 @@ Table Subject {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  managementOrganization Organization [not null]
+  managementOrganization DM_DonVi [not null]
   managementOrganizationId String [not null]
   information String
   subjectVersion SubjectVersion [not null]
@@ -377,7 +377,7 @@ Table SubjectVersion {
   materials String
   rules String
   documentPaths String[] [not null]
-  managementOrganization Organization [not null]
+  managementOrganization DM_DonVi [not null]
   managementOrganizationId String [not null]
   subject Subject [not null]
   subjectId String [not null]
@@ -597,7 +597,7 @@ Table TrainingField {
   name String [not null]
   englishName String [not null]
   publishDate DateTime [not null]
-  organization Organization [not null]
+  organization DM_DonVi [not null]
   organizationId String [not null]
   trainingObjectTypes TrainingFieldOnTrainingObjectType [not null]
   trainingMajors TrainingMajor [not null]
@@ -637,7 +637,7 @@ Table TrainingMajor {
   numberCreditsMajor Int [not null, default: 0, note: 'Số tín chỉ chuyên ngành']
   numberCreditsRequired Int [not null, default: 0, note: 'Số tín chỉ bắt buộc']
   numberCreditsElective Int [not null, default: 0, note: 'Số tín chỉ tự chọn']
-  organization Organization [not null]
+  organization DM_DonVi [not null]
   organizationId String [not null]
   trainingField TrainingField [not null]
   trainingFieldId String [not null]
@@ -803,7 +803,7 @@ Table Student {
   trainingTypeId String
   trainingForm TrainingForm
   trainingFormId String
-  registrationArea RegistrationArea
+  registrationArea DM_KhuVuc_DiaLy
   registrationAreaId String
   curriculumVersion CurriculumVersion
   curriculumVersionId String
@@ -1020,34 +1020,36 @@ Table UserProfile {
   contactAddress String
   phoneNumber String
   email String
-  nationality Nationality
+  nationality DM_QuocGia
   nationalityId String
-  religion Religion
+  religion DM_TonGiao
   religionId String
-  ethnicity Ethnicity
+  ethnicity DM_DanToc
   ethnicityId String
-  provinceHometown Province
+  provinceHometown DM_Tinh
   provinceHometownId String
-  communeHometown Commune
+  districtHometown DM_QuanHuyen
+  districtHometownId String
+  communeHometown DM_XaPhuong
   communeHometownId String
   officerNumber String
-  rank Rank
+  rank DM_CapBac
   rankId String
   rankDate DateTime
-  academicDegreeType AcademicDegreeType
+  academicDegreeType DM_HocVi
   academicDegreeTypeId String
   academicDegreeDate DateTime
-  academicRankType AcademicRankType
+  academicRankType DM_HocHam
   academicRankTypeId String
   academicRankDate DateTime
-  level Level
+  level DM_ChucDanh
   levelId String
   unionDate DateTime
   unionPlace String
   CPVJoinDate DateTime
   officialCPVDate DateTime
   CPVJoinPlace String
-  positionCPV PositionCPV
+  positionCPV DM_ChucVu
   positionCPVId String
   tenureDate DateTime
   enlistmentDate DateTime
@@ -1061,134 +1063,682 @@ Table UserProfile {
   staffHistory StaffHistory [not null]
 }
 
-Table RegistrationArea {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
+Table DM_CapBac {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  profiles UserProfile [not null]
+}
+
+Table DM_ChucDanh {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  iLoaiChucDanh Int [default: 0]
+  DM_ViTriCongViec DM_ViTriCongViec [not null]
+  userProfile UserProfile [not null]
+}
+
+Table DM_ChucVu {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  userProfile UserProfile [not null]
+}
+
+Table DM_HocHam {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  profiles UserProfile [not null]
+}
+
+Table DM_HocVi {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  profiles UserProfile [not null]
+}
+
+Table DM_ChungChiTinHoc {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+}
+
+Table DM_DanToc {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTenKhac String
+  sDiaChiCuTru String
+  userProfile UserProfile [not null]
+}
+
+Table DM_DonVi {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sCode String
+  sTenVietTat String
+  sParentId String
+  sTruongDonVi String
+  sChucNangNhiemVu String
+  sDiaChi String
+  DM_NhanVien DM_NhanVien [not null]
+  parent DM_DonVi
+  children DM_DonVi [not null]
+  lecturers Lecturer [not null]
+  lecturerHistory LecturerHistory [not null]
+  staffs Staff [not null]
+  staffHistory StaffHistory [not null]
+  curriculum Curriculum [not null]
+  fixedClass FixedClass [not null]
+  subjectVersions SubjectVersion [not null]
+  subjects Subject [not null]
+  trainingFields TrainingField [not null]
+  trainingMajors TrainingMajor [not null]
+}
+
+Table DM_DonViHanhChinh {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTen_En String
+  tinh DM_Tinh [not null]
+  huyen DM_QuanHuyen [not null]
+  xaPhuong DM_XaPhuong [not null]
+}
+
+Table DM_KhuVuc_DiaLy {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTen_En String
+  tinh DM_Tinh [not null]
   student Student [not null]
-
-  Note: 'khu vực đăng ký (Bắc, Trung, Nam)'
 }
 
-Table Nationality {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
+Table DM_NgoaiNgu {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+}
+
+Table DM_TonGiao {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
   userProfile UserProfile [not null]
-
-  Note: 'quốc tịch'
 }
 
-Table Religion {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
+Table DM_TrinhDoNgoaiNgu {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sKhung String
+}
+
+Table DM_TrinhDoTinHoc {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+}
+
+Table DM_UngDung {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sMoTa String
+  sLogoUrl String
+  sUrl String
+  bTatCaNguoiDung Boolean [default: false]
+  bTatCaNhanVien Boolean [default: false]
+  sClientId String
+  sClientSecret String
+  sRedirectDefault String
+}
+
+Table DM_NhanVien {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sHoVaDem String
+  sTenDayDu String
+  dNgaySinh DateTime
+  iGioiTinh Int
+  sDiaChi String
+  sSDTDiDong String
+  sEmail String
+  bLaNguoiDung Boolean
+  DM_DonVi DM_DonVi
+  sDM_DonViId String
+  DM_ViTriCongViec DM_ViTriCongViec
+  sDM_ViTriCongViecId String
+  sQuanlyTrucTiepId String
+  sAvatarId String
+  taiKhoan TaiKhoan
+  NguoiDungTrongNhom NguoiDungTrongNhom [not null]
+  Quyen_VaiTro Quyen_VaiTro [not null]
+  nhatKyHoatDong NhatKyHoatDong [not null]
+}
+
+Table DM_NhomNguoiDung {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  vaiTroTrongNhom VaiTroTrongNhom [not null]
+  nguoiDungTrongNhom NguoiDungTrongNhom [not null]
+}
+
+Table DM_NhomUngDung {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sMoTa String
+}
+
+Table DM_QuocGia {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sLanguage String
   userProfile UserProfile [not null]
-
-  Note: 'tôn giáo'
+  tinh DM_Tinh [not null]
 }
 
-Table Ethnicity {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
+Table DM_Tinh {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  quocGia DM_QuocGia
+  sDM_QuocGiaId String
+  dM_KhuVuc_DiaLy DM_KhuVuc_DiaLy
+  iDM_KhuVucDiaLy_Id String
+  dM_DonViHanhChinh DM_DonViHanhChinh
+  iDM_DonViHanhChinhId String
+  huyen DM_QuanHuyen [not null]
+  xaPhuong DM_XaPhuong [not null]
   userProfile UserProfile [not null]
-
-  Note: 'dân tộc'
 }
 
-Table Province {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
-  Commune Commune [not null]
+Table DM_QuanHuyen {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  dM_Tinh DM_Tinh
+  sDM_TinhId String
+  sDM_Tinh_Ma String
+  dM_DonViHanhChinh DM_DonViHanhChinh
+  iDM_DonViHanhChinhId String
+  xaPhuong DM_XaPhuong [not null]
+  userProfile UserProfile [not null]
 }
 
-Table Commune {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  province Province [not null]
-  provinceId String [not null]
-  profiles UserProfile [not null]
+Table DM_XaPhuong {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sDM_TinhId String
+  quanHuyen DM_QuanHuyen
+  sDM_QuanHuyenId String
+  sDM_QuanHuyen_Ma String
+  dM_Tinh DM_Tinh
+  dM_TinhId String
+  dM_DonViHanhChinh DM_DonViHanhChinh
+  iDM_DonViHanhChinhId String
+  userProfile UserProfile [not null]
+}
+
+Table DM_VaiTro {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  Quyen_VaiTro Quyen_VaiTro [not null]
+  VaiTroTrongNhom VaiTroTrongNhom [not null]
+}
+
+Table DM_ViTriCongViec {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sDM_ChucDanhId String
+  sDM_NhomViTriId String [not null]
+  DM_NhanVien DM_NhanVien [not null]
+  DM_ChucDanh DM_ChucDanh
+}
+
+Table NguoiDungTrongNhom {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  DM_NhomNguoiDung DM_NhomNguoiDung
+  sDM_NhomNguoiDungId String
+  DM_NhanVien DM_NhanVien
+  sDM_NhanVienId String
 
   indexes {
-    (name, provinceId) [unique]
+    (sDM_NhomNguoiDungId, sDM_NhanVienId) [unique]
   }
 }
 
-Table Level {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
+Table NhatKyHoatDong {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  DM_NhanVien DM_NhanVien
+  sNhanVienId String
+  dLogTime DateTime
+  iState Int
+  sObjectName String
+  sReferenceName String
+  sDescription String
+  sIPAddress String
 }
 
-Table Rank {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
-
-  Note: 'cấp bậc hàm'
+Table Policy {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  bXacThuc2YeuTo Boolean [default: false]
+  bGioiHanTCIP Boolean [default: false]
+  bGioiHanTG Boolean [default: false]
+  iApDungChoUD Int [default: 0]
 }
 
-Table AcademicDegreeType {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
-
-  Note: 'học hàm'
+Table Quyen_VaiTro {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTenChucNang String [default: 'N'Tên quyền'']
+  sDM_NhanVienId String
+  sDM_VaiTroId String
+  fValue Int
+  DM_NhanVien DM_NhanVien
+  DM_VaiTro DM_VaiTro
 }
 
-Table AcademicRankType {
+Table TaiKhoan {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sUserName String
+  sAvatar String
+  sDM_NhanVienId String [unique]
+  nhanVien DM_NhanVien
+}
+
+Table VaiTroTrongNhom {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  dM_NhomNguoiDung DM_NhomNguoiDung
+  sDM_NhomNguoiDungId String
+  DM_VaiTro DM_VaiTro
+  sDM_VaiTroId String
+}
+
+Table Lecturer {
   id String [pk]
   code String
   active Boolean [not null, default: true]
@@ -1196,10 +1746,40 @@ Table AcademicRankType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
+  from DateTime
+  lectureID String [unique]
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization DM_DonVi [not null]
+  organizationId String [not null]
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+  mainSubjectClasses SubjectClass [not null]
+  extraSubjectClasses SubjectClass [not null]
+  enterGradeClasses SubjectClass [not null]
+  manageFixedClass FixedClass [not null]
+}
 
-  Note: 'học vị'
+Table LecturerHistory {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  to DateTime
+  lectureID String
+  lectureCode String
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization DM_DonVi
+  organizationId String
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
 }
 
 Table LecturerType {
@@ -1247,107 +1827,6 @@ Table StaffPosition {
   Note: 'Chức vụ nhân viên'
 }
 
-Table PositionCPV {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  profiles UserProfile [not null]
-
-  Note: 'chức vụ Đảng'
-}
-
-Table OrganizationType {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  organizations Organization [not null]
-
-  Note: 'loại đơn vị'
-}
-
-Table Organization {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [unique, not null]
-  type OrganizationType [not null]
-  typeId String [not null]
-  parent Organization
-  parentId String
-  children Organization [not null]
-  address String
-  lecturers Lecturer [not null]
-  lecturerHistory LecturerHistory [not null]
-  staffs Staff [not null]
-  staffHistory StaffHistory [not null]
-  curriculum Curriculum [not null]
-  fixedClass FixedClass [not null]
-  subjectVersions SubjectVersion [not null]
-  subjects Subject [not null]
-  trainingFields TrainingField [not null]
-  trainingMajors TrainingMajor [not null]
-
-  Note: 'đơn vị'
-}
-
-Table Lecturer {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  from DateTime
-  lectureID String [unique]
-  serviceDate DateTime
-  userProfile UserProfile [not null]
-  userProfileId String [unique, not null]
-  organization Organization [not null]
-  organizationId String [not null]
-  lecturerType LecturerType [not null]
-  lecturerTypeId String [not null]
-  mainSubjectClasses SubjectClass [not null]
-  extraSubjectClasses SubjectClass [not null]
-  enterGradeClasses SubjectClass [not null]
-  manageFixedClass FixedClass [not null]
-}
-
-Table LecturerHistory {
-  id String [pk]
-  code String
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  from DateTime
-  to DateTime
-  lectureID String
-  lectureCode String
-  serviceDate DateTime
-  userProfile UserProfile [not null]
-  userProfileId String [unique, not null]
-  organization Organization
-  organizationId String
-  lecturerType LecturerType [not null]
-  lecturerTypeId String [not null]
-}
-
 Table Staff {
   id String [pk]
   code String
@@ -1359,7 +1838,7 @@ Table Staff {
   from DateTime
   userProfile UserProfile [not null]
   userProfileId String [unique, not null]
-  organization Organization [not null]
+  organization DM_DonVi [not null]
   organizationId String [not null]
   staffType StaffType [not null]
   staffTypeId String [not null]
@@ -1380,8 +1859,8 @@ Table StaffHistory {
   to DateTime
   userProfile UserProfile [not null]
   userProfileId String [unique, not null]
-  organization Organization
-  organizationId String
+  organization DM_DonVi [not null]
+  organizationId String [not null]
   staffType StaffType [not null]
   staffTypeId String [not null]
   staffPosition StaffPosition [not null]
@@ -1622,7 +2101,7 @@ Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: FixedClass.trainingCourseId > TrainingCourse.id
 
-Ref: FixedClass.managementOrganizationId > Organization.id
+Ref: FixedClass.managementOrganizationId > DM_DonVi.Id
 
 Ref: FixedClass.lecturerManagementId > Lecturer.id
 
@@ -1630,7 +2109,7 @@ Ref: FixedClass.staffManagementId > Staff.id
 
 Ref: FixedClass.curriculumVersionId > CurriculumVersion.id
 
-Ref: Curriculum.managementOrganizationId > Organization.id
+Ref: Curriculum.managementOrganizationId > DM_DonVi.Id
 
 Ref: Curriculum.trainingMajorId > TrainingMajor.id
 
@@ -1644,9 +2123,9 @@ Ref: CurriculumVersion.trainingTimeId > TrainingTime.id
 
 Ref: CurriculumVersion.diplomaTypeId > DiplomaType.id
 
-Ref: Subject.managementOrganizationId > Organization.id
+Ref: Subject.managementOrganizationId > DM_DonVi.Id
 
-Ref: SubjectVersion.managementOrganizationId > Organization.id
+Ref: SubjectVersion.managementOrganizationId > DM_DonVi.Id
 
 Ref: SubjectVersion.subjectId > Subject.id
 
@@ -1670,13 +2149,13 @@ Ref: Building.trainingLocationId > TrainingLocation.id
 
 Ref: Room.buildingId > Building.id
 
-Ref: TrainingField.organizationId > Organization.id
+Ref: TrainingField.organizationId > DM_DonVi.Id
 
 Ref: TrainingFieldOnTrainingObjectType.trainingFieldId > TrainingField.id
 
 Ref: TrainingFieldOnTrainingObjectType.trainingObjectTypeId > TrainingObjectType.id
 
-Ref: TrainingMajor.organizationId > Organization.id
+Ref: TrainingMajor.organizationId > DM_DonVi.Id
 
 Ref: TrainingMajor.trainingFieldId > TrainingField.id
 
@@ -1704,7 +2183,7 @@ Ref: Student.trainingTypeId > TrainingType.id
 
 Ref: Student.trainingFormId > TrainingForm.id
 
-Ref: Student.registrationAreaId > RegistrationArea.id
+Ref: Student.registrationAreaId > DM_KhuVuc_DiaLy.Id
 
 Ref: Student.curriculumVersionId > CurriculumVersion.id
 
@@ -1728,47 +2207,83 @@ Ref: Feedback.userId > User.id
 
 Ref: UserProfile.userId > User.id
 
-Ref: UserProfile.nationalityId > Nationality.id
+Ref: UserProfile.nationalityId > DM_QuocGia.Id
 
-Ref: UserProfile.religionId > Religion.id
+Ref: UserProfile.religionId > DM_TonGiao.Id
 
-Ref: UserProfile.ethnicityId > Ethnicity.id
+Ref: UserProfile.ethnicityId > DM_DanToc.Id
 
-Ref: UserProfile.provinceHometownId > Province.id
+Ref: UserProfile.provinceHometownId > DM_Tinh.Id
 
-Ref: UserProfile.communeHometownId > Commune.id
+Ref: UserProfile.districtHometownId > DM_QuanHuyen.Id
 
-Ref: UserProfile.rankId > Rank.id
+Ref: UserProfile.communeHometownId > DM_XaPhuong.Id
 
-Ref: UserProfile.academicDegreeTypeId > AcademicDegreeType.id
+Ref: UserProfile.rankId > DM_CapBac.Id
 
-Ref: UserProfile.academicRankTypeId > AcademicRankType.id
+Ref: UserProfile.academicDegreeTypeId > DM_HocVi.Id
 
-Ref: UserProfile.levelId > Level.id
+Ref: UserProfile.academicRankTypeId > DM_HocHam.Id
 
-Ref: UserProfile.positionCPVId > PositionCPV.id
+Ref: UserProfile.levelId > DM_ChucDanh.Id
 
-Ref: Commune.provinceId > Province.id
+Ref: UserProfile.positionCPVId > DM_ChucVu.Id
 
-Ref: Organization.typeId > OrganizationType.id
+Ref: DM_DonVi.sParentId - DM_DonVi.Id
 
-Ref: Organization.parentId - Organization.id
+Ref: DM_NhanVien.sDM_DonViId > DM_DonVi.Id [delete: No Action]
+
+Ref: DM_NhanVien.sDM_ViTriCongViecId > DM_ViTriCongViec.Id [delete: No Action]
+
+Ref: DM_Tinh.sDM_QuocGiaId > DM_QuocGia.Id
+
+Ref: DM_Tinh.iDM_KhuVucDiaLy_Id > DM_KhuVuc_DiaLy.Id
+
+Ref: DM_Tinh.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_QuanHuyen.sDM_TinhId > DM_Tinh.Id
+
+Ref: DM_QuanHuyen.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_XaPhuong.sDM_QuanHuyenId > DM_QuanHuyen.Id
+
+Ref: DM_XaPhuong.dM_TinhId > DM_Tinh.Id
+
+Ref: DM_XaPhuong.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_ViTriCongViec.sDM_ChucDanhId > DM_ChucDanh.Id [delete: No Action]
+
+Ref: NguoiDungTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id [delete: No Action]
+
+Ref: NguoiDungTrongNhom.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: NhatKyHoatDong.sNhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: Quyen_VaiTro.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: Quyen_VaiTro.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
+
+Ref: TaiKhoan.sDM_NhanVienId - DM_NhanVien.Id [delete: No Action]
+
+Ref: VaiTroTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id
+
+Ref: VaiTroTrongNhom.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
 
 Ref: Lecturer.userProfileId - UserProfile.id
 
-Ref: Lecturer.organizationId > Organization.id
+Ref: Lecturer.organizationId > DM_DonVi.Id
 
 Ref: Lecturer.lecturerTypeId > LecturerType.id
 
 Ref: LecturerHistory.userProfileId > UserProfile.id
 
-Ref: LecturerHistory.organizationId > Organization.id
+Ref: LecturerHistory.organizationId > DM_DonVi.Id
 
 Ref: LecturerHistory.lecturerTypeId > LecturerType.id
 
 Ref: Staff.userProfileId - UserProfile.id
 
-Ref: Staff.organizationId > Organization.id
+Ref: Staff.organizationId > DM_DonVi.Id
 
 Ref: Staff.staffTypeId > StaffType.id
 
@@ -1776,7 +2291,7 @@ Ref: Staff.staffPositionId > StaffPosition.id
 
 Ref: StaffHistory.userProfileId > UserProfile.id
 
-Ref: StaffHistory.organizationId > Organization.id
+Ref: StaffHistory.organizationId > DM_DonVi.Id
 
 Ref: StaffHistory.staffTypeId > StaffType.id
 

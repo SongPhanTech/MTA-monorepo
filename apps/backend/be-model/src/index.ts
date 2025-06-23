@@ -1,4 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { jwtAuth } from '@workspace/auth/hono'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -7,9 +8,7 @@ import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-
 import MinIOApp from './api/minio'
-import { jwtAuth } from '@workspace/auth/hono'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
 

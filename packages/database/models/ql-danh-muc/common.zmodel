@@ -5,53 +5,54 @@ import '../ql-dao-tao/categories'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 
-model Province extends Base {
-  name     String
+// model Province extends Base {
+//   name     String
 
-  profiles UserProfile[]
-  Commune  Commune[]
-  @@schema("ql-danh-muc")
-}
+//   profiles UserProfile[]
+//   Commune  Commune[]
+//   @@schema("ql-danh-muc")
+// }
 
-model Commune extends Base {
-  name       String
-  province   Province      @relation(fields: [provinceId], references: [id])
-  provinceId String
-  profiles   UserProfile[]
-  @@unique([name, provinceId])
-  @@schema("ql-danh-muc")
-}
+// model Commune extends Base {
+//   name       String
+//   province   Province      @relation(fields: [provinceId], references: [id])
+//   provinceId String
+//   profiles   UserProfile[]
+//   @@unique([name, provinceId])
+//   @@schema("ql-danh-muc")
+// }
 
-model Level extends Base {
-  name     String
+// model Level extends Base {
+//   name     String
 
-  profiles UserProfile[]
-  @@schema("ql-danh-muc")
-}
-/// cấp bậc hàm
-model Rank extends Base {
-  name     String
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
-  profiles UserProfile[]
+// /// cấp bậc hàm
+// model Rank extends Base {
+//   name     String
 
-  @@schema("ql-danh-muc")
-}
+//   profiles UserProfile[]
 
-/// học hàm
-model AcademicDegreeType extends Base {
-  name     String
+//   @@schema("ql-danh-muc")
+// }
 
-  profiles UserProfile[]
-  @@schema("ql-danh-muc")
-}
+// /// học hàm
+// model AcademicDegreeType extends Base {
+//   name     String
 
-/// học vị
-model AcademicRankType extends Base {
-  name     String
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
-  profiles UserProfile[]
-  @@schema("ql-danh-muc")
-}
+// /// học vị
+// model AcademicRankType extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
 /// Loại giáo viên
 model LecturerType extends Base {
@@ -81,43 +82,43 @@ model StaffPosition extends Base {
   @@schema("ql-danh-muc")
 }
 
-/// chức vụ Đảng
-model PositionCPV extends Base {
-  name     String
+// /// chức vụ Đảng
+// model PositionCPV extends Base {
+//   name     String
 
-  profiles UserProfile[]
-  @@schema("ql-danh-muc")
-}
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
 
-/// loại đơn vị
-model OrganizationType extends Base {
-  name          String
+// /// loại đơn vị
+// model OrganizationType extends Base {
+//   name          String
 
-  organizations Organization[]
-  @@schema("ql-danh-muc")
-}
+//   organizations Organization[]
+//   @@schema("ql-danh-muc")
+// }
 
-/// đơn vị
-model Organization extends Base {
-  name            String            @unique
-  type            OrganizationType  @relation(fields: [typeId], references: [id])
-  typeId          String
-  parent          Organization?     @relation("ParentChild", fields: [parentId], references: [id])
-  parentId        String?
-  children        Organization[]    @relation("ParentChild")
-  address         String?
+// /// đơn vị
+// model Organization extends Base {
+//   name            String            @unique
+//   type            OrganizationType  @relation(fields: [typeId], references: [id])
+//   typeId          String
+//   parent          Organization?     @relation("ParentChild", fields: [parentId], references: [id])
+//   parentId        String?
+//   children        Organization[]    @relation("ParentChild")
+//   address         String?
 
-  lecturers       Lecturer[]
-  lecturerHistory LecturerHistory[]
-  staffs          Staff[]
-  staffHistory    StaffHistory[]
+//   lecturers       Lecturer[]
+//   lecturerHistory LecturerHistory[]
+//   staffs          Staff[]
+//   staffHistory    StaffHistory[]
 
-  curriculum      Curriculum[]
-  fixedClass      FixedClass[]
-  subjectVersions SubjectVersion[]
-  subjects        Subject[]
-  trainingFields  TrainingField[]
-  trainingMajors  TrainingMajor[]
+//   curriculum      Curriculum[]
+//   fixedClass      FixedClass[]
+//   subjectVersions SubjectVersion[]
+//   subjects        Subject[]
+//   trainingFields  TrainingField[]
+//   trainingMajors  TrainingMajor[]
 
-  @@schema("ql-danh-muc")
-}
+//   @@schema("ql-danh-muc")
+// }

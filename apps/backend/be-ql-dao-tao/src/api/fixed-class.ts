@@ -1,12 +1,11 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { $Enums } from '@workspace/db'
 import { FixedClassScalarSchema } from '@workspace/db/zod/models'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
 import { read, utils } from 'xlsx'
 
 import { prisma } from '..'
-import { StudentInfo, StudentTemplateData } from '../dto/student-info.dto'
+import { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { listStudentInfo } from '../services/fixed-class.service'
 import { getBufferFromUrl } from '../services/template.service'

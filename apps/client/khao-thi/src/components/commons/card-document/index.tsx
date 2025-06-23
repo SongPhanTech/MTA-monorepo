@@ -5,7 +5,6 @@ import { cn } from '@lib/utils'
 import type { Document } from '@workspace/db'
 import { Image, Popconfirm } from 'antd'
 import { useCallback, useMemo } from 'react'
-import ImageNext from 'next/image'
 import { FileUploadIcon } from '../upload'
 type CardDocumentProps = {
     onDelete?: () => void

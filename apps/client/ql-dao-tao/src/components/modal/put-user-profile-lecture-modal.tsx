@@ -7,37 +7,36 @@ import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
-    type UserProfile,
-    type Nationality,
-    type Religion,
-    type Ethnicity,
     $Enums,
-    type Rank,
-    type Level,
     type AcademicDegreeType,
     type AcademicRankType,
+    type Ethnicity,
     type Lecturer,
-    type Prisma,
-    type Organization,
     type LecturerType,
+    type Level,
+    type Nationality,
+    type Organization,
+    type Prisma,
+    type Rank,
+    type Religion,
+    type UserProfile,
 } from '@workspace/db'
 import {
-    useFindManyUserProfile,
-    useUpdateUserProfile,
-    useFindManyReligion,
-    useFindManyEthnicity,
-    useFindManyOrganization,
-    useFindManyNationality,
-    useFindManyRank,
-    useFindManyLevel,
+    useCreateLecturer,
+    useCreateUserProfile,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
+    useFindManyDM_DonVi,
+    useFindManyEthnicity,
+    useFindManyLecturerType,
+    useFindManyLevel,
+    useFindManyNationality,
+    useFindManyRank,
+    useFindManyReligion,
+    useFindManyUserProfile,
     useFindUniqueLecturer,
     useUpdateLecturer,
-    useCreateLecturer,
-    useFindManyLecturerType,
-    useFindManyLecturer,
-    useCreateUserProfile,
+    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import {
@@ -54,12 +53,12 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { PutOrganizationUserProps } from './put-organization-user'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -224,13 +223,13 @@ const PutUserProfileLectureModal = () => {
     // const {
     //     data: organizationUserData = [],
     //     refetch: refetchOrganizationUser,
-    // } = useFindManyOrganizationUser({
+    // } = useFindManyDM_DonViUser({
     //     where: {
     //         userProfileId: id || undefined,
     //     },
     // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -487,28 +486,28 @@ const PutUserProfileLectureModal = () => {
                 userType: $Enums.UserType.LECTURER,
                 // Relations - chỉ connect khi có giá trị
                 ...(output.nationalityId && {
-                    nationality: { connect: { id: output.nationalityId } },
+                    nationality: { connect: { Id: output.nationalityId } },
                 }),
                 ...(output.religionId && {
-                    religion: { connect: { id: output.religionId } },
+                    religion: { connect: { Id: output.religionId } },
                 }),
                 ...(output.ethnicityId && {
-                    ethnicity: { connect: { id: output.ethnicityId } },
+                    ethnicity: { connect: { Id: output.ethnicityId } },
                 }),
                 ...(output.rankId && {
-                    rank: { connect: { id: output.rankId } },
+                    rank: { connect: { Id: output.rankId } },
                 }),
                 ...(output.levelId && {
-                    level: { connect: { id: output.levelId } },
+                    level: { connect: { Id: output.levelId } },
                 }),
                 ...(output.academicDegreeTypeId && {
                     academicDegreeType: {
-                        connect: { id: output.academicDegreeTypeId },
+                        connect: { Id: output.academicDegreeTypeId },
                     },
                 }),
                 ...(output.academicRankTypeId && {
                     academicRankType: {
-                        connect: { id: output.academicRankTypeId },
+                        connect: { Id: output.academicRankTypeId },
                     },
                 }),
             }
@@ -646,7 +645,6 @@ const PutUserProfileLectureModal = () => {
     //     base: Record<PropertyKey, unknown>
     // ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
         if (lecturerData?.userProfile && id) {
@@ -705,13 +703,13 @@ const PutUserProfileLectureModal = () => {
                     : null,
 
                 // Relations IDs
-                nationalityId: userProfile.nationality?.id,
-                religionId: userProfile.religion?.id,
-                ethnicityId: userProfile.ethnicity?.id,
-                rankId: userProfile.rank?.id,
-                levelId: userProfile.level?.id,
-                academicDegreeTypeId: userProfile.academicDegreeType?.id,
-                academicRankTypeId: userProfile.academicRankType?.id,
+                nationalityId: userProfile.nationality?.Id,
+                religionId: userProfile.religion?.Id,
+                ethnicityId: userProfile.ethnicity?.Id,
+                rankId: userProfile.rank?.Id,
+                levelId: userProfile.level?.Id,
+                academicDegreeTypeId: userProfile.academicDegreeType?.Id,
+                academicRankTypeId: userProfile.academicRankType?.Id,
 
                 // Lịch sử - Dates
                 rankDate: userProfile.rankDate

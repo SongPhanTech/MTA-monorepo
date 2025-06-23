@@ -28,6 +28,7 @@ import {
     useFindUniqueFixedClass,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Checkbox,
@@ -49,7 +50,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { ROUTER_PATH } from '@workspace/router'
 
 dayjs.locale('vi')
 export default function StudentFixedClassPage() {
@@ -559,5 +559,9 @@ export default function StudentFixedClassPage() {
 }
 
 StudentFixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout headerChildren="Danh sách sinh viên lớp biên chế">
+            {page}
+        </DefaultLayout>
+    )
 }

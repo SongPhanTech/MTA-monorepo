@@ -1,65 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import type { Session, SessionStatus } from '..'
-import { fetchSession } from '.'
-const useSession = () => {
-    const { status, data, error, setStatus, setData, setError } =
-        useContext(SessionContext)
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        setStatus('loading')
-        fetchSession()
-            .then((session) => {
-                setStatus(session.status)
-                setData(session.data)
-                setError(session.error)
-            })
-            .catch((err) => {
-                setStatus('unauthenticated')
-                setData(null)
-                setError(
-                    err instanceof Error ? err : new Error('Unknown error')
-                )
-            })
-    }, [])
-
-    return {
-        status,
-        data,
-        error,
-    }
-}
 const SessionContext = React.createContext<{
-    status: SessionStatus
-    data: Session | null
-    error: Error | null
-    setStatus: (status: SessionStatus) => void
-    setData: (data: Session | null) => void
-    setError: (error: Error | null) => void
+    session: any | null | undefined
+    sessionState: Session | null
+    status: SessionStatus | null
+    setSessionState: React.Dispatch<React.SetStateAction<Session | null>>
+    setStatus: React.Dispatch<React.SetStateAction<SessionStatus | null>>
 }>({
-    data: null,
-    status: 'loading',
-    error: null,
-    setData: () => {},
+    session: null,
+    sessionState: null,
+    status: null,
+    setSessionState: () => {},
     setStatus: () => {},
-    setError: () => {},
 })
 
-const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
-    children,
-}) => {
-    const [status, setStatus] = useState<SessionStatus>('loading')
-    const [data, setData] = useState<Session | null>(null)
-    const [error, setError] = useState<Error | null>(null)
+const SessionProvider: React.FC<{
+    children: React.ReactNode
+    session?: any | null | undefined
+}> = ({ children, session }) => {
+    const [sessionState, setSessionState] = React.useState<Session | null>(
+        session
+    )
+    const [status, setStatus] = React.useState<SessionStatus | null>(null)
     return (
         <SessionContext.Provider
             value={{
+                session,
+                sessionState,
                 status,
-                data,
-                error,
+                setSessionState,
                 setStatus,
-                setData,
-                setError,
             }}
         >
             {children}
@@ -69,4 +40,4 @@ const SessionProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export default SessionProvider
 
-export { useSession, SessionProvider }
+export { SessionProvider, SessionContext }

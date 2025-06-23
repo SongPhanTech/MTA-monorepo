@@ -2,11 +2,9 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchCreateGroup, fetchUpdateGroup } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import { PutNhomNguoiDungModal } from '@components/modal'
 import type { PutNhomNguoiDungFormType } from '@components/modal/put-nhom-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
@@ -22,13 +20,14 @@ import {
     Flex,
     Form,
     Input,
-    message,
     Row,
     Tooltip,
+    message,
 } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function Page() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)

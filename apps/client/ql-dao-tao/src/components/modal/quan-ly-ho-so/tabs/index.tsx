@@ -14,12 +14,26 @@ export default function TabQuanLyHoSo({
     activeKey,
     setActiveKey,
     id,
+    avatar,
+    setAvatar,
+    setFileList,
+    fileList,
+    type,
 }: TabQuanLyHoSoProps) {
     const items: TabsProps['items'] = [
         {
             key: '1',
             label: 'Thông tin cá nhân',
-            children: <ThongTinCaNhanTab id={id} />,
+            children: (
+                <ThongTinCaNhanTab
+                    id={id}
+                    avatar={avatar || []}
+                    setAvatar={setAvatar || (() => {})}
+                    setFileList={setFileList || (() => {})}
+                    fileList={fileList || []}
+                    type={type}
+                />
+            ),
             forceRender: true,
         },
         {

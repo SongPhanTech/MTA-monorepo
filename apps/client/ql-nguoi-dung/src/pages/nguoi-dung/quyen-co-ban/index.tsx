@@ -1,15 +1,13 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
 import { PutQuyenCoBanModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import useQuyenCoBan from '@hooks/quyen-co-ban'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Divider, Flex, Form, Input, Row, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)

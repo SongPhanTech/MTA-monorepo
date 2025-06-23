@@ -558,7 +558,7 @@ function Page() {
                                               title: 'Lý do từ chối',
                                               dataIndex: 'reason',
                                               width: 200,
-                                              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
                                               render: (value: any) => value,
                                           },
                                       ]

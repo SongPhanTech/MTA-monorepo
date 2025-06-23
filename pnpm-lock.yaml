@@ -225,6 +225,9 @@ catalogs:
     react-markdown:
       specifier: ^10.1.0
       version: 10.1.0
+    react-to-print:
+      specifier: ^3.1.0
+      version: 3.1.0
     react-top-loading-bar:
       specifier: ^2.3.1
       version: 2.3.1
@@ -252,6 +255,9 @@ catalogs:
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
+    xlsx:
+      specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      version: 0.20.3
     zenstack:
       specifier: ^2.15.1
       version: 2.15.1
@@ -438,6 +444,9 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.2.2
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
       '@workspace/biome-config':
         specifier: workspace:*
         version: link:../../../packages/biome-config
@@ -951,6 +960,9 @@ importers:
       react-images-viewer:
         specifier: 'catalog:'
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.1.0(react@18.3.1)
       react-top-loading-bar:
         specifier: 'catalog:'
         version: 2.3.1(react@18.3.1)
@@ -1238,6 +1250,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.74.7(react@18.3.1)
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
       '@workspace/constant':
         specifier: workspace:*
         version: link:../../../packages/constant
@@ -1280,9 +1295,6 @@ importers:
       next:
         specifier: 'catalog:'
         version: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      next-auth:
-        specifier: 'catalog:'
-        version: 5.0.0-beta.25(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       qs:
         specifier: 'catalog:'
         version: 6.13.1
@@ -1497,6 +1509,12 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../database
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.13
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -6856,6 +6874,11 @@ packages:
 
   react-scrolllock@3.0.2:
     resolution: {integrity: sha512-ZShCKvt4bxxhqngaegHsZuoTIUDt4QOHd0saJ/cfJAu0LwCOoRaQfRZe9UPT/bpDE944u/GhuTWBmGaW9YER7Q==}
+
+  react-to-print@3.1.0:
+    resolution: {integrity: sha512-hiJZVmJtaRm9EHoUTG2bordyeRxVSGy9oFVV7fSvzOWwctPp6jbz2R6NFkaokaTYBxC7wTM/fMV5eCXsNpEwsA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ~19
 
   react-top-loading-bar@2.3.1:
     resolution: {integrity: sha512-rQk2Nm+TOBrM1C4E3e6KwT65iXyRSgBHjCkr2FNja1S51WaPulRA5nKj/xazuQ3x89wDDdGsrqkqy0RBIfd0xg==}
@@ -14405,6 +14428,10 @@ snapshots:
   react-scrolllock@3.0.2:
     dependencies:
       exenv: 1.2.2
+
+  react-to-print@3.1.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-top-loading-bar@2.3.1(react@18.3.1):
     dependencies:

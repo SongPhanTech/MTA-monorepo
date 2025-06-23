@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react'
+import { useSession } from '@workspace/auth/react'
 import { useFindUniqueUser } from '@workspace/db/hooks'
 
 export const useCurrentUser = () => {
@@ -10,7 +10,7 @@ export const useCurrentUser = () => {
         error,
     } = useFindUniqueUser({
         where: {
-            ssoId: session?.user?.user_id || '',
+            ssoId: session?.sub || '',
         },
         // enabled: !!session?.user?.user_id, // chỉ gọi khi đã có user_id
     })

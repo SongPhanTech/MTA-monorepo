@@ -1,4 +1,3 @@
-import { Column } from '@ant-design/plots/es/core/plots/column'
 import { fetchThongTinBaoCao } from '@api/userProfile'
 import useSpinner from '@hooks/spinner'
 import { Modal, Table, message } from 'antd'
@@ -26,7 +25,7 @@ const ThongTinBaoCaoModal = () => {
                 message.error('Lỗi khi tải thông tin báo cáo')
             })
             .finally(() => hideSpinner())
-    }, [isOpen])
+    }, [isOpen, showSpinner, hideSpinner])
 
     const flattenSchema = (schema: any[], parentPath = ''): any[] => {
         return schema.flatMap((item, index) => {

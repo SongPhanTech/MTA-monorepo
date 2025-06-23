@@ -101,7 +101,7 @@ export default function TrinhDoChungChiTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'chinh-tri' ? ['1'] : []}
                 onChange={handleCollapseChange('chinh-tri')}
@@ -187,7 +187,7 @@ export default function TrinhDoChungChiTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'hanh-chinh' ? ['1'] : []}
                 onChange={handleCollapseChange('hanh-chinh')}
@@ -274,7 +274,7 @@ export default function TrinhDoChungChiTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'nha-nuoc' ? ['1'] : []}
                 onChange={handleCollapseChange('nha-nuoc')}
@@ -361,7 +361,7 @@ export default function TrinhDoChungChiTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'ngoai-ngu' ? ['1'] : []}
                 onChange={handleCollapseChange('ngoai-ngu')}
@@ -448,7 +448,7 @@ export default function TrinhDoChungChiTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'tin-hoc' ? ['1'] : []}
                 onChange={handleCollapseChange('tin-hoc')}
@@ -533,7 +533,7 @@ export default function TrinhDoChungChiTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'an-ninh' ? ['1'] : []}
                 onChange={handleCollapseChange('an-ninh')}

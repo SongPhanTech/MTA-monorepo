@@ -3,10 +3,9 @@ import PutFormModal, {
     type PutModalFormType,
 } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useFindFirstGroup } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
-import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutNhomNguoiDungFormType = {
     name: string
     permissionName: string

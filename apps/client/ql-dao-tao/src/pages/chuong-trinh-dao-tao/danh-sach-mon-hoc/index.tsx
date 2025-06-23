@@ -7,9 +7,9 @@ import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Organization, ExamType } from '@workspace/db'
+import type { DM_DonVi, ExamType } from '@workspace/db'
 import {
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManySubject,
     useUpdateSubject,
     useUpdateSubjectVersion,
@@ -48,7 +48,7 @@ export default function SubjectList() {
     })
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
-    const { data: organization = [] } = useFindManyOrganization()
+    const { data: organization = [] } = useFindManyDM_DonVi()
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
@@ -187,8 +187,8 @@ export default function SubjectList() {
         return SubjectData?.map((item) => ({
             ...item,
             name: `${item?.name}${
-                item?.managementOrganization?.name
-                    ? ` - ${item?.managementOrganization?.name}`
+                item?.managementOrganization?.sTen
+                    ? ` - ${item?.managementOrganization?.sTen}`
                     : ''
             }`,
         }))
@@ -236,9 +236,9 @@ export default function SubjectList() {
                                         <Select
                                             placeholder="Chọn đơn vị quản lý"
                                             options={organization.map(
-                                                (i: Organization) => ({
-                                                    value: i.id,
-                                                    label: i.name,
+                                                (i: DM_DonVi) => ({
+                                                    value: i.Id,
+                                                    label: i.sTen,
                                                 })
                                             )}
                                             onChange={(val) =>
@@ -390,8 +390,8 @@ export default function SubjectList() {
                                 fixed: 'right',
                                 width: 150,
                                 filters: [
-                                    { text: 'Đang đào tạo', value: true },
-                                    { text: 'Ngừng đào tạo', value: false },
+                                    { text: 'Đang hoạt động', value: true },
+                                    { text: 'Không hoạt động', value: false },
                                 ],
                                 filterMultiple: false,
                                 onFilter: () => true,

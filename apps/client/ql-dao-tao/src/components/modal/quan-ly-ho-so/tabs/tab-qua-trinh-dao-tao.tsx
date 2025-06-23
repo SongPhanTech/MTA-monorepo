@@ -58,7 +58,7 @@ export default function QuaTrinhDaoTaoTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'boi-duong' ? ['1'] : []}
                 onChange={handleCollapseChange('boi-duong')}

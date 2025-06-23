@@ -1,26 +1,25 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { Curriculum, TrainingMajor } from '@workspace/db'
 import {
-    useFindUniqueCurriculum,
     useCreateCurriculum,
-    useUpdateCurriculum,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManyTrainingMajor,
+    useFindUniqueCurriculum,
+    useUpdateCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Switch, TreeSelect } from 'antd'
+import { Col, Form, Input, Switch, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import dayjs from 'dayjs'
-export type PutCurriculum = Curriculum
 import 'dayjs/locale/vi'
-import type React from 'react'
 import './index.css'
-import { buildOrgTree } from '@lib/utils'
 import DocumentPaths from '@components/commons/documentPaths'
+import { buildOrgTree } from '@lib/utils'
+export type PutCurriculum = Curriculum
 dayjs.locale('vi')
 
 const PutCurriculum = () => {
@@ -36,7 +35,7 @@ const PutCurriculum = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: manageOrgData = [] } = useFindManyOrganization()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor()
 

@@ -4,8 +4,7 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { useDeleteDocument, useFindFirstDocument } from '@workspace/db/hooks'
-import { Button, Divider, Modal, Popconfirm, message } from 'antd'
-import { Trash2 } from 'lucide-react'
+import { Button, Divider, Modal, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const PreviewTaiLieu = () => {

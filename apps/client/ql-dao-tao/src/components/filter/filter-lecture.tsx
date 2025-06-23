@@ -1,31 +1,26 @@
-import React, { useState } from 'react'
+import { FilterOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
+import {
+    useFindManyDM_DanToc,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TonGiao,
+    useFindManyPriorityObject,
+} from '@workspace/db/hooks'
 import {
     Button,
+    Col,
+    Divider,
     Flex,
+    Form,
     Input,
     Popover,
+    Row,
     //   Select,
     Space,
     Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
 } from 'antd'
-import {
-    FilterOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    ControlOutlined,
-} from '@ant-design/icons'
-import { X, Search } from 'lucide-react'
-import Select from '@components/commons/select'
-import {
-    useFindManyNationality,
-    useFindManyPriorityObject,
-    useFindManyReligion,
-    useFindManyEthnicity,
-} from '@workspace/db/hooks'
+import { Search, X } from 'lucide-react'
+import { useState } from 'react'
 
 const { Text } = Typography
 
@@ -37,9 +32,8 @@ export type FilterProps = {
 }
 
 interface Props {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     onFilterChange: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     onSearchChange: any
 }
 const options = [
@@ -76,11 +70,11 @@ const FilterLecture = (props: Props) => {
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
     const { data: nationalityData = [], refetch: refetchNationality } =
-        useFindManyNationality()
+        useFindManyDM_QuocGia()
     const { data: religionData = [], refetch: refetchReligion } =
-        useFindManyReligion()
+        useFindManyDM_TonGiao()
     const { data: ethnicityData = [], refetch: refetchEthnicity } =
-        useFindManyEthnicity()
+        useFindManyDM_DanToc()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -138,8 +132,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn quốc tịch"
                                     options={nationalityData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />
@@ -157,8 +151,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn tôn giáo"
                                     options={religionData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />
@@ -176,8 +170,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn dân tộc"
                                     options={ethnicityData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />
@@ -214,6 +208,7 @@ const FilterLecture = (props: Props) => {
             <Input
                 placeholder="Tìm kiếm theo tên giảng viên..."
                 style={{ width: 300, marginRight: 8 }}
+                className="py-0"
                 prefix={
                     <Search
                         size={15}

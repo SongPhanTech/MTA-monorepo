@@ -1,37 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import { CalendarOutlined } from '@ant-design/icons'
+import type { SubjectClass } from '@workspace/db'
+import { useUpdateSubjectClass } from '@workspace/db/hooks'
 import {
     Button,
+    Col,
+    DatePicker,
+    Divider,
     Flex,
-    Input,
-    Popover,
+    Form,
+    Modal,
+    Row,
     //   Select,
     Space,
-    Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
-    Checkbox,
-    DatePicker,
-    Modal,
-    Switch,
     Tag,
+    Typography,
 } from 'antd'
-import {
-    FilterOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    ControlOutlined,
-    CalendarOutlined,
-} from '@ant-design/icons'
-import { useUpdateSubjectClass } from '@workspace/db/hooks'
-import { X, Search, Check, Calendar } from 'lucide-react'
-import type { SubjectClass } from '@workspace/db'
+import { useEffect, useState } from 'react'
 const { Text } = Typography
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { date } from 'zod'
 
 dayjs.extend(customParseFormat)
 // export type DataProps = {

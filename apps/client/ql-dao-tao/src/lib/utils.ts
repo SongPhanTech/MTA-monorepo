@@ -1,6 +1,6 @@
+import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
-import clsx, { type ClassValue } from 'clsx'
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }
@@ -107,15 +107,15 @@ function generatePassword(length = 12): string {
         .join('')
 }
 function buildOrgTree(
-    list: Array<{ id: string; name: string; parentId: string | null }>,
+    list: Array<{ Id: string; sTen: string | null; sParentId: string | null }>,
     parentId = '0'
-): Array<{ title: string; value: string; children: any[] }> {
+): Array<{ title: string | null; value: string; children: any[] }> {
     return list
-        .filter((item) => (item.parentId ?? '0') === parentId)
+        .filter((item) => (item.sParentId ?? '0') === parentId)
         .map((item) => ({
-            title: item.name,
-            value: item.id,
-            children: buildOrgTree(list, item.id),
+            title: item.sTen,
+            value: item.Id,
+            children: buildOrgTree(list, item.Id),
         }))
 }
 // function buildOrgTree(

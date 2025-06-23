@@ -1,7 +1,5 @@
 import {
     type OidcClaimsHook,
-    getAuth,
-    oidcAuthMiddleware,
     processOAuthCallback,
     revokeSession,
 } from '@hono/oidc-auth'

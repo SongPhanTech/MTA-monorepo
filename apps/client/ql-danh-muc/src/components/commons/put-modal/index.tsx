@@ -1,16 +1,11 @@
-import React from 'react'
 import {
     Modal as AntdModal,
     type ModalProps as AntdModalProps,
-    Col,
     Form,
     type FormInstance,
-    Input,
     Row,
 } from 'antd'
-import FormItem from '../form-item'
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type PutModalFormType = {}
 export type ModalProps<T = PutModalFormType> = {
     form: FormInstance<T>

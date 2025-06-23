@@ -8,7 +8,7 @@ import { buildOrgTree } from '@lib/utils'
 import type { Subject, SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManySubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
@@ -100,7 +100,7 @@ const PutSubjectModal = () => {
         }
     }, [level])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
     const { data: subjectGroupData = [], refetch: refetchSGroup } =
         useFindManySubject()

@@ -4,28 +4,11 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSemester,
-    useFindManySemester,
-    useFindManySubjectVersion,
-    useUpdateSemester,
-} from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
-import dayjs from 'dayjs'
+import { useFindManySubjectVersion } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type Props = {
     curriculumVersionSubjectId: string

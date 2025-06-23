@@ -4,8 +4,10 @@ import { colors } from '@constants/colors'
 import { API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
+import * as modals from '@components/modal'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { SessionProvider } from '@workspace/auth/react'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
 import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
@@ -15,10 +17,8 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
-import LoadingBar from 'react-top-loading-bar'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
-import * as modals from '@components/modal'
-import { SessionProvider } from '@workspace/auth/react'
+import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
 
 dayjs.locale('vi')
@@ -65,7 +65,7 @@ function App({ Component, pageProps }: AppProps) {
     if (!isClient) return null
 
     return (
-        <SessionProvider>
+        <SessionProvider session={pageProps.session}>
             <StoreProvider store={store}>
                 <LoadingBar
                     color={colors.common.green}

@@ -1,32 +1,32 @@
 import { PlusOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
+import TableCollapse from '@components/commons/tableCollapse'
+import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingMajor, TrainingObjectType } from '@workspace/db'
 import {
-    useFindManyCurriculum,
-    useUpdateCurriculum,
     useCountCurriculum,
-    useUpdateCurriculumVersion,
-    useFindManyTrainingObjectType,
+    useFindManyCurriculum,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
+    useUpdateCurriculum,
+    useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import type { TrainingMajor, TrainingObjectType } from '@workspace/db'
-import { Search } from 'lucide-react'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import TableCollapse from '@components/commons/tableCollapse'
-import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import { ROUTER_PATH } from '@workspace/router'
-import CreateIcon from '@components/icons/create'
 interface FilterProps {
     searchText: string | undefined
     trainingObjectId: string | undefined
@@ -350,8 +350,8 @@ export default function TrainingProgramCatalog() {
         return data?.map((item) => ({
             ...item,
             name: `${item?.name}${
-                item?.managementOrganization?.name
-                    ? ` - ${item?.managementOrganization?.name}`
+                item?.managementOrganization?.sTen
+                    ? ` - ${item?.managementOrganization?.sTen}`
                     : ''
             }`,
         }))

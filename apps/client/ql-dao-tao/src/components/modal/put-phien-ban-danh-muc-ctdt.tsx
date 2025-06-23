@@ -1,36 +1,35 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { TrainingLanguage } from '@workspace/db'
 import type {
-    TrainingObjectType,
     CurriculumVersion,
-    TrainingForm,
-    TrainingTime,
     DiplomaType,
+    TrainingForm,
+    TrainingObjectType,
+    TrainingTime,
 } from '@workspace/db'
 import {
-    useFindManyTrainingLevel,
-    useFindUniqueCurriculumVersion,
-    useFindManyTrainingObjectType,
-    useFindManyDiplomaType,
     useCreateCurriculumVersion,
-    useUpdateCurriculumVersion,
+    useFindManyDiplomaType,
+    useFindManyTrainingLevel,
+    useFindManyTrainingObjectType,
     useFindManyTrainingTime,
+    useFindUniqueCurriculumVersion,
+    useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import dayjs from 'dayjs'
-export type PutCurriculumVersion = CurriculumVersion
 import 'dayjs/locale/vi'
-import type React from 'react'
 import './index.css'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
+import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
+export type PutCurriculumVersion = CurriculumVersion
 dayjs.locale('vi')
 
 type CurriculumVersionInput = {
@@ -68,7 +67,7 @@ const PutCurriculumVersion = () => {
         try {
             showSpinner()
             const data = {
-                curriculumId: input?.curriculumId,
+                curriculumId: input?.curriculumId || '',
                 code: output.code,
                 name: output.name,
                 shortName: output?.shortName,

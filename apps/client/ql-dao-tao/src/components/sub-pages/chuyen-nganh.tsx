@@ -10,26 +10,15 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { FixedClass, Organization, TrainingCourse } from '@workspace/db'
 import {
     useCountFixedClass,
+    useFindManyDM_DonVi,
     useFindManyFixedClass,
-    useFindManyOrganization,
     useFindManyTemplateFile,
     useFindManyTrainingCourse,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import {
-    Checkbox,
-    Col,
-    Form,
-    Input,
-    Menu,
-    Row,
-    Tag,
-    TreeSelect,
-    message,
-} from 'antd'
+import { Checkbox, Col, Form, Input, Row, Tag, TreeSelect, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -71,7 +60,7 @@ export default function MajorInforList({ infor }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
@@ -303,7 +292,7 @@ export default function MajorInforList({ infor }: any) {
                                 width: 140,
                                 fixed: 'right',
                                 render: (value, record) => {
-                                    return record?.status == 'IN_ACTIVE' ? (
+                                    return record?.status === 'IN_ACTIVE' ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
                                         <Tag color="success">

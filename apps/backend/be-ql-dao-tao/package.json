@@ -29,6 +29,7 @@
     "@types/bun": "catalog:",
     "@workspace/biome-config": "workspace:*",
     "@workspace/db": "workspace:*",
+    "@workspace/auth": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:"
   }

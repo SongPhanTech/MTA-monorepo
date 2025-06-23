@@ -49,7 +49,7 @@ export default function HocHamHocViTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'hoc-vi' ? ['1'] : []}
                 onChange={handleCollapseChange('hoc-vi')}
@@ -133,7 +133,7 @@ export default function HocHamHocViTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'hoc-ham' ? ['1'] : []}
                 onChange={handleCollapseChange('hoc-ham')}

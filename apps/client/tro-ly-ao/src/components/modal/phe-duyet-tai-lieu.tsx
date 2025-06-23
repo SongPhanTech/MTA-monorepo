@@ -1,5 +1,4 @@
 import { fetchChungkingAndVectorizeDocument } from '@/api/chunking_and_vectorize'
-import { fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost } from '@api/chat/chatComponents'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
@@ -39,7 +38,6 @@ const PheDuyetTaiLieu = () => {
                 const result =
                     await fetchChungkingAndVectorizeDocument(documentId)
 
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 if ((result as any)?.error === 'True') {
                     message.error('Đã xảy ra lỗi khi phê duyệt tài liệu')
                     return

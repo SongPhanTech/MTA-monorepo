@@ -1,5 +1,4 @@
 import Select from '@components/commons/select'
-import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -9,13 +8,10 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountScoreConvert,
-    useFindManyScoreConvert,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useUpdateScoreConvert,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'

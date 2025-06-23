@@ -3,9 +3,9 @@ import { Col, Flex, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import RegisterClassManager from './components/dang-ky-hoc-cho-lop-quan-ly'
-import FixedClass from './components/lop-co-mon-theo-khgd'
 import StudentCourseByPlan from './components/hoc-vien-co-mon-theo-khgd'
 import RegisterResult from './components/ket-qua-dang-ky-hoc-lop-quan-ly'
+import FixedClass from './components/lop-co-mon-theo-khgd'
 
 interface TabItem {
     key: string

@@ -1,41 +1,25 @@
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { PutTrainingCourseModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Space,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
-import dayjs from 'dayjs'
-import _ from 'lodash'
-import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import { TRAINING_COURSE_STATUS } from '@constants/constants'
 import Select from '@components/commons/select'
 import EditIcon from '@components/icons/edit'
-import { X, Search } from 'lucide-react'
+import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import _ from 'lodash'
+import { Search } from 'lucide-react'
+import type React from 'react'
+import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined

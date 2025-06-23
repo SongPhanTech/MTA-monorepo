@@ -1,8 +1,7 @@
-import React from 'react'
-import { Card, Alert, Space } from 'antd'
 import { NotificationOutlined } from '@ant-design/icons'
-import Link from 'next/link'
+import { Alert, Card, Space } from 'antd'
 import dayjs from 'dayjs'
+import Link from 'next/link'
 const fakeData: any = [
     {
         id: 1,
@@ -98,6 +97,7 @@ function News() {
                                     <img
                                         src={item?.image}
                                         style={{ width: '100%' }}
+                                        alt=""
                                     />
                                     <div style={{ paddingTop: '5px' }}>
                                         <span

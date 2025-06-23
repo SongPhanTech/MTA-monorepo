@@ -1,4 +1,4 @@
-import { DeleteOutlined, LockOutlined } from '@ant-design/icons'
+import { LockOutlined } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
 type DeleteIconProps = {

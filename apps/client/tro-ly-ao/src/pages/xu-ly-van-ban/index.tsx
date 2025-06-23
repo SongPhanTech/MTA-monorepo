@@ -1,6 +1,6 @@
 import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
 import { readStreamToText } from '@/utils'
-import { FileSyncOutlined, CopyOutlined, StopOutlined } from '@ant-design/icons'
+import { CopyOutlined, FileSyncOutlined } from '@ant-design/icons'
 import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
 import {
     Button,

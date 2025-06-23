@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import type { Session } from '..'
 
 const auth = async (token?: string): Promise<Session | null> => {

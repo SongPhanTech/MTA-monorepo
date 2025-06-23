@@ -8,34 +8,29 @@ import { GENDER_LIST } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
     $Enums,
-    type AcademicDegreeType,
-    type AcademicRankType,
-    type Ethnicity,
+    type DM_CapBac,
+    type DM_ChucDanh,
+    type DM_DanToc,
+    type DM_HocHam,
+    type DM_HocVi,
+    type DM_QuocGia,
+    type DM_TonGiao,
     type FixedClass,
-    type Lecturer,
-    type Level,
-    type Nationality,
-    type Organization,
     type Prisma,
-    type Rank,
-    type Religion,
     type Staff,
-    type StaffPosition,
-    type StaffType,
     type UserProfile,
 } from '@workspace/db'
 import {
     useCreateStaff,
-    useFindManyAcademicDegreeType,
-    useFindManyAcademicRankType,
-    useFindManyEthnicity,
+    useFindManyDM_CapBac,
+    useFindManyDM_ChucDanh,
+    useFindManyDM_DanToc,
+    useFindManyDM_DonVi,
+    useFindManyDM_HocHam,
+    useFindManyDM_HocVi,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TonGiao,
     useFindManyFixedClass,
-    useFindManyLevel,
-    useFindManyNationality,
-    useFindManyOrganization,
-    useFindManyRank,
-    useFindManyReligion,
-    useFindManyStaff,
     useFindManyStaffPosition,
     useFindManyStaffType,
     useFindManyUserProfile,
@@ -83,13 +78,13 @@ export interface PutUserProfileLectureProps {
 }
 
 type ExistingProfileWithStaff = UserProfile & {
-    nationality?: Nationality | null
-    religion?: Religion | null
-    ethnicity?: Ethnicity | null
-    rank?: Rank | null
-    level?: Level | null
-    academicDegreeType?: AcademicDegreeType | null
-    academicRankType?: AcademicRankType | null
+    nationality?: DM_QuocGia | null
+    religion?: DM_TonGiao | null
+    ethnicity?: DM_DanToc | null
+    rank?: DM_CapBac | null
+    level?: DM_ChucDanh | null
+    academicDegreeType?: DM_HocHam | null
+    academicRankType?: DM_HocVi | null
     staff?:
         | (Staff & {
               fixedClass?: FixedClass[]
@@ -126,19 +121,18 @@ const PutUserProfileStaffModal = () => {
     const [originalData, setOriginalData] = useState<StaffFrom>()
 
     const { data: nationalityData = [], refetch: refetchNa } =
-        useFindManyNationality()
+        useFindManyDM_QuocGia()
 
     const { data: religionData = [], refetch: refetchReli } =
-        useFindManyReligion()
+        useFindManyDM_TonGiao()
 
     const { data: ethnicityData = [], refetch: refetchEth } =
-        useFindManyEthnicity()
+        useFindManyDM_DanToc()
 
-    const { data: rankData = [] } = useFindManyRank()
-    const { data: levelData = [] } = useFindManyLevel()
-    const { data: academicDegreeTypeData = [] } =
-        useFindManyAcademicDegreeType()
-    const { data: academicRankTypeData = [] } = useFindManyAcademicRankType()
+    const { data: rankData = [] } = useFindManyDM_CapBac()
+    const { data: levelData = [] } = useFindManyDM_ChucDanh()
+    const { data: academicDegreeTypeData = [] } = useFindManyDM_HocHam()
+    const { data: academicRankTypeData = [] } = useFindManyDM_HocVi()
 
     const { data: staffTypeData = [] } = useFindManyStaffType()
     const { data: staffPositionData = [] } = useFindManyStaffPosition()
@@ -252,13 +246,13 @@ const PutUserProfileStaffModal = () => {
     // const {
     //     data: organizationUserData = [],
     //     refetch: refetchOrganizationUser,
-    // } = useFindManyOrganizationUser({
+    // } = useFindManyDM_DonViUser({
     //     where: {
     //         userProfileId: id || undefined,
     //     },
     // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -300,13 +294,13 @@ const PutUserProfileStaffModal = () => {
                     ? dayjs(profile.academicDegreeDate)
                     : null,
 
-                nationalityId: profile.nationality?.id,
-                religionId: profile.religion?.id,
-                ethnicityId: profile.ethnicity?.id,
-                rankId: profile.rank?.id,
-                levelId: profile.level?.id,
-                academicDegreeTypeId: profile.academicDegreeType?.id,
-                academicRankTypeId: profile.academicRankType?.id,
+                nationalityId: profile.nationality?.Id,
+                religionId: profile.religion?.Id,
+                ethnicityId: profile.ethnicity?.Id,
+                rankId: profile.rank?.Id,
+                levelId: profile.level?.Id,
+                academicDegreeTypeId: profile.academicDegreeType?.Id,
+                academicRankTypeId: profile.academicRankType?.Id,
 
                 ...(profile.staff && {
                     organizationId: profile.staff.organizationId,
@@ -395,28 +389,28 @@ const PutUserProfileStaffModal = () => {
 
             // ✅ Relations với proper connect syntax
             ...(output.nationalityId && {
-                nationality: { connect: { id: output.nationalityId } },
+                nationality: { connect: { Id: output.nationalityId } },
             }),
             ...(output.religionId && {
-                religion: { connect: { id: output.religionId } },
+                religion: { connect: { Id: output.religionId } },
             }),
             ...(output.ethnicityId && {
-                ethnicity: { connect: { id: output.ethnicityId } },
+                ethnicity: { connect: { Id: output.ethnicityId } },
             }),
             ...(output.rankId && {
-                rank: { connect: { id: output.rankId } },
+                rank: { connect: { Id: output.rankId } },
             }),
             ...(output.levelId && {
-                level: { connect: { id: output.levelId } },
+                level: { connect: { Id: output.levelId } },
             }),
             ...(output.academicDegreeTypeId && {
                 academicDegreeType: {
-                    connect: { id: output.academicDegreeTypeId },
+                    connect: { Id: output.academicDegreeTypeId },
                 },
             }),
             ...(output.academicRankTypeId && {
                 academicRankType: {
-                    connect: { id: output.academicRankTypeId },
+                    connect: { Id: output.academicRankTypeId },
                 },
             }),
         }
@@ -431,28 +425,28 @@ const PutUserProfileStaffModal = () => {
                 ...basicFieldChanges,
                 // Luôn thêm relations nếu có giá trị (không cần so sánh)
                 ...(output.nationalityId && {
-                    nationality: { connect: { id: output.nationalityId } },
+                    nationality: { connect: { Id: output.nationalityId } },
                 }),
                 ...(output.religionId && {
-                    religion: { connect: { id: output.religionId } },
+                    religion: { connect: { Id: output.religionId } },
                 }),
                 ...(output.ethnicityId && {
-                    ethnicity: { connect: { id: output.ethnicityId } },
+                    ethnicity: { connect: { Id: output.ethnicityId } },
                 }),
                 ...(output.rankId && {
-                    rank: { connect: { id: output.rankId } },
+                    rank: { connect: { Id: output.rankId } },
                 }),
                 ...(output.levelId && {
-                    level: { connect: { id: output.levelId } },
+                    level: { connect: { Id: output.levelId } },
                 }),
                 ...(output.academicDegreeTypeId && {
                     academicDegreeType: {
-                        connect: { id: output.academicDegreeTypeId },
+                        connect: { Id: output.academicDegreeTypeId },
                     },
                 }),
                 ...(output.academicRankTypeId && {
                     academicRankType: {
-                        connect: { id: output.academicRankTypeId },
+                        connect: { Id: output.academicRankTypeId },
                     },
                 }),
             }
@@ -591,7 +585,7 @@ const PutUserProfileStaffModal = () => {
                                 code: output.code,
                                 ...(output.organizationId && {
                                     organization: {
-                                        connect: { id: output.organizationId },
+                                        connect: { Id: output.organizationId },
                                     },
                                 }),
                                 ...(output.staffTypeId && {
@@ -640,7 +634,7 @@ const PutUserProfileStaffModal = () => {
                             code: output.code,
                             ...(output.organizationId && {
                                 organization: {
-                                    connect: { id: output.organizationId },
+                                    connect: { Id: output.organizationId },
                                 },
                             }),
                             ...(output.staffTypeId && {
@@ -683,7 +677,6 @@ const PutUserProfileStaffModal = () => {
         base: Record<PropertyKey, unknown>
     ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
         if (staffData?.userProfile && id) {
@@ -751,13 +744,13 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
 
                 // Relations IDs
-                nationalityId: userProfile.nationality?.id,
-                religionId: userProfile.religion?.id,
-                ethnicityId: userProfile.ethnicity?.id,
-                rankId: userProfile.rank?.id,
-                levelId: userProfile.level?.id,
-                academicDegreeTypeId: userProfile.academicDegreeType?.id,
-                academicRankTypeId: userProfile.academicRankType?.id,
+                nationalityId: userProfile.nationality?.Id,
+                religionId: userProfile.religion?.Id,
+                ethnicityId: userProfile.ethnicity?.Id,
+                rankId: userProfile.rank?.Id,
+                levelId: userProfile.level?.Id,
+                academicDegreeTypeId: userProfile.academicDegreeType?.Id,
+                academicRankTypeId: userProfile.academicRankType?.Id,
 
                 rankDate: userProfile.rankDate
                     ? dayjs(userProfile.rankDate)
@@ -1195,10 +1188,10 @@ const PutUserProfileStaffModal = () => {
                                                     allowClear
                                                     placeholder="Chọn quốc tịch"
                                                     options={nationalityData.map(
-                                                        (i: Nationality) => {
+                                                        (i: DM_QuocGia) => {
                                                             return {
-                                                                value: i.id,
-                                                                label: i.name,
+                                                                value: i.Id,
+                                                                label: i.sTen,
                                                             }
                                                         }
                                                     )}
@@ -1221,10 +1214,10 @@ const PutUserProfileStaffModal = () => {
                                                     allowClear
                                                     placeholder="Chọn tôn giáo"
                                                     options={religionData.map(
-                                                        (i: Religion) => {
+                                                        (i: DM_TonGiao) => {
                                                             return {
-                                                                value: i.id,
-                                                                label: i.name,
+                                                                value: i.Id,
+                                                                label: i.sTen,
                                                             }
                                                         }
                                                     )}
@@ -1247,10 +1240,10 @@ const PutUserProfileStaffModal = () => {
                                                     allowClear
                                                     placeholder="Chọn dân tộc"
                                                     options={ethnicityData.map(
-                                                        (i: Ethnicity) => {
+                                                        (i: DM_DanToc) => {
                                                             return {
-                                                                value: i.id,
-                                                                label: i.name,
+                                                                value: i.Id,
+                                                                label: i.sTen,
                                                             }
                                                         }
                                                     )}
@@ -1428,8 +1421,8 @@ const PutUserProfileStaffModal = () => {
                                 <Select
                                     placeholder="Chọn cấp bậc hàm"
                                     options={rankData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
+                                        value: i.Id,
+                                        label: i.sTen,
                                     }))}
                                 />
                             </FormItem>
@@ -1463,8 +1456,8 @@ const PutUserProfileStaffModal = () => {
                                 <Select
                                     placeholder="Chọn trình độ học vấn"
                                     options={levelData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
+                                        value: i.Id,
+                                        label: i.sTen,
                                     }))}
                                 />
                             </FormItem>
@@ -1483,8 +1476,8 @@ const PutUserProfileStaffModal = () => {
                                     placeholder="Chọn học hàm"
                                     options={academicDegreeTypeData.map(
                                         (i) => ({
-                                            value: i.id,
-                                            label: i.name,
+                                            value: i.Id,
+                                            label: i.sTen,
                                         })
                                     )}
                                 />
@@ -1516,8 +1509,8 @@ const PutUserProfileStaffModal = () => {
                                 <Select
                                     placeholder="Chọn học vị"
                                     options={academicRankTypeData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
+                                        value: i.Id,
+                                        label: i.sTen,
                                     }))}
                                 />
                             </FormItem>

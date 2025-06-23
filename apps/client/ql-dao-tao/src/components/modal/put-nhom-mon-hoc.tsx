@@ -5,18 +5,17 @@ import useSpinner from '@hooks/spinner'
 import type { Subject } from '@workspace/db'
 import {
     useCreateSubject,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
-import DatePicker from '@components/commons/date-picker'
+import { Col, Form, Input, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import dayjs from 'dayjs'
-export type PutSubjectFormType = Subject
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
+export type PutSubjectFormType = Subject
 dayjs.locale('vi')
 const PutSubjectModal = () => {
     const [form] = Form.useForm<PutSubjectFormType>()
@@ -81,7 +80,7 @@ const PutSubjectModal = () => {
         }
     }, [level])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     return (

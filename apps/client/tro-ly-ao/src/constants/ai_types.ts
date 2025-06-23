@@ -1,14 +1,11 @@
 import {
-    RobotOutlined,
-    UserOutlined,
+    AuditOutlined,
     BookOutlined,
     FileTextOutlined,
-    SolutionOutlined,
-    TeamOutlined,
     ProfileOutlined,
     QuestionCircleOutlined,
     SafetyCertificateOutlined,
-    AuditOutlined,
+    SolutionOutlined,
 } from '@ant-design/icons'
 
 const AI_TYPES = [

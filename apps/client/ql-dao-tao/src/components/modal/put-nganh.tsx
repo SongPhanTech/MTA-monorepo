@@ -1,36 +1,26 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type { TrainingField, TrainingObjectType } from '@workspace/db'
-import { $Enums } from '@workspace/db'
 import {
     useCreateTrainingField,
+    useFindManyDM_DonVi,
+    useFindManyTrainingObjectType,
     useFindUniqueTrainingField,
     useUpdateTrainingField,
-    useFindManyTrainingObjectType,
-    useFindManyOrganization,
 } from '@workspace/db/hooks'
-import {
-    Col,
-    Form,
-    Input,
-    message,
-    Switch,
-    Radio,
-    Flex,
-    TreeSelect,
-} from 'antd'
+import { Col, Form, Input, Radio, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
-import { buildOrgTree } from '@lib/utils'
+import 'dayjs/locale/vi'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingFieldModal = () => {
     const [form] = Form.useForm<PutTrainingField>()
@@ -48,7 +38,7 @@ const PutTrainingFieldModal = () => {
         useFindManyTrainingObjectType()
 
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()

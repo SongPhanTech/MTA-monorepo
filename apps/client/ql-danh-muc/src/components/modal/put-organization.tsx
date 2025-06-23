@@ -1,19 +1,19 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { Organization, OrganizationType } from '@workspace/db'
 import {
     useCreateOrganization,
+    useFindManyDM_DonVi,
+    useFindManyDM_DonViType,
     useFindUniqueOrganization,
-    useFindManyOrganizationType,
-    useFindManyOrganization,
     useUpdateOrganization,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
 export type PutOrganizationType = Organization
 const PutOrganizationModal = () => {
     const [form] = Form.useForm<PutOrganizationType>()
@@ -27,12 +27,12 @@ const PutOrganizationModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data = [], refetch } = useFindManyOrganizationType({
+    const { data = [], refetch } = useFindManyDM_DonViType({
         take: 1000,
         skip: 0,
     })
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()

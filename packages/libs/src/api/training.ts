@@ -29,16 +29,16 @@ import type {
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
     FixedClassBySubjectClassSemesterParams,
-    LecturerAssignment200,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfFixedClassBySubjectClassSemester,
     ListOfOpenSubjectClass,
     ListOfStudentClassBySubjectClassSemester,
     ListOfundefined,
     OpenSubjectClassParams,
+    PutManySubjectClass200,
     SerializedFields,
     StudentBySubjectClassSemesterParams,
-    TeachingAssignmentRequest,
+    SubjectClasses,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -929,119 +929,6 @@ export function useExportStudentFixedClassDocx<
 }
 
 /**
- * Phân công giảng dạy
- * @summary Phân công giảng dạy
- */
-export type lecturerAssignmentResponse200 = {
-    data: LecturerAssignment200
-    status: 200
-}
-
-export type lecturerAssignmentResponse400 = {
-    data: undefined
-    status: 400
-}
-
-export type lecturerAssignmentResponseComposite =
-    | lecturerAssignmentResponse200
-    | lecturerAssignmentResponse400
-
-export type lecturerAssignmentResponse = lecturerAssignmentResponseComposite & {
-    headers: Headers
-}
-
-export const getLecturerAssignmentUrl = () => {
-    return '/api/subject-class/teaching-assignment'
-}
-
-export const lecturerAssignment = async (
-    teachingAssignmentRequest: TeachingAssignmentRequest[],
-    options?: RequestInit
-): Promise<lecturerAssignmentResponse> => {
-    return customTrainingFetch<lecturerAssignmentResponse>(
-        getLecturerAssignmentUrl(),
-        {
-            ...options,
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers,
-            },
-            body: JSON.stringify(teachingAssignmentRequest),
-        }
-    )
-}
-
-export const getLecturerAssignmentMutationOptions = <
-    TError = void,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof lecturerAssignment>>,
-        TError,
-        { data: TeachingAssignmentRequest[] },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof lecturerAssignment>>,
-    TError,
-    { data: TeachingAssignmentRequest[] },
-    TContext
-> => {
-    const mutationKey = ['lecturerAssignment']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof lecturerAssignment>>,
-        { data: TeachingAssignmentRequest[] }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return lecturerAssignment(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type LecturerAssignmentMutationResult = NonNullable<
-    Awaited<ReturnType<typeof lecturerAssignment>>
->
-export type LecturerAssignmentMutationBody = TeachingAssignmentRequest[]
-export type LecturerAssignmentMutationError = undefined
-
-/**
- * @summary Phân công giảng dạy
- */
-export const useLecturerAssignment = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof lecturerAssignment>>,
-            TError,
-            { data: TeachingAssignmentRequest[] },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof lecturerAssignment>>,
-    TError,
-    { data: TeachingAssignmentRequest[] },
-    TContext
-> => {
-    const mutationOptions = getLecturerAssignmentMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
  * Lấy danh sách lớp môn học đã mở
  * @summary Lấy danh sách lớp môn học đã mở
  */
@@ -1917,6 +1804,114 @@ export const useEnrollStudentOnSubjectClass = <
 > => {
     const mutationOptions =
         getEnrollStudentOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Cập nhật nhiều lớp môn học
+ * @summary Cập nhật nhiều lớp môn học
+ */
+export type putManySubjectClassResponse200 = {
+    data: PutManySubjectClass200
+    status: 200
+}
+
+export type putManySubjectClassResponseComposite =
+    putManySubjectClassResponse200
+
+export type putManySubjectClassResponse =
+    putManySubjectClassResponseComposite & {
+        headers: Headers
+    }
+
+export const getPutManySubjectClassUrl = () => {
+    return '/api/subject-class'
+}
+
+export const putManySubjectClass = async (
+    subjectClasses: SubjectClasses[],
+    options?: RequestInit
+): Promise<putManySubjectClassResponse> => {
+    return customTrainingFetch<putManySubjectClassResponse>(
+        getPutManySubjectClassUrl(),
+        {
+            ...options,
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers,
+            },
+            body: JSON.stringify(subjectClasses),
+        }
+    )
+}
+
+export const getPutManySubjectClassMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof putManySubjectClass>>,
+        TError,
+        { data: SubjectClasses[] },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof putManySubjectClass>>,
+    TError,
+    { data: SubjectClasses[] },
+    TContext
+> => {
+    const mutationKey = ['putManySubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof putManySubjectClass>>,
+        { data: SubjectClasses[] }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return putManySubjectClass(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PutManySubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof putManySubjectClass>>
+>
+export type PutManySubjectClassMutationBody = SubjectClasses[]
+export type PutManySubjectClassMutationError = unknown
+
+/**
+ * @summary Cập nhật nhiều lớp môn học
+ */
+export const usePutManySubjectClass = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof putManySubjectClass>>,
+            TError,
+            { data: SubjectClasses[] },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof putManySubjectClass>>,
+    TError,
+    { data: SubjectClasses[] },
+    TContext
+> => {
+    const mutationOptions = getPutManySubjectClassMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

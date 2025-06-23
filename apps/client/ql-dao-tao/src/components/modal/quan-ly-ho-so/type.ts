@@ -2,19 +2,27 @@ import type {
     AcademicDegreeType,
     AcademicRankType,
     Commune,
+    CurriculumVersion,
     Ethnicity,
     FixedClass,
+    Lecturer,
+    LecturerType,
     Level,
     Nationality,
+    Organization,
     PositionCPV,
     PriorityObject,
     Province,
     Rank,
     Religion,
+    Staff,
+    StaffPosition,
+    StaffType,
     Student,
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
+import type { UploadFile } from 'antd'
 
 export type SibarItem = {
     key: string
@@ -29,9 +37,29 @@ export type StudentSiderbarProps = {
 
 export type TabQuanLyHoSoProps = {
     id?: string | null
+    avatar?: UploadFile[]
+    setAvatar: (avatar: UploadFile[]) => void
+    fileList: UploadFile[]
+    setFileList: (fileList: UploadFile[]) => void
+    type: string
 } & StudentSiderbarProps
 
 export type TabThongTinCaNhan = {
+    id?: string | null
+    avatar: UploadFile[]
+    setAvatar: (avatar: UploadFile[]) => void
+    fileList: UploadFile[]
+    setFileList: (fileList: UploadFile[]) => void
+    type: string
+}
+
+export type StudentModalProps = {
+    preSelectedValues?: {
+        trainingObjectTypeId?: string
+        trainingCourseId?: string
+        fixedClassId?: string
+        curriculumVersionId?: string
+    }
     id?: string | null
 }
 
@@ -46,15 +74,44 @@ export type UserProfileType = UserProfile & {
     academicRankType: AcademicRankType
     level: Level
     positionCPV: PositionCPV
+    educationAndTraining: StudentType[]
+    lecturer: Lecturer
 }
 
 export type FixedClassType = FixedClass & {
     trainingCourse: TrainingCourse
+    curriculumVersion: CurriculumVersion
 }
 
 export type StudentType = Student & {
     priorityObject: PriorityObject[]
     fixedClass: FixedClassType
+    userProfile: UserProfileType
 }
 
-export type PutStudentProfile = StudentType & UserProfileType
+export type LecturerProfileType = Lecturer & {
+    organization: Organization
+    lecturerType: LecturerType
+}
+
+export type StaffProfileType = Staff & {
+    staffType: StaffType
+    organization: Organization
+    staffPosition: StaffPosition
+    userProfile: UserProfileType
+    fixedClass: FixedClassType[]
+}
+
+export type PutLecturerProfile = LecturerProfileType & UserProfileType
+
+export type PutStudentProfile = StudentType & UserProfileType & FixedClassType
+
+export type PutStaffProfile = StaffProfileType &
+    UserProfileType &
+    FixedClassType
+
+export type PutModalType = StudentType &
+    LecturerProfileType &
+    UserProfileType &
+    FixedClassType &
+    StaffProfileType

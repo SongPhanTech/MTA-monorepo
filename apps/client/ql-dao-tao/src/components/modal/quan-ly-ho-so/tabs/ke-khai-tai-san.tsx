@@ -52,7 +52,7 @@ export default function KeKhaiTaiSanTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'tai-san' ? ['1'] : []}
                 onChange={handleCollapseChange('tai-san')}

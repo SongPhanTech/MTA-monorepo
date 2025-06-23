@@ -2,19 +2,19 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
+import type {
+    TrainingBlock,
+    TrainingBlockOnCurriculumVersion,
+} from '@workspace/db'
 import {
     useCreateTrainingBlockOnCurriculumVersion,
     useFindManyTrainingBlock,
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import type {
-    TrainingBlock,
-    TrainingBlockOnCurriculumVersion,
-} from '@workspace/db'
+import { Col, Form, InputNumber, Select, message } from 'antd'
 import dayjs from 'dayjs'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingBlockOnCurriculumVersion =
     TrainingBlockOnCurriculumVersion
 import 'dayjs/locale/vi'

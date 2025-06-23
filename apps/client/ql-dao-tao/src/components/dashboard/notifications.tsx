@@ -1,6 +1,5 @@
-import React from 'react'
-import { Card, Alert, Space } from 'antd'
 import { NotificationOutlined } from '@ant-design/icons'
+import { Alert, Space } from 'antd'
 import Link from 'next/link'
 interface NotificationData {
     ID: number

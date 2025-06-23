@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
@@ -24,15 +25,15 @@ enum UserType {
 }
 
 model UserProfile extends Base {
-  user                 User?               @relation(fields: [userId], references: [id])
-  userId               String?             @unique
-  userType             UserType            @default(OTHER)
+  user                 User?             @relation(fields: [userId], references: [id])
+  userId               String?           @unique
+  userType             UserType          @default(OTHER)
 
   // general information
   avatar               String? // đường dẫn ảnh đại diện
   firstName            String
   lastName             String
-  idCardNumber         String              @unique // số căn cước công dân
+  idCardNumber         String            @unique // số căn cước công dân
   fullname             String?
   dateOfBirth          DateTime? // ngày sinh
   placeOfBirth         String? // nơi sinh
@@ -44,31 +45,33 @@ model UserProfile extends Base {
   contactAddress       String? // địa chỉ liên hệ
   phoneNumber          String? // số điện thoại
   email                String? // email
-  nationality          Nationality?        @relation(fields: [nationalityId], references: [id]) // quốc tịch
+  nationality          DM_QuocGia?       @relation(fields: [nationalityId], references: [Id]) // quốc tịch
   nationalityId        String?
-  religion             Religion?           @relation(fields: [religionId], references: [id]) // tôn giáo
+  religion             DM_TonGiao?       @relation(fields: [religionId], references: [Id]) // tôn giáo
   religionId           String?
-  ethnicity            Ethnicity?          @relation(fields: [ethnicityId], references: [id]) // dân tộc
+  ethnicity            DM_DanToc?        @relation(fields: [ethnicityId], references: [Id]) // dân tộc
   ethnicityId          String?
-  provinceHometown     Province?           @relation(fields: [provinceHometownId], references: [id])
+  provinceHometown     DM_Tinh?          @relation(fields: [provinceHometownId], references: [Id])
   provinceHometownId   String?
-  communeHometown      Commune?            @relation(fields: [communeHometownId], references: [id])
+  districtHometown     DM_QuanHuyen?     @relation(fields: [districtHometownId], references: [Id])
+  districtHometownId   String?
+  communeHometown      DM_XaPhuong?      @relation(fields: [communeHometownId], references: [Id])
   communeHometownId    String?
 
   officerNumber        String? // số hiệu sĩ quan/quân nhân
-  rank                 Rank?               @relation(fields: [rankId], references: [id])
+  rank                 DM_CapBac?        @relation(fields: [rankId], references: [Id])
   rankId               String?
   rankDate             DateTime? // ngày phong quân hàm
 
-  academicDegreeType   AcademicDegreeType? @relation(fields: [academicDegreeTypeId], references: [id])
+  academicDegreeType   DM_HocVi?         @relation(fields: [academicDegreeTypeId], references: [Id])
   academicDegreeTypeId String?
   academicDegreeDate   DateTime? // ngày cấp bằng học vị
 
-  academicRankType     AcademicRankType?   @relation(fields: [academicRankTypeId], references: [id])
+  academicRankType     DM_HocHam?        @relation(fields: [academicRankTypeId], references: [Id])
   academicRankTypeId   String?
   academicRankDate     DateTime? // ngày cấp bằng học hàm
 
-  level                Level?              @relation(fields: [levelId], references: [id])
+  level                DM_ChucDanh?      @relation(fields: [levelId], references: [Id])
   levelId              String?
 
   // thông tin đoàn thể
@@ -78,7 +81,7 @@ model UserProfile extends Base {
   CPVJoinDate          DateTime? // ngày vào Đảng
   officialCPVDate      DateTime? // ngày chính thức
   CPVJoinPlace         String? // nơi vào Đảng
-  positionCPV          PositionCPV?        @relation(fields: [positionCPVId], references: [id])
+  positionCPV          DM_ChucVu?        @relation(fields: [positionCPVId], references: [Id])
   positionCPVId        String?
   tenureDate           DateTime? // ngày vào biên chế
   enlistmentDate       DateTime? // ngày nhập ngũ

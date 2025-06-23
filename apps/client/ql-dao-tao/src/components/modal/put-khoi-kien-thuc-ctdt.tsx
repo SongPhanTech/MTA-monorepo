@@ -2,15 +2,15 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
+import type { TrainingBlock } from '@workspace/db'
 import {
     useCreateTrainingBlock,
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select, Switch } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { TrainingBlock } from '@workspace/db'
+import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
 import dayjs from 'dayjs'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingBlock = TrainingBlock
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'

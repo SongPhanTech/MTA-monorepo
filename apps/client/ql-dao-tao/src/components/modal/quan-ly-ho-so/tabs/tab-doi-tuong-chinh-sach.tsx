@@ -41,7 +41,7 @@ export default function DoiTuongChinhSachTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'chinh-sach' ? ['1'] : []}
                 onChange={handleCollapseChange('chinh-sach')}

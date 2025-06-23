@@ -1,8 +1,7 @@
 import type { $Enums } from '@workspace/db'
 import NAVIGATION, { type ROUTER_PATH } from '@workspace/router'
-import { useAbility } from './hooks'
-import { useMenuList } from '@hooks/menu-list'
 import { useMemo } from 'react'
+import { useAbility } from './hooks'
 
 type CanProps = {
     children: React.ReactNode

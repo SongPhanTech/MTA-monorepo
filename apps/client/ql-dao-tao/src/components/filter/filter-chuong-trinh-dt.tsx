@@ -1,48 +1,39 @@
-import React, { useState } from 'react'
-import {
-    Button,
-    Flex,
-    Input,
-    Popover,
-    //   Select,
-    Space,
-    Typography,
-    Divider,
-    Row,
-    Col,
-    Form,
-    TreeSelect,
-    Tag,
-} from 'antd'
-import {
-    FilterOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    ControlOutlined,
-} from '@ant-design/icons'
-import { X, Search } from 'lucide-react'
+import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
-import {
-    useUpdateTrainingCourse,
-    useFindManyTrainingType,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingLevel,
-    useFindManySchoolYear,
-    useFindManyTrainingForm,
-    useFindManyOrganization,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { CTDT_STATUS } from '@constants/constants'
+import { buildOrgTree } from '@lib/utils'
 import type {
     SchoolYear,
-    TrainingForm,
     TrainingLevel,
     TrainingMajor,
     TrainingObjectType,
     TrainingTime,
-    TrainingType,
 } from '@workspace/db'
-import { CTDT_STATUS, KHOA_HL_STATUS } from '@constants/constants'
-import { buildOrgTree } from '@lib/utils'
+import {
+    useFindManyDM_DonVi,
+    useFindManySchoolYear,
+    useFindManyTrainingLevel,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingType,
+} from '@workspace/db/hooks'
+import {
+    Button,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Popover,
+    Row,
+    //   Select,
+    Space,
+    Tag,
+    TreeSelect,
+    Typography,
+} from 'antd'
+import { Search, X } from 'lucide-react'
+import { useState } from 'react'
 const { Text } = Typography
 
 interface FilterProps {
@@ -60,9 +51,9 @@ interface FilterProps {
 
 interface Props {
     filters: FilterProps
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     setFilters: any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+
     debouncedRefetch: any
 }
 
@@ -117,7 +108,7 @@ const FilterChuongTrinhDT = (props: Props) => {
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
         useFindManySchoolYear()
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const filterContent = (

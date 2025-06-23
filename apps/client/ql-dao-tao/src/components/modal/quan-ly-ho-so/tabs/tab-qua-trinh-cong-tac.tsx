@@ -91,7 +91,7 @@ export default function QuaTrinhCongTacTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'cap-bac' ? ['1'] : []}
                 onChange={handleCollapseChange('cap-bac')}
@@ -169,7 +169,7 @@ export default function QuaTrinhCongTacTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'cong-tac' ? ['1'] : []}
                 onChange={handleCollapseChange('cong-tac')}
@@ -249,7 +249,7 @@ export default function QuaTrinhCongTacTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'cu-cong-tac' ? ['1'] : []}
                 onChange={handleCollapseChange('cu-cong-tac')}

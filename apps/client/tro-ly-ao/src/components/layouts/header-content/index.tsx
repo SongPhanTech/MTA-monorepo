@@ -1,7 +1,7 @@
+import APPS_TYPES from '@/navigations/header-content/app_types'
 import { UnorderedListOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Menu } from 'antd'
 import { useRouter } from 'next/router'
-import APPS_TYPES from '@/navigations/header-content/app_types'
 
 function HeaderContent() {
     const router = useRouter()

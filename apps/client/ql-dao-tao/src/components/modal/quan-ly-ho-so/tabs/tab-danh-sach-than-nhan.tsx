@@ -62,7 +62,7 @@ export default function ThanNhanTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'khen-thuong' ? ['1'] : []}
                 onChange={handleCollapseChange('khen-thuong')}

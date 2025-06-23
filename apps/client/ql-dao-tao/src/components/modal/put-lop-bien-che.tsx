@@ -1,40 +1,37 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type {
     FixedClass,
     TrainingCourse,
-    TrainingObjectType,
     TrainingMajor,
-    CurriculumVersion,
-    Lecturer,
+    TrainingObjectType,
 } from '@workspace/db'
 import {
     useCreateFixedClass,
-    useFindUniqueFixedClass,
-    useUpdateFixedClass,
-    useFindManyOrganization,
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useFindManyTrainingMajor,
     useFindManyCurriculum,
+    useFindManyDM_DonVi,
     useFindManyLecturer,
     useFindManyStaff,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useFindUniqueCurriculumVersion,
+    useFindUniqueFixedClass,
+    useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, TreeSelect, Radio } from 'antd'
+import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
-import DatePicker from '@components/commons/date-picker'
-import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import { buildOrgTree } from '@lib/utils'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
 }
-import 'dayjs/locale/vi'
-import { buildOrgTree } from '@lib/utils'
 dayjs.locale('vi')
 const PutFixedClassModal = () => {
     const [form] = Form.useForm<PutFixedClass>()
@@ -49,7 +46,7 @@ const PutFixedClassModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
 
     // const managementOrganizationForm = Form.useWatch(
@@ -178,7 +175,7 @@ const PutFixedClassModal = () => {
                         managementOrganization: output.managementOrganizationId
                             ? {
                                   connect: {
-                                      id: output.managementOrganizationId,
+                                      Id: output.managementOrganizationId,
                                   },
                               }
                             : { disconnect: true },
@@ -223,7 +220,7 @@ const PutFixedClassModal = () => {
                         managementOrganization: output.managementOrganizationId
                             ? {
                                   connect: {
-                                      id: output.managementOrganizationId,
+                                      Id: output.managementOrganizationId,
                                   },
                               }
                             : undefined,
@@ -319,7 +316,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue({
                 managementOrganizationId:
                     curriculumVersionData?.curriculum?.managementOrganization
-                        ?.id,
+                        ?.Id,
                 trainingMajorId:
                     curriculumVersionData?.curriculum?.trainingMajor?.id,
                 trainingObjectTypeId:

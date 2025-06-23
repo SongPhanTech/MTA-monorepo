@@ -1,6 +1,7 @@
 import '../base'
 import './categories'
 import '../ql-danh-muc/common'
+import '../ql-danh-muc/core-categories'
 import '../ql-nguoi-dung/profile'
 import './student'
 import './lecturer'
@@ -142,7 +143,7 @@ model FixedClass extends Base {
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String?
 
-  managementOrganization   Organization?      @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?
 
   lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
@@ -167,7 +168,8 @@ model FixedClass extends Base {
 model Curriculum extends Base {
   name                     String
   englishName              String?
-  managementOrganization   Organization        @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+
+  managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
 
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
@@ -253,7 +255,7 @@ model CurriculumVersion extends Base {
 model Subject extends Base {
   name                     String
 
-  managementOrganization   Organization     @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
   information              String?   //Thông tin
 
@@ -314,7 +316,7 @@ model SubjectVersion extends Base {
 
   documentPaths            String[] // Đường dẫn tài liệu
 
-  managementOrganization   Organization           @relation(fields: [managementOrganizationId], references: [id]) // Đơn vị phụ trách
+  managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
 
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])

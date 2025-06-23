@@ -1,5 +1,5 @@
-import React from 'react'
 import TreeFixClass from '@components/commons/fix-class-select/TreeFixClass'
+import type React from 'react'
 interface Item {
     code: string | null
     name: string

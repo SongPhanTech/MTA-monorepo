@@ -1,11 +1,9 @@
 import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 import {
     DownloadOutlined,
-    EyeOutlined,
     UploadOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import {
@@ -18,28 +16,22 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountLecturer,
-    useCountUserProfile,
     useFindManyLecturer,
     useFindManyTemplateFile,
-    useFindManyUserProfile,
     useUpdateLecturer,
-    useUpdateUserProfile,
 } from '@workspace/db/hooks'
 
 import EditIcon from '@components/icons/edit'
 import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
 import {
-    Avatar,
     Button,
     Col,
-    Divider,
     Dropdown,
     Flex,
     Image,
     Input,
     Menu,
     Row,
-    Tag,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -47,7 +39,6 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
 import { getMinioUrl } from '@workspace/constant'
@@ -75,7 +66,7 @@ export default function UserProfilePageLecture() {
     })
 
     // const { data: organization_data = [], refetch: refetch_organization } =
-    //     useFindManyOrganization()
+    //     useFindManyDM_DonVi()
 
     // const tree_organization = convertToTree(organization_data)
     // const tree_search_organization = searchTree(
@@ -110,7 +101,7 @@ export default function UserProfilePageLecture() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },
@@ -174,10 +165,9 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    // const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } =
-    //     useDisclosure<AddUserProfileLectureProps>({
-    //         tag: PutUserProfileLectureModal.name,
-    //     })
+    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
+        tag: PutUserProfileLectureModal.name,
+    })
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } =
         useDisclosure<string>({
@@ -190,9 +180,9 @@ export default function UserProfilePageLecture() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    // const handleModal = () => {
-    //     onOpenModalAdd()
-    // }
+    const handleModal = () => {
+        onOpenModalAdd()
+    }
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
             onOpenUpload('GV')
@@ -237,7 +227,7 @@ export default function UserProfilePageLecture() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },
@@ -371,7 +361,6 @@ export default function UserProfilePageLecture() {
                                     )
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
-                                style={{ height: 40 }}
                             />
                         </Col>
                         <Col span={10}>
@@ -384,9 +373,8 @@ export default function UserProfilePageLecture() {
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button
-                                    // onClick={handleModal}
+                                    onClick={handleModal}
                                     type="primary"
-                                    style={{ height: 40 }}
                                 >
                                     Thêm mới
                                 </Button>
@@ -400,7 +388,6 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<DownloadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Tải file mẫu
                                     </Button>
@@ -414,7 +401,6 @@ export default function UserProfilePageLecture() {
                                         className="ml-4"
                                         type="primary"
                                         icon={<UploadOutlined />}
-                                        style={{ height: 40 }}
                                     >
                                         Nhập file
                                     </Button>

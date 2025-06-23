@@ -62,7 +62,7 @@ export default function KhenThuongKyLuatTab() {
         <div className="space-y-6">
             <Collapse
                 ghost
-                className="bg-gray-100  shadow-sm"
+                className="bg-gray-50  shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'khen-thuong' ? ['1'] : []}
                 onChange={handleCollapseChange('khen-thuong')}
@@ -148,7 +148,7 @@ export default function KhenThuongKyLuatTab() {
 
             <Collapse
                 ghost
-                className="bg-gray-100 shadow-sm"
+                className="bg-gray-50 shadow-sm"
                 accordion={true}
                 activeKey={openCollapse === 'ky-luat' ? ['1'] : []}
                 onChange={handleCollapseChange('ky-luat')}

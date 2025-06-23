@@ -1,7 +1,7 @@
-import { EyeOutlined } from '@ant-design/icons'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutAcademicRankTypeModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -10,24 +10,12 @@ import {
     useCountAcademicRankType,
     useFindManyAcademicRankType,
     useUpdateAcademicRankType,
-    useUpdateUser,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import EditIcon from '@components/icons/edit'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)

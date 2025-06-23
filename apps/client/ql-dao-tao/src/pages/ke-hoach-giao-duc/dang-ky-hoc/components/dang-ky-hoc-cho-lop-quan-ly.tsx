@@ -1,18 +1,17 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Search } from 'lucide-react'
-import { Col, Flex, Form, Input, Row, Select } from 'antd'
-import _ from 'lodash'
-import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useExamTypeOptions } from '@hooks/examType'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import {
     useFindManySemester,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
+import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import dayjs from 'dayjs'
-import type { ExamType, Semester, SubjectClassSchedule } from '@workspace/db'
-import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import { useExamTypeOptions } from '@hooks/examType'
+import _ from 'lodash'
+import { Search } from 'lucide-react'
+import { useEffect } from 'react'
+import { useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -65,6 +64,11 @@ export default function RegisterClassManager({
                     _count: true,
                 },
             },
+            room: {
+                include: {
+                    building: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -73,7 +77,22 @@ export default function RegisterClassManager({
 
     type SubjectClassData = (typeof subjectClassData)[number]
 
-    const { data: semester = [] } = useFindManySemester()
+    const { data: semester = [] } = useFindManySemester({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    useEffect(() => {
+        if (semester.length > 0 && !filters.semesterId) {
+            const latestSemesterId = semester[0].id
+            setFilters((prev) => {
+                const newFilters = { ...prev, semesterId: latestSemesterId }
+                debouncedRefetch()
+                return newFilters
+            })
+        }
+    }, [semester, filters])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -129,7 +148,8 @@ export default function RegisterClassManager({
                             >
                                 <Select
                                     placeholder="Chọn kì học"
-                                    options={semester.map((i: Semester) => ({
+                                    value={filters.semesterId || undefined}
+                                    options={semester.map((i) => ({
                                         value: i.id,
                                         label: i.name,
                                     }))}
@@ -196,8 +216,7 @@ export default function RegisterClassManager({
                         //     value: opt.value,
                         // })),
                         filterSearch: true,
-                        render: (value: SubjectClassSchedule) =>
-                            getScheduleLabel(value),
+                        render: (value) => getScheduleLabel(value),
                     },
                     {
                         title: 'Giảng viên 1',
@@ -217,17 +236,17 @@ export default function RegisterClassManager({
                         dataIndex: ['subject', 'examType'],
                         align: 'center',
                         width: 180,
-                        render: (value: ExamType) => getExamTypeLabel(value),
+                        render: (value) => getExamTypeLabel(value),
                     },
                     {
                         title: 'Địa điểm',
-                        dataIndex: '',
+                        dataIndex: ['room', 'building', 'name'],
                         align: 'center',
                         width: 180,
                     },
                     {
                         title: 'Phòng học',
-                        dataIndex: '',
+                        dataIndex: ['room', 'name'],
                         align: 'center',
                         width: 180,
                     },

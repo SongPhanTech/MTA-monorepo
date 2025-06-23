@@ -46,10 +46,9 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
         }) => ({
             code: item.code === null ? undefined : item.code,
             name: item.name,
-            lecture:
-                item.mainLecturer && item.mainLecturer.userProfile
-                    ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
-                    : 'Chưa có giảng viên',
+            lecture: item.mainLecturer?.userProfile
+                ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
+                : 'Chưa có giảng viên',
             id: item.id,
         })
     )

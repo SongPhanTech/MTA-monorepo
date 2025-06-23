@@ -3,6 +3,7 @@ packages:
   - apps/backend/*
   - packages/*
 catalog:
+  "react-to-print": ^3.1.0
   "@ant-design/cssinjs": ^1.22.1
   "@ant-design/icons": ^5.5.2
   "@ant-design/nextjs-registry": ^1.0.2
@@ -85,5 +86,6 @@ catalog:
   ts-node: ^10.9.2
   turbo: ^2.4.2
   typescript: ^5.8.3
+  xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
   zenstack: ^2.15.1
   zod: 3.24.2

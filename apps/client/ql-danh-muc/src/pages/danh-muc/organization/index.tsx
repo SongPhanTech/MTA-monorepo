@@ -1,46 +1,29 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { convertToTree, searchTree } from '@/utils/convertOrganizationToTree'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutOrganizationModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountOrganization,
-    useFindManyOrganization,
-    useFindManyUserProfile,
+    useFindManyDM_DonVi,
     useUpdateOrganization,
-    useUpdateUser,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import {
-    convertToTree,
-    searchTree,
-    searchTree2,
-} from '@/utils/convertOrganizationToTree'
-import EditIcon from '@components/icons/edit'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [], refetch } = useFindManyOrganization({
+    const { data = [], refetch } = useFindManyDM_DonVi({
         take: 10000,
         skip: 0,
     })

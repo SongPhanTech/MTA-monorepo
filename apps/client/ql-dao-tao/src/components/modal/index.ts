@@ -1,34 +1,38 @@
 import ConfirmModal from './confirm-dialog'
-import PutSchoolYearModal from './put-nam-hoc'
-import PutSemesterModal from './put-ky-hoc'
-import PutMilestoneModal from './put-moc-huan-luyen'
-import PutTrainingCourseModal from './put-khoa-huan-luyen'
-import PutFixedClassModal from './put-lop-bien-che'
-import PutUploadProfileModal from './put-upload-profile'
-import PutUpdateProfileModal from './put-update-profile'
+import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
+import PutConvertScore from './put-chuyen-doi-diem'
+import PutTrainingMajorModal from './put-chuyen-nganh'
+import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
+import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
-import PutSubjectGroupModal from './put-nhom-mon-hoc'
-import PutSubjectModal from './put-mon-hoc'
-import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
-import PutOrganizationUser from './put-organization-user'
-import ThongTinBaoCaoModal from './thong-tin-bao-cao'
-import PutTrainingFieldModal from './put-nganh'
-import PutTrainingMajorModal from './put-chuyen-nganh'
-import PutSubjectListModal from './put-danh-sach-mon-hoc'
-import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
-import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
-import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
-import PutOpenClassModal from './put-mo-lop'
-import PutStudentModal from './put-student'
-import PutUserProfileStaffModal from './put-staff-modal'
-import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
+import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
-import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
-import PutConvertScore from './put-chuyen-doi-diem'
+import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
 import PutTrainingLocationModal from './put-khu-vuc'
-import PutBuildingModal from './put-toa-nha'
+import PutSemesterModal from './put-ky-hoc'
+import PutFixedClassModal from './put-lop-bien-che'
+import PutOpenClassModal from './put-mo-lop'
+import PutMilestoneModal from './put-moc-huan-luyen'
+import PutSubjectModal from './put-mon-hoc'
+import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
+import PutSchoolYearModal from './put-nam-hoc'
+import PutTrainingFieldModal from './put-nganh'
+import PutSubjectGroupModal from './put-nhom-mon-hoc'
+import PutOneSubjectClassModal from './put-one-subject-class'
+import PutOrganizationUser from './put-organization-user'
+import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
+import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutUserProfileStaffModal from './put-staff-modal'
+import PutStudentModal from './put-student'
+import PutOpenSubjectClassModal from './put-tao-lop-mh'
+import PutBuildingModal from './put-toa-nha'
+import PutUpdateProfileModal from './put-update-profile'
+import PutUploadProfileModal from './put-upload-profile'
+import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
+import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalGPASemester from './modal-diem-trung-binh-lop'
 import PutHocHamHocViModal from './quan-ly-ho-so/modals/put-hoc-ham-hoc-vi'
 export {
     ConfirmModal,
@@ -53,6 +57,7 @@ export {
     PutCurriculumVersion,
     PutVersionSubjectModal,
     PutOpenClassModal,
+    PutOpenSubjectClassModal,
     PutStudentModal,
     PutCurriculum,
     PutTrainingBlockOnCurriculumVersion,
@@ -62,5 +67,8 @@ export {
     PutTrainingLocationModal,
     PutBuildingModal,
     PutRoomModal,
+    ModalPrintToKQHT,
+    PutOneSubjectClassModal,
+    ModalGPASemester,
     PutHocHamHocViModal,
 }

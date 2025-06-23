@@ -2,8 +2,6 @@ import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
 import PieChart from '@components/dashboard/org-structure'
 import StaffByOrg from '@components/dashboard/staff-by-org'
-import StaffLevel from '@components/dashboard/staff-level'
-import TypeOfTraining from '@components/dashboard/type-of-training'
 import DashboardLayout from '@layouts/dashboard-layout'
 import { Col, Row, Typography } from 'antd'
 const { Title } = Typography
@@ -43,9 +41,6 @@ function Page() {
                                         độ
                                     </Title>
                                 </div>
-                                <div className="flex-1">
-                                    <StaffLevel className="h-full" />
-                                </div>
                             </div>
                         </Col>
                         <Col xs={24} md={12}>
@@ -55,9 +50,6 @@ function Page() {
                                         Thống kê số lượng học viên theo loại
                                         hình đào tạo
                                     </Title>
-                                </div>
-                                <div className="flex-1">
-                                    <TypeOfTraining className="h-full" />
                                 </div>
                             </div>
                         </Col>

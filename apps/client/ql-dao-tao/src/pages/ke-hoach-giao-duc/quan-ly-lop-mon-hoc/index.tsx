@@ -1,46 +1,41 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import {
+    PutOneSubjectClassModal,
+    PutOpenSubjectClassModal,
+} from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     SUBJECT_CLASS_SCHEDULE_TYPE,
 } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSubjectClass,
-    useFindManySubjectClass,
-    useFindManyTrainingCourse,
-    useFindManyLecturer,
-    useFindManySemester,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { formatDate } from '@lib/utils'
 import type {
     SubjectClass,
     SubjectClassSchedule,
     TrainingCourse,
     TrainingMajor,
 } from '@workspace/db'
-import { Search } from 'lucide-react'
 import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+    useCountSubjectClass,
+    useFindManyLecturer,
+    useFindManySemester,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+    useUpdateSubjectClass,
+} from '@workspace/db/hooks'
+import { putManySubjectClass } from '@workspace/libs/api/training'
+import { Button, Checkbox, Col, Flex, Input, Row, message } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { useExamTypeOptions } from '@hooks/examType'
-import { formatDate } from '@lib/utils'
-import { lecturerAssignment } from '@workspace/libs/api/training'
-import { AnyCnameRecord } from 'node:dns'
-// const { Option } = Select;
+import { useCallback, useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | undefined
     trainingCourseId: string | null
@@ -68,22 +63,30 @@ export default function TeachingAssignment() {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             semester: {
-                id: filters.semesterStartId || undefined,
-                trainingCoursesStart: {
-                    some: {
-                        id: filters.trainingCourseId || undefined,
-                    },
-                },
+                ...(filters.semesterStartId
+                    ? { id: filters.semesterStartId }
+                    : {}),
+                ...(filters.trainingCourseId
+                    ? {
+                          trainingCoursesStart: {
+                              some: { id: filters.trainingCourseId },
+                          },
+                      }
+                    : {}),
             },
-            subject: {
-                managementOrganization: {
-                    trainingMajors: {
-                        some: {
-                            id: filters.trainingMajorId || undefined,
-                        },
-                    },
-                },
-            },
+            ...(filters.trainingMajorId
+                ? {
+                      subject: {
+                          managementOrganization: {
+                              trainingMajors: {
+                                  some: {
+                                      id: filters.trainingMajorId,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             semester: true,
@@ -116,6 +119,7 @@ export default function TeachingAssignment() {
                     },
                 },
             },
+            subjectClassStudent: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -188,18 +192,18 @@ export default function TeachingAssignment() {
     async function handleChangeData() {
         try {
             showSpinner()
-            const res: any = await lecturerAssignment(
+            const res = await putManySubjectClass(
                 dataSubmit.map((subjectClass) => ({
-                    subjectClassId: subjectClass.id,
-                    lecturerId: subjectClass.lecturerId ?? '',
-                    extraLecturerId: subjectClass.extraLecturerId ?? '',
+                    id: subjectClass.id,
+                    lecturerId: subjectClass.lecturerId ?? null,
+                    extraLecturerId: subjectClass.extraLecturerId ?? null,
                     enterGradeLecturerId:
-                        subjectClass.enterGradeLecturerId ?? '',
+                        subjectClass.enterGradeLecturerId ?? null,
                 }))
             )
-            if (res?.data?.errors?.length) {
+            if (res?.data?.failedIds?.length) {
                 message.error(
-                    `${res?.data?.errors?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
+                    `${res?.data?.failedIds?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
                 )
             } else {
                 message.success('Phân công giảng dạy thành công')
@@ -212,6 +216,23 @@ export default function TeachingAssignment() {
         }
         hideSpinner()
     }
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSubjectClass({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     const handleChangeLecturer = (
         record: SubjectClass,
@@ -219,6 +240,7 @@ export default function TeachingAssignment() {
         objectIdName: string,
         objectName: string
     ) => {
+        console.log(record)
         if (value) {
             const itemChange = lecturerData.find((i) => i?.id === value)
 
@@ -284,6 +306,19 @@ export default function TeachingAssignment() {
         }
     }
 
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: PutOpenSubjectClassModal.name,
+    })
+
+    const { onOpen: onOpenEditSubjectClass, onClose: onCloseEditSubjectClass } =
+        useDisclosure<string>({
+            tag: PutOneSubjectClassModal.name,
+        })
+
+    const handleModal = () => {
+        onOpen()
+    }
+
     const handleCancel = () => {
         setIsEdit(false)
         setDataSubmit([...data])
@@ -301,7 +336,7 @@ export default function TeachingAssignment() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
+                        <Col span={4}>
                             <Input
                                 id="search"
                                 onChange={(e) =>
@@ -366,8 +401,15 @@ export default function TeachingAssignment() {
                             />
                         </Col>
 
-                        <Col span={6}>
+                        <Col span={8}>
                             <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() => handleModal()}
+                                    //TODO: handle save
+                                    type="primary"
+                                >
+                                    Thêm mới lớp MH
+                                </Button>
                                 <Button
                                     //TODO: handle export
                                     type="primary"
@@ -401,7 +443,7 @@ export default function TeachingAssignment() {
                                         type="primary"
                                         disabled={!dataSubmit.length}
                                     >
-                                        Sửa
+                                        PCGD
                                     </Button>
                                 )}
                             </Flex>
@@ -445,6 +487,7 @@ export default function TeachingAssignment() {
                                 width: 200,
                                 align: 'center',
                             },
+
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'subject',
@@ -452,6 +495,20 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 render: (value) =>
                                     value?.credit ? value?.credit : '',
+                            },
+                            {
+                                title: 'Số SV tối đa',
+                                dataIndex: 'maxStudent',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số SV',
+                                dataIndex: 'subjectClassStudent',
+                                width: 100,
+                                align: 'center',
+                                render: (value) =>
+                                    value?.length ? value?.length : '',
                             },
                             {
                                 title: 'Giảng viên 1',
@@ -479,7 +536,7 @@ export default function TeachingAssignment() {
                                                 record,
                                                 selectedValue,
                                                 'lecturerId',
-                                                'lecturer'
+                                                'mainLecturer'
                                             )
                                         }
                                         disabled={!isEdit}
@@ -542,6 +599,7 @@ export default function TeachingAssignment() {
                             {
                                 title: 'Địa điểm',
                                 dataIndex: 'room',
+                                align: 'center',
                                 width: 150,
                                 render: (value) =>
                                     value?.building?.trainingLocation?.name
@@ -556,16 +614,35 @@ export default function TeachingAssignment() {
                                 render: (record) => (
                                     <Select
                                         style={{ width: '100%' }}
-                                        options={[
-                                            {
-                                                label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
-                                                value: record?.lecturerId,
-                                            },
-                                            {
-                                                label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
-                                                value: record?.extraLecturerId,
-                                            },
-                                        ]}
+                                        options={
+                                            record?.mainLecturer &&
+                                            record?.extraLecturer
+                                                ? [
+                                                      {
+                                                          label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                          value: record?.lecturerId,
+                                                      },
+                                                      {
+                                                          label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                          value: record?.extraLecturerId,
+                                                      },
+                                                  ]
+                                                : record?.mainLecturer
+                                                  ? [
+                                                        {
+                                                            label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                            value: record?.lecturerId,
+                                                        },
+                                                    ]
+                                                  : record?.extraLecturer
+                                                    ? [
+                                                          {
+                                                              label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                              value: record?.extraLecturerId,
+                                                          },
+                                                      ]
+                                                    : []
+                                        }
                                         value={
                                             record?.enterGradeLecturerId ||
                                             undefined
@@ -577,20 +654,46 @@ export default function TeachingAssignment() {
                                                 selectedValue
                                             )
                                         }
-                                        disabled={!isEdit}
+                                        disabled={!isEdit && record?.lecturerId}
                                     />
                                 ),
                             },
                             {
                                 title: 'Phòng học',
                                 dataIndex: 'room',
+                                align: 'center',
                                 width: 100,
                                 render: (value) => value?.name || '',
                             },
                             {
+                                title: 'Ngày thi',
+                                dataIndex: 'examDate',
+                                align: 'center',
+                                width: 100,
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+
+                            {
                                 title: 'Hạn PCGD',
                                 dataIndex: 'lecturerAssignmentDeadline',
                                 width: 100,
+                                align: 'center',
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+                            {
+                                title: 'Hạn nhập điểm CC/TX',
+                                dataIndex: 'scoreDeadline',
+                                width: 150,
+                                align: 'center',
+                                render: (value) =>
+                                    value ? formatDate(value) : '',
+                            },
+                            {
+                                title: 'Hạn nhập điểm thi',
+                                dataIndex: 'examScoreDeadline',
+                                width: 150,
                                 render: (value) =>
                                     value ? formatDate(value) : '',
                             },
@@ -598,6 +701,7 @@ export default function TeachingAssignment() {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'subject',
                                 width: 200,
+                                align: 'center',
                                 render: (value) =>
                                     value?.managementOrganization?.name
                                         ? value?.managementOrganization?.name
@@ -619,6 +723,47 @@ export default function TeachingAssignment() {
                                 title: 'Lớp liên kết',
                                 dataIndex: 'lopLienKet',
                                 width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, { id }) => {
+                                    if (id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                {/* <Tooltip
+                                                    title="Xem chi tiết"
+                                                    placement="leftTop"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={onOpen.bind(
+                                                            null,
+                                                            id
+                                                        )}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Tooltip> */}
+                                                <EditIcon
+                                                    onClick={onOpenEditSubjectClass.bind(
+                                                        null,
+                                                        id
+                                                    )}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDelete(id),
+                                                    }}
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
                             },
                         ]}
                         data={dataSubmit}
