@@ -429,8 +429,8 @@ export default function FixedClassPage({
                                 width: 150,
                                 dataIndex: 'curriculumVersion',
                                 render: (_, record) =>
-                                    record.curriculumVersion?.curriculum
-                                        .trainingMajor?.name || '',
+                                    record?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '',
                             },
                             {
                                 title: 'Trình độ đào tạo',

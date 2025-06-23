@@ -198,8 +198,6 @@ const FilterMonHocCTDT = (props: Props) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: 40,
-                        height: 40,
                     }}
                 />
             </Popover>
