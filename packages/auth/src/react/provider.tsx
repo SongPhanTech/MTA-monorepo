@@ -29,9 +29,6 @@ const SessionProvider: React.FC<{
     useEffect(() => {
         const url = `${pathname}${!searchParams.toString() ? '' : `?${searchParams.toString()}`}`
         if (pathname !== '/') {
-            console.log('pathname', pathname)
-            console.log('searchParams', searchParams.toString())
-
             localStorage.setItem('lastPage', url)
         }
     }, [pathname, searchParams])
