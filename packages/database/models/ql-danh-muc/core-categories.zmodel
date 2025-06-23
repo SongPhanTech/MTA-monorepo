@@ -22,6 +22,14 @@ abstract model CoreBase {
   sThietBiTao    String?
   sThietBiSua    String?
   @@schema("ql-danh-muc")
+
+  // TODO: change this
+  @@allow('all', auth() != null)
+
+  @@deny('read', bDeleted == true)
+  /// TODO: allow all for now, will be restricted later
+  @@allow('all', auth().role == 'ADMIN')
+  @@allow('read', auth() != null)
 }
 
 model DM_CapBac extends CoreBase {
