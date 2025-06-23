@@ -462,17 +462,17 @@ export default function StudentFixedClassPage() {
                                 title: 'Ngành',
                                 width: 150,
                                 render: (record) => {
-                                    return record.fixedClass.curriculumVersion
-                                        .curriculum.trainingMajor.trainingField
-                                        .name
+                                    return record.fixedClass?.curriculumVersion
+                                        ?.curriculum?.trainingMajor
+                                        ?.trainingField?.name
                                 },
                             },
                             {
                                 title: 'Chuyên ngành',
                                 width: 180,
                                 render: (record) => {
-                                    return record.fixedClass.curriculumVersion
-                                        .curriculum.trainingMajor.name
+                                    return record.fixedClass?.curriculumVersion
+                                        ?.curriculum?.trainingMajor?.name
                                 },
                             },
                             {
