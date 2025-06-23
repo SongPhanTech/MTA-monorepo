@@ -1010,12 +1010,34 @@ Table UserProfile {
   lastName String [not null]
   idCardNumber String [unique, not null]
   fullname String
+  healthInsuranceNumber String
+  bankAccountNumber String
+  bankName String
+  currentAddress String
+  provinceCurrentAddress DM_Tinh
+  provinceCurrentAddressId String
+  districtcurrentAddress DM_QuanHuyen
+  districtcurrentAddressId String
+  communecurrentAddress DM_XaPhuong
+  communecurrentAddressId String
   dateOfBirth DateTime
   placeOfBirth String
+  provinceOfBirth DM_Tinh
+  provinceOfBirthId String
+  districtOfBirth DM_QuanHuyen
+  districtOfBirthId String
+  communeOfBirth DM_XaPhuong
+  communeOfBirthId String
   homeTown String
   idCardDate DateTime
   gender Gender
   permanentAddress String
+  provincePermanentAddress DM_Tinh
+  provincePermanentAddressId String
+  districtPermanentAddress DM_QuanHuyen
+  districtPermanentAddressId String
+  communePermanentAddress DM_XaPhuong
+  communePermanentAddressId String
   temporaryAddress String
   contactAddress String
   phoneNumber String
@@ -1499,7 +1521,10 @@ Table DM_Tinh {
   iDM_DonViHanhChinhId String
   huyen DM_QuanHuyen [not null]
   xaPhuong DM_XaPhuong [not null]
-  userProfile UserProfile [not null]
+  userProfileHometown UserProfile [not null]
+  userProfilePlaceOfBirth UserProfile [not null]
+  userProfilePermanentAddress UserProfile [not null]
+  userProfileCurrentAddress UserProfile [not null]
 }
 
 Table DM_QuanHuyen {
@@ -1524,7 +1549,10 @@ Table DM_QuanHuyen {
   dM_DonViHanhChinh DM_DonViHanhChinh
   iDM_DonViHanhChinhId String
   xaPhuong DM_XaPhuong [not null]
-  userProfile UserProfile [not null]
+  userProfileHometown UserProfile [not null]
+  userProfilePlaceOfBirth UserProfile [not null]
+  userProfilePermanentAddress UserProfile [not null]
+  userProfileCurrentAddress UserProfile [not null]
 }
 
 Table DM_XaPhuong {
@@ -1551,7 +1579,10 @@ Table DM_XaPhuong {
   dM_TinhId String
   dM_DonViHanhChinh DM_DonViHanhChinh
   iDM_DonViHanhChinhId String
-  userProfile UserProfile [not null]
+  userProfileHometown UserProfile [not null]
+  userProfilePlaceOfBirth UserProfile [not null]
+  userProfilePermanentAddress UserProfile [not null]
+  userProfileCurrentAddress UserProfile [not null]
 }
 
 Table DM_VaiTro {
@@ -2206,6 +2237,24 @@ Ref: Message.conversationId > Conversation.id
 Ref: Feedback.userId > User.id
 
 Ref: UserProfile.userId > User.id
+
+Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
+
+Ref: UserProfile.districtcurrentAddressId > DM_QuanHuyen.Id
+
+Ref: UserProfile.communecurrentAddressId > DM_XaPhuong.Id
+
+Ref: UserProfile.provinceOfBirthId > DM_Tinh.Id
+
+Ref: UserProfile.districtOfBirthId > DM_QuanHuyen.Id
+
+Ref: UserProfile.communeOfBirthId > DM_XaPhuong.Id
+
+Ref: UserProfile.provincePermanentAddressId > DM_Tinh.Id
+
+Ref: UserProfile.districtPermanentAddressId > DM_QuanHuyen.Id
+
+Ref: UserProfile.communePermanentAddressId > DM_XaPhuong.Id
 
 Ref: UserProfile.nationalityId > DM_QuocGia.Id
 
