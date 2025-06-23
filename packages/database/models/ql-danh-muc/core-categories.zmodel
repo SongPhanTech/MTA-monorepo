@@ -187,45 +187,54 @@ model DM_QuocGia extends CoreBase {
 }
 
 model DM_Tinh extends CoreBase {
-  quocGia              DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
-  sDM_QuocGiaId        String?
-  dM_KhuVuc_DiaLy      DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
-  iDM_KhuVucDiaLy_Id   String?
-  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId String?
+  quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
+  sDM_QuocGiaId               String?
+  dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
+  iDM_KhuVucDiaLy_Id          String?
+  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId        String?
 
-  huyen                DM_QuanHuyen[]
-  xaPhuong             DM_XaPhuong[]
-  userProfile          UserProfile[]
+  huyen                       DM_QuanHuyen[]
+  xaPhuong                    DM_XaPhuong[]
+  userProfileHometown         UserProfile[]      @relation("ProvineceHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
   @@schema("ql-danh-muc")
 }
 
 model DM_QuanHuyen extends CoreBase {
-  dM_Tinh              DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
-  sDM_TinhId           String?
-  sDM_Tinh_Ma          String?
-  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId String?
+  dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
+  sDM_TinhId                  String?
+  sDM_Tinh_Ma                 String?
+  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId        String?
 
-  xaPhuong             DM_XaPhuong[]
-  userProfile          UserProfile[]
+  xaPhuong                    DM_XaPhuong[]
+  userProfileHometown         UserProfile[]      @relation("DistrictHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("DistrictPlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("DistrictPermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("DistrictCurrentAddress")
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("ql-danh-muc")
 }
 
 model DM_XaPhuong extends CoreBase {
-  sDM_TinhId           String?
-  quanHuyen            DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
-  sDM_QuanHuyenId      String?
-  sDM_QuanHuyen_Ma     String?
-  dM_Tinh              DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId            String?
-  dM_DonViHanhChinh    DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId String?
+  sDM_TinhId                  String?
+  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
+  sDM_QuanHuyenId             String?
+  sDM_QuanHuyen_Ma            String?
+  dM_Tinh                     DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId                   String?
+  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
+  iDM_DonViHanhChinhId        String?
 
-  userProfile          UserProfile[]
+  userProfileHometown         UserProfile[]      @relation("CommuneHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("CommunePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("CommunePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("CommuneCurrentAddress")
   @@schema("ql-danh-muc")
 }
 
