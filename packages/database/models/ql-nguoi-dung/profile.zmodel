@@ -45,9 +45,9 @@ model UserProfile extends Base {
   contactAddress       String? // địa chỉ liên hệ
   phoneNumber          String? // số điện thoại
   email                String? // email
-  nationality          DM_TonGiao?       @relation(fields: [nationalityId], references: [Id]) // quốc tịch
+  nationality          DM_QuocGia?       @relation(fields: [nationalityId], references: [Id]) // quốc tịch
   nationalityId        String?
-  religion             DM_QuocGia?       @relation(fields: [religionId], references: [Id]) // tôn giáo
+  religion             DM_TonGiao?       @relation(fields: [religionId], references: [Id]) // tôn giáo
   religionId           String?
   ethnicity            DM_DanToc?        @relation(fields: [ethnicityId], references: [Id]) // dân tộc
   ethnicityId          String?
