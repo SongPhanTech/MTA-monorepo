@@ -5,7 +5,6 @@ import useSpinner from '@hooks/spinner'
 import type { Subject } from '@workspace/db'
 import {
     useCreateSubject,
-    useFindManyOrganizationType,
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
@@ -13,8 +12,8 @@ import { Col, Form, Input, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSubject = Subject
 import 'dayjs/locale/vi'
+export type PutSubject = Subject
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
     const [form] = Form.useForm<PutSubject>()
@@ -28,23 +27,23 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: organizationTypes = [] } = useFindManyOrganizationType({
-        include: {
-            organizations: true,
-        },
-    })
+    // const { data: organizationTypes = [] } = useFindManyDM_DonViType({
+    //     include: {
+    //         organizations: true,
+    //     },
+    // })
 
-    const treeData =
-        organizationTypes.map((organizationType) => ({
-            title: organizationType.name,
-            value: organizationType.id,
-            selectable: false,
-            children:
-                organizationType.organizations.map((organization) => ({
-                    title: organization.name,
-                    value: organization.id,
-                })) || [],
-        })) || []
+    // const treeData =
+    //     organizationTypes.map((organizationType) => ({
+    //         title: organizationType.name,
+    //         value: organizationType.id,
+    //         selectable: false,
+    //         children:
+    //             organizationType.organizations.map((organization) => ({
+    //                 title: organization.name,
+    //                 value: organization.id,
+    //             })) || [],
+    //     })) || []
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
@@ -142,7 +141,7 @@ const PutSubjectListModal = () => {
                     label="Đơn vị quản lý"
                 >
                     <TreeSelect
-                        treeData={treeData}
+                        // treeData={treeData}
                         showSearch
                         placeholder="Chọn đơn vị quản lý"
                         style={{ width: '100%' }}

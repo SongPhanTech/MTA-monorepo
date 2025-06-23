@@ -17,7 +17,7 @@ import {
     useCountTrainingBlockOnCurriculumVersion,
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
     useUpdateTrainingBlockSubject,
@@ -356,7 +356,7 @@ export default function TrainingProgramSubjects() {
         },
     })
 
-    const { data: manageOrgData = [] } = useFindManyOrganization()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

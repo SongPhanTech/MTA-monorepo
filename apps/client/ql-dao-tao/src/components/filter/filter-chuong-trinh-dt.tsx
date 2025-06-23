@@ -10,7 +10,7 @@ import type {
     TrainingTime,
 } from '@workspace/db'
 import {
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManySchoolYear,
     useFindManyTrainingLevel,
     useFindManyTrainingMajor,
@@ -108,7 +108,7 @@ const FilterChuongTrinhDT = (props: Props) => {
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
         useFindManySchoolYear()
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const filterContent = (

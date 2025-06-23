@@ -7,7 +7,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Organization, Prisma, TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, Prisma, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
@@ -245,9 +245,9 @@ export default function TrainingFieldPage() {
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
-                                render: (organization: Organization) =>
-                                    organization?.name
-                                        ? organization?.name
+                                render: (organization: DM_DonVi) =>
+                                    organization?.sTen
+                                        ? organization?.sTen
                                         : '',
                             },
 

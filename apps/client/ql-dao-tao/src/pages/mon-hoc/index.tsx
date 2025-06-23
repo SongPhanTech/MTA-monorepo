@@ -10,7 +10,7 @@ import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import {
     useCountSubjectVersion,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManySchoolYear,
     useFindManySubjectVersion,
     useUpdateSubjectVersion,
@@ -114,7 +114,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
         }
     }, [dataSchoolYear])
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(
         _.debounce(() => {

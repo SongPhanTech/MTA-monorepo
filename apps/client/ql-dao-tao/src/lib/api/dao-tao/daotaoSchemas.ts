@@ -19,7 +19,7 @@ export type ListOfundefined = PaginationQuery & {
         description?: string | null
         deletedAt?: string | null
         /**
-         * @default 2025-06-18T03:19:28.228Z
+         * @default 2025-06-23T03:24:16.102Z
          */
         createdAt?: string | null
         updatedAt: string | null
@@ -114,28 +114,6 @@ export type SerializedFields = SerializedField[]
  */
 export type FixedClassId = string
 
-/**
- * ID của lớp môn học
- */
-export type SubjectClassId = string
-
-/**
- * ID của giảng viên
- */
-export type UserProfileId = string
-
-export type TeachingAssignmentResponse = {
-    subjectClassId: SubjectClassId
-    userProfileId: UserProfileId
-}
-
-export type TeachingAssignmentRequest = {
-    subjectClassId: string
-    lecturerId: string
-    extraLecturerId?: string
-    enterGradeLecturerId?: string
-}
-
 export type OpenSubjectClass = {
     trainingMajorId: string
     trainingCourseId: string
@@ -159,6 +137,11 @@ export type OpenSubjectClass = {
         fixedClassSemester: number
     }[]
     countStudent: number
+}
+
+export type ListOfOpenSubjectClass = PaginationQuery & {
+    data: OpenSubjectClass[]
+    count: number
 }
 
 /**
@@ -239,6 +222,16 @@ export type FixedClassBySubjectClassSemester = {
     }
 }
 
+export type ListOfFixedClassBySubjectClassSemester = PaginationQuery & {
+    data: FixedClassBySubjectClassSemester[]
+    count: number
+}
+
+/**
+ * ID của lớp môn học
+ */
+export type SubjectClassId = string
+
 export type StudentClassBySubjectClassSemester = {
     id: string
     code: string
@@ -304,6 +297,11 @@ export type StudentClassBySubjectClassSemester = {
             }
         }
     }
+}
+
+export type ListOfStudentClassBySubjectClassSemester = PaginationQuery & {
+    data: StudentClassBySubjectClassSemester[]
+    count: number
 }
 
 export type EnrollFixedClassOnSubjectClass = {
@@ -372,6 +370,11 @@ export type EnrollFixedClassOnSubjectClass = {
     }
 }
 
+export type ListOfEnrollFixedClassOnSubjectClass = PaginationQuery & {
+    data: EnrollFixedClassOnSubjectClass[]
+    count: number
+}
+
 /**
  * Danh sách ID lớp quản lý
  */
@@ -386,3 +389,51 @@ export type StudentIds = string[]
  * Danh sách ID học viên cần xóa
  */
 export type RemoveStudentIds = string[]
+
+export type SubjectClasses = {
+    id: string
+    code?: string | null
+    /**
+     * @default true
+     */
+    active?: boolean
+    description?: string | null
+    deletedAt?: string | null
+    /**
+     * @default 2025-06-23T03:24:16.110Z
+     */
+    createdAt?: string | null
+    updatedAt?: string | null
+    name?: string
+    startDate?: string | null
+    endDate?: string | null
+    schedule?: 'MORNING' | 'AFTERNOON' | 'EVENING'
+    maxStudent?: number
+    lecturerAssignmentDeadline?: string | null
+    examDate?: string | null
+    scoreDeadline?: string | null
+    examScoreDeadline?: string | null
+    examType?:
+        | 'OfflineWritten'
+        | 'OnlineWritten'
+        | 'OfflineChoices'
+        | 'OnlineChoices'
+        | 'Oral'
+        | 'Practice'
+        | 'Project'
+        | 'Other'
+        | null
+    /**
+     * @default false
+     */
+    isLockScore?: boolean
+    /**
+     * @default true
+     */
+    isLockExamScore?: boolean
+    issuedScoreAt?: string | null
+    roomId?: string | null
+    lecturerId?: string | null
+    extraLecturerId?: string | null
+    enterGradeLecturerId?: string | null
+}

@@ -6,8 +6,8 @@ import useSpinner from '@hooks/spinner'
 import type { Organization, OrganizationType } from '@workspace/db'
 import {
     useCreateOrganization,
-    useFindManyOrganization,
-    useFindManyOrganizationType,
+    useFindManyDM_DonVi,
+    useFindManyDM_DonViType,
     useFindUniqueOrganization,
     useUpdateOrganization,
 } from '@workspace/db/hooks'
@@ -27,12 +27,12 @@ const PutOrganizationModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data = [], refetch } = useFindManyOrganizationType({
+    const { data = [], refetch } = useFindManyDM_DonViType({
         take: 1000,
         skip: 0,
     })
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()

@@ -24,11 +24,11 @@ import {
     useCreateStaff,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
+    useFindManyDM_DonVi,
     useFindManyEthnicity,
     useFindManyFixedClass,
     useFindManyLevel,
     useFindManyNationality,
-    useFindManyOrganization,
     useFindManyRank,
     useFindManyReligion,
     useFindManyStaffPosition,
@@ -247,13 +247,13 @@ const PutUserProfileStaffModal = () => {
     // const {
     //     data: organizationUserData = [],
     //     refetch: refetchOrganizationUser,
-    // } = useFindManyOrganizationUser({
+    // } = useFindManyDM_DonViUser({
     //     where: {
     //         userProfileId: id || undefined,
     //     },
     // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -586,7 +586,7 @@ const PutUserProfileStaffModal = () => {
                                 code: output.code,
                                 ...(output.organizationId && {
                                     organization: {
-                                        connect: { id: output.organizationId },
+                                        connect: { Id: output.organizationId },
                                     },
                                 }),
                                 ...(output.staffTypeId && {
@@ -745,13 +745,13 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
 
                 // Relations IDs
-                nationalityId: userProfile.nationality?.id,
-                religionId: userProfile.religion?.id,
-                ethnicityId: userProfile.ethnicity?.id,
-                rankId: userProfile.rank?.id,
-                levelId: userProfile.level?.id,
-                academicDegreeTypeId: userProfile.academicDegreeType?.id,
-                academicRankTypeId: userProfile.academicRankType?.id,
+                nationalityId: userProfile.nationality?.Id,
+                religionId: userProfile.religion?.Id,
+                ethnicityId: userProfile.ethnicity?.Id,
+                rankId: userProfile.rank?.Id,
+                levelId: userProfile.level?.Id,
+                academicDegreeTypeId: userProfile.academicDegreeType?.Id,
+                academicRankTypeId: userProfile.academicRankType?.Id,
 
                 rankDate: userProfile.rankDate
                     ? dayjs(userProfile.rankDate)

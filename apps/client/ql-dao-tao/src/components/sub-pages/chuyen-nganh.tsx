@@ -12,8 +12,8 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import {
     useCountFixedClass,
+    useFindManyDM_DonVi,
     useFindManyFixedClass,
-    useFindManyOrganization,
     useFindManyTemplateFile,
     useFindManyTrainingCourse,
     useUpdateFixedClass,
@@ -60,7 +60,7 @@ export default function MajorInforList({ infor }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({

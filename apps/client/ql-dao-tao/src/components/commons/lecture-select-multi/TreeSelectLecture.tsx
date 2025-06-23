@@ -1,8 +1,5 @@
 import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import {
-    useFindManyLecturer,
-    useFindManyOrganization,
-} from '@workspace/db/hooks'
+import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { SelectProps } from 'antd'
 import { message } from 'antd'
@@ -11,19 +8,14 @@ import { useEffect, useMemo, useState } from 'react'
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgTree(
-    list: Array<{ id: string; name: string; parentId: string | null }>,
+    list: Array<{ id: string; name: string | null; parentId: string | null }>,
     lecturers: Array<{
         id: string
         userProfile: { fullName: string }
         organizationId: string
     }>,
     parentId: string | null = null
-): Array<{
-    title: string
-    value: string
-    children: Record<string, unknown>[]
-    selectable?: boolean
-}> {
+): Array<TreeNodeType> {
     return list
         .filter((item) => (item.parentId ?? null) === parentId)
         .map((item) => ({
@@ -71,7 +63,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         data: organizations = [],
         isLoading: organizationsLoading,
         error: organizationsError,
-    } = useFindManyOrganization()
+    } = useFindManyDM_DonVi()
 
     // Lấy danh sách Lecturer
     const {
@@ -96,9 +88,9 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
 
         return buildOrgTree(
             organizations.map((org) => ({
-                id: org.id,
-                name: org.name,
-                parentId: org.parentId,
+                id: org.Id,
+                name: org.sTen,
+                parentId: org.sParentId,
             })),
             lecturers.map((lec) => ({
                 id: lec.id,

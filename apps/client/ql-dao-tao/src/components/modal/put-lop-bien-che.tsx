@@ -12,8 +12,8 @@ import type {
 import {
     useCreateFixedClass,
     useFindManyCurriculum,
+    useFindManyDM_DonVi,
     useFindManyLecturer,
-    useFindManyOrganization,
     useFindManyStaff,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
@@ -26,12 +26,12 @@ import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
+import { buildOrgTree } from '@lib/utils'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
 }
-import 'dayjs/locale/vi'
-import { buildOrgTree } from '@lib/utils'
 dayjs.locale('vi')
 const PutFixedClassModal = () => {
     const [form] = Form.useForm<PutFixedClass>()
@@ -46,7 +46,7 @@ const PutFixedClassModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
 
     // const managementOrganizationForm = Form.useWatch(
@@ -175,7 +175,7 @@ const PutFixedClassModal = () => {
                         managementOrganization: output.managementOrganizationId
                             ? {
                                   connect: {
-                                      id: output.managementOrganizationId,
+                                      Id: output.managementOrganizationId,
                                   },
                               }
                             : { disconnect: true },
@@ -220,7 +220,7 @@ const PutFixedClassModal = () => {
                         managementOrganization: output.managementOrganizationId
                             ? {
                                   connect: {
-                                      id: output.managementOrganizationId,
+                                      Id: output.managementOrganizationId,
                                   },
                               }
                             : undefined,
@@ -316,7 +316,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue({
                 managementOrganizationId:
                     curriculumVersionData?.curriculum?.managementOrganization
-                        ?.id,
+                        ?.Id,
                 trainingMajorId:
                     curriculumVersionData?.curriculum?.trainingMajor?.id,
                 trainingObjectTypeId:

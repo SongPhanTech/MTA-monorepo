@@ -8,7 +8,7 @@ import { buildOrgTree } from '@lib/utils'
 import type { TrainingField, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingField,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingField,
     useUpdateTrainingField,
@@ -17,10 +17,10 @@ import { Col, Form, Input, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingFieldModal = () => {
     const [form] = Form.useForm<PutTrainingField>()
@@ -38,7 +38,7 @@ const PutTrainingFieldModal = () => {
         useFindManyTrainingObjectType()
 
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingField } = useCreateTrainingField()

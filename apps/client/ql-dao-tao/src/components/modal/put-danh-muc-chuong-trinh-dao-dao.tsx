@@ -6,7 +6,7 @@ import useSpinner from '@hooks/spinner'
 import type { Curriculum, TrainingMajor } from '@workspace/db'
 import {
     useCreateCurriculum,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManyTrainingMajor,
     useFindUniqueCurriculum,
     useUpdateCurriculum,
@@ -15,11 +15,11 @@ import { Col, Form, Input, Switch, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutCurriculum = Curriculum
 import 'dayjs/locale/vi'
 import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { buildOrgTree } from '@lib/utils'
+export type PutCurriculum = Curriculum
 dayjs.locale('vi')
 
 const PutCurriculum = () => {
@@ -35,7 +35,7 @@ const PutCurriculum = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: manageOrgData = [] } = useFindManyOrganization()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor()
 

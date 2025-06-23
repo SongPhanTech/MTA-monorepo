@@ -1,5 +1,5 @@
 import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
-import { useFindManyOrganization } from '@workspace/db/hooks'
+import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
 import type React from 'react'
@@ -29,42 +29,44 @@ const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
     const {
         data: organizationDataKhoa = [],
         refetch: refetchOrganizationKhoa,
-    } = useFindManyOrganization({
+    } = useFindManyDM_DonVi({
         include: {
-            type: true,
+            children: true,
         },
+        // TODO: fetch Khoa only
         where: {
-            type: {
-                code: 'KHOA',
-            },
+            // type: {
+            //     code: 'KHOA',
+            // },
         },
     })
     const {
         data: organizationDataBoMon = [],
         refetch: refetchOrganizationBoMon,
-    } = useFindManyOrganization({
-        include: {
-            type: true,
-        },
-        where: {
-            type: {
-                code: 'BOMON',
-            },
-        },
+    } = useFindManyDM_DonVi({
+        // include: {
+        //     type: true,
+        // },
+        // where: {
+        //     type: {
+        //         code: 'BOMON',
+        //     },
+        // },
     })
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         const khoaList = organizationDataKhoa || []
-        const bomonList = organizationDataBoMon || []
+        const boMonList = organizationDataBoMon || []
+        organizationDataKhoa.map((khoa) => {})
         return khoaList.map((khoa) => ({
-            value: `khoa-${khoa.id}`,
-            title: khoa.name,
+            value: `khoa-${khoa.Id}`,
+            title: khoa.sTen,
             selectable: false, // Make the node unselectable without changing its color
-            children: bomonList
-                .filter((bomon) => bomon.parentId === khoa.id)
-                .map((bomon) => ({
-                    value: bomon.id,
-                    title: bomon.name,
+            children: boMonList
+                .filter((boMon) => boMon.sParentId === khoa.Id)
+                .map((boMon) => ({
+                    value: boMon.Id,
+                    title: boMon.sTen,
                 })),
         }))
     }, [organizationDataKhoa, organizationDataBoMon])
