@@ -4,8 +4,7 @@ import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSele
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import {
-    useFindManyOrganization,
-    useFindManyOrganizationType,
+    useFindManyDM_DonVi,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import {
@@ -147,35 +146,15 @@ const FilterSubjectClass = (props: Props) => {
     }, [filters, form])
 
     const {
-        data: organizationTypeData = [],
-        refetch: refetchOrganizationType,
-    } = useFindManyOrganizationType()
-    const {
         data: organizationDataKhoa = [],
         refetch: refetchOrganizationKhoa,
-    } = useFindManyOrganization({
-        include: {
-            type: true,
-        },
-        where: {
-            type: {
-                code: 'KHOA',
-            },
-        },
-    })
-    const {
-        data: organizationDataBoMon = [],
-        refetch: refetchOrganizationBoMon,
-    } = useFindManyOrganization({
-        include: {
-            type: true,
-        },
-        where: {
-            parentId: form.getFieldValue('KhoaId') || undefined,
-            type: {
-                code: 'BOMON',
-            },
-        },
+    } = useFindManyDM_DonVi({
+        // TODO: fetch Khoa only
+        // where: {
+        //     type: {
+        //         code: 'KHOA',
+        //     },
+        // },
     })
     const {
         data: trainingObjectTypeData = [],
@@ -363,7 +342,7 @@ const FilterSubjectClass = (props: Props) => {
                                             form.setFieldsValue({
                                                 BoMonId: value,
                                             })
-                                            refetchOrganizationBoMon()
+                                            // refetchOrganizationBoMon()
                                         }}
                                     />
                                 </Form.Item>

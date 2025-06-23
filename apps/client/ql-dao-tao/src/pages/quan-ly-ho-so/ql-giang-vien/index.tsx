@@ -67,7 +67,7 @@ export default function UserProfilePageLecture() {
     })
 
     // const { data: organization_data = [], refetch: refetch_organization } =
-    //     useFindManyOrganization()
+    //     useFindManyDM_DonVi()
 
     // const tree_organization = convertToTree(organization_data)
     // const tree_search_organization = searchTree(
@@ -102,7 +102,7 @@ export default function UserProfilePageLecture() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },
@@ -229,7 +229,7 @@ export default function UserProfilePageLecture() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },

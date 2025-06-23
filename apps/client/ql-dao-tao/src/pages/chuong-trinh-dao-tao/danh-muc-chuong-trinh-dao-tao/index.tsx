@@ -350,8 +350,8 @@ export default function TrainingProgramCatalog() {
         return data?.map((item) => ({
             ...item,
             name: `${item?.name}${
-                item?.managementOrganization?.name
-                    ? ` - ${item?.managementOrganization?.name}`
+                item?.managementOrganization?.sTen
+                    ? ` - ${item?.managementOrganization?.sTen}`
                     : ''
             }`,
         }))

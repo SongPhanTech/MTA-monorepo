@@ -1,10 +1,10 @@
 import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import {
-    useFindManyEthnicity,
-    useFindManyNationality,
+    useFindManyDM_DanToc,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TonGiao,
     useFindManyPriorityObject,
-    useFindManyReligion,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -70,11 +70,11 @@ const FilterLecture = (props: Props) => {
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
     const { data: nationalityData = [], refetch: refetchNationality } =
-        useFindManyNationality()
+        useFindManyDM_QuocGia()
     const { data: religionData = [], refetch: refetchReligion } =
-        useFindManyReligion()
+        useFindManyDM_TonGiao()
     const { data: ethnicityData = [], refetch: refetchEthnicity } =
-        useFindManyEthnicity()
+        useFindManyDM_DanToc()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -132,8 +132,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn quốc tịch"
                                     options={nationalityData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />
@@ -151,8 +151,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn tôn giáo"
                                     options={religionData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />
@@ -170,8 +170,8 @@ const FilterLecture = (props: Props) => {
                                     placeholder="Chọn dân tộc"
                                     options={ethnicityData.map((item) => {
                                         return {
-                                            value: item.id,
-                                            label: item.name,
+                                            value: item.Id,
+                                            label: item.sTen,
                                         }
                                     })}
                                 />

@@ -1279,9 +1279,9 @@ model UserProfile {
   contactAddress       String?
   phoneNumber          String?
   email                String?
-  nationality          DM_TonGiao?       @relation(fields: [nationalityId], references: [Id])
+  nationality          DM_QuocGia?       @relation(fields: [nationalityId], references: [Id])
   nationalityId        String?
-  religion             DM_QuocGia?       @relation(fields: [religionId], references: [Id])
+  religion             DM_TonGiao?       @relation(fields: [religionId], references: [Id])
   religionId           String?
   ethnicity            DM_DanToc?        @relation(fields: [ethnicityId], references: [Id])
   ethnicityId          String?

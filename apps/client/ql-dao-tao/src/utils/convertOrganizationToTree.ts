@@ -1,4 +1,4 @@
-import type { Organization } from '@workspace/db'
+import type { DM_DonVi } from '@workspace/db'
 
 export interface TreeNodeOrganization extends Record<string, unknown> {
     key: string
@@ -13,29 +13,30 @@ export interface TreeNodeType {
     value: string
     title: React.ReactNode
     children?: TreeNodeType[]
+    selectable?: boolean
 }
-export const convertToTree = (flatData: Organization[]) => {
+export const convertToTree = (flatData: DM_DonVi[]) => {
     const map = new Map()
     const treeData: TreeNodeOrganization[] = []
 
-    flatData.forEach((item: Organization, index: number) => {
+    flatData.forEach((item: DM_DonVi, index: number) => {
         const node = {
-            key: item.id,
-            id: item.id,
-            code: item.code,
-            name: item.name,
-            address: item.address,
-            value: item.id,
-            label: item.id,
+            key: item.Id,
+            id: item.Id,
+            code: item.sMa,
+            name: item.sTen,
+            address: item.sDiaChi,
+            value: item.Id,
+            label: item.Id,
             // type: item.type?.name || null,
             children: [],
         }
-        map.set(item.id, node)
+        map.set(item.Id, node)
     })
 
-    flatData.forEach((item: Organization) => {
-        const node = map.get(item.id)
-        if (item.parentId === null || item.parentId === '0') {
+    flatData.forEach((item: DM_DonVi) => {
+        const node = map.get(item.Id)
+        if (item.sParentId === null || item.sParentId === '0') {
             // This is a root node
             const node_root = {
                 ...node,
@@ -43,7 +44,7 @@ export const convertToTree = (flatData: Organization[]) => {
             }
             treeData.push(node_root)
         } else {
-            const parentNode = map.get(item.parentId)
+            const parentNode = map.get(item.sParentId)
             if (parentNode) {
                 parentNode.children.push(node)
             }
@@ -53,25 +54,25 @@ export const convertToTree = (flatData: Organization[]) => {
     return treeData
 }
 
-export const convertToTreeSelect = (flatData: Organization[]) => {
+export const convertToTreeSelect = (flatData: DM_DonVi[]) => {
     const map = new Map()
     const treeData: TreeNodeType[] = []
 
-    flatData.forEach((item: Organization, index: number) => {
+    flatData.forEach((item: DM_DonVi, index: number) => {
         const node = {
-            value: item.id,
-            title: item.name,
+            value: item.Id,
+            title: item.sTen,
             children: [],
         }
-        map.set(item.id, node)
+        map.set(item.Id, node)
     })
 
-    flatData.forEach((item: Organization) => {
-        const node = map.get(item.id)
-        if (item.parentId === null || item.parentId === '0') {
+    flatData.forEach((item: DM_DonVi) => {
+        const node = map.get(item.Id)
+        if (item.sParentId === null || item.sParentId === '0') {
             treeData.push(node)
         } else {
-            const parentNode = map.get(item.parentId)
+            const parentNode = map.get(item.sParentId)
             if (parentNode) {
                 parentNode.children.push(node)
             }

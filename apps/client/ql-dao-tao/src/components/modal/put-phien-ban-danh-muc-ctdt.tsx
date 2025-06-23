@@ -24,12 +24,12 @@ import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutCurriculumVersion = CurriculumVersion
 import 'dayjs/locale/vi'
 import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
+export type PutCurriculumVersion = CurriculumVersion
 dayjs.locale('vi')
 
 type CurriculumVersionInput = {
@@ -67,7 +67,7 @@ const PutCurriculumVersion = () => {
         try {
             showSpinner()
             const data = {
-                curriculumId: input?.curriculumId,
+                curriculumId: input?.curriculumId || '',
                 code: output.code,
                 name: output.name,
                 shortName: output?.shortName,

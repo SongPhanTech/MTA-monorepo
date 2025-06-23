@@ -1020,9 +1020,9 @@ Table UserProfile {
   contactAddress String
   phoneNumber String
   email String
-  nationality DM_TonGiao
+  nationality DM_QuocGia
   nationalityId String
-  religion DM_QuocGia
+  religion DM_TonGiao
   religionId String
   ethnicity DM_DanToc
   ethnicityId String
@@ -2207,9 +2207,9 @@ Ref: Feedback.userId > User.id
 
 Ref: UserProfile.userId > User.id
 
-Ref: UserProfile.nationalityId > DM_TonGiao.Id
+Ref: UserProfile.nationalityId > DM_QuocGia.Id
 
-Ref: UserProfile.religionId > DM_QuocGia.Id
+Ref: UserProfile.religionId > DM_TonGiao.Id
 
 Ref: UserProfile.ethnicityId > DM_DanToc.Id
 

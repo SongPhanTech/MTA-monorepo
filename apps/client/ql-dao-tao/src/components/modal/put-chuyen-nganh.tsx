@@ -11,7 +11,7 @@ import type {
 } from '@workspace/db'
 import {
     useCreateTrainingMajor,
-    useFindManyOrganization,
+    useFindManyDM_DonVi,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingMajor,
@@ -21,10 +21,10 @@ import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingMajorModal = () => {
     const [form] = Form.useForm<PutTrainingMajor>()
@@ -53,7 +53,7 @@ const PutTrainingMajorModal = () => {
         })
 
     const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()

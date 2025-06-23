@@ -84,7 +84,7 @@ export default function StaffManagement() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },
@@ -140,7 +140,7 @@ export default function StaffManagement() {
                     ? [
                           {
                               organization: {
-                                  name: {
+                                  sTen: {
                                       contains: filters.organizationText,
                                   },
                               },

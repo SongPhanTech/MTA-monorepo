@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 import * as reactQuery from '@tanstack/react-query'
-import { type DaotaoContext, useDaotaoContext } from './daotaoContext'
+import { useDaotaoContext, type DaotaoContext } from './daotaoContext'
 import type * as Fetcher from './daotaoFetcher'
 import { daotaoFetch } from './daotaoFetcher'
 import type * as Schemas from './daotaoSchemas'
@@ -152,7 +152,7 @@ export type UploadExcelCreateFixedClassResponse = Schemas.ListOfundefined &
             description?: string | null
             deletedAt?: string | null
             /**
-             * @default 2025-06-18T03:19:28.231Z
+             * @default 2025-06-23T03:24:16.103Z
              */
             createdAt?: string | null
             updatedAt: string | null
@@ -421,62 +421,6 @@ export const useExportStudentFixedClassDocx = <TData = undefined>(
     })
 }
 
-export type LecturerAssignmentError = Fetcher.ErrorWrapper<undefined>
-
-export type LecturerAssignmentResponse = Schemas.TeachingAssignmentResponse[]
-
-export type LecturerAssignmentRequestBody = Schemas.TeachingAssignmentRequest[]
-
-export type LecturerAssignmentVariables = {
-    body?: LecturerAssignmentRequestBody
-} & DaotaoContext['fetcherOptions']
-
-/**
- * Phân công giảng dạy
- */
-export const fetchLecturerAssignment = (
-    variables: LecturerAssignmentVariables,
-    signal?: AbortSignal
-) =>
-    daotaoFetch<
-        LecturerAssignmentResponse,
-        LecturerAssignmentError,
-        LecturerAssignmentRequestBody,
-        {},
-        {},
-        {}
-    >({
-        url: '/api/subject-class/teaching-assignment',
-        method: 'put',
-        ...variables,
-        signal,
-    })
-
-/**
- * Phân công giảng dạy
- */
-export const useLecturerAssignment = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            LecturerAssignmentResponse,
-            LecturerAssignmentError,
-            LecturerAssignmentVariables
-        >,
-        'mutationFn'
-    >
-) => {
-    const { fetcherOptions } = useDaotaoContext()
-    return reactQuery.useMutation<
-        LecturerAssignmentResponse,
-        LecturerAssignmentError,
-        LecturerAssignmentVariables
-    >({
-        mutationFn: (variables: LecturerAssignmentVariables) =>
-            fetchLecturerAssignment({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
-
 export type OpenSubjectClassQueryParams = {
     semesterId: Schemas.SemesterId
     trainingCourseId?: Schemas.TrainingCourseId
@@ -487,8 +431,6 @@ export type OpenSubjectClassQueryParams = {
 }
 
 export type OpenSubjectClassError = Fetcher.ErrorWrapper<undefined>
-
-export type OpenSubjectClassResponse = Schemas.OpenSubjectClass[]
 
 export type OpenSubjectClassVariables = {
     queryParams: OpenSubjectClassQueryParams
@@ -502,7 +444,7 @@ export const fetchOpenSubjectClass = (
     signal?: AbortSignal
 ) =>
     daotaoFetch<
-        OpenSubjectClassResponse,
+        Schemas.ListOfOpenSubjectClass,
         OpenSubjectClassError,
         undefined,
         {},
@@ -518,11 +460,11 @@ export const fetchOpenSubjectClass = (
 /**
  * Lấy danh sách lớp môn học đã mở
  */
-export const useOpenSubjectClass = <TData = OpenSubjectClassResponse>(
+export const useOpenSubjectClass = <TData = Schemas.ListOfOpenSubjectClass>(
     variables: OpenSubjectClassVariables,
     options?: Omit<
         reactQuery.UseQueryOptions<
-            OpenSubjectClassResponse,
+            Schemas.ListOfOpenSubjectClass,
             OpenSubjectClassError,
             TData
         >,
@@ -532,7 +474,7 @@ export const useOpenSubjectClass = <TData = OpenSubjectClassResponse>(
     const { fetcherOptions, queryOptions, queryKeyFn } =
         useDaotaoContext(options)
     return reactQuery.useQuery<
-        OpenSubjectClassResponse,
+        Schemas.ListOfOpenSubjectClass,
         OpenSubjectClassError,
         TData
     >({
@@ -559,9 +501,6 @@ export type FixedClassBySubjectClassSemesterQueryParams = {
 export type FixedClassBySubjectClassSemesterError =
     Fetcher.ErrorWrapper<undefined>
 
-export type FixedClassBySubjectClassSemesterResponse =
-    Schemas.FixedClassBySubjectClassSemester[]
-
 export type FixedClassBySubjectClassSemesterVariables = {
     queryParams: FixedClassBySubjectClassSemesterQueryParams
 } & DaotaoContext['fetcherOptions']
@@ -574,7 +513,7 @@ export const fetchFixedClassBySubjectClassSemester = (
     signal?: AbortSignal
 ) =>
     daotaoFetch<
-        FixedClassBySubjectClassSemesterResponse,
+        Schemas.ListOfFixedClassBySubjectClassSemester,
         FixedClassBySubjectClassSemesterError,
         undefined,
         {},
@@ -591,12 +530,12 @@ export const fetchFixedClassBySubjectClassSemester = (
  * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
  */
 export const useFixedClassBySubjectClassSemester = <
-    TData = FixedClassBySubjectClassSemesterResponse,
+    TData = Schemas.ListOfFixedClassBySubjectClassSemester,
 >(
     variables: FixedClassBySubjectClassSemesterVariables,
     options?: Omit<
         reactQuery.UseQueryOptions<
-            FixedClassBySubjectClassSemesterResponse,
+            Schemas.ListOfFixedClassBySubjectClassSemester,
             FixedClassBySubjectClassSemesterError,
             TData
         >,
@@ -606,7 +545,7 @@ export const useFixedClassBySubjectClassSemester = <
     const { fetcherOptions, queryOptions, queryKeyFn } =
         useDaotaoContext(options)
     return reactQuery.useQuery<
-        FixedClassBySubjectClassSemesterResponse,
+        Schemas.ListOfFixedClassBySubjectClassSemester,
         FixedClassBySubjectClassSemesterError,
         TData
     >({
@@ -635,9 +574,6 @@ export type StudentBySubjectClassSemesterQueryParams = {
 
 export type StudentBySubjectClassSemesterError = Fetcher.ErrorWrapper<undefined>
 
-export type StudentBySubjectClassSemesterResponse =
-    Schemas.StudentClassBySubjectClassSemester[]
-
 export type StudentBySubjectClassSemesterVariables = {
     queryParams: StudentBySubjectClassSemesterQueryParams
 } & DaotaoContext['fetcherOptions']
@@ -650,7 +586,7 @@ export const fetchStudentBySubjectClassSemester = (
     signal?: AbortSignal
 ) =>
     daotaoFetch<
-        StudentBySubjectClassSemesterResponse,
+        Schemas.ListOfStudentClassBySubjectClassSemester,
         StudentBySubjectClassSemesterError,
         undefined,
         {},
@@ -667,12 +603,12 @@ export const fetchStudentBySubjectClassSemester = (
  * Lấy danh sách học sinh theo học kỳ và lớp môn học
  */
 export const useStudentBySubjectClassSemester = <
-    TData = StudentBySubjectClassSemesterResponse,
+    TData = Schemas.ListOfStudentClassBySubjectClassSemester,
 >(
     variables: StudentBySubjectClassSemesterVariables,
     options?: Omit<
         reactQuery.UseQueryOptions<
-            StudentBySubjectClassSemesterResponse,
+            Schemas.ListOfStudentClassBySubjectClassSemester,
             StudentBySubjectClassSemesterError,
             TData
         >,
@@ -682,7 +618,7 @@ export const useStudentBySubjectClassSemester = <
     const { fetcherOptions, queryOptions, queryKeyFn } =
         useDaotaoContext(options)
     return reactQuery.useQuery<
-        StudentBySubjectClassSemesterResponse,
+        Schemas.ListOfStudentClassBySubjectClassSemester,
         StudentBySubjectClassSemesterError,
         TData
     >({
@@ -704,9 +640,6 @@ export const useStudentBySubjectClassSemester = <
 export type EnrollFixedClassOnSubjectClassError =
     Fetcher.ErrorWrapper<undefined>
 
-export type EnrollFixedClassOnSubjectClassResponse =
-    Schemas.EnrollFixedClassOnSubjectClass[]
-
 export type EnrollFixedClassOnSubjectClassRequestBody = {
     fixedClassIds: Schemas.FixedClassIds
     subjectClassId: Schemas.SubjectClassId
@@ -724,7 +657,7 @@ export const fetchEnrollFixedClassOnSubjectClass = (
     signal?: AbortSignal
 ) =>
     daotaoFetch<
-        EnrollFixedClassOnSubjectClassResponse,
+        Schemas.ListOfEnrollFixedClassOnSubjectClass,
         EnrollFixedClassOnSubjectClassError,
         EnrollFixedClassOnSubjectClassRequestBody,
         {},
@@ -743,7 +676,7 @@ export const fetchEnrollFixedClassOnSubjectClass = (
 export const useEnrollFixedClassOnSubjectClass = (
     options?: Omit<
         reactQuery.UseMutationOptions<
-            EnrollFixedClassOnSubjectClassResponse,
+            Schemas.ListOfEnrollFixedClassOnSubjectClass,
             EnrollFixedClassOnSubjectClassError,
             EnrollFixedClassOnSubjectClassVariables
         >,
@@ -752,7 +685,7 @@ export const useEnrollFixedClassOnSubjectClass = (
 ) => {
     const { fetcherOptions } = useDaotaoContext()
     return reactQuery.useMutation<
-        EnrollFixedClassOnSubjectClassResponse,
+        Schemas.ListOfEnrollFixedClassOnSubjectClass,
         EnrollFixedClassOnSubjectClassError,
         EnrollFixedClassOnSubjectClassVariables
     >({
@@ -766,9 +699,6 @@ export const useEnrollFixedClassOnSubjectClass = (
 }
 
 export type EnrollStudentOnSubjectClassError = Fetcher.ErrorWrapper<undefined>
-
-export type EnrollStudentOnSubjectClassResponse =
-    Schemas.EnrollFixedClassOnSubjectClass[]
 
 export type EnrollStudentOnSubjectClassRequestBody = {
     addStudentIds: Schemas.StudentIds
@@ -788,7 +718,7 @@ export const fetchEnrollStudentOnSubjectClass = (
     signal?: AbortSignal
 ) =>
     daotaoFetch<
-        EnrollStudentOnSubjectClassResponse,
+        Schemas.ListOfEnrollFixedClassOnSubjectClass,
         EnrollStudentOnSubjectClassError,
         EnrollStudentOnSubjectClassRequestBody,
         {},
@@ -807,7 +737,7 @@ export const fetchEnrollStudentOnSubjectClass = (
 export const useEnrollStudentOnSubjectClass = (
     options?: Omit<
         reactQuery.UseMutationOptions<
-            EnrollStudentOnSubjectClassResponse,
+            Schemas.ListOfEnrollFixedClassOnSubjectClass,
             EnrollStudentOnSubjectClassError,
             EnrollStudentOnSubjectClassVariables
         >,
@@ -816,7 +746,7 @@ export const useEnrollStudentOnSubjectClass = (
 ) => {
     const { fetcherOptions } = useDaotaoContext()
     return reactQuery.useMutation<
-        EnrollStudentOnSubjectClassResponse,
+        Schemas.ListOfEnrollFixedClassOnSubjectClass,
         EnrollStudentOnSubjectClassError,
         EnrollStudentOnSubjectClassVariables
     >({
@@ -825,6 +755,61 @@ export const useEnrollStudentOnSubjectClass = (
                 ...fetcherOptions,
                 ...variables,
             }),
+        ...options,
+    })
+}
+
+export type PutManySubjectClassError = Fetcher.ErrorWrapper<undefined>
+
+export type PutManySubjectClassResponse = {
+    success: boolean
+    failedIds: string[]
+    message?: string
+}
+
+export type PutManySubjectClassRequestBody = Schemas.SubjectClasses[]
+
+export type PutManySubjectClassVariables = {
+    body?: PutManySubjectClassRequestBody
+} & DaotaoContext['fetcherOptions']
+
+/**
+ * Cập nhật nhiều lớp môn học
+ */
+export const fetchPutManySubjectClass = (
+    variables: PutManySubjectClassVariables,
+    signal?: AbortSignal
+) =>
+    daotaoFetch<
+        PutManySubjectClassResponse,
+        PutManySubjectClassError,
+        PutManySubjectClassRequestBody,
+        {},
+        {},
+        {}
+    >({ url: '/api/subject-class', method: 'put', ...variables, signal })
+
+/**
+ * Cập nhật nhiều lớp môn học
+ */
+export const usePutManySubjectClass = (
+    options?: Omit<
+        reactQuery.UseMutationOptions<
+            PutManySubjectClassResponse,
+            PutManySubjectClassError,
+            PutManySubjectClassVariables
+        >,
+        'mutationFn'
+    >
+) => {
+    const { fetcherOptions } = useDaotaoContext()
+    return reactQuery.useMutation<
+        PutManySubjectClassResponse,
+        PutManySubjectClassError,
+        PutManySubjectClassVariables
+    >({
+        mutationFn: (variables: PutManySubjectClassVariables) =>
+            fetchPutManySubjectClass({ ...fetcherOptions, ...variables }),
         ...options,
     })
 }

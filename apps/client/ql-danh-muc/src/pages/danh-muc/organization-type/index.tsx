@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountOrganizationType,
-    useFindManyOrganizationType,
+    useFindManyDM_DonViType,
     useUpdateOrganizationType,
 } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
@@ -22,7 +22,7 @@ export default function Page() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
 
-    const { data = [], refetch } = useFindManyOrganizationType({
+    const { data = [], refetch } = useFindManyDM_DonViType({
         where: {
             name: {
                 contains: searchText,

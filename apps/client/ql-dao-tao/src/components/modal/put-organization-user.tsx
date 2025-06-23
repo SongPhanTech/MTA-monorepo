@@ -18,7 +18,7 @@ const PutOrganizationUser = () => {
 
     // const { data: positions, refetch: refetchPositions } = useFindManyPosition()
     // const { data: organizations, refetch: refetchOrganizations } =
-    //     useFindManyOrganization()
+    //     useFindManyDM_DonVi()
 
     // const { mutateAsync: createOrganizationUser } = useCreateOrganizationUser()
     // const { mutateAsync: updateOrganizationUserevel } =

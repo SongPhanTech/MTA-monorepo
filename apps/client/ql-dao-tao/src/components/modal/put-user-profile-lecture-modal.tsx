@@ -26,11 +26,11 @@ import {
     useCreateUserProfile,
     useFindManyAcademicDegreeType,
     useFindManyAcademicRankType,
+    useFindManyDM_DonVi,
     useFindManyEthnicity,
     useFindManyLecturerType,
     useFindManyLevel,
     useFindManyNationality,
-    useFindManyOrganization,
     useFindManyRank,
     useFindManyReligion,
     useFindManyUserProfile,
@@ -223,13 +223,13 @@ const PutUserProfileLectureModal = () => {
     // const {
     //     data: organizationUserData = [],
     //     refetch: refetchOrganizationUser,
-    // } = useFindManyOrganizationUser({
+    // } = useFindManyDM_DonViUser({
     //     where: {
     //         userProfileId: id || undefined,
     //     },
     // })
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -486,28 +486,28 @@ const PutUserProfileLectureModal = () => {
                 userType: $Enums.UserType.LECTURER,
                 // Relations - chỉ connect khi có giá trị
                 ...(output.nationalityId && {
-                    nationality: { connect: { id: output.nationalityId } },
+                    nationality: { connect: { Id: output.nationalityId } },
                 }),
                 ...(output.religionId && {
-                    religion: { connect: { id: output.religionId } },
+                    religion: { connect: { Id: output.religionId } },
                 }),
                 ...(output.ethnicityId && {
-                    ethnicity: { connect: { id: output.ethnicityId } },
+                    ethnicity: { connect: { Id: output.ethnicityId } },
                 }),
                 ...(output.rankId && {
-                    rank: { connect: { id: output.rankId } },
+                    rank: { connect: { Id: output.rankId } },
                 }),
                 ...(output.levelId && {
-                    level: { connect: { id: output.levelId } },
+                    level: { connect: { Id: output.levelId } },
                 }),
                 ...(output.academicDegreeTypeId && {
                     academicDegreeType: {
-                        connect: { id: output.academicDegreeTypeId },
+                        connect: { Id: output.academicDegreeTypeId },
                     },
                 }),
                 ...(output.academicRankTypeId && {
                     academicRankType: {
-                        connect: { id: output.academicRankTypeId },
+                        connect: { Id: output.academicRankTypeId },
                     },
                 }),
             }
@@ -703,13 +703,13 @@ const PutUserProfileLectureModal = () => {
                     : null,
 
                 // Relations IDs
-                nationalityId: userProfile.nationality?.id,
-                religionId: userProfile.religion?.id,
-                ethnicityId: userProfile.ethnicity?.id,
-                rankId: userProfile.rank?.id,
-                levelId: userProfile.level?.id,
-                academicDegreeTypeId: userProfile.academicDegreeType?.id,
-                academicRankTypeId: userProfile.academicRankType?.id,
+                nationalityId: userProfile.nationality?.Id,
+                religionId: userProfile.religion?.Id,
+                ethnicityId: userProfile.ethnicity?.Id,
+                rankId: userProfile.rank?.Id,
+                levelId: userProfile.level?.Id,
+                academicDegreeTypeId: userProfile.academicDegreeType?.Id,
+                academicRankTypeId: userProfile.academicRankType?.Id,
 
                 // Lịch sử - Dates
                 rankDate: userProfile.rankDate
