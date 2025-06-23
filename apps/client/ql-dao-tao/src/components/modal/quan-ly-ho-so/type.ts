@@ -29,6 +29,18 @@ export type SibarItem = {
     label: string
 }
 
+export const tabs = [
+    { key: '1', label: 'Thông tin cá nhân' },
+    { key: '2', label: 'Học hàm, học vị' },
+    { key: '3', label: 'Trình độ, chứng chỉ' },
+    { key: '4', label: 'Quá trình công tác' },
+    { key: '5', label: 'Quá trình đào tạo' },
+    { key: '6', label: 'Khen thưởng - Kỷ luật' },
+    { key: '7', label: 'Đối tượng chính sách' },
+    { key: '8', label: 'Kê khai tài sản' },
+    { key: '9', label: 'Thân nhân' },
+]
+
 export type StudentSiderbarProps = {
     activeKey: string
     setActiveKey: (key: string) => void

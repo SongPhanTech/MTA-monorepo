@@ -1,29 +1,26 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
+import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
+import { buildOrgTree } from '@lib/utils'
 import {
     useFindManyCurriculumVersion,
-    useFindManyEthnicity,
+    useFindManyDM_DanToc,
+    useFindManyDM_DonVi,
+    useFindManyDM_KhuVuc_DiaLy,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TonGiao,
     useFindManyFixedClass,
     useFindManyLecturerType,
-    useFindManyNationality,
-    useFindManyOrganization,
-    useFindManyRegistrationArea,
-    useFindManyReligion,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
-    useFindManyUserProfile,
 } from '@workspace/db/hooks'
-import { Form, Collapse, Row, Col, AutoComplete, Input, Upload } from 'antd'
+import { Col, Collapse, Form, Input, Row, Upload } from 'antd'
 import type { UploadFile, UploadProps } from 'antd'
 import dayjs from 'dayjs'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import type { PutModalType, TabThongTinCaNhan } from '../type'
-import _ from 'lodash'
-import { getMinioUrl } from '@workspace/constant'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
-import { buildOrgTree } from '@lib/utils'
 const { Panel } = Collapse
 
 export default function ThongTinCaNhanTab({
@@ -42,22 +39,22 @@ export default function ThongTinCaNhanTab({
     // >([])
 
     const { data: registrationAreaData = [], refetch: refetchRe } =
-        useFindManyRegistrationArea()
+        useFindManyDM_KhuVuc_DiaLy()
 
     const { data: nationalityData = [], refetch: refetchNa } =
-        useFindManyNationality()
+        useFindManyDM_QuocGia()
 
     const { data: religionData = [], refetch: refetchReli } =
-        useFindManyReligion()
+        useFindManyDM_TonGiao()
 
     const { data: ethnicityData = [], refetch: refetchEth } =
-        useFindManyEthnicity()
+        useFindManyDM_DanToc()
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyOrganization()
+        useFindManyDM_DonVi()
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
 

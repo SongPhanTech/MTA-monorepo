@@ -49,18 +49,16 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import {
-    useCountStudent,
     useFindManyCurriculumVersion,
-    useFindManyFixedClass,
-    useFindManyStudent,
-    useFindManyTemplateFile,
-    useFindManyTrainingCourse,
+    // useFindManyFixedClass,
+    // useFindManyStudent,
+    // useFindManyTemplateFile,
+    // useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
-    useUpdateStudent,
+    // useFindManyTrainingObjectType,
+    // useUpdateStudent,
 } from '@workspace/db/hooks'
-import { getMinioUrl } from '@workspace/constant'
 import ViewIcon from '@components/icons/view'
 import { useRouter } from 'next/router'
 import { ROUTER_PATH } from '@workspace/router'
