@@ -5,7 +5,7 @@ import type { NextPage } from 'next'
 import { useEffect } from 'react'
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
-    const { status, data } = useSession()
+    const { status } = useSession()
 
     useEffect(() => {
         if (status === 'unauthenticated') {
