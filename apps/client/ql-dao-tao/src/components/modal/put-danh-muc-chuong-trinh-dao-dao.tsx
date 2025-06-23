@@ -77,9 +77,12 @@ const PutCurriculum = () => {
         hideSpinner()
     }
 
-    const { data: initialData } = useFindUniqueCurriculum({
-        where: { id },
-    })
+    const { data: initialData } = useFindUniqueCurriculum(
+        {
+            where: { id },
+        },
+        { enabled: !!id }
+    )
     const treeData = buildOrgTree(manageOrgData)
     const [active, setActive] = useState(true)
 

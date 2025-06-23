@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
-import { EditIcon } from 'lucide-react'
+import EditIcon from '@components/icons/edit'
 dayjs.locale('vi')
 
 const ModalGPASemester = () => {
@@ -30,6 +30,7 @@ const ModalGPASemester = () => {
                     name: 'sinh viên 1',
                     gpa: 3.32,
                     totalCredit: 15,
+                    credit: 15,
                 },
                 {
                     id: '3',
@@ -37,6 +38,7 @@ const ModalGPASemester = () => {
                     name: 'sinh viên 2',
                     gpa: 3.05,
                     totalCredit: 15,
+                    credit: 10,
                 },
             ],
         },
@@ -95,6 +97,12 @@ const ModalGPASemester = () => {
                     {
                         title: 'Tổng số tín chỉ đăng ký',
                         dataIndex: 'totalCredit',
+                        width: 150,
+                        align: 'center',
+                    },
+                    {
+                        title: 'Số tín chỉ đã đạt',
+                        dataIndex: 'credit',
                         width: 150,
                         align: 'center',
                     },
