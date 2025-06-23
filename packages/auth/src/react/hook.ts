@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import { fetchSession } from '.'
 import { SessionContext } from './provider'
 
@@ -17,8 +17,18 @@ export const useSession = () => {
         }
     }, [status])
 
+    const goToLastPage = useCallback(() => {
+        const lastPage = localStorage.getItem('lastPage')
+        if (lastPage) {
+            window.location.href = lastPage
+            return true
+        }
+        return false
+    }, [])
+
     return {
         status,
         data: sessionState,
+        goToLastPage,
     }
 }

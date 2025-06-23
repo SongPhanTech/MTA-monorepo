@@ -24,6 +24,8 @@ const fetchSession = async (): Promise<{
             error: null,
         }
     } catch (error) {
+        localStorage.setItem('lastPage', window.location.pathname)
+        signIn()
         return {
             status: 'unauthenticated',
             data: null,
