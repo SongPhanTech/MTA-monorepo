@@ -65,7 +65,6 @@ export default function TrainingFieldPage() {
                         : {}),
                 },
             },
-            // deletedAt: null,
         },
         include: {
             scoreConverts: {
@@ -96,7 +95,6 @@ export default function TrainingFieldPage() {
                       ],
                   }
                 : {}),
-            // deletedAt: null,
         },
     })
 
@@ -106,7 +104,7 @@ export default function TrainingFieldPage() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutConvertScore.name,
     })
 

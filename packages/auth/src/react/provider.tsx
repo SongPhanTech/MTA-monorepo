@@ -1,4 +1,5 @@
-import React from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import React, { useEffect } from 'react'
 import type { Session, SessionStatus } from '..'
 
 const SessionContext = React.createContext<{
@@ -23,6 +24,15 @@ const SessionProvider: React.FC<{
         session
     )
     const [status, setStatus] = React.useState<SessionStatus | null>(null)
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    useEffect(() => {
+        const url = `${pathname}${!searchParams.toString() ? '' : `?${searchParams.toString()}`}`
+        if (pathname !== '/') {
+            localStorage.setItem('lastPage', url)
+        }
+    }, [pathname, searchParams])
+
     return (
         <SessionContext.Provider
             value={{

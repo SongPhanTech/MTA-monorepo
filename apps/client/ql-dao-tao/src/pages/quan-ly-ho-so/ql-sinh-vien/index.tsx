@@ -21,6 +21,7 @@ import DefaultLayout from '@layouts/default-layout'
 import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
 import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
@@ -31,6 +32,18 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import {
+    useFindManyCurriculumVersion,
+    // useFindManyFixedClass,
+    // useFindManyStudent,
+    // useFindManyTemplateFile,
+    // useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
+    // useFindManyTrainingObjectType,
+    // useUpdateStudent,
+} from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Col,
@@ -45,23 +58,10 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import {
-    useFindManyCurriculumVersion,
-    // useFindManyFixedClass,
-    // useFindManyStudent,
-    // useFindManyTemplateFile,
-    // useFindManyTrainingCourse,
-    useFindManyTrainingField,
-    useFindManyTrainingMajor,
-    // useFindManyTrainingObjectType,
-    // useUpdateStudent,
-} from '@workspace/db/hooks'
-import ViewIcon from '@components/icons/view'
-import { useRouter } from 'next/router'
-import { ROUTER_PATH } from '@workspace/router'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -705,7 +705,7 @@ export default function UserProfilePageDs() {
                                 ),
                                 render: (record) => {
                                     return record.fixedClass?.curriculumVersion
-                                        .curriculum.name
+                                        ?.curriculum?.name
                                 },
                             },
                             {
