@@ -16,10 +16,10 @@ import {
 import { Checkbox, Col, Form, InputNumber, Select, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutTrainingBlockSubject = TrainingBlockSubject
 import 'dayjs/locale/vi'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { useEffect } from 'react'
+export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -127,6 +127,8 @@ const PutTrainingBlockSubject = () => {
             <Col span={24}>
                 <FormItem form={form} name="subjectId" label="Môn học" required>
                     <Select
+                        allowClear
+                        showSearch
                         placeholder="Chọn môn học"
                         options={subjectVersionData.map((i: SubjectVersion) => {
                             return {
