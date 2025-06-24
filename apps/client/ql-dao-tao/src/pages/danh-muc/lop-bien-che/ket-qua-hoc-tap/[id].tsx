@@ -1,5 +1,6 @@
+import { SafetyCertificateOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-import { ModalPrintToKQHT } from '@components/modal'
+import { ModalPrintToKQHT, PutAddOlympicScoreModal } from '@components/modal'
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
@@ -26,6 +27,13 @@ export default function StudentScoreClassPage() {
         dataStudent: any
     }>({
         tag: ModalPrintToKQHT.name,
+    })
+
+    const { onOpen: onOpenModalAddScore } = useDisclosure<{
+        id: string
+        list: string[]
+    }>({
+        tag: PutAddOlympicScoreModal.name,
     })
 
     const { data: student } = useFindUniqueStudent(
@@ -261,6 +269,21 @@ export default function StudentScoreClassPage() {
                                 render: (value) => convertScore(value).letter,
                             },
                             {
+                                title: 'Điểm cộng',
+                                align: 'center',
+                                width: 120,
+                            },
+                            {
+                                title: 'Chứng chỉ',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Điểm tương đương',
+                                align: 'center',
+                                width: 120,
+                            },
+                            {
                                 title: 'Kết quả',
                                 align: 'center',
                                 dataIndex: [
@@ -330,13 +353,26 @@ export default function StudentScoreClassPage() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 150,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip title="Cộng điểm">
                                             <BookCheckIcon
+                                                onClick={onOpenModalAddScore.bind(
+                                                    null,
+                                                    {
+                                                        id: id,
+                                                        list: ['1'],
+                                                    }
+                                                )}
+                                                size={16}
+                                            />
+                                        </Tooltip>
+
+                                        <Tooltip title="Thêm chứng chỉ">
+                                            <SafetyCertificateOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                 }}
