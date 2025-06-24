@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@types/bun": "catalog:",
-    "@workspace/biome-config": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:"

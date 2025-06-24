@@ -8,7 +8,7 @@
     "lint": "biome lint --fix",
     "generate": "turbo run generate",
     "format": "biome format --write --verbose",
-    "check": "biome check --write --unsafe --files-ignore-unknown=true --organize-imports-enabled=false --no-errors-on-unmatched --colors=off --config-path ./biome.json",
+    "check": "biome check --write --unsafe --files-ignore-unknown=true --no-errors-on-unmatched --colors=off",
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },

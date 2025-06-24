@@ -58,7 +58,6 @@
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"@types/react-image-fallback": "catalog:",
-		"@workspace/biome-config": "workspace:*",
 		"@workspace/libs": "workspace:*",
 		"autoprefixer": "catalog:",
 		"cross-env": "catalog:",
