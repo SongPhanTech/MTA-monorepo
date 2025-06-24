@@ -1,7 +1,6 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -31,7 +30,6 @@ import _ from 'lodash'
 import { Download, Printer, Save, Search, Upload } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import { useRouter } from 'next/router'
@@ -610,10 +608,7 @@ export default function SubjectClassScore() {
                                                 fileInput.onchange = (
                                                     e: any
                                                 ) => {
-                                                    if (
-                                                        e.target.files &&
-                                                        e.target.files[0]
-                                                    ) {
+                                                    if (e.target.files?.[0]) {
                                                         handleUploadFile(
                                                             e.target.files[0]
                                                         )
@@ -1079,9 +1074,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return ''
                                             }
+                                            return ''
                                         },
                                     },
                                     {
@@ -1337,9 +1331,8 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            } else {
-                                                return record.description || ''
                                             }
+                                            return record.description || ''
                                         },
                                     },
                                     // {

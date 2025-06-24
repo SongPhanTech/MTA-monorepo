@@ -4,7 +4,9 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./api/*": "./src/api/*.ts"
+    "./api/*": "./src/api/*.ts",
+    "./parseExcel": "./src/parseExcel.ts",
+    "./utils": "./src/utils.ts"
   },
   "scripts": {
     "generate": "orval"

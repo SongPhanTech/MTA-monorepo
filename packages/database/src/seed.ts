@@ -1,5 +1,6 @@
 import { $Enums, PrismaClient } from '@prisma/client'
 import { scoreConversions } from './archived/score-convert'
+import { trainingData } from './archived/trainingData'
 
 const prisma = new PrismaClient()
 
@@ -38,14 +39,14 @@ async function main() {
         data: [
             {
                 id: '550e8402-e29b-41d4-a716-446655440000',
-                name: 'Quân sự',
+                name: 'Đại học quân sự',
                 code: 'QS',
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
             },
             {
                 id: '550e8402-e29b-41d4-a716-446655440001',
-                name: 'Dân sự',
+                name: 'Đại học dân sự',
                 code: 'DS',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -121,6 +122,20 @@ async function main() {
                 updatedAt: new Date('2025-04-03T12:58:42.507Z'),
             },
         ],
+    })
+
+    await prisma.trainingTime.createMany({
+        data: [
+            {
+                id: '4years',
+                name: '4 năm',
+            },
+            {
+                id: '5years',
+                name: '5 năm',
+            },
+        ],
+        skipDuplicates: true,
     })
 
     // Seed TrainingForm
@@ -673,9 +688,59 @@ async function main() {
         },
     })
 
-    // const organization = await prisma.organization.findFirstOrThrow({
-    //     where: { name: 'Khoa CNTT' },
-    // })
+    const firstOrg = await prisma.dM_DonVi.findFirstOrThrow()
+    await prisma.trainingField.createMany({
+        data: trainingData.map(({ id, trainingField }) => ({
+            id,
+            name: trainingField,
+            englishName: trainingField,
+            organizationId: firstOrg?.Id,
+            publishDate: new Date(),
+        })),
+        skipDuplicates: true,
+    })
+
+    await prisma.trainingMajor.createMany({
+        data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+            trainingMajors.map(({ id, trainingMajor }) => ({
+                id,
+                name: trainingMajor,
+                organizationId: firstOrg.Id,
+                summary: '',
+                trainingFieldId,
+            }))
+        ),
+        skipDuplicates: true,
+    })
+
+    await prisma.curriculum.createMany({
+        data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+            trainingMajors.map(({ id, trainingMajor }) => ({
+                id,
+                name: trainingMajor,
+                managementOrganizationId: firstOrg.Id,
+                summary: '',
+                trainingMajorId: id,
+            }))
+        ),
+        skipDuplicates: true,
+    })
+
+    await prisma.curriculumVersion.createMany({
+        data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+            trainingMajors.flatMap(({ id: trainingMajorId, curriculums }) =>
+                curriculums.map((curriculum) => ({
+                    curriculumId: trainingMajorId,
+                    name: curriculum,
+                    trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
+                    trainingObjectTypeId:
+                        '550e8402-e29b-41d4-a716-446655440000',
+                    trainingTimeId: '4years',
+                }))
+            )
+        ),
+        skipDuplicates: true,
+    })
 
     const curriculum = await prisma.curriculum.create({
         data: {
@@ -728,7 +793,12 @@ async function main() {
                             create: { name: 'Đại học' },
                         },
                     },
-                    trainingTime: { create: { name: '4 năm' } },
+                    trainingTime: {
+                        connectOrCreate: {
+                            where: { id: '4years' },
+                            create: { name: '4 năm' },
+                        },
+                    },
                 },
             },
         },

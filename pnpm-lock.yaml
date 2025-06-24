@@ -419,6 +419,12 @@ importers:
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.175(hono@4.7.2)
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
       axios:
         specifier: 'catalog:'
         version: 1.7.9
@@ -450,9 +456,6 @@ importers:
       '@workspace/biome-config':
         specifier: workspace:*
         version: link:../../../packages/biome-config
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../../../packages/typescript-config
@@ -1473,6 +1476,9 @@ importers:
         specifier: 'catalog:'
         version: 3.24.2
     devDependencies:
+      '@paralleldrive/cuid2':
+        specifier: github:paralleldrive/cuid2
+        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -2729,6 +2735,10 @@ packages:
 
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
+
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67':
+    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67}
+    version: 2.2.2
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -9401,6 +9411,10 @@ snapshots:
   '@panva/hkdf@1.2.1': {}
 
   '@paralleldrive/cuid2@2.2.2':
+    dependencies:
+      '@noble/hashes': 1.7.1
+
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67':
     dependencies:
       '@noble/hashes': 1.7.1
 

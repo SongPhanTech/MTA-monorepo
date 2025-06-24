@@ -10,6 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import FixedClassApp from './api/fixed-class'
+import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
@@ -50,12 +51,13 @@ const config = {
         clientId: process.env.KEYCLOAK_CLIENT_ID || 'fe-test-local',
     },
 }
-const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
-const jwksUri = `${issuer}/protocol/openid-connect/certs`
-const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
+
+// const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
+// const jwksUri = `${issuer}/protocol/openid-connect/certs`
+// const audience = config.keycloak.clientId
 // app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
 
 setupOpenApi(app)
@@ -63,6 +65,7 @@ setupOpenApi(app)
 app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
+app.route('/api/student', StudentApp)
 
 app.use(
     '/api/model/*',
@@ -102,12 +105,14 @@ app.onError((err, c) => {
         if (err.code === 'P2003') status = 400
 
         if (status === 500) {
+            console.log(err)
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
         return c.json({ message: err.meta?.cause }, status)
     }
 
+    console.log(err)
     return c.json({ message: err.message }, 500)
 })
 

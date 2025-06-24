@@ -19,7 +19,7 @@ import {
     sanitizeFilename,
 } from '../services/subject-class.service'
 import { getCurrentDateForReport } from '../utils'
-import { StudentTemplateData } from '../dto/student-info.dto'
+import type { StudentTemplateData } from '../dto/student-info.dto'
 import { getBufferFromUrl } from '../services/template.service'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { read, utils } from 'xlsx'
