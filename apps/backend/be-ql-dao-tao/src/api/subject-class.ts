@@ -13,7 +13,11 @@ import {
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
 import { ListOf } from '../zod/base'
-import { listStudentInfo, populateExcelTemplate, sanitizeFilename } from '../services/subject-class.service'
+import {
+    listStudentInfo,
+    populateExcelTemplate,
+    sanitizeFilename,
+} from '../services/subject-class.service'
 import { getCurrentDateForReport } from '../utils'
 import { StudentTemplateData } from '../dto/student-info.dto'
 import { getBufferFromUrl } from '../services/template.service'
@@ -312,11 +316,12 @@ const exportExcelListStudentSubjectClass = createRoute({
         200: {
             description: 'Export list of student SubjectClass as .xlsx',
             content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-                    schema: z
-                        .any()
-                        .openapi({ type: 'string', format: 'binary' }),
-                },
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    {
+                        schema: z
+                            .any()
+                            .openapi({ type: 'string', format: 'binary' }),
+                    },
             },
         },
         400: {
@@ -364,10 +369,10 @@ const uploadExcelImportScore = createRoute({
         200: {
             content: {
                 'application/json': {
-                   schema: z.object({
-                       data: z.array(z.number()),
-                       count: z.number(),
-                   }),
+                    schema: z.object({
+                        data: z.array(z.number()),
+                        count: z.number(),
+                    }),
                 },
             },
             description: 'Tải danh sách thành công',
@@ -881,15 +886,18 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
         student: students,
     }
 
-    const templateBuffer = await getBufferFromUrl('LIST_STUDENT_SUBJECTCLASS_EXCEL');
-        const excelBuffer = populateExcelTemplate(templateBuffer, templateData);
+    const templateBuffer = await getBufferFromUrl(
+        'LIST_STUDENT_SUBJECTCLASS_EXCEL'
+    )
+    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
 
-        // Set response headers
-        const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class');
-        return c.body(excelBuffer, 200, {
-            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
-        });
+    // Set response headers
+    const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class')
+    return c.body(excelBuffer, 200, {
+        'Content-Type':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
+    })
 })
 app.openapi(uploadExcelImportScore, async (c) => {
     const { file, subjectClassId } = c.req.valid('form')
@@ -924,7 +932,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
     console.log(`Giá trị ô ${cellAddress}:`, cellValue)
 
     const subjectClass = await prisma.subjectClass.findFirst({
-        where: { id: subjectClassId }, 
+        where: { id: subjectClassId },
     })
 
     if (!subjectClass?.code) {
@@ -942,10 +950,11 @@ app.openapi(uploadExcelImportScore, async (c) => {
             scoreTX: Number(row[6]),
             scoreThi: Number(row[7]),
         }))
-        .filter((update) => update.studentCode);
+        .filter((update) => update.studentCode)
 
-
-    const studentCodes = scoreUpdates.map((update) => update.studentCode).filter((code): code is string => Boolean(code));
+    const studentCodes = scoreUpdates
+        .map((update) => update.studentCode)
+        .filter((code): code is string => Boolean(code))
     const students = await prisma.student.findMany({
         where: {
             active: true,
@@ -955,12 +964,12 @@ app.openapi(uploadExcelImportScore, async (c) => {
             id: true,
             code: true,
         },
-    });
+    })
 
     // Update the student scores (assuming the score field exists in studentSubjectScore)
-    const updateResults = [];
+    const updateResults = []
     for (const { studentCode, scoreCC, scoreTX, scoreThi } of scoreUpdates) {
-        const student = students.find(s => s.code === studentCode);
+        const student = students.find((s) => s.code === studentCode)
         if (student) {
             const res = await prisma.studentSubjectScore.updateMany({
                 where: {
@@ -968,17 +977,17 @@ app.openapi(uploadExcelImportScore, async (c) => {
                     subjectClassId,
                     active: true,
                 },
-                data: { 
+                data: {
                     attendanceScore: scoreCC,
                     midtermScore: scoreTX,
                     examScore: scoreThi,
-                 },
-            });
-            updateResults.push(res.count);
+                },
+            })
+            updateResults.push(res.count)
         }
     }
-    const totalUpdated = updateResults.reduce((sum, count) => sum + count, 0);
-    console.log(`Total records updated: ${totalUpdated}`);
+    const totalUpdated = updateResults.reduce((sum, count) => sum + count, 0)
+    console.log(`Total records updated: ${totalUpdated}`)
 
     return c.json({ data: updateResults, count: totalUpdated }, 200)
 })
