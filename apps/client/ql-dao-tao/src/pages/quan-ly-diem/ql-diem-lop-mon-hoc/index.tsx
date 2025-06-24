@@ -11,9 +11,10 @@ import {
     useFindManySchoolYear,
     useFindManySemester,
     useFindManyStudentSubjectScore,
-    useFindManySubjectClass, useFindManyTrainingObjectType,
+    useFindManySubjectClass,
+    useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
-    useUpdateStudentSubjectScore
+    useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import {
     Button,
@@ -24,7 +25,7 @@ import {
     Form,
     Input,
     Row,
-    message
+    message,
 } from 'antd'
 import _ from 'lodash'
 import { Download, Printer, Save, Search, Upload } from 'lucide-react'
@@ -90,7 +91,8 @@ export default function SubjectClassScore() {
     }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
+    const { mutateAsync: updateStudentSubjectScore } =
+        useUpdateStudentSubjectScore()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -119,7 +121,6 @@ export default function SubjectClassScore() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-
     const { data: schoolYearData = [] } = useFindManySchoolYear({
         orderBy: {
             startDate: 'desc',
@@ -142,47 +143,47 @@ export default function SubjectClassScore() {
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
-                    subjectClassStudent: {
-                        some: {
-                            student: {
-                                trainingObjectTypeId:
-                                    filters.trainingObjectTypeId,
-                            },
-                        },
-                    },
-                }
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.LectureIds.length > 0
                 ? {
-                    OR: filters.LectureIds.map((id) => ({
-                        mainLecturer: { id },
-                    })),
-                }
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
                 : {}),
             ...(filters.BoMonId
                 ? {
-                    subject: {
-                        managementOrganizationId: filters.BoMonId,
-                    },
-                }
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
                 : {}),
             ...(filters.examDateRange
                 ? {
-                    examDate: {
-                        gte: filters.examDateRange[0],
-                        lte: filters.examDateRange[1],
-                    },
-                }
+                      examDate: {
+                          gte: filters.examDateRange[0],
+                          lte: filters.examDateRange[1],
+                      },
+                  }
                 : {}),
         },
         include: {
@@ -260,7 +261,7 @@ export default function SubjectClassScore() {
 
     const { data: count } = useCountStudentSubjectScore({
         where: {
-            subjectClassId: selectedFixedClass || ''
+            subjectClassId: selectedFixedClass || '',
         },
     })
 
@@ -309,11 +310,21 @@ export default function SubjectClassScore() {
     // #region Lưu điểm
     const [scoreCC, setScoreCC] = useState<{ id: string; value: number }[]>([])
     const [scoreTX, setScoreTX] = useState<{ id: string; value: number }[]>([])
-    const [scoreThi, setScoreThi] = useState<{ id: string; value: number }[]>([])
-    const [scoreCamThi, setScoreCamThi] = useState<{ id: string; value: boolean }[]>([])
-    const [scoreHoanThi, setScoreHoanThi] = useState<{ id: string; value: boolean }[]>([])
-    const [scoreDinhChi, setscoreDinhChi] = useState<{ id: string; value: boolean }[]>([])
-    const [scoreLyDo, setScoreLyDo] = useState<{ id: string; value: string }[]>([])
+    const [scoreThi, setScoreThi] = useState<{ id: string; value: number }[]>(
+        []
+    )
+    const [scoreCamThi, setScoreCamThi] = useState<
+        { id: string; value: boolean }[]
+    >([])
+    const [scoreHoanThi, setScoreHoanThi] = useState<
+        { id: string; value: boolean }[]
+    >([])
+    const [scoreDinhChi, setscoreDinhChi] = useState<
+        { id: string; value: boolean }[]
+    >([])
+    const [scoreLyDo, setScoreLyDo] = useState<{ id: string; value: string }[]>(
+        []
+    )
 
     const clearCheckbox = () => {
         setNhapDiemCC(false)
@@ -330,8 +341,12 @@ export default function SubjectClassScore() {
                 const txScore = scoreTX.find((s) => s.id === record.id)
                 const thiScore = scoreThi.find((s) => s.id === record.id)
                 const camThiScore = scoreCamThi.find((s) => s.id === record.id)
-                const hoanThiScore = scoreHoanThi.find((s) => s.id === record.id)
-                const dinhChiScore = scoreDinhChi.find((s) => s.id === record.id)
+                const hoanThiScore = scoreHoanThi.find(
+                    (s) => s.id === record.id
+                )
+                const dinhChiScore = scoreDinhChi.find(
+                    (s) => s.id === record.id
+                )
                 const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
                 return {
                     id: record.id,
@@ -414,23 +429,23 @@ export default function SubjectClassScore() {
 
     //#region Upload file nhập điểm
     const handleUploadFile = async (file: File) => {
-        const formData = new FormData();
-        formData.append('file', file);
+        const formData = new FormData()
+        formData.append('file', file)
 
         try {
             const response = await fetch('/api/upload', {
                 method: 'POST',
                 body: formData,
-            });
+            })
             if (!response.ok) {
-                throw new Error('Upload failed');
+                throw new Error('Upload failed')
             }
-            const data = await response.json();
-            message.success('File uploaded successfully');
-            console.log('Upload result:', data);
+            const data = await response.json()
+            message.success('File uploaded successfully')
+            console.log('Upload result:', data)
         } catch (error) {
-            console.error(error);
-            message.error('Có lỗi xảy ra khi upload file');
+            console.error(error)
+            message.error('Có lỗi xảy ra khi upload file')
         }
     }
 
@@ -445,27 +460,27 @@ export default function SubjectClassScore() {
                             code: item.code === null ? undefined : item.code,
                             mainLecturer: item.mainLecturer
                                 ? {
-                                    userProfile: {
-                                        firstName:
-                                            item.mainLecturer.userProfile
-                                                .firstName,
-                                        lastName:
-                                            item.mainLecturer.userProfile
-                                                .lastName,
-                                    },
-                                }
+                                      userProfile: {
+                                          firstName:
+                                              item.mainLecturer.userProfile
+                                                  .firstName,
+                                          lastName:
+                                              item.mainLecturer.userProfile
+                                                  .lastName,
+                                      },
+                                  }
                                 : {
-                                    userProfile: {
-                                        firstName: '',
-                                        lastName: '',
-                                    },
-                                },
+                                      userProfile: {
+                                          firstName: '',
+                                          lastName: '',
+                                      },
+                                  },
                         }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
                     />
                 </Col>
-                
+
                 <Col span={20} className="flex justify-end">
                     <Row>
                         <Col span={24}>
@@ -571,44 +586,55 @@ export default function SubjectClassScore() {
                             <Row
                                 gutter={[16, 16]}
                                 align="top"
-                                justify="space-between">
+                                justify="space-between"
+                            >
                                 <Col span={24} className="flex justify-end">
                                     <Flex>
                                         <Button
                                             // className="h-[40px]"
                                             disabled={!selectedFixedClass}
                                         >
-                                            <Download stroke="black" 
-                                            />
+                                            <Download stroke="black" />
                                             Tải danh sách
                                         </Button>
                                         <Button
                                             onClick={() => {
-                                                const fileInput = document.createElement('input');
-                                                fileInput.type = 'file';
-                                                fileInput.accept = '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel';
-                                                fileInput.onchange = (e: any) => {
-                                                    if (e.target.files && e.target.files[0]) {
-                                                        handleUploadFile(e.target.files[0]);
+                                                const fileInput =
+                                                    document.createElement(
+                                                        'input'
+                                                    )
+                                                fileInput.type = 'file'
+                                                fileInput.accept =
+                                                    '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
+                                                fileInput.onchange = (
+                                                    e: any
+                                                ) => {
+                                                    if (
+                                                        e.target.files &&
+                                                        e.target.files[0]
+                                                    ) {
+                                                        handleUploadFile(
+                                                            e.target.files[0]
+                                                        )
                                                     }
-                                                };
-                                                fileInput.click();
+                                                }
+                                                fileInput.click()
                                             }}
-                                             disabled={!selectedFixedClass}
+                                            disabled={!selectedFixedClass}
                                         >
                                             <Upload stroke="black" />
                                             Nhập file
                                         </Button>
                                         <Button
                                             // className="h-[40px]"
-                                             disabled={!selectedFixedClass}
+                                            disabled={!selectedFixedClass}
                                         >
                                             <Printer stroke="black" />
                                             In phiếu điểm và khóa
                                         </Button>
                                         <Button
                                             // className="h-[40px]"
-                                             disabled={!selectedFixedClass}
+                                            disabled={!selectedFixedClass}
                                         >
                                             <Printer stroke="black" />
                                             In phiếu điểm nháp
@@ -679,7 +705,7 @@ export default function SubjectClassScore() {
                                             index +
                                             1 +
                                             (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE,
+                                                DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
@@ -703,9 +729,9 @@ export default function SubjectClassScore() {
                                             record.student?.userProfile
                                                 ?.dateOfBirth
                                                 ? new Date(
-                                                    record.student.userProfile
-                                                        .dateOfBirth
-                                                ).toLocaleDateString('vi-VN')
+                                                      record.student.userProfile
+                                                          .dateOfBirth
+                                                  ).toLocaleDateString('vi-VN')
                                                 : '',
                                     },
                                     {
@@ -726,7 +752,13 @@ export default function SubjectClassScore() {
                                         render: (text, record) => {
                                             if (nhapDiemCC) {
                                                 const Score =
-                                                    scoreCC.find((item) => item.id === record.id)?.value ?? record.attendanceScore ?? '';
+                                                    scoreCC.find(
+                                                        (item) =>
+                                                            item.id ===
+                                                            record.id
+                                                    )?.value ??
+                                                    record.attendanceScore ??
+                                                    ''
                                                 return (
                                                     <Input
                                                         type="number"
@@ -735,125 +767,51 @@ export default function SubjectClassScore() {
                                                         }}
                                                         value={Score}
                                                         onChange={(e) => {
-                                                            const newScore = e.target.value
-                                                            setScoreCC((prevScores) => {
-                                                                const index = prevScores.findIndex((item) => item.id === record.id)
-                                                                if (index > -1) {
-                                                                    const updated = [...prevScores]
-                                                                    updated[index] = { ...updated[index], value: Number(newScore) }
-                                                                    return updated
-                                                                }
-                                                                return [...prevScores, { id: record.id, value: Number(newScore) }]
-                                                            })
-                                                        }}
-                                                        onBlur={(e) => {
-                                                            const { value } = e.target
-                                                            const numericValue = Number.parseFloat(value)
-                                                            const regex = /^(\d{1,2}(\.\d)?|10)$/
-                                                            if (
-                                                                !regex.test(value) ||
-                                                                Number.isNaN(numericValue) ||
-                                                                numericValue < 0 ||
-                                                                numericValue > 10
-                                                            ) {
-                                                                e.target.style.borderColor = 'red'
-                                                                message.error(
-                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
-                                                                )
-                                                            } else {
-                                                                e.target.style.borderColor = ''
-                                                            }
-                                                        }}
-                                                    />
-                                                )
-                                            }
-                                            return record.attendanceScore || ''
-                                        },
-                                    },
-                                    // #region Điểm TX
-                                    {
-                                        title: 'Điểm TX',
-                                        dataIndex: 'midtermScore',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemTX) {
-                                                {
-                                                    const Score =
-                                                        scoreTX.find((item) => item.id === record.id)?.value ?? record.midtermScore ?? '';
-                                                    return (
-                                                        <Input
-                                                            type="number"
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-
-                                                            value={Score}
-                                                            onChange={(e) => {
-                                                                // Handle input change for TX score
-                                                                const newScore = e.target.value;
-                                                                setScoreTX((prevScores) => {
-                                                                    const index = prevScores.findIndex((item) => item.id === record.id);
-                                                                    if (index > -1) {
-                                                                        const updated = [...prevScores];
-                                                                        updated[index] = { id: record.id, value: Number(newScore) };
-                                                                        return updated;
+                                                            const newScore =
+                                                                e.target.value
+                                                            setScoreCC(
+                                                                (
+                                                                    prevScores
+                                                                ) => {
+                                                                    const index =
+                                                                        prevScores.findIndex(
+                                                                            (
+                                                                                item
+                                                                            ) =>
+                                                                                item.id ===
+                                                                                record.id
+                                                                        )
+                                                                    if (
+                                                                        index >
+                                                                        -1
+                                                                    ) {
+                                                                        const updated =
+                                                                            [
+                                                                                ...prevScores,
+                                                                            ]
+                                                                        updated[
+                                                                            index
+                                                                        ] = {
+                                                                            ...updated[
+                                                                                index
+                                                                            ],
+                                                                            value: Number(
+                                                                                newScore
+                                                                            ),
+                                                                        }
+                                                                        return updated
                                                                     }
-                                                                    return [...prevScores, { id: record.id, value: Number(newScore) }];
-                                                                });
-                                                            }}
-                                                            onBlur={(e) => {
-                                                                const { value } = e.target;
-                                                                const numericValue = Number.parseFloat(value);
-                                                                const regex = /^(\d{1,2}(\.\d)?|10)$/;
-                                                                if (
-                                                                    !regex.test(value) ||
-                                                                    Number.isNaN(numericValue) ||
-                                                                    numericValue < 0 ||
-                                                                    numericValue > 10
-                                                                ) {
-                                                                    e.target.style.borderColor = 'red';
-                                                                    message.error('Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .');
-                                                                } else {
-                                                                    e.target.style.borderColor = '';
+                                                                    return [
+                                                                        ...prevScores,
+                                                                        {
+                                                                            id: record.id,
+                                                                            value: Number(
+                                                                                newScore
+                                                                            ),
+                                                                        },
+                                                                    ]
                                                                 }
-                                                            }}
-                                                        />
-                                                    );
-                                                }
-                                            }
-                                            return record.midtermScore || ''
-                                        },
-                                    },
-                                    // #region Điểm Thi
-                                    {
-                                        title: 'Điểm thi',
-                                        dataIndex: 'examScore',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemThi) {
-                                                const Score =
-                                                    scoreThi.find((item) => item.id === record.id)?.value ?? record.examScore ?? '';
-                                                return (
-                                                    <Input
-                                                        type="number"
-                                                        style={{
-                                                            width: '100%',
-                                                        }}
-
-                                                        value={Score}
-                                                        onChange={(e) => {
-                                                            const newScore = e.target.value
-                                                            setScoreThi((prevScores) => {
-                                                                const index = prevScores.findIndex((item) => item.id === record.id)
-                                                                if (index > -1) {
-                                                                    const updated = [...prevScores]
-                                                                    updated[index] = { ...updated[index], value: Number(newScore) }
-                                                                    return updated
-                                                                }
-                                                                return [...prevScores, { id: record.id, value: Number(newScore) }]
-                                                            })
+                                                            )
                                                         }}
                                                         onBlur={(e) => {
                                                             const { value } =
@@ -872,9 +830,227 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
+                                                            ) {
+                                                                e.target.style.borderColor =
+                                                                    'red'
+                                                                message.error(
+                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                )
+                                                            } else {
+                                                                e.target.style.borderColor =
+                                                                    ''
+                                                            }
+                                                        }}
+                                                    />
+                                                )
+                                            }
+                                            return record.attendanceScore || ''
+                                        },
+                                    },
+                                    // #region Điểm TX
+                                    {
+                                        title: 'Điểm TX',
+                                        dataIndex: 'midtermScore',
+                                        width: 80,
+                                        align: 'center',
+                                        render: (text, record) => {
+                                            if (nhapDiemTX) {
+                                                {
+                                                    const Score =
+                                                        scoreTX.find(
+                                                            (item) =>
+                                                                item.id ===
+                                                                record.id
+                                                        )?.value ??
+                                                        record.midtermScore ??
+                                                        ''
+                                                    return (
+                                                        <Input
+                                                            type="number"
+                                                            style={{
+                                                                width: '100%',
+                                                            }}
+                                                            value={Score}
+                                                            onChange={(e) => {
+                                                                // Handle input change for TX score
+                                                                const newScore =
+                                                                    e.target
+                                                                        .value
+                                                                setScoreTX(
+                                                                    (
+                                                                        prevScores
+                                                                    ) => {
+                                                                        const index =
+                                                                            prevScores.findIndex(
+                                                                                (
+                                                                                    item
+                                                                                ) =>
+                                                                                    item.id ===
+                                                                                    record.id
+                                                                            )
+                                                                        if (
+                                                                            index >
+                                                                            -1
+                                                                        ) {
+                                                                            const updated =
+                                                                                [
+                                                                                    ...prevScores,
+                                                                                ]
+                                                                            updated[
+                                                                                index
+                                                                            ] =
+                                                                                {
+                                                                                    id: record.id,
+                                                                                    value: Number(
+                                                                                        newScore
+                                                                                    ),
+                                                                                }
+                                                                            return updated
+                                                                        }
+                                                                        return [
+                                                                            ...prevScores,
+                                                                            {
+                                                                                id: record.id,
+                                                                                value: Number(
+                                                                                    newScore
+                                                                                ),
+                                                                            },
+                                                                        ]
+                                                                    }
+                                                                )
+                                                            }}
+                                                            onBlur={(e) => {
+                                                                const {
+                                                                    value,
+                                                                } = e.target
+                                                                const numericValue =
+                                                                    Number.parseFloat(
+                                                                        value
+                                                                    )
+                                                                const regex =
+                                                                    /^(\d{1,2}(\.\d)?|10)$/
+                                                                if (
+                                                                    !regex.test(
+                                                                        value
+                                                                    ) ||
+                                                                    Number.isNaN(
+                                                                        numericValue
+                                                                    ) ||
+                                                                    numericValue <
+                                                                        0 ||
+                                                                    numericValue >
+                                                                        10
+                                                                ) {
+                                                                    e.target.style.borderColor =
+                                                                        'red'
+                                                                    message.error(
+                                                                        'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                                    )
+                                                                } else {
+                                                                    e.target.style.borderColor =
+                                                                        ''
+                                                                }
+                                                            }}
+                                                        />
+                                                    )
+                                                }
+                                            }
+                                            return record.midtermScore || ''
+                                        },
+                                    },
+                                    // #region Điểm Thi
+                                    {
+                                        title: 'Điểm thi',
+                                        dataIndex: 'examScore',
+                                        width: 80,
+                                        align: 'center',
+                                        render: (text, record) => {
+                                            if (nhapDiemThi) {
+                                                const Score =
+                                                    scoreThi.find(
+                                                        (item) =>
+                                                            item.id ===
+                                                            record.id
+                                                    )?.value ??
+                                                    record.examScore ??
+                                                    ''
+                                                return (
+                                                    <Input
+                                                        type="number"
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
+                                                        value={Score}
+                                                        onChange={(e) => {
+                                                            const newScore =
+                                                                e.target.value
+                                                            setScoreThi(
+                                                                (
+                                                                    prevScores
+                                                                ) => {
+                                                                    const index =
+                                                                        prevScores.findIndex(
+                                                                            (
+                                                                                item
+                                                                            ) =>
+                                                                                item.id ===
+                                                                                record.id
+                                                                        )
+                                                                    if (
+                                                                        index >
+                                                                        -1
+                                                                    ) {
+                                                                        const updated =
+                                                                            [
+                                                                                ...prevScores,
+                                                                            ]
+                                                                        updated[
+                                                                            index
+                                                                        ] = {
+                                                                            ...updated[
+                                                                                index
+                                                                            ],
+                                                                            value: Number(
+                                                                                newScore
+                                                                            ),
+                                                                        }
+                                                                        return updated
+                                                                    }
+                                                                    return [
+                                                                        ...prevScores,
+                                                                        {
+                                                                            id: record.id,
+                                                                            value: Number(
+                                                                                newScore
+                                                                            ),
+                                                                        },
+                                                                    ]
+                                                                }
+                                                            )
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            const { value } =
+                                                                e.target
+                                                            const numericValue =
+                                                                Number.parseFloat(
+                                                                    value
+                                                                )
+                                                            const regex =
+                                                                /^(\d{1,2}(\.\d)?|10)$/
+                                                            if (
+                                                                !regex.test(
+                                                                    value
+                                                                ) ||
+                                                                Number.isNaN(
+                                                                    numericValue
+                                                                ) ||
+                                                                numericValue <
+                                                                    0 ||
+                                                                numericValue >
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'
@@ -925,9 +1101,9 @@ export default function SubjectClassScore() {
                                                                     numericValue
                                                                 ) ||
                                                                 numericValue <
-                                                                0 ||
+                                                                    0 ||
                                                                 numericValue >
-                                                                10
+                                                                    10
                                                             ) {
                                                                 e.target.style.borderColor =
                                                                     'red'
@@ -941,8 +1117,7 @@ export default function SubjectClassScore() {
                                                         }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return ''
                                             }
                                         },
@@ -961,21 +1136,51 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         render: (text, record) => {
                                             const isCheck =
-                                                scoreCamThi.find((item) => item.id === record.id)?.value ?? record.examBanned ?? false;
+                                                scoreCamThi.find(
+                                                    (item) =>
+                                                        item.id === record.id
+                                                )?.value ??
+                                                record.examBanned ??
+                                                false
                                             return (
                                                 <Checkbox
                                                     checked={isCheck}
                                                     onChange={(e) => {
-                                                        const newValue = e.target.checked;
-                                                        setScoreCamThi((prevScores) => {
-                                                            const index = prevScores.findIndex((item) => item.id === record.id);
-                                                            if (index > -1) {
-                                                                const updated = [...prevScores];
-                                                                updated[index] = { id: record.id, value: newValue };
-                                                                return updated;
+                                                        const newValue =
+                                                            e.target.checked
+                                                        setScoreCamThi(
+                                                            (prevScores) => {
+                                                                const index =
+                                                                    prevScores.findIndex(
+                                                                        (
+                                                                            item
+                                                                        ) =>
+                                                                            item.id ===
+                                                                            record.id
+                                                                    )
+                                                                if (
+                                                                    index > -1
+                                                                ) {
+                                                                    const updated =
+                                                                        [
+                                                                            ...prevScores,
+                                                                        ]
+                                                                    updated[
+                                                                        index
+                                                                    ] = {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                    return updated
+                                                                }
+                                                                return [
+                                                                    ...prevScores,
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    },
+                                                                ]
                                                             }
-                                                            return [...prevScores, { id: record.id, value: newValue }];
-                                                        }
                                                         )
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
@@ -991,21 +1196,51 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         render: (text, record) => {
                                             const isCheck =
-                                                scoreHoanThi.find((item) => item.id === record.id)?.value ?? record.examPostponed ?? false;
+                                                scoreHoanThi.find(
+                                                    (item) =>
+                                                        item.id === record.id
+                                                )?.value ??
+                                                record.examPostponed ??
+                                                false
                                             return (
                                                 <Checkbox
                                                     checked={isCheck}
                                                     onChange={(e) => {
-                                                        const newValue = e.target.checked;
-                                                        setScoreHoanThi((prevScores) => {
-                                                            const index = prevScores.findIndex((item) => item.id === record.id);
-                                                            if (index > -1) {
-                                                                const updated = [...prevScores];
-                                                                updated[index] = { id: record.id, value: newValue };
-                                                                return updated;
+                                                        const newValue =
+                                                            e.target.checked
+                                                        setScoreHoanThi(
+                                                            (prevScores) => {
+                                                                const index =
+                                                                    prevScores.findIndex(
+                                                                        (
+                                                                            item
+                                                                        ) =>
+                                                                            item.id ===
+                                                                            record.id
+                                                                    )
+                                                                if (
+                                                                    index > -1
+                                                                ) {
+                                                                    const updated =
+                                                                        [
+                                                                            ...prevScores,
+                                                                        ]
+                                                                    updated[
+                                                                        index
+                                                                    ] = {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                    return updated
+                                                                }
+                                                                return [
+                                                                    ...prevScores,
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    },
+                                                                ]
                                                             }
-                                                            return [...prevScores, { id: record.id, value: newValue }];
-                                                        }
                                                         )
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
@@ -1021,21 +1256,51 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         render: (text, record) => {
                                             const isCheck =
-                                                scoreDinhChi.find((item) => item.id === record.id)?.value ?? record.examPostponed ?? false;
+                                                scoreDinhChi.find(
+                                                    (item) =>
+                                                        item.id === record.id
+                                                )?.value ??
+                                                record.examPostponed ??
+                                                false
                                             return (
                                                 <Checkbox
                                                     checked={isCheck}
                                                     onChange={(e) => {
-                                                        const newValue = e.target.checked;
-                                                        setscoreDinhChi((prevScores) => {
-                                                            const index = prevScores.findIndex((item) => item.id === record.id);
-                                                            if (index > -1) {
-                                                                const updated = [...prevScores];
-                                                                updated[index] = { id: record.id, value: newValue };
-                                                                return updated;
+                                                        const newValue =
+                                                            e.target.checked
+                                                        setscoreDinhChi(
+                                                            (prevScores) => {
+                                                                const index =
+                                                                    prevScores.findIndex(
+                                                                        (
+                                                                            item
+                                                                        ) =>
+                                                                            item.id ===
+                                                                            record.id
+                                                                    )
+                                                                if (
+                                                                    index > -1
+                                                                ) {
+                                                                    const updated =
+                                                                        [
+                                                                            ...prevScores,
+                                                                        ]
+                                                                    updated[
+                                                                        index
+                                                                    ] = {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                    return updated
+                                                                }
+                                                                return [
+                                                                    ...prevScores,
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    },
+                                                                ]
                                                             }
-                                                            return [...prevScores, { id: record.id, value: newValue }];
-                                                        }
                                                         )
                                                         // Handle checkbox change for exam prohibition reason
                                                     }}
@@ -1052,7 +1317,13 @@ export default function SubjectClassScore() {
                                         render: (text, record) => {
                                             if (camThi) {
                                                 const note =
-                                                    scoreLyDo.find((item) => item.id === record.id)?.value ?? record.description ?? '';
+                                                    scoreLyDo.find(
+                                                        (item) =>
+                                                            item.id ===
+                                                            record.id
+                                                    )?.value ??
+                                                    record.description ??
+                                                    ''
                                                 return (
                                                     <Input
                                                         placeholder="Nhập ghi chú lý do"
@@ -1062,24 +1333,49 @@ export default function SubjectClassScore() {
                                                         value={note}
                                                         onChange={(e) => {
                                                             // Handle input change for bonus score
-                                                            const newNote = e.target.value;
-                                                            setScoreLyDo((prevScores) => {
-                                                                const index = prevScores.findIndex((item) => item.id === record.id);
-                                                                if (index > -1) {
-                                                                    const updated = [...prevScores];
-                                                                    updated[index] = { id: record.id, value: newNote };
-                                                                    return updated;
+                                                            const newNote =
+                                                                e.target.value
+                                                            setScoreLyDo(
+                                                                (
+                                                                    prevScores
+                                                                ) => {
+                                                                    const index =
+                                                                        prevScores.findIndex(
+                                                                            (
+                                                                                item
+                                                                            ) =>
+                                                                                item.id ===
+                                                                                record.id
+                                                                        )
+                                                                    if (
+                                                                        index >
+                                                                        -1
+                                                                    ) {
+                                                                        const updated =
+                                                                            [
+                                                                                ...prevScores,
+                                                                            ]
+                                                                        updated[
+                                                                            index
+                                                                        ] = {
+                                                                            id: record.id,
+                                                                            value: newNote,
+                                                                        }
+                                                                        return updated
+                                                                    }
+                                                                    return [
+                                                                        ...prevScores,
+                                                                        {
+                                                                            id: record.id,
+                                                                            value: newNote,
+                                                                        },
+                                                                    ]
                                                                 }
-                                                                return [...prevScores, { id: record.id, value: newNote }];
-                                                            }
                                                             )
-                                                        }
-                                                        }
-
+                                                        }}
                                                     />
                                                 )
-                                            }
-                                            else {
+                                            } else {
                                                 return record.description || ''
                                             }
                                         },

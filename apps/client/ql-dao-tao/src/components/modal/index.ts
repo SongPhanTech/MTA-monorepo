@@ -70,5 +70,5 @@ export {
     ModalPrintToKQHT,
     PutOneSubjectClassModal,
     ModalGPASemester,
-    AddStudentToFixedClassModal
+    AddStudentToFixedClassModal,
 }
