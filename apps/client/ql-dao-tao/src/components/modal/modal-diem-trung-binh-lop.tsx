@@ -1,150 +1,61 @@
-import PutFormModal from '@components/commons/put-modal'
-import DeleteIcon from '@components/icons/delete'
-import { Form, Row } from 'antd'
+import { Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import TableCollapse from '@components/commons/tableCollapse'
-import EditIcon from '@components/icons/edit'
+import Tabs from '@components/commons/tabar'
+import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
+import XetHocBong from '@components/sub-pages/xet-hoc-bong'
 dayjs.locale('vi')
 
 const ModalGPASemester = () => {
-    const [form] = Form.useForm<any>()
     const { isOpen, onClose, input } = useDisclosure<string>({
         tag: ModalGPASemester.name,
     })
 
-    async function onOk(output?: any) {
-        if (!output) return
-    }
-
-    const fakeData = [
-        {
-            id: '1',
-            code: 'lql_1',
-            name: 'lớp quản lý 1',
-            children: [
-                {
-                    id: '2',
-                    code: 'sv_1',
-                    name: 'sinh viên 1',
-                    gpa: 3.32,
-                    totalCredit: 15,
-                    credit: 15,
-                },
-                {
-                    id: '3',
-                    code: 'sv_2',
-                    name: 'sinh viên 2',
-                    gpa: 3.05,
-                    totalCredit: 15,
-                    credit: 10,
-                },
-            ],
-        },
-        {
-            id: '12',
-            code: 'lql_2',
-            name: 'lớp quản lý 2',
-            children: [
-                {
-                    id: '22',
-                    code: 'sv_3',
-                    name: 'sinh viên 3',
-                    gpa: 3.32,
-                    totalCredit: 15,
-                },
-                {
-                    id: '32',
-                    code: 'sv_4',
-                    name: 'sinh viên 4',
-                    gpa: 3.05,
-                    totalCredit: 15,
-                },
-            ],
-        },
-    ]
-
     return (
-        <PutFormModal
+        <Modal
             open={isOpen}
-            form={form}
-            onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Điểm trung bình kỳ - kỳ I 2025'}
+            footer={null}
+            title={'Cảnh cáo học tập, Xét học bổng'}
             className="w-[80vw]"
         >
-            <TableCollapse
-                rowKey="key"
-                headerTitleKey="name"
-                childrenFieldName="children"
-                defaultExpandAll
-                className="w-full"
-                data={fakeData}
-                columns={[
+            <Tabs
+                items={[
                     {
-                        title: 'Mã sinh viên',
-                        dataIndex: 'code',
-                        width: 120,
-                        align: 'center',
+                        key: '1',
+                        label: 'Điểm trung bình kỳ học',
+                        children: <DiemTrungBinhKyHoc />,
                     },
                     {
-                        title: 'Tên sinh viên',
-                        dataIndex: 'name',
-                        width: 200,
+                        key: '2',
+                        label: 'Xét học bổng',
+                        children: <XetHocBong />,
                     },
                     {
-                        title: 'Tổng số tín chỉ đăng ký',
-                        dataIndex: 'totalCredit',
-                        width: 150,
-                        align: 'center',
+                        key: '3',
+                        label: 'Xét cảnh cáo học đường',
+                        children: 'Content of Tab Pane 3',
                     },
                     {
-                        title: 'Số tín chỉ đã đạt',
-                        dataIndex: 'credit',
-                        width: 150,
-                        align: 'center',
+                        key: '4',
+                        label: 'Xét cảnh cáo học tập',
+                        children: 'Content of Tab Pane 3',
                     },
                     {
-                        title: 'GPA',
-                        dataIndex: 'gpa',
-                        width: 120,
-                        align: 'center',
+                        key: '5',
+                        label: 'Xét thôi học',
+                        children: 'Content of Tab Pane 3',
                     },
                     {
-                        title: 'Thao tác',
-                        width: 100,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (_, record) => {
-                            const { id: subjectVersionId, subjectId } = record
-                            return subjectVersionId ? (
-                                <Row className="justify-center gap-2">
-                                    <EditIcon
-                                        // onClick={() =>
-                                        //     onOpenSubjectVersion({
-                                        //         subjectId,
-                                        //         subjectVersionId,
-                                        //     })
-                                        // }
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                    <DeleteIcon
-                                    // popConfirm={{
-                                    //     onConfirm: () =>
-                                    //         handleDelete(
-                                    //             subjectVersionId
-                                    //         ),
-                                    // }}
-                                    />
-                                </Row>
-                            ) : null
-                        },
+                        key: '6',
+                        label: 'Xét lưu ban',
+                        children: 'Content of Tab Pane 3',
                     },
                 ]}
             />
-        </PutFormModal>
+        </Modal>
     )
 }
 

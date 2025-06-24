@@ -8,7 +8,11 @@ import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type {
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -419,7 +423,7 @@ export default function TrainingProgramCatalog() {
                                         <Select
                                             placeholder="Khoá đào tạo"
                                             options={trainingCourseData.map(
-                                                (i: TrainingObjectType) => ({
+                                                (i: TrainingCourse) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })
