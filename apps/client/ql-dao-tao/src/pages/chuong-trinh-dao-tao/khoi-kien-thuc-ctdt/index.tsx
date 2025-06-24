@@ -46,7 +46,12 @@ export default function TrainingBlock() {
                                   mode: 'insensitive',
                               },
                           },
-                          // { code: { contains: filters.searchText } },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                       ],
                   }
                 : {}),

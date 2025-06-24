@@ -5,6 +5,7 @@ import useSpinner from '@hooks/spinner'
 import type { Subject } from '@workspace/db'
 import {
     useCreateSubject,
+    useFindManyDM_DonVi,
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
@@ -13,6 +14,7 @@ import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { buildOrgTree } from '@lib/utils'
 export type PutSubject = Subject
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
@@ -27,23 +29,8 @@ const PutSubjectListModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    // const { data: organizationTypes = [] } = useFindManyDM_DonViType({
-    //     include: {
-    //         organizations: true,
-    //     },
-    // })
-
-    // const treeData =
-    //     organizationTypes.map((organizationType) => ({
-    //         title: organizationType.name,
-    //         value: organizationType.id,
-    //         selectable: false,
-    //         children:
-    //             organizationType.organizations.map((organization) => ({
-    //                 title: organization.name,
-    //                 value: organization.id,
-    //             })) || [],
-    //     })) || []
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(manageOrgData)
 
     const { mutateAsync: createSubject } = useCreateSubject()
     const { mutateAsync: updateSubject } = useUpdateSubject()
@@ -141,7 +128,7 @@ const PutSubjectListModal = () => {
                     label="Đơn vị quản lý"
                 >
                     <TreeSelect
-                        // treeData={treeData}
+                        treeData={treeData}
                         showSearch
                         placeholder="Chọn đơn vị quản lý"
                         style={{ width: '100%' }}

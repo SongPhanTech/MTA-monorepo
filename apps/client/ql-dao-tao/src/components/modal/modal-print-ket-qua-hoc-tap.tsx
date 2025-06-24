@@ -1,6 +1,9 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
-import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
+import {
+    useFindManyStudentSubjectScore,
+    useFindUniqueCurriculumVersion,
+} from '@workspace/db/hooks'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
@@ -135,8 +138,6 @@ const ModalPrintToKQHT = () => {
         tag: ModalPrintToKQHT.name,
     })
 
-    console.log(input?.dataStudent)
-
     const { data: subjectScoreData } = useFindUniqueCurriculumVersion({
         where: {
             id: input?.dataStudent?.curriculumVersionId,
@@ -171,7 +172,28 @@ const ModalPrintToKQHT = () => {
         },
     })
 
-    console.log(subjectScoreData)
+    const { data: studentSubClass } = useFindManyStudentSubjectScore({
+        where: {
+            studentId: input?.dataStudent?.id,
+        },
+        include: {
+            subjectClass: {
+                include: {
+                    semester: true,
+                    subject: true,
+                    fixedClasses: {
+                        include: {
+                            trainingCourse: {
+                                include: {
+                                    scoreConverts: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -341,7 +363,7 @@ const ModalPrintToKQHT = () => {
                         {basicInfoCol1?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
-                                className="flex flex-col gap-1 sm:flex-row sm:gap-0 md:gap-2 lg:gap-10 w-full"
+                                className="flex gap-2 w-full"
                             >
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
@@ -356,7 +378,7 @@ const ModalPrintToKQHT = () => {
                         {basicInfoCol2?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
-                                className="flex flex-col gap-1 sm:flex-row sm:gap-0 md:gap-2 lg:gap-10"
+                                className="flex gap-2 w-full"
                             >
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
