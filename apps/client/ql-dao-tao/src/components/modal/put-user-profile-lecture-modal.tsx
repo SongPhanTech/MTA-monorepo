@@ -1,5 +1,4 @@
 import { queryClient } from '@api/index'
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
@@ -18,6 +17,7 @@ import {
     useUpdateLecturer,
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import { Col, Collapse, Form, Tabs, message } from 'antd'
 import dayjs from 'dayjs'
@@ -464,17 +464,15 @@ const PutUserProfileLectureModal = () => {
         if (!output) return
         let fileName = output.avatar
         if (fileList.length > 0) {
-            const resPresignedUrl = await fetchGeneratePresignedUrl({
-                body: {
-                    path: 'avatar',
-                    extension: fileList[0].name.split('.').pop() ?? '',
-                },
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'avatar',
+                extension: fileList[0].name.split('.').pop() ?? '',
             })
-            const res = await fetch(resPresignedUrl.url, {
+            const res = await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
                 body: fileList[0].originFileObj,
             })
-            fileName = resPresignedUrl.fileName
+            fileName = resPresignedUrl.data.fileName
         }
         try {
             showSpinner()

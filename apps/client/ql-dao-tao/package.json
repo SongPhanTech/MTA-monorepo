@@ -8,8 +8,7 @@
 		"start": "next start",
 		"lint": "biome lint --write --verbose",
 		"format": "biome format --write --verbose",
-		"generate": "patch-package && pnpm generate:openapi",
-		"generate:openapi": "openapi-codegen gen daoTao"
+		"generate": "patch-package"
 	},
 	"dependencies": {
 		"@ant-design/cssinjs": "catalog:",
@@ -52,8 +51,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
-		"@openapi-codegen/cli": "catalog:",
-		"@openapi-codegen/typescript": "catalog:",
 		"@types/lodash": "catalog:",
 		"@types/minio": "catalog:",
 		"@types/node": "catalog:",

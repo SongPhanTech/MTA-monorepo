@@ -1,4 +1,3 @@
-import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -75,26 +74,6 @@ export default function SchoolYearPage({
         hideSpinner()
     }
 
-    async function handleLockAcc(id: string, accountLocked: boolean) {
-        if (!id) return
-        try {
-            showSpinner()
-            await fetchUpdateUser({
-                pathParams: {
-                    id: id,
-                },
-                body: {
-                    accountLocked: !accountLocked,
-                },
-            })
-            message.success('Cập nhật thành công')
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-        refetch()
-        onClose()
-    }
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
