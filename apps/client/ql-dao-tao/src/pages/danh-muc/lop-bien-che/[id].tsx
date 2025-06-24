@@ -13,6 +13,7 @@ import {
     PutUploadProfileModal,
 } from '@components/modal'
 import {
+    CUSSTOM_VI_LOCALE,
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
     GENDER_LIST,
@@ -116,11 +117,11 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-               
+
                 dateOfBirth: {
                     gte: filters.dateOfBirth?.[0],
                     lte: filters.dateOfBirth?.[1],
-                }
+                },
             },
         },
         include: {
@@ -186,10 +187,10 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-                    dateOfBirth: {
-                        gte: filters.dateOfBirth?.[0],
-                        lte: filters.dateOfBirth?.[1],
-                    }
+                dateOfBirth: {
+                    gte: filters.dateOfBirth?.[0],
+                    lte: filters.dateOfBirth?.[1],
+                },
             },
         },
     })
@@ -360,42 +361,6 @@ export default function StudentFixedClassPage() {
         setOpen(true)
     }
 
-        const customViVNLocale = {
-        lang: {
-            locale: 'vi_VN',
-            placeholder: 'Chọn ngày',
-            rangePlaceholder: ['Từ ngày', 'Đến ngày'] as [string, string],
-            today: 'Hôm nay',
-            now: 'Bây giờ',
-            backToToday: 'Về hôm nay',
-            ok: 'Đồng ý',
-            clear: 'Xóa',
-            month: 'Tháng',
-            year: 'Năm',
-            timeSelect: 'Chọn giờ',
-            dateSelect: 'Chọn ngày',
-            monthSelect: 'Chọn tháng',
-            yearSelect: 'Chọn năm',
-            decadeSelect: 'Chọn thập kỷ',
-            yearFormat: 'YYYY',
-            dateFormat: 'DD/MM/YYYY',
-            dayFormat: 'D',
-            dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
-            monthBeforeYear: true,
-            previousMonth: 'Tháng trước',
-            nextMonth: 'Tháng sau',
-            previousYear: 'Năm trước',
-            nextYear: 'Năm sau',
-            previousDecade: 'Thập kỷ trước',
-            nextDecade: 'Thập kỷ sau',
-            previousCentury: 'Thế kỷ trước',
-            nextCentury: 'Thế kỷ sau',
-        },
-        timePickerLocale: {
-            placeholder: 'Chọn giờ',
-        },
-    }
-
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -448,7 +413,7 @@ export default function StudentFixedClassPage() {
                                     labelAlign="left"
                                 >
                                     <Select
-                                      placeholder="Chọn giới tính"
+                                        placeholder="Chọn giới tính"
                                         options={GENDER_LIST.map((i) => {
                                             return {
                                                 value: i.id,
@@ -462,35 +427,33 @@ export default function StudentFixedClassPage() {
                                             height: 32,
                                         }}
                                         onChange={(val) =>
-                                            handleFilterChange(
-                                                'gender',
-                                                val
-                                            )
+                                            handleFilterChange('gender', val)
                                         }
                                         allowClear
                                     />
                                 </Form.Item>
-                                   <DatePicker.RangePicker
-                                        placeholder={['Từ ngày', 'Đến ngày']}
-                                          style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        allowClear
-                                        onChange={(dates, dateStrings) => {
-                                            handleFilterChange('dateOfBirth',
-                                                dates
-                                                    ? [
-                                                          dateStrings[0],
-                                                          dateStrings[1],
-                                                      ]
-                                                    : []
-                                            )
-                                        }}
-                                        locale={customViVNLocale}
-                                        format="DD/MM/YYYY"
-                                    />
+                                <DatePicker.RangePicker
+                                    placeholder={['Từ ngày', 'Đến ngày']}
+                                    style={{
+                                        width: 300,
+                                        marginRight: 8,
+                                        height: 32,
+                                    }}
+                                    allowClear
+                                    onChange={(dates, dateStrings) => {
+                                        handleFilterChange(
+                                            'dateOfBirth',
+                                            dates
+                                                ? [
+                                                      dateStrings[0],
+                                                      dateStrings[1],
+                                                  ]
+                                                : []
+                                        )
+                                    }}
+                                    locale={CUSSTOM_VI_LOCALE}
+                                    format="DD/MM/YYYY"
+                                />
                             </Flex>
                         </Col>
 
