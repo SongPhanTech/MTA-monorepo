@@ -1101,8 +1101,8 @@ model Student {
   fixedClass           FixedClass?           @relation(fields: [fixedClassId], references: [id])
   fixedClassId         String?
   subjectClassStudent  StudentSubjectScore[]
-  userProfileId        String?
-  userProfile          UserProfile?          @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
+  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
   trainingLevel        TrainingLevel?        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String?
   trainingObjectType   TrainingObjectType?   @relation(fields: [trainingObjectTypeId], references: [id])
@@ -1343,10 +1343,10 @@ model UserProfile {
   currentAddress             String?
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?
-  districtcurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtcurrentAddressId], references: [Id])
-  districtcurrentAddressId   String?
-  communecurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communecurrentAddressId], references: [Id])
-  communecurrentAddressId    String?
+  districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
+  districtCurrentAddressId   String?
+  communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddressId    String?
   dateOfBirth                DateTime?
   placeOfBirth               String?
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
@@ -1375,7 +1375,7 @@ model UserProfile {
   religionId                 String?
   ethnicity                  DM_DanToc?        @relation(fields: [ethnicityId], references: [Id])
   ethnicityId                String?
-  provinceHometown           DM_Tinh?          @relation(name: "ProvineceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?
   districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
   districtHometownId         String?
@@ -1897,7 +1897,7 @@ model DM_Tinh {
   iDM_DonViHanhChinhId        String?
   huyen                       DM_QuanHuyen[]
   xaPhuong                    DM_XaPhuong[]
-  userProfileHometown         UserProfile[]      @relation("ProvineceHometown")
+  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")

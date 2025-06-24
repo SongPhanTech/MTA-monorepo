@@ -860,8 +860,8 @@ Table Student {
   fixedClass FixedClass
   fixedClassId String
   subjectClassStudent StudentSubjectScore [not null]
-  userProfileId String
-  userProfile UserProfile
+  userProfileId String [not null]
+  userProfile UserProfile [not null]
   trainingLevel TrainingLevel
   trainingLevelId String
   trainingObjectType TrainingObjectType
@@ -1083,10 +1083,10 @@ Table UserProfile {
   currentAddress String
   provinceCurrentAddress DM_Tinh
   provinceCurrentAddressId String
-  districtcurrentAddress DM_QuanHuyen
-  districtcurrentAddressId String
-  communecurrentAddress DM_XaPhuong
-  communecurrentAddressId String
+  districtCurrentAddress DM_QuanHuyen
+  districtCurrentAddressId String
+  communeCurrentAddress DM_XaPhuong
+  communeCurrentAddressId String
   dateOfBirth DateTime
   placeOfBirth String
   provinceOfBirth DM_Tinh
@@ -2314,9 +2314,9 @@ Ref: UserProfile.userId > User.id
 
 Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
 
-Ref: UserProfile.districtcurrentAddressId > DM_QuanHuyen.Id
+Ref: UserProfile.districtCurrentAddressId > DM_QuanHuyen.Id
 
-Ref: UserProfile.communecurrentAddressId > DM_XaPhuong.Id
+Ref: UserProfile.communeCurrentAddressId > DM_XaPhuong.Id
 
 Ref: UserProfile.provinceOfBirthId > DM_Tinh.Id
 
