@@ -421,7 +421,7 @@ export default function FixedClassPage({
                                 align: 'left',
                                 width: 200,
                                 render: (value) =>
-                                    value?.name ? value?.name : '',
+                                    value?.sTen ? value?.sTen : '',
                             },
                             {
                                 title: 'Chuyên ngành',
