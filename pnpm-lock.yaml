@@ -419,6 +419,12 @@ importers:
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.175(hono@4.7.2)
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
       axios:
         specifier: 'catalog:'
         version: 1.7.9
@@ -450,9 +456,6 @@ importers:
       '@workspace/biome-config':
         specifier: workspace:*
         version: link:../../../packages/biome-config
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../../../packages/typescript-config

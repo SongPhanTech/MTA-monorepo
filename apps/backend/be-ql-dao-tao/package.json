@@ -23,12 +23,13 @@
     "pizzip": "catalog:",
     "prom-client": "catalog:",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@workspace/libs": "workspace:*",
+    "@workspace/db": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "catalog:",
     "@workspace/biome-config": "workspace:*",
-    "@workspace/db": "workspace:*",
     "@workspace/auth": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:"

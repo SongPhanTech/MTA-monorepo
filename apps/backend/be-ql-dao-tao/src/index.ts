@@ -11,6 +11,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import FixedClassApp from './api/fixed-class'
+import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
@@ -64,6 +65,7 @@ setupOpenApi(app)
 app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
+app.route('/api/student', StudentApp)
 
 app.use(
     '/api/model/*',
