@@ -34,6 +34,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import { useRouter } from 'next/router'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -52,6 +53,7 @@ interface FilterProps {
 }
 
 export default function SubjectClassScore() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -64,6 +66,13 @@ export default function SubjectClassScore() {
     const [nhapDiemThi, setNhapDiemThi] = useState<boolean>(false)
     const [nhapDiemCong, setNhapDiemCong] = useState<boolean>(false)
     const [camThi, setCamThi] = useState<boolean>(false)
+    const { subjectId } = router.query
+
+    useEffect(() => {
+        if (subjectId) {
+            setSelectedFixedClass(subjectId as string)
+        }
+    }, [subjectId])
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -81,14 +90,6 @@ export default function SubjectClassScore() {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOpenClassModal.name,
-    })
-
-    const handleModal = () => {
-        onOpen()
-    }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     const { mutateAsync: updateStudentSubjectScore } =
@@ -648,45 +649,6 @@ export default function SubjectClassScore() {
                                             Lưu
                                         </Button>
                                     </Flex>
-                                </Col>
-                            </Row>
-                            <Row className="mt-4">
-                                <Col span={20} className="flex">
-                                    <Checkbox
-                                        checked={nhapDiemCC}
-                                        onChange={handleChangeNhapDiemCC}
-                                        className="text-sm"
-                                    >
-                                        Nhập điểm CC
-                                    </Checkbox>
-                                    <Checkbox
-                                        checked={nhapDiemTX}
-                                        onChange={handleChangeNhapDiemTX}
-                                        className="text-sm"
-                                    >
-                                        Nhập điểm TX
-                                    </Checkbox>
-                                    <Checkbox
-                                        checked={nhapDiemThi}
-                                        onChange={handleChangeNhapDiemThi}
-                                        className="text-sm"
-                                    >
-                                        Nhập điểm thi
-                                    </Checkbox>
-                                    {/* <Checkbox
-                                        checked={nhapDiemCong}
-                                        onChange={handleChangeNhapDiemCong}
-                                        className="text-sm"
-                                    >
-                                        Nhập điểm cộng
-                                    </Checkbox> */}
-                                    <Checkbox
-                                        checked={camThi}
-                                        onChange={handleChangeCamThi}
-                                        className="text-sm"
-                                    >
-                                        Cấm thi/Hoãn thi/Đình chỉ
-                                    </Checkbox>
                                 </Col>
                             </Row>
                         </Col>

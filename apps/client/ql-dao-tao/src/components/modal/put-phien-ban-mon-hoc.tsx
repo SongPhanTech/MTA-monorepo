@@ -18,7 +18,6 @@ import {
     InputNumber,
     Switch,
     TreeSelect,
-    type UploadProps,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -31,9 +30,14 @@ import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
 dayjs.locale('vi')
 
+type PutSubjectVersionFormValues = PutSubjectVersion & {
+    prerequisiteSubjectIds?: string[]
+    coRequisiteSubjectIds?: string[]
+}
+
 const PutVersionSubjectModal = () => {
     const [document, setDocument] = useState<string[]>([])
-    const [form] = Form.useForm<PutSubjectVersion>()
+    const [form] = Form.useForm<PutSubjectVersionFormValues>()
     const { isOpen, onClose, input } = useDisclosure<{
         subjectId: string
         subjectVersionId?: string
@@ -47,6 +51,10 @@ const PutVersionSubjectModal = () => {
 
     const { data: subjectVersion } = useFindUniqueSubjectVersion({
         where: { id: subjectVersionId },
+        include: {
+            prerequisiteSubject: true,
+            coRequisiteSubject: true,
+        },
     })
 
     const [active, setActive] = useState(true)
@@ -91,6 +99,8 @@ const PutVersionSubjectModal = () => {
 
         try {
             showSpinner()
+            const values =
+                (await form.validateFields()) as PutSubjectVersionFormValues
 
             const payload = {
                 code: output.code,
@@ -119,6 +129,30 @@ const PutVersionSubjectModal = () => {
                 materials: output.materials,
                 rules: output.rules,
                 documentPaths: output.documentPaths,
+                prerequisiteSubject: subjectVersionId
+                    ? {
+                          set:
+                              values.prerequisiteSubjectIds?.map((id) => ({
+                                  id,
+                              })) || [],
+                      }
+                    : {
+                          connect: values.prerequisiteSubjectIds?.map((id) => ({
+                              id,
+                          })),
+                      },
+                coRequisiteSubject: subjectVersionId
+                    ? {
+                          set:
+                              values.coRequisiteSubjectIds?.map((id) => ({
+                                  id,
+                              })) || [],
+                      }
+                    : {
+                          connect: values.coRequisiteSubjectIds?.map((id) => ({
+                              id,
+                          })),
+                      },
             }
 
             if (subjectVersionId) {
@@ -147,30 +181,17 @@ const PutVersionSubjectModal = () => {
         if (subjectVersion) {
             form.setFieldsValue({
                 ...subjectVersion,
+                coRequisiteSubjectIds: subjectVersion.coRequisiteSubject.map(
+                    (item: { id: string }) => item.id
+                ),
+                prerequisiteSubjectIds: subjectVersion.prerequisiteSubject.map(
+                    (item: { id: string }) => item.id
+                ),
             })
             setDocument(subjectVersion.documentPaths)
             setActive(subjectVersion.active)
         }
     }, [subjectVersion, form])
-
-    const props: UploadProps = {
-        name: 'file',
-        multiple: true,
-        onChange(info) {
-            const { status } = info.file
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList)
-            }
-            if (status === 'done') {
-                message.success(`${info.file.name} uploaded successfully.`)
-            } else if (status === 'error') {
-                message.error(`${info.file.name} upload failed.`)
-            }
-        },
-        onDrop(e) {
-            console.log('Dropped files', e.dataTransfer.files)
-        },
-    }
 
     const handleChange = (checked: boolean) => {
         setActive(checked)

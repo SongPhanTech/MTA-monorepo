@@ -465,6 +465,7 @@ export default function TrainingProgramSubjects() {
                                             placeholder="Nhập tên ngành..."
                                             style={{
                                                 marginRight: 8,
+                                                height: '32px',
                                             }}
                                             prefix={
                                                 <Search
