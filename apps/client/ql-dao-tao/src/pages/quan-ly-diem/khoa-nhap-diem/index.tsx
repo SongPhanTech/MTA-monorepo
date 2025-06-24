@@ -1,7 +1,6 @@
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -21,21 +20,13 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import HanNhapDiem from './modal-han-nhap-diem'
+import dayjs from 'dayjs'
 
 // const { Option } = Select;
 interface FilterProps {
-    schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
-    KhoaId: string | null //Khoa
-    BoMonId: string | null //Bộ môn
-    trainingObjectId: string | null //Đối tượng đào tạo
-    examTypeId: string | null //Hình thức thi
-    LectureIds: string[] //Giảng viên
     searchText: string | null
+    semesterId: string | null //Học kỳ
     trainingObjectTypeId: string | null
-    subjectClassId: string | null
-    fixedClassIds: string[]
-    examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
 export default function SubjectClassScore() {
@@ -43,24 +34,12 @@ export default function SubjectClassScore() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm()
-    const [filterStatus, setFilterStatus] = useState(false)
-    const [arrSubjectClass, setArrSubjectClass] = useState<string[]>([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const [editSubjectClass, setEditSubjectClass] =
         useState<SubjectClass | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,
         trainingObjectTypeId: null,
-        subjectClassId: null,
-        schoolYearId: null,
-        KhoaId: null,
-        BoMonId: null,
-        trainingObjectId: null,
-        examTypeId: null,
-        LectureIds: [],
-        fixedClassIds: [],
-        examDateRange: undefined, // Khoảng thời gian thi
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -113,13 +92,22 @@ export default function SubjectClassScore() {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
-                          { name: { contains: filters.searchText } },
-                          { code: { contains: filters.searchText } },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                       ],
                   }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
                       subjectClassStudent: {
@@ -129,28 +117,6 @@ export default function SubjectClassScore() {
                                       filters.trainingObjectTypeId,
                               },
                           },
-                      },
-                  }
-                : {}),
-            ...(filters.LectureIds.length > 0
-                ? {
-                      OR: filters.LectureIds.map((id) => ({
-                          mainLecturer: { id },
-                      })),
-                  }
-                : {}),
-            ...(filters.BoMonId
-                ? {
-                      subject: {
-                          managementOrganizationId: filters.BoMonId,
-                      },
-                  }
-                : {}),
-            ...(filters.examDateRange
-                ? {
-                      examDate: {
-                          gte: filters.examDateRange[0],
-                          lte: filters.examDateRange[1],
                       },
                   }
                 : {}),
@@ -166,6 +132,9 @@ export default function SubjectClassScore() {
                 include: { userProfile: true },
             },
             extraLecturer: {
+                include: { userProfile: true },
+            },
+            enterGradeLecturer: {
                 include: { userProfile: true },
             },
             subjectClassStudent: {
@@ -228,14 +197,6 @@ export default function SubjectClassScore() {
             searchText: filters.searchText,
             semesterId: filters.semesterId,
             trainingObjectTypeId: filters.trainingObjectTypeId,
-            subjectClassId: filters.subjectClassId,
-            schoolYearId: filters.schoolYearId,
-            KhoaId: filters.KhoaId,
-            BoMonId: filters.BoMonId,
-            trainingObjectId: filters.trainingObjectId,
-            examTypeId: filters.examTypeId,
-            LectureIds: filters.LectureIds,
-            fixedClassIds: filters.fixedClassIds,
         })
     }, [filters, form])
 
@@ -366,6 +327,8 @@ export default function SubjectClassScore() {
         handleCheckExamDate()
     }, [])
 
+    console.log(dataTable)
+
     return (
         <div>
             <Form form={form}>
@@ -389,9 +352,6 @@ export default function SubjectClassScore() {
                                                     )
                                                 }
                                                 placeholder="Nhập tên lớp..."
-                                                style={{
-                                                    height: 40,
-                                                }}
                                                 prefix={
                                                     <Search
                                                         size={15}
@@ -457,44 +417,6 @@ export default function SubjectClassScore() {
                                             />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={8}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            name="trainingCourseId"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <Select
-                                                placeholder="Lớp MH"
-                                                options={dataTable.map(
-                                                    (
-                                                        i: TrainingObjectType
-                                                    ) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                style={{
-                                                    height: 40,
-                                                }}
-                                                onChange={(val) =>
-                                                    handleFilterChange(
-                                                        'subjectClassId',
-                                                        val
-                                                    )
-                                                }
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={4} className="flex">
-                                        <FilterSubjectClass
-                                            filters={filters}
-                                            onFilterChange={handleFilterChange}
-                                            onApply={handleFilterApply}
-                                        />
-                                    </Col>
                                 </Flex>
                             </Col>
 
@@ -545,49 +467,60 @@ export default function SubjectClassScore() {
                                     dataIndex: 'code',
                                     align: 'center',
                                     width: 150,
+                                    fixed: 'left',
                                 },
                                 {
                                     title: 'Tên lớp',
                                     dataIndex: 'name',
-                                    width: 150,
+                                    align: 'center',
+                                    width: 200,
+                                    fixed: 'left',
                                 },
                                 {
                                     title: 'Môn học',
-                                    dataIndex: 'tenMonHoc',
-                                    width: 150,
+                                    width: 250,
                                     render: (text, record) =>
                                         record.subject?.name || text,
+                                    fixed: 'left',
                                 },
                                 {
                                     title: 'Số tín chỉ',
-                                    dataIndex: 'stc',
-                                    width: 150,
+                                    width: 80,
                                     align: 'center',
                                     render: (text, record) =>
                                         record.subject?.credit || text,
                                 },
                                 {
-                                    title: 'Hạn đợi',
-                                    dataIndex: 'ngayDot',
-                                    width: 60,
+                                    title: 'Hạn ĐQT',
+                                    width: 120,
                                     align: 'center',
+                                    render: ({ scoreDeadline }) =>
+                                        scoreDeadline
+                                            ? dayjs(scoreDeadline).format(
+                                                  'DD/MM/YYYY'
+                                              )
+                                            : '',
                                 },
                                 {
                                     title: 'Số ngày',
                                     dataIndex: 'ngayDot',
-                                    width: 60,
+                                    width: 80,
                                     align: 'center',
                                 },
                                 {
                                     title: 'Hạn ĐT',
-                                    dataIndex: 'ngayDot',
-                                    width: 60,
+                                    width: 120,
                                     align: 'center',
+                                    render: ({ examScoreDeadline }) =>
+                                        examScoreDeadline
+                                            ? dayjs(examScoreDeadline).format(
+                                                  'DD/MM/YYYY'
+                                              )
+                                            : '',
                                 },
                                 {
                                     title: 'Giảng viên',
-                                    dataIndex: 'tenMonHoc',
-                                    width: 150,
+                                    width: 200,
                                     align: 'center',
                                     render: (text, record) => {
                                         const mainLecturer = record.mainLecturer
@@ -607,63 +540,61 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Giảng viên NĐ',
-                                    dataIndex: 'tenMonHoc',
-                                    width: 150,
+                                    width: 200,
                                     align: 'center',
                                     render: (text, record) => {
+                                        const enterGradeLecturer =
+                                            record.enterGradeLecturer
+                                                ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
+                                                : ''
                                         const mainLecturer = record.mainLecturer
                                             ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                            : 'Chưa có giảng viên chính'
-                                        return <span>{mainLecturer}</span>
+                                            : ''
+                                        const extraLecturer =
+                                            record.extraLecturer
+                                                ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                                                : ''
+                                        return (
+                                            <span>
+                                                {enterGradeLecturer ||
+                                                    mainLecturer ||
+                                                    extraLecturer ||
+                                                    'Chưa có giảng viên NĐ'}
+                                            </span>
+                                        )
                                     },
                                 },
 
                                 {
                                     title: 'Ngày bắt đầu',
-                                    dataIndex: 'startDate',
                                     width: 150,
                                     align: 'center',
-                                    render: (date) =>
-                                        new Date(date).toLocaleDateString(
-                                            'vi-VN',
-                                            {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                            }
-                                        ),
+                                    render: ({ startDate }) =>
+                                        startDate
+                                            ? dayjs(startDate).format(
+                                                  'DD/MM/YYYY'
+                                              )
+                                            : '',
                                 },
                                 {
                                     title: 'Ngày thi',
-                                    dataIndex: 'examDate',
                                     width: 150,
                                     align: 'center',
-                                    render: (date) =>
-                                        date
-                                            ? new Date(date).toLocaleDateString(
-                                                  'vi-VN',
-                                                  {
-                                                      year: 'numeric',
-                                                      month: '2-digit',
-                                                      day: '2-digit',
-                                                  }
+                                    render: ({ examDate }) =>
+                                        examDate
+                                            ? dayjs(examDate).format(
+                                                  'DD/MM/YYYY'
                                               )
                                             : '',
                                 },
                                 {
                                     title: 'Ngày kết thúc',
-                                    dataIndex: 'endDate',
                                     width: 150,
                                     align: 'center',
-                                    render: (date) =>
-                                        date
-                                            ? new Date(date).toLocaleDateString(
-                                                  'vi-VN',
-                                                  {
-                                                      year: 'numeric',
-                                                      month: '2-digit',
-                                                      day: '2-digit',
-                                                  }
+                                    render: ({ endDate }) =>
+                                        endDate
+                                            ? dayjs(endDate).format(
+                                                  'DD/MM/YYYY'
                                               )
                                             : '',
                                 },
@@ -677,7 +608,7 @@ export default function SubjectClassScore() {
                                             <span>
                                                 {record.subject
                                                     ?.managementOrganization
-                                                    ?.name || 'Chưa có bộ môn'}
+                                                    ?.sTen || 'Chưa có bộ môn'}
                                             </span>
                                         )
                                     },
@@ -692,7 +623,7 @@ export default function SubjectClassScore() {
                                             <span>
                                                 {record.subject
                                                     ?.managementOrganization
-                                                    ?.parent?.name ||
+                                                    ?.parent?.sTen ||
                                                     'Chưa có khoa'}
                                             </span>
                                         )
@@ -738,7 +669,6 @@ export default function SubjectClassScore() {
                                                     <Row
                                                         className="flex justify-center items-center gap-2 text-[#028850]"
                                                         onClick={() => {
-                                                            setIsModalOpen(true)
                                                             setEditSubjectClass(
                                                                 record as SubjectClass
                                                             )
