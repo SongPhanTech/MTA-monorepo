@@ -82,21 +82,30 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
 
                 return {
                     stt: row[cols.stt],
-                    code: row[cols.code],
-                    fullname: row[cols.fullname],
+                    code: row[cols.code]?.trim(),
+                    fullname: row[cols.fullname]?.trim(),
                     dateOfBirth: dateOfBirth.isValid()
                         ? dateOfBirth.toDate()
                         : null,
-                    gender: row[cols.gender],
-                    placeOfBirth: row[cols.placeOfBirth],
+                    gender: row[cols.gender]?.trim(),
+                    placeOfBirth: row[cols.placeOfBirth]?.trim(),
                 }
             })
 
         return {
             code: name,
-            trainingObjectType: trainingObjectTypeCell?.v,
-            trainingCourse: trainingCourseCell?.v,
-            name: classNameCell?.v,
+            trainingObjectType:
+                typeof trainingObjectTypeCell?.v === 'string'
+                    ? trainingObjectTypeCell?.v.trim()
+                    : trainingObjectTypeCell?.v,
+            trainingCourse:
+                typeof trainingCourseCell?.v === 'string'
+                    ? trainingCourseCell?.v.trim()
+                    : trainingCourseCell?.v,
+            name:
+                typeof classNameCell?.v === 'string'
+                    ? classNameCell?.v.trim()
+                    : classNameCell?.v,
             students,
             errors,
         }
@@ -214,31 +223,38 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 
             return {
                 stt: row[cols.stt],
-                registerNumber: row[cols.registerNumber],
-                code: row[cols.code] as string,
-                fullname: row[cols.fullname] as string,
+                registerNumber: row[cols.registerNumber]?.trim(),
+                code: row[cols.code]?.trim() as string,
+                fullname: row[cols.fullname]?.trim() as string,
                 dateOfBirth: dateOfBirth.isValid()
                     ? dateOfBirth.toDate()
                     : null,
-                gender: row[cols.gender],
-                ethnicity: row[cols.ethnicity],
-                nationality: row[cols.nationality],
+                gender: row[cols.gender]?.trim(),
+                ethnicity: row[cols.ethnicity]?.trim(),
+                nationality: row[cols.nationality]?.trim(),
                 districtHometown: row[cols.districtHometown]?.trim(),
-                provinceHometown: row[cols.provinceHometown],
-                admissionBlock: row[cols.admissionBlock],
-                admissionScore: row[cols.admissionScore],
-                competencyAssessmentScore: row[cols.competencyAssessmentScore],
-                fixedClass: row[cols.fixedClass] as string,
-                trainingField: row[cols.trainingField],
-                trainingMajor: row[cols.trainingMajor],
-                curriculum: row[cols.curriculum],
-                description: row[cols.description],
+                provinceHometown: row[cols.provinceHometown]?.trim(),
+                admissionBlock: row[cols.admissionBlock]?.trim(),
+                admissionScore: row[cols.admissionScore]?.trim(),
+                competencyAssessmentScore:
+                    row[cols.competencyAssessmentScore]?.trim(),
+                fixedClass: row[cols.fixedClass]?.trim() as string,
+                trainingField: row[cols.trainingField]?.trim(),
+                trainingMajor: row[cols.trainingMajor]?.trim(),
+                curriculum: row[cols.curriculum]?.trim() as string,
+                description: row[cols.description]?.trim(),
             }
         })
 
     return {
-        trainingObjectType: trainingObjectTypeCell?.v,
-        trainingCourse: trainingCourseCell?.v,
+        trainingObjectType:
+            typeof trainingObjectTypeCell?.v === 'string'
+                ? trainingObjectTypeCell?.v.trim()
+                : trainingObjectTypeCell?.v,
+        trainingCourse:
+            typeof trainingCourseCell?.v === 'string'
+                ? trainingCourseCell?.v.trim()
+                : trainingCourseCell?.v,
         students,
         errors,
     }

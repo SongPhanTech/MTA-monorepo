@@ -21,6 +21,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@paralleldrive/cuid2": "github:paralleldrive/cuid2",
     "@workspace/typescript-config": "workspace:*",
     "@zenstackhq/openapi": "catalog:",
     "@zenstackhq/server": "catalog:",

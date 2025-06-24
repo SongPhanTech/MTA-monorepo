@@ -2,9 +2,9 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { Gender, type Prisma } from '@workspace/db'
 import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
-import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
 import {
+    buildCurriculumMap,
     buildDistrictMap,
     buildEthnicityMap,
     buildNationalityMap,
@@ -23,13 +23,20 @@ const importHeQuanSu = createRoute({
             content: {
                 'multipart/form-data': {
                     schema: z.object({
+                        timeout: z.coerce.number().default(30),
                         file: z
                             .instanceof(File)
-                            // .refine(
-                            //     (file) =>
-                            //         file.type ===
-                            //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                            // )
+                            .refine(
+                                (file) =>
+                                    [
+                                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+                                        'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm
+                                        'application/vnd.ms-excel.sheet.binary.macroEnabled.12', // .xlsb
+                                        'application/vnd.ms-excel', // .xls
+                                        'application/vnd.oasis.opendocument.spreadsheet', // .ods
+                                    ].includes(file.type),
+                                'Định dạng file không hỗ trợ'
+                            )
                             .openapi({
                                 type: 'string',
                                 format: 'binary', // Required for OpenAPI file upload
@@ -60,7 +67,7 @@ const importHeQuanSu = createRoute({
 })
 
 app.openapi(importHeQuanSu, async (c) => {
-    const { file } = c.req.valid('form')
+    const { file, timeout } = c.req.valid('form')
 
     const buf = await file.arrayBuffer()
     const data = parseSheetHeQuanSu(buf)
@@ -124,107 +131,106 @@ app.openapi(importHeQuanSu, async (c) => {
         data.students.map((student) => student.districtHometown)
     )
 
-    await prisma.$transaction(async (tx) => {
-        for (const student of data.students) {
-            const curriculumVersion = await tx.curriculumVersion.findFirst({
-                where: {
-                    name: student.curriculum, // non null because early return error
-                    trainingObjectTypeId: trainingObjectType.id,
-                    ...(student.trainingMajor && student.trainingField
-                        ? {
-                              curriculum: {
-                                  trainingMajor: {
-                                      name: student.trainingMajor,
-                                      trainingField: {
-                                          name: student.trainingField,
-                                      },
-                                  },
+    const curriculumVersionMap = await buildCurriculumMap(prisma, data.students)
+
+    try {
+        await prisma.$transaction(
+            async (tx) => {
+                for (const student of data.students) {
+                    const existsFixedClass = await tx.fixedClass.findFirst({
+                        where: {
+                            name: student.fixedClass,
+                            curriculumVersionId: curriculumVersionMap.get(
+                                student.curriculum
+                            ),
+                        },
+                    })
+
+                    const fixedClass = existsFixedClass
+                        ? existsFixedClass
+                        : await tx.fixedClass.create({
+                              data: {
+                                  name: student.fixedClass,
+                                  curriculumVersionId: curriculumVersionMap.get(
+                                      student.curriculum
+                                  ),
+                                  startYear: new Date().getFullYear(),
+                                  trainingCourseId: trainingCourse.id,
                               },
-                          }
-                        : {}),
-                },
-            })
+                          })
 
-            if (!curriculumVersion) {
-                throw new HTTPException(400, {
-                    message: `Chương trình đào tạo không tồn tại: ${student.curriculum}${
-                        student.trainingMajor && student.trainingField
-                            ? ` - ${student.trainingMajor} - ${student.trainingField}`
-                            : ''
-                    }`,
-                })
-            }
+                    const existingStudent = await tx.student.findFirst({
+                        where: { code: student.code },
+                    })
 
-            const existsFixedClass = await tx.fixedClass.findFirst({
-                where: {
-                    name: student.fixedClass,
-                    curriculumVersionId: curriculumVersion.id,
-                },
-            })
-
-            const fixedClass = existsFixedClass
-                ? existsFixedClass
-                : await tx.fixedClass.create({
-                      data: {
-                          name: student.fixedClass,
-                          curriculumVersionId: curriculumVersion.id,
-                          startYear: new Date().getFullYear(),
-                          trainingCourseId: trainingCourse.id,
-                      },
-                  })
-
-            const existingStudent = await tx.student.findFirst({
-                where: { code: student.code },
-            })
-
-            const studentData: Prisma.StudentCreateInput = {
-                trainingObjectType: { connect: { id: trainingObjectType.id } },
-                fixedClass: { connect: { id: fixedClass.id } },
-                curriculumVersion: { connect: { id: curriculumVersion.id } },
-            }
-            const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
-                {
-                    ...splitFullName(student.fullname),
-                    // TODO: need to use idCardNumber
-                    idCardNumber: student.code,
-                    code: student.code,
-                    gender:
-                        student.gender === 'Nữ' ? Gender.Female : Gender.Male,
-                    ethnicityId:
-                        ethnicityMap.get(student.ethnicity || null) || null,
-                    nationalityId:
-                        nationalityMap.get(student.nationality || null) || null,
-                    provinceHometownId:
-                        provinceMap.get(student.provinceHometown || null) ||
-                        null,
-                    districtHometownId:
-                        districtMap.get(student.districtHometown || null) ||
-                        null,
-                }
-
-            if (existingStudent) {
-                await tx.student.update({
-                    where: { id: existingStudent.id },
-                    data: {
-                        ...studentData,
-                        userProfile: { update: profileData },
-                    },
-                })
-            } else {
-                await tx.student.create({
-                    data: {
-                        ...studentData,
-                        userProfile: {
-                            connectOrCreate: {
-                                where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
-                                create: profileData,
+                    const studentData: Prisma.StudentCreateInput = {
+                        trainingObjectType: {
+                            connect: { id: trainingObjectType.id },
+                        },
+                        fixedClass: { connect: { id: fixedClass.id } },
+                        curriculumVersion: {
+                            connect: {
+                                id: curriculumVersionMap.get(
+                                    student.curriculum
+                                ),
                             },
                         },
-                    },
-                })
-            }
-        }
-    })
+                    }
+                    const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
+                        {
+                            ...splitFullName(student.fullname),
+                            // TODO: need to use idCardNumber
+                            idCardNumber: student.code,
+                            code: student.code,
+                            gender:
+                                student.gender === 'Nữ'
+                                    ? Gender.Female
+                                    : Gender.Male,
+                            ethnicityId:
+                                ethnicityMap.get(student.ethnicity || null) ||
+                                null,
+                            nationalityId:
+                                nationalityMap.get(
+                                    student.nationality || null
+                                ) || null,
+                            provinceHometownId:
+                                provinceMap.get(
+                                    student.provinceHometown || null
+                                ) || null,
+                            districtHometownId:
+                                districtMap.get(
+                                    student.districtHometown || null
+                                ) || null,
+                        }
+
+                    if (existingStudent) {
+                        await tx.student.update({
+                            where: { id: existingStudent.id },
+                            data: {
+                                ...studentData,
+                                userProfile: { update: profileData },
+                            },
+                        })
+                    } else {
+                        await tx.student.create({
+                            data: {
+                                ...studentData,
+                                userProfile: {
+                                    connectOrCreate: {
+                                        where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
+                                        create: profileData,
+                                    },
+                                },
+                            },
+                        })
+                    }
+                }
+            },
+            { timeout: timeout * 1000 }
+        )
+    } catch (error) {
+        console.log(error)
+    }
 
     return c.json(
         { message: `Import students successfully: ${data.students.length}` },

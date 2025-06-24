@@ -52,12 +52,13 @@ const config = {
         clientId: process.env.KEYCLOAK_CLIENT_ID || 'fe-test-local',
     },
 }
-const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
-const jwksUri = `${issuer}/protocol/openid-connect/certs`
-const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
+
+const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
+const jwksUri = `${issuer}/protocol/openid-connect/certs`
+const audience = config.keycloak.clientId
 app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
 
 setupOpenApi(app)
@@ -105,12 +106,14 @@ app.onError((err, c) => {
         if (err.code === 'P2003') status = 400
 
         if (status === 500) {
+            console.log(err)
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
         return c.json({ message: err.meta?.cause }, status)
     }
 
+    console.log(err)
     return c.json({ message: err.message }, 500)
 })
 
