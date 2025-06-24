@@ -133,104 +133,94 @@ app.openapi(importHeQuanSu, async (c) => {
 
     const curriculumVersionMap = await buildCurriculumMap(prisma, data.students)
 
-    try {
-        await prisma.$transaction(
-            async (tx) => {
-                for (const student of data.students) {
-                    const existsFixedClass = await tx.fixedClass.findFirst({
-                        where: {
-                            name: student.fixedClass,
-                            curriculumVersionId: curriculumVersionMap.get(
-                                student.curriculum
-                            ),
-                        },
-                    })
+    await prisma.$transaction(
+        async (tx) => {
+            for (const student of data.students) {
+                const existsFixedClass = await tx.fixedClass.findFirst({
+                    where: {
+                        name: student.fixedClass,
+                        curriculumVersionId: curriculumVersionMap.get(
+                            student.curriculum
+                        ),
+                    },
+                })
 
-                    const fixedClass = existsFixedClass
-                        ? existsFixedClass
-                        : await tx.fixedClass.create({
-                              data: {
-                                  name: student.fixedClass,
-                                  curriculumVersionId: curriculumVersionMap.get(
-                                      student.curriculum
-                                  ),
-                                  startYear: new Date().getFullYear(),
-                                  trainingCourseId: trainingCourse.id,
-                              },
-                          })
+                const fixedClass = existsFixedClass
+                    ? existsFixedClass
+                    : await tx.fixedClass.create({
+                          data: {
+                              name: student.fixedClass,
+                              curriculumVersionId: curriculumVersionMap.get(
+                                  student.curriculum
+                              ),
+                              startYear: new Date().getFullYear(),
+                              trainingCourseId: trainingCourse.id,
+                          },
+                      })
 
-                    const existingStudent = await tx.student.findFirst({
-                        where: { code: student.code },
-                    })
+                const existingStudent = await tx.student.findFirst({
+                    where: { code: student.code },
+                })
 
-                    const studentData: Prisma.StudentCreateInput = {
-                        trainingObjectType: {
-                            connect: { id: trainingObjectType.id },
+                const studentData: Prisma.StudentCreateInput = {
+                    trainingObjectType: {
+                        connect: { id: trainingObjectType.id },
+                    },
+                    fixedClass: { connect: { id: fixedClass.id } },
+                    curriculumVersion: {
+                        connect: {
+                            id: curriculumVersionMap.get(student.curriculum),
                         },
-                        fixedClass: { connect: { id: fixedClass.id } },
-                        curriculumVersion: {
-                            connect: {
-                                id: curriculumVersionMap.get(
-                                    student.curriculum
-                                ),
-                            },
-                        },
+                    },
+                }
+                const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
+                    {
+                        ...splitFullName(student.fullname),
+                        // TODO: need to use idCardNumber
+                        idCardNumber: student.code,
+                        code: student.code,
+                        gender:
+                            student.gender === 'Nữ'
+                                ? Gender.Female
+                                : Gender.Male,
+                        ethnicityId:
+                            ethnicityMap.get(student.ethnicity || null) || null,
+                        nationalityId:
+                            nationalityMap.get(student.nationality || null) ||
+                            null,
+                        provinceHometownId:
+                            provinceMap.get(student.provinceHometown || null) ||
+                            null,
+                        districtHometownId:
+                            districtMap.get(student.districtHometown || null) ||
+                            null,
                     }
-                    const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
-                        {
-                            ...splitFullName(student.fullname),
-                            // TODO: need to use idCardNumber
-                            idCardNumber: student.code,
-                            code: student.code,
-                            gender:
-                                student.gender === 'Nữ'
-                                    ? Gender.Female
-                                    : Gender.Male,
-                            ethnicityId:
-                                ethnicityMap.get(student.ethnicity || null) ||
-                                null,
-                            nationalityId:
-                                nationalityMap.get(
-                                    student.nationality || null
-                                ) || null,
-                            provinceHometownId:
-                                provinceMap.get(
-                                    student.provinceHometown || null
-                                ) || null,
-                            districtHometownId:
-                                districtMap.get(
-                                    student.districtHometown || null
-                                ) || null,
-                        }
 
-                    if (existingStudent) {
-                        await tx.student.update({
-                            where: { id: existingStudent.id },
-                            data: {
-                                ...studentData,
-                                userProfile: { update: profileData },
-                            },
-                        })
-                    } else {
-                        await tx.student.create({
-                            data: {
-                                ...studentData,
-                                userProfile: {
-                                    connectOrCreate: {
-                                        where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
-                                        create: profileData,
-                                    },
+                if (existingStudent) {
+                    await tx.student.update({
+                        where: { id: existingStudent.id },
+                        data: {
+                            ...studentData,
+                            userProfile: { update: profileData },
+                        },
+                    })
+                } else {
+                    await tx.student.create({
+                        data: {
+                            ...studentData,
+                            userProfile: {
+                                connectOrCreate: {
+                                    where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
+                                    create: profileData,
                                 },
                             },
-                        })
-                    }
+                        },
+                    })
                 }
-            },
-            { timeout: timeout * 1000 }
-        )
-    } catch (error) {
-        console.log(error)
-    }
+            }
+        },
+        { timeout: timeout * 1000 }
+    )
 
     return c.json(
         { message: `Import students successfully: ${data.students.length}` },
