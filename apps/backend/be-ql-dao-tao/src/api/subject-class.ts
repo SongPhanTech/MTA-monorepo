@@ -17,6 +17,8 @@ import { listStudentInfo, populateExcelTemplate, sanitizeFilename } from '../ser
 import { getCurrentDateForReport } from '../utils'
 import { StudentTemplateData } from '../dto/student-info.dto'
 import { getBufferFromUrl } from '../services/template.service'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
+import { read, utils } from 'xlsx'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -339,7 +341,49 @@ const exportExcelListStudentSubjectClass = createRoute({
         },
     },
 })
-
+const uploadExcelImportScore = createRoute({
+    operationId: 'uploadExcelImportScore',
+    path: '/upload-excel-import-score',
+    method: 'post',
+    description:
+        'Import điểm lớp môn học \n\n [subjectClassId] là id của lớp học',
+    tags: ['SubjectClass'],
+    summary: 'Import file nhập điểm',
+    request: {
+        body: {
+            content: {
+                'multipart/form-data': {
+                    schema: UploadExcelModel.extend({
+                        subjectClassId: z.string(), // loại thông tin
+                    }).openapi('uploadExcelImportScore'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                   schema: z.object({
+                       data: z.array(z.number()),
+                       count: z.number(),
+                   }),
+                },
+            },
+            description: 'Tải danh sách thành công',
+        },
+        400: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+            description: 'Invalid file upload',
+        },
+    },
+})
 app.openapi(openSubjectClass, async (c) => {
     const {
         semesterId,
@@ -846,5 +890,96 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
         });
+})
+app.openapi(uploadExcelImportScore, async (c) => {
+    const { file, subjectClassId } = c.req.valid('form')
+
+    const maxFileSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxFileSize) {
+        return c.json({ message: 'File vượt quá 50MB' }, 400)
+    }
+
+    // Đọc file Excel
+    const arrayBuffer = await file.arrayBuffer()
+    const workbook = read(arrayBuffer, { type: 'array' })
+
+    // Lấy sheet đầu tiên
+    const sheetName = workbook.SheetNames[0]
+    if (!sheetName) {
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
+    }
+
+    const sheet = workbook.Sheets[sheetName]
+    if (!sheet) {
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
+    }
+
+    // Chuyển đổi dữ liệu từ sheet thành JSON
+    const rowData = utils.sheet_to_json<string[]>(sheet, { header: 1 })
+
+    // Kiểm tra mã lớp có trùng với đầu vào không để tránh nhập nhầm
+    const cellAddress = 'C4'
+    const cell = sheet[cellAddress]
+    const cellValue = cell ? cell.v : null
+    console.log(`Giá trị ô ${cellAddress}:`, cellValue)
+
+    const subjectClass = await prisma.subjectClass.findFirst({
+        where: { id: subjectClassId }, 
+    })
+
+    if (!subjectClass?.code) {
+        return c.json({ message: 'Không tìm thấy khoá học' }, 400)
+    }
+    if (subjectClass?.code !== cellValue) {
+        return c.json({ message: 'Mã lớp không trùng khớp' }, 400)
+    }
+
+    const scoreUpdates = rowData
+        .slice(11)
+        .map((row) => ({
+            studentCode: row[1],
+            scoreCC: Number(row[5]),
+            scoreTX: Number(row[6]),
+            scoreThi: Number(row[7]),
+        }))
+        .filter((update) => update.studentCode);
+
+
+    const studentCodes = scoreUpdates.map((update) => update.studentCode).filter((code): code is string => Boolean(code));
+    const students = await prisma.student.findMany({
+        where: {
+            active: true,
+            code: { in: studentCodes },
+        },
+        select: {
+            id: true,
+            code: true,
+        },
+    });
+
+    // Update the student scores (assuming the score field exists in studentSubjectScore)
+    const updateResults = [];
+    for (const { studentCode, scoreCC, scoreTX, scoreThi } of scoreUpdates) {
+        const student = students.find(s => s.code === studentCode);
+        if (student) {
+            const res = await prisma.studentSubjectScore.updateMany({
+                where: {
+                    studentId: student.id,
+                    subjectClassId,
+                    active: true,
+                },
+                data: { 
+                    attendanceScore: scoreCC,
+                    midtermScore: scoreTX,
+                    examScore: scoreThi,
+                 },
+            });
+            updateResults.push(res.count);
+        }
+    }
+    const totalUpdated = updateResults.reduce((sum, count) => sum + count, 0);
+    console.log(`Total records updated: ${totalUpdated}`);
+
+    return c.json({ data: updateResults, count: totalUpdated }, 200)
 })
 export default app
