@@ -126,7 +126,6 @@ export default function SubjectClassScore() {
                 : {}),
             // ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             // ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            deletedAt: null,
         },
         include: {
             mainLecturer: {

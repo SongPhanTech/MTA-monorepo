@@ -1,6 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { SpanKind, context, trace } from '@opentelemetry/api'
-import { jwtAuth } from '@workspace/auth/hono'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -57,7 +56,7 @@ const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
+// app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
 
 setupOpenApi(app)
 
