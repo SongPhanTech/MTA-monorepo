@@ -5,60 +5,69 @@ import {
 } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
+    AddStudentToFixedClassModal,
     PutStudentModal,
     PutUpdateProfileModal,
     PutUploadProfileModal,
 } from '@components/modal'
 import {
+    CUSSTOM_VI_LOCALE,
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
+    GENDER_LIST,
     GENDER_MEAN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-
-import { FilterSinhVien } from '@components/filter'
-import EditIcon from '@components/icons/edit'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
     useFindManyStudent,
     useFindManyTemplateFile,
     useFindUniqueFixedClass,
+    useUpdateManyStudent,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
-    Checkbox,
     Col,
+    DatePicker,
     Divider,
     Dropdown,
     Flex,
+    Form,
     Image,
+    Input,
     Menu,
+    Popconfirm,
     Row,
+    Select,
     Tag,
     Tooltip,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookCheckIcon } from 'lucide-react'
+import { BookCheckIcon, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 dayjs.locale('vi')
+
 export default function StudentFixedClassPage() {
     const router = useRouter()
     const fixedClassId = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+    const [open, setOpen] = useState(false)
     const [filters, setFilters] = useState({
         searchText: '',
+        dateOfBirth: [],
     })
 
     const { data: fixedClass } = useFindUniqueFixedClass(
@@ -108,6 +117,11 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
+
+                dateOfBirth: {
+                    gte: filters.dateOfBirth?.[0],
+                    lte: filters.dateOfBirth?.[1],
+                },
             },
         },
         include: {
@@ -159,6 +173,7 @@ export default function StudentFixedClassPage() {
 
     const { data: count } = useCountStudent({
         where: {
+            fixedClassId,
             userProfile: {
                 OR: [
                     {
@@ -172,6 +187,10 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
+                dateOfBirth: {
+                    gte: filters.dateOfBirth?.[0],
+                    lte: filters.dateOfBirth?.[1],
+                },
             },
         },
     })
@@ -183,15 +202,9 @@ export default function StudentFixedClassPage() {
         []
     )
     const { onOpen } = useDisclosure<{
-        tag?: string
-        preSelectedValues?: {
-            trainingObjectTypeId?: string
-            trainingCourseId?: string
-            fixedClassId?: string
-        }
-        id?: string | null
+        id: string
     }>({
-        tag: PutStudentModal.name,
+        tag: AddStudentToFixedClassModal.name,
     })
 
     const { onOpen: onOpenUpload } = useDisclosure<string>({
@@ -215,10 +228,9 @@ export default function StudentFixedClassPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({
-            preSelectedValues: {},
-        })
+        onOpen({ id: fixedClassId })
     }
+
     const handleModalUpload = (type: string) => {
         if (type === 'upload') {
             onOpenUpload('SV')
@@ -227,6 +239,7 @@ export default function StudentFixedClassPage() {
         }
     }
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
+    const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -235,9 +248,33 @@ export default function StudentFixedClassPage() {
                     id,
                 },
                 data: {
-                    deletedAt: new Date(),
+                    fixedClassId: null,
                 },
             })
+            setSelectedRowKeys([])
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    async function handleDeleteMulti() {
+        try {
+            showSpinner()
+            if (selectedRowKeys?.length > 0) {
+                await updateManyUserProfile({
+                    where: {
+                        id: {
+                            in: selectedRowKeys,
+                        },
+                    },
+                    data: {
+                        fixedClassId: null,
+                    },
+                })
+            }
+            setOpen(false)
+            setSelectedRowKeys([])
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -249,7 +286,7 @@ export default function StudentFixedClassPage() {
 
     const handleFilterChange = (
         key: string,
-        value: string | { startDate?: string; endDate?: string }
+        value: string | { startDate?: string; endDate?: string } | string[]
     ) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -316,6 +353,14 @@ export default function StudentFixedClassPage() {
         </Menu>
     )
 
+    const handleCancel = () => {
+        setOpen(false)
+    }
+
+    const showPopconfirm = () => {
+        setOpen(true)
+    }
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -332,21 +377,114 @@ export default function StudentFixedClassPage() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col flex="1 1">
-                            <FilterSinhVien
-                                handleFilterChange={handleFilterChange}
-                                filters={filters}
-                                setFilters={setFilters}
-                            />
+                        <Col span={12}>
+                            <Flex>
+                                <Form.Item name="searchText">
+                                    <Input
+                                        id="search"
+                                        onChange={(e) =>
+                                            handleFilterChange(
+                                                'searchText',
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="Tìm kiếm"
+                                        style={{
+                                            width: 200,
+                                            marginRight: 8,
+                                            height: 32,
+                                        }}
+                                        prefix={
+                                            <Search
+                                                size={16}
+                                                style={{
+                                                    color: 'rgba(0, 0, 0, 0.25)',
+                                                }}
+                                            />
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="gender"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Chọn giới tính"
+                                        options={GENDER_LIST.map((i) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        })}
+                                        mode="multiple"
+                                        style={{
+                                            width: 200,
+                                            marginRight: 8,
+                                            height: 32,
+                                        }}
+                                        onChange={(val) =>
+                                            handleFilterChange('gender', val)
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                                <DatePicker.RangePicker
+                                    placeholder={['Từ ngày', 'Đến ngày']}
+                                    style={{
+                                        width: 300,
+                                        marginRight: 8,
+                                        height: 32,
+                                    }}
+                                    allowClear
+                                    onChange={(dates, dateStrings) => {
+                                        handleFilterChange(
+                                            'dateOfBirth',
+                                            dates
+                                                ? [
+                                                      dateStrings[0],
+                                                      dateStrings[1],
+                                                  ]
+                                                : []
+                                        )
+                                    }}
+                                    locale={CUSSTOM_VI_LOCALE}
+                                    format="DD/MM/YYYY"
+                                />
+                            </Flex>
                         </Col>
+
                         {/* Hàng chứa các button */}
-                        <Col xs={24}>
+                        <Col xs={12}>
                             <Flex
                                 justify="end"
                                 wrap="wrap"
                                 gap="8px"
                                 className="mt-1"
                             >
+                                <Popconfirm
+                                    title="Xác nhận xóa dữ liệu?"
+                                    description="Bạn có chắc chắn muốn xoá những sinh viên đã chọn ra khỏi lớp này không?"
+                                    open={open}
+                                    onConfirm={handleDeleteMulti}
+                                    onCancel={handleCancel}
+                                >
+                                    <Button
+                                        disabled={selectedRowKeys?.length <= 0}
+                                        onClick={showPopconfirm}
+                                        type="primary"
+                                    >
+                                        {selectedRowKeys?.length > 0 && (
+                                            <span>
+                                                ({selectedRowKeys?.length})
+                                            </span>
+                                        )}
+                                        Xoá SV khỏi lớp
+                                    </Button>
+                                </Popconfirm>
                                 <Button type="primary">In danh sách</Button>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -379,14 +517,20 @@ export default function StudentFixedClassPage() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys: any) =>
+                                setSelectedRowKeys(selectedKeys),
+                        }}
                         columns={[
-                            {
-                                title: '',
-                                width: 30,
-                                align: 'center',
-                                fixed: 'left',
-                                render: () => <Checkbox />,
-                            },
+                            // {
+                            //     title: '',
+                            //     width: 30,
+                            //     align: 'center',
+                            //     fixed: 'left',
+                            //     render: () => <Checkbox />,
+                            // },
                             {
                                 title: 'STT',
                                 width: 60,
@@ -462,17 +606,22 @@ export default function StudentFixedClassPage() {
                                 title: 'Ngành',
                                 width: 150,
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor
-                                        ?.trainingField?.name
+                                    return (
+                                        record?.fixedClass?.curriculumVersion
+                                            ?.curriculum?.trainingMajor
+                                            ?.trainingField?.name || ''
+                                    )
                                 },
                             },
                             {
                                 title: 'Chuyên ngành',
                                 width: 180,
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor?.name
+                                    return (
+                                        record?.fixedClass?.curriculumVersion
+                                            ?.curriculum?.trainingMajor?.name ||
+                                        ''
+                                    )
                                 },
                             },
                             {

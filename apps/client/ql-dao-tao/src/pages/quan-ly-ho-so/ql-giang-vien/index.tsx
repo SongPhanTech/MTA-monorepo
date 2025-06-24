@@ -372,10 +372,7 @@ export default function UserProfilePageLecture() {
 
                         <Col span={7}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={handleModal}
-                                    type="primary"
-                                >
+                                <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
 

@@ -1,8 +1,7 @@
-import { fetchThongTinBaoCao } from '@api/userProfile'
 import useSpinner from '@hooks/spinner'
-import { Modal, Table, message } from 'antd'
+import { Modal, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ThongTinBaoCaoModal = () => {
@@ -11,21 +10,6 @@ const ThongTinBaoCaoModal = () => {
         tag: ThongTinBaoCaoModal.name,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    useEffect(() => {
-        if (!isOpen) return
-
-        showSpinner()
-        fetchThongTinBaoCao()
-            .then(async (data) => {
-                const flatData = flattenSchema(data)
-                setLabels(flatData)
-            })
-            .catch(() => {
-                message.error('Lỗi khi tải thông tin báo cáo')
-            })
-            .finally(() => hideSpinner())
-    }, [isOpen, showSpinner, hideSpinner])
 
     const flattenSchema = (schema: any[], parentPath = ''): any[] => {
         return schema.flatMap((item, index) => {

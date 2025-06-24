@@ -1,6 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
-import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
@@ -33,16 +32,6 @@ const PutUpdateProfileModal = () => {
             const formData = new FormData()
             formData.append('file', output.file)
             formData.append('type', typeId)
-            const res = await fetchUploadFile(
-                formData,
-                'api/UserProfile/upload-excel-update-user-profile'
-            )
-            const data = await res.json()
-            if (res.ok) {
-                message.success('Tải lên thành công!')
-            } else {
-                message.error(data.message || 'Tải lên thất bại!')
-            }
 
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

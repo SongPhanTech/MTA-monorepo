@@ -1,6 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { queryClient } from '@api/index'
-import { fetchUploadFile } from '@api/userProfile'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -36,39 +34,6 @@ const PutUploadFixedClassModal = () => {
         if (!output.file || output.file.length === 0) {
             message.error('Vui lòng chọn một file để tải lên.')
             return
-        }
-        const uploadFile = output.file[0]
-
-        if (!uploadFile.originFileObj) {
-            message.error('Tệp tải lên không hợp lệ.')
-            return
-        }
-
-        try {
-            showSpinner()
-
-            const formData = new FormData()
-            formData.append('file', uploadFile.originFileObj as File)
-            formData.append('trainingCourseId', output.trainingCourseId)
-
-            const res = await fetchUploadFile(
-                formData,
-                'api/fixed-class/FixedClass/upload-excel-create-fixed-class'
-            )
-            const data = await res.json()
-
-            if (res.ok) {
-                message.success('Tải lên thành công!')
-            } else {
-                message.error(data.message || 'Tải lên thất bại!')
-            }
-
-            queryClient.invalidateQueries({ queryKey: ['FixedClass'] })
-            onClose()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
         }
     }
 

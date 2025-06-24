@@ -663,13 +663,13 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingField =
-                                        record.fixedClass.curriculumVersion
+                                        record?.fixedClass?.curriculumVersion
                                             ?.curriculum?.trainingMajor
                                             ?.trainingField?.name
                                     return trainingField === value
                                 },
                                 render: (record) => {
-                                    return record.fixedClass.curriculumVersion
+                                    return record?.fixedClass?.curriculumVersion
                                         ?.curriculum?.trainingMajor
                                         ?.trainingField?.name
                                 },

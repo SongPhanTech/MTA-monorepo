@@ -74,7 +74,6 @@ enum SubjectRequirementType {
   None
   Mandatory
   Optional
-  Elective
 
   @@schema("ql-dao-tao")
 }
@@ -313,32 +312,101 @@ model SurveyAnswer {
 
 /// Điểm môn học SV - lớp môn học
 model StudentSubjectScore {
-  id               String                    @id() @default(cuid())
+  id               String                                     @id() @default(cuid())
   code             String?
-  active           Boolean                   @default(true)
-  description      String?                   @db.Text()
+  active           Boolean                                    @default(true)
+  description      String?                                    @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt()
-  subjectClass     SubjectClass?             @relation(fields: [subjectClassId], references: [id])
+  createdAt        DateTime                                   @default(now())
+  updatedAt        DateTime                                   @updatedAt()
+  subjectClass     SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
   subjectClassId   String?
-  subjectVersion   SubjectVersion            @relation(fields: [subjectVersionId], references: [id])
+  subjectVersion   SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
-  student          Student                   @relation(fields: [studentId], references: [id])
+  student          Student                                    @relation(fields: [studentId], references: [id])
   studentId        String
-  status           SubjectClassStudentStatus @default(Studying)
+  status           SubjectClassStudentStatus                  @default(Studying)
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
-  bonusScore       Float?
   finalScore       Float?
-  examPostponed    Boolean                   @default(false)
-  exempted         Boolean                   @default(false)
-  withdrew         Boolean                   @default(false)
-  examBanned       Boolean                   @default(false)
-  suspended        Boolean                   @default(false)
+  examPostponed    Boolean                                    @default(false)
+  exempted         Boolean                                    @default(false)
+  withdrew         Boolean                                    @default(false)
+  examBanned       Boolean                                    @default(false)
+  suspended        Boolean                                    @default(false)
+  certificates     ArchivedCertificateOnStudentSubjectScore[]
+  awards           ArchivedAwardOnStudentSubjectScore[]
 
   @@unique([subjectClassId, studentId])
+  @@schema("ql-dao-tao")
+}
+
+model ArchivedCertificateOnStudentSubjectScore {
+  id                    String              @id() @default(cuid())
+  code                  String?
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt()
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+  archivedCertificate   ArchivedCertificate @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId String
+
+  @@unique([studentSubjectScoreId, archivedCertificateId])
+  @@schema("ql-dao-tao")
+}
+
+model ArchivedCertificate {
+  id                  String                                     @id() @default(cuid())
+  code                String?
+  active              Boolean                                    @default(true)
+  description         String?                                    @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime                                   @default(now())
+  updatedAt           DateTime                                   @updatedAt()
+  name                String
+  englishName         String?
+  finalScore          Float
+  documentPaths       String[]
+  studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
+
+  @@schema("ql-dao-tao")
+}
+
+model ArchivedAwardOnStudentSubjectScore {
+  id                    String              @id() @default(cuid())
+  code                  String?
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt()
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+  archivedAward         ArchivedAward       @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId       String
+
+  @@unique([studentSubjectScoreId, archivedAwardId])
+  @@schema("ql-dao-tao")
+}
+
+model ArchivedAward {
+  id                  String                               @id() @default(cuid())
+  code                String?
+  active              Boolean                              @default(true)
+  description         String?                              @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime                             @default(now())
+  updatedAt           DateTime                             @updatedAt()
+  name                String
+  englishName         String?
+  bonusScore          Float
+  documentPaths       String[]
+  studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -1033,8 +1101,8 @@ model Student {
   fixedClass           FixedClass?           @relation(fields: [fixedClassId], references: [id])
   fixedClassId         String?
   subjectClassStudent  StudentSubjectScore[]
-  userProfileId        String?
-  userProfile          UserProfile?          @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
+  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
   trainingLevel        TrainingLevel?        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String?
   trainingObjectType   TrainingObjectType?   @relation(fields: [trainingObjectTypeId], references: [id])
@@ -1275,10 +1343,10 @@ model UserProfile {
   currentAddress             String?
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?
-  districtcurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtcurrentAddressId], references: [Id])
-  districtcurrentAddressId   String?
-  communecurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communecurrentAddressId], references: [Id])
-  communecurrentAddressId    String?
+  districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
+  districtCurrentAddressId   String?
+  communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddressId    String?
   dateOfBirth                DateTime?
   placeOfBirth               String?
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
@@ -1307,7 +1375,7 @@ model UserProfile {
   religionId                 String?
   ethnicity                  DM_DanToc?        @relation(fields: [ethnicityId], references: [Id])
   ethnicityId                String?
-  provinceHometown           DM_Tinh?          @relation(name: "ProvineceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?
   districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
   districtHometownId         String?
@@ -1829,7 +1897,7 @@ model DM_Tinh {
   iDM_DonViHanhChinhId        String?
   huyen                       DM_QuanHuyen[]
   xaPhuong                    DM_XaPhuong[]
-  userProfileHometown         UserProfile[]      @relation("ProvineceHometown")
+  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")

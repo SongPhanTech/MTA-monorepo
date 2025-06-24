@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import type { Session, SessionStatus } from '..'
 
@@ -24,12 +24,14 @@ const SessionProvider: React.FC<{
         session
     )
     const [status, setStatus] = React.useState<SessionStatus | null>(null)
-    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
     useEffect(() => {
-        if (router.pathname !== '/') {
-            localStorage.setItem('lastPage', router.pathname)
+        const url = `${pathname}${!searchParams.toString() ? '' : `?${searchParams.toString()}`}`
+        if (pathname !== '/') {
+            localStorage.setItem('lastPage', url)
         }
-    }, [router.pathname])
+    }, [pathname, searchParams])
 
     return (
         <SessionContext.Provider

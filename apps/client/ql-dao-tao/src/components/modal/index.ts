@@ -1,4 +1,6 @@
+import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
+import ModalGPASemester from './modal-diem-trung-binh-lop'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingMajorModal from './put-chuyen-nganh'
@@ -32,8 +34,6 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutUserProfileLectureModal from './put-user-profile-lecture-modal'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
-import ModalGPASemester from './modal-diem-trung-binh-lop'
-import PutHocHamHocViModal from './quan-ly-ho-so/modals/put-hoc-ham-hoc-vi'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -70,5 +70,5 @@ export {
     ModalPrintToKQHT,
     PutOneSubjectClassModal,
     ModalGPASemester,
-    PutHocHamHocViModal,
+    AddStudentToFixedClassModal,
 }

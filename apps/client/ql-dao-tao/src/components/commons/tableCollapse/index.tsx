@@ -132,6 +132,8 @@ const TableCollapse = <T extends Data>({
                 width: 60,
                 className: 'sticky left-0 z-50',
                 render: (_, record) => {
+                    if (record.$type !== 'child') return ''
+
                     const order = allChildren.findIndex(
                         (item) => item.key === record.key
                     )

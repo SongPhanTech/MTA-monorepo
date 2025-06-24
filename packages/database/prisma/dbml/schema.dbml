@@ -115,19 +115,86 @@ Table StudentSubjectScore {
   attendanceScore Float
   midtermScore Float
   examScore Float
-  bonusScore Float
   finalScore Float
   examPostponed Boolean [not null, default: false]
   exempted Boolean [not null, default: false]
   withdrew Boolean [not null, default: false]
   examBanned Boolean [not null, default: false]
   suspended Boolean [not null, default: false]
+  certificates ArchivedCertificateOnStudentSubjectScore [not null]
+  awards ArchivedAwardOnStudentSubjectScore [not null]
 
   indexes {
     (subjectClassId, studentId) [unique]
   }
 
   Note: 'Điểm môn học SV - lớp môn học'
+}
+
+Table ArchivedCertificateOnStudentSubjectScore {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  studentSubjectScore StudentSubjectScore [not null]
+  studentSubjectScoreId String [not null]
+  archivedCertificate ArchivedCertificate [not null]
+  archivedCertificateId String [not null]
+
+  indexes {
+    (studentSubjectScoreId, archivedCertificateId) [unique]
+  }
+}
+
+Table ArchivedCertificate {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  englishName String
+  finalScore Float [not null]
+  documentPaths String[] [not null]
+  studentSubjectScore ArchivedCertificateOnStudentSubjectScore [not null]
+}
+
+Table ArchivedAwardOnStudentSubjectScore {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  studentSubjectScore StudentSubjectScore [not null]
+  studentSubjectScoreId String [not null]
+  archivedAward ArchivedAward [not null]
+  archivedAwardId String [not null]
+
+  indexes {
+    (studentSubjectScoreId, archivedAwardId) [unique]
+  }
+}
+
+Table ArchivedAward {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  englishName String
+  bonusScore Float [not null]
+  documentPaths String[] [not null]
+  studentSubjectScore ArchivedAwardOnStudentSubjectScore [not null]
 }
 
 Table SchoolYear {
@@ -793,8 +860,8 @@ Table Student {
   fixedClass FixedClass
   fixedClassId String
   subjectClassStudent StudentSubjectScore [not null]
-  userProfileId String
-  userProfile UserProfile
+  userProfileId String [not null]
+  userProfile UserProfile [not null]
   trainingLevel TrainingLevel
   trainingLevelId String
   trainingObjectType TrainingObjectType
@@ -1016,10 +1083,10 @@ Table UserProfile {
   currentAddress String
   provinceCurrentAddress DM_Tinh
   provinceCurrentAddressId String
-  districtcurrentAddress DM_QuanHuyen
-  districtcurrentAddressId String
-  communecurrentAddress DM_XaPhuong
-  communecurrentAddressId String
+  districtCurrentAddress DM_QuanHuyen
+  districtCurrentAddressId String
+  communeCurrentAddress DM_XaPhuong
+  communeCurrentAddressId String
   dateOfBirth DateTime
   placeOfBirth String
   provinceOfBirth DM_Tinh
@@ -2004,7 +2071,6 @@ Enum SubjectRequirementType {
   None
   Mandatory
   Optional
-  Elective
 }
 
 Enum SubjectClassSchedule {
@@ -2121,6 +2187,14 @@ Ref: StudentSubjectScore.subjectClassId > SubjectClass.id
 Ref: StudentSubjectScore.subjectVersionId > SubjectVersion.id
 
 Ref: StudentSubjectScore.studentId > Student.id
+
+Ref: ArchivedCertificateOnStudentSubjectScore.studentSubjectScoreId > StudentSubjectScore.id
+
+Ref: ArchivedCertificateOnStudentSubjectScore.archivedCertificateId > ArchivedCertificate.id
+
+Ref: ArchivedAwardOnStudentSubjectScore.studentSubjectScoreId > StudentSubjectScore.id
+
+Ref: ArchivedAwardOnStudentSubjectScore.archivedAwardId > ArchivedAward.id
 
 Ref: Semester.schoolYearId > SchoolYear.id
 
@@ -2240,9 +2314,9 @@ Ref: UserProfile.userId > User.id
 
 Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
 
-Ref: UserProfile.districtcurrentAddressId > DM_QuanHuyen.Id
+Ref: UserProfile.districtCurrentAddressId > DM_QuanHuyen.Id
 
-Ref: UserProfile.communecurrentAddressId > DM_XaPhuong.Id
+Ref: UserProfile.communeCurrentAddressId > DM_XaPhuong.Id
 
 Ref: UserProfile.provinceOfBirthId > DM_Tinh.Id
 

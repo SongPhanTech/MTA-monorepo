@@ -96,12 +96,6 @@ docker-compose stop
  ┃ ┃ ┃ ┗ 📜index.tsx
  ┃ ┣ 📂lib
  ┃ ┃ ┣ 📂api
- ┃ ┃ ┃ ┣ 📂open-api
- ┃ ┃ ┃ ┃ ┗ 📂hooks
- ┃ ┃ ┃ ┃ ┃ ┣ 📜appComponents.ts
- ┃ ┃ ┃ ┃ ┃ ┣ 📜appContext.ts
- ┃ ┃ ┃ ┃ ┃ ┣ 📜appFetcher.ts
- ┃ ┃ ┃ ┃ ┃ ┗ 📜appSchemas.ts
  ┃ ┃ ┃ ┗ 📜index.ts
  ┃ ┃ ┣ 📂casl
  ┃ ┃ ┃ ┣ 📜ability.ts

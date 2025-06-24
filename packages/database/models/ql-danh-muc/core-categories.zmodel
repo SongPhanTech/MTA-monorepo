@@ -204,7 +204,7 @@ model DM_Tinh extends CoreBase {
 
   huyen                       DM_QuanHuyen[]
   xaPhuong                    DM_XaPhuong[]
-  userProfileHometown         UserProfile[]      @relation("ProvineceHometown")
+  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")

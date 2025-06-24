@@ -1,126 +1,15 @@
 import { PrinterOutlined } from '@ant-design/icons'
+import { useScoreConverter } from '@hooks/scoreConverter'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
+import { SubjectRequirementType } from '@workspace/db'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
-import { Button, Modal } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 
 dayjs.locale('vi')
-
-const mockScoreData = [
-    {
-        id: 1,
-        name: 'Vật lý đại cương 1',
-        credit: 3,
-        score10: 7.5,
-        score4: 3.0,
-        letter: 'B',
-    },
-    {
-        id: 2,
-        name: 'Thí nghiệm Vật lý đại cương 1',
-        credit: 1,
-        score10: 7.0,
-        score4: 3.0,
-        letter: 'B',
-    },
-    {
-        id: 3,
-        name: 'Vật lý đại cương 2',
-        credit: 4,
-        score10: 6.8,
-        score4: 2.5,
-        letter: 'C+',
-    },
-    {
-        id: 4,
-        name: 'Thí nghiệm Vật lý đại cương 2',
-        credit: 1,
-        score10: 6.7,
-        score4: 2.5,
-        letter: 'C+',
-    },
-    {
-        id: 5,
-        name: 'Hình giải tích và đại số tuyến tính',
-        credit: 4,
-        score10: 8.7,
-        score4: 3.7,
-        letter: 'A',
-    },
-    {
-        id: 6,
-        name: 'Giải tích 1',
-        credit: 3,
-        score10: 7.7,
-        score4: 3.0,
-        letter: 'B',
-    },
-    {
-        id: 7,
-        name: 'Giải tích 2',
-        credit: 3,
-        score10: 8.0,
-        score4: 3.0,
-        letter: 'B',
-    },
-    {
-        id: 8,
-        name: 'Lý thuyết xác suất thống kê',
-        credit: 3,
-        score10: 8.4,
-        score4: 3.5,
-        letter: 'B+',
-    },
-    {
-        id: 9,
-        name: 'Lập trình cơ bản',
-        credit: 4,
-        score10: 9.4,
-        score4: 4.0,
-        letter: 'A+',
-    },
-    {
-        id: 10,
-        name: 'Tiếng Anh B1.1',
-        credit: 2,
-        score10: 10.0,
-        score4: 4.0,
-        letter: 'A+',
-    },
-    {
-        id: 11,
-        name: 'Tiếng Anh B1.2',
-        credit: 2,
-        score10: 9.0,
-        score4: 4.0,
-        letter: 'A+',
-    },
-    {
-        isGraduationPart: true,
-        title: 'Học phần tốt nghiệp',
-        items: [
-            {
-                id: 50,
-                name: 'Thực tập công nghiệp',
-                credits: 3,
-                score10: 8.0,
-                score4: 3.5,
-                letter: 'B+',
-            },
-            {
-                id: 51,
-                name: 'Đồ án tốt nghiệp',
-                credits: 6,
-                score10: 7.7,
-                score4: 3.0,
-                letter: 'B',
-            },
-        ],
-    },
-]
 
 type ModalPrintToKQHTInput = {
     dataTable: any
@@ -130,36 +19,40 @@ type ModalPrintToKQHTInput = {
 const ModalPrintToKQHT = () => {
     const formattedDate = `..., ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
+    const [signerName, setSignerName] = useState('Đại tá, TS Nguyễn Trọng Lưu')
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
         tag: ModalPrintToKQHT.name,
     })
 
-    console.log(input?.dataStudent)
-
     const { data: subjectScoreData } = useFindUniqueCurriculumVersion({
         where: {
             id: input?.dataStudent?.curriculumVersionId,
         },
-
         include: {
+            fixedClasses: {
+                include: {
+                    students: {
+                        where: {
+                            id: input?.dataStudent?.id,
+                        },
+                    },
+                    trainingCourse: {
+                        include: {
+                            scoreConverts: true,
+                        },
+                    },
+                },
+            },
             trainingBlocks: {
                 include: {
                     subjects: {
                         include: {
                             subject: {
                                 include: {
-                                    subjectClass: {
+                                    studentSubjectScore: {
                                         where: {
-                                            subjectClassStudent: {
-                                                every: {
-                                                    studentId:
-                                                        input?.dataStudent?.id,
-                                                },
-                                            },
-                                        },
-                                        include: {
-                                            subjectClassStudent: true,
+                                            studentId: input?.dataStudent?.id,
                                         },
                                     },
                                 },
@@ -171,7 +64,9 @@ const ModalPrintToKQHT = () => {
         },
     })
 
-    console.log(subjectScoreData)
+    const { convertScore } = useScoreConverter(
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.scoreConverts
+    )
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -296,8 +191,15 @@ const ModalPrintToKQHT = () => {
             width={900}
             style={{ top: 20 }}
             title={
-                <div className="flex items-center justify-between w-[98%]">
+                <div className="flex items-center justify-between w-[95%]">
                     <span>Kết quả học tập</span>
+                    {/* TODO: Làm select chọn trưởng phòng đào tạo */}
+                    <Input
+                        placeholder="Nhập tên người ký"
+                        value={signerName}
+                        onChange={(e) => setSignerName(e.target.value)}
+                        className="w-64"
+                    />
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={handlePrint}
@@ -341,7 +243,7 @@ const ModalPrintToKQHT = () => {
                         {basicInfoCol1?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
-                                className="flex flex-col gap-1 sm:flex-row sm:gap-0 md:gap-2 lg:gap-10 w-full"
+                                className="flex gap-2 w-full"
                             >
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
@@ -356,7 +258,7 @@ const ModalPrintToKQHT = () => {
                         {basicInfoCol2?.filter(Boolean).map((item, index) => (
                             <div
                                 key={item?.title || index}
-                                className="flex flex-col gap-1 sm:flex-row sm:gap-0 md:gap-2 lg:gap-10"
+                                className="flex gap-2 w-full"
                             >
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
@@ -410,65 +312,139 @@ const ModalPrintToKQHT = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {mockScoreData.map((item, index) =>
-                                item.isGraduationPart ? (
-                                    <>
-                                        <tr
-                                            key={`graduation-title-${item.title}`}
-                                        >
-                                            <td
-                                                colSpan={6}
-                                                className="border border-black px-1 py-1 font-semibold"
-                                            >
-                                                {item.title}
-                                            </td>
-                                        </tr>
-                                        {item.items.map((subItem, index) => (
-                                            <tr key={subItem.id}>
+                            {(() => {
+                                // Tách môn học thành 2 nhóm: thường và tốt nghiệp
+                                const regularSubjects: any[] = []
+                                const graduationSubjects: any[] = []
+
+                                subjectScoreData?.trainingBlocks[0]?.subjects
+                                    ?.filter(
+                                        (subjectItem: any) =>
+                                            subjectItem.print === true
+                                    )
+                                    ?.forEach(
+                                        (subjectItem: any, index: number) => {
+                                            if (subjectItem.graduation) {
+                                                graduationSubjects.push({
+                                                    subjectItem,
+                                                    index,
+                                                })
+                                            } else {
+                                                regularSubjects.push({
+                                                    subjectItem,
+                                                    index,
+                                                })
+                                            }
+                                        }
+                                    )
+
+                                // Render các môn thường trước
+                                const regularRows = regularSubjects?.map(
+                                    ({ subjectItem }, originalIndex) => {
+                                        const subject = subjectItem.subject
+                                        const score =
+                                            subject.studentSubjectScore?.[0]
+                                        const isOptional =
+                                            subjectItem.type ===
+                                            SubjectRequirementType.Optional
+                                        const notForFinalScore =
+                                            !subjectItem.useForFinalScore
+
+                                        const score10 = score?.finalScore || 0
+                                        const score4 =
+                                            convertScore(score10).base4
+                                        const letterGrade =
+                                            convertScore(score10).letter
+
+                                        return (
+                                            <tr key={subject.id}>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {index + 1}
+                                                    {originalIndex + 1}
                                                 </td>
-                                                <td className="border border-black px-1 py-1">
-                                                    {subItem.name}
-                                                </td>
-                                                <td className="border border-black px-1 py-1 text-center">
-                                                    {subItem.credits}
-                                                </td>
-                                                <td className="border border-black px-1 py-1 text-center">
-                                                    {subItem.score10}
+                                                <td
+                                                    className={`border border-black px-1 py-1 ${notForFinalScore ? 'italic' : ''}`}
+                                                >
+                                                    {isOptional ? '* ' : ''}
+                                                    {subject.name}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {subItem.score4}
+                                                    {subject.credit}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {subItem.letter}
+                                                    {score10}
+                                                </td>
+                                                <td className="border border-black px-1 py-1 text-center">
+                                                    {score4}
+                                                </td>
+                                                <td className="border border-black px-1 py-1 text-center">
+                                                    {letterGrade}
                                                 </td>
                                             </tr>
-                                        ))}
-                                    </>
-                                ) : (
-                                    <tr key={item.id}>
-                                        <td className="border border-black px-1 py-1 text-center">
-                                            {index + 1}
-                                        </td>
-                                        <td className="border border-black px-1 py-1">
-                                            {item.name}
-                                        </td>
-                                        <td className="border border-black px-1 py-1 text-center">
-                                            {item.credit}
-                                        </td>
-                                        <td className="border border-black px-1 py-1 text-center">
-                                            {item.score10}
-                                        </td>
-                                        <td className="border border-black px-1 py-1 text-center">
-                                            {item.score4}
-                                        </td>
-                                        <td className="border border-black px-1 py-1 text-center">
-                                            {item.letter}
-                                        </td>
-                                    </tr>
+                                        )
+                                    }
                                 )
-                            )}
+
+                                // Render các môn tốt nghiệp sau (sử dụng flatMap)
+                                const graduationRows =
+                                    graduationSubjects?.flatMap(
+                                        ({ subjectItem }, originalIndex) => {
+                                            const subject = subjectItem.subject
+                                            const score =
+                                                subject.studentSubjectScore?.[0]
+                                            const isOptional =
+                                                subjectItem.type ===
+                                                SubjectRequirementType.Optional
+                                            const notForFinalScore =
+                                                !subjectItem.useForFinalScore
+
+                                            const score10 =
+                                                score?.finalScore || 0
+                                            const score4 =
+                                                convertScore(score10).base4
+                                            const letterGrade =
+                                                convertScore(score10).letter
+
+                                            return [
+                                                <tr
+                                                    key={`graduation-header-${subject.id}`}
+                                                >
+                                                    <td
+                                                        colSpan={6}
+                                                        className="border border-black px-1 py-1 font-semibold"
+                                                    >
+                                                        Học phần tốt nghiệp
+                                                    </td>
+                                                </tr>,
+                                                <tr key={subject.id}>
+                                                    <td className="border border-black px-1 py-1 text-center">
+                                                        {originalIndex + 1}
+                                                    </td>
+                                                    <td
+                                                        className={`border border-black px-1 py-1 ${notForFinalScore ? 'italic' : ''}`}
+                                                    >
+                                                        {isOptional ? '* ' : ''}
+                                                        {subject.name}
+                                                    </td>
+                                                    <td className="border border-black px-1 py-1 text-center">
+                                                        {subject.credit}
+                                                    </td>
+                                                    <td className="border border-black px-1 py-1 text-center">
+                                                        {score10}
+                                                    </td>
+                                                    <td className="border border-black px-1 py-1 text-center">
+                                                        {score4}
+                                                    </td>
+                                                    <td className="border border-black px-1 py-1 text-center">
+                                                        {letterGrade}
+                                                    </td>
+                                                </tr>,
+                                            ]
+                                        }
+                                    )
+
+                                // Kết hợp cả 2 và giữ nguyên STT
+                                return [...regularRows, ...graduationRows]
+                            })()}
                         </tbody>
                     </table>
                 </div>
@@ -478,7 +454,33 @@ const ModalPrintToKQHT = () => {
                             <div className="italic min-w-32">
                                 Tổng số tín chỉ:
                             </div>
-                            <span className="font-bold">153</span>
+                            <span className="font-bold">
+                                {(() => {
+                                    // Tính tổng số tín chỉ chỉ bao gồm các môn có useForFinalScore = true và print = true
+                                    // TODO: Chưa tính các học phần bổ sung kiến thức, in nghiêng
+                                    const totalCredits =
+                                        subjectScoreData?.trainingBlocks[0]?.subjects
+                                            ?.filter(
+                                                (subjectItem: any) =>
+                                                    subjectItem.print ===
+                                                        true &&
+                                                    subjectItem.useForFinalScore ===
+                                                        true
+                                            )
+                                            ?.reduce(
+                                                (
+                                                    sum: number,
+                                                    subjectItem: any
+                                                ) =>
+                                                    sum +
+                                                    (subjectItem.subject
+                                                        ?.credit || 0),
+                                                0
+                                            )
+
+                                    return totalCredits || 0
+                                })()}
+                            </span>
                         </div>
                         <div>
                             <span>
@@ -499,16 +501,16 @@ const ModalPrintToKQHT = () => {
                             <span>Trưởng phòng đào tạo</span>
                         </div>
                         <div className="min-h-40 flex items-end justify-center">
-                            <span>Đại tá, TS Nguyễn Trọng Lưu</span>
+                            <span>{signerName}</span>
                         </div>
                     </div>
                 </div>
                 <div className="mt-4 text-sm leading-[1.5] whitespace-pre-wrap">
                     <p className="italic font-[500]">Ghi chú:</p>
-                    <p>- Học phần có đánh dấu * là học phần tự chọn.</p>
+                    <p>- Học phần có đánh dấu * là học phần tự chọn</p>
                     <p>
-                        - Học phần tin nghiệm và học phần bổ sung kiến thức
-                        không được tính vào trung bình chung tích lũy.
+                        - Học phần in nghiêng và học phần bổ sung kiến thức
+                        không được tính vào trung bình chung tích lũy
                     </p>
                     <p>- Hệ thống điểm được quy định theo:</p>
 

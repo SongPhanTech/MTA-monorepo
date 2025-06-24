@@ -461,10 +461,11 @@ export default function TrainingProgramSubjects() {
                                                     e.target.value
                                                 )
                                             }
+                                            className="py-0"
                                             placeholder="Nhập tên ngành..."
                                             style={{
-                                                height: 40,
                                                 marginRight: 8,
+                                                height: '32px',
                                             }}
                                             prefix={
                                                 <Search
@@ -499,9 +500,6 @@ export default function TrainingProgramSubjects() {
                                                         input.toLowerCase()
                                                     )
                                             }
-                                            style={{
-                                                height: 40,
-                                            }}
                                         />
                                     </Form.Item>
                                 </Col>
@@ -529,7 +527,6 @@ export default function TrainingProgramSubjects() {
                                         })
                                     }
                                     type="primary"
-                                    className="h-[40px]"
                                 >
                                     <PlusOutlined />
                                     Thêm khối kiến thức
@@ -639,7 +636,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                             },
                             {
-                                title: 'ĐV QL',
+                                title: 'Đơn vị quản lý',
                                 dataIndex: [
                                     'subject',
                                     'managementOrganization',
@@ -693,7 +690,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Số tiết TKB',
                                 dataIndex: ['subject', 'period'],
-                                width: 110,
+                                width: 120,
                                 align: 'center',
                                 sorter: (a, b) => {
                                     const sortA = a.subject?.period || 0
@@ -771,7 +768,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'KT, Thi',
                                 dataIndex: ['subject', 'numberOfExam'],
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 sorter: (a, b) => {
                                     const sortA = a.subject?.numberOfExam || 0

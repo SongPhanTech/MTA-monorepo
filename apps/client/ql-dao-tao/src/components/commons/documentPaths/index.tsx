@@ -6,12 +6,11 @@ import {
 import { Tooltip, Typography, Upload, message } from 'antd'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
+import type { FormInstance } from 'antd/es/form'
 
 const { Dragger } = Upload
 const { Link } = Typography
-
-import { fetchGeneratePresignedUrl } from '@api/model/modelComponents'
-import type { FormInstance } from 'antd/es/form'
 
 interface DocumentPathsComponentProps {
     form: FormInstance
@@ -42,14 +41,12 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     const handleCustomUpload = async (file: File) => {
         try {
             const extension = file.name.split('.').pop() || ''
-            const resPresignedUrl = await fetchGeneratePresignedUrl({
-                body: {
-                    path: 'tai-lieu-ctdt',
-                    extension: extension,
-                },
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'tai-lieu-ctdt',
+                extension: extension,
             })
 
-            await axios.put(resPresignedUrl.url, file, {
+            await axios.put(resPresignedUrl.data.url, file, {
                 onUploadProgress: (progressEvent) => {
                     const { loaded, total = 1, estimated = 0 } = progressEvent
                     const percent = Math.floor((loaded * 100) / total)
@@ -58,7 +55,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                             ...form.getFieldValue('files'),
                             [file.name]: {
                                 ...file,
-                                url: resPresignedUrl.fileName,
+                                url: resPresignedUrl.data.fileName,
                                 progress: percent,
                                 timeLeft: estimated,
                             },
@@ -71,13 +68,13 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
             setFileList((prev: UploadedFileItem[]) => {
                 const newList = [
                     ...prev,
-                    { file, fileName: resPresignedUrl.fileName },
+                    { file, fileName: resPresignedUrl.data.fileName },
                 ]
                 const rawPaths = form.getFieldValue('documentPaths')
                 const currentPaths = Array.isArray(rawPaths) ? rawPaths : []
                 form.setFieldValue('documentPaths', [
                     ...currentPaths,
-                    resPresignedUrl.fileName,
+                    resPresignedUrl.data.fileName,
                 ])
                 return newList
             })

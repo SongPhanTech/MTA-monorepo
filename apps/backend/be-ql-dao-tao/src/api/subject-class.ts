@@ -13,6 +13,17 @@ import {
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
 import { ListOf } from '../zod/base'
+import {
+    listStudentInfo,
+    populateExcelTemplate,
+    sanitizeFilename,
+} from '../services/subject-class.service'
+import { getCurrentDateForReport } from '../utils'
+import type { StudentTemplateData } from '../dto/student-info.dto'
+import { getBufferFromUrl } from '../services/template.service'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
+import { read, utils } from 'xlsx'
+
 const app = new OpenAPIHono({ strict: false })
 
 const openSubjectClass = createRoute({
@@ -287,6 +298,97 @@ const putManySubjectClass = createRoute({
     },
 })
 
+const exportExcelListStudentSubjectClass = createRoute({
+    operationId: 'exportStudentSubjectClassExcel',
+    path: '/export-xlsx-list-student-subject-class',
+    description: 'Xuất file xlsx danh sách sinh viên trong lớp môn học',
+    tags: ['SubjectClass'],
+    summary: 'Xuất file xlsx danh sách sinh viên trong lớp môn học',
+    method: 'get',
+    request: {
+        query: z.object({
+            subjectClassId: z.string().openapi('subjectClassId', {
+                description: 'ID của lớp môn học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student SubjectClass as .xlsx',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    {
+                        schema: z
+                            .any()
+                            .openapi({ type: 'string', format: 'binary' }),
+                    },
+            },
+        },
+        400: {
+            description: 'Invalid file upload',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+const uploadExcelImportScore = createRoute({
+    operationId: 'uploadExcelImportScore',
+    path: '/upload-excel-import-score',
+    method: 'post',
+    description:
+        'Import điểm lớp môn học \n\n [subjectClassId] là id của lớp học',
+    tags: ['SubjectClass'],
+    summary: 'Import file nhập điểm',
+    request: {
+        body: {
+            content: {
+                'multipart/form-data': {
+                    schema: UploadExcelModel.extend({
+                        subjectClassId: z.string(), // loại thông tin
+                    }).openapi('uploadExcelImportScore'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        data: z.array(z.number()),
+                        count: z.number(),
+                    }),
+                },
+            },
+            description: 'Tải danh sách thành công',
+        },
+        400: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+            description: 'Invalid file upload',
+        },
+    },
+})
 app.openapi(openSubjectClass, async (c) => {
     const {
         semesterId,
@@ -759,5 +861,134 @@ app.openapi(putManySubjectClass, async (c) => {
         .map(({ id }) => id)
 
     return c.json({ success: failedIds.length === 0, failedIds }, 200)
+})
+
+app.openapi(exportExcelListStudentSubjectClass, async (c) => {
+    const { subjectClassId } = c.req.valid('query')
+    const students = await listStudentInfo(subjectClassId)
+    const subjectClass = await prisma.subjectClass.findUnique({
+        where: { id: subjectClassId }, // Tìm kiếm lớp biên chế
+    })
+    if (!subjectClass) {
+        return c.json(
+            { message: `Không tìm thấy lớp biên chế ${subjectClassId}` },
+            404
+        )
+    }
+
+    const { date, month, year } = getCurrentDateForReport()
+
+    const templateData: StudentTemplateData = {
+        date,
+        month,
+        year,
+        className: subjectClass.name,
+        student: students,
+    }
+
+    const templateBuffer = await getBufferFromUrl(
+        'LIST_STUDENT_SUBJECTCLASS_EXCEL'
+    )
+    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
+
+    // Set response headers
+    const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class')
+    return c.body(excelBuffer, 200, {
+        'Content-Type':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
+    })
+})
+app.openapi(uploadExcelImportScore, async (c) => {
+    const { file, subjectClassId } = c.req.valid('form')
+
+    const maxFileSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxFileSize) {
+        return c.json({ message: 'File vượt quá 50MB' }, 400)
+    }
+
+    // Đọc file Excel
+    const arrayBuffer = await file.arrayBuffer()
+    const workbook = read(arrayBuffer, { type: 'array' })
+
+    // Lấy sheet đầu tiên
+    const sheetName = workbook.SheetNames[0]
+    if (!sheetName) {
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
+    }
+
+    const sheet = workbook.Sheets[sheetName]
+    if (!sheet) {
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
+    }
+
+    // Chuyển đổi dữ liệu từ sheet thành JSON
+    const rowData = utils.sheet_to_json<string[]>(sheet, { header: 1 })
+
+    // Kiểm tra mã lớp có trùng với đầu vào không để tránh nhập nhầm
+    const cellAddress = 'C4'
+    const cell = sheet[cellAddress]
+    const cellValue = cell ? cell.v : null
+    console.log(`Giá trị ô ${cellAddress}:`, cellValue)
+
+    const subjectClass = await prisma.subjectClass.findFirst({
+        where: { id: subjectClassId },
+    })
+
+    if (!subjectClass?.code) {
+        return c.json({ message: 'Không tìm thấy khoá học' }, 400)
+    }
+    if (subjectClass?.code !== cellValue) {
+        return c.json({ message: 'Mã lớp không trùng khớp' }, 400)
+    }
+
+    const scoreUpdates = rowData
+        .slice(11)
+        .map((row) => ({
+            studentCode: row[1],
+            scoreCC: Number(row[5]),
+            scoreTX: Number(row[6]),
+            scoreThi: Number(row[7]),
+        }))
+        .filter((update) => update.studentCode)
+
+    const studentCodes = scoreUpdates
+        .map((update) => update.studentCode)
+        .filter((code): code is string => Boolean(code))
+    const students = await prisma.student.findMany({
+        where: {
+            active: true,
+            code: { in: studentCodes },
+        },
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+
+    // Update the student scores (assuming the score field exists in studentSubjectScore)
+    const updateResults = []
+    for (const { studentCode, scoreCC, scoreTX, scoreThi } of scoreUpdates) {
+        const student = students.find((s) => s.code === studentCode)
+        if (student) {
+            const res = await prisma.studentSubjectScore.updateMany({
+                where: {
+                    studentId: student.id,
+                    subjectClassId,
+                    active: true,
+                },
+                data: {
+                    attendanceScore: scoreCC,
+                    midtermScore: scoreTX,
+                    examScore: scoreThi,
+                },
+            })
+            updateResults.push(res.count)
+        }
+    }
+    const totalUpdated = updateResults.reduce((sum, count) => sum + count, 0)
+    console.log(`Total records updated: ${totalUpdated}`)
+
+    return c.json({ data: updateResults, count: totalUpdated }, 200)
 })
 export default app

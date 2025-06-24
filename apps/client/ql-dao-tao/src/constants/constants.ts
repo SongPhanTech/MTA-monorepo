@@ -147,6 +147,42 @@ const SUBJECT_CLASS_SCHEDULE_TYPE = {
     EVENINGE: 'Tối',
 }
 
+const CUSSTOM_VI_LOCALE = {
+    lang: {
+        locale: 'vi_VN',
+        placeholder: 'Chọn ngày',
+        rangePlaceholder: ['Từ ngày', 'Đến ngày'] as [string, string],
+        today: 'Hôm nay',
+        now: 'Bây giờ',
+        backToToday: 'Về hôm nay',
+        ok: 'Đồng ý',
+        clear: 'Xóa',
+        month: 'Tháng',
+        year: 'Năm',
+        timeSelect: 'Chọn giờ',
+        dateSelect: 'Chọn ngày',
+        monthSelect: 'Chọn tháng',
+        yearSelect: 'Chọn năm',
+        decadeSelect: 'Chọn thập kỷ',
+        yearFormat: 'YYYY',
+        dateFormat: 'DD/MM/YYYY',
+        dayFormat: 'D',
+        dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
+        monthBeforeYear: true,
+        previousMonth: 'Tháng trước',
+        nextMonth: 'Tháng sau',
+        previousYear: 'Năm trước',
+        nextYear: 'Năm sau',
+        previousDecade: 'Thập kỷ trước',
+        nextDecade: 'Thập kỷ sau',
+        previousCentury: 'Thế kỷ trước',
+        nextCentury: 'Thế kỷ sau',
+    },
+    timePickerLocale: {
+        placeholder: 'Chọn giờ',
+    },
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -166,4 +202,5 @@ export {
     SUBJECT_CLASS_SCHEDULE_TYPE,
     SUBJECT_CLASS_STUDENT_STATUS,
     SUBJECT_CLASS_STUDENT_STATUS_OPTIONS,
+    CUSSTOM_VI_LOCALE,
 }

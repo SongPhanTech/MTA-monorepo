@@ -24,8 +24,8 @@ model Student extends Base {
   fixedClassId         String?
   subjectClassStudent  StudentSubjectScore[]
 
-  userProfileId        String?
-  userProfile          UserProfile?          @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
+  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
 
   trainingLevel        TrainingLevel?        @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId      String?

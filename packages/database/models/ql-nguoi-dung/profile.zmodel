@@ -41,10 +41,10 @@ model UserProfile extends Base {
   currentAddress             String? // địa chỉ hiện tại
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?
-  districtcurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtcurrentAddressId], references: [Id])
-  districtcurrentAddressId   String?
-  communecurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communecurrentAddressId], references: [Id])
-  communecurrentAddressId    String?
+  districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
+  districtCurrentAddressId   String?
+  communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddressId    String?
   dateOfBirth                DateTime? // ngày sinh
   placeOfBirth               String?   // nơi sinh
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
@@ -73,7 +73,7 @@ model UserProfile extends Base {
   religionId                 String?
   ethnicity                  DM_DanToc?        @relation(fields: [ethnicityId], references: [Id]) // dân tộc
   ethnicityId                String?
-  provinceHometown           DM_Tinh?          @relation(name: "ProvineceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?
   districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
   districtHometownId         String?
