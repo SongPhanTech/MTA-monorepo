@@ -5,7 +5,6 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { Button, Collapse, Flex, Row } from 'antd'
 import { useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Panel } = Collapse
 
