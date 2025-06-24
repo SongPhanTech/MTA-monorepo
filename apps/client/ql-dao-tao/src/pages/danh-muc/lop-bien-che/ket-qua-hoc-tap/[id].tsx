@@ -97,14 +97,11 @@ export default function StudentScoreClassPage() {
                 },
             },
             trainingCoursesStart: {
+                where: {
+                    id: student?.fixedClass?.trainingCourseId ?? undefined,
+                },
                 include: {
-                    scoreConverts: {
-                        where: {
-                            trainingCourseId:
-                                (student?.fixedClass
-                                    ?.trainingCourseId as string) || '',
-                        },
-                    },
+                    scoreConverts: true,
                 },
             },
         },
