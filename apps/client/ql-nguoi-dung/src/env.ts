@@ -7,7 +7,7 @@ export const env = createEnv({
      * isn't built with invalid env vars.
      */
     server: {
-        ENVIROMENT: z.enum(['develop', 'test', 'product']).default('develop'),
+        ENVIRONMENT: z.enum(['develop', 'test', 'product']).default('develop'),
         AUTH_ASGARDEO_ISSUER: z.string().url(),
         AUTH_ASGARDEO_ID: z.string(),
         AUTH_ASGARDEO_SECRET: z.string(),
@@ -33,7 +33,7 @@ export const env = createEnv({
      * middlewares) or client-side so we need to destruct manually.
      */
     runtimeEnv: {
-        ENVIROMENT: process.env.ENVIROMENT,
+        ENVIRONMENT: process.env.ENVIRONMENT,
         AUTH_ASGARDEO_ISSUER: process.env.AUTH_ASGARDEO_ISSUER,
         AUTH_ASGARDEO_ID: process.env.AUTH_ASGARDEO_ID,
         AUTH_ASGARDEO_SECRET: process.env.AUTH_ASGARDEO_SECRET,
