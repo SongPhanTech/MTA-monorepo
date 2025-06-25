@@ -1,5 +1,6 @@
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -25,14 +26,14 @@ import {
     Row,
     message,
 } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import LopMonHocItem from './lop-mon-hoc'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import dayjs from 'dayjs'
+import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -67,10 +68,7 @@ export default function SubjectClassScore() {
     const { subjectId } = router.query
 
     const [open, setOpen] = useState(false)
-
-    const hide = () => {
-        setOpen(false)
-    }
+    const [importModalVisible, setImportModalVisible] = useState(false)
 
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -425,22 +423,49 @@ export default function SubjectClassScore() {
     }, [dataTable, selectedFixedClass])
 
     //#region Upload file nhập điểm
-    const handleUploadFile = async (file: File) => {
-        const formData = new FormData()
-        formData.append('file', file)
+    const handleImportConfirm = (importedData: any[]) => {
+        showSpinner()
 
         try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
+            const updatedScores = dataTable.map((record) => {
+                const importedScore = importedData.find(
+                    (item) => item.studentCode === record.student?.code
+                )
+
+                if (importedScore) {
+                    return {
+                        id: record.id,
+                        attendanceScore: importedScore.attendanceScore,
+                        midtermScore: importedScore.midtermScore,
+                        finalScore: importedScore.finalScore,
+                    }
+                }
+                return record
             })
-            if (!response.ok) {
-                throw new Error('Upload failed')
-            }
-            const data = await response.json()
-            message.success('File uploaded successfully')
+
+            // Cập nhật state
+            const newScoreCC = updatedScores.map((item) => ({
+                id: item.id,
+                value: item.attendanceScore || 0,
+            }))
+            const newScoreTX = updatedScores.map((item) => ({
+                id: item.id,
+                value: item.midtermScore || 0,
+            }))
+            const newScoreThi = updatedScores.map((item) => ({
+                id: item.id,
+                value: item.finalScore || 0,
+            }))
+
+            setScoreCC(newScoreCC)
+            setScoreTX(newScoreTX)
+            setScoreThi(newScoreThi)
+
+            message.success('Nhập điểm từ file thành công!')
         } catch (error) {
-            message.error('Có lỗi xảy ra khi upload file')
+            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+        } finally {
+            hideSpinner()
         }
     }
 
@@ -577,34 +602,23 @@ export default function SubjectClassScore() {
                                             gap={4}
                                         >
                                             <Button
-                                                onClick={() => {
-                                                    const fileInput =
-                                                        document.createElement(
-                                                            'input'
-                                                        )
-                                                    fileInput.type = 'file'
-                                                    fileInput.accept =
-                                                        '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
-                                                    fileInput.onchange = (
-                                                        e: any
-                                                    ) => {
-                                                        if (
-                                                            e.target.files?.[0]
-                                                        ) {
-                                                            handleUploadFile(
-                                                                e.target
-                                                                    .files[0]
-                                                            )
-                                                        }
-                                                    }
-                                                    fileInput.click()
-                                                }}
+                                                onClick={() =>
+                                                    setImportModalVisible(true)
+                                                }
                                                 disabled={!selectedFixedClass}
                                                 className="w-full flex justify-start"
                                             >
                                                 <FileUp />
                                                 Nhập điểm từ file
                                             </Button>
+                                            <ImportScoreModal
+                                                visible={importModalVisible}
+                                                onCancel={() =>
+                                                    setImportModalVisible(false)
+                                                }
+                                                onConfirm={handleImportConfirm}
+                                                existingStudents={dataTable}
+                                            />
                                             <ExportScoreTemplate
                                                 selectedFixedClass={
                                                     selectedFixedClass
