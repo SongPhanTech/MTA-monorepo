@@ -61,6 +61,7 @@ model StudentTrainingSemester extends Base {
   semesterId String
 
   scoreAvg   Float    @default(0) // điểm trung bình rèn luyện
+  trainingType StudentTrainingType // loại đánh giá rèn luyện
 
   @@schema("ql-nguoi-dung")
 }

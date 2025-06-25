@@ -148,6 +148,8 @@ model Semester extends Base {
   @@schema("ql-dao-tao")
 
 	trainingScoreSession TrainingScoreSession[]
+
+	studentTrainingSemester StudentTrainingSemester[]
 }
 
 /// Mốc huấn luyện
