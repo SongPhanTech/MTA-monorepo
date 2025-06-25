@@ -1,25 +1,27 @@
 {
-  "name": "@workspace/libs",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    "./api/*": "./src/api/*.ts"
-  },
-  "scripts": {
-    "generate": "orval"
-  },
-  "devDependencies": {
-    "@types/node": "catalog:",
-    "@workspace/biome-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
-    "orval": "catalog:",
-    "typescript": "catalog:"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.69.0",
-    "@workspace/db": "workspace:*",
-    "dayjs": "catalog:",
-    "xlsx": "catalog:"
-  }
+    "name": "@workspace/libs",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        "./api/*": "./src/api/*.ts",
+        "./parseExcel": "./src/parseExcel.ts",
+        "./utils": "./src/utils.ts"
+    },
+    "scripts": {
+        "generate": "orval"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "@workspace/biome-config": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "orval": "catalog:",
+        "typescript": "catalog:"
+    },
+    "dependencies": {
+        "@tanstack/react-query": "^5.69.0",
+        "@workspace/db": "workspace:*",
+        "dayjs": "catalog:",
+        "xlsx": "catalog:"
+    }
 }

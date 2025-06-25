@@ -116,26 +116,21 @@ export default function UserProfilePageDs() {
         },
         include: {
             userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
+            trainingObjectType: true,
             fixedClass: {
                 include: {
                     trainingCourse: true,
                     curriculumVersion: {
                         include: {
-                            curriculum: true,
+                            curriculum: {
+                                include: {
+                                    trainingMajor: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -529,9 +524,9 @@ export default function UserProfilePageDs() {
                                 title: 'Ảnh',
                                 align: 'center',
                                 width: 120,
+                                className: 'flex justify-center',
                                 render: (_, record) => {
                                     const avatar = record.userProfile?.avatar
-
                                     return avatar ? (
                                         <Image
                                             src={getMinioUrl(avatar)}
@@ -591,7 +586,7 @@ export default function UserProfilePageDs() {
                                     },
                                 ],
                                 onFilter: (value, record) =>
-                                    record.userProfile.gender === value,
+                                    record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
@@ -642,14 +637,14 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingCourseName =
-                                        record.fixedClass?.trainingCourse?.name
+                                        record?.fixedClass?.trainingCourse?.name
                                     return trainingCourseName === value
                                 },
                                 render: (record) => {
                                     const trainingCourse =
-                                        record.fixedClass?.trainingCourse
+                                        record?.fixedClass?.trainingCourse
                                     return trainingCourse
-                                        ? trainingCourse.name
+                                        ? trainingCourse?.name
                                         : ''
                                 },
                             },
@@ -684,12 +679,12 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingMajor =
-                                        record.fixedClass?.curriculumVersion
+                                        record?.fixedClass?.curriculumVersion
                                             ?.curriculum?.trainingMajor?.name
                                     return trainingMajor === value
                                 },
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
+                                    return record?.fixedClass?.curriculumVersion
                                         ?.curriculum?.trainingMajor?.name
                                 },
                             },
@@ -704,7 +699,7 @@ export default function UserProfilePageDs() {
                                     })
                                 ),
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
+                                    return record?.fixedClass?.curriculumVersion
                                         ?.curriculum?.name
                                 },
                             },

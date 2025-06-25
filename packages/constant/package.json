@@ -1,17 +1,17 @@
 {
-  "name": "@workspace/constant",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "devDependencies": {
-    "@types/node": "catalog:",
-    "typescript": "catalog:",
-    "@workspace/typescript-config": "workspace:*"
-  },
-  "dependencies": {
-    "@workspace/db": "workspace:*"
-  }
+    "name": "@workspace/constant",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "@workspace/typescript-config": "workspace:*"
+    },
+    "dependencies": {
+        "@workspace/db": "workspace:*"
+    }
 }

@@ -1,52 +1,45 @@
 {
-  "name": "@workspace/ui",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    "./globals.css": "./src/assets/styles/globals.css",
-    "./postcss.config": "./postcss.config.mjs",
-    "./tailwind.config": "./tailwind.config.ts",
-    "./lib/*": "./src/lib/*.ts",
-    "./hooks/*": [
-      "./src/hooks/*.ts",
-      "./src/hooks/*.tsx"
-    ],
-    ".": "./src/index.ts",
-    "./*": [
-      "./src/*.ts",
-      "./src/*.tsx",
-      "./src/*/index.ts"
-    ]
-  },
-  "scripts": {
-    "lint": "biome lint .",
-    "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@turbo/gen": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@workspace/biome-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
-    "autoprefixer": "catalog:",
-    "postcss": "catalog:",
-    "tailwindcss": "catalog:",
-    "typescript": "catalog:"
-  },
-  "dependencies": {
-    "@ant-design/cssinjs": "catalog:",
-    "@ant-design/icons": "catalog:",
-    "@workspace/router": "workspace:*",
-    "antd": "catalog:",
-    "class-variance-authority": "catalog:",
-    "clsx": "catalog:",
-    "lucide-react": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "tailwind-merge": "catalog:",
-    "tailwindcss-animate": "catalog:"
-  }
+    "name": "@workspace/ui",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        "./globals.css": "./src/assets/styles/globals.css",
+        "./postcss.config": "./postcss.config.mjs",
+        "./tailwind.config": "./tailwind.config.ts",
+        "./lib/*": "./src/lib/*.ts",
+        "./hooks/*": ["./src/hooks/*.ts", "./src/hooks/*.tsx"],
+        ".": "./src/index.ts",
+        "./*": ["./src/*.ts", "./src/*.tsx", "./src/*/index.ts"]
+    },
+    "scripts": {
+        "lint": "biome lint .",
+        "generate:component": "turbo gen react-component",
+        "check-types": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@turbo/gen": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@workspace/biome-config": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "autoprefixer": "catalog:",
+        "postcss": "catalog:",
+        "tailwindcss": "catalog:",
+        "typescript": "catalog:"
+    },
+    "dependencies": {
+        "@ant-design/cssinjs": "catalog:",
+        "@ant-design/icons": "catalog:",
+        "@workspace/router": "workspace:*",
+        "antd": "catalog:",
+        "class-variance-authority": "catalog:",
+        "clsx": "catalog:",
+        "lucide-react": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "tailwind-merge": "catalog:",
+        "tailwindcss-animate": "catalog:"
+    }
 }

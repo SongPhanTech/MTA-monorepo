@@ -1,32 +1,32 @@
 {
-  "name": "@backend/be-ql-nguoi-dung",
-  "type": "module",
-  "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "build": "bun build.ts",
-    "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
-    "postcompile": "rm -f .*.bun-build",
-    "start": "bun dist/index.js",
-    "generate": "bun --bun orval"
-  },
-  "dependencies": {
-    "@hono/oidc-auth": "catalog:",
-    "@hono/zod-openapi": "catalog:",
-    "@opentelemetry/api": "catalog:",
-    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
-    "@opentelemetry/resources": "catalog:",
-    "@opentelemetry/sdk-trace-base": "catalog:",
-    "@opentelemetry/sdk-trace-web": "catalog:",
-    "@scalar/hono-api-reference": "catalog:",
-    "hono": "catalog:",
-    "prom-client": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@types/bun": "catalog:",
-    "@workspace/biome-config": "workspace:*",
-    "@workspace/db": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
-    "orval": "catalog:"
-  }
+    "name": "@backend/be-ql-nguoi-dung",
+    "type": "module",
+    "scripts": {
+        "dev": "bun run --hot src/index.ts",
+        "build": "bun build.ts",
+        "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
+        "postcompile": "rm -f .*.bun-build",
+        "start": "bun dist/index.js",
+        "generate": "bun --bun orval"
+    },
+    "dependencies": {
+        "@hono/oidc-auth": "catalog:",
+        "@hono/zod-openapi": "catalog:",
+        "@opentelemetry/api": "catalog:",
+        "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+        "@opentelemetry/resources": "catalog:",
+        "@opentelemetry/sdk-trace-base": "catalog:",
+        "@opentelemetry/sdk-trace-web": "catalog:",
+        "@scalar/hono-api-reference": "catalog:",
+        "hono": "catalog:",
+        "prom-client": "catalog:",
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@types/bun": "catalog:",
+        "@workspace/biome-config": "workspace:*",
+        "@workspace/db": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "orval": "catalog:"
+    }
 }

@@ -5,6 +5,10 @@ import 'dayjs/locale/vi'
 import Tabs from '@components/commons/tabar'
 import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
 import XetHocBong from '@components/sub-pages/xet-hoc-bong'
+import XetCanhCaoHocDuong from '@components/sub-pages/xet-canh-cao-hoc-duong'
+import XetCanhCaoHocTap from '@components/sub-pages/xet-canh-cao-hoc-tap'
+import XetThoiHoc from '@components/sub-pages/xet-thoi-hoc'
+import XetLuuBan from '@components/sub-pages/xet-luu-ban'
 dayjs.locale('vi')
 
 const ModalGPASemester = () => {
@@ -36,22 +40,22 @@ const ModalGPASemester = () => {
                     {
                         key: '3',
                         label: 'Xét cảnh cáo học đường',
-                        children: 'Content of Tab Pane 3',
+                        children: <XetCanhCaoHocDuong />,
                     },
                     {
                         key: '4',
                         label: 'Xét cảnh cáo học tập',
-                        children: 'Content of Tab Pane 3',
+                        children: <XetCanhCaoHocTap />,
                     },
                     {
                         key: '5',
                         label: 'Xét thôi học',
-                        children: 'Content of Tab Pane 3',
+                        children: <XetThoiHoc />,
                     },
                     {
                         key: '6',
                         label: 'Xét lưu ban',
-                        children: 'Content of Tab Pane 3',
+                        children: <XetLuuBan />,
                     },
                 ]}
             />

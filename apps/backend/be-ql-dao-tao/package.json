@@ -1,36 +1,37 @@
 {
-  "name": "@backend/be-ql-dao-tao",
-  "type": "module",
-  "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "build": "bun build.ts",
-    "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
-    "postcompile": "rm -f .*.bun-build",
-    "start": "bun dist/index.js"
-  },
-  "dependencies": {
-    "@hono/oidc-auth": "catalog:",
-    "@hono/zod-openapi": "catalog:",
-    "@opentelemetry/api": "catalog:",
-    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
-    "@opentelemetry/resources": "catalog:",
-    "@opentelemetry/sdk-trace-base": "catalog:",
-    "@opentelemetry/sdk-trace-web": "catalog:",
-    "@scalar/hono-api-reference": "catalog:",
-    "axios": "catalog:",
-    "docxtemplater": "catalog:",
-    "hono": "catalog:",
-    "pizzip": "catalog:",
-    "prom-client": "catalog:",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@types/bun": "catalog:",
-    "@workspace/biome-config": "workspace:*",
-    "@workspace/db": "workspace:*",
-    "@workspace/auth": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
-    "orval": "catalog:"
-  }
+    "name": "@backend/be-ql-dao-tao",
+    "type": "module",
+    "scripts": {
+        "dev": "bun run --hot src/index.ts",
+        "build": "bun build.ts",
+        "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
+        "postcompile": "rm -f .*.bun-build",
+        "start": "bun dist/index.js"
+    },
+    "dependencies": {
+        "@hono/oidc-auth": "catalog:",
+        "@hono/zod-openapi": "catalog:",
+        "@opentelemetry/api": "catalog:",
+        "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+        "@opentelemetry/resources": "catalog:",
+        "@opentelemetry/sdk-trace-base": "catalog:",
+        "@opentelemetry/sdk-trace-web": "catalog:",
+        "@scalar/hono-api-reference": "catalog:",
+        "axios": "catalog:",
+        "docxtemplater": "catalog:",
+        "hono": "catalog:",
+        "pizzip": "catalog:",
+        "prom-client": "catalog:",
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+        "zod": "catalog:",
+        "@workspace/libs": "workspace:*",
+        "@workspace/db": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/bun": "catalog:",
+        "@workspace/biome-config": "workspace:*",
+        "@workspace/auth": "workspace:*",
+        "@workspace/typescript-config": "workspace:*",
+        "orval": "catalog:"
+    }
 }

@@ -1,0 +1,152 @@
+[
+    {
+        "trainingField": "Kỹ thuật cơ khí",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Đạn",
+                "curriculums": ["Đạn"]
+            },
+            {
+                "trainingMajor": "Vũ khí",
+                "curriculums": ["Vũ khí Lào 59", "Ô tô Lào 59", "Vũ khí"]
+            },
+            {
+                "trainingMajor": "Ô tô quân sự",
+                "curriculums": ["Ô tô Lào 59"]
+            },
+            {
+                "trainingMajor": "Máy tàu",
+                "curriculums": ["Máy tàu"]
+            },
+            {
+                "trainingMajor": "Công nghệ chế tạo máy",
+                "curriculums": ["Công nghệ chế tạo máy"]
+            },
+            {
+                "trainingMajor": "Tăng - Thiết giáp",
+                "curriculums": ["Tăng - Thiết giáp"]
+            },
+            {
+                "trainingMajor": "Công nghệ chế tạo đạn",
+                "curriculums": ["Công nghệ chế tạo đạn"]
+            },
+            {
+                "trainingMajor": "Thiết kế chế tạo vũ khí",
+                "curriculums": ["Thiết kế chế tạo vũ khí"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Công nghệ thông tin",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Địa tin học",
+                "curriculums": ["Địa tin học Lào 59"]
+            },
+            {
+                "trainingMajor": "Công nghệ thông tin",
+                "curriculums": ["Công nghệ thông tin 59", "Công nghệ thông tin"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Kỹ thuật điện tử - viễn thông",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Thông tin",
+                "curriculums": ["Thông tin Lào 59", "Thông tin_CLC59"]
+            },
+            {
+                "trainingMajor": "Tác chiến điện tử",
+                "curriculums": ["Tác chiến điện tử CPC59"]
+            },
+            {
+                "trainingMajor": "Ra đa",
+                "curriculums": ["Ra đa CPC59"]
+            },
+            {
+                "trainingMajor": "Tự động hóa chỉ huy",
+                "curriculums": ["Tự động hóa chỉ huy"]
+            },
+            {
+                "trainingMajor": "Thiết kế, chế tạo trang thiết bị thông tin",
+                "curriculums": ["Thiết kế, chế tạo trang thiết bị thông tin"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Kỹ thuật điều khiển và tự động hóa",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Tên lửa phòng không",
+                "curriculums": ["Tên lửa phòng không CPC59"]
+            },
+            {
+                "trainingMajor": "Tên lửa hải quân",
+                "curriculums": ["Tên lửa hải quân"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Kỹ thuật cơ điện tử",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Cơ điện tử",
+                "curriculums": ["Cơ điện tử"]
+            },
+            {
+                "trainingMajor": "Khí tài quang - quang điện tử",
+                "curriculums": ["Khí tài quang - Quang điện tử"]
+            },
+            {
+                "trainingMajor": "Thiết bị bay không người lái",
+                "curriculums": ["Thiết bị bay không người lái"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Công nghệ vật liệu",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Công nghệ vật liệu",
+                "curriculums": ["Công nghệ vật liệu"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Kỹ thuật xây dựng",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Công trình quốc phòng",
+                "curriculums": ["Công trình quốc phòng"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Công nghệ kỹ thuật hóa học",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Phòng hóa",
+                "curriculums": ["Phòng hóa"]
+            }
+        ]
+    },
+    {
+        "trainingField": "Kỹ thuật xây dựng công trình giao thông",
+        "trainingMajors": [
+            {
+                "trainingMajor": "Cầu đường",
+                "curriculums": ["Cầu đường"]
+            }
+        ]
+    },
+    {
+        "trainingField": "An toàn thông tin",
+        "trainingMajors": [
+            {
+                "trainingMajor": "An ninh hệ thống thông tin",
+                "curriculums": ["An ninh hệ thống thông tin K59"]
+            }
+        ]
+    }
+]

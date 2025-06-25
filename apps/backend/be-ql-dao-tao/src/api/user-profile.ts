@@ -1,11 +1,12 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { Gender } from '@workspace/db'
 import { UserProfileScalarSchema } from '@workspace/db/zod/models'
+import { splitFullName } from '@workspace/libs/utils'
 import { HTTPException } from 'hono/http-exception'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { parseDate, splitFullName } from '../utils'
+import { parseDate } from '../utils'
 import { ListOf } from '../zod/base'
 
 const uploadExcelCreateUserProfile = createRoute({

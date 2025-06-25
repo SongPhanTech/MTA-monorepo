@@ -6,6 +6,7 @@ import '../ql-nguoi-dung/profile'
 import './student'
 import './lecturer'
 import './staff'
+import '../ql-nguoi-dung/training-score'
 
 enum SubjectClassStudentStatus {
   Registered
@@ -130,17 +131,19 @@ enum SemesterType {
 /// Kỳ học
 // Giao diện tạo kỳ học có ô stt tự động tăng (useCount), người dùng chọn kỳ học là kỳ 1 hay kỳ 2 => HK chính => SemesterType
 model Semester extends Base {
-  name                 String
-  shortName            String? // tên ngắn gọn
-  semesterType         SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
-  order                Int // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
-  schoolYear           SchoolYear       @relation(fields: [schoolYearId], references: [id])
-  schoolYearId         String
-  startDate            DateTime
-  endDate              DateTime?
+  name                    String
+  shortName               String? // tên ngắn gọn
+  semesterType            SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
+  order                   Int // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
+  schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
+  schoolYearId            String
+  startDate               DateTime
+  endDate                 DateTime?
 
-  subjectClasses       SubjectClass[]
-  trainingCoursesStart TrainingCourse[]
+  subjectClasses          SubjectClass[]
+  trainingCoursesStart    TrainingCourse[]
+  trainingScoreSession    TrainingScoreSession[]
+  studentTrainingSemester StudentTrainingSemester[]
 
   @@unique([schoolYearId, order]) // stt kỳ học trong một năm học không được trùng nhau
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)

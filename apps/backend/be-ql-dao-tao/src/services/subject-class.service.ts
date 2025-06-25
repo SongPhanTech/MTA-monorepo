@@ -71,8 +71,8 @@ export const populateExcelTemplate = (
         throw new Error('No valid worksheet found in the template.')
     }
 
-    worksheet['A1'] = { t: 's', v: `Class: ${templateData.className}` }
-    worksheet['A2'] = {
+    worksheet.A1 = { t: 's', v: `Class: ${templateData.className}` }
+    worksheet.A2 = {
         t: 's',
         v: `Date: ${templateData.date}/${templateData.month}/${templateData.year}`,
     }

@@ -2,9 +2,7 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { SubjectClass, TrainingObjectType } from '@workspace/db'
 import {
@@ -12,14 +10,14 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
     useUpdateSubjectClass,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { ROUTER_PATH } from '@workspace/router'
+import { Col, Flex, Form, Input, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -38,6 +36,7 @@ interface FilterProps {
 }
 
 export default function ClassSubject() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -56,32 +55,10 @@ export default function ClassSubject() {
         examDateRange: undefined, // Khoảng thời gian thi
     })
 
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOpenClassModal.name,
-    })
-
-    const handleModal = () => {
-        onOpen()
-    }
-
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateTrainingCourse({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
+    const handleNavigate = (id: string) => {
+        router.push(
+            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`
+        )
     }
 
     const handleFilterChange = (key: string, value: string) => {
@@ -485,14 +462,14 @@ export default function ClassSubject() {
                             {
                                 title: 'Môn học',
                                 dataIndex: 'tenMonHoc',
-                                width: 150,
+                                width: 180,
                                 render: (text, record) =>
                                     record.subject?.name || text,
                             },
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'stc',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 render: (text, record) =>
                                     record.subject?.credit || text,
@@ -500,25 +477,25 @@ export default function ClassSubject() {
                             {
                                 title: 'Hạn đợi',
                                 dataIndex: 'ngayDot',
-                                width: 60,
+                                width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Số ngày',
                                 dataIndex: 'ngayDot',
-                                width: 60,
+                                width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Hạn ĐT',
                                 dataIndex: 'ngayDot',
-                                width: 60,
+                                width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Giảng viên',
                                 dataIndex: 'tenMonHoc',
-                                width: 150,
+                                width: 180,
                                 align: 'center',
                                 render: (text, record) => {
                                     const mainLecturer = record.mainLecturer
@@ -538,7 +515,7 @@ export default function ClassSubject() {
                             {
                                 title: 'Giảng viên NĐ',
                                 dataIndex: 'tenMonHoc',
-                                width: 150,
+                                width: 180,
                                 align: 'center',
                                 render: (text, record) => {
                                     const mainLecturer = record.mainLecturer
@@ -658,7 +635,9 @@ export default function ClassSubject() {
                                         return (
                                             <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={handleModal}
+                                                onClick={() =>
+                                                    handleNavigate(id)
+                                                }
                                             >
                                                 <CalendarPlus
                                                     size={16}
