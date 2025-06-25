@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutOplympicScoreModal } from '@components/modal'
+import { PutOlympicScoreModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
@@ -31,7 +31,7 @@ export default function OplympicAwards() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOplympicScoreModal.name,
+        tag: PutOlympicScoreModal.name,
     })
 
     const handleModal = () => {

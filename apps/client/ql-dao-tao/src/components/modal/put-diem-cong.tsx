@@ -15,7 +15,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 export type PutArchivedAward = ArchivedAward
 dayjs.locale('vi')
-const PutOplympicScoreModal = () => {
+const PutOlympicScoreModal = () => {
     const [form] = Form.useForm<PutArchivedAward>()
     const [targetDisabled, setTargetDisabled] = useState(true)
     const {
@@ -23,7 +23,7 @@ const PutOplympicScoreModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOplympicScoreModal.name,
+        tag: PutOlympicScoreModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -134,4 +134,4 @@ const PutOplympicScoreModal = () => {
     )
 }
 
-export default PutOplympicScoreModal
+export default PutOlympicScoreModal

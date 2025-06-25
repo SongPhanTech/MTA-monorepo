@@ -1,26 +1,28 @@
-import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ArchivedCertificate } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db'
 import {
     useCountArchivedAward,
-    useCreateArchivedCertificate,
     useFindManyArchivedAward,
-    useUpdateArchivedCertificate,
+    useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Col, Form, message } from 'antd'
+import { Col, Flex, Form, Input, Row, message } from 'antd'
 import dayjs from 'dayjs'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import _ from 'lodash'
-export type PutArchivedCertificate = ArchivedCertificate
+export type PutStudentSubjectScore = StudentSubjectScore
+interface FilterProps {
+    searchText: string | ''
+}
+
 dayjs.locale('vi')
 
 const PutAddOlympicScoreModal = () => {
-    const [form] = Form.useForm<PutArchivedCertificate>()
+    const [form] = Form.useForm<PutStudentSubjectScore>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -28,34 +30,37 @@ const PutAddOlympicScoreModal = () => {
         tag: PutAddOlympicScoreModal.name,
         onClose: form.resetFields,
     })
-    const { showSpinner, hideSpinner } = useSpinner()
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+    })
 
-    const { mutateAsync: createArchivedCertificate } =
-        useCreateArchivedCertificate()
-    const { mutateAsync: updateArchivedCertificate } =
-        useUpdateArchivedCertificate()
-    async function onOk({ ...rest }: PutArchivedCertificate) {
+    const { showSpinner, hideSpinner } = useSpinner()
+    const { mutateAsync: updateStudentSubjectScore } =
+        useUpdateStudentSubjectScore()
+    async function onOk({ ...rest }: PutStudentSubjectScore) {
         try {
             showSpinner()
-            // if (id) {
-            //     await updateArchivedCertificate({
-            //         data: {
-            //             name: rest.name,
-            //             finalScore: rest.finalScore,
-            //         },
-            //         where: { id },
-            //     })
-            //     message.success('Cập nhật thành công')
-            // } else {
-            //     await createArchivedCertificate({
-            //         data: rest,
-            //     })
-            //     message.success('Thêm mới thành công')
-            // }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['ArchivedCertificate'],
+            await updateStudentSubjectScore({
+                data: {
+                    ...rest,
+                    awards: {
+                        createMany: {
+                            data: selectedRowKeys.map((id) => ({
+                                archivedAwardId: id as string,
+                            })),
+                            skipDuplicates: true,
+                        },
+                        deleteMany: {
+                            studentSubjectScoreId: input.id,
+                            archivedAwardId: {
+                                notIn: selectedRowKeys as string[],
+                            },
+                        },
+                    },
+                },
+                where: { id: input.id },
             })
+            message.success('Cập nhật thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -63,7 +68,27 @@ const PutAddOlympicScoreModal = () => {
         hideSpinner()
     }
 
-    const { data: dataTable = [], refetch } = useFindManyArchivedAward({})
+    const { data: dataTable = [], refetch } = useFindManyArchivedAward({
+        where: {
+            OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+        },
+        include: {},
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    const { data: count } = useCountArchivedAward({
+        where: {
+            OR: [
+                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                { code: { contains: filters.searchText, mode: 'insensitive' } },
+            ],
+        },
+    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -72,28 +97,19 @@ const PutAddOlympicScoreModal = () => {
         []
     )
 
-    const { data: count } = useCountArchivedAward({})
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
 
-    // const { data: level } = useFindUniqueArchivedCertificate(
-    //     {
-    //         where: { id },
-    //     },
-    //     { enabled: !!id }
-    // )
-
-    // // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    // useEffect(() => {
-    //     if (level) {
-    //         setTargetDisabled(false)
-    //         form.setFieldsValue({
-    //             ...level,
-    //         })
-    //     } else {
-    //         form.setFieldsValue({
-    //             active: true,
-    //         })
-    //     }
-    // }, [level])
+    useEffect(() => {
+        if (input?.list?.length) {
+            setSelectedRowKeys(input?.list)
+        }
+    }, [input])
 
     return (
         <PutFormModal
@@ -105,6 +121,39 @@ const PutAddOlympicScoreModal = () => {
             title={'Thêm điểm cộng cho sinh viên'}
             className="w-[1000px]"
         >
+            <Row gutter={[16, 16]} align="top" justify="space-between">
+                <Col span={24} className="mt-3">
+                    <Flex justify="space-between">
+                        <Col span={24}>
+                            <Form.Item className="mb-0" name="searchText">
+                                <Input
+                                    id="search"
+                                    onChange={(e) =>
+                                        handleFilterChange(
+                                            'searchText',
+                                            e.target.value
+                                        )
+                                    }
+                                    placeholder="Tìm kiếm"
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Flex>
+                </Col>
+
+                {/* <Col span={6}>
+                            <Flex justify="end" gap={4}>
+                                <Button type="primary" className="h-[40px]">
+                                    Thêm mới
+                                </Button>
+                                <Button type="primary" className="h-[40px]">
+                                    <EditIcon stroke="white" />
+                                    Nhập từ file danh sách
+                                </Button>
+                            </Flex>
+                        </Col> */}
+            </Row>
             <Col span={24}>
                 <Table
                     rowKey="id"
@@ -126,7 +175,7 @@ const PutAddOlympicScoreModal = () => {
                                 (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Tên chứng chỉ',
+                            title: 'Tên giải thưởng',
                             dataIndex: 'name',
                             align: 'center',
                         },
