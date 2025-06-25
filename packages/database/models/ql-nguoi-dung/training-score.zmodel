@@ -11,6 +11,7 @@ import '../ql-dao-tao/student'
 enum TrainingScoreSessionStatus {
   ACTIVE
   INACTIVE
+  @@schema("ql-nguoi-dung")
 }
 
 // Đợt đánh giá rèn luyện, đi theo kì và đối tượng đào tạo
@@ -50,17 +51,18 @@ enum StudentTrainingType {
   FAIR      // Khá
   AVERAGE   // Trung bình
   POOR      // Yếu
+  @@schema("ql-nguoi-dung")
 }
 
 // Phân loại rèn luyện theo kì (có thể thay đổi loại đánh giá)
 model StudentTrainingSemester extends Base {
-  student    Student  @relation(fields: [studentId], references: [id])
-  studentId  String
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
 
-  semester   Semester @relation(fields: [semesterId], references: [id])
-  semesterId String
+  semester     Semester            @relation(fields: [semesterId], references: [id])
+  semesterId   String
 
-  scoreAvg   Float    @default(0) // điểm trung bình rèn luyện
+  scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
   trainingType StudentTrainingType // loại đánh giá rèn luyện
 
   @@schema("ql-nguoi-dung")

@@ -1031,7 +1031,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="districtcurrentAddressId"
+                                    name="districtCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -1043,7 +1043,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="communecurrentAddressId"
+                                    name="communeCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
