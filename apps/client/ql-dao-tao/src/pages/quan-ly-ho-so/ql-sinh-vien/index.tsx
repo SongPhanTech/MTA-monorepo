@@ -116,26 +116,21 @@ export default function UserProfilePageDs() {
         },
         include: {
             userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
+            trainingObjectType: true,
             fixedClass: {
                 include: {
                     trainingCourse: true,
                     curriculumVersion: {
                         include: {
-                            curriculum: true,
+                            curriculum: {
+                                include: {
+                                    trainingMajor: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -591,7 +586,7 @@ export default function UserProfilePageDs() {
                                     },
                                 ],
                                 onFilter: (value, record) =>
-                                    record.userProfile.gender === value,
+                                    record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
@@ -653,61 +648,61 @@ export default function UserProfilePageDs() {
                                         : ''
                                 },
                             },
-                            {
-                                title: 'Ngành',
-                                align: 'center',
-                                width: 160,
-                                filters: TrainingFieldData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
-                                })),
-                                onFilter: (value, record) => {
-                                    const trainingField =
-                                        record?.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor
-                                            ?.trainingField?.name
-                                    return trainingField === value
-                                },
-                                render: (record) => {
-                                    return record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor
-                                        ?.trainingField?.name
-                                },
-                            },
-                            {
-                                title: 'Chuyên ngành',
-                                align: 'center',
-                                width: 180,
-                                filters: TrainingMajorData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
-                                })),
-                                onFilter: (value, record) => {
-                                    const trainingMajor =
-                                        record.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor?.name
-                                    return trainingMajor === value
-                                },
-                                render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor?.name
-                                },
-                            },
-                            {
-                                title: 'Chương trình đào tạo',
-                                align: 'center',
-                                width: 180,
-                                filters: TrainingCurriculumVersionData.map(
-                                    (item) => ({
-                                        text: item.name,
-                                        value: item.name,
-                                    })
-                                ),
-                                render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
-                                        ?.curriculum?.name
-                                },
-                            },
+                            // {
+                            //     title: 'Ngành',
+                            //     align: 'center',
+                            //     width: 160,
+                            //     filters: TrainingFieldData.map((item) => ({
+                            //         text: item.name,
+                            //         value: item.name,
+                            //     })),
+                            //     onFilter: (value, record) => {
+                            //         const trainingField =
+                            //             record.fixedClass.curriculumVersion
+                            //                 ?.curriculum?.trainingMajor
+                            //                 ?.trainingField?.name
+                            //         return trainingField === value
+                            //     },
+                            //     render: (record) => {
+                            //         return record.fixedClass.curriculumVersion
+                            //             ?.curriculum?.trainingMajor
+                            //             ?.trainingField?.name
+                            //     },
+                            // },
+                            // {
+                            //     title: 'Chuyên ngành',
+                            //     align: 'center',
+                            //     width: 180,
+                            //     filters: TrainingMajorData.map((item) => ({
+                            //         text: item.name,
+                            //         value: item.name,
+                            //     })),
+                            //     onFilter: (value, record) => {
+                            //         const trainingMajor =
+                            //             record.fixedClass?.curriculumVersion
+                            //                 ?.curriculum?.trainingMajor?.name
+                            //         return trainingMajor === value
+                            //     },
+                            //     render: (record) => {
+                            //         return record.fixedClass?.curriculumVersion
+                            //             ?.curriculum?.trainingMajor?.name
+                            //     },
+                            // },
+                            // {
+                            //     title: 'Chương trình đào tạo',
+                            //     align: 'center',
+                            //     width: 180,
+                            //     filters: TrainingCurriculumVersionData.map(
+                            //         (item) => ({
+                            //             text: item.name,
+                            //             value: item.name,
+                            //         })
+                            //     ),
+                            //      render: (record) => {
+                            //          return record.fixedClass?.curriculumVersion
+                            //             .curriculum.name
+                            //      },
+                            // },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
