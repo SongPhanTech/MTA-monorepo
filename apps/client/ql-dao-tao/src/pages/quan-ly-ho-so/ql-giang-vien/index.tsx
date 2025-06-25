@@ -485,6 +485,7 @@ export default function UserProfilePageLecture() {
                                 title: 'Ảnh',
                                 align: 'center',
                                 width: 120,
+                                className: 'flex justify-center',
                                 render: (_, record) => {
                                     const avatar = record.userProfile?.avatar
 
