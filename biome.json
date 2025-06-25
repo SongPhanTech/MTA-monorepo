@@ -4,6 +4,7 @@
         "ignoreUnknown": true,
         "ignore": [
             ".vscode",
+            "apps/backup/**/*",
             ".next/**/*",
             "generated/**/*",
             "open-api/**/*",
