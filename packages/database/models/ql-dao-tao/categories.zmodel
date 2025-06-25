@@ -4,6 +4,7 @@ import '../ql-dao-tao/student'
 import '../ql-danh-muc/common'
 import '../ql-nguoi-dung/profile'
 import '../ql-danh-muc/core-categories'
+import '../ql-nguoi-dung/training-score'
 
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
@@ -15,6 +16,8 @@ model TrainingObjectType extends Base {
   students          Student[]
 
   @@schema("ql-dao-tao")
+
+	trainingScoreSession TrainingScoreSession[]
 }
 
 /// đối tượng ưu tiên

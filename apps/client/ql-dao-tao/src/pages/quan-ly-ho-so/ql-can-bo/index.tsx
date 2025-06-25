@@ -47,6 +47,7 @@ type Filter = FilterProps & {
 export default function StaffManagement() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
@@ -366,6 +367,7 @@ export default function StaffManagement() {
                                 title: 'Ảnh',
                                 align: 'center',
                                 width: 120,
+                                className: 'flex justify-center',
                                 render: (_, record) => {
                                     const avatar = record.userProfile?.avatar
 
@@ -434,10 +436,10 @@ export default function StaffManagement() {
                             },
                             {
                                 title: 'Đơn vị',
-                                width: 150,
+                                width: 200,
                                 render: (_, record) => {
                                     return (
-                                        record.organization?.name || 'Chưa có'
+                                        record.organization?.sTen || 'Chưa có'
                                     )
                                 },
                                 align: 'center',
@@ -533,6 +535,12 @@ export default function StaffManagement() {
                             },
                         ]}
                         data={data}
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys) =>
+                                setSelectedRowKeys(selectedKeys),
+                        }}
                         pagination={{
                             total: count,
                             onChange: setCurrentPage,

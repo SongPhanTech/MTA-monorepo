@@ -1,20 +1,21 @@
 import type {
-    AcademicDegreeType,
-    AcademicRankType,
-    Commune,
+    $Enums,
     CurriculumVersion,
-    Ethnicity,
+    DM_CapBac,
+    DM_ChucDanh,
+    DM_ChucVu,
+    DM_DanToc,
+    DM_DonVi,
+    DM_HocHam,
+    DM_HocVi,
+    DM_QuocGia,
+    DM_Tinh,
+    DM_TonGiao,
+    DM_XaPhuong,
     FixedClass,
     Lecturer,
     LecturerType,
-    Level,
-    Nationality,
-    Organization,
-    PositionCPV,
     PriorityObject,
-    Province,
-    Rank,
-    Religion,
     Staff,
     StaffPosition,
     StaffType,
@@ -22,7 +23,6 @@ import type {
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
-import type { UploadFile } from 'antd'
 
 export type SibarItem = {
     key: string
@@ -49,20 +49,12 @@ export type StudentSiderbarProps = {
 
 export type TabQuanLyHoSoProps = {
     id?: string | null
-    avatar?: UploadFile[]
-    setAvatar: (avatar: UploadFile[]) => void
-    fileList: UploadFile[]
-    setFileList: (fileList: UploadFile[]) => void
-    type: string
+    type: $Enums.UserType
 } & StudentSiderbarProps
 
 export type TabThongTinCaNhan = {
     id?: string | null
-    avatar: UploadFile[]
-    setAvatar: (avatar: UploadFile[]) => void
-    fileList: UploadFile[]
-    setFileList: (fileList: UploadFile[]) => void
-    type: string
+    type: $Enums.UserType
 }
 
 export type StudentModalProps = {
@@ -76,16 +68,16 @@ export type StudentModalProps = {
 }
 
 export type UserProfileType = UserProfile & {
-    nationality: Nationality
-    religion: Religion
-    ethnicity: Ethnicity
-    provinceHometown: Province
-    communeHometown: Commune
-    rank: Rank
-    academicDegreeType: AcademicDegreeType
-    academicRankType: AcademicRankType
-    level: Level
-    positionCPV: PositionCPV
+    nationality: DM_QuocGia
+    religion: DM_TonGiao
+    ethnicity: DM_DanToc
+    provinceHometown: DM_Tinh
+    communeHometown: DM_XaPhuong
+    rank: DM_CapBac
+    academicDegreeType: DM_HocVi
+    academicRankType: DM_HocHam
+    level: DM_ChucDanh
+    positionCPV: DM_ChucVu
     educationAndTraining: StudentType[]
     lecturer: Lecturer
 }
@@ -102,16 +94,15 @@ export type StudentType = Student & {
 }
 
 export type LecturerProfileType = Lecturer & {
-    organization: Organization
+    organization: DM_DonVi
     lecturerType: LecturerType
 }
 
 export type StaffProfileType = Staff & {
     staffType: StaffType
-    organization: Organization
+    organization: DM_DonVi
     staffPosition: StaffPosition
     userProfile: UserProfileType
-    fixedClass: FixedClassType[]
 }
 
 export type PutLecturerProfile = LecturerProfileType & UserProfileType
@@ -120,7 +111,9 @@ export type PutStudentProfile = StudentType & UserProfileType & FixedClassType
 
 export type PutStaffProfile = StaffProfileType &
     UserProfileType &
-    FixedClassType
+    FixedClassType & {
+        file: File | null
+    }
 
 export type PutModalType = StudentType &
     LecturerProfileType &

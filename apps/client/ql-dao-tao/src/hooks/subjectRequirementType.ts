@@ -10,7 +10,6 @@ export const useSubjectRequirementTypeOptions = () => {
         { value: SubjectRequirementType.None, label: 'Không xác định' },
         { value: SubjectRequirementType.Mandatory, label: 'Bắt buộc' },
         { value: SubjectRequirementType.Optional, label: 'Tự chọn' },
-        { value: SubjectRequirementType.Elective, label: 'Tự chọn tự do' },
     ]
 
     const getSubjectRequirementTypeLabel = (

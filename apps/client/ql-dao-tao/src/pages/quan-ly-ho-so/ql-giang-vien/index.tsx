@@ -16,16 +16,25 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountLecturer,
+    useFindManyDM_CapBac,
+    useFindManyDM_DonVi,
+    useFindManyDM_HocHam,
+    useFindManyDM_HocVi,
     useFindManyLecturer,
+    useFindManyLecturerType,
     useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
 
+import { FilterLecture } from '@components/filter'
+import type { FilterProps } from '@components/filter/filter-lecture'
 import EditIcon from '@components/icons/edit'
-import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
+import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
+import { getMinioUrl } from '@workspace/constant'
 import {
     Button,
     Col,
+    DatePicker,
     Dropdown,
     Flex,
     Image,
@@ -34,19 +43,19 @@ import {
     Row,
     message,
 } from 'antd'
-import dayjs from 'dayjs'
+
+import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { FilterLecture } from '@components/filter'
-import type { FilterProps } from '@components/filter/filter-lecture'
-import { getMinioUrl } from '@workspace/constant'
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
 }
 dayjs.locale('vi')
+
+const { RangePicker } = DatePicker
 
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -54,6 +63,7 @@ export default function UserProfilePageLecture() {
     const [organizationIds, setOrganizationIds] = useState<string[]>([])
     const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
     const [searchOrganization, setSearchOrganization] = useState<string>('')
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const debouncedSearchText = _.debounce(setSearchOrganization, 200)
     const [filters, setFilters] = useState<Filter>({
@@ -200,6 +210,12 @@ export default function UserProfilePageLecture() {
     //     setOrganizationIds(listChildrenOrganizationId)
     // }
 
+    const { data: lecturerTypeData = [] } = useFindManyLecturerType()
+    const { data: organizationData = [] } = useFindManyDM_DonVi()
+    const { data: academicRankTypeData = [] } = useFindManyDM_HocHam()
+    const { data: academicDegreeTypeData = [] } = useFindManyDM_HocVi()
+    const { data: rankTypeData = [] } = useFindManyDM_CapBac()
+
     const { data: count } = useCountLecturer({
         where: {
             AND: [
@@ -239,6 +255,7 @@ export default function UserProfilePageLecture() {
     })
 
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
+
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -345,6 +362,7 @@ export default function UserProfilePageLecture() {
             // handleSelectOrganization(record.id)
         }
     }
+
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -467,6 +485,7 @@ export default function UserProfilePageLecture() {
                                 title: 'Ảnh',
                                 align: 'center',
                                 width: 120,
+                                className: 'flex justify-center',
                                 render: (_, record) => {
                                     const avatar = record.userProfile?.avatar
 
@@ -514,6 +533,18 @@ export default function UserProfilePageLecture() {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 100,
+                                filters: [
+                                    {
+                                        text: 'Nam',
+                                        value: 'Male',
+                                    },
+                                    {
+                                        text: 'Nữ',
+                                        value: 'Female',
+                                    },
+                                ],
+                                onFilter: (value, record) =>
+                                    record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
@@ -524,21 +555,149 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Ngày sinh',
+                                filterDropdown: ({
+                                    setSelectedKeys,
+                                    selectedKeys,
+                                    confirm,
+                                    clearFilters,
+                                }) => (
+                                    <div className="p-4 space-y-2">
+                                        <RangePicker
+                                            value={
+                                                selectedKeys.length > 0
+                                                    ? (() => {
+                                                          try {
+                                                              const [
+                                                                  start,
+                                                                  end,
+                                                              ] = JSON.parse(
+                                                                  selectedKeys[0] as string
+                                                              )
+                                                              return [
+                                                                  dayjs(
+                                                                      start,
+                                                                      'DD/MM/YYYY'
+                                                                  ),
+                                                                  dayjs(
+                                                                      end,
+                                                                      'DD/MM/YYYY'
+                                                                  ),
+                                                              ]
+                                                          } catch {
+                                                              return [
+                                                                  null,
+                                                                  null,
+                                                              ]
+                                                          }
+                                                      })()
+                                                    : [null, null]
+                                            }
+                                            onChange={(dates) => {
+                                                if (dates?.[0] && dates[1]) {
+                                                    const startDate =
+                                                        dates[0].format(
+                                                            'DD/MM/YYYY'
+                                                        )
+                                                    const endDate =
+                                                        dates[1].format(
+                                                            'DD/MM/YYYY'
+                                                        )
+                                                    setSelectedKeys([
+                                                        JSON.stringify([
+                                                            startDate,
+                                                            endDate,
+                                                        ]),
+                                                    ])
+                                                } else {
+                                                    setSelectedKeys([])
+                                                }
+                                            }}
+                                            format="DD/MM/YYYY"
+                                            placeholder={[
+                                                'Từ ngày',
+                                                'Đến ngày',
+                                            ]}
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div className="flex justify-between gap-2">
+                                            <Button
+                                                size="small"
+                                                onClick={() => {
+                                                    clearFilters?.()
+                                                    confirm()
+                                                }}
+                                            >
+                                                Xóa
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                onClick={() => confirm()}
+                                            >
+                                                Lọc
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ),
+                                onFilter: (value, record) => {
+                                    if (
+                                        !value ||
+                                        typeof value !== 'string' ||
+                                        !record.userProfile?.dateOfBirth
+                                    ) {
+                                        return false
+                                    }
+
+                                    const [startDate, endDate] = JSON.parse(
+                                        value
+                                    ) as string[]
+
+                                    const birthDate = dayjs(
+                                        record.userProfile?.dateOfBirth,
+                                        'DD/MM/YYYY'
+                                    )
+                                    const filterStartDate = dayjs(
+                                        startDate,
+                                        'DD/MM/YYYY'
+                                    )
+                                    const filterEndDate = dayjs(
+                                        endDate,
+                                        'DD/MM/YYYY'
+                                    )
+
+                                    console.log(filterStartDate)
+                                    console.log(filterEndDate)
+
+                                    return (
+                                        birthDate.isAfter(
+                                            filterStartDate,
+                                            'day'
+                                        ) &&
+                                        birthDate.isBefore(filterEndDate, 'day')
+                                    )
+                                },
                                 render: (_, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(
-                                              record.userProfile.dateOfBirth
+                                              record.userProfile?.dateOfBirth
                                           ).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
-                                width: 100,
+                                width: 120,
                             },
                             {
                                 title: 'Đơn vị',
-                                width: 150,
+                                width: 200,
+                                filters: organizationData.map((org) => ({
+                                    text: org.sTen,
+                                    value: org.Id,
+                                })),
+                                onFilter: (value, record) => {
+                                    return record.organization?.Id === value
+                                },
                                 render: (_, record) => {
                                     return (
-                                        record.organization?.name || 'Chưa có'
+                                        record.organization?.sTen || 'Chưa có'
                                     )
                                 },
                                 align: 'center',
@@ -546,6 +705,16 @@ export default function UserProfilePageLecture() {
                             {
                                 title: 'Học hàm',
                                 width: 120,
+                                filters: academicRankTypeData.map((aca) => ({
+                                    text: aca.sTen,
+                                    value: aca.Id,
+                                })),
+                                onFilter: (value, record) => {
+                                    return (
+                                        record.organization
+                                            ?.academicRankTypeId === value
+                                    )
+                                },
                                 render: (_, record) =>
                                     record.userProfile?.academicRankType
                                         ?.name || '',
@@ -553,6 +722,67 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Năm HH',
+                                filterDropdown: ({
+                                    setSelectedKeys,
+                                    selectedKeys,
+                                    confirm,
+                                    clearFilters,
+                                }) => (
+                                    <div className="p-2 space-y-2">
+                                        <DatePicker
+                                            value={
+                                                selectedKeys[0]
+                                                    ? dayjs(
+                                                          selectedKeys[0] as string
+                                                      )
+                                                    : null
+                                            }
+                                            onChange={(date: Dayjs | null) => {
+                                                const formatted = date
+                                                    ? date.format('DD/MM/YYYY')
+                                                    : null
+                                                setSelectedKeys(
+                                                    formatted ? [formatted] : []
+                                                )
+                                            }}
+                                            format="DD/MM/YYYY"
+                                            placeholder="Chọn năm học hàm"
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div className="flex justify-between gap-2">
+                                            <Button
+                                                size="small"
+                                                onClick={() => {
+                                                    clearFilters?.()
+                                                    confirm()
+                                                }}
+                                            >
+                                                Xóa
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                onClick={() => confirm()}
+                                            >
+                                                Lọc
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ),
+                                onFilter: (value, record) => {
+                                    if (
+                                        !value ||
+                                        !record.userProfile?.academicRankDate
+                                    )
+                                        return false
+
+                                    const filterDate = dayjs(value as string)
+                                    const recordDate = dayjs(
+                                        record.userProfile.academicRankDate
+                                    )
+
+                                    return filterDate.isSame(recordDate, 'day')
+                                },
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
                                         ? dayjs(
@@ -565,6 +795,16 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Học vị',
+                                filters: academicDegreeTypeData.map((hv) => ({
+                                    text: hv.sTen,
+                                    value: hv.Id,
+                                })),
+                                onFilter: (value, record) => {
+                                    return (
+                                        record.userProfile
+                                            ?.academicDegreeTypeId === value
+                                    )
+                                },
                                 render: (_, record) =>
                                     record.userProfile?.academicDegreeType
                                         ?.name || '',
@@ -586,7 +826,13 @@ export default function UserProfilePageLecture() {
                             {
                                 title: 'Loại giảng viên',
                                 align: 'center',
-                                width: 120,
+                                filters: lecturerTypeData.map((type) => ({
+                                    text: type.name,
+                                    value: type.id,
+                                })),
+                                onFilter: (value, record) =>
+                                    record.lecturerTypeId === value,
+                                width: 140,
                                 render: (_, record) =>
                                     record.lecturerType?.name || '',
                             },
@@ -605,10 +851,14 @@ export default function UserProfilePageLecture() {
                             {
                                 title: 'Cập bậc hàm',
                                 dataIndex: 'rankId',
+                                filters: rankTypeData.map((rank) => ({
+                                    text: rank.sTen,
+                                    value: rank.Id,
+                                })),
                                 render: (_, record) =>
                                     record.userProfile?.rank?.name || '',
                                 align: 'center',
-                                width: 120,
+                                width: 140,
                             },
                             {
                                 title: 'Năm CB',
@@ -646,6 +896,12 @@ export default function UserProfilePageLecture() {
                             },
                         ]}
                         data={data}
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys) =>
+                                setSelectedRowKeys(selectedKeys),
+                        }}
                         pagination={{
                             total: count,
                             onChange: setCurrentPage,

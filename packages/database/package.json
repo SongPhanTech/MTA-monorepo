@@ -2,7 +2,8 @@
   "name": "@workspace/db",
   "version": "0.0.0",
   "scripts": {
-    "generate": "zenstack generate && prisma generate --sql",
+    "generate:sql": "prisma generate --sql",
+    "generate": "zenstack generate",
     "db:push": "prisma db push --skip-generate"
   },
   "exports": {
