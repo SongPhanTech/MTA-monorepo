@@ -1,4 +1,6 @@
+import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -12,7 +14,6 @@ import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
-    useUpdateTrainingCourse,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import {
@@ -23,16 +24,16 @@ import {
     Flex,
     Form,
     Input,
+    Popover,
     Row,
     message,
 } from 'antd'
 import _ from 'lodash'
-import { Download, Printer, Save, Search, Upload } from 'lucide-react'
+import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import LopMonHocItem from './lop-mon-hoc'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import { useRouter } from 'next/router'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -66,6 +67,16 @@ export default function SubjectClassScore() {
     const [camThi, setCamThi] = useState<boolean>(false)
     const { subjectId } = router.query
 
+    const [open, setOpen] = useState(false)
+
+    const hide = () => {
+        setOpen(false)
+    }
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
+
     useEffect(() => {
         if (subjectId) {
             setSelectedFixedClass(subjectId as string)
@@ -89,25 +100,8 @@ export default function SubjectClassScore() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     const { mutateAsync: updateStudentSubjectScore } =
         useUpdateStudentSubjectScore()
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateTrainingCourse({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -243,6 +237,26 @@ export default function SubjectClassScore() {
             subjectClass: {
                 include: {
                     subject: true,
+                    semester: {
+                        include: {
+                            schoolYear: true,
+                        },
+                    },
+                    mainLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                    extraLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                    enterGradeLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
                 },
             },
         },
@@ -591,33 +605,67 @@ export default function SubjectClassScore() {
                         >
                             <Col span={24} className="flex justify-end">
                                 <Flex gap={4}>
-                                    <Button
-                                        // className="h-[40px]"
-                                        disabled={!selectedFixedClass}
+                                    <Popover
+                                        content={
+                                            <Flex
+                                                vertical
+                                                align="flex-start"
+                                                gap={4}
+                                            >
+                                                <Button
+                                                    onClick={() => {
+                                                        const fileInput =
+                                                            document.createElement(
+                                                                'input'
+                                                            )
+                                                        fileInput.type = 'file'
+                                                        fileInput.accept =
+                                                            '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
+                                                        fileInput.onchange = (
+                                                            e: any
+                                                        ) => {
+                                                            if (
+                                                                e.target
+                                                                    .files?.[0]
+                                                            ) {
+                                                                handleUploadFile(
+                                                                    e.target
+                                                                        .files[0]
+                                                                )
+                                                            }
+                                                        }
+                                                        fileInput.click()
+                                                    }}
+                                                    disabled={
+                                                        !selectedFixedClass
+                                                    }
+                                                    className="w-full flex justify-start"
+                                                >
+                                                    <FileUp />
+                                                    Nhập điểm từ file
+                                                </Button>
+                                                <ExportScoreTemplate
+                                                    selectedFixedClass={
+                                                        selectedFixedClass
+                                                    }
+                                                    dataTable={dataTable}
+                                                />
+                                            </Flex>
+                                        }
+                                        trigger="click"
+                                        open={open}
+                                        onOpenChange={handleOpenChange}
+                                        placement="bottomLeft"
+                                        arrow={false}
                                     >
-                                        <Download stroke="black" />
-                                        Tải danh sách
-                                    </Button>
-                                    <Button
-                                        onClick={() => {
-                                            const fileInput =
-                                                document.createElement('input')
-                                            fileInput.type = 'file'
-                                            fileInput.accept =
-                                                '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
-                                            fileInput.onchange = (e: any) => {
-                                                if (e.target.files?.[0]) {
-                                                    handleUploadFile(
-                                                        e.target.files[0]
-                                                    )
-                                                }
-                                            }
-                                            fileInput.click()
-                                        }}
-                                        disabled={!selectedFixedClass}
-                                    >
-                                        <Upload stroke="black" />
-                                        Nhập file
+                                        <Button disabled={!selectedFixedClass}>
+                                            <Ellipsis />
+                                        </Button>
+                                    </Popover>
+
+                                    <Button disabled={!selectedFixedClass}>
+                                        <Printer stroke="black" />
+                                        In phiếu danh sách thi
                                     </Button>
                                     <Button disabled={!selectedFixedClass}>
                                         <Printer stroke="black" />
@@ -718,7 +766,7 @@ export default function SubjectClassScore() {
                                                 onChange={(e) => {
                                                     const value = e.target.value
                                                     const newScore =
-                                                        parseFloat(value)
+                                                        Number.parseFloat(value)
 
                                                     setScoreCC((prevScores) => {
                                                         const index =
