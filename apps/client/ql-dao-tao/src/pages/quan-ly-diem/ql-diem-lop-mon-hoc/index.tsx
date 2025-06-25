@@ -351,7 +351,7 @@ export default function SubjectClassScore() {
                     id: record.id,
                     attendanceScore: ccScore ? ccScore.value : null,
                     midtermScore: txScore ? txScore.value : null,
-                    finalScore: thiScore ? thiScore.value : null,
+                    examScore: thiScore ? thiScore.value : null,
                     examBanned: camThiScore ? camThiScore.value : false,
                     examPostponed: hoanThiScore ? hoanThiScore.value : false,
                     suspended: dinhChiScore ? dinhChiScore.value : false,
@@ -365,7 +365,7 @@ export default function SubjectClassScore() {
                         data: {
                             attendanceScore: score.attendanceScore,
                             midtermScore: score.midtermScore,
-                            finalScore: score.finalScore,
+                            examScore: score.examScore,
                             examBanned: score.examBanned,
                             examPostponed: score.examPostponed,
                             suspended: score.suspended,
@@ -437,7 +437,7 @@ export default function SubjectClassScore() {
                         id: record.id,
                         attendanceScore: importedScore.attendanceScore,
                         midtermScore: importedScore.midtermScore,
-                        finalScore: importedScore.finalScore,
+                        examScore: importedScore.examScore,
                     }
                 }
                 return record
@@ -454,7 +454,7 @@ export default function SubjectClassScore() {
             }))
             const newScoreThi = updatedScores.map((item) => ({
                 id: item.id,
-                value: item.finalScore || 0,
+                value: item.examScore || 0,
             }))
 
             setScoreCC(newScoreCC)

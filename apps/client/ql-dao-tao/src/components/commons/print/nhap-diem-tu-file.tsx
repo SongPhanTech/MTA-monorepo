@@ -38,7 +38,7 @@ const ImportScoreModal = ({
             const tableStartIndex = jsonData.findIndex(
                 (item: any) =>
                     item['IMPORT ĐIỂM'] === 'STT' ||
-                    item.__EMPTY === 'Mã Sinh Viên'
+                    item.__EMPTY === 'Mã sinh viên'
             )
 
             if (tableStartIndex === -1) {
@@ -58,7 +58,7 @@ const ImportScoreModal = ({
                     className: row.__EMPTY_3, // Tên lớp
                     attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm CC
                     midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm TX
-                    finalScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm Thi
+                    examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm Thi
                 }))
                 .filter((item: any) => item.studentCode) // Lọc các dòng trống
 
@@ -105,7 +105,7 @@ const ImportScoreModal = ({
             if (
                 item.attendanceScore === undefined ||
                 item.midtermScore === undefined ||
-                item.finalScore === undefined
+                item.examScore === undefined
             ) {
                 errors.push(`Thiếu điểm cho sinh viên ${item.studentCode}`)
             }
@@ -121,7 +121,7 @@ const ImportScoreModal = ({
 
             checkScoreRange(item.attendanceScore, 'Điểm CC')
             checkScoreRange(item.midtermScore, 'Điểm TX')
-            checkScoreRange(item.finalScore, 'Điểm Thi')
+            checkScoreRange(item.examScore, 'Điểm thi')
         })
 
         if (errors.length > 0) {
@@ -134,7 +134,7 @@ const ImportScoreModal = ({
 
     const columns = [
         {
-            title: 'Mã Sinh Viên',
+            title: 'Mã sinh viên',
             dataIndex: 'studentCode',
             key: 'studentCode',
         },
@@ -144,7 +144,7 @@ const ImportScoreModal = ({
             key: 'studentName',
         },
         {
-            title: 'Ngày Sinh',
+            title: 'Ngày sinh',
             dataIndex: 'dobStudent',
             key: 'dobStudent',
         },
@@ -182,9 +182,9 @@ const ImportScoreModal = ({
             ),
         },
         {
-            title: 'Điểm Thi',
-            dataIndex: 'finalScore',
-            key: 'finalScore',
+            title: 'Điểm thi',
+            dataIndex: 'examScore',
+            key: 'examScore',
             render: (score: number) => (
                 <span
                     style={{

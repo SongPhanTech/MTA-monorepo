@@ -158,13 +158,13 @@ const ExportScoreTemplate = ({
         const headerRow = worksheet.getRow(10)
         headerRow.values = [
             'STT',
-            'Mã Sinh Viên',
-            'Họ và Tên',
-            'Ngày Sinh',
+            'Mã sinh viên',
+            'Họ và tên',
+            'Ngày sinh',
             'Tên lớp',
             'Điểm CC',
             'Điểm TX',
-            'Điểm Thi',
+            'Điểm thi',
         ]
         headerRow.eachCell((cell: any) => {
             cell.style = tableHeaderStyle
@@ -185,7 +185,7 @@ const ExportScoreTemplate = ({
                 record.student?.fixedClass?.name || '',
                 record.attendanceScore || '',
                 record.midtermScore || '',
-                record.finalScore || '',
+                record.examScore || '',
             ]
 
             // Áp dụng style border cho tất cả các cell trong hàng
