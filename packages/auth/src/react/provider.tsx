@@ -25,7 +25,7 @@ const SessionProvider: React.FC<{
     )
     const [status, setStatus] = React.useState<SessionStatus | null>(null)
     const pathname = usePathname()
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams() ?? ''
     useEffect(() => {
         const url = `${pathname}${!searchParams.toString() ? '' : `?${searchParams.toString()}`}`
         if (pathname !== '/') {
