@@ -1,7 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
 import { buildOrgTree } from '@lib/utils'
 import {
@@ -13,10 +12,12 @@ import {
     useFindManyDM_TonGiao,
     useFindManyFixedClass,
     useFindManyLecturerType,
+    useFindManyStaffPosition,
+    useFindManyStaffType,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, Upload } from 'antd'
+import { Col, Collapse, Form, Input, Row, TreeSelect, Upload } from 'antd'
 import type { UploadFile, UploadProps } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
@@ -33,13 +34,12 @@ export default function ThongTinCaNhanTab({
 }: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
 
-    // const [searchIdCard, setSearchIdCard] = useState<string>('')
-    // const [idCardOptions, setIdCardOptions] = useState<
-    //     { value: string; label: string }[]
-    // >([])
-
     const { data: registrationAreaData = [], refetch: refetchRe } =
         useFindManyDM_KhuVuc_DiaLy()
+
+    const { data: staffPositionData = [] } = useFindManyStaffPosition()
+
+    const { data: staffTypeData = [] } = useFindManyStaffType()
 
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyDM_QuocGia()
@@ -59,20 +59,6 @@ export default function ThongTinCaNhanTab({
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
 
     const treeData = buildOrgTree(manageOrgData)
-
-    // const { data: idCardNumberData = [] } = useFindManyUserProfile({
-    //     select: {
-    //         idCardNumber: true,
-    //         userType: true,
-    //         lastName: true,
-    //         firstName: true,
-    //     },
-    //     where: {
-    //         userType: {
-    //             in: ['CIVILIAN_STUDENT', 'MILITARY_STUDENT'],
-    //         },
-    //     },
-    // })
 
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
 
@@ -104,30 +90,7 @@ export default function ThongTinCaNhanTab({
         setFileList(newFileList.slice(-1))
     }
 
-    // useEffect(() => {
-    //     if (idCardNumberData.length > 0) {
-    //         const options = idCardNumberData
-    //             .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
-    //             .map((profile) => {
-    //                 // Tạo full name từ lastName + firstName
-    //                 const fullName =
-    //                     `${profile.lastName || ''} ${profile.firstName || ''}`.trim()
-
-    //                 // Tạo label: "Họ tên - Số CCCD"
-    //                 const label = fullName
-    //                     ? `${fullName} - ${profile.idCardNumber}`
-    //                     : profile.idCardNumber // Fallback nếu không có tên
-
-    //                 return {
-    //                     value: profile.idCardNumber,
-    //                     label: label,
-    //                     searchText:
-    //                         `${fullName} ${profile.idCardNumber}`.toLowerCase(),
-    //                 }
-    //             })
-    //         setIdCardOptions(options)
-    //     }
-    // }, [idCardNumberData])
+    console.log(treeData)
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -274,6 +237,7 @@ export default function ThongTinCaNhanTab({
                                 <Input placeholder="Nhập số căn cước công dân" />
                             </FormItem>
                         </Col>
+
                         {type === 'STUDENT' && (
                             <Col sm={12} lg={12}>
                                 <FormItem
@@ -314,6 +278,25 @@ export default function ThongTinCaNhanTab({
                             </Col>
                         )}
 
+                        {type === 'STAFF' && (
+                            <Col sm={12} lg={12}>
+                                <FormItem
+                                    form={form}
+                                    name="code"
+                                    label="Mã cán bộ"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập mã cán bộ',
+                                        },
+                                    ]}
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập mã cán bộ" />
+                                </FormItem>
+                            </Col>
+                        )}
+
                         <Col sm={12} lg={12}>
                             <FormItem
                                 form={form}
@@ -337,6 +320,18 @@ export default function ThongTinCaNhanTab({
                             </FormItem>
                         </Col>
                     </Row>
+                </Col>
+
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="code"
+                        label="Tên tài khoản"
+                        required
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập tên tài khoản" />
+                    </FormItem>
                 </Col>
 
                 {type === 'STUDENT' && (
@@ -450,8 +445,16 @@ export default function ThongTinCaNhanTab({
                                 className="mb-0"
                             >
                                 <TreeSelect
-                                    placeholder="Chọn đơn vị"
+                                    allowClear
+                                    showSearch
+                                    placeholder="Chọn đơn vị phụ trách"
+                                    treeDefaultExpandAll
                                     treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
                                 />
                             </FormItem>
                         </Col>
@@ -465,6 +468,64 @@ export default function ThongTinCaNhanTab({
                                 <Select
                                     placeholder="Chọn loại giảng viên"
                                     options={lecturerTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
+                            </FormItem>
+                        </Col>
+                    </>
+                )}
+
+                {type === 'STAFF' && (
+                    <>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="organizationId"
+                                label="Đơn vị"
+                                className="mb-0"
+                            >
+                                <TreeSelect
+                                    allowClear
+                                    showSearch
+                                    placeholder="Chọn đơn vị phụ trách"
+                                    treeDefaultExpandAll
+                                    treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="staffTypeId"
+                                label="Loại cán bộ"
+                                className="mb-0"
+                            >
+                                <Select
+                                    placeholder="Chọn loại cán bộ"
+                                    options={staffTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="staffPositionId"
+                                label="Chức vụ cán bộ"
+                                className="mb-0"
+                            >
+                                <Select
+                                    placeholder="Chọn loại cán bộ"
+                                    options={staffPositionData.map((i) => ({
                                         value: i.id,
                                         label: i.name,
                                     }))}
@@ -564,25 +625,60 @@ export default function ThongTinCaNhanTab({
                 <Col sm={12} lg={8}>
                     <FormItem
                         form={form}
-                        name="registrationAreaId"
-                        label="Khu vực đăng ký"
+                        name="healthInsuranceNumber"
+                        label="Thẻ bảo hiểm y tế"
                         className="mb-0"
-                        normalize={(value) =>
-                            value === undefined ? null : value
-                        }
                     >
-                        <Select
-                            allowClear
-                            placeholder="Chọn khu vực đăng ký"
-                            options={registrationAreaData.map((i) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            })}
-                        />
+                        <Input placeholder="Nhập thẻ bảo hiểm y tế" />
                     </FormItem>
                 </Col>
+
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="bankAccountNumber"
+                        label="Số thẻ ngân hàng"
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập số thẻ ngân hàng" />
+                    </FormItem>
+                </Col>
+
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="bankName"
+                        label="Ngân hàng"
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập ngân hàng" />
+                    </FormItem>
+                </Col>
+
+                {type === 'STUDENT' && (
+                    <Col sm={12} lg={8}>
+                        <FormItem
+                            form={form}
+                            name="registrationAreaId"
+                            label="Khu vực đăng ký"
+                            className="mb-0"
+                            normalize={(value) =>
+                                value === undefined ? null : value
+                            }
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn khu vực đăng ký"
+                                options={registrationAreaData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                )}
                 <Col sm={12} lg={8}>
                     <FormItem
                         form={form}
@@ -598,8 +694,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn quốc tịch"
                             options={nationalityData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -620,8 +716,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn tôn giáo"
                             options={religionData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -642,8 +738,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn dân tộc"
                             options={ethnicityData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -736,7 +832,7 @@ export default function ThongTinCaNhanTab({
                 </Col>
             </Row>
 
-            <div className="mt-3">
+            <div className="mt-4">
                 <Collapse
                     ghost
                     accordion={true}
@@ -755,7 +851,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthProvince"
+                                    name="provinceOfBirthId"
                                     className="mb-0"
                                     label="Tỉnh/Thành phố"
                                 >
@@ -768,7 +864,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthDistrict"
+                                    name="districtOfBirthId"
                                     className="mb-0"
                                     label="Quận/Huyện"
                                 >
@@ -781,7 +877,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthWard"
+                                    name="communeOfBirthId"
                                     className="mb-0"
                                     label="Phường/Xã"
                                 >
@@ -813,7 +909,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownProvince"
+                                    name="provinceHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -825,7 +921,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownDistrict"
+                                    name="districtHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -837,7 +933,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownWard"
+                                    name="communeHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -868,7 +964,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentProvince"
+                                    name="provincePermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -880,7 +976,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentDistrict"
+                                    name="districtPermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -892,7 +988,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentWard"
+                                    name="communePermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -923,7 +1019,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentProvince"
+                                    name="provinceCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -935,7 +1031,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentDistrict"
+                                    name="districtcurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -947,7 +1043,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentWard"
+                                    name="communecurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -959,7 +1055,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentDetailAddress"
+                                    name="currentAddress"
                                     className="mb-0"
                                 >
                                     <Input
