@@ -1,7 +1,8 @@
 // components/ImportScoreModal.tsx
-import { Button, Modal, Table, message } from 'antd'
+import { Button, Modal, Table, message, Tag, Space } from 'antd'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
+import { CloseOutlined } from '@ant-design/icons'
 
 interface ImportScoreModalProps {
     visible: boolean
@@ -18,12 +19,14 @@ const ImportScoreModal = ({
 }: ImportScoreModalProps) => {
     const [previewData, setPreviewData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
+    const [fileName, setFileName] = useState<string>('')
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
 
         setFile(file)
+        setFileName(file.name)
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -54,9 +57,9 @@ const ImportScoreModal = ({
                     studentName: row.__EMPTY_1, // Họ và Tên
                     dobStudent: row.__EMPTY_2, // Ngày Sinh
                     className: row.__EMPTY_3, // Tên lớp
-                    attendanceScore: row.__EMPTY_4, // Điểm CC
-                    midtermScore: row.__EMPTY_5, // Điểm TX
-                    finalScore: row.__EMPTY_6, // Điểm Thi
+                    attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm CC
+                    midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm TX
+                    finalScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm Thi
                 }))
                 .filter((item: any) => item.studentCode) // Lọc các dòng trống
 
@@ -65,11 +68,30 @@ const ImportScoreModal = ({
         reader.readAsArrayBuffer(file)
     }
 
+    const handleRemoveFile = () => {
+        setFile(null)
+        setFileName('')
+        setPreviewData([])
+        // Reset input file để có thể chọn lại file cùng tên
+        const fileInput = document.getElementById(
+            'file-upload'
+        ) as HTMLInputElement
+        if (fileInput) {
+            fileInput.value = ''
+        }
+    }
+
+    const handleCancel = () => {
+        handleRemoveFile()
+        onCancel()
+    }
+
     const handleConfirm = () => {
         // Validate data
         const errors: string[] = []
 
         previewData.forEach((item) => {
+            // Kiểm tra mã sinh viên
             const existingStudent = existingStudents.find(
                 (s) => s.student?.code === item.studentCode
             )
@@ -80,6 +102,7 @@ const ImportScoreModal = ({
                 )
             }
 
+            // Kiểm tra điểm có đủ 3 loại không
             if (
                 item.attendanceScore === undefined ||
                 item.midtermScore === undefined ||
@@ -87,13 +110,26 @@ const ImportScoreModal = ({
             ) {
                 errors.push(`Thiếu điểm cho sinh viên ${item.studentCode}`)
             }
+
+            // Kiểm tra điểm nằm trong khoảng 0-10
+            const checkScoreRange = (score: number, scoreName: string) => {
+                if (score < 0 || score > 10) {
+                    errors.push(
+                        `${scoreName} của sinh viên ${item.studentCode} phải từ 0 đến 10 (hiện tại: ${score})`
+                    )
+                }
+            }
+
+            checkScoreRange(item.attendanceScore, 'Điểm CC')
+            checkScoreRange(item.midtermScore, 'Điểm TX')
+            checkScoreRange(item.finalScore, 'Điểm Thi')
         })
 
         if (errors.length > 0) {
             message.error(`Lỗi: ${errors.join(', ')}`)
         } else {
             onConfirm(previewData)
-            onCancel()
+            handleCancel()
         }
     }
 
@@ -122,16 +158,43 @@ const ImportScoreModal = ({
             title: 'Điểm CC',
             dataIndex: 'attendanceScore',
             key: 'attendanceScore',
+            render: (score: number) => (
+                <span
+                    style={{
+                        color: score < 0 || score > 10 ? 'red' : 'inherit',
+                    }}
+                >
+                    {score}
+                </span>
+            ),
         },
         {
             title: 'Điểm TX',
             dataIndex: 'midtermScore',
             key: 'midtermScore',
+            render: (score: number) => (
+                <span
+                    style={{
+                        color: score < 0 || score > 10 ? 'red' : 'inherit',
+                    }}
+                >
+                    {score}
+                </span>
+            ),
         },
         {
             title: 'Điểm Thi',
             dataIndex: 'finalScore',
             key: 'finalScore',
+            render: (score: number) => (
+                <span
+                    style={{
+                        color: score < 0 || score > 10 ? 'red' : 'inherit',
+                    }}
+                >
+                    {score}
+                </span>
+            ),
         },
     ]
 
@@ -140,9 +203,9 @@ const ImportScoreModal = ({
             title="Xem trước dữ liệu nhập điểm"
             open={visible}
             width={1200}
-            onCancel={onCancel}
+            onCancel={handleCancel}
             footer={[
-                <Button key="cancel" onClick={onCancel}>
+                <Button key="cancel" onClick={handleCancel}>
                     Hủy
                 </Button>,
                 <Button
@@ -157,10 +220,34 @@ const ImportScoreModal = ({
         >
             <div style={{ marginBottom: 16 }}>
                 <input
+                    id="file-upload"
                     type="file"
                     accept=".xlsx,.xls"
                     onChange={handleFileChange}
+                    style={{ display: 'none' }}
                 />
+                <Button
+                    onClick={() =>
+                        document.getElementById('file-upload')?.click()
+                    }
+                >
+                    Chọn file
+                </Button>
+
+                {fileName && (
+                    <Space style={{ marginLeft: 16 }}>
+                        <Tag
+                            closable
+                            onClose={handleRemoveFile}
+                            closeIcon={
+                                <CloseOutlined style={{ color: 'red' }} />
+                            }
+                        >
+                            {fileName}
+                        </Tag>
+                    </Space>
+                )}
+
                 <p style={{ marginTop: 8 }}>
                     Chọn file Excel mẫu đã xuất từ hệ thống
                 </p>
