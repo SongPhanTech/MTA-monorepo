@@ -57,7 +57,10 @@ export default function StudentDetailPage() {
                     className="border-none"
                 >
                     <div className="p-4">
-                        <ThongTinCaNhanTab id={studentId} />
+                        <ThongTinCaNhanTab
+                            type={'CIVILIAN_STUDENT'}
+                            id={studentId}
+                        />
                     </div>
                 </Panel>
 

@@ -18,20 +18,12 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { Col, Collapse, Form, Input, Row, TreeSelect, Upload } from 'antd'
-import type { UploadFile, UploadProps } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import type { PutModalType, TabThongTinCaNhan } from '../type'
 const { Panel } = Collapse
 
-export default function ThongTinCaNhanTab({
-    id,
-    avatar,
-    setAvatar,
-    setFileList,
-    fileList,
-    type,
-}: TabThongTinCaNhan) {
+export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
 
     const { data: registrationAreaData = [], refetch: refetchRe } =
@@ -71,26 +63,6 @@ export default function ThongTinCaNhanTab({
         })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-
-    const beforeUpload = (file: File) => {
-        const fileURL = URL.createObjectURL(file)
-
-        const newFile: UploadFile = {
-            uid: Date.now().toString(),
-            name: file.name,
-            status: 'done',
-            url: fileURL,
-            originFileObj: file as any,
-        }
-        setFileList([newFile])
-        return false
-    }
-
-    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-        setFileList(newFileList.slice(-1))
-    }
-
-    console.log(treeData)
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -167,29 +139,14 @@ export default function ThongTinCaNhanTab({
                         }}
                     >
                         <Form.Item name={'file'} className="mb-0">
-                            <Upload
-                                listType="picture-card"
-                                // fileList={fileList}
-                                fileList={avatar.length > 0 ? avatar : fileList}
-                                onChange={onChange}
-                                beforeUpload={beforeUpload}
-                                onRemove={() => {
-                                    setFileList([])
-                                    setAvatar([])
-                                    return true
-                                }}
-                            >
-                                {avatar.length > 0 || fileList.length > 0
-                                    ? ''
-                                    : fileList.length < 1 && (
-                                          <p
-                                              style={{
-                                                  fontSize: '0.65rem',
-                                              }}
-                                          >
-                                              + Tải ảnh lên
-                                          </p>
-                                      )}
+                            <Upload listType="picture-card" maxCount={1}>
+                                <p
+                                    style={{
+                                        fontSize: '0.65rem',
+                                    }}
+                                >
+                                    + Tải ảnh lên
+                                </p>
                             </Upload>
                         </Form.Item>
                     </div>
@@ -237,27 +194,44 @@ export default function ThongTinCaNhanTab({
                                 <Input placeholder="Nhập số căn cước công dân" />
                             </FormItem>
                         </Col>
-
-                        {type === 'STUDENT' && (
+                        {type === 'CIVILIAN_STUDENT' && (
                             <Col sm={12} lg={12}>
                                 <FormItem
                                     form={form}
                                     name="code"
-                                    label="Mã sinh viên / học viên"
+                                    label="Mã sinh viên"
                                     rules={[
                                         {
                                             required: true,
                                             message:
-                                                'Vui lòng nhập mã sinh viên / học viên!',
+                                                'Vui lòng nhập mã sinh viên!',
                                         },
                                     ]}
                                     className="mb-0"
                                 >
-                                    <Input placeholder="Nhập mã sinh viên / học viên" />
+                                    <Input placeholder="Nhập mã sinh viên" />
                                 </FormItem>
                             </Col>
                         )}
-
+                        {type === 'MILITARY_STUDENT' && (
+                            <Col sm={12} lg={12}>
+                                <FormItem
+                                    form={form}
+                                    name="code"
+                                    label="Mã học viên"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Vui lòng nhập mã học viên!',
+                                        },
+                                    ]}
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập mã học viên" />
+                                </FormItem>
+                            </Col>
+                        )}
                         {type === 'LECTURER' && (
                             <Col sm={12} lg={12}>
                                 <FormItem
@@ -334,7 +308,7 @@ export default function ThongTinCaNhanTab({
                     </FormItem>
                 </Col>
 
-                {type === 'STUDENT' && (
+                {type.includes('STUDENT') && (
                     <>
                         <Col sm={12} lg={8}>
                             <FormItem
@@ -655,7 +629,7 @@ export default function ThongTinCaNhanTab({
                     </FormItem>
                 </Col>
 
-                {type === 'STUDENT' && (
+                {type.includes('STUDENT') && (
                     <Col sm={12} lg={8}>
                         <FormItem
                             form={form}

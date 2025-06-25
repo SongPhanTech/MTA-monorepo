@@ -443,11 +443,7 @@ const PutStudentModal = () => {
                 <TabQuanLyHoSo
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
-                    avatar={avatar}
-                    setAvatar={setAvatar}
-                    type="STUDENT"
-                    fileList={fileList}
-                    setFileList={setFileList}
+                    type="CIVILIAN_STUDENT"
                 />
             </Col>
         </PutFormModal>

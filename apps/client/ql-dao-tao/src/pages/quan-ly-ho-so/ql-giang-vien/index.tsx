@@ -29,7 +29,7 @@ import {
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
 import EditIcon from '@components/icons/edit'
-import type { PutUserProfileLectureProps } from '@components/modal/put-user-profile-lecture-modal'
+import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
 import { getMinioUrl } from '@workspace/constant'
 import {
     Button,

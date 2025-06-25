@@ -467,11 +467,7 @@ const PutUserProfileLectureModal = () => {
                 <TabQuanLyHoSo
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
-                    avatar={avatar}
-                    setAvatar={setAvatar}
                     type="LECTURER"
-                    fileList={fileList}
-                    setFileList={setFileList}
                 />
             </Col>
         </PutFormModal>
