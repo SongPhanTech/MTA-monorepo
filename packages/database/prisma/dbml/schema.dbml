@@ -4,7 +4,7 @@
 
 Table Config {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -16,7 +16,7 @@ Table Config {
 
 Table SurveyObjectType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -28,7 +28,7 @@ Table SurveyObjectType {
 
 Table SurveyTopic {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -40,7 +40,7 @@ Table SurveyTopic {
 
 Table SurveyQuestionType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -52,7 +52,7 @@ Table SurveyQuestionType {
 
 Table Survey {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -70,7 +70,7 @@ Table Survey {
 
 Table SurveyQuestion {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -86,7 +86,7 @@ Table SurveyQuestion {
 
 Table SurveyAnswer {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -99,7 +99,7 @@ Table SurveyAnswer {
 
 Table StudentSubjectScore {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -133,7 +133,7 @@ Table StudentSubjectScore {
 
 Table ArchivedCertificateOnStudentSubjectScore {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -151,7 +151,7 @@ Table ArchivedCertificateOnStudentSubjectScore {
 
 Table ArchivedCertificate {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -166,7 +166,7 @@ Table ArchivedCertificate {
 
 Table ArchivedAwardOnStudentSubjectScore {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -184,7 +184,7 @@ Table ArchivedAwardOnStudentSubjectScore {
 
 Table ArchivedAward {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -199,7 +199,7 @@ Table ArchivedAward {
 
 Table SchoolYear {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -217,7 +217,7 @@ Table SchoolYear {
 
 Table Semester {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -233,6 +233,8 @@ Table Semester {
   endDate DateTime
   subjectClasses SubjectClass [not null]
   trainingCoursesStart TrainingCourse [not null]
+  trainingScoreSession TrainingScoreSession [not null]
+  studentTrainingSemester StudentTrainingSemester [not null]
 
   indexes {
     (schoolYearId, order) [unique]
@@ -244,7 +246,7 @@ Table Semester {
 
 Table Milestone {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -262,7 +264,7 @@ Table Milestone {
 
 Table TrainingCourse {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -276,6 +278,11 @@ Table TrainingCourse {
   academicYear String
   maxTrainingTime Float
   admissionQuota Int
+  coef_1 Float [not null, default: 0.1]
+  coef_2 Float [not null, default: 0.30000000000000004]
+  coef_3 Float [not null, default: 0.6000000000000001]
+  scoreToTakeExam Float [not null, default: 1]
+  scoreToPass Float [not null, default: 4]
   trainingObjectType TrainingObjectType [not null]
   trainingObjectTypeId String [not null]
   fixedClass FixedClass [not null]
@@ -286,7 +293,7 @@ Table TrainingCourse {
 
 Table FixedClass {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -315,7 +322,7 @@ Table FixedClass {
 
 Table Curriculum {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -337,7 +344,7 @@ Table Curriculum {
 
 Table DiplomaType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -350,7 +357,7 @@ Table DiplomaType {
 
 Table CurriculumVersion {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -371,13 +378,8 @@ Table CurriculumVersion {
   trainingLevelId String [not null]
   trainingTime TrainingTime [not null]
   trainingTimeId String [not null]
-  coef_1 Float
-  coef_2 Float
-  coef_3 Float
   diplomaType DiplomaType
   diplomaTypeId String
-  scoreToTakeExam Float
-  scoreToPass Float
   requiredCredits Int
   electiveCredits Int
   jobPosition String
@@ -401,7 +403,7 @@ Table CurriculumVersion {
 
 Table Subject {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -418,7 +420,7 @@ Table Subject {
 
 Table SubjectVersion {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -461,7 +463,7 @@ Table SubjectVersion {
 
 Table TrainingBlockSubject {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -483,7 +485,7 @@ Table TrainingBlockSubject {
 
 Table SubjectClass {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -522,7 +524,7 @@ Table SubjectClass {
 
 Table TrainingObjectType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -534,13 +536,14 @@ Table TrainingObjectType {
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
   trainingFields TrainingFieldOnTrainingObjectType [not null]
   students Student [not null]
+  trainingScoreSession TrainingScoreSession [not null]
 
   Note: 'đối tượng đào tạo (Quân sư, dân sự, quốc tế)'
 }
 
 Table PriorityObject {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -554,7 +557,7 @@ Table PriorityObject {
 
 Table TrainingType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -568,7 +571,7 @@ Table TrainingType {
 
 Table TrainingLevel {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -583,7 +586,7 @@ Table TrainingLevel {
 
 Table TrainingForm {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -597,7 +600,7 @@ Table TrainingForm {
 
 Table TrainingLocation {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -612,7 +615,7 @@ Table TrainingLocation {
 
 Table Building {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -631,7 +634,7 @@ Table Building {
 
 Table Room {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -655,7 +658,7 @@ Table Room {
 
 Table TrainingField {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -674,7 +677,7 @@ Table TrainingField {
 
 Table TrainingFieldOnTrainingObjectType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -692,7 +695,7 @@ Table TrainingFieldOnTrainingObjectType {
 
 Table TrainingMajor {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -716,7 +719,7 @@ Table TrainingMajor {
 
 Table TrainingMajorOnTrainingObjectType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -734,7 +737,7 @@ Table TrainingMajorOnTrainingObjectType {
 
 Table TrainingBlock {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -749,7 +752,7 @@ Table TrainingBlock {
 
 Table TrainingBlockOnCurriculumVersion {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -769,7 +772,7 @@ Table TrainingBlockOnCurriculumVersion {
 
 Table TrainingTime {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -783,7 +786,7 @@ Table TrainingTime {
 
 Table StudyRank {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -797,7 +800,7 @@ Table StudyRank {
 
 Table TrainingRank {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -811,7 +814,7 @@ Table TrainingRank {
 
 Table ScoreConvert {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -832,7 +835,7 @@ Table ScoreConvert {
 
 Table TrainingKPI {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -845,7 +848,7 @@ Table TrainingKPI {
 
 Table Student {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -878,13 +881,15 @@ Table Student {
   studyRankId String
   trainingRank TrainingRank
   trainingRankId String
+  studentTrainingScore StudentTrainingScore [not null]
+  studentTrainingSemester StudentTrainingSemester [not null]
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
 
 Table User {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -909,7 +914,7 @@ Table User {
 
 Table Group {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -922,7 +927,7 @@ Table Group {
 
 Table Role {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -935,7 +940,7 @@ Table Role {
 
 Table Permission {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -953,7 +958,7 @@ Table Permission {
 
 Table ChatBotConfig {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -965,7 +970,7 @@ Table ChatBotConfig {
 
 Table Document {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -987,7 +992,7 @@ Table Document {
 
 Table FAQ {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1006,7 +1011,7 @@ Table FAQ {
 
 Table Prompt {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1020,7 +1025,7 @@ Table Prompt {
 
 Table Conversation {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1034,7 +1039,7 @@ Table Conversation {
 
 Table Message {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1048,7 +1053,7 @@ Table Message {
 
 Table Feedback {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1063,7 +1068,7 @@ Table Feedback {
 
 Table UserProfile {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1838,7 +1843,7 @@ Table VaiTroTrongNhom {
 
 Table Lecturer {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1861,7 +1866,7 @@ Table Lecturer {
 
 Table LecturerHistory {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1882,7 +1887,7 @@ Table LecturerHistory {
 
 Table LecturerType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1897,7 +1902,7 @@ Table LecturerType {
 
 Table StaffType {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1912,7 +1917,7 @@ Table StaffType {
 
 Table StaffPosition {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1927,7 +1932,7 @@ Table StaffPosition {
 
 Table Staff {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1947,7 +1952,7 @@ Table Staff {
 
 Table StaffHistory {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1965,9 +1970,61 @@ Table StaffHistory {
   staffPositionId String [not null]
 }
 
+Table TrainingScoreSession {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  time DateTime [default: `now()`, not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  trainingObjectType TrainingObjectType
+  trainingObjectTypeId String
+  studentTrainingScore StudentTrainingScore [not null]
+}
+
+Table StudentTrainingScore {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingScoreSession TrainingScoreSession [not null]
+  trainingScoreSessionId String [not null]
+  student Student [not null]
+  studentId String [not null]
+  score Float [not null, default: 0]
+
+  indexes {
+    (trainingScoreSessionId, studentId) [unique]
+  }
+}
+
+Table StudentTrainingSemester {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  scoreAvg Float [not null, default: 0]
+  trainingType StudentTrainingType [not null]
+}
+
 Table TemplateFile {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -1982,7 +2039,7 @@ Table TemplateFile {
 
 Table BlockedIp {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -2164,6 +2221,14 @@ Enum UserType {
 Enum Gender {
   Male
   Female
+}
+
+Enum StudentTrainingType {
+  EXCELLENT
+  GOOD
+  FAIR
+  AVERAGE
+  POOR
 }
 
 Enum TemplateFileType {
@@ -2419,3 +2484,15 @@ Ref: StaffHistory.organizationId > DM_DonVi.Id
 Ref: StaffHistory.staffTypeId > StaffType.id
 
 Ref: StaffHistory.staffPositionId > StaffPosition.id
+
+Ref: TrainingScoreSession.semesterId > Semester.id
+
+Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
+
+Ref: StudentTrainingScore.studentId > Student.id
+
+Ref: StudentTrainingSemester.studentId > Student.id
+
+Ref: StudentTrainingSemester.semesterId > Semester.id

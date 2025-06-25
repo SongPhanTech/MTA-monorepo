@@ -145,8 +145,8 @@ const PutStudentModal = () => {
         lastName: output.lastName,
         currentAddress: output.currentAddress,
         provinceCurrentAddressId: output.provinceCurrentAddressId,
-        districtcurrentAddressId: output.districtcurrentAddressId,
-        communecurrentAddressId: output.communecurrentAddressId,
+        districtCurrentAddressId: output.districtCurrentAddressId,
+        communeCurrentAddressId: output.communeCurrentAddressId,
         provinceOfBirthId: output.provinceOfBirthId,
         districtOfBirthId: output.districtOfBirthId,
         communeOfBirthId: output.communeOfBirthId,
@@ -443,11 +443,7 @@ const PutStudentModal = () => {
                 <TabQuanLyHoSo
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
-                    avatar={avatar}
-                    setAvatar={setAvatar}
-                    type="STUDENT"
-                    fileList={fileList}
-                    setFileList={setFileList}
+                    type="CIVILIAN_STUDENT"
                 />
             </Col>
         </PutFormModal>

@@ -10,11 +10,9 @@ import {
     useUpdateUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import type { UploadFile } from 'antd'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { getMinioUrl } from '@workspace/constant'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
@@ -36,9 +34,6 @@ const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutStaffProfile>()
 
     const [activeKey, setActiveKey] = useState<string>('1')
-    const [fileList, setFileList] = useState<UploadFile[]>([])
-    const [avatar, setAvatar] = useState<UploadFile[]>([])
-
     const { isOpen, onClose, input } =
         useDisclosure<PutUserProfileLectureProps>({
             tag: PutUserProfileStaffModal.name,
@@ -234,31 +229,27 @@ const PutUserProfileStaffModal = () => {
     async function onOk(output?: PutStaffProfile) {
         if (!output) return
         let fileName = output.avatar
-        if (fileList.length > 0) {
+        if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension: fileList[0].name.split('.').pop() ?? '',
+                extension: output.file.name.split('.').pop() ?? '',
             })
-            const res = await fetch(resPresignedUrl.data.url, {
+            await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
-                body: fileList[0].originFileObj,
+                body: output.file,
             })
             fileName = resPresignedUrl.data.fileName
         }
-
         try {
             showSpinner()
-
             const userProfileData = buildUserProfileUpdateData(
                 output,
                 fileName ?? undefined
             )
-
             const userProfileCreateData = buildUserProfileCreateData(
                 output,
                 fileName ?? undefined
             )
-
             const staffUpdateData = buildStaffUpdateData(output)
 
             if (id) {
@@ -324,9 +315,6 @@ const PutUserProfileStaffModal = () => {
         if (staffData?.userProfile && id) {
             const userProfile = staffData.userProfile
             const staff = staffData
-
-            console.log(staff)
-
             const formData = {
                 code: staff.code ?? undefined,
                 organizationId: staff.organizationId,
@@ -410,22 +398,7 @@ const PutUserProfileStaffModal = () => {
                     ? dayjs(userProfile.academicDegreeDate)
                     : undefined,
             }
-
             form.setFieldsValue(formData)
-
-            console.log(formData.organizationId)
-
-            // Set avatar nếu có
-            if (userProfile.avatar) {
-                setAvatar([
-                    {
-                        uid: '-1',
-                        name: 'avatar.png',
-                        status: 'done',
-                        url: getMinioUrl(userProfile.avatar),
-                    },
-                ])
-            }
         }
     }, [staffData, form, id])
 
@@ -454,11 +427,7 @@ const PutUserProfileStaffModal = () => {
                 <TabQuanLyHoSo
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
-                    avatar={avatar}
-                    setAvatar={setAvatar}
                     type="STAFF"
-                    fileList={fileList}
-                    setFileList={setFileList}
                 />
             </Col>
         </PutFormModal>

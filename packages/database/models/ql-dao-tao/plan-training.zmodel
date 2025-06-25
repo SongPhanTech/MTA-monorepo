@@ -131,25 +131,23 @@ enum SemesterType {
 /// Kỳ học
 // Giao diện tạo kỳ học có ô stt tự động tăng (useCount), người dùng chọn kỳ học là kỳ 1 hay kỳ 2 => HK chính => SemesterType
 model Semester extends Base {
-  name                 String
-  shortName            String? // tên ngắn gọn
-  semesterType         SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
-  order                Int // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
-  schoolYear           SchoolYear       @relation(fields: [schoolYearId], references: [id])
-  schoolYearId         String
-  startDate            DateTime
-  endDate              DateTime?
+  name                    String
+  shortName               String? // tên ngắn gọn
+  semesterType            SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
+  order                   Int // số thứ tự của kỳ học trong năm học (1, 2, 3, ...) 
+  schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
+  schoolYearId            String
+  startDate               DateTime
+  endDate                 DateTime?
 
-  subjectClasses       SubjectClass[]
-  trainingCoursesStart TrainingCourse[]
+  subjectClasses          SubjectClass[]
+  trainingCoursesStart    TrainingCourse[]
+  trainingScoreSession    TrainingScoreSession[]
+  studentTrainingSemester StudentTrainingSemester[]
 
   @@unique([schoolYearId, order]) // stt kỳ học trong một năm học không được trùng nhau
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
-
-	trainingScoreSession TrainingScoreSession[]
-
-	studentTrainingSemester StudentTrainingSemester[]
 }
 
 /// Mốc huấn luyện
@@ -174,6 +172,16 @@ model TrainingCourse extends Base {
   academicYear         String?
   maxTrainingTime      Float?
   admissionQuota       Int?
+
+  coef_1               Float              @default(0.1) // Hệ số 1
+  coef_2               Float              @default(0.3) // Hệ số 2
+  coef_3               Float              @default(0.6) // Hệ số 3
+
+  scoreToTakeExam      Float              @default(1) // Điểm tối thiểu để được thi
+  scoreToPass          Float              @default(4) // Điểm tối thiểu để qua môn
+
+  // TODO: Thêm các quy chế về học bổng, cảnh cáo học tập
+
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
 
@@ -265,16 +273,9 @@ model CurriculumVersion extends Base {
   trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
   trainingTimeId        String
 
-  coef_1                Float? // Hệ số 1
-  coef_2                Float? // Hệ số 2
-  coef_3                Float? // Hệ số 3
-
   diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
   diplomaTypeId         String?
 
-  // TODO: maybe move to ScoreConvert
-  scoreToTakeExam       Float? // Điểm tối thiểu để được thi
-  scoreToPass           Float? // Điểm tối thiểu để qua môn
   // TODO: Thêm các quy chế cho chương trình đào tạo
   requiredCredits       Int? // Số tín chỉ bắt buộc
   electiveCredits       Int? // Số tín chỉ tự chọn
