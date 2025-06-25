@@ -1,7 +1,8 @@
+import { CalendarOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-import { PutOpenClassModal } from '@components/modal'
+import { HanNhapDiem } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -10,17 +11,14 @@ import {
     useCountSubjectClass,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
-    useUpdateSubjectClass,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, Row, Tag, Tooltip } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import HanNhapDiem from './modal-han-nhap-diem'
-import dayjs from 'dayjs'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -45,47 +43,19 @@ export default function SubjectClassScore() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOpenClassModal.name,
+        tag: HanNhapDiem.name,
     })
 
-    const handleModal = () => {
-        onOpen()
-    }
-
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateTrainingCourse({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
-
     const handleFilterChange = (key: string, value: string) => {
-        console.log(`Filter changed: ${key} = ${value}`)
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
             return newFilters
         })
-        console.log('Filters updated:', filters)
     }
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
-
-    const handleChangeLocked = async (id: string, isLocked: boolean) => {}
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
@@ -160,11 +130,37 @@ export default function SubjectClassScore() {
     const { data: count } = useCountSubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
                 : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
+            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                      subjectClassStudent: {
+                          some: {
+                              student: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
+            deletedAt: null,
         },
     })
 
@@ -177,157 +173,6 @@ export default function SubjectClassScore() {
             console.log(selectedKeys)
         },
     }
-
-    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
-        setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters }
-            console.log('Filters applied:', updatedFilters)
-            debouncedRefetch()
-            return updatedFilters
-        })
-    }
-
-    useEffect(() => {
-        filters
-        debouncedRefetch()
-    }, [filters, debouncedRefetch])
-    // Cập nhật giá trị khi filter thay đổi
-    useEffect(() => {
-        form.setFieldsValue({
-            searchText: filters.searchText,
-            semesterId: filters.semesterId,
-            trainingObjectTypeId: filters.trainingObjectTypeId,
-        })
-    }, [filters, form])
-
-    const handleApply = async (data: SubjectClass) => {
-        updateSubjectClass({
-            where: { id: data.id },
-            data: {
-                examScoreDeadline: data.examScoreDeadline,
-                scoreDeadline: data.scoreDeadline,
-            },
-        }).catch((error) => {
-            console.error(
-                'Error updating examScoreDeadline for item:',
-                data.id,
-                error
-            )
-        })
-
-        console.log('Applying filters:', data)
-    }
-
-    const handleCheckExamDate = () => {
-        dataTable.forEach((item: SubjectClass) => {
-            if (item.examDate) {
-                if (!item.examScoreDeadline) {
-                    const examDate = new Date(item.examDate)
-                    const examScoreDeadline = new Date(
-                        examDate.getTime() + 7 * 24 * 60 * 60 * 1000
-                    )
-                    item.examScoreDeadline = examScoreDeadline
-                    if (
-                        item.examScoreDeadline <=
-                        new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
-                        item.isLockExamScore = true
-                    } else if (
-                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
-                        item.isLockExamScore = true
-                    } else {
-                        item.isLockExamScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: {
-                            examScoreDeadline,
-                            isLockExamScore: item.isLockExamScore,
-                        },
-                    }).catch((error) => {
-                        console.error(
-                            'Error updating examScoreDeadline for item:',
-                            item.id,
-                            error
-                        )
-                    })
-                } else {
-                    const examDate = new Date(item.examDate)
-                    if (
-                        item.examScoreDeadline <
-                        new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
-                        item.isLockExamScore = true
-                    } else if (
-                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
-                        item.isLockExamScore = true
-                    } else {
-                        item.isLockExamScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { isLockExamScore: item.isLockExamScore },
-                    }).catch((error) => {
-                        console.error(
-                            'Error updating examScoreDeadline for item:',
-                            item.id,
-                            error
-                        )
-                    })
-                }
-                // Kiểm tra và cập nhật scoreDeadline
-                if (!item.scoreDeadline) {
-                    const examDate = new Date(item.examDate)
-                    const scoreDeadline = new Date(
-                        examDate.getTime() - 7 * 24 * 60 * 60 * 1000
-                    )
-                    item.scoreDeadline = scoreDeadline
-                    if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true
-                    } else {
-                        item.isLockScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { scoreDeadline, isLockScore: item.isLockScore },
-                    }).catch((error) => {
-                        console.error(
-                            'Error updating scoreDeadline for item:',
-                            item.id,
-                            error
-                        )
-                    })
-                } else {
-                    if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true
-                    } else {
-                        item.isLockScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { isLockScore: item.isLockScore },
-                    }).catch((error) => {
-                        console.error(
-                            'Error updating scoreDeadline for item:',
-                            item.id,
-                            error
-                        )
-                    })
-                }
-            } else {
-                console.log('No exam date found for item:', item)
-            }
-        })
-    }
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        handleCheckExamDate()
-    }, [])
-
-    console.log(dataTable)
 
     return (
         <div>
@@ -474,14 +319,12 @@ export default function SubjectClassScore() {
                                     dataIndex: 'name',
                                     align: 'center',
                                     width: 200,
-                                    fixed: 'left',
                                 },
                                 {
                                     title: 'Môn học',
                                     width: 250,
                                     render: (text, record) =>
                                         record.subject?.name || text,
-                                    fixed: 'left',
                                 },
                                 {
                                     title: 'Số tín chỉ',
@@ -494,6 +337,19 @@ export default function SubjectClassScore() {
                                     title: 'Hạn ĐQT',
                                     width: 120,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const dateA = a.scoreDeadline
+                                            ? new Date(
+                                                  a.scoreDeadline
+                                              ).getTime()
+                                            : 0
+                                        const dateB = b.scoreDeadline
+                                            ? new Date(
+                                                  b.scoreDeadline
+                                              ).getTime()
+                                            : 0
+                                        return dateA - dateB
+                                    },
                                     render: ({ scoreDeadline }) =>
                                         scoreDeadline
                                             ? dayjs(scoreDeadline).format(
@@ -503,14 +359,141 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Số ngày',
-                                    dataIndex: 'ngayDot',
-                                    width: 80,
+                                    width: 100,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const today = dayjs()
+
+                                        // Hàm tính số ngày còn lại
+                                        const calculateDaysRemaining = (
+                                            record: any
+                                        ) => {
+                                            const scoreDeadline =
+                                                record.scoreDeadline
+                                                    ? dayjs(
+                                                          record.scoreDeadline
+                                                      )
+                                                    : null
+                                            const examDeadline =
+                                                record.examScoreDeadline
+                                                    ? dayjs(
+                                                          record.examScoreDeadline
+                                                      )
+                                                    : null
+
+                                            // Nếu không có cả 2 hạn
+                                            if (!scoreDeadline && !examDeadline)
+                                                return Number.POSITIVE_INFINITY
+
+                                            // Nếu chưa qua hạn ĐQT
+                                            if (
+                                                scoreDeadline &&
+                                                today.isBefore(scoreDeadline)
+                                            ) {
+                                                return scoreDeadline.diff(
+                                                    today,
+                                                    'day'
+                                                )
+                                            }
+                                            // Nếu đã qua hạn ĐQT nhưng chưa qua hạn ĐT
+                                            if (
+                                                examDeadline &&
+                                                today.isBefore(examDeadline)
+                                            ) {
+                                                return examDeadline.diff(
+                                                    today,
+                                                    'day'
+                                                )
+                                            }
+                                            // Đã qua cả 2 hạn
+                                            return Number.NEGATIVE_INFINITY
+                                        }
+
+                                        const daysA = calculateDaysRemaining(a)
+                                        const daysB = calculateDaysRemaining(b)
+
+                                        return daysA - daysB
+                                    },
+                                    render: (record) => {
+                                        const today = dayjs()
+                                        const scoreDeadline = dayjs(
+                                            record?.scoreDeadline
+                                        )
+                                        const examScoreDeadline = dayjs(
+                                            record?.examScoreDeadline
+                                        )
+
+                                        if (
+                                            !scoreDeadline &&
+                                            !examScoreDeadline
+                                        ) {
+                                            return 'N/A'
+                                        }
+
+                                        let daysRemaining: number
+                                        let deadlineType: string
+
+                                        // Nếu chưa qua hạn ĐQT
+                                        if (today?.isBefore(scoreDeadline)) {
+                                            daysRemaining = scoreDeadline?.diff(
+                                                today,
+                                                'day'
+                                            )
+                                            deadlineType = 'ĐQT'
+                                        }
+                                        // Nếu đã qua hạn ĐQT nhưng chưa qua hạn ĐT
+                                        else if (
+                                            today?.isBefore(examScoreDeadline)
+                                        ) {
+                                            daysRemaining =
+                                                examScoreDeadline?.diff(
+                                                    today,
+                                                    'day'
+                                                )
+                                            deadlineType = 'ĐT'
+                                        } else {
+                                            return 'Hết hạn'
+                                        }
+
+                                        return (
+                                            <Tooltip
+                                                title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
+                                            >
+                                                <span
+                                                    style={{
+                                                        color:
+                                                            daysRemaining <= 3
+                                                                ? 'red'
+                                                                : daysRemaining <=
+                                                                    7
+                                                                  ? 'orange'
+                                                                  : 'green',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    {daysRemaining}
+                                                </span>
+                                            </Tooltip>
+                                        )
+                                    },
                                 },
                                 {
                                     title: 'Hạn ĐT',
                                     width: 120,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const dateA = a.examScoreDeadline
+                                            ? new Date(
+                                                  a.examScoreDeadline
+                                              ).getTime()
+                                            : 0
+                                        const dateB = b.examScoreDeadline
+                                            ? new Date(
+                                                  b.examScoreDeadline
+                                              ).getTime()
+                                            : 0
+                                        return dateA - dateB
+                                    },
                                     render: ({ examScoreDeadline }) =>
                                         examScoreDeadline
                                             ? dayjs(examScoreDeadline).format(
@@ -569,6 +552,15 @@ export default function SubjectClassScore() {
                                     title: 'Ngày bắt đầu',
                                     width: 150,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const dateA = a.startDate
+                                            ? new Date(a.startDate).getTime()
+                                            : 0
+                                        const dateB = b.startDate
+                                            ? new Date(b.startDate).getTime()
+                                            : 0
+                                        return dateA - dateB
+                                    },
                                     render: ({ startDate }) =>
                                         startDate
                                             ? dayjs(startDate).format(
@@ -580,6 +572,15 @@ export default function SubjectClassScore() {
                                     title: 'Ngày thi',
                                     width: 150,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const dateA = a.examDate
+                                            ? new Date(a.examDate).getTime()
+                                            : 0
+                                        const dateB = b.examDate
+                                            ? new Date(b.examDate).getTime()
+                                            : 0
+                                        return dateA - dateB
+                                    },
                                     render: ({ examDate }) =>
                                         examDate
                                             ? dayjs(examDate).format(
@@ -591,6 +592,15 @@ export default function SubjectClassScore() {
                                     title: 'Ngày kết thúc',
                                     width: 150,
                                     align: 'center',
+                                    sorter: (a: any, b: any) => {
+                                        const dateA = a.endDate
+                                            ? new Date(a.endDate).getTime()
+                                            : 0
+                                        const dateB = b.endDate
+                                            ? new Date(b.endDate).getTime()
+                                            : 0
+                                        return dateA - dateB
+                                    },
                                     render: ({ endDate }) =>
                                         endDate
                                             ? dayjs(endDate).format(
@@ -631,9 +641,8 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Trạng thái',
-                                    dataIndex: 'trangThai',
                                     width: 150,
-                                    // fixed: 'right',
+                                    fixed: 'right',
                                     align: 'center',
                                     render: (text, record) => {
                                         if (
@@ -667,23 +676,26 @@ export default function SubjectClassScore() {
                                             return (
                                                 <div className="flex justify-center items-center gap-2">
                                                     <Row
-                                                        className="flex justify-center items-center gap-2 text-[#028850]"
+                                                        className="flex justify-center items-center gap-2 text-primary"
                                                         onClick={() => {
                                                             setEditSubjectClass(
                                                                 record as SubjectClass
                                                             )
                                                         }}
                                                     >
-                                                        <HanNhapDiem
-                                                            data={
-                                                                editSubjectClass
+                                                        <Button
+                                                            icon={
+                                                                <CalendarOutlined />
                                                             }
-                                                            onFilterChange={
-                                                                handleFilterChange
+                                                            onClick={() =>
+                                                                onOpen(
+                                                                    record.id
+                                                                )
                                                             }
-                                                            onApply={
-                                                                handleApply
-                                                            }
+                                                            style={{
+                                                                height: '40px',
+                                                                width: '40px',
+                                                            }}
                                                         />
                                                         Đặt lại lịch nhập điểm
                                                     </Row>
