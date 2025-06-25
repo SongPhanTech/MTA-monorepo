@@ -1,8 +1,7 @@
-// components/ImportScoreModal.tsx
-import { Button, Modal, Table, message, Tag, Space } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
+import { Button, Modal, Space, Table, Tag, message } from 'antd'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
-import { CloseOutlined } from '@ant-design/icons'
 
 interface ImportScoreModalProps {
     visible: boolean
