@@ -340,6 +340,7 @@ model StudentSubjectScore {
   midtermScore     Float?
   examScore        Float?
   finalScore       Float?
+  manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
   withdrew         Boolean                                    @default(false)
@@ -502,6 +503,11 @@ model TrainingCourse {
   academicYear         String?
   maxTrainingTime      Float?
   admissionQuota       Int?
+  coef_1               Float              @default(0.1)
+  coef_2               Float              @default(0.3)
+  coef_3               Float              @default(0.6)
+  scoreToTakeExam      Float              @default(1)
+  scoreToPass          Float              @default(4)
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
   fixedClass           FixedClass[]
@@ -602,13 +608,8 @@ model CurriculumVersion {
   trainingLevelId       String
   trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId        String
-  coef_1                Float?
-  coef_2                Float?
-  coef_3                Float?
   diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
   diplomaTypeId         String?
-  scoreToTakeExam       Float?
-  scoreToPass           Float?
   requiredCredits       Int?
   electiveCredits       Int?
   jobPosition           String?
