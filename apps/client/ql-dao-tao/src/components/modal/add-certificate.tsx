@@ -118,7 +118,7 @@ const PutAddCertificateScoreModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Thêm điểm cộng cho sinh viên'}
+            title={'Thêm chứng chỉ cho sinh viên'}
             className="w-[1000px]"
         >
             <Row gutter={[16, 16]} align="top" justify="space-between">
