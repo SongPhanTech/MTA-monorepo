@@ -4,11 +4,11 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import { HanNhapDiem } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SubjectClass, TrainingObjectType } from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
+    useFindManySemester,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -17,7 +17,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 // const { Option } = Select;
@@ -32,15 +32,20 @@ export default function SubjectClassScore() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm()
-    const [editSubjectClass, setEditSubjectClass] =
-        useState<SubjectClass | null>(null)
-    const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        semesterId: null,
-        trainingObjectTypeId: null,
+
+    const { data: semesters = [] } = useFindManySemester({
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
-    const { showSpinner, hideSpinner } = useSpinner()
+    const latestSemester = semesters?.[0]?.id || null
+
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+        semesterId: latestSemester,
+        trainingObjectTypeId: null,
+    })
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: HanNhapDiem.name,
@@ -174,6 +179,15 @@ export default function SubjectClassScore() {
         },
     }
 
+    useEffect(() => {
+        if (latestSemester && !filters.semesterId) {
+            setFilters((prev) => ({
+                ...prev,
+                semesterId: latestSemester,
+            }))
+        }
+    }, [latestSemester])
+
     return (
         <div>
             <Form form={form}>
@@ -219,9 +233,9 @@ export default function SubjectClassScore() {
                                             <TreeSelectSemester
                                                 style={{ height: 40 }}
                                                 defaultValue={
-                                                    filters.semesterId ||
-                                                    undefined
+                                                    latestSemester || ''
                                                 }
+                                                value={filters.semesterId || ''}
                                                 onChange={(val) =>
                                                     handleFilterChange(
                                                         'semesterId',
@@ -324,14 +338,14 @@ export default function SubjectClassScore() {
                                     title: 'Môn học',
                                     width: 250,
                                     render: (text, record) =>
-                                        record.subject?.name || text,
+                                        record?.subject?.name || text,
                                 },
                                 {
                                     title: 'Số tín chỉ',
                                     width: 80,
                                     align: 'center',
                                     render: (text, record) =>
-                                        record.subject?.credit || text,
+                                        record?.subject?.credit || text,
                                 },
                                 {
                                     title: 'Hạn ĐQT',
@@ -369,15 +383,15 @@ export default function SubjectClassScore() {
                                             record: any
                                         ) => {
                                             const scoreDeadline =
-                                                record.scoreDeadline
+                                                record?.scoreDeadline
                                                     ? dayjs(
-                                                          record.scoreDeadline
+                                                          record?.scoreDeadline
                                                       )
                                                     : null
                                             const examDeadline =
-                                                record.examScoreDeadline
+                                                record?.examScoreDeadline
                                                     ? dayjs(
-                                                          record.examScoreDeadline
+                                                          record?.examScoreDeadline
                                                       )
                                                     : null
 
@@ -506,12 +520,13 @@ export default function SubjectClassScore() {
                                     width: 200,
                                     align: 'center',
                                     render: (text, record) => {
-                                        const mainLecturer = record.mainLecturer
-                                            ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                            : 'Chưa có giảng viên chính'
+                                        const mainLecturer =
+                                            record?.mainLecturer
+                                                ? `${record?.mainLecturer?.userProfile?.lastName} ${record?.mainLecturer?.userProfile?.firstName}`
+                                                : 'Chưa có giảng viên chính'
                                         const extraLecturer =
-                                            record.extraLecturer
-                                                ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                                            record?.extraLecturer
+                                                ? `, ${record?.extraLecturer?.userProfile?.lastName} ${record?.extraLecturer?.userProfile?.firstName}`
                                                 : ''
                                         return (
                                             <span>
@@ -527,15 +542,16 @@ export default function SubjectClassScore() {
                                     align: 'center',
                                     render: (text, record) => {
                                         const enterGradeLecturer =
-                                            record.enterGradeLecturer
-                                                ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
+                                            record?.enterGradeLecturer
+                                                ? `${record?.enterGradeLecturer?.userProfile?.lastName} ${record?.enterGradeLecturer?.userProfile?.firstName}`
                                                 : ''
-                                        const mainLecturer = record.mainLecturer
-                                            ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                            : ''
+                                        const mainLecturer =
+                                            record?.mainLecturer
+                                                ? `${record?.mainLecturer?.userProfile?.lastName} ${record?.mainLecturer?.userProfile?.firstName}`
+                                                : ''
                                         const extraLecturer =
-                                            record.extraLecturer
-                                                ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                                            record?.extraLecturer
+                                                ? `${record?.extraLecturer?.userProfile?.lastName} ${record?.extraLecturer?.userProfile?.firstName}`
                                                 : ''
                                         return (
                                             <span>
@@ -616,7 +632,7 @@ export default function SubjectClassScore() {
                                     render: (text, record) => {
                                         return (
                                             <span>
-                                                {record.subject
+                                                {record?.subject
                                                     ?.managementOrganization
                                                     ?.sTen || 'Chưa có bộ môn'}
                                             </span>
@@ -631,7 +647,7 @@ export default function SubjectClassScore() {
                                     render: (text, record) => {
                                         return (
                                             <span>
-                                                {record.subject
+                                                {record?.subject
                                                     ?.managementOrganization
                                                     ?.parent?.sTen ||
                                                     'Chưa có khoa'}
@@ -646,8 +662,8 @@ export default function SubjectClassScore() {
                                     align: 'center',
                                     render: (text, record) => {
                                         if (
-                                            record.active === true ||
-                                            record.active === 'active'
+                                            record?.active === true ||
+                                            record?.active === 'active'
                                         ) {
                                             return (
                                                 <Tag color="green">
@@ -656,8 +672,8 @@ export default function SubjectClassScore() {
                                             )
                                         }
                                         if (
-                                            record.active === false ||
-                                            record.active === 'inactive'
+                                            record?.active === false ||
+                                            record?.active === 'inactive'
                                         ) {
                                             return (
                                                 <Tag color="red">Kết thúc</Tag>
@@ -675,14 +691,7 @@ export default function SubjectClassScore() {
                                         if (record.id) {
                                             return (
                                                 <div className="flex justify-center items-center gap-2">
-                                                    <Row
-                                                        className="flex justify-center items-center gap-2 text-primary"
-                                                        onClick={() => {
-                                                            setEditSubjectClass(
-                                                                record as SubjectClass
-                                                            )
-                                                        }}
-                                                    >
+                                                    <Row className="flex justify-center items-center gap-2 text-primary">
                                                         <Button
                                                             icon={
                                                                 <CalendarOutlined />
