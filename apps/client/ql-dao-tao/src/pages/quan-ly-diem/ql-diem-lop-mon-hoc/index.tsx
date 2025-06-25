@@ -1,3 +1,4 @@
+import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
@@ -20,16 +21,17 @@ import {
     Flex,
     Form,
     Input,
+    Popover,
     Row,
     message,
 } from 'antd'
 import _ from 'lodash'
-import { Download, Printer, Save, Search, Upload } from 'lucide-react'
+import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import LopMonHocItem from './lop-mon-hoc'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 
 // const { Option } = Select;
@@ -63,6 +65,16 @@ export default function SubjectClassScore() {
     const [nhapDiemCong, setNhapDiemCong] = useState<boolean>(false)
     const [camThi, setCamThi] = useState<boolean>(false)
     const { subjectId } = router.query
+
+    const [open, setOpen] = useState(false)
+
+    const hide = () => {
+        setOpen(false)
+    }
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
 
     useEffect(() => {
         if (subjectId) {
@@ -209,6 +221,26 @@ export default function SubjectClassScore() {
             subjectClass: {
                 include: {
                     subject: true,
+                    semester: {
+                        include: {
+                            schoolYear: true,
+                        },
+                    },
+                    mainLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                    extraLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                    enterGradeLecturer: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
                 },
             },
         },
@@ -548,33 +580,67 @@ export default function SubjectClassScore() {
                         >
                             <Col span={24} className="flex justify-end">
                                 <Flex gap={4}>
-                                    <Button
-                                        // className="h-[40px]"
-                                        disabled={!selectedFixedClass}
+                                    <Popover
+                                        content={
+                                            <Flex
+                                                vertical
+                                                align="flex-start"
+                                                gap={4}
+                                            >
+                                                <Button
+                                                    onClick={() => {
+                                                        const fileInput =
+                                                            document.createElement(
+                                                                'input'
+                                                            )
+                                                        fileInput.type = 'file'
+                                                        fileInput.accept =
+                                                            '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
+                                                        fileInput.onchange = (
+                                                            e: any
+                                                        ) => {
+                                                            if (
+                                                                e.target
+                                                                    .files?.[0]
+                                                            ) {
+                                                                handleUploadFile(
+                                                                    e.target
+                                                                        .files[0]
+                                                                )
+                                                            }
+                                                        }
+                                                        fileInput.click()
+                                                    }}
+                                                    disabled={
+                                                        !selectedFixedClass
+                                                    }
+                                                    className="w-full flex justify-start"
+                                                >
+                                                    <FileUp />
+                                                    Nhập điểm từ file
+                                                </Button>
+                                                <ExportScoreTemplate
+                                                    selectedFixedClass={
+                                                        selectedFixedClass
+                                                    }
+                                                    dataTable={dataTable}
+                                                />
+                                            </Flex>
+                                        }
+                                        trigger="click"
+                                        open={open}
+                                        onOpenChange={handleOpenChange}
+                                        placement="bottomLeft"
+                                        arrow={false}
                                     >
-                                        <Download stroke="black" />
-                                        Tải danh sách
-                                    </Button>
-                                    <Button
-                                        onClick={() => {
-                                            const fileInput =
-                                                document.createElement('input')
-                                            fileInput.type = 'file'
-                                            fileInput.accept =
-                                                '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
-                                            fileInput.onchange = (e: any) => {
-                                                if (e.target.files?.[0]) {
-                                                    handleUploadFile(
-                                                        e.target.files[0]
-                                                    )
-                                                }
-                                            }
-                                            fileInput.click()
-                                        }}
-                                        disabled={!selectedFixedClass}
-                                    >
-                                        <Upload stroke="black" />
-                                        Nhập file
+                                        <Button disabled={!selectedFixedClass}>
+                                            <Ellipsis />
+                                        </Button>
+                                    </Popover>
+
+                                    <Button disabled={!selectedFixedClass}>
+                                        <Printer stroke="black" />
+                                        In phiếu danh sách thi
                                     </Button>
                                     <Button disabled={!selectedFixedClass}>
                                         <Printer stroke="black" />
