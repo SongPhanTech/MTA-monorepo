@@ -1,3 +1,4 @@
+import { z } from '@hono/zod-openapi'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { read, utils } from 'xlsx'
@@ -5,11 +6,13 @@ import type { CellObject } from 'xlsx'
 
 dayjs.extend(customParseFormat)
 
-type ParseSheetError = {
-    cellRef: string
-    message: string
-}
-
+export const zParseSheetError = z
+    .object({
+        cellRef: z.string(),
+        message: z.string(),
+    })
+    .openapi('ParseSheetError')
+export type ParseSheetError = z.infer<typeof zParseSheetError>
 // TODO!: now depends on stt column(it need to be a integer), maybe need to change to more reliable way
 
 // DanhSachSV_Mau2

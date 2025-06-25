@@ -5,24 +5,24 @@ import {
     getSubjectClassBySemester,
 } from '@workspace/db/sql'
 import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
+import { read, utils } from 'xlsx'
 import { prisma } from '..'
+import type { StudentTemplateData } from '../dto/student-info.dto'
 import {
     EnrollFixedClassOnSubjectClass,
     FixedClassBySubjectClassSemester,
     OpenSubjectClass,
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
-import { ListOf } from '../zod/base'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
     listStudentInfo,
     populateExcelTemplate,
     sanitizeFilename,
 } from '../services/subject-class.service'
-import { getCurrentDateForReport } from '../utils'
-import type { StudentTemplateData } from '../dto/student-info.dto'
 import { getBufferFromUrl } from '../services/template.service'
-import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { read, utils } from 'xlsx'
+import { getCurrentDateForReport } from '../utils'
+import { ListOf } from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -346,6 +346,7 @@ const exportExcelListStudentSubjectClass = createRoute({
         },
     },
 })
+
 const uploadExcelImportScore = createRoute({
     operationId: 'uploadExcelImportScore',
     path: '/upload-excel-import-score',
@@ -389,6 +390,7 @@ const uploadExcelImportScore = createRoute({
         },
     },
 })
+
 app.openapi(openSubjectClass, async (c) => {
     const {
         semesterId,
@@ -899,6 +901,7 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
     })
 })
+
 app.openapi(uploadExcelImportScore, async (c) => {
     const { file, subjectClassId } = c.req.valid('form')
 
@@ -991,4 +994,5 @@ app.openapi(uploadExcelImportScore, async (c) => {
 
     return c.json({ data: updateResults, count: totalUpdated }, 200)
 })
+
 export default app

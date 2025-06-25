@@ -8,28 +8,19 @@ import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
 import '../ql-dao-tao/student'
 
-enum TrainingScoreSessionStatus {
-  ACTIVE
-  INACTIVE
-  @@schema("ql-nguoi-dung")
-}
-
 // Đợt đánh giá rèn luyện, đi theo kì và đối tượng đào tạo
 model TrainingScoreSession extends Base {
-  Name                 String
+  name                 String
+  time                 DateTime               @default(now())// thời gian
 
-  trainingObjectType   TrainingObjectType?        @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
-  trainingObjectTypeId String?
-
-  time                 DateTime                   @default(now())// thời gian
-
-  semester             Semester                   @relation(fields: [semesterId], references: [id])
+  semester             Semester               @relation(fields: [semesterId], references: [id])
   semesterId           String
 
-  status               TrainingScoreSessionStatus @default(ACTIVE) // trạng thái
-  @@schema("ql-nguoi-dung")
+  trainingObjectType   TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId String?
 
   studentTrainingScore StudentTrainingScore[]
+  @@schema("ql-nguoi-dung")
 }
 
 // Điểm rèn luyện của sinh viên, được tính theo đợt đánh giá
@@ -42,11 +33,12 @@ model StudentTrainingScore extends Base {
 
   score                  Float                @default(0) // điểm rèn luyện
 
+  @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-nguoi-dung")
 }
 
 enum StudentTrainingType {
-  EXCELENT  // Xuất sắc
+  EXCELLENT  // Xuất sắc
   GOOD      // Tốt
   FAIR      // Khá
   AVERAGE   // Trung bình
