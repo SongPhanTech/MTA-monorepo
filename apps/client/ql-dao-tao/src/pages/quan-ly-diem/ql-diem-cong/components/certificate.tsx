@@ -76,7 +76,7 @@ export default function ArchivedCertificate() {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
         },
-        include: {},
+        include: { _count: true },
         orderBy: {
             createdAt: 'desc',
         },
@@ -172,22 +172,19 @@ export default function ArchivedCertificate() {
                                 width: 150,
                                 align: 'center',
                             },
-                            // {
-                            //     title: 'Điểm tương đương hệ 4',
-                            //     dataIndex: 'bonusScore',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     render: (value: number) =>
-                            //       Number(value)?   useScoreConverter([]).convertScore(value).base4 :''
-
-                            // },
+                            {
+                                title: 'Số SV đã đổi chứng chỉ',
+                                dataIndex: ['_count', 'studentSubjectScore'],
+                                width: 150,
+                                align: 'center',
+                            },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 60,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
+                                render: (_, { id, _count }) => {
+                                    if (!_count?.studentSubjectScore) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon

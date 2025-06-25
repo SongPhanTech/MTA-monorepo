@@ -3,6 +3,7 @@ import useSpinner from '@hooks/spinner'
 import type { StudentSubjectScore } from '@workspace/db'
 import {
     useCountArchivedCertificate,
+    useFindFirstTrainingCourse,
     useFindManyArchivedCertificate,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
@@ -13,6 +14,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { calcFinalScore } from '@workspace/libs/utils'
 import _ from 'lodash'
 export type PutStudentSubjectScore = StudentSubjectScore
 interface FilterProps {
@@ -37,36 +39,19 @@ const PutAddCertificateScoreModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: updateStudentSubjectScore } =
         useUpdateStudentSubjectScore()
-    async function onOk({ ...rest }: PutStudentSubjectScore) {
-        try {
-            showSpinner()
-            await updateStudentSubjectScore({
-                data: {
-                    ...rest,
-                    certificates: {
-                        createMany: {
-                            data: selectedRowKeys.map((id) => ({
-                                archivedCertificateId: id as string,
-                            })),
-                            skipDuplicates: true,
-                        },
-                        deleteMany: {
-                            studentSubjectScoreId: input.id,
-                            archivedCertificateId: {
-                                notIn: selectedRowKeys as string[],
-                            },
+    const { data: trainingCourse } = useFindFirstTrainingCourse({
+        where: {
+            fixedClass: {
+                some: {
+                    students: {
+                        some: {
+                            id: input.studentId,
                         },
                     },
                 },
-                where: { id: input.id },
-            })
-            message.success('Cập nhật thành công')
-            onClose()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
+            },
+        },
+    })
 
     const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
         where: {
@@ -96,6 +81,51 @@ const PutAddCertificateScoreModal = () => {
         }, 500),
         []
     )
+
+    async function onOk({ ...rest }: PutStudentSubjectScore) {
+        try {
+            showSpinner()
+            const listCertificates = []
+            for (const key of selectedRowKeys) {
+                const item = dataTable.find((item) => item.id === key)
+                if (item) {
+                    listCertificates.push({ archivedCertificate: item })
+                }
+            }
+            const finalScore = calcFinalScore(trainingCourse, {
+                ...input.subjectClassStudent,
+                certificates: listCertificates,
+            })
+            console.log(finalScore)
+
+            await updateStudentSubjectScore({
+                data: {
+                    ...rest,
+                    finalScore,
+                    certificates: {
+                        createMany: {
+                            data: selectedRowKeys.map((id) => ({
+                                archivedCertificateId: id as string,
+                            })),
+                            skipDuplicates: true,
+                        },
+                        deleteMany: {
+                            studentSubjectScoreId: input.id,
+                            archivedCertificateId: {
+                                notIn: selectedRowKeys as string[],
+                            },
+                        },
+                    },
+                },
+                where: { id: input.id },
+            })
+            message.success('Cập nhật thành công')
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {

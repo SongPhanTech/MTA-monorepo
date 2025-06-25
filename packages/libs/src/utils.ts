@@ -50,7 +50,7 @@ export const calcFinalScore = (
           )
         : null
 
-    if (rawFinalScore === null || maxCertFinalScore === null) {
+    if (rawFinalScore === null && maxCertFinalScore === null) {
         return null
     }
 

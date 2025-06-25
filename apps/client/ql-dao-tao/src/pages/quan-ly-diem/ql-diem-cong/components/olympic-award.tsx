@@ -11,7 +11,6 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
 import _ from 'lodash'
-import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -23,7 +22,6 @@ interface FilterProps {
 export default function OplympicAwards() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
@@ -71,7 +69,7 @@ export default function OplympicAwards() {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
         },
-        include: {},
+        include: { _count: true },
         orderBy: {
             createdAt: 'desc',
         },
@@ -168,12 +166,18 @@ export default function OplympicAwards() {
                                 align: 'center',
                             },
                             {
+                                title: 'Số SV đã được cộng',
+                                dataIndex: ['_count', 'studentSubjectScore'],
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 60,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
+                                render: (_, { id, _count }) => {
+                                    if (!_count?.studentSubjectScore) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon

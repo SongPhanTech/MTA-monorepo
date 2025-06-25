@@ -8,7 +8,11 @@ import {
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import type { ArchivedAward, ArchivedCertificate } from '@workspace/db'
+import type {
+    ArchivedAward,
+    ArchivedCertificate,
+    StudentSubjectScore,
+} from '@workspace/db'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -36,6 +40,8 @@ export default function StudentScoreClassPage() {
     const { onOpen: onOpenModalAddScore } = useDisclosure<{
         id: string
         list: string[]
+        studentId: string
+        subjectClassStudent: StudentSubjectScore
     }>({
         tag: PutAddOlympicScoreModal.name,
     })
@@ -43,6 +49,8 @@ export default function StudentScoreClassPage() {
     const { onOpen: onOpenModalAddCertificate } = useDisclosure<{
         id: string
         list: string[]
+        studentId: string
+        subjectClassStudent: StudentSubjectScore
     }>({
         tag: PutAddCertificateScoreModal.name,
     })
@@ -428,6 +436,7 @@ export default function StudentScoreClassPage() {
                                                     {
                                                         id: subjectClassStudent?.[0]
                                                             ?.id,
+                                                        studentId: studentId,
                                                         list:
                                                             subjectClassStudent?.length >
                                                             0
@@ -438,6 +447,8 @@ export default function StudentScoreClassPage() {
                                                                           i.archivedAwardId
                                                                   )
                                                                 : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
                                                     }
                                                 )}
                                                 size={16}
@@ -451,6 +462,7 @@ export default function StudentScoreClassPage() {
                                                     {
                                                         id: subjectClassStudent?.[0]
                                                             ?.id,
+                                                        studentId: studentId,
                                                         list:
                                                             subjectClassStudent?.length >
                                                             0
@@ -461,6 +473,8 @@ export default function StudentScoreClassPage() {
                                                                           i.archivedCertificateId
                                                                   )
                                                                 : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
                                                     }
                                                 )}
                                                 size={16}
