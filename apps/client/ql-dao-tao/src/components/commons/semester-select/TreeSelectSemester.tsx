@@ -3,7 +3,7 @@ import { useFindManySchoolYear, useFindManySemester } from '@workspace/db/hooks'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -11,6 +11,7 @@ interface CustomTreeSelectProps {
     style?: React.CSSProperties
     dropdownStyle?: React.CSSProperties
     defaultValue?: string
+    value?: string
     disabled?: boolean
     onChange?: (value: string) => void
     onPopupScroll?: TreeSelectProps['onPopupScroll']
@@ -21,11 +22,20 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     style = { width: '100%' },
     dropdownStyle = { maxHeight: 400, overflow: 'auto' },
     defaultValue,
+    value: propValue,
     disabled = false,
     onChange,
     onPopupScroll,
 }) => {
-    const [value, setValue] = useState<string | undefined>(defaultValue)
+    const [internalValue, setInternalValue] = useState<string | undefined>(
+        defaultValue
+    )
+
+    useEffect(() => {
+        if (propValue !== undefined) {
+            setInternalValue(propValue)
+        }
+    }, [propValue])
 
     // Lấy thông tin SchoolYear
     const { data: schoolYears } = useFindManySchoolYear({
@@ -60,7 +70,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     }, [schoolYears, semesters])
 
     const handleChange = (newValue: string) => {
-        setValue(newValue)
+        setInternalValue(newValue)
         if (onChange) {
             onChange(newValue)
         }
@@ -84,7 +94,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
             disabled={disabled}
             showSearch
             style={style}
-            value={value}
+            value={internalValue}
             dropdownStyle={dropdownStyle}
             placeholder={placeholder}
             allowClear

@@ -34,6 +34,7 @@ import PutBuildingModal from './put-toa-nha'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import HanNhapDiem from './modal-han-nhap-diem'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -71,4 +72,5 @@ export {
     PutOneSubjectClassModal,
     ModalGPASemester,
     AddStudentToFixedClassModal,
+    HanNhapDiem,
 }
