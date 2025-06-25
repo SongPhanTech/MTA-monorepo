@@ -1,0 +1,68 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
+import '../ql-danh-muc/common'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/plan-training'
+import '../ql-nguoi-dung/profile'
+import '../ql-dao-tao/student'
+
+enum TrainingScoreSessionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+// Đợt đánh giá rèn luyện, đi theo kì và đối tượng đào tạo
+model TrainingScoreSession extends Base {
+  Name                 String
+
+  trainingObjectType   TrainingObjectType?        @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId String?
+
+  time                 DateTime                   @default(now())// thời gian
+
+  semester             Semester                   @relation(fields: [semesterId], references: [id])
+  semesterId           String
+
+  status               TrainingScoreSessionStatus @default(ACTIVE) // trạng thái
+  @@schema("ql-nguoi-dung")
+
+  studentTrainingScore StudentTrainingScore[]
+}
+
+// Điểm rèn luyện của sinh viên, được tính theo đợt đánh giá
+model StudentTrainingScore extends Base {
+  trainingScoreSession   TrainingScoreSession @relation(fields: [trainingScoreSessionId], references: [id])
+  trainingScoreSessionId String
+
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+
+  score                  Float                @default(0) // điểm rèn luyện
+
+  @@schema("ql-nguoi-dung")
+}
+
+enum StudentTrainingType {
+  EXCELENT  // Xuất sắc
+  GOOD      // Tốt
+  FAIR      // Khá
+  AVERAGE   // Trung bình
+  POOR      // Yếu
+}
+
+// Phân loại rèn luyện theo kì (có thể thay đổi loại đánh giá)
+model StudentTrainingSemester extends Base {
+  student    Student  @relation(fields: [studentId], references: [id])
+  studentId  String
+
+  semester   Semester @relation(fields: [semesterId], references: [id])
+  semesterId String
+
+  scoreAvg   Float    @default(0) // điểm trung bình rèn luyện
+  trainingType StudentTrainingType // loại đánh giá rèn luyện
+
+  @@schema("ql-nguoi-dung")
+}
+
