@@ -172,6 +172,16 @@ model TrainingCourse extends Base {
   academicYear         String?
   maxTrainingTime      Float?
   admissionQuota       Int?
+
+  coef_1               Float              @default(0.1) // Hệ số 1
+  coef_2               Float              @default(0.3) // Hệ số 2
+  coef_3               Float              @default(0.6) // Hệ số 3
+
+  scoreToTakeExam      Float              @default(1) // Điểm tối thiểu để được thi
+  scoreToPass          Float              @default(4) // Điểm tối thiểu để qua môn
+
+  // TODO: Thêm các quy chế về học bổng, cảnh cáo học tập
+
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId String
 
@@ -263,16 +273,9 @@ model CurriculumVersion extends Base {
   trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
   trainingTimeId        String
 
-  coef_1                Float? // Hệ số 1
-  coef_2                Float? // Hệ số 2
-  coef_3                Float? // Hệ số 3
-
   diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
   diplomaTypeId         String?
 
-  // TODO: maybe move to ScoreConvert
-  scoreToTakeExam       Float? // Điểm tối thiểu để được thi
-  scoreToPass           Float? // Điểm tối thiểu để qua môn
   // TODO: Thêm các quy chế cho chương trình đào tạo
   requiredCredits       Int? // Số tín chỉ bắt buộc
   electiveCredits       Int? // Số tín chỉ tự chọn
