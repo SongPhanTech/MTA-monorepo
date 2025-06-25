@@ -116,6 +116,7 @@ Table StudentSubjectScore {
   midtermScore Float
   examScore Float
   finalScore Float
+  manualFinalScore Float
   examPostponed Boolean [not null, default: false]
   exempted Boolean [not null, default: false]
   withdrew Boolean [not null, default: false]

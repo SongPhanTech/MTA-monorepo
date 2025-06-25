@@ -38,11 +38,16 @@ model StudentSubjectScore extends Base {
   midtermScore     Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
   examScore        Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
 
-  // bonusScore       Float?                                     @gte(0, 'Điểm tối thiểu là 0') // điểm thưởng
+  // dùng hàm `calcFinalScore` từ @workspace/libs/utils
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
-  // finalScore = if examScore < 4 ? examScore : Math.max((attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore, 10)
-  // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp finalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
+  // examScore < 4 => liệt
+  // computedFinalScore = if examScore < 4 ? examScore : Math.max((attendanceScore*hs1 + midtermScore*hs2 + examScore*hs3) + bonusScore, 10)
+  // maxCertFinalScore = Math.max(.certificates.archivedCertificate.finalScore)
+  // bonusScore = sum(.awards.archivedAward.bonusScore)
+  // finalScore = Math.max(computedFinalScore, maxCertFinalScore) + bonusScore
   finalScore       Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
+  // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp manualFinalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
+  manualFinalScore Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết chuyển trường
 
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
   // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
@@ -83,8 +88,9 @@ model ArchivedCertificateOnStudentSubjectScore extends Base {
 model ArchivedCertificate extends Base {
   name                String
   englishName         String?
-  finalScore          Float // điểm tổng kết
+  finalScore          Float                                      @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết
   documentPaths       String[] // Đường dẫn tài liệu
+
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
   @@schema("ql-dao-tao")
 }
@@ -103,7 +109,7 @@ model  ArchivedAwardOnStudentSubjectScore extends Base {
 model ArchivedAward extends Base {
   name                String
   englishName         String?
-  bonusScore          Float // điểm thưởng
+  bonusScore          Float  // điểm thưởng
   documentPaths       String[] // Đường dẫn tài liệu
 
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
