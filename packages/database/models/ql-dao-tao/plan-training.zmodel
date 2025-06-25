@@ -6,6 +6,7 @@ import '../ql-nguoi-dung/profile'
 import './student'
 import './lecturer'
 import './staff'
+import '../ql-nguoi-dung/training-score'
 
 enum SubjectClassStudentStatus {
   Registered
@@ -145,6 +146,8 @@ model Semester extends Base {
   @@unique([schoolYearId, order]) // stt kỳ học trong một năm học không được trùng nhau
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
+
+	trainingScoreSession TrainingScoreSession[]
 }
 
 /// Mốc huấn luyện
