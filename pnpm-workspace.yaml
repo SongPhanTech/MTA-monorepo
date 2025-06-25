@@ -33,10 +33,10 @@ catalog:
   "@types/react": ^18.3
   "@types/react-dom": ^18.3
   "@types/react-image-fallback": ^8.0.6
-  "@zenstackhq/openapi": ^2.15.1
-  "@zenstackhq/runtime": ^2.15.1
-  "@zenstackhq/server": ^2.15.1
-  "@zenstackhq/tanstack-query": ^2.15.1
+  "@zenstackhq/openapi": ^2.16.0
+  "@zenstackhq/runtime": ^2.16.0
+  "@zenstackhq/server": ^2.16.0
+  "@zenstackhq/tanstack-query": ^2.16.0
   antd: ^5.23.1
   autoprefixer: ^10.4.20
   axios: 1.7.9
@@ -87,5 +87,5 @@ catalog:
   turbo: ^2.4.2
   typescript: ^5.8.3
   xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
-  zenstack: ^2.15.1
+  zenstack: ^2.16.0
   zod: 3.24.2

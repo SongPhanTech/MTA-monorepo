@@ -1,4 +1,5 @@
 import type {
+    $Enums,
     CurriculumVersion,
     DM_CapBac,
     DM_ChucDanh,
@@ -22,7 +23,6 @@ import type {
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
-import type { UploadFile } from 'antd'
 
 export type SibarItem = {
     key: string
@@ -49,20 +49,12 @@ export type StudentSiderbarProps = {
 
 export type TabQuanLyHoSoProps = {
     id?: string | null
-    avatar?: UploadFile[]
-    setAvatar: (avatar: UploadFile[]) => void
-    fileList: UploadFile[]
-    setFileList: (fileList: UploadFile[]) => void
-    type: string
+    type: $Enums.UserType
 } & StudentSiderbarProps
 
 export type TabThongTinCaNhan = {
     id?: string | null
-    avatar: UploadFile[]
-    setAvatar: (avatar: UploadFile[]) => void
-    fileList: UploadFile[]
-    setFileList: (fileList: UploadFile[]) => void
-    type: string
+    type: $Enums.UserType
 }
 
 export type StudentModalProps = {
@@ -119,7 +111,9 @@ export type PutStudentProfile = StudentType & UserProfileType & FixedClassType
 
 export type PutStaffProfile = StaffProfileType &
     UserProfileType &
-    FixedClassType
+    FixedClassType & {
+        file: File | null
+    }
 
 export type PutModalType = StudentType &
     LecturerProfileType &
