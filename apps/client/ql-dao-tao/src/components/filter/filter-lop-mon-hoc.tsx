@@ -2,13 +2,9 @@ import { FilterOutlined } from '@ant-design/icons'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import {
-    useFindManyDM_DonVi,
-    useFindManyTrainingObjectType,
-} from '@workspace/db/hooks'
 import {
     Button,
+    Checkbox,
     Col,
     DatePicker,
     Divider,
@@ -24,9 +20,10 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import dayjs from 'dayjs'
-import 'dayjs/locale/vi' // Import Vietnamese locale for dayjs
+import 'dayjs/locale/vi'
 import { CUSSTOM_VI_LOCALE } from '@constants/constants'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { useExamTypeOptions } from '@hooks/examType'
 
 dayjs.extend(customParseFormat)
 
@@ -45,6 +42,7 @@ export type FilterProps = {
     subjectClassId: string | null
     fixedClassIds: string[]
     examDateRange?: [string, string] | null // Khoảng thời gian thi
+    checkedList?: string[]
 }
 
 interface Props {
@@ -54,42 +52,6 @@ interface Props {
     onApply: (filters: FilterProps) => void
 }
 
-// TODO: use useExamTypeOptions instead
-const ExamType = [
-    {
-        value: 'OfflineWritten',
-        label: 'Thi viết',
-    },
-    {
-        value: 'OnlineWritten',
-        label: 'Thi viết trực tuyến',
-    },
-    {
-        value: 'OfflineChoices',
-        label: 'Thi trắc nghiệm',
-    },
-    {
-        value: 'OnlineChoices',
-        label: 'Thi trắc nghiệm trực tuyến',
-    },
-    {
-        value: 'Oral',
-        label: 'Thi vấn đáp',
-    },
-    {
-        value: 'Practice',
-        label: 'Thi thực hành',
-    },
-    {
-        value: 'Project',
-        label: 'Thi đồ án',
-    },
-    {
-        value: 'Other',
-        label: 'Loại khác',
-    },
-]
-
 const FilterSubjectClass = (props: Props) => {
     const { onFilterChange, filters, onApply } = props
     const [form] = Form.useForm<FilterProps>()
@@ -98,6 +60,14 @@ const FilterSubjectClass = (props: Props) => {
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
     }
+
+    const { options: ExamType } = useExamTypeOptions()
+
+    const options = [
+        { label: 'P13 đã khóa', value: 'locked_P13' },
+        { label: 'P13 đã nhận Phiếu điểm', value: 'received_score_P13' },
+        { label: 'P2/P7 đã kiểm tra', value: 'checked_P2_P7' },
+    ]
 
     const handleReset = () => {
         form.setFieldsValue({
@@ -110,6 +80,7 @@ const FilterSubjectClass = (props: Props) => {
             LectureIds: [],
             fixedClassIds: [],
             examDateRange: undefined,
+            checkedList: [],
         })
 
         console.log('Reset filters', form.getFieldsValue())
@@ -145,26 +116,6 @@ const FilterSubjectClass = (props: Props) => {
             fixedClassIds: filters.fixedClassIds || [],
         })
     }, [filters, form])
-
-    const {
-        data: organizationDataKhoa = [],
-        refetch: refetchOrganizationKhoa,
-    } = useFindManyDM_DonVi({
-        // TODO: fetch Khoa only
-        // where: {
-        //     type: {
-        //         code: 'KHOA',
-        //     },
-        // },
-    })
-    const {
-        data: trainingObjectTypeData = [],
-        refetch: refetchTrainingTypeObject,
-    } = useFindManyTrainingObjectType({
-        orderBy: {
-            name: 'asc',
-        },
-    })
 
     const ApplyFilterExamDate = (examDateRange: [string, string] | null) => {
         if (examDateRange && examDateRange.length === 2) {
@@ -209,56 +160,6 @@ const FilterSubjectClass = (props: Props) => {
                         <Col span={12}>
                             <Col span={24}>
                                 <Form.Item
-                                    label="Kỳ học"
-                                    labelCol={{ span: 7 }}
-                                    wrapperCol={{ span: 17 }}
-                                    labelAlign="left"
-                                >
-                                    <TreeSelectSemester
-                                        placeholder="Chọn kỳ học"
-                                        style={{ width: '100%' }}
-                                        dropdownStyle={{
-                                            maxHeight: 400,
-                                            overflow: 'auto',
-                                        }}
-                                        defaultValue={
-                                            form.getFieldValue('semesterId') ||
-                                            undefined
-                                        }
-                                        onChange={(value) => {
-                                            form.setFieldsValue({
-                                                semesterId: value,
-                                            })
-                                        }}
-                                        disabled={true}
-                                    />
-                                </Form.Item>
-                            </Col>
-
-                            <Col span={24}>
-                                <Form.Item
-                                    label="Đối tượng đào tạo"
-                                    name="trainingObjectTypeId"
-                                    labelCol={{ span: 7 }}
-                                    wrapperCol={{ span: 17 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        disabled={true}
-                                        placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (item) => {
-                                                return {
-                                                    value: item.id,
-                                                    label: item.name,
-                                                }
-                                            }
-                                        )}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item
                                     label="Thời gian thi"
                                     name="examDateRange"
                                     labelCol={{ span: 7 }}
@@ -284,8 +185,6 @@ const FilterSubjectClass = (props: Props) => {
                                     />
                                 </Form.Item>
                             </Col>
-                        </Col>
-                        <Col span={12}>
                             <Col span={24}>
                                 <Form.Item
                                     label="Đơn vị đào tạo"
@@ -313,6 +212,8 @@ const FilterSubjectClass = (props: Props) => {
                                     />
                                 </Form.Item>
                             </Col>
+                        </Col>
+                        <Col span={12}>
                             <Col span={24}>
                                 <Form.Item
                                     label="Hình thức thi"
@@ -346,6 +247,17 @@ const FilterSubjectClass = (props: Props) => {
                                     />
                                 </Form.Item>
                             </Col>
+                        </Col>
+
+                        <Col>
+                            <Checkbox.Group
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 12,
+                                }}
+                                options={options}
+                            />
                         </Col>
                     </Row>
                 </Form>
@@ -396,8 +308,8 @@ const FilterSubjectClass = (props: Props) => {
                 <Button
                     icon={<FilterOutlined />}
                     style={{
-                        height: '40px',
-                        width: '40px',
+                        height: '32px',
+                        width: '32px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

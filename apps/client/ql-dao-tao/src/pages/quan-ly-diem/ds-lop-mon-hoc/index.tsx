@@ -3,8 +3,9 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
-import type { SubjectClass, TrainingObjectType } from '@workspace/db'
+import type { ExamType, SubjectClass, TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
@@ -13,6 +14,7 @@ import {
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Col, Flex, Form, Input, Row, Tag } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -54,6 +56,7 @@ export default function ClassSubject() {
         fixedClassIds: [],
         examDateRange: undefined, // Khoảng thời gian thi
     })
+    const { getExamTypeLabel } = useExamTypeOptions()
 
     const handleNavigate = (id: string) => {
         router.push(
@@ -150,6 +153,8 @@ export default function ClassSubject() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    console.log(dataTable)
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -314,9 +319,7 @@ export default function ClassSubject() {
                                                 )
                                             }
                                             placeholder="Nhập tên lớp..."
-                                            style={{
-                                                height: 40,
-                                            }}
+                                            style={{ height: 32 }}
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -337,7 +340,6 @@ export default function ClassSubject() {
                                         labelAlign="left"
                                     >
                                         <TreeSelectSemester
-                                            style={{ height: 40 }}
                                             defaultValue={
                                                 filters.semesterId || undefined
                                             }
@@ -366,9 +368,6 @@ export default function ClassSubject() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             onChange={(val) =>
                                                 handleFilterChange(
                                                     'trainingObjectTypeId',
@@ -395,9 +394,6 @@ export default function ClassSubject() {
                                                     label: i.name,
                                                 })
                                             )}
-                                            style={{
-                                                height: 40,
-                                            }}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -475,10 +471,48 @@ export default function ClassSubject() {
                                     record.subject?.credit || text,
                             },
                             {
+                                title: 'Hình thức thi',
+                                dataIndex: ['subject', 'examType'],
+                                width: 150,
+                                align: 'center',
+                                filterSearch: true,
+                                render: (record: ExamType) =>
+                                    getExamTypeLabel(record),
+                            },
+                            {
+                                title: 'Ngày bắt đầu',
+                                dataIndex: 'startDate',
+                                width: 150,
+                                render: (record: string) =>
+                                    record
+                                        ? dayjs(record).format('DD/MM/YYYY')
+                                        : '',
+                            },
+                            {
+                                title: 'Ngày kết thúc',
+                                dataIndex: 'endDate',
+                                width: 150,
+                                align: 'center',
+                                render: (record: string) =>
+                                    record
+                                        ? dayjs(record).format('DD/MM/YYYY')
+                                        : '',
+                            },
+                            {
                                 title: 'Hạn đợi',
                                 dataIndex: 'ngayDot',
                                 width: 100,
                                 align: 'center',
+                            },
+                            {
+                                title: 'Ngày thi',
+                                dataIndex: 'examDate',
+                                width: 150,
+                                align: 'center',
+                                render: (record: string) =>
+                                    record
+                                        ? dayjs(record).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Số ngày',
@@ -550,50 +584,10 @@ export default function ClassSubject() {
                                 },
                             },
                             {
-                                title: 'Ngày bắt đầu',
-                                dataIndex: 'startDate',
-                                width: 150,
+                                title: 'Mã bộ môn',
+                                dataIndex: '',
+                                width: 200,
                                 align: 'center',
-                                render: (date) =>
-                                    new Date(date).toLocaleDateString('vi-VN', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                    }),
-                            },
-                            {
-                                title: 'Ngày thi',
-                                dataIndex: 'examDate',
-                                width: 150,
-                                align: 'center',
-                                render: (date) =>
-                                    date
-                                        ? new Date(date).toLocaleDateString(
-                                              'vi-VN',
-                                              {
-                                                  year: 'numeric',
-                                                  month: '2-digit',
-                                                  day: '2-digit',
-                                              }
-                                          )
-                                        : '',
-                            },
-                            {
-                                title: 'Ngày kết thúc',
-                                dataIndex: 'endDate',
-                                width: 150,
-                                align: 'center',
-                                render: (date) =>
-                                    date
-                                        ? new Date(date).toLocaleDateString(
-                                              'vi-VN',
-                                              {
-                                                  year: 'numeric',
-                                                  month: '2-digit',
-                                                  day: '2-digit',
-                                              }
-                                          )
-                                        : '',
                             },
                             {
                                 title: 'Bộ môn',
@@ -609,6 +603,12 @@ export default function ClassSubject() {
                                         </span>
                                     )
                                 },
+                            },
+                            {
+                                title: 'Mã khoa',
+                                dataIndex: '',
+                                width: 200,
+                                align: 'center',
                             },
                             {
                                 title: 'Khoa',

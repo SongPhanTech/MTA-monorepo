@@ -143,8 +143,18 @@ export default function SubjectClassScore() {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
-                          { name: { contains: filters.searchText } },
-                          { code: { contains: filters.searchText } },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                       ],
                   }
                 : {}),
@@ -247,9 +257,6 @@ export default function SubjectClassScore() {
         // take: numberOfPages,
         // skip: (currentPage - 1) * numberOfPages,
     })
-
-    // console.log('subjectClassData', subjectClassData)
-    // console.log('dataTable', selectedFixedClass, dataTable)
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -449,490 +456,373 @@ export default function SubjectClassScore() {
     }
 
     return (
-        <div>
-            <Row>
-                <Col span={4} className="flex">
-                    <LopMonHocItem
-                        dataTable={subjectClassData.map((item) => ({
-                            id: item.id,
-                            name: item.name,
-                            code: item.code === null ? undefined : item.code,
-                            mainLecturer: item.mainLecturer
-                                ? {
-                                      userProfile: {
-                                          firstName:
-                                              item.mainLecturer.userProfile
-                                                  .firstName,
-                                          lastName:
-                                              item.mainLecturer.userProfile
-                                                  .lastName,
-                                      },
-                                  }
-                                : {
-                                      userProfile: {
-                                          firstName: '',
-                                          lastName: '',
-                                      },
+        <Flex gap={8}>
+            <Col
+                span={4}
+                className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4"
+            >
+                <LopMonHocItem
+                    dataTable={subjectClassData.map((item) => ({
+                        id: item.id,
+                        name: item.name,
+                        code: item.code === null ? undefined : item.code,
+                        mainLecturer: item.mainLecturer
+                            ? {
+                                  userProfile: {
+                                      firstName:
+                                          item.mainLecturer.userProfile
+                                              .firstName,
+                                      lastName:
+                                          item.mainLecturer.userProfile
+                                              .lastName,
                                   },
-                        }))}
-                        onChangeSelected={handleChangeFixedClass}
-                        selectedItem={selectedFixedClass}
-                    />
-                </Col>
+                              }
+                            : {
+                                  userProfile: {
+                                      firstName: '',
+                                      lastName: '',
+                                  },
+                              },
+                    }))}
+                    onChangeSelected={handleChangeFixedClass}
+                    selectedItem={selectedFixedClass}
+                />
+            </Col>
 
-                <Col span={20} className="flex justify-end">
-                    <Row>
-                        <Col span={24}>
-                            <Row
-                                gutter={[16, 16]}
-                                align="top"
-                                justify="space-between"
-                            >
-                                <Col span={12}>
-                                    <Flex>
-                                        <Col span={8}>
-                                            <Form.Item name="searchText">
-                                                <Input
-                                                    id="search"
-                                                    onChange={(e) =>
-                                                        handleFilterChange(
-                                                            'searchText',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    placeholder="Nhập tên lớp..."
-                                                    style={{
-                                                        height: 40,
-                                                    }}
-                                                    prefix={
-                                                        <Search
-                                                            size={15}
-                                                            style={{
-                                                                color: 'rgba(0, 0, 0, 0.25)',
-                                                            }}
-                                                        />
-                                                    }
-                                                    allowClear
-                                                />
-                                            </Form.Item>
-                                        </Col>
-
-                                        <Col span={8}>
-                                            <Form.Item
-                                                className="mb-0"
-                                                name="semesterId"
-                                                labelCol={{ span: 24 }}
-                                                wrapperCol={{ span: 24 }}
-                                                labelAlign="left"
-                                            >
-                                                <TreeSelectSemester
-                                                    placeholder="Học kỳ"
-                                                    style={{
-                                                        height: 40,
-                                                    }}
-                                                    onChange={(val) =>
-                                                        handleFilterChange(
-                                                            'semesterId',
-                                                            val
-                                                        )
-                                                    }
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Form.Item
-                                                className="mb-0"
-                                                name="trainingObjectId"
-                                                labelCol={{ span: 24 }}
-                                                wrapperCol={{ span: 24 }}
-                                                labelAlign="left"
-                                            >
-                                                <Select
-                                                    placeholder="Chọn đối tượng đào tạo"
-                                                    options={trainingObjectTypeData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
-                                                            value: i.id,
-                                                            label: i.name,
-                                                        })
-                                                    )}
-                                                    style={{
-                                                        height: 40,
-                                                    }}
-                                                    onChange={(val) =>
-                                                        handleFilterChange(
-                                                            'trainingObjectTypeId',
-                                                            val
-                                                        )
-                                                    }
-                                                    allowClear
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={4} className="flex">
-                                            <FilterSubjectClass
-                                                onFilterChange={
-                                                    handleFilterChange
-                                                }
-                                                filters={filters}
-                                                onApply={handleFilterApply}
-                                            />
-                                        </Col>
-                                    </Flex>
-                                </Col>
-                            </Row>
-                            <Row
-                                gutter={[16, 16]}
-                                align="top"
-                                justify="space-between"
-                            >
-                                <Col span={24} className="flex justify-end">
-                                    <Flex>
-                                        <Button
-                                            // className="h-[40px]"
-                                            disabled={!selectedFixedClass}
-                                        >
-                                            <Download stroke="black" />
-                                            Tải danh sách
-                                        </Button>
-                                        <Button
-                                            onClick={() => {
-                                                const fileInput =
-                                                    document.createElement(
-                                                        'input'
+            <Col
+                span={20}
+                className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4"
+            >
+                <Row>
+                    <Col span={24}>
+                        <Row
+                            gutter={[0, 16]}
+                            align="top"
+                            justify="space-between"
+                        >
+                            <Col span={12}>
+                                <Flex gap={4}>
+                                    <Col span={8}>
+                                        <Form.Item name="searchText">
+                                            <Input
+                                                id="search"
+                                                onChange={(e) =>
+                                                    handleFilterChange(
+                                                        'searchText',
+                                                        e.target.value
                                                     )
-                                                fileInput.type = 'file'
-                                                fileInput.accept =
-                                                    '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
-                                                fileInput.onchange = (
-                                                    e: any
-                                                ) => {
-                                                    if (e.target.files?.[0]) {
-                                                        handleUploadFile(
-                                                            e.target.files[0]
-                                                        )
-                                                    }
                                                 }
-                                                fileInput.click()
-                                            }}
-                                            disabled={!selectedFixedClass}
-                                        >
-                                            <Upload stroke="black" />
-                                            Nhập file
-                                        </Button>
-                                        <Button
-                                            // className="h-[40px]"
-                                            disabled={!selectedFixedClass}
-                                        >
-                                            <Printer stroke="black" />
-                                            In phiếu điểm và khóa
-                                        </Button>
-                                        <Button
-                                            // className="h-[40px]"
-                                            disabled={!selectedFixedClass}
-                                        >
-                                            <Printer stroke="black" />
-                                            In phiếu điểm nháp
-                                        </Button>
-                                        <Button
-                                            type="primary"
-                                            // className="h-[40px]"
-                                            onClick={handleSaveScores}
-                                        >
-                                            <Save stroke="white" />
-                                            Lưu
-                                        </Button>
-                                    </Flex>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col span={24}>
-                            <Table
-                                rowKey="id"
-                                id="training-category"
-                                rowSelection={rowSelection}
-                                columns={[
-                                    {
-                                        title: 'STT',
-                                        width: 60,
-                                        align: 'center',
-                                        fixed: 'left',
-                                        render: (_, __, index) =>
-                                            index +
-                                            1 +
-                                            (currentPage - 1) *
-                                                DEFAULT_PAGINATE_SIZE,
-                                    },
-                                    {
-                                        title: 'Mã sinh viên',
-                                        align: 'center',
-                                        width: 150,
-                                        render: (_, record) =>
-                                            record.student?.code || '',
-                                    },
-                                    {
-                                        title: 'Họ và tên',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                        render: (text, record) =>
-                                            `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
-                                    },
-                                    {
-                                        title: 'Ngày sinh',
-                                        dataIndex: 'tenMonHoc',
-                                        width: 150,
-                                        render: (text, record) =>
-                                            record.student?.userProfile
-                                                ?.dateOfBirth
-                                                ? new Date(
-                                                      record.student.userProfile
-                                                          .dateOfBirth
-                                                  ).toLocaleDateString('vi-VN')
-                                                : '',
-                                    },
-                                    {
-                                        title: 'Tên lớp',
-                                        dataIndex: 'stc',
-                                        width: 150,
-                                        align: 'center',
-                                        render: (text, record) =>
-                                            record.student?.fixedClass?.name ||
-                                            'Chưa có lớp',
-                                    },
-                                    // #region Điểm CC
-                                    {
-                                        title: 'Điểm CC',
-                                        dataIndex: 'attendanceScore',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemCC) {
-                                                const Score =
-                                                    scoreCC.find(
-                                                        (item) =>
-                                                            item.id ===
-                                                            record.id
-                                                    )?.value ??
-                                                    record.attendanceScore ??
-                                                    ''
-                                                return (
-                                                    <Input
-                                                        type="number"
+                                                placeholder="Nhập tên lớp..."
+                                                style={{ height: 32 }}
+                                                prefix={
+                                                    <Search
+                                                        size={15}
                                                         style={{
-                                                            width: '100%',
-                                                        }}
-                                                        value={Score}
-                                                        onChange={(e) => {
-                                                            const newScore =
-                                                                e.target.value
-                                                            setScoreCC(
-                                                                (
-                                                                    prevScores
-                                                                ) => {
-                                                                    const index =
-                                                                        prevScores.findIndex(
-                                                                            (
-                                                                                item
-                                                                            ) =>
-                                                                                item.id ===
-                                                                                record.id
-                                                                        )
-                                                                    if (
-                                                                        index >
-                                                                        -1
-                                                                    ) {
-                                                                        const updated =
-                                                                            [
-                                                                                ...prevScores,
-                                                                            ]
-                                                                        updated[
-                                                                            index
-                                                                        ] = {
-                                                                            ...updated[
-                                                                                index
-                                                                            ],
-                                                                            value: Number(
-                                                                                newScore
-                                                                            ),
-                                                                        }
-                                                                        return updated
-                                                                    }
-                                                                    return [
-                                                                        ...prevScores,
-                                                                        {
-                                                                            id: record.id,
-                                                                            value: Number(
-                                                                                newScore
-                                                                            ),
-                                                                        },
-                                                                    ]
-                                                                }
-                                                            )
-                                                        }}
-                                                        onBlur={(e) => {
-                                                            const { value } =
-                                                                e.target
-                                                            const numericValue =
-                                                                Number.parseFloat(
-                                                                    value
-                                                                )
-                                                            const regex =
-                                                                /^(\d{1,2}(\.\d)?|10)$/
-                                                            if (
-                                                                !regex.test(
-                                                                    value
-                                                                ) ||
-                                                                Number.isNaN(
-                                                                    numericValue
-                                                                ) ||
-                                                                numericValue <
-                                                                    0 ||
-                                                                numericValue >
-                                                                    10
-                                                            ) {
-                                                                e.target.style.borderColor =
-                                                                    'red'
-                                                                message.error(
-                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
-                                                                )
-                                                            } else {
-                                                                e.target.style.borderColor =
-                                                                    ''
-                                                            }
+                                                            color: 'rgba(0, 0, 0, 0.25)',
                                                         }}
                                                     />
-                                                )
+                                                }
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+
+                                    <Col span={8}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="semesterId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <TreeSelectSemester
+                                                placeholder="Học kỳ"
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'semesterId',
+                                                        val
+                                                    )
+                                                }
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Item
+                                            className="mb-0"
+                                            name="trainingObjectId"
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
+                                            labelAlign="left"
+                                        >
+                                            <Select
+                                                placeholder="Chọn đối tượng đào tạo"
+                                                options={trainingObjectTypeData.map(
+                                                    (
+                                                        i: TrainingObjectType
+                                                    ) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                onChange={(val) =>
+                                                    handleFilterChange(
+                                                        'trainingObjectTypeId',
+                                                        val
+                                                    )
+                                                }
+                                                allowClear
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={4} className="flex">
+                                        <FilterSubjectClass
+                                            onFilterChange={handleFilterChange}
+                                            filters={filters}
+                                            onApply={handleFilterApply}
+                                        />
+                                    </Col>
+                                </Flex>
+                            </Col>
+                        </Row>
+                        <Row
+                            gutter={[16, 16]}
+                            align="top"
+                            justify="space-between"
+                        >
+                            <Col span={24} className="flex justify-end">
+                                <Flex gap={4}>
+                                    <Button
+                                        // className="h-[40px]"
+                                        disabled={!selectedFixedClass}
+                                    >
+                                        <Download stroke="black" />
+                                        Tải danh sách
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            const fileInput =
+                                                document.createElement('input')
+                                            fileInput.type = 'file'
+                                            fileInput.accept =
+                                                '.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'
+                                            fileInput.onchange = (e: any) => {
+                                                if (e.target.files?.[0]) {
+                                                    handleUploadFile(
+                                                        e.target.files[0]
+                                                    )
+                                                }
                                             }
-                                            return record.attendanceScore || ''
-                                        },
-                                    },
-                                    // #region Điểm TX
-                                    {
-                                        title: 'Điểm TX',
-                                        dataIndex: 'midtermScore',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemTX) {
-                                                {
-                                                    const Score =
-                                                        scoreTX.find(
+                                            fileInput.click()
+                                        }}
+                                        disabled={!selectedFixedClass}
+                                    >
+                                        <Upload stroke="black" />
+                                        Nhập file
+                                    </Button>
+                                    <Button disabled={!selectedFixedClass}>
+                                        <Printer stroke="black" />
+                                        In phiếu điểm và khóa
+                                    </Button>
+                                    <Button disabled={!selectedFixedClass}>
+                                        <Printer stroke="black" />
+                                        In phiếu điểm nháp
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        onClick={handleSaveScores}
+                                    >
+                                        <Save stroke="white" />
+                                        Lưu
+                                    </Button>
+                                </Flex>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col span={24}>
+                        <Table
+                            rowKey="id"
+                            id="training-category"
+                            rowSelection={rowSelection}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) =>
+                                        index +
+                                        1 +
+                                        (currentPage - 1) *
+                                            DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Mã sinh viên',
+                                    align: 'center',
+                                    width: 150,
+                                    render: (_, record) =>
+                                        record.student?.code || '',
+                                },
+                                {
+                                    title: 'Họ và tên',
+                                    dataIndex: 'name',
+                                    width: 150,
+                                    render: (text, record) =>
+                                        `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
+                                },
+                                {
+                                    title: 'Ngày sinh',
+                                    dataIndex: 'tenMonHoc',
+                                    width: 150,
+                                    render: (text, record) =>
+                                        record.student?.userProfile?.dateOfBirth
+                                            ? new Date(
+                                                  record.student.userProfile
+                                                      .dateOfBirth
+                                              ).toLocaleDateString('vi-VN')
+                                            : '',
+                                },
+                                {
+                                    title: 'Tên lớp',
+                                    dataIndex: 'stc',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (text, record) =>
+                                        record.student?.fixedClass?.name ||
+                                        'Chưa có lớp',
+                                },
+                                // #region Điểm CC
+                                {
+                                    title: 'Điểm CC',
+                                    dataIndex: 'attendanceScore',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (_: any, record: any) => {
+                                        const Score =
+                                            scoreCC.find(
+                                                (item) => item.id === record.id
+                                            )?.value ??
+                                            (record.attendanceScore !==
+                                            undefined
+                                                ? Number(record.attendanceScore)
+                                                : null)
+
+                                        return (
+                                            <Input
+                                                type="number"
+                                                id={`score-cc-${record.id}`}
+                                                style={{ width: '100%' }}
+                                                min={0}
+                                                max={10}
+                                                step={0.1}
+                                                value={Score || ''}
+                                                onChange={(e) => {
+                                                    const value = e.target.value
+                                                    const newScore =
+                                                        parseFloat(value)
+
+                                                    setScoreCC((prevScores) => {
+                                                        const index =
+                                                            prevScores.findIndex(
+                                                                (item) =>
+                                                                    item.id ===
+                                                                    record.id
+                                                            )
+                                                        if (index > -1) {
+                                                            const updated = [
+                                                                ...prevScores,
+                                                            ]
+                                                            updated[index] = {
+                                                                ...updated[
+                                                                    index
+                                                                ],
+                                                                value: newScore,
+                                                            }
+                                                            return updated
+                                                        }
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newScore,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    const currentRowIndex =
+                                                        dataTable.findIndex(
                                                             (item) =>
                                                                 item.id ===
                                                                 record.id
-                                                        )?.value ??
-                                                        record.midtermScore ??
-                                                        ''
-                                                    return (
-                                                        <Input
-                                                            type="number"
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-                                                            value={Score}
-                                                            onChange={(e) => {
-                                                                // Handle input change for TX score
-                                                                const newScore =
-                                                                    e.target
-                                                                        .value
-                                                                setScoreTX(
-                                                                    (
-                                                                        prevScores
-                                                                    ) => {
-                                                                        const index =
-                                                                            prevScores.findIndex(
-                                                                                (
-                                                                                    item
-                                                                                ) =>
-                                                                                    item.id ===
-                                                                                    record.id
-                                                                            )
-                                                                        if (
-                                                                            index >
-                                                                            -1
-                                                                        ) {
-                                                                            const updated =
-                                                                                [
-                                                                                    ...prevScores,
-                                                                                ]
-                                                                            updated[
-                                                                                index
-                                                                            ] =
-                                                                                {
-                                                                                    id: record.id,
-                                                                                    value: Number(
-                                                                                        newScore
-                                                                                    ),
-                                                                                }
-                                                                            return updated
-                                                                        }
-                                                                        return [
-                                                                            ...prevScores,
-                                                                            {
-                                                                                id: record.id,
-                                                                                value: Number(
-                                                                                    newScore
-                                                                                ),
-                                                                            },
-                                                                        ]
-                                                                    }
+                                                        )
+                                                    if (
+                                                        e.key === 'Tab' &&
+                                                        !e.shiftKey
+                                                    ) {
+                                                        const nextRow =
+                                                            dataTable[
+                                                                currentRowIndex +
+                                                                    1
+                                                            ]
+                                                        if (nextRow) {
+                                                            e.preventDefault()
+                                                            const nextInput =
+                                                                document.getElementById(
+                                                                    `score-cc-${nextRow.id}`
                                                                 )
-                                                            }}
-                                                            onBlur={(e) => {
-                                                                const {
-                                                                    value,
-                                                                } = e.target
-                                                                const numericValue =
-                                                                    Number.parseFloat(
-                                                                        value
-                                                                    )
-                                                                const regex =
-                                                                    /^(\d{1,2}(\.\d)?|10)$/
-                                                                if (
-                                                                    !regex.test(
-                                                                        value
-                                                                    ) ||
-                                                                    Number.isNaN(
-                                                                        numericValue
-                                                                    ) ||
-                                                                    numericValue <
-                                                                        0 ||
-                                                                    numericValue >
-                                                                        10
-                                                                ) {
-                                                                    e.target.style.borderColor =
-                                                                        'red'
-                                                                    message.error(
-                                                                        'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
-                                                                    )
-                                                                } else {
-                                                                    e.target.style.borderColor =
-                                                                        ''
-                                                                }
-                                                            }}
-                                                        />
-                                                    )
-                                                }
-                                            }
-                                            return record.midtermScore || ''
-                                        },
+                                                            nextInput?.focus()
+                                                        }
+                                                    }
+
+                                                    if (
+                                                        e.key === 'ArrowUp' ||
+                                                        e.key === 'ArrowDown'
+                                                    ) {
+                                                        e.preventDefault()
+
+                                                        const direction =
+                                                            e.key ===
+                                                            'ArrowDown'
+                                                                ? 1
+                                                                : -1
+                                                        const targetRow =
+                                                            dataTable[
+                                                                currentRowIndex +
+                                                                    direction
+                                                            ]
+                                                        if (targetRow) {
+                                                            const nextInput =
+                                                                document.getElementById(
+                                                                    `score-cc-${targetRow.id}`
+                                                                )
+                                                            if (nextInput) {
+                                                                ;(
+                                                                    nextInput as HTMLElement
+                                                                ).focus()
+                                                            }
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        )
                                     },
-                                    // #region Điểm Thi
-                                    {
-                                        title: 'Điểm thi',
-                                        dataIndex: 'examScore',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemThi) {
+                                },
+                                // #region Điểm TX
+                                {
+                                    title: 'Điểm TX',
+                                    dataIndex: 'midtermScore',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        if (record) {
+                                            {
                                                 const Score =
-                                                    scoreThi.find(
+                                                    scoreTX.find(
                                                         (item) =>
                                                             item.id ===
                                                             record.id
                                                     )?.value ??
-                                                    record.examScore ??
+                                                    record.midtermScore ??
                                                     ''
                                                 return (
                                                     <Input
@@ -942,9 +832,10 @@ export default function SubjectClassScore() {
                                                         }}
                                                         value={Score}
                                                         onChange={(e) => {
+                                                            // Handle input change for TX score
                                                             const newScore =
                                                                 e.target.value
-                                                            setScoreThi(
+                                                            setScoreTX(
                                                                 (
                                                                     prevScores
                                                                 ) => {
@@ -967,9 +858,7 @@ export default function SubjectClassScore() {
                                                                         updated[
                                                                             index
                                                                         ] = {
-                                                                            ...updated[
-                                                                                index
-                                                                            ],
+                                                                            id: record.id,
                                                                             value: Number(
                                                                                 newScore
                                                                             ),
@@ -1022,89 +911,35 @@ export default function SubjectClassScore() {
                                                     />
                                                 )
                                             }
-                                            return record.finalScore || ''
-                                        },
+                                        }
                                     },
-                                    {
-                                        title: 'Điểm cộng',
-                                        dataIndex: 'code',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (nhapDiemCong) {
-                                                return (
-                                                    <Input
-                                                        type="number"
-                                                        style={{
-                                                            width: '100%',
-                                                        }}
-                                                        onChange={(e) => {
-                                                            // Handle input change for bonus score
-                                                        }}
-                                                        onBlur={(e) => {
-                                                            const { value } =
-                                                                e.target
-                                                            const numericValue =
-                                                                Number.parseFloat(
-                                                                    value
-                                                                )
-                                                            const regex =
-                                                                /^(\d{1,2}(\.\d)?|10)$/
-                                                            if (
-                                                                !regex.test(
-                                                                    value
-                                                                ) ||
-                                                                Number.isNaN(
-                                                                    numericValue
-                                                                ) ||
-                                                                numericValue <
-                                                                    0 ||
-                                                                numericValue >
-                                                                    10
-                                                            ) {
-                                                                e.target.style.borderColor =
-                                                                    'red'
-                                                                message.error(
-                                                                    'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
-                                                                )
-                                                            } else {
-                                                                e.target.style.borderColor =
-                                                                    ''
-                                                            }
-                                                        }}
-                                                    />
-                                                )
-                                            }
-                                            return ''
-                                        },
-                                    },
-                                    {
-                                        title: 'Điểm HP',
-                                        dataIndex: 'code',
-                                        width: 80,
-                                        align: 'center',
-                                    },
-                                    // #region Cấm thi/Hoãn thi/Đình chỉ
-                                    {
-                                        title: 'Cấm thi',
-                                        dataIndex: 'code',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            const isCheck =
-                                                scoreCamThi.find(
+                                },
+                                // #region Điểm Thi
+                                {
+                                    title: 'Điểm thi',
+                                    dataIndex: 'examScore',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        if (nhapDiemThi) {
+                                            const Score =
+                                                scoreThi.find(
                                                     (item) =>
                                                         item.id === record.id
                                                 )?.value ??
-                                                record.examBanned ??
-                                                false
+                                                record.examScore ??
+                                                ''
                                             return (
-                                                <Checkbox
-                                                    checked={isCheck}
+                                                <Input
+                                                    type="number"
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    value={Score}
                                                     onChange={(e) => {
-                                                        const newValue =
-                                                            e.target.checked
-                                                        setScoreCamThi(
+                                                        const newScore =
+                                                            e.target.value
+                                                        setScoreThi(
                                                             (prevScores) => {
                                                                 const index =
                                                                     prevScores.findIndex(
@@ -1124,260 +959,417 @@ export default function SubjectClassScore() {
                                                                     updated[
                                                                         index
                                                                     ] = {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    }
-                                                                    return updated
-                                                                }
-                                                                return [
-                                                                    ...prevScores,
-                                                                    {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    },
-                                                                ]
-                                                            }
-                                                        )
-                                                        // Handle checkbox change for exam prohibition reason
-                                                    }}
-                                                    disabled={!camThi}
-                                                />
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Hoãn thi',
-                                        dataIndex: 'code',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            const isCheck =
-                                                scoreHoanThi.find(
-                                                    (item) =>
-                                                        item.id === record.id
-                                                )?.value ??
-                                                record.examPostponed ??
-                                                false
-                                            return (
-                                                <Checkbox
-                                                    checked={isCheck}
-                                                    onChange={(e) => {
-                                                        const newValue =
-                                                            e.target.checked
-                                                        setScoreHoanThi(
-                                                            (prevScores) => {
-                                                                const index =
-                                                                    prevScores.findIndex(
-                                                                        (
-                                                                            item
-                                                                        ) =>
-                                                                            item.id ===
-                                                                            record.id
-                                                                    )
-                                                                if (
-                                                                    index > -1
-                                                                ) {
-                                                                    const updated =
-                                                                        [
-                                                                            ...prevScores,
-                                                                        ]
-                                                                    updated[
-                                                                        index
-                                                                    ] = {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    }
-                                                                    return updated
-                                                                }
-                                                                return [
-                                                                    ...prevScores,
-                                                                    {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    },
-                                                                ]
-                                                            }
-                                                        )
-                                                        // Handle checkbox change for exam prohibition reason
-                                                    }}
-                                                    disabled={!camThi}
-                                                />
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Đình chỉ',
-                                        dataIndex: 'code',
-                                        width: 80,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            const isCheck =
-                                                scoreDinhChi.find(
-                                                    (item) =>
-                                                        item.id === record.id
-                                                )?.value ??
-                                                record.examPostponed ??
-                                                false
-                                            return (
-                                                <Checkbox
-                                                    checked={isCheck}
-                                                    onChange={(e) => {
-                                                        const newValue =
-                                                            e.target.checked
-                                                        setscoreDinhChi(
-                                                            (prevScores) => {
-                                                                const index =
-                                                                    prevScores.findIndex(
-                                                                        (
-                                                                            item
-                                                                        ) =>
-                                                                            item.id ===
-                                                                            record.id
-                                                                    )
-                                                                if (
-                                                                    index > -1
-                                                                ) {
-                                                                    const updated =
-                                                                        [
-                                                                            ...prevScores,
-                                                                        ]
-                                                                    updated[
-                                                                        index
-                                                                    ] = {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    }
-                                                                    return updated
-                                                                }
-                                                                return [
-                                                                    ...prevScores,
-                                                                    {
-                                                                        id: record.id,
-                                                                        value: newValue,
-                                                                    },
-                                                                ]
-                                                            }
-                                                        )
-                                                        // Handle checkbox change for exam prohibition reason
-                                                    }}
-                                                    disabled={!camThi}
-                                                />
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Ghi chú lý do',
-                                        dataIndex: 'code',
-                                        width: 150,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            if (camThi) {
-                                                const note =
-                                                    scoreLyDo.find(
-                                                        (item) =>
-                                                            item.id ===
-                                                            record.id
-                                                    )?.value ??
-                                                    record.description ??
-                                                    ''
-                                                return (
-                                                    <Input
-                                                        placeholder="Nhập ghi chú lý do"
-                                                        style={{
-                                                            width: '100%',
-                                                        }}
-                                                        value={note}
-                                                        onChange={(e) => {
-                                                            // Handle input change for bonus score
-                                                            const newNote =
-                                                                e.target.value
-                                                            setScoreLyDo(
-                                                                (
-                                                                    prevScores
-                                                                ) => {
-                                                                    const index =
-                                                                        prevScores.findIndex(
-                                                                            (
-                                                                                item
-                                                                            ) =>
-                                                                                item.id ===
-                                                                                record.id
-                                                                        )
-                                                                    if (
-                                                                        index >
-                                                                        -1
-                                                                    ) {
-                                                                        const updated =
-                                                                            [
-                                                                                ...prevScores,
-                                                                            ]
-                                                                        updated[
+                                                                        ...updated[
                                                                             index
-                                                                        ] = {
-                                                                            id: record.id,
-                                                                            value: newNote,
-                                                                        }
-                                                                        return updated
+                                                                        ],
+                                                                        value: Number(
+                                                                            newScore
+                                                                        ),
                                                                     }
-                                                                    return [
-                                                                        ...prevScores,
-                                                                        {
-                                                                            id: record.id,
-                                                                            value: newNote,
-                                                                        },
-                                                                    ]
+                                                                    return updated
                                                                 }
+                                                                return [
+                                                                    ...prevScores,
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: Number(
+                                                                            newScore
+                                                                        ),
+                                                                    },
+                                                                ]
+                                                            }
+                                                        )
+                                                    }}
+                                                    onBlur={(e) => {
+                                                        const { value } =
+                                                            e.target
+                                                        const numericValue =
+                                                            Number.parseFloat(
+                                                                value
                                                             )
-                                                        }}
-                                                    />
-                                                )
-                                            }
-                                            return record.description || ''
-                                        },
+                                                        const regex =
+                                                            /^(\d{1,2}(\.\d)?|10)$/
+                                                        if (
+                                                            !regex.test(
+                                                                value
+                                                            ) ||
+                                                            Number.isNaN(
+                                                                numericValue
+                                                            ) ||
+                                                            numericValue < 0 ||
+                                                            numericValue > 10
+                                                        ) {
+                                                            e.target.style.borderColor =
+                                                                'red'
+                                                            message.error(
+                                                                'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                            )
+                                                        } else {
+                                                            e.target.style.borderColor =
+                                                                ''
+                                                        }
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                        return record.finalScore || ''
                                     },
-                                    // {
-                                    //     title: 'Thao tác',
-                                    //     width: 100,
-                                    //     align: 'center',
-                                    //     fixed: 'right',
-                                    //     render: (_, { id }) => {
-                                    //         if (id) {
-                                    //             return (
-                                    //                 <Row
-                                    //                     className="flex justify-center items-center gap-2 text-[#028850]"
-                                    //                     onClick={handleModal}
-                                    //                 >
-                                    //                     <CalendarPlus
-                                    //                         size={16}
-                                    //                         strokeWidth={2}
-                                    //                     />
-                                    //                     Nhập điểm
-                                    //                 </Row>
-                                    //             )
-                                    //         }
-                                    //         return ''
-                                    //     },
-                                    // },
-                                ]}
-                                data={dataTable}
-                                pagination={{
-                                    current: currentPage,
-                                    pageSize: numberOfPages,
-                                    total: count,
-                                    onChange: setCurrentPage,
-                                    onShowSizeChange: setNumberOfPages,
-                                    showTotal: (total, range) =>
-                                        `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                                }}
-                            />
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </div>
+                                },
+                                {
+                                    title: 'Điểm cộng',
+                                    dataIndex: 'code',
+                                    width: 100,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        if (nhapDiemCong) {
+                                            return (
+                                                <Input
+                                                    type="number"
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    onChange={(e) => {
+                                                        // Handle input change for bonus score
+                                                    }}
+                                                    onBlur={(e) => {
+                                                        const { value } =
+                                                            e.target
+                                                        const numericValue =
+                                                            Number.parseFloat(
+                                                                value
+                                                            )
+                                                        const regex =
+                                                            /^(\d{1,2}(\.\d)?|10)$/
+                                                        if (
+                                                            !regex.test(
+                                                                value
+                                                            ) ||
+                                                            Number.isNaN(
+                                                                numericValue
+                                                            ) ||
+                                                            numericValue < 0 ||
+                                                            numericValue > 10
+                                                        ) {
+                                                            e.target.style.borderColor =
+                                                                'red'
+                                                            message.error(
+                                                                'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
+                                                            )
+                                                        } else {
+                                                            e.target.style.borderColor =
+                                                                ''
+                                                        }
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                        return ''
+                                    },
+                                },
+                                {
+                                    title: 'Điểm HP',
+                                    dataIndex: 'code',
+                                    width: 80,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Điểm hệ 4',
+                                    dataIndex: '',
+                                    width: 100,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Điểm chữ',
+                                    dataIndex: '',
+                                    width: 100,
+                                    align: 'center',
+                                },
+                                // #region Cấm thi/Hoãn thi/Đình chỉ
+                                {
+                                    title: 'Lý do cấm thi',
+                                    dataIndex: '',
+                                    width: 150,
+                                },
+                                {
+                                    title: 'Cấm thi',
+                                    dataIndex: 'code',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        const isCheck =
+                                            scoreCamThi.find(
+                                                (item) => item.id === record.id
+                                            )?.value ??
+                                            record.examBanned ??
+                                            false
+                                        return (
+                                            <Checkbox
+                                                checked={isCheck}
+                                                onChange={(e) => {
+                                                    const newValue =
+                                                        e.target.checked
+                                                    setScoreCamThi(
+                                                        (prevScores) => {
+                                                            const index =
+                                                                prevScores.findIndex(
+                                                                    (item) =>
+                                                                        item.id ===
+                                                                        record.id
+                                                                )
+                                                            if (index > -1) {
+                                                                const updated =
+                                                                    [
+                                                                        ...prevScores,
+                                                                    ]
+                                                                updated[index] =
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: newValue,
+                                                                },
+                                                            ]
+                                                        }
+                                                    )
+                                                    // Handle checkbox change for exam prohibition reason
+                                                }}
+                                                disabled={!camThi}
+                                            />
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Lý do hoãn thi',
+                                    dataIndex: '',
+                                    width: 150,
+                                },
+                                {
+                                    title: 'Hoãn thi',
+                                    dataIndex: 'code',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        const isCheck =
+                                            scoreHoanThi.find(
+                                                (item) => item.id === record.id
+                                            )?.value ??
+                                            record.examPostponed ??
+                                            false
+                                        return (
+                                            <Checkbox
+                                                checked={isCheck}
+                                                onChange={(e) => {
+                                                    const newValue =
+                                                        e.target.checked
+                                                    setScoreHoanThi(
+                                                        (prevScores) => {
+                                                            const index =
+                                                                prevScores.findIndex(
+                                                                    (item) =>
+                                                                        item.id ===
+                                                                        record.id
+                                                                )
+                                                            if (index > -1) {
+                                                                const updated =
+                                                                    [
+                                                                        ...prevScores,
+                                                                    ]
+                                                                updated[index] =
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: newValue,
+                                                                },
+                                                            ]
+                                                        }
+                                                    )
+                                                    // Handle checkbox change for exam prohibition reason
+                                                }}
+                                                disabled={!camThi}
+                                            />
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Lý do đình chỉ',
+                                    dataIndex: '',
+                                    width: 150,
+                                },
+                                {
+                                    title: 'Đình chỉ',
+                                    dataIndex: 'code',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        const isCheck =
+                                            scoreDinhChi.find(
+                                                (item) => item.id === record.id
+                                            )?.value ??
+                                            record.examPostponed ??
+                                            false
+                                        return (
+                                            <Checkbox
+                                                checked={isCheck}
+                                                onChange={(e) => {
+                                                    const newValue =
+                                                        e.target.checked
+                                                    setscoreDinhChi(
+                                                        (prevScores) => {
+                                                            const index =
+                                                                prevScores.findIndex(
+                                                                    (item) =>
+                                                                        item.id ===
+                                                                        record.id
+                                                                )
+                                                            if (index > -1) {
+                                                                const updated =
+                                                                    [
+                                                                        ...prevScores,
+                                                                    ]
+                                                                updated[index] =
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newValue,
+                                                                    }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: newValue,
+                                                                },
+                                                            ]
+                                                        }
+                                                    )
+                                                    // Handle checkbox change for exam prohibition reason
+                                                }}
+                                                disabled={!camThi}
+                                            />
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Ghi chú',
+                                    dataIndex: 'code',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (text, record) => {
+                                        if (camThi) {
+                                            const note =
+                                                scoreLyDo.find(
+                                                    (item) =>
+                                                        item.id === record.id
+                                                )?.value ??
+                                                record.description ??
+                                                ''
+                                            return (
+                                                <Input
+                                                    placeholder="Nhập ghi chú lý do"
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    value={note}
+                                                    onChange={(e) => {
+                                                        // Handle input change for bonus score
+                                                        const newNote =
+                                                            e.target.value
+                                                        setScoreLyDo(
+                                                            (prevScores) => {
+                                                                const index =
+                                                                    prevScores.findIndex(
+                                                                        (
+                                                                            item
+                                                                        ) =>
+                                                                            item.id ===
+                                                                            record.id
+                                                                    )
+                                                                if (
+                                                                    index > -1
+                                                                ) {
+                                                                    const updated =
+                                                                        [
+                                                                            ...prevScores,
+                                                                        ]
+                                                                    updated[
+                                                                        index
+                                                                    ] = {
+                                                                        id: record.id,
+                                                                        value: newNote,
+                                                                    }
+                                                                    return updated
+                                                                }
+                                                                return [
+                                                                    ...prevScores,
+                                                                    {
+                                                                        id: record.id,
+                                                                        value: newNote,
+                                                                    },
+                                                                ]
+                                                            }
+                                                        )
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                        return record.description || ''
+                                    },
+                                },
+                                // {
+                                //     title: 'Thao tác',
+                                //     width: 100,
+                                //     align: 'center',
+                                //     fixed: 'right',
+                                //     render: (_, { id }) => {
+                                //         if (id) {
+                                //             return (
+                                //                 <Row
+                                //                     className="flex justify-center items-center gap-2 text-[#028850]"
+                                //                     onClick={handleModal}
+                                //                 >
+                                //                     <CalendarPlus
+                                //                         size={16}
+                                //                         strokeWidth={2}
+                                //                     />
+                                //                     Nhập điểm
+                                //                 </Row>
+                                //             )
+                                //         }
+                                //         return ''
+                                //     },
+                                // },
+                            ]}
+                            data={dataTable}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
+                                onChange: setCurrentPage,
+                                onShowSizeChange: setNumberOfPages,
+                                showTotal: (total, range) =>
+                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                            }}
+                        />
+                    </Col>
+                </Row>
+            </Col>
+        </Flex>
     )
 }
 
 SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

@@ -60,10 +60,10 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             }}
             style={{
                 padding: '8px',
-                border: '1px solid #ccc',
                 borderRadius: '8px',
-                marginBottom: '4px',
+                marginBottom: '2px',
                 width: '100%',
+                cursor: 'pointer',
                 backgroundColor:
                     selectedItem === item.id ? '#daf2ed' : 'transparent',
             }}
@@ -81,12 +81,11 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             style={{
                 width: '100%',
                 padding: '16px',
-                backgroundColor: '#f9f9f9',
                 borderRadius: '8px',
             }}
         >
             <h2
-                className="text-lg font-semibold"
+                className="text-lg font-semibold px-[6]"
                 style={{ marginBottom: '12px' }}
             >
                 Danh sách lớp
