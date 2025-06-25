@@ -25,23 +25,15 @@ import ViewIcon from '@components/icons/view'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTemplateFile,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useUpdateStudent,
-} from '@workspace/db/hooks'
-import {
-    useFindManyCurriculumVersion,
-    // useFindManyFixedClass,
-    // useFindManyStudent,
-    // useFindManyTemplateFile,
-    // useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    // useFindManyTrainingObjectType,
-    // useUpdateStudent,
+    useFindManyTrainingObjectType,
+    useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import {

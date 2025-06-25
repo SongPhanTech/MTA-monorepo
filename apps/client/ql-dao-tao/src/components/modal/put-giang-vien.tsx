@@ -5,9 +5,11 @@ import { $Enums, type Prisma, type UserProfile } from '@workspace/db'
 import {
     useCreateLecturer,
     useCreateUserProfile,
+    useFindManyUserProfile,
     useFindUniqueLecturer,
     useUpdateLecturer,
     useUpdateUserProfile,
+    useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
@@ -43,7 +45,6 @@ const PutUserProfileLectureModal = () => {
     const [form] = Form.useForm<PutLecturerProfile>()
 
     const [activeKey, setActiveKey] = useState<string>('1')
-    const [fileList, setFileList] = useState<UploadFile[]>([])
     const [avatar, setAvatar] = useState<UploadFile[]>([])
 
     const { isOpen, onClose, input } =
@@ -103,6 +104,18 @@ const PutUserProfileLectureModal = () => {
     const { mutateAsync: createLecturer } = useCreateLecturer()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
+    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
+    const { data = [] } = useFindManyUserProfile({
+        where: {
+            userType: $Enums.UserType.LECTURER,
+            lecturer: {
+                deletedAt: null, // Lecturer chưa bị xóa
+            },
+        },
+        select: {
+            idCardNumber: true,
+        },
+    })
 
     const buildUserProfileUpdateData = (
         output: UserProfileType,
@@ -257,17 +270,21 @@ const PutUserProfileLectureModal = () => {
     async function onOk(output?: PutLecturerProfile) {
         if (!output) return
         let fileName = output.avatar
-        if (fileList.length > 0) {
+        if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension: fileList[0].name.split('.').pop() ?? '',
+                extension:
+                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
-            const res = await fetch(resPresignedUrl.data.url, {
+
+            await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
-                body: fileList[0].originFileObj,
+                body: output.file.fileList?.[0]?.originFileObj,
             })
+
             fileName = resPresignedUrl.data.fileName
         }
+
         try {
             showSpinner()
 
@@ -308,22 +325,50 @@ const PutUserProfileLectureModal = () => {
                 await Promise.all(promises)
                 message.success('Cập nhật giảng viên thành công')
             } else {
-                // CREATE MODE
-                const userProfile = await createUserProfile({
-                    data: userProfileCreateData,
-                })
+                // CREATE MODE - sử dụng upsert
+                if (
+                    data.some(
+                        (item) => item.idCardNumber === output.idCardNumber
+                    )
+                ) {
+                    // Sử dụng upsert để create hoặc update UserProfile
+                    const userProfile = await upsertUserProfile({
+                        where: {
+                            idCardNumber: output.idCardNumber,
+                        },
+                        create: userProfileCreateData,
+                        update: userProfileData,
+                    })
 
-                if (!userProfile?.id) {
-                    throw new Error('Tạo hồ sơ người dùng thất bại')
+                    const lecturerUpdateData = buildLecturerUpdateData(output)
+
+                    await updateLecturer({
+                        data: lecturerUpdateData,
+                        where: {
+                            userProfileId: userProfile?.id,
+                        },
+                    })
+
+                    message.success('Cập nhật giảng viên thành công')
+                } else {
+                    // Nếu không có CCCD thì tạo mới
+                    const userProfile = await createUserProfile({
+                        data: userProfileCreateData,
+                    })
+
+                    if (!userProfile?.id) {
+                        throw new Error('Tạo hồ sơ người dùng thất bại')
+                    }
+
+                    const lecturerCreateData = buildLecturerCreateData(
+                        output,
+                        userProfile.id
+                    )
+
+                    await createLecturer({ data: lecturerCreateData })
+
+                    message.success('Thêm mới giảng viên thành công')
                 }
-
-                const lecturerCreateData = buildLecturerCreateData(
-                    output,
-                    userProfile.id
-                )
-                await createLecturer({ data: lecturerCreateData })
-
-                message.success('Thêm mới giảng viên thành công')
             }
 
             // refetch() lại danh sách level
@@ -348,8 +393,6 @@ const PutUserProfileLectureModal = () => {
             const userProfile = lecturerData.userProfile
             const lecturer = lecturerData
 
-            console.log(lecturer)
-
             const formData = {
                 // Thông tin từ Lecturer
                 code: lecturer.code,
@@ -363,7 +406,6 @@ const PutUserProfileLectureModal = () => {
                     ? dayjs(userProfile.dateOfBirth)
                     : null,
                 placeOfBirth: userProfile.placeOfBirth,
-                avatar: userProfile.avatar,
                 homeTown: userProfile.homeTown,
                 idCardNumber: userProfile.idCardNumber,
                 idCardDate: userProfile.idCardDate
@@ -427,7 +469,7 @@ const PutUserProfileLectureModal = () => {
 
             form.setFieldsValue(formData)
 
-            if (userProfile.avatar) {
+            if (userProfile?.avatar) {
                 setAvatar([
                     {
                         uid: '-1',
@@ -439,8 +481,6 @@ const PutUserProfileLectureModal = () => {
             }
         }
     }, [lecturerData, form, id])
-
-    //upload file
 
     return (
         <PutFormModal
@@ -468,6 +508,8 @@ const PutUserProfileLectureModal = () => {
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
                     type="LECTURER"
+                    avatar={avatar}
+                    setAvatar={setAvatar}
                 />
             </Col>
         </PutFormModal>

@@ -3,6 +3,7 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
 import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import {
     useFindManyCurriculumVersion,
     useFindManyDM_DanToc,
@@ -16,15 +17,97 @@ import {
     useFindManyStaffType,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
+    useFindManyUserProfile,
+    useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, TreeSelect, Upload } from 'antd'
+import {
+    AutoComplete,
+    Col,
+    Collapse,
+    Form,
+    Input,
+    Row,
+    TreeSelect,
+    Upload,
+    type UploadFile,
+    type UploadProps,
+} from 'antd'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
+import { debounce } from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PutModalType, TabThongTinCaNhan } from '../type'
 const { Panel } = Collapse
 
-export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
+export default function ThongTinCaNhanTab({
+    id,
+    type,
+    avatar,
+    setAvatar,
+}: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
+
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+
+    const [cccd, setCccd] = useState('')
+
+    // Hook để lấy danh sách UserProfile để làm options cho AutoComplete
+    const { data: userProfileOptions = [] } = useFindManyUserProfile({
+        where: {
+            AND: [
+                {
+                    OR: [
+                        // STUDENT types - kiểm tra educationAndTraining không bị xóa
+                        ...(type.includes('STUDENT')
+                            ? [
+                                  {
+                                      educationAndTraining: {
+                                          some: {
+                                              deletedAt: null, // Thêm điều kiện không bị xóa
+                                          },
+                                      },
+                                  },
+                              ]
+                            : []),
+
+                        // LECTURER type - kiểm tra lecturer không bị xóa
+                        ...(type === 'LECTURER'
+                            ? [
+                                  {
+                                      lecturer: {
+                                          deletedAt: null, // Thêm điều kiện không bị xóa
+                                      },
+                                  },
+                              ]
+                            : []),
+
+                        // STAFF type - kiểm tra staffs không bị xóa
+                        ...(type === 'STAFF'
+                            ? [
+                                  {
+                                      staffs: {
+                                          deletedAt: null, // Thêm điều kiện không bị xóa
+                                      },
+                                  },
+                              ]
+                            : []),
+                    ],
+                },
+            ],
+        },
+        select: {
+            firstName: true,
+            lastName: true,
+            idCardNumber: true,
+        },
+    })
+
+    // Tạo options cho AutoComplete
+    const idCardOptions = useMemo(() => {
+        return userProfileOptions.map((profile) => ({
+            value: profile.idCardNumber,
+            label: `${profile.idCardNumber} - ${profile.lastName} ${profile.firstName}`,
+        }))
+    }, [userProfileOptions])
 
     const { data: registrationAreaData = [], refetch: refetchRe } =
         useFindManyDM_KhuVuc_DiaLy()
@@ -63,6 +146,78 @@ export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
         })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+
+    const { data: cccdUserProfileData } = useFindUniqueUserProfile(
+        {
+            where: {
+                idCardNumber: cccd,
+            },
+            include: {
+                provinceCurrentAddress: true,
+                districtCurrentAddress: true,
+                communeCurrentAddress: true,
+                provinceOfBirth: true,
+                districtOfBirth: true,
+                communeOfBirth: true,
+                provinceHometown: true,
+                districtHometown: true,
+                communeHometown: true,
+                nationality: true,
+                religion: true,
+                ethnicity: true,
+                rank: true,
+                academicDegreeType: true,
+                academicRankType: true,
+                level: true,
+                educationAndTraining: type.includes('STUDENT')
+                    ? {
+                          include: {
+                              fixedClass: {
+                                  include: {
+                                      trainingCourse: true,
+                                      curriculumVersion: {
+                                          include: {
+                                              curriculum: {
+                                                  include: {
+                                                      trainingMajor: true,
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      }
+                    : false,
+                staffs:
+                    type === 'STAFF'
+                        ? {
+                              include: {
+                                  organization: true,
+                                  staffType: true,
+                                  staffPosition: true,
+                              },
+                          }
+                        : false,
+                lecturer:
+                    type === 'LECTURER'
+                        ? {
+                              include: {
+                                  organization: true,
+                                  lecturerType: true,
+                              },
+                          }
+                        : false,
+            },
+        },
+        {
+            enabled: !!cccd,
+        }
+    )
+
+    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList.slice(-1))
+    }
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -127,6 +282,137 @@ export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
         }
     }
 
+    // Hàm fill thông tin từ dữ liệu cccdUserProfileData
+    const fillUserInfo = useCallback(
+        (userData: any) => {
+            if (!userData) return
+
+            // Fill thông tin cơ bản từ UserProfile
+            form.setFieldsValue({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                dateOfBirth: userData.dateOfBirth
+                    ? dayjs(userData.dateOfBirth)
+                    : null,
+                gender: userData.gender,
+                phoneNumber: userData.phoneNumber,
+                email: userData.email,
+                idCardDate: userData.idCardDate
+                    ? dayjs(userData.idCardDate)
+                    : null,
+                officerNumber: userData.officerNumber,
+                healthInsuranceNumber: userData.healthInsuranceNumber,
+                bankAccountNumber: userData.bankAccountNumber,
+                bankName: userData.bankName,
+                currentAddress: userData.currentAddress,
+
+                // Địa chỉ
+                provinceCurrentAddressId: userData.provinceCurrentAddressId,
+                districtCurrentAddressId: userData.districtCurrentAddressId,
+                communeCurrentAddressId: userData.communeCurrentAddressId,
+                provinceOfBirthId: userData.provinceOfBirthId,
+                districtOfBirthId: userData.districtOfBirthId,
+                communeOfBirthId: userData.communeOfBirthId,
+                provincePermanentAddressId: userData.provincePermanentAddressId,
+                districtPermanentAddressId: userData.districtPermanentAddressId,
+                communePermanentAddressId: userData.communePermanentAddressId,
+                provinceHometownId: userData.provinceHometownId,
+                districtHometownId: userData.districtHometownId,
+                communeHometownId: userData.communeHometownId,
+
+                // Thông tin cá nhân khác
+                nationalityId: userData.nationalityId,
+                religionId: userData.religionId,
+                ethnicityId: userData.ethnicityId,
+                unionDate: userData.unionDate
+                    ? dayjs(userData.unionDate)
+                    : null,
+                unionPlace: userData.unionPlace,
+                CPVJoinDate: userData.CPVJoinDate
+                    ? dayjs(userData.CPVJoinDate)
+                    : null,
+                officialCPVDate: userData.officialCPVDate
+                    ? dayjs(userData.officialCPVDate)
+                    : null,
+                CPVJoinPlace: userData.CPVJoinPlace,
+                tenureDate: userData.tenureDate
+                    ? dayjs(userData.tenureDate)
+                    : null,
+            })
+
+            if (userData.avatar) {
+                const avatarFile: UploadFile = {
+                    uid: '-1',
+                    name: 'avatar.jpg',
+                    status: 'done',
+                    url: getMinioUrl(userData.avatar), // Sử dụng getMinioUrl để tạo URL hiển thị
+                }
+                setFileList([avatarFile])
+            } else {
+                setFileList([])
+            }
+
+            // Fill thông tin Student
+            if (
+                type.includes('STUDENT') &&
+                userData.educationAndTraining &&
+                userData.educationAndTraining.length > 0
+            ) {
+                const student = userData.educationAndTraining[0]
+                form.setFieldsValue({
+                    code: student.code,
+                    status: student.status,
+                    fixedClassId: student.fixedClassId,
+                    trainingCourseId: student.fixedClass?.trainingCourseId,
+                    curriculumVersionId:
+                        student.curriculumVersionId ||
+                        student.fixedClass?.curriculumVersionId,
+                    trainingObjectTypeId: student.trainingObjectTypeId,
+                    registrationAreaId: student.registrationAreaId,
+                })
+            }
+
+            // Fill thông tin Lecturer
+            if (type === 'LECTURER' && userData.lecturer) {
+                const lecturer = userData.lecturer
+                form.setFieldsValue({
+                    code: lecturer.code,
+                    organizationId: lecturer.organizationId,
+                    lecturerTypeId: lecturer.lecturerTypeId,
+                })
+            }
+
+            // Fill thông tin Staff
+            if (type === 'STAFF' && userData.staffs) {
+                const staff = userData.staffs
+                form.setFieldsValue({
+                    code: staff.code,
+                    organizationId: staff.organizationId,
+                    staffTypeId: staff.staffTypeId,
+                    staffPositionId: staff.staffPositionId,
+                })
+            }
+        },
+        [form, type]
+    )
+
+    // Hàm search với debounce
+    const debouncedSearch = useCallback(
+        debounce((cccd: string) => {
+            if (!id && cccd) {
+                setCccd(cccd)
+            }
+        }, 500),
+        []
+    )
+
+    // Effect để fill thông tin khi có dữ liệu từ API
+    useEffect(() => {
+        if (cccdUserProfileData && !id) {
+            fillUserInfo(cccdUserProfileData)
+        }
+    }, [cccdUserProfileData, fillUserInfo, id])
+
     return (
         <>
             <Row gutter={[16, 16]}>
@@ -139,14 +425,26 @@ export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
                         }}
                     >
                         <Form.Item name={'file'} className="mb-0">
-                            <Upload listType="picture-card" maxCount={1}>
-                                <p
-                                    style={{
-                                        fontSize: '0.65rem',
-                                    }}
-                                >
-                                    + Tải ảnh lên
-                                </p>
+                            <Upload
+                                listType="picture-card"
+                                maxCount={1}
+                                fileList={avatar.length > 0 ? avatar : fileList}
+                                onChange={onChange}
+                                onRemove={() => {
+                                    setAvatar([])
+                                }}
+                            >
+                                {avatar.length > 0 || fileList.length > 0
+                                    ? ''
+                                    : fileList.length < 1 && (
+                                          <p
+                                              style={{
+                                                  fontSize: '0.65rem',
+                                              }}
+                                          >
+                                              + Tải ảnh lên
+                                          </p>
+                                      )}
                             </Upload>
                         </Form.Item>
                     </div>
@@ -162,7 +460,7 @@ export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
                                 className="mb-0"
                                 required
                             >
-                                {/* <AutoComplete
+                                <AutoComplete
                                     placeholder="Nhập hoặc chọn số CCCD"
                                     allowClear
                                     options={idCardOptions}
@@ -182,16 +480,30 @@ export default function ThongTinCaNhanTab({ type }: TabThongTinCaNhan) {
                                         form.setFieldsValue({
                                             idCardNumber: value,
                                         })
-                                        debouncedSearch(value)
+                                        // Search ngay khi select từ dropdown
+                                        if (!id) {
+                                            debouncedSearch(value)
+                                        }
                                     }}
                                     onChange={(value) => {
                                         form.setFieldsValue({
                                             idCardNumber: value,
                                         })
-                                        debouncedSearch(value)
+
+                                        if (typeof value === 'string') {
+                                            if (value === '') {
+                                                form.resetFields()
+                                            } else {
+                                                debouncedSearch(value)
+                                            }
+                                        }
+
+                                        // Debounced search khi gõ tay
+                                        if (typeof value === 'string') {
+                                            debouncedSearch(value)
+                                        }
                                     }}
-                                /> */}
-                                <Input placeholder="Nhập số căn cước công dân" />
+                                />
                             </FormItem>
                         </Col>
                         {type === 'CIVILIAN_STUDENT' && (

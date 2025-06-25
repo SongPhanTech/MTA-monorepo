@@ -233,6 +233,8 @@ Table Semester {
   endDate DateTime
   subjectClasses SubjectClass [not null]
   trainingCoursesStart TrainingCourse [not null]
+  trainingScoreSession TrainingScoreSession [not null]
+  studentTrainingSemester StudentTrainingSemester [not null]
 
   indexes {
     (schoolYearId, order) [unique]
@@ -534,6 +536,7 @@ Table TrainingObjectType {
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
   trainingFields TrainingFieldOnTrainingObjectType [not null]
   students Student [not null]
+  trainingScoreSession TrainingScoreSession [not null]
 
   Note: 'đối tượng đào tạo (Quân sư, dân sự, quốc tế)'
 }
@@ -878,6 +881,8 @@ Table Student {
   studyRankId String
   trainingRank TrainingRank
   trainingRankId String
+  studentTrainingScore StudentTrainingScore [not null]
+  studentTrainingSemester StudentTrainingSemester [not null]
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
@@ -1965,6 +1970,55 @@ Table StaffHistory {
   staffPositionId String [not null]
 }
 
+Table TrainingScoreSession {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Name String [not null]
+  trainingObjectType TrainingObjectType
+  trainingObjectTypeId String
+  time DateTime [default: `now()`, not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  status TrainingScoreSessionStatus [not null, default: 'ACTIVE']
+  studentTrainingScore StudentTrainingScore [not null]
+}
+
+Table StudentTrainingScore {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingScoreSession TrainingScoreSession [not null]
+  trainingScoreSessionId String [not null]
+  student Student [not null]
+  studentId String [not null]
+  score Float [not null, default: 0]
+}
+
+Table StudentTrainingSemester {
+  id String [pk]
+  code String
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  scoreAvg Float [not null, default: 0]
+  trainingType StudentTrainingType [not null]
+}
+
 Table TemplateFile {
   id String [pk]
   code String
@@ -2164,6 +2218,19 @@ Enum UserType {
 Enum Gender {
   Male
   Female
+}
+
+Enum TrainingScoreSessionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+Enum StudentTrainingType {
+  EXCELENT
+  GOOD
+  FAIR
+  AVERAGE
+  POOR
 }
 
 Enum TemplateFileType {
@@ -2419,3 +2486,15 @@ Ref: StaffHistory.organizationId > DM_DonVi.Id
 Ref: StaffHistory.staffTypeId > StaffType.id
 
 Ref: StaffHistory.staffPositionId > StaffPosition.id
+
+Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: TrainingScoreSession.semesterId > Semester.id
+
+Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
+
+Ref: StudentTrainingScore.studentId > Student.id
+
+Ref: StudentTrainingSemester.studentId > Student.id
+
+Ref: StudentTrainingSemester.semesterId > Semester.id

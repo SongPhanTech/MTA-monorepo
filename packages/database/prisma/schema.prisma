@@ -193,6 +193,23 @@ enum Gender {
   @@schema("ql-danh-muc")
 }
 
+enum TrainingScoreSessionStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("ql-nguoi-dung")
+}
+
+enum StudentTrainingType {
+  EXCELENT
+  GOOD
+  FAIR
+  AVERAGE
+  POOR
+
+  @@schema("ql-nguoi-dung")
+}
+
 enum TemplateFileType {
   UPLOAD
   DOWNLOAD
@@ -431,23 +448,25 @@ model SchoolYear {
 
 /// Kỳ học
 model Semester {
-  id                   String           @id() @default(cuid())
-  code                 String?
-  active               Boolean          @default(true)
-  description          String?          @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt()
-  name                 String
-  shortName            String?
-  semesterType         SemesterType?
-  order                Int
-  schoolYear           SchoolYear       @relation(fields: [schoolYearId], references: [id])
-  schoolYearId         String
-  startDate            DateTime
-  endDate              DateTime?
-  subjectClasses       SubjectClass[]
-  trainingCoursesStart TrainingCourse[]
+  id                      String                    @id() @default(cuid())
+  code                    String?
+  active                  Boolean                   @default(true)
+  description             String?                   @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt()
+  name                    String
+  shortName               String?
+  semesterType            SemesterType?
+  order                   Int
+  schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
+  schoolYearId            String
+  startDate               DateTime
+  endDate                 DateTime?
+  subjectClasses          SubjectClass[]
+  trainingCoursesStart    TrainingCourse[]
+  trainingScoreSession    TrainingScoreSession[]
+  studentTrainingSemester StudentTrainingSemester[]
 
   @@unique([schoolYearId, order])
   @@unique([schoolYearId, semesterType])
@@ -747,19 +766,20 @@ model SubjectClass {
 
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType {
-  id                String                              @id() @default(cuid())
-  code              String?
-  active            Boolean                             @default(true)
-  description       String?                             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime                            @default(now())
-  updatedAt         DateTime                            @updatedAt()
-  name              String                              @unique()
-  trainingCourse    TrainingCourse[]
-  curriculumVersion CurriculumVersion[]
-  trainingMajors    TrainingMajorOnTrainingObjectType[]
-  trainingFields    TrainingFieldOnTrainingObjectType[]
-  students          Student[]
+  id                   String                              @id() @default(cuid())
+  code                 String?
+  active               Boolean                             @default(true)
+  description          String?                             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                            @default(now())
+  updatedAt            DateTime                            @updatedAt()
+  name                 String                              @unique()
+  trainingCourse       TrainingCourse[]
+  curriculumVersion    CurriculumVersion[]
+  trainingMajors       TrainingMajorOnTrainingObjectType[]
+  trainingFields       TrainingFieldOnTrainingObjectType[]
+  students             Student[]
+  trainingScoreSession TrainingScoreSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -1084,41 +1104,43 @@ model TrainingKPI {
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
-  id                   String                @id() @default(cuid())
-  code                 String?
-  active               Boolean               @default(true)
-  description          String?               @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt()
-  from                 DateTime?
-  to                   DateTime?
-  trainingLocation     TrainingLocation?     @relation(fields: [trainingLocationId], references: [id])
-  trainingLocationId   String?
+  id                      String                    @id() @default(cuid())
+  code                    String?
+  active                  Boolean                   @default(true)
+  description             String?                   @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt()
+  from                    DateTime?
+  to                      DateTime?
+  trainingLocation        TrainingLocation?         @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId      String?
   /// đối tượng ưu tiên
-  priorityObject       PriorityObject[]
-  status               StudentStatus         @default(ENROLLED)
-  fixedClass           FixedClass?           @relation(fields: [fixedClassId], references: [id])
-  fixedClassId         String?
-  subjectClassStudent  StudentSubjectScore[]
-  userProfileId        String
-  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
-  trainingLevel        TrainingLevel?        @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String?
-  trainingObjectType   TrainingObjectType?   @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-  trainingType         TrainingType?         @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId       String?
-  trainingForm         TrainingForm?         @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String?
-  registrationArea     DM_KhuVuc_DiaLy?      @relation(fields: [registrationAreaId], references: [Id])
-  registrationAreaId   String?
-  curriculumVersion    CurriculumVersion?    @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId  String?
-  studyRank            StudyRank?            @relation(fields: [studyRankId], references: [id])
-  studyRankId          String?
-  trainingRank         TrainingRank?         @relation(fields: [trainingRankId], references: [id])
-  trainingRankId       String?
+  priorityObject          PriorityObject[]
+  status                  StudentStatus             @default(ENROLLED)
+  fixedClass              FixedClass?               @relation(fields: [fixedClassId], references: [id])
+  fixedClassId            String?
+  subjectClassStudent     StudentSubjectScore[]
+  userProfileId           String
+  userProfile             UserProfile               @relation(fields: [userProfileId], references: [id])
+  trainingLevel           TrainingLevel?            @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId         String?
+  trainingObjectType      TrainingObjectType?       @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId    String?
+  trainingType            TrainingType?             @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId          String?
+  trainingForm            TrainingForm?             @relation(fields: [trainingFormId], references: [id])
+  trainingFormId          String?
+  registrationArea        DM_KhuVuc_DiaLy?          @relation(fields: [registrationAreaId], references: [Id])
+  registrationAreaId      String?
+  curriculumVersion       CurriculumVersion?        @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String?
+  studyRank               StudyRank?                @relation(fields: [studyRankId], references: [id])
+  studyRankId             String?
+  trainingRank            TrainingRank?             @relation(fields: [trainingRankId], references: [id])
+  trainingRankId          String?
+  studentTrainingScore    StudentTrainingScore[]
+  studentTrainingSemester StudentTrainingSemester[]
 
   @@schema("ql-dao-tao")
 }
@@ -2304,6 +2326,61 @@ model StaffHistory {
   staffPositionId String
 
   @@schema("ql-dao-tao")
+}
+
+model TrainingScoreSession {
+  id                   String                     @id() @default(cuid())
+  code                 String?
+  active               Boolean                    @default(true)
+  description          String?                    @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt()
+  Name                 String
+  trainingObjectType   TrainingObjectType?        @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+  time                 DateTime                   @default(now())
+  semester             Semester                   @relation(fields: [semesterId], references: [id])
+  semesterId           String
+  status               TrainingScoreSessionStatus @default(ACTIVE)
+  studentTrainingScore StudentTrainingScore[]
+
+  @@schema("ql-nguoi-dung")
+}
+
+model StudentTrainingScore {
+  id                     String               @id() @default(cuid())
+  code                   String?
+  active                 Boolean              @default(true)
+  description            String?              @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt()
+  trainingScoreSession   TrainingScoreSession @relation(fields: [trainingScoreSessionId], references: [id])
+  trainingScoreSessionId String
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+  score                  Float                @default(0)
+
+  @@schema("ql-nguoi-dung")
+}
+
+model StudentTrainingSemester {
+  id           String              @id() @default(cuid())
+  code         String?
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt()
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+  semester     Semester            @relation(fields: [semesterId], references: [id])
+  semesterId   String
+  scoreAvg     Float               @default(0)
+  trainingType StudentTrainingType
+
+  @@schema("ql-nguoi-dung")
 }
 
 model TemplateFile {
