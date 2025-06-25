@@ -4,11 +4,9 @@
         "ignoreUnknown": true,
         "ignore": [
             ".vscode",
-            "package.json",
             ".next/**/*",
             "generated/**/*",
             "open-api/**/*",
-            "*.json",
             "lib/api/**/*",
             ".env",
             ".env.*"

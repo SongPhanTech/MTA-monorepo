@@ -1,37 +1,36 @@
 {
-  "name": "mta-monorepo",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "build:backend": "turbo run build --filter=backend",
-    "dev": "turbo dev",
-    "lint": "biome lint --fix",
-    "generate": "turbo run generate",
-    "format": "biome format --write --verbose",
-    "check": "biome check --write --unsafe --files-ignore-unknown=true --organize-imports-enabled=false --no-errors-on-unmatched --colors=off --config-path ./biome.json",
-    "prepare": "husky",
-    "lint-staged": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "pnpm check"
-    ]
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.1.0",
-    "turbo": "catalog:",
-    "typescript": "catalog:"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "@hono/zod-openapi": "catalog:",
-    "esbuild": "catalog:"
-  },
-  "packageManager": "pnpm@10.12.3+sha512.467df2c586056165580ad6dfb54ceaad94c5a30f80893ebdec5a44c5aa73c205ae4a5bb9d5ed6bb84ea7c249ece786642bbb49d06a307df218d03da41c317417"
+    "name": "mta-monorepo",
+    "private": true,
+    "scripts": {
+        "build": "turbo build",
+        "build:backend": "turbo run build --filter=backend",
+        "dev": "turbo dev",
+        "lint": "biome lint --fix",
+        "generate": "turbo run generate",
+        "generate:sql": "turbo run generate:sql",
+        "format": "biome format --write --verbose",
+        "check": "biome check --write --unsafe --files-ignore-unknown=true --organize-imports-enabled=false --no-errors-on-unmatched --colors=off --config-path ./biome.json",
+        "prepare": "husky",
+        "lint-staged": "lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["pnpm check"]
+    },
+    "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.0",
+        "turbo": "catalog:",
+        "typescript": "catalog:"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "dependencies": {
+        "@hono/zod-openapi": "catalog:",
+        "esbuild": "catalog:"
+    },
+    "packageManager": "pnpm@10.12.3+sha512.467df2c586056165580ad6dfb54ceaad94c5a30f80893ebdec5a44c5aa73c205ae4a5bb9d5ed6bb84ea7c249ece786642bbb49d06a307df218d03da41c317417"
 }
