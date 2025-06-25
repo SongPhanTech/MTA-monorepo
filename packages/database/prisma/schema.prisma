@@ -220,7 +220,7 @@ enum TemplateFileType {
 
 model Config {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -234,7 +234,7 @@ model Config {
 
 model SurveyObjectType {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -248,7 +248,7 @@ model SurveyObjectType {
 
 model SurveyTopic {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -262,7 +262,7 @@ model SurveyTopic {
 
 model SurveyQuestionType {
   id             String           @id() @default(cuid())
-  code           String?
+  code           String?          @unique()
   active         Boolean          @default(true)
   description    String?          @db.Text()
   deletedAt      DateTime?
@@ -276,7 +276,7 @@ model SurveyQuestionType {
 
 model Survey {
   id               String           @id() @default(cuid())
-  code             String?
+  code             String?          @unique()
   active           Boolean          @default(true)
   description      String?          @db.Text()
   deletedAt        DateTime?
@@ -296,7 +296,7 @@ model Survey {
 
 model SurveyQuestion {
   id                   String             @id() @default(cuid())
-  code                 String?
+  code                 String?            @unique()
   active               Boolean            @default(true)
   description          String?            @db.Text()
   deletedAt            DateTime?
@@ -314,7 +314,7 @@ model SurveyQuestion {
 
 model SurveyAnswer {
   id               String         @id() @default(cuid())
-  code             String?
+  code             String?        @unique()
   active           Boolean        @default(true)
   description      String?        @db.Text()
   deletedAt        DateTime?
@@ -330,7 +330,7 @@ model SurveyAnswer {
 /// Điểm môn học SV - lớp môn học
 model StudentSubjectScore {
   id               String                                     @id() @default(cuid())
-  code             String?
+  code             String?                                    @unique()
   active           Boolean                                    @default(true)
   description      String?                                    @db.Text()
   deletedAt        DateTime?
@@ -347,6 +347,7 @@ model StudentSubjectScore {
   midtermScore     Float?
   examScore        Float?
   finalScore       Float?
+  manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
   withdrew         Boolean                                    @default(false)
@@ -361,7 +362,7 @@ model StudentSubjectScore {
 
 model ArchivedCertificateOnStudentSubjectScore {
   id                    String              @id() @default(cuid())
-  code                  String?
+  code                  String?             @unique()
   active                Boolean             @default(true)
   description           String?             @db.Text()
   deletedAt             DateTime?
@@ -378,7 +379,7 @@ model ArchivedCertificateOnStudentSubjectScore {
 
 model ArchivedCertificate {
   id                  String                                     @id() @default(cuid())
-  code                String?
+  code                String?                                    @unique()
   active              Boolean                                    @default(true)
   description         String?                                    @db.Text()
   deletedAt           DateTime?
@@ -395,7 +396,7 @@ model ArchivedCertificate {
 
 model ArchivedAwardOnStudentSubjectScore {
   id                    String              @id() @default(cuid())
-  code                  String?
+  code                  String?             @unique()
   active                Boolean             @default(true)
   description           String?             @db.Text()
   deletedAt             DateTime?
@@ -412,7 +413,7 @@ model ArchivedAwardOnStudentSubjectScore {
 
 model ArchivedAward {
   id                  String                               @id() @default(cuid())
-  code                String?
+  code                String?                              @unique()
   active              Boolean                              @default(true)
   description         String?                              @db.Text()
   deletedAt           DateTime?
@@ -430,7 +431,7 @@ model ArchivedAward {
 /// Năm học
 model SchoolYear {
   id          String      @id() @default(cuid())
-  code        String?
+  code        String?     @unique()
   active      Boolean     @default(true)
   description String?     @db.Text()
   deletedAt   DateTime?
@@ -476,7 +477,7 @@ model Semester {
 /// Mốc huấn luyện
 model Milestone {
   id           String     @id() @default(cuid())
-  code         String?
+  code         String?    @unique()
   active       Boolean    @default(true)
   description  String?    @db.Text()
   deletedAt    DateTime?
@@ -495,7 +496,7 @@ model Milestone {
 /// Khoá học
 model TrainingCourse {
   id                   String             @id() @default(cuid())
-  code                 String?
+  code                 String?            @unique()
   active               Boolean            @default(true)
   description          String?            @db.Text()
   deletedAt            DateTime?
@@ -509,6 +510,11 @@ model TrainingCourse {
   academicYear         String?
   maxTrainingTime      Float?
   admissionQuota       Int?
+  coef_1               Float              @default(0.1)
+  coef_2               Float              @default(0.3)
+  coef_3               Float              @default(0.6)
+  scoreToTakeExam      Float              @default(1)
+  scoreToPass          Float              @default(4)
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
   fixedClass           FixedClass[]
@@ -520,7 +526,7 @@ model TrainingCourse {
 /// lớp biên chế
 model FixedClass {
   id                       String             @id() @default(cuid())
-  code                     String?
+  code                     String?            @unique()
   active                   Boolean            @default(true)
   description              String?            @db.Text()
   deletedAt                DateTime?
@@ -550,7 +556,7 @@ model FixedClass {
 /// chương trình đào tạo
 model Curriculum {
   id                       String              @id() @default(cuid())
-  code                     String?
+  code                     String?             @unique()
   active                   Boolean             @default(true)
   description              String?             @db.Text()
   deletedAt                DateTime?
@@ -572,7 +578,7 @@ model Curriculum {
 
 model DiplomaType {
   id                String              @id() @default(cuid())
-  code              String?
+  code              String?             @unique()
   active            Boolean             @default(true)
   description       String?             @db.Text()
   deletedAt         DateTime?
@@ -588,7 +594,7 @@ model DiplomaType {
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion {
   id                    String                             @id() @default(cuid())
-  code                  String?
+  code                  String?                            @unique()
   active                Boolean                            @default(true)
   description           String?                            @db.Text()
   deletedAt             DateTime?
@@ -609,13 +615,8 @@ model CurriculumVersion {
   trainingLevelId       String
   trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId        String
-  coef_1                Float?
-  coef_2                Float?
-  coef_3                Float?
   diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
   diplomaTypeId         String?
-  scoreToTakeExam       Float?
-  scoreToPass           Float?
   requiredCredits       Int?
   electiveCredits       Int?
   jobPosition           String?
@@ -640,7 +641,7 @@ model CurriculumVersion {
 /// môn học
 model Subject {
   id                       String           @id() @default(cuid())
-  code                     String?
+  code                     String?          @unique()
   active                   Boolean          @default(true)
   description              String?          @db.Text()
   deletedAt                DateTime?
@@ -658,7 +659,7 @@ model Subject {
 /// Phiên bản môn học
 model SubjectVersion {
   id                       String                 @id() @default(cuid())
-  code                     String?
+  code                     String?                @unique()
   active                   Boolean                @default(true)
   description              String?                @db.Text()
   deletedAt                DateTime?
@@ -704,7 +705,7 @@ model SubjectVersion {
 /// môn học khối kiến thức chương trình
 model TrainingBlockSubject {
   id                                 String                           @id() @default(cuid())
-  code                               String?
+  code                               String?                          @unique()
   active                             Boolean                          @default(true)
   description                        String?                          @db.Text()
   deletedAt                          DateTime?
@@ -727,7 +728,7 @@ model TrainingBlockSubject {
 /// Lớp môn học
 model SubjectClass {
   id                         String                @id() @default(cuid())
-  code                       String?
+  code                       String?               @unique()
   active                     Boolean               @default(true)
   description                String?               @db.Text()
   deletedAt                  DateTime?
@@ -787,7 +788,7 @@ model TrainingObjectType {
 /// đối tượng ưu tiên
 model PriorityObject {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -802,7 +803,7 @@ model PriorityObject {
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -817,7 +818,7 @@ model TrainingType {
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel {
   id                String              @id() @default(cuid())
-  code              String?
+  code              String?             @unique()
   active            Boolean             @default(true)
   description       String?             @db.Text()
   deletedAt         DateTime?
@@ -833,7 +834,7 @@ model TrainingLevel {
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -848,7 +849,7 @@ model TrainingForm {
 /// địa điểm đào tạo
 model TrainingLocation {
   id          String     @id() @default(cuid())
-  code        String?
+  code        String?    @unique()
   active      Boolean    @default(true)
   description String?    @db.Text()
   deletedAt   DateTime?
@@ -863,7 +864,7 @@ model TrainingLocation {
 
 model Building {
   id                 String            @id() @default(cuid())
-  code               String?
+  code               String?           @unique()
   active             Boolean           @default(true)
   description        String?           @db.Text()
   deletedAt          DateTime?
@@ -881,7 +882,7 @@ model Building {
 
 model Room {
   id             String         @id() @default(cuid())
-  code           String?
+  code           String?        @unique()
   active         Boolean        @default(true)
   description    String?        @db.Text()
   deletedAt      DateTime?
@@ -905,7 +906,7 @@ model Room {
 /// ngành đào tạo
 model TrainingField {
   id                  String                              @id() @default(cuid())
-  code                String?
+  code                String?                             @unique()
   active              Boolean                             @default(true)
   description         String?                             @db.Text()
   deletedAt           DateTime?
@@ -924,7 +925,7 @@ model TrainingField {
 
 model TrainingFieldOnTrainingObjectType {
   id                   String             @id() @default(cuid())
-  code                 String?
+  code                 String?            @unique()
   active               Boolean            @default(true)
   description          String?            @db.Text()
   deletedAt            DateTime?
@@ -942,7 +943,7 @@ model TrainingFieldOnTrainingObjectType {
 /// chuyên ngành đào tạo
 model TrainingMajor {
   id                    String                              @id() @default(cuid())
-  code                  String?
+  code                  String?                             @unique()
   active                Boolean                             @default(true)
   description           String?                             @db.Text()
   deletedAt             DateTime?
@@ -969,7 +970,7 @@ model TrainingMajor {
 
 model TrainingMajorOnTrainingObjectType {
   id                   String             @id() @default(cuid())
-  code                 String?
+  code                 String?            @unique()
   active               Boolean            @default(true)
   description          String?            @db.Text()
   deletedAt            DateTime?
@@ -987,7 +988,7 @@ model TrainingMajorOnTrainingObjectType {
 /// khối kiến thức
 model TrainingBlock {
   id                 String                             @id() @default(cuid())
-  code               String?
+  code               String?                            @unique()
   active             Boolean                            @default(true)
   description        String?                            @db.Text()
   deletedAt          DateTime?
@@ -1003,7 +1004,7 @@ model TrainingBlock {
 
 model TrainingBlockOnCurriculumVersion {
   id                  String                 @id() @default(cuid())
-  code                String?
+  code                String?                @unique()
   active              Boolean                @default(true)
   description         String?                @db.Text()
   deletedAt           DateTime?
@@ -1024,7 +1025,7 @@ model TrainingBlockOnCurriculumVersion {
 /// thời gian đào tạo
 model TrainingTime {
   id                String              @id() @default(cuid())
-  code              String?
+  code              String?             @unique()
   active            Boolean             @default(true)
   description       String?             @db.Text()
   deletedAt         DateTime?
@@ -1039,7 +1040,7 @@ model TrainingTime {
 /// xếp loại học tập
 model StudyRank {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -1054,7 +1055,7 @@ model StudyRank {
 /// Xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)
 model TrainingRank {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -1069,7 +1070,7 @@ model TrainingRank {
 /// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc
 model ScoreConvert {
   id                  String         @id() @default(cuid())
-  code                String?
+  code                String?        @unique()
   active              Boolean        @default(true)
   description         String?        @db.Text()
   deletedAt           DateTime?
@@ -1091,7 +1092,7 @@ model ScoreConvert {
 /// Nội dung tính tải đào tạo
 model TrainingKPI {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -1147,7 +1148,7 @@ model Student {
 
 model User {
   id               String         @id() @default(cuid())
-  code             String?
+  code             String?        @unique()
   active           Boolean        @default(true)
   description      String?        @db.Text()
   deletedAt        DateTime?
@@ -1174,7 +1175,7 @@ model User {
 
 model Group {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -1189,7 +1190,7 @@ model Group {
 
 model Role {
   id          String       @id() @default(cuid())
-  code        String?
+  code        String?      @unique()
   active      Boolean      @default(true)
   description String?      @db.Text()
   deletedAt   DateTime?
@@ -1204,7 +1205,7 @@ model Role {
 
 model Permission {
   id             String         @id() @default(cuid())
-  code           String?
+  code           String?        @unique()
   active         Boolean        @default(true)
   description    String?        @db.Text()
   deletedAt      DateTime?
@@ -1221,7 +1222,7 @@ model Permission {
 
 model ChatBotConfig {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?
@@ -1235,7 +1236,7 @@ model ChatBotConfig {
 
 model Document {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
   active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
@@ -1259,7 +1260,7 @@ model Document {
 
 model FAQ {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
   active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
@@ -1280,7 +1281,7 @@ model FAQ {
 
 model Prompt {
   id          String         @id() @default(cuid())
-  code        String?
+  code        String?        @unique()
   active      Boolean        @default(true)
   description String?        @db.Text()
   deletedAt   DateTime?
@@ -1296,7 +1297,7 @@ model Prompt {
 
 model Conversation {
   id          String        @id() @default(cuid())
-  code        String?
+  code        String?       @unique()
   active      Boolean       @default(true)
   description String?       @db.Text()
   deletedAt   DateTime?
@@ -1312,7 +1313,7 @@ model Conversation {
 
 model Message {
   id             String        @id() @default(cuid())
-  code           String?
+  code           String?       @unique()
   active         Boolean       @default(true)
   description    String?       @db.Text()
   deletedAt      DateTime?
@@ -1328,7 +1329,7 @@ model Message {
 
 model Feedback {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
   active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
@@ -1345,7 +1346,7 @@ model Feedback {
 
 model UserProfile {
   id                         String            @id() @default(cuid())
-  code                       String?
+  code                       String?           @unique()
   active                     Boolean           @default(true)
   description                String?           @db.Text()
   deletedAt                  DateTime?
@@ -2190,7 +2191,7 @@ model VaiTroTrongNhom {
 
 model Lecturer {
   id                  String         @id() @default(cuid())
-  code                String?
+  code                String?        @unique()
   active              Boolean        @default(true)
   description         String?        @db.Text()
   deletedAt           DateTime?
@@ -2215,7 +2216,7 @@ model Lecturer {
 
 model LecturerHistory {
   id             String       @id() @default(cuid())
-  code           String?
+  code           String?      @unique()
   active         Boolean      @default(true)
   description    String?      @db.Text()
   deletedAt      DateTime?
@@ -2239,7 +2240,7 @@ model LecturerHistory {
 /// Loại giáo viên
 model LecturerType {
   id              String            @id() @default(cuid())
-  code            String?
+  code            String?           @unique()
   active          Boolean           @default(true)
   description     String?           @db.Text()
   deletedAt       DateTime?
@@ -2255,7 +2256,7 @@ model LecturerType {
 /// Loại nhân viên
 model StaffType {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
   active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
@@ -2271,7 +2272,7 @@ model StaffType {
 /// Chức vụ nhân viên
 model StaffPosition {
   id           String         @id() @default(cuid())
-  code         String?
+  code         String?        @unique()
   active       Boolean        @default(true)
   description  String?        @db.Text()
   deletedAt    DateTime?
@@ -2286,7 +2287,7 @@ model StaffPosition {
 
 model Staff {
   id              String        @id() @default(cuid())
-  code            String?
+  code            String?       @unique()
   active          Boolean       @default(true)
   description     String?       @db.Text()
   deletedAt       DateTime?
@@ -2308,7 +2309,7 @@ model Staff {
 
 model StaffHistory {
   id              String        @id() @default(cuid())
-  code            String?
+  code            String?       @unique()
   active          Boolean       @default(true)
   description     String?       @db.Text()
   deletedAt       DateTime?
@@ -2385,7 +2386,7 @@ model StudentTrainingSemester {
 
 model TemplateFile {
   id          String            @id() @default(cuid())
-  code        String?
+  code        String?           @unique()
   active      Boolean           @default(true)
   description String?           @db.Text()
   deletedAt   DateTime?
@@ -2402,7 +2403,7 @@ model TemplateFile {
 
 model BlockedIp {
   id          String    @id() @default(cuid())
-  code        String?
+  code        String?   @unique()
   active      Boolean   @default(true)
   description String?   @db.Text()
   deletedAt   DateTime?

@@ -78,12 +78,12 @@ const PutCurriculumVersion = () => {
                 trainingObjectTypeId: output.trainingObjectTypeId,
                 trainingLevelId: output.trainingLevelId,
                 trainingTimeId: output.trainingTimeId,
-                coef_1: output.coef_1,
-                coef_2: output.coef_2,
-                coef_3: output.coef_3,
+                // coef_1: output.coef_1,
+                // coef_2: output.coef_2,
+                // coef_3: output.coef_3,
                 diplomaTypeId: output.diplomaTypeId,
-                scoreToTakeExam: output.scoreToTakeExam,
-                scoreToPass: output.scoreToPass,
+                // scoreToTakeExam: output.scoreToTakeExam,
+                // scoreToPass: output.scoreToPass,
                 description: output.description,
                 documentPaths: output.documentPaths,
                 active: output.active,
@@ -273,7 +273,7 @@ const PutCurriculumVersion = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="coef_1"
@@ -304,7 +304,7 @@ const PutCurriculumVersion = () => {
                         className="w-full"
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -321,7 +321,7 @@ const PutCurriculumVersion = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem
                     form={form}
                     name="scoreToTakeExam"
@@ -344,7 +344,7 @@ const PutCurriculumVersion = () => {
                         className="w-full"
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem
                     form={form}

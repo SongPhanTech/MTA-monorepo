@@ -1,25 +1,25 @@
 {
-  "name": "@workspace/auth",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    "./server": "./src/server/index.ts",
-    "./react": "./src/react/index.ts",
-    "./hono": "./src/hono/index.ts"
-  },
-  "devDependencies": {
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@workspace/typescript-config": "workspace:*",
-    "typescript": "catalog:"
-  },
-  "dependencies": {
-    "@workspace/db": "workspace:*",
-    "hono": "catalog:",
-    "jose": "^6.0.11",
-    "jwt-decode": "^4.0.0",
-    "next": "catalog:",
-    "react": "catalog:"
-  }
+    "name": "@workspace/auth",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "exports": {
+        "./server": "./src/server/index.ts",
+        "./react": "./src/react/index.ts",
+        "./hono": "./src/hono/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@workspace/typescript-config": "workspace:*",
+        "typescript": "catalog:"
+    },
+    "dependencies": {
+        "@workspace/db": "workspace:*",
+        "hono": "catalog:",
+        "jose": "^6.0.11",
+        "jwt-decode": "^4.0.0",
+        "next": "catalog:",
+        "react": "catalog:"
+    }
 }
