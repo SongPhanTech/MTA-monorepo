@@ -83,14 +83,12 @@ const FilterSubjectClass = (props: Props) => {
             checkedList: [],
         })
 
-        console.log('Reset filters', form.getFieldsValue())
         onApply(form.getFieldsValue())
         setOpen(false)
         setIsActive(false)
     }
 
     const handleApply = () => {
-        console.log('Applying filters', form.getFieldsValue())
         const formValues = form.getFieldsValue()
         onApply(formValues)
         setOpen(false)
@@ -104,7 +102,6 @@ const FilterSubjectClass = (props: Props) => {
     }
 
     useEffect(() => {
-        console.log('Filter values updated:', filters)
         form.setFieldsValue({
             schoolYearId: filters.schoolYearId || null,
             semesterId: filters.semesterId || null,

@@ -340,6 +340,7 @@ model StudentSubjectScore {
   midtermScore     Float?
   examScore        Float?
   finalScore       Float?
+  manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
   withdrew         Boolean                                    @default(false)

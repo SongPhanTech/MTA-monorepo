@@ -13,7 +13,7 @@ import {
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Flex, Form, Input, Row, Tag } from 'antd'
+import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
@@ -86,8 +86,18 @@ export default function ClassSubject() {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
-                          { name: { contains: filters.searchText } },
-                          { code: { contains: filters.searchText } },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
                       ],
                   }
                 : {}),
@@ -154,8 +164,6 @@ export default function ClassSubject() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    console.log(dataTable)
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -177,7 +185,6 @@ export default function ClassSubject() {
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
             const updatedFilters = { ...prev, ...newFilters }
-            console.log('Filters applied:', updatedFilters)
             debouncedRefetch()
             return updatedFilters
         })
@@ -188,7 +195,6 @@ export default function ClassSubject() {
         selectedRowKeys,
         onChange: (selectedKeys: any) => {
             setSelectedRowKeys(selectedKeys)
-            console.log(selectedKeys)
         },
     }
 
@@ -220,9 +226,8 @@ export default function ClassSubject() {
                             isLockExamScore: item.isLockExamScore,
                         },
                     }).catch((error) => {
-                        console.error(
+                        message.error(
                             'Error updating examScoreDeadline for item:',
-                            item.id,
                             error
                         )
                     })
@@ -244,9 +249,8 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { isLockExamScore: item.isLockExamScore },
                     }).catch((error) => {
-                        console.error(
+                        message.error(
                             'Error updating examScoreDeadline for item:',
-                            item.id,
                             error
                         )
                     })
@@ -267,9 +271,8 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { scoreDeadline, isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error(
+                        message.error(
                             'Error updating scoreDeadline for item:',
-                            item.id,
                             error
                         )
                     })
@@ -283,15 +286,12 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        console.error(
+                        message.error(
                             'Error updating scoreDeadline for item:',
-                            item.id,
                             error
                         )
                     })
                 }
-            } else {
-                console.log('No exam date found for item:', item)
             }
         })
     }
