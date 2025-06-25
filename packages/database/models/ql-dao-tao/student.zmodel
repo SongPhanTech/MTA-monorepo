@@ -6,6 +6,7 @@ import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
+import '../ql-nguoi-dung/training-score'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
@@ -53,6 +54,9 @@ model Student extends Base {
   trainingRank         TrainingRank?         @relation(fields: [trainingRankId], references: [id])
   trainingRankId       String?
   @@schema("ql-dao-tao")
+
+	studentTrainingScore StudentTrainingScore[]
+	studentTrainingSemester StudentTrainingSemester[]
 }
 
 enum StudentStatus {
