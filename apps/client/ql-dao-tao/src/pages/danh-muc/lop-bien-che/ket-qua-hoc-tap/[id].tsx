@@ -299,7 +299,7 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Điểm tương đương',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
                                 render: (__, { id, subjectClassStudent }) => {
                                     const arr: { finalScore: number }[] =
                                         subjectClassStudent?.[0]?.certificates.map(
@@ -327,8 +327,13 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    return subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore ?? ''
+                                    const subjectClassStudent =
+                                        record?.subjectClassStudent?.[0]
+                                    return (
+                                        subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore ??
+                                        ''
+                                    )
                                 },
                             },
                             {
@@ -336,9 +341,14 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
-                                    return score !== undefined ? convertScore(score).base4 : ''
+                                    const subjectClassStudent =
+                                        record?.subjectClassStudent?.[0]
+                                    const score =
+                                        subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore
+                                    return score !== undefined
+                                        ? convertScore(score).base4
+                                        : ''
                                 },
                             },
                             {
@@ -346,9 +356,14 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
-                                    return score !== undefined ? convertScore(score).letter : ''
+                                    const subjectClassStudent =
+                                        record?.subjectClassStudent?.[0]
+                                    const score =
+                                        subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore
+                                    return score !== undefined
+                                        ? convertScore(score).letter
+                                        : ''
                                 },
                             },
                             {
@@ -356,17 +371,24 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_: any, record: any) => {
-                                    const subjectClassStudent = record.subjectClassStudent?.[0]
-                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
-                            
-                                    if (score === undefined || score === null) return null
-                            
+                                    const subjectClassStudent =
+                                        record.subjectClassStudent?.[0]
+                                    const score =
+                                        subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore
+
+                                    if (score === undefined || score === null)
+                                        return null
+
                                     const result = convertScore(score)
-                            
+
                                     return (
                                         <div className="flex items-center justify-center">
                                             {result.pass ? (
-                                                <Check size={18} color="green" />
+                                                <Check
+                                                    size={18}
+                                                    color="green"
+                                                />
                                             ) : (
                                                 <X size={18} color="red" />
                                             )}
