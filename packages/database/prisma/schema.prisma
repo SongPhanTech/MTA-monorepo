@@ -86,6 +86,13 @@ enum SubjectClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+enum AcademicRankingBaseType {
+  Base10
+  Base4
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentStatus {
   ENROLLED
   GRADUATED
@@ -1085,20 +1092,21 @@ model ScoreConvert {
 
 /// Xếp loại học lực
 model AcademicRankingConvert {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
+  id               String                  @id() @default(cuid())
+  code             String?                 @unique()
+  active           Boolean                 @default(true)
+  description      String?                 @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt()
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt()
   classification   String
-  base10Min        Float
-  base10Max        Float
-  base4Min         Float
-  base4Max         Float
+  type             AcademicRankingBaseType
+  base10Min        Float?
+  base10Max        Float?
+  base4Min         Float?
+  base4Max         Float?
   graduated        Boolean
-  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
   @@schema("ql-dao-tao")

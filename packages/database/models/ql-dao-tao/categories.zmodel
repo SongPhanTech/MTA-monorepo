@@ -229,18 +229,32 @@ model ScoreConvert extends Base {
   @@schema("ql-dao-tao")
 }
 
+enum AcademicRankingBaseType {
+  Base10
+  Base4
+
+  @@schema("ql-dao-tao")
+}
+
 /// Xếp loại học lực
 model AcademicRankingConvert extends Base {
   classification   String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
-  base10Min        Float
-  base10Max        Float
-  base4Min         Float
-  base4Max         Float
+  // dựa vào type yêu cầu người dùng nhập hệ 10 hoặc hệ 4
+  // dựa vào type để xếp loại học lực theo hệ 10 hoặc hệ 4
+  type             AcademicRankingBaseType
+  base10Min        Float?
+  base10Max        Float?
+  base4Min         Float?
+  base4Max         Float?
   graduated        Boolean
 
-  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
+  @@validate(!(type == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
+  @@validate(!(type == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
+
+  @@allow('all', true)
   @@schema("ql-dao-tao")
 }
 
