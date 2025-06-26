@@ -54,6 +54,10 @@ export const calcFinalScore = (
         return null
     }
 
+    if (rawFinalScore && rawFinalScore < coef.scoreToPass) {
+        return rawFinalScore
+    }
+
     const bonusScore = subjectScore.awards.reduce(
         (prev, curr) => prev + curr.archivedAward.bonusScore,
         0

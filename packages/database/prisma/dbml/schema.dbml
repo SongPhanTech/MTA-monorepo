@@ -288,6 +288,7 @@ Table TrainingCourse {
   trainingObjectTypeId String [not null]
   fixedClass FixedClass [not null]
   scoreConverts ScoreConvert [not null]
+  academicRankingConvert AcademicRankingConvert [not null]
 
   Note: 'Khoá học'
 }
@@ -832,6 +833,27 @@ Table ScoreConvert {
   trainingCourseId String [not null]
 
   Note: 'Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc'
+}
+
+Table AcademicRankingConvert {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  classification String [not null]
+  base10Min Float [not null]
+  base10Max Float [not null]
+  base4Min Float [not null]
+  base4Max Float [not null]
+  letter String [not null]
+  graduated Boolean [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+
+  Note: 'Xếp loại học lực'
 }
 
 Table TrainingKPI {
@@ -2339,6 +2361,8 @@ Ref: TrainingBlockOnCurriculumVersion.trainingBlockId > TrainingBlock.id
 Ref: TrainingBlockOnCurriculumVersion.curriculumVersionId > CurriculumVersion.id
 
 Ref: ScoreConvert.trainingCourseId > TrainingCourse.id
+
+Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 
 Ref: Student.trainingLocationId > TrainingLocation.id
 

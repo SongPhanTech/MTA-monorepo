@@ -488,30 +488,31 @@ model Milestone {
 
 /// Khoá học
 model TrainingCourse {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
-  name                 String
-  semesterStart        Semester           @relation(fields: [semesterStartId], references: [id])
-  semesterStartId      String
-  startYear            Int?
-  endYear              Int?
-  academicYear         String?
-  maxTrainingTime      Float?
-  admissionQuota       Int?
-  coef_1               Float              @default(0.1)
-  coef_2               Float              @default(0.3)
-  coef_3               Float              @default(0.6)
-  scoreToTakeExam      Float              @default(1)
-  scoreToPass          Float              @default(4)
-  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
-  fixedClass           FixedClass[]
-  scoreConverts        ScoreConvert[]
+  id                     String                   @id() @default(cuid())
+  code                   String?                  @unique()
+  active                 Boolean                  @default(true)
+  description            String?                  @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt()
+  name                   String
+  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id])
+  semesterStartId        String
+  startYear              Int?
+  endYear                Int?
+  academicYear           String?
+  maxTrainingTime        Float?
+  admissionQuota         Int?
+  coef_1                 Float                    @default(0.1)
+  coef_2                 Float                    @default(0.3)
+  coef_3                 Float                    @default(0.6)
+  scoreToTakeExam        Float                    @default(1)
+  scoreToPass            Float                    @default(4)
+  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId   String
+  fixedClass             FixedClass[]
+  scoreConverts          ScoreConvert[]
+  academicRankingConvert AcademicRankingConvert[]
 
   @@schema("ql-dao-tao")
 }
@@ -1078,6 +1079,28 @@ model ScoreConvert {
   improvementRegister Boolean        @default(false)
   trainingCourse      TrainingCourse @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId    String
+
+  @@schema("ql-dao-tao")
+}
+
+/// Xếp loại học lực
+model AcademicRankingConvert {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt()
+  classification   String
+  base10Min        Float
+  base10Max        Float
+  base4Min         Float
+  base4Max         Float
+  letter           String
+  graduated        Boolean
+  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
 
   @@schema("ql-dao-tao")
 }

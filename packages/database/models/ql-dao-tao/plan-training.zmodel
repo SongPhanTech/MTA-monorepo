@@ -170,29 +170,30 @@ model Milestone extends Base {
 
 /// Khoá học
 model TrainingCourse extends Base {
-  name                 String
-  semesterStart        Semester           @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
-  semesterStartId      String
-  startYear            Int?
-  endYear              Int?
-  academicYear         String?
-  maxTrainingTime      Float?
-  admissionQuota       Int?
+  name                   String
+  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
+  semesterStartId        String
+  startYear              Int?
+  endYear                Int?
+  academicYear           String?
+  maxTrainingTime        Float?
+  admissionQuota         Int?
 
-  coef_1               Float              @default(0.1) // Hệ số 1
-  coef_2               Float              @default(0.3) // Hệ số 2
-  coef_3               Float              @default(0.6) // Hệ số 3
+  coef_1                 Float                    @default(0.1) // Hệ số 1
+  coef_2                 Float                    @default(0.3) // Hệ số 2
+  coef_3                 Float                    @default(0.6) // Hệ số 3
 
-  scoreToTakeExam      Float              @default(1) // Điểm tối thiểu để được thi
-  scoreToPass          Float              @default(4) // Điểm tối thiểu để qua môn
+  scoreToTakeExam        Float                    @default(1) // Điểm tối thiểu để được thi
+  scoreToPass            Float                    @default(4) // Điểm tối thiểu để qua môn
 
   // TODO: Thêm các quy chế về học bổng, cảnh cáo học tập
 
-  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId String
+  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId   String
 
-  fixedClass           FixedClass[]
-  scoreConverts        ScoreConvert[]
+  fixedClass             FixedClass[]
+  scoreConverts          ScoreConvert[]
+  academicRankingConvert AcademicRankingConvert[]
   @@schema("ql-dao-tao")
 }
 /// lớp biên chế

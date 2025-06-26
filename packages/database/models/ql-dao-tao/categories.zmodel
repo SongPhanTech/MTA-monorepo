@@ -8,16 +8,16 @@ import '../ql-nguoi-dung/training-score'
 
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType extends Base {
-  name              String                              @unique
-  trainingCourse    TrainingCourse[]
-  curriculumVersion CurriculumVersion[]
-  trainingMajors    TrainingMajorOnTrainingObjectType[]
-  trainingFields    TrainingFieldOnTrainingObjectType[]
-  students          Student[]
+  name                 String                              @unique
+  trainingCourse       TrainingCourse[]
+  curriculumVersion    CurriculumVersion[]
+  trainingMajors       TrainingMajorOnTrainingObjectType[]
+  trainingFields       TrainingFieldOnTrainingObjectType[]
+  students             Student[]
 
   @@schema("ql-dao-tao")
 
-	trainingScoreSession TrainingScoreSession[]
+  trainingScoreSession TrainingScoreSession[]
 }
 
 /// đối tượng ưu tiên
@@ -228,6 +228,23 @@ model ScoreConvert extends Base {
 
   @@schema("ql-dao-tao")
 }
+
+/// Xếp loại học lực
+model AcademicRankingConvert extends Base {
+  classification   String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
+  base10Min        Float
+  base10Max        Float
+  base4Min         Float
+  base4Max         Float
+  letter           String
+  graduated        Boolean
+
+  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+
+  @@schema("ql-dao-tao")
+}
+
 
 /// Nội dung tính tải đào tạo
 // TODO: add relations
