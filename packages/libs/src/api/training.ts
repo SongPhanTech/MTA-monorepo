@@ -28,7 +28,13 @@ import type {
     ExportStudentFixedClassDocx400,
     ExportStudentFixedClassDocx404,
     ExportStudentFixedClassDocxParams,
+    ExportStudentSubjectClassExcel400,
+    ExportStudentSubjectClassExcel404,
+    ExportStudentSubjectClassExcelParams,
     FixedClassBySubjectClassSemesterParams,
+    ImportHeQuanSu,
+    ImportHeQuanSu200,
+    ImportHeQuanSu400,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfFixedClassBySubjectClassSemester,
     ListOfOpenSubjectClass,
@@ -44,6 +50,9 @@ import type {
     UploadExcelCreateFixedClass400,
     UploadExcelCreateUserProfile,
     UploadExcelCreateUserProfile400,
+    UploadExcelImportScore,
+    UploadExcelImportScore200,
+    UploadExcelImportScore400,
     UploadExcelUpdateUserProfile,
     UploadExcelUpdateUserProfile400,
 } from './schemas'
@@ -1912,6 +1921,470 @@ export const usePutManySubjectClass = <TError = unknown, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getPutManySubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Xuất file xlsx danh sách sinh viên trong lớp môn học
+ * @summary Xuất file xlsx danh sách sinh viên trong lớp môn học
+ */
+export type exportStudentSubjectClassExcelResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportStudentSubjectClassExcelResponse400 = {
+    data: ExportStudentSubjectClassExcel400
+    status: 400
+}
+
+export type exportStudentSubjectClassExcelResponse404 = {
+    data: ExportStudentSubjectClassExcel404
+    status: 404
+}
+
+export type exportStudentSubjectClassExcelResponseComposite =
+    | exportStudentSubjectClassExcelResponse200
+    | exportStudentSubjectClassExcelResponse400
+    | exportStudentSubjectClassExcelResponse404
+
+export type exportStudentSubjectClassExcelResponse =
+    exportStudentSubjectClassExcelResponseComposite & {
+        headers: Headers
+    }
+
+export const getExportStudentSubjectClassExcelUrl = (
+    params: ExportStudentSubjectClassExcelParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(
+                key,
+                value === null ? 'null' : value.toString()
+            )
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/export-xlsx-list-student-subject-class?${stringifiedParams}`
+        : '/api/subject-class/export-xlsx-list-student-subject-class'
+}
+
+export const exportStudentSubjectClassExcel = async (
+    params: ExportStudentSubjectClassExcelParams,
+    options?: RequestInit
+): Promise<exportStudentSubjectClassExcelResponse> => {
+    return customTrainingFetch<exportStudentSubjectClassExcelResponse>(
+        getExportStudentSubjectClassExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentSubjectClassExcelQueryKey = (
+    params: ExportStudentSubjectClassExcelParams
+) => {
+    return [
+        '/api/subject-class/export-xlsx-list-student-subject-class',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentSubjectClassExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError =
+        | ExportStudentSubjectClassExcel400
+        | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getExportStudentSubjectClassExcelQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+    > = ({ signal }) =>
+        exportStudentSubjectClassExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentSubjectClassExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+>
+export type ExportStudentSubjectClassExcelQueryError =
+    | ExportStudentSubjectClassExcel400
+    | ExportStudentSubjectClassExcel404
+
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError =
+        | ExportStudentSubjectClassExcel400
+        | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError =
+        | ExportStudentSubjectClassExcel400
+        | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError =
+        | ExportStudentSubjectClassExcel400
+        | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Xuất file xlsx danh sách sinh viên trong lớp môn học
+ */
+
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError =
+        | ExportStudentSubjectClassExcel400
+        | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+} {
+    const queryOptions = getExportStudentSubjectClassExcelQueryOptions(
+        params,
+        options
+    )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+        TData,
+        TError
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Import điểm lớp môn học 
+
+ [subjectClassId] là id của lớp học
+ * @summary Import file nhập điểm
+ */
+export type uploadExcelImportScoreResponse200 = {
+    data: UploadExcelImportScore200
+    status: 200
+}
+
+export type uploadExcelImportScoreResponse400 = {
+    data: UploadExcelImportScore400
+    status: 400
+}
+
+export type uploadExcelImportScoreResponseComposite =
+    | uploadExcelImportScoreResponse200
+    | uploadExcelImportScoreResponse400
+
+export type uploadExcelImportScoreResponse =
+    uploadExcelImportScoreResponseComposite & {
+        headers: Headers
+    }
+
+export const getUploadExcelImportScoreUrl = () => {
+    return '/api/subject-class/upload-excel-import-score'
+}
+
+export const uploadExcelImportScore = async (
+    uploadExcelImportScore: UploadExcelImportScore,
+    options?: RequestInit
+): Promise<uploadExcelImportScoreResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelImportScore.file)
+    formData.append('subjectClassId', uploadExcelImportScore.subjectClassId)
+
+    return customTrainingFetch<uploadExcelImportScoreResponse>(
+        getUploadExcelImportScoreUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getUploadExcelImportScoreMutationOptions = <
+    TError = UploadExcelImportScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        TError,
+        { data: UploadExcelImportScore },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelImportScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        { data: UploadExcelImportScore }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return uploadExcelImportScore(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelImportScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>
+>
+export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
+export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
+
+/**
+ * @summary Import file nhập điểm
+ */
+export const useUploadExcelImportScore = <
+    TError = UploadExcelImportScore400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelImportScore>>,
+            TError,
+            { data: UploadExcelImportScore },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importHeQuanSuResponse200 = {
+    data: ImportHeQuanSu200
+    status: 200
+}
+
+export type importHeQuanSuResponse400 = {
+    data: ImportHeQuanSu400
+    status: 400
+}
+
+export type importHeQuanSuResponseComposite =
+    | importHeQuanSuResponse200
+    | importHeQuanSuResponse400
+
+export type importHeQuanSuResponse = importHeQuanSuResponseComposite & {
+    headers: Headers
+}
+
+export const getImportHeQuanSuUrl = () => {
+    return '/api/student/import-he-quan-su'
+}
+
+export const importHeQuanSu = async (
+    importHeQuanSu: ImportHeQuanSu,
+    options?: RequestInit
+): Promise<importHeQuanSuResponse> => {
+    const formData = new FormData()
+    formData.append('file', importHeQuanSu.file)
+    if (
+        importHeQuanSu.timeout !== undefined &&
+        importHeQuanSu.timeout !== null
+    ) {
+        formData.append('timeout', importHeQuanSu.timeout.toString())
+    }
+
+    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportHeQuanSuMutationOptions = <
+    TError = ImportHeQuanSu400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        TError,
+        { data: ImportHeQuanSu },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSu },
+    TContext
+> => {
+    const mutationKey = ['importHeQuanSu']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation &&
+          'mutationKey' in options.mutation &&
+          options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        { data: ImportHeQuanSu }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importHeQuanSu(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportHeQuanSuMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importHeQuanSu>>
+>
+export type ImportHeQuanSuMutationBody = ImportHeQuanSu
+export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+
+export const useImportHeQuanSu = <
+    TError = ImportHeQuanSu400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importHeQuanSu>>,
+            TError,
+            { data: ImportHeQuanSu },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSu },
+    TContext
+> => {
+    const mutationOptions = getImportHeQuanSuMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

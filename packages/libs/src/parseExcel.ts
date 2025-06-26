@@ -8,7 +8,8 @@ dayjs.extend(customParseFormat)
 
 export const zParseSheetError = z
     .object({
-        cellRef: z.string(),
+        sheetRef: z.string(),
+        cellRef: z.string().nullable(),
         message: z.string(),
     })
     .openapi('ParseSheetError')
@@ -34,15 +35,16 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
     }
     // end: Các tham chiếu ô cố định trong sheet
 
+    const errors: ParseSheetError[] = []
     const data = wb.SheetNames.map((name) => {
         // biome-ignore lint/style/noNonNullAssertion: <explanation>
         const ws = wb.Sheets[name]!
-        const errors: ParseSheetError[] = []
 
         const trainingObjectTypeCell: CellObject | undefined =
             ws[trainingObjectTypeRef]
         if (trainingObjectTypeCell?.t !== 's' || !trainingObjectTypeCell.v) {
             errors.push({
+                sheetRef: name,
                 cellRef: trainingObjectTypeRef,
                 message: 'Loại đào tạo không hợp lệ',
             })
@@ -51,6 +53,7 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
         const trainingCourseCell: CellObject | undefined = ws[trainingCourseRef]
         if (trainingCourseCell?.t !== 's' || !trainingCourseCell.v) {
             errors.push({
+                sheetRef: name,
                 cellRef: trainingCourseRef,
                 message: 'Ngành đào tạo không hợp lệ',
             })
@@ -59,6 +62,7 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
         const classNameCell: CellObject | undefined = ws[classNameRef]
         if (classNameCell?.t !== 's' || !classNameCell.v) {
             errors.push({
+                sheetRef: name,
                 cellRef: classNameRef,
                 message: 'Tên lớp không hợp lệ',
             })
@@ -114,7 +118,46 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
         }
     })
 
+    const duplicateStudentCode = findDuplicateStudentCodes(data)
+    for (const [code, sheetRefs] of duplicateStudentCode.entries()) {
+        for (const sheetRef of sheetRefs) {
+            errors.push({
+                sheetRef,
+                cellRef: null,
+                message: `MSV ${code} bị trùng: ${sheetRefs.join(', ')}`,
+            })
+        }
+    }
+
     return data
+}
+
+function findDuplicateStudentCodes(
+    classes: {
+        code: string
+        students: { code?: string }[]
+    }[]
+): Map<string, string[]> {
+    const studentMap = new Map<string, string[]>() // studentCode -> list of class codes
+
+    for (const classItem of classes) {
+        for (const student of classItem.students) {
+            if (!student.code) continue
+            const classCodes = studentMap.get(student.code) ?? []
+            classCodes.push(classItem.code)
+            studentMap.set(student.code, classCodes)
+        }
+    }
+
+    // Filter only duplicates (i.e., students in more than one class)
+    const duplicates = new Map<string, string[]>()
+    for (const [studentCode, classCodes] of studentMap.entries()) {
+        if (classCodes.length > 1) {
+            duplicates.set(studentCode, classCodes)
+        }
+    }
+
+    return duplicates
 }
 
 export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
@@ -125,6 +168,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
     const ws = wb.Sheets[sheetName]
     if (!ws) {
         errors.push({
+            sheetRef: sheetName,
             cellRef: sheetName,
             message: `Không tìm thấy sheet "${sheetName}" trong file`,
         })
@@ -166,6 +210,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
         ws[trainingObjectTypeRef]
     if (trainingObjectTypeCell?.t !== 's' || !trainingObjectTypeCell.v) {
         errors.push({
+            sheetRef: sheetName,
             cellRef: trainingObjectTypeRef,
             message: 'Đối tượng đào tạo không hợp lệ',
         })
@@ -173,6 +218,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
     const trainingCourseCell: CellObject | undefined = ws[trainingCourseRef]
     if (trainingCourseCell?.t !== 's' || !trainingCourseCell.v) {
         errors.push({
+            sheetRef: sheetName,
             cellRef: trainingCourseRef,
             message: 'Khoá đào tạo không hợp lệ',
         })
@@ -198,6 +244,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 
             if (!row[cols.code]) {
                 errors.push({
+                    sheetRef: sheetName,
                     cellRef: `${cols.code}${row.__rowNum__ + 1}`,
                     message: 'Mã sinh viên không được để trống',
                 })
@@ -205,6 +252,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 
             if (!row[cols.fullname]) {
                 errors.push({
+                    sheetRef: sheetName,
                     cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
                     message: 'Họ và tên không được để trống',
                 })
@@ -212,6 +260,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 
             if (!row[cols.fixedClass]) {
                 errors.push({
+                    sheetRef: sheetName,
                     cellRef: `${cols.fixedClass}${row.__rowNum__ + 1}`,
                     message: 'Lớp quản lý không được để trống',
                 })
@@ -219,6 +268,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
 
             if (!row[cols.curriculum]) {
                 errors.push({
+                    sheetRef: sheetName,
                     cellRef: `${cols.curriculum}${row.__rowNum__ + 1}`,
                     message: 'Chương trình đào tạo không được để trống',
                 })

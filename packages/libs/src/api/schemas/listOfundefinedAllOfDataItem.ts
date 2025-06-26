@@ -29,6 +29,14 @@ export type ListOfundefinedAllOfDataItem = {
     /** @nullable */
     fullname?: string | null
     /** @nullable */
+    healthInsuranceNumber?: string | null
+    /** @nullable */
+    bankAccountNumber?: string | null
+    /** @nullable */
+    bankName?: string | null
+    /** @nullable */
+    currentAddress?: string | null
+    /** @nullable */
     dateOfBirth?: string | null
     /** @nullable */
     placeOfBirth?: string | null

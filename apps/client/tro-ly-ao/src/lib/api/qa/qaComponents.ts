@@ -3,382 +3,382 @@
  *
  * @version 1.0.0
  */
-import * as reactQuery from '@tanstack/react-query'
-import { useQaContext, type QaContext } from './qaContext'
-import type * as Fetcher from './qaFetcher'
-import { qaFetch } from './qaFetcher'
-import type * as Schemas from './qaSchemas'
+import * as reactQuery from "@tanstack/react-query";
+import { useQaContext, QaContext } from "./qaContext";
+import type * as Fetcher from "./qaFetcher";
+import { qaFetch } from "./qaFetcher";
+import type * as Schemas from "./qaSchemas";
 
 export type ReadDocumentContentDocumentDocumentReaderGetQueryParams = {
-    uri_file: string
-    type: Schemas.DocumentType
-}
+  uri_file: string;
+  type: Schemas.DocumentType;
+};
 
 export type ReadDocumentContentDocumentDocumentReaderGetError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type ReadDocumentContentDocumentDocumentReaderGetVariables = {
-    queryParams: ReadDocumentContentDocumentDocumentReaderGetQueryParams
-} & QaContext['fetcherOptions']
+  queryParams: ReadDocumentContentDocumentDocumentReaderGetQueryParams;
+} & QaContext["fetcherOptions"];
 
 /**
  * Reads and returns the content of a document file specified by its URI.
  */
 export const fetchReadDocumentContentDocumentDocumentReaderGet = (
-    variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
-    signal?: AbortSignal
+  variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
+  signal?: AbortSignal,
 ) =>
-    qaFetch<
-        Schemas.SrcRoutersDocumentDocumentReaderResponse,
-        ReadDocumentContentDocumentDocumentReaderGetError,
-        undefined,
-        {},
-        ReadDocumentContentDocumentDocumentReaderGetQueryParams,
-        {}
-    >({ url: '/document/document-reader', method: 'get', ...variables, signal })
+  qaFetch<
+    Schemas.SrcRoutersDocumentDocumentReaderResponse,
+    ReadDocumentContentDocumentDocumentReaderGetError,
+    undefined,
+    {},
+    ReadDocumentContentDocumentDocumentReaderGetQueryParams,
+    {}
+  >({ url: "/document/document-reader", method: "get", ...variables, signal });
 
 /**
  * Reads and returns the content of a document file specified by its URI.
  */
 export const useReadDocumentContentDocumentDocumentReaderGet = <
-    TData = Schemas.SrcRoutersDocumentDocumentReaderResponse,
+  TData = Schemas.SrcRoutersDocumentDocumentReaderResponse,
 >(
-    variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            Schemas.SrcRoutersDocumentDocumentReaderResponse,
-            ReadDocumentContentDocumentDocumentReaderGetError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SrcRoutersDocumentDocumentReaderResponse,
+      ReadDocumentContentDocumentDocumentReaderGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options)
-    return reactQuery.useQuery<
-        Schemas.SrcRoutersDocumentDocumentReaderResponse,
-        ReadDocumentContentDocumentDocumentReaderGetError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/document/document-reader',
-            operationId: 'readDocumentContentDocumentDocumentReaderGet',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchReadDocumentContentDocumentDocumentReaderGet(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  return reactQuery.useQuery<
+    Schemas.SrcRoutersDocumentDocumentReaderResponse,
+    ReadDocumentContentDocumentDocumentReaderGetError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/document/document-reader",
+      operationId: "readDocumentContentDocumentDocumentReaderGet",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchReadDocumentContentDocumentDocumentReaderGet(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type GetSimilarDocumentsDocumentSimilarDocumentsGetQueryParams = {
-    id_document: string
-    type: Schemas.DocumentType
-}
+  id_document: string;
+  type: Schemas.DocumentType;
+};
 
 export type GetSimilarDocumentsDocumentSimilarDocumentsGetError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type GetSimilarDocumentsDocumentSimilarDocumentsGetResponse =
-    Schemas.SimilarDocumentResponse[]
+  Schemas.SimilarDocumentResponse[];
 
 export type GetSimilarDocumentsDocumentSimilarDocumentsGetVariables = {
-    queryParams: GetSimilarDocumentsDocumentSimilarDocumentsGetQueryParams
-} & QaContext['fetcherOptions']
+  queryParams: GetSimilarDocumentsDocumentSimilarDocumentsGetQueryParams;
+} & QaContext["fetcherOptions"];
 
 /**
  * Fetches documents of the same type with similar content based on a provided document ID and type.
  */
 export const fetchGetSimilarDocumentsDocumentSimilarDocumentsGet = (
-    variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
-    signal?: AbortSignal
+  variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
+  signal?: AbortSignal,
 ) =>
-    qaFetch<
-        GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
-        GetSimilarDocumentsDocumentSimilarDocumentsGetError,
-        undefined,
-        {},
-        GetSimilarDocumentsDocumentSimilarDocumentsGetQueryParams,
-        {}
-    >({
-        url: '/document/similar-documents',
-        method: 'get',
-        ...variables,
-        signal,
-    })
+  qaFetch<
+    GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+    GetSimilarDocumentsDocumentSimilarDocumentsGetError,
+    undefined,
+    {},
+    GetSimilarDocumentsDocumentSimilarDocumentsGetQueryParams,
+    {}
+  >({
+    url: "/document/similar-documents",
+    method: "get",
+    ...variables,
+    signal,
+  });
 
 /**
  * Fetches documents of the same type with similar content based on a provided document ID and type.
  */
 export const useGetSimilarDocumentsDocumentSimilarDocumentsGet = <
-    TData = GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+  TData = GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
 >(
-    variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
-            GetSimilarDocumentsDocumentSimilarDocumentsGetError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+      GetSimilarDocumentsDocumentSimilarDocumentsGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options)
-    return reactQuery.useQuery<
-        GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
-        GetSimilarDocumentsDocumentSimilarDocumentsGetError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/document/similar-documents',
-            operationId: 'getSimilarDocumentsDocumentSimilarDocumentsGet',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchGetSimilarDocumentsDocumentSimilarDocumentsGet(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  return reactQuery.useQuery<
+    GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+    GetSimilarDocumentsDocumentSimilarDocumentsGetError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/document/similar-documents",
+      operationId: "getSimilarDocumentsDocumentSimilarDocumentsGet",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSimilarDocumentsDocumentSimilarDocumentsGet(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type GetSimilarDocumentsFqaSimilarQuestionGetQueryParams = {
-    id_fqa: string
-    type: Schemas.DocumentType
-}
+  id_fqa: string;
+  type: Schemas.DocumentType;
+};
 
 export type GetSimilarDocumentsFqaSimilarQuestionGetError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type GetSimilarDocumentsFqaSimilarQuestionGetResponse =
-    Schemas.SimilarFQAResponse[]
+  Schemas.SimilarFQAResponse[];
 
 export type GetSimilarDocumentsFqaSimilarQuestionGetVariables = {
-    queryParams: GetSimilarDocumentsFqaSimilarQuestionGetQueryParams
-} & QaContext['fetcherOptions']
+  queryParams: GetSimilarDocumentsFqaSimilarQuestionGetQueryParams;
+} & QaContext["fetcherOptions"];
 
 /**
  * Fetches questions of the same type with similar content based on a provided question ID and type.
  */
 export const fetchGetSimilarDocumentsFqaSimilarQuestionGet = (
-    variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
-    signal?: AbortSignal
+  variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
+  signal?: AbortSignal,
 ) =>
-    qaFetch<
-        GetSimilarDocumentsFqaSimilarQuestionGetResponse,
-        GetSimilarDocumentsFqaSimilarQuestionGetError,
-        undefined,
-        {},
-        GetSimilarDocumentsFqaSimilarQuestionGetQueryParams,
-        {}
-    >({ url: '/fqa/similar-question', method: 'get', ...variables, signal })
+  qaFetch<
+    GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+    GetSimilarDocumentsFqaSimilarQuestionGetError,
+    undefined,
+    {},
+    GetSimilarDocumentsFqaSimilarQuestionGetQueryParams,
+    {}
+  >({ url: "/fqa/similar-question", method: "get", ...variables, signal });
 
 /**
  * Fetches questions of the same type with similar content based on a provided question ID and type.
  */
 export const useGetSimilarDocumentsFqaSimilarQuestionGet = <
-    TData = GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+  TData = GetSimilarDocumentsFqaSimilarQuestionGetResponse,
 >(
-    variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            GetSimilarDocumentsFqaSimilarQuestionGetResponse,
-            GetSimilarDocumentsFqaSimilarQuestionGetError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+      GetSimilarDocumentsFqaSimilarQuestionGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options)
-    return reactQuery.useQuery<
-        GetSimilarDocumentsFqaSimilarQuestionGetResponse,
-        GetSimilarDocumentsFqaSimilarQuestionGetError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/fqa/similar-question',
-            operationId: 'getSimilarDocumentsFqaSimilarQuestionGet',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchGetSimilarDocumentsFqaSimilarQuestionGet(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  return reactQuery.useQuery<
+    GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+    GetSimilarDocumentsFqaSimilarQuestionGetError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/fqa/similar-question",
+      operationId: "getSimilarDocumentsFqaSimilarQuestionGet",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSimilarDocumentsFqaSimilarQuestionGet(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type GetSimilarDocumentsFqaSimilarAnswerGetQueryParams = {
-    id_fqa: string
-    type: Schemas.DocumentType
-}
+  id_fqa: string;
+  type: Schemas.DocumentType;
+};
 
 export type GetSimilarDocumentsFqaSimilarAnswerGetError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
 export type GetSimilarDocumentsFqaSimilarAnswerGetResponse =
-    Schemas.SimilarFQAResponse[]
+  Schemas.SimilarFQAResponse[];
 
 export type GetSimilarDocumentsFqaSimilarAnswerGetVariables = {
-    queryParams: GetSimilarDocumentsFqaSimilarAnswerGetQueryParams
-} & QaContext['fetcherOptions']
+  queryParams: GetSimilarDocumentsFqaSimilarAnswerGetQueryParams;
+} & QaContext["fetcherOptions"];
 
 /**
  * Fetches answeres of the same type with similar content based on a provided question ID and type.
  */
 export const fetchGetSimilarDocumentsFqaSimilarAnswerGet = (
-    variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
-    signal?: AbortSignal
+  variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
+  signal?: AbortSignal,
 ) =>
-    qaFetch<
-        GetSimilarDocumentsFqaSimilarAnswerGetResponse,
-        GetSimilarDocumentsFqaSimilarAnswerGetError,
-        undefined,
-        {},
-        GetSimilarDocumentsFqaSimilarAnswerGetQueryParams,
-        {}
-    >({ url: '/fqa/similar-answer', method: 'get', ...variables, signal })
+  qaFetch<
+    GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+    GetSimilarDocumentsFqaSimilarAnswerGetError,
+    undefined,
+    {},
+    GetSimilarDocumentsFqaSimilarAnswerGetQueryParams,
+    {}
+  >({ url: "/fqa/similar-answer", method: "get", ...variables, signal });
 
 /**
  * Fetches answeres of the same type with similar content based on a provided question ID and type.
  */
 export const useGetSimilarDocumentsFqaSimilarAnswerGet = <
-    TData = GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+  TData = GetSimilarDocumentsFqaSimilarAnswerGetResponse,
 >(
-    variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            GetSimilarDocumentsFqaSimilarAnswerGetResponse,
-            GetSimilarDocumentsFqaSimilarAnswerGetError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+      GetSimilarDocumentsFqaSimilarAnswerGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options)
-    return reactQuery.useQuery<
-        GetSimilarDocumentsFqaSimilarAnswerGetResponse,
-        GetSimilarDocumentsFqaSimilarAnswerGetError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/fqa/similar-answer',
-            operationId: 'getSimilarDocumentsFqaSimilarAnswerGet',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchGetSimilarDocumentsFqaSimilarAnswerGet(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  return reactQuery.useQuery<
+    GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+    GetSimilarDocumentsFqaSimilarAnswerGetError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/fqa/similar-answer",
+      operationId: "getSimilarDocumentsFqaSimilarAnswerGet",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSimilarDocumentsFqaSimilarAnswerGet(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type ReadDocumentContentUtilNlpTaskGetQueryParams = {
-    text: string
-    doc_type: Schemas.DocumentType
-    conversationId: string
-}
+  text: string;
+  doc_type: Schemas.DocumentType;
+  conversationId: string;
+};
 
 export type ReadDocumentContentUtilNlpTaskGetError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
 export type ReadDocumentContentUtilNlpTaskGetVariables = {
-    queryParams: ReadDocumentContentUtilNlpTaskGetQueryParams
-} & QaContext['fetcherOptions']
+  queryParams: ReadDocumentContentUtilNlpTaskGetQueryParams;
+} & QaContext["fetcherOptions"];
 
 export const fetchReadDocumentContentUtilNlpTaskGet = (
-    variables: ReadDocumentContentUtilNlpTaskGetVariables,
-    signal?: AbortSignal
+  variables: ReadDocumentContentUtilNlpTaskGetVariables,
+  signal?: AbortSignal,
 ) =>
-    qaFetch<
-        Schemas.SrcRoutersUtilDocumentReaderResponse,
-        ReadDocumentContentUtilNlpTaskGetError,
-        undefined,
-        {},
-        ReadDocumentContentUtilNlpTaskGetQueryParams,
-        {}
-    >({ url: '/util/nlp_task', method: 'get', ...variables, signal })
+  qaFetch<
+    Schemas.SrcRoutersUtilDocumentReaderResponse,
+    ReadDocumentContentUtilNlpTaskGetError,
+    undefined,
+    {},
+    ReadDocumentContentUtilNlpTaskGetQueryParams,
+    {}
+  >({ url: "/util/nlp_task", method: "get", ...variables, signal });
 
 export const useReadDocumentContentUtilNlpTaskGet = <
-    TData = Schemas.SrcRoutersUtilDocumentReaderResponse,
+  TData = Schemas.SrcRoutersUtilDocumentReaderResponse,
 >(
-    variables: ReadDocumentContentUtilNlpTaskGetVariables,
-    options?: Omit<
-        reactQuery.UseQueryOptions<
-            Schemas.SrcRoutersUtilDocumentReaderResponse,
-            ReadDocumentContentUtilNlpTaskGetError,
-            TData
-        >,
-        'queryKey' | 'queryFn' | 'initialData'
-    >
+  variables: ReadDocumentContentUtilNlpTaskGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SrcRoutersUtilDocumentReaderResponse,
+      ReadDocumentContentUtilNlpTaskGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
 ) => {
-    const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options)
-    return reactQuery.useQuery<
-        Schemas.SrcRoutersUtilDocumentReaderResponse,
-        ReadDocumentContentUtilNlpTaskGetError,
-        TData
-    >({
-        queryKey: queryKeyFn({
-            path: '/util/nlp_task',
-            operationId: 'readDocumentContentUtilNlpTaskGet',
-            variables,
-        }),
-        queryFn: ({ signal }) =>
-            fetchReadDocumentContentUtilNlpTaskGet(
-                { ...fetcherOptions, ...variables },
-                signal
-            ),
-        ...options,
-        ...queryOptions,
-    })
-}
+  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  return reactQuery.useQuery<
+    Schemas.SrcRoutersUtilDocumentReaderResponse,
+    ReadDocumentContentUtilNlpTaskGetError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/util/nlp_task",
+      operationId: "readDocumentContentUtilNlpTaskGet",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchReadDocumentContentUtilNlpTaskGet(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
 
 export type QueryOperation =
-    | {
-          path: '/document/document-reader'
-          operationId: 'readDocumentContentDocumentDocumentReaderGet'
-          variables: ReadDocumentContentDocumentDocumentReaderGetVariables
-      }
-    | {
-          path: '/document/similar-documents'
-          operationId: 'getSimilarDocumentsDocumentSimilarDocumentsGet'
-          variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables
-      }
-    | {
-          path: '/fqa/similar-question'
-          operationId: 'getSimilarDocumentsFqaSimilarQuestionGet'
-          variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables
-      }
-    | {
-          path: '/fqa/similar-answer'
-          operationId: 'getSimilarDocumentsFqaSimilarAnswerGet'
-          variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables
-      }
-    | {
-          path: '/util/nlp_task'
-          operationId: 'readDocumentContentUtilNlpTaskGet'
-          variables: ReadDocumentContentUtilNlpTaskGetVariables
-      }
+  | {
+      path: "/document/document-reader";
+      operationId: "readDocumentContentDocumentDocumentReaderGet";
+      variables: ReadDocumentContentDocumentDocumentReaderGetVariables;
+    }
+  | {
+      path: "/document/similar-documents";
+      operationId: "getSimilarDocumentsDocumentSimilarDocumentsGet";
+      variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables;
+    }
+  | {
+      path: "/fqa/similar-question";
+      operationId: "getSimilarDocumentsFqaSimilarQuestionGet";
+      variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables;
+    }
+  | {
+      path: "/fqa/similar-answer";
+      operationId: "getSimilarDocumentsFqaSimilarAnswerGet";
+      variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables;
+    }
+  | {
+      path: "/util/nlp_task";
+      operationId: "readDocumentContentUtilNlpTaskGet";
+      variables: ReadDocumentContentUtilNlpTaskGetVariables;
+    };

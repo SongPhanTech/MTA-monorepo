@@ -3,402 +3,390 @@
  *
  * @version 0.1.0
  */
-import * as reactQuery from '@tanstack/react-query'
-import { useChatContext, type ChatContext } from './chatContext'
-import type * as Fetcher from './chatFetcher'
-import { chatFetch } from './chatFetcher'
-import type * as Schemas from './chatSchemas'
+import * as reactQuery from "@tanstack/react-query";
+import { useChatContext, ChatContext } from "./chatContext";
+import type * as Fetcher from "./chatFetcher";
+import { chatFetch } from "./chatFetcher";
+import type * as Schemas from "./chatSchemas";
 
 export type HoiDapHoiDapPostError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
-export type HoiDapHoiDapPostVariables = ChatContext['fetcherOptions']
+export type HoiDapHoiDapPostVariables = ChatContext["fetcherOptions"];
 
 export const fetchHoiDapHoiDapPost = (
-    variables: HoiDapHoiDapPostVariables,
-    signal?: AbortSignal
+  variables: HoiDapHoiDapPostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<void, HoiDapHoiDapPostError, undefined, {}, {}, {}>({
-        url: '/hoi_dap',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  chatFetch<void, HoiDapHoiDapPostError, undefined, {}, {}, {}>({
+    url: "/hoi_dap",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 export const useHoiDapHoiDapPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            HoiDapHoiDapPostError,
-            HoiDapHoiDapPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      HoiDapHoiDapPostError,
+      HoiDapHoiDapPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        HoiDapHoiDapPostError,
-        HoiDapHoiDapPostVariables
-    >({
-        mutationFn: (variables: HoiDapHoiDapPostVariables) =>
-            fetchHoiDapHoiDapPost({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    HoiDapHoiDapPostError,
+    HoiDapHoiDapPostVariables
+  >({
+    mutationFn: (variables: HoiDapHoiDapPostVariables) =>
+      fetchHoiDapHoiDapPost({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type HoiDapFaqHoiDapFaqPostError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
-export type HoiDapFaqHoiDapFaqPostVariables = ChatContext['fetcherOptions']
+export type HoiDapFaqHoiDapFaqPostVariables = ChatContext["fetcherOptions"];
 
 export const fetchHoiDapFaqHoiDapFaqPost = (
-    variables: HoiDapFaqHoiDapFaqPostVariables,
-    signal?: AbortSignal
+  variables: HoiDapFaqHoiDapFaqPostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<void, HoiDapFaqHoiDapFaqPostError, undefined, {}, {}, {}>({
-        url: '/hoi_dap_faq',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  chatFetch<void, HoiDapFaqHoiDapFaqPostError, undefined, {}, {}, {}>({
+    url: "/hoi_dap_faq",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 export const useHoiDapFaqHoiDapFaqPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            HoiDapFaqHoiDapFaqPostError,
-            HoiDapFaqHoiDapFaqPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      HoiDapFaqHoiDapFaqPostError,
+      HoiDapFaqHoiDapFaqPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        HoiDapFaqHoiDapFaqPostError,
-        HoiDapFaqHoiDapFaqPostVariables
-    >({
-        mutationFn: (variables: HoiDapFaqHoiDapFaqPostVariables) =>
-            fetchHoiDapFaqHoiDapFaqPost({ ...fetcherOptions, ...variables }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    HoiDapFaqHoiDapFaqPostError,
+    HoiDapFaqHoiDapFaqPostVariables
+  >({
+    mutationFn: (variables: HoiDapFaqHoiDapFaqPostVariables) =>
+      fetchHoiDapFaqHoiDapFaqPost({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-    (
-        variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
-        signal?: AbortSignal
-    ) =>
-        chatFetch<
-            void,
-            ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-            undefined,
-            {},
-            {},
-            {}
-        >({
-            url: '/chungking_and_vectorize_document',
-            method: 'post',
-            ...variables,
-            signal,
-        })
+  (
+    variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
+    signal?: AbortSignal,
+  ) =>
+    chatFetch<
+      void,
+      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
+      undefined,
+      {},
+      {},
+      {}
+    >({
+      url: "/chungking_and_vectorize_document",
+      method: "post",
+      ...variables,
+      signal,
+    });
 
 export const useChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-    (
-        options?: Omit<
-            reactQuery.UseMutationOptions<
-                void,
-                ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-                ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
-            >,
-            'mutationFn'
-        >
-    ) => {
-        const { fetcherOptions } = useChatContext()
-        return reactQuery.useMutation<
-            void,
-            ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-            ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
-        >({
-            mutationFn: (
-                variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
-            ) =>
-                fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
-                    {
-                        ...fetcherOptions,
-                        ...variables,
-                    }
-                ),
-            ...options,
-        })
-    }
+  (
+    options?: Omit<
+      reactQuery.UseMutationOptions<
+        void,
+        ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
+        ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
+      >,
+      "mutationFn"
+    >,
+  ) => {
+    const { fetcherOptions } = useChatContext();
+    return reactQuery.useMutation<
+      void,
+      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
+      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
+    >({
+      mutationFn: (
+        variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
+      ) =>
+        fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost({
+          ...fetcherOptions,
+          ...variables,
+        }),
+      ...options,
+    });
+  };
 
 export type FaqVectorizeFaqVectorizePostError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
 export type FaqVectorizeFaqVectorizePostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchFaqVectorizeFaqVectorizePost = (
-    variables: FaqVectorizeFaqVectorizePostVariables,
-    signal?: AbortSignal
+  variables: FaqVectorizeFaqVectorizePostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<void, FaqVectorizeFaqVectorizePostError, undefined, {}, {}, {}>({
-        url: '/faq_vectorize',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  chatFetch<void, FaqVectorizeFaqVectorizePostError, undefined, {}, {}, {}>({
+    url: "/faq_vectorize",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 export const useFaqVectorizeFaqVectorizePost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            FaqVectorizeFaqVectorizePostError,
-            FaqVectorizeFaqVectorizePostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      FaqVectorizeFaqVectorizePostError,
+      FaqVectorizeFaqVectorizePostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        FaqVectorizeFaqVectorizePostError,
-        FaqVectorizeFaqVectorizePostVariables
-    >({
-        mutationFn: (variables: FaqVectorizeFaqVectorizePostVariables) =>
-            fetchFaqVectorizeFaqVectorizePost({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    FaqVectorizeFaqVectorizePostError,
+    FaqVectorizeFaqVectorizePostVariables
+  >({
+    mutationFn: (variables: FaqVectorizeFaqVectorizePostVariables) =>
+      fetchFaqVectorizeFaqVectorizePost({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
 
 export type TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError = Fetcher.ErrorWrapper<{
-    status: 422
-    payload: Schemas.HTTPValidationError
-}>
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
 export type TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
-    variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables,
-    signal?: AbortSignal
+  variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<
-        void,
-        TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
-        undefined,
-        {},
-        {},
-        {}
-    >({ url: '/tim_kiem_theo_tu_khoa', method: 'post', ...variables, signal })
+  chatFetch<
+    void,
+    TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/tim_kiem_theo_tu_khoa", method: "post", ...variables, signal });
 
 export const useTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
-            TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
+      TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
-        TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
-    >({
-        mutationFn: (
-            variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
-        ) =>
-            fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostError,
+    TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
+  >({
+    mutationFn: (variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables) =>
+      fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
+    ...options,
+  });
+};
 
 export type TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
-    variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables,
-    signal?: AbortSignal
+  variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<
-        void,
-        TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
-        undefined,
-        {},
-        {},
-        {}
-    >({ url: '/tim_kiem_theo_ngu_nghia', method: 'post', ...variables, signal })
+  chatFetch<
+    void,
+    TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/tim_kiem_theo_ngu_nghia", method: "post", ...variables, signal });
 
 export const useTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
-            TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
+      TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
-        TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
-    >({
-        mutationFn: (
-            variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
-        ) =>
-            fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostError,
+    TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables
+  >({
+    mutationFn: (
+      variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables,
+    ) =>
+      fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
+    ...options,
+  });
+};
 
 export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost =
-    (
-        variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
-        signal?: AbortSignal
-    ) =>
-        chatFetch<
-            void,
-            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
-            undefined,
-            {},
-            {},
-            {}
-        >({
-            url: '/xoa_ban_ghi_trong_vector_db_hoi_dap',
-            method: 'post',
-            ...variables,
-            signal,
-        })
+  (
+    variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
+    signal?: AbortSignal,
+  ) =>
+    chatFetch<
+      void,
+      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+      undefined,
+      {},
+      {},
+      {}
+    >({
+      url: "/xoa_ban_ghi_trong_vector_db_hoi_dap",
+      method: "post",
+      ...variables,
+      signal,
+    });
 
 export const useXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
-            XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
-        XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
-    >({
-        mutationFn: (
-            variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
-        ) =>
-            fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+    XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+  >({
+    mutationFn: (
+      variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
+    ) =>
+      fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
+    ...options,
+  });
+};
 
 export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError =
-    Fetcher.ErrorWrapper<{
-        status: 422
-        payload: Schemas.HTTPValidationError
-    }>
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
 
 export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables =
-    ChatContext['fetcherOptions']
+  ChatContext["fetcherOptions"];
 
 export const fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
-    variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
-    signal?: AbortSignal
+  variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
+  signal?: AbortSignal,
 ) =>
-    chatFetch<
-        void,
-        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
-        undefined,
-        {},
-        {},
-        {}
-    >({
-        url: '/xoa_ban_ghi_trong_db_faq',
-        method: 'post',
-        ...variables,
-        signal,
-    })
+  chatFetch<
+    void,
+    XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/xoa_ban_ghi_trong_db_faq", method: "post", ...variables, signal });
 
 export const useXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
-    options?: Omit<
-        reactQuery.UseMutationOptions<
-            void,
-            XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
-            XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
-        >,
-        'mutationFn'
-    >
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+      XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
+    >,
+    "mutationFn"
+  >,
 ) => {
-    const { fetcherOptions } = useChatContext()
-    return reactQuery.useMutation<
-        void,
-        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
-        XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
-    >({
-        mutationFn: (
-            variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
-        ) =>
-            fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost({
-                ...fetcherOptions,
-                ...variables,
-            }),
-        ...options,
-    })
-}
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError,
+    XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables
+  >({
+    mutationFn: (
+      variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
+    ) =>
+      fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
+    ...options,
+  });
+};
 
 export type QueryOperation = {
-    path: string
-    operationId: never
-    variables: unknown
-}
+  path: string;
+  operationId: never;
+  variables: unknown;
+};
