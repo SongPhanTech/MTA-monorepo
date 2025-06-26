@@ -8,14 +8,17 @@ import {
     useCreateStudent,
     useCreateUserProfile,
     useFindManyFixedClass,
+    useFindManyUserProfile,
     useFindUniqueStudent,
     useUpdateStudent,
     useUpdateUserProfile,
+    useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import type { UploadFile } from 'antd'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { $Enums } from '@workspace/db'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
@@ -49,7 +52,6 @@ const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
 
     const [activeKey, setActiveKey] = useState<string>('1')
-    const [fileList, setFileList] = useState<UploadFile[]>([])
     const [avatar, setAvatar] = useState<UploadFile[]>([])
 
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
@@ -66,39 +68,6 @@ const PutStudentModal = () => {
                 curriculumVersion: true,
             },
         })
-
-    // const { data: trainingObjectTypeData = [] } =
-    //     useFindManyTrainingObjectType()
-
-    //  Helper function để xác định userType dựa vào trainingObjectType
-    // const getUserTypeFromTrainingObjectType = useCallback(
-    //     (trainingObjectTypeId: string) => {
-    //         const trainingObjectType = trainingObjectTypeData.find(
-    //             (type) => type.id === trainingObjectTypeId
-    //         )
-
-    //         if (!trainingObjectType) return 'CIVILIAN_STUDENT' // Default
-
-    //         //  Kiểm tra dựa vào tên hoặc code của đối tượng đào tạo
-    //         const typeName = trainingObjectType.name?.toLowerCase() || ''
-    //         const typeCode = trainingObjectType.code?.toLowerCase() || ''
-
-    //         // Kiểm tra xem có phải quân sự không
-    //         if (
-    //             typeName.includes('quân sự') ||
-    //             typeName.includes('military') ||
-    //             typeName.includes('học viên') ||
-    //             typeCode.includes('military') ||
-    //             typeCode.includes('qs') ||
-    //             typeCode.includes('hv')
-    //         ) {
-    //             return 'MILITARY_STUDENT' // Học viên quân sự
-    //         }
-
-    //         return 'CIVILIAN_STUDENT' // Sinh viên dân sự
-    //     },
-    //     [trainingObjectTypeData]
-    // )
 
     const { data: studentData } = useFindUniqueStudent({
         where: { id: id || '' },
@@ -131,6 +100,20 @@ const PutStudentModal = () => {
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
+    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
+    const { data = [] } = useFindManyUserProfile({
+        where: {
+            userType: $Enums.UserType.CIVILIAN_STUDENT,
+            educationAndTraining: {
+                some: {
+                    deletedAt: null, // Chỉ lấy Student chưa bị xóa mềm
+                },
+            },
+        },
+        select: {
+            idCardNumber: true,
+        },
+    })
 
     const buildUserProfileUpdateData = (
         output: UserProfileType,
@@ -207,16 +190,18 @@ const PutStudentModal = () => {
     async function onOk(output?: PutStudentProfile) {
         if (!output) return
         let fileName = output.avatar
-        if (fileList.length > 0) {
+        if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension: fileList[0].name.split('.').pop() ?? '',
+                extension:
+                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
-            const res = await fetch(resPresignedUrl.data.url, {
+
+            await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
-                body: fileList[0].originFileObj,
+                body: output.file.fileList?.[0]?.originFileObj,
             })
-            console.log('đây nè', resPresignedUrl.data.fileName)
+
             fileName = resPresignedUrl.data.fileName
         }
         try {
@@ -226,6 +211,7 @@ const PutStudentModal = () => {
                 output,
                 fileName ?? undefined
             )
+
             const studentDataUpdate = buildStudentUpdateData(output)
 
             if (id) {
@@ -255,23 +241,46 @@ const PutStudentModal = () => {
                 message.success('Cập nhật sinh viên thành công')
             } else {
                 // CREATE MODE
-                const userProfile = await createUserProfile({
-                    data: userProfileData,
-                })
-
-                if (!userProfile?.id) {
-                    throw new Error(
-                        'Tạo userProfile thất bại: Không có ID trả về'
+                if (
+                    data.some(
+                        (item) => item.idCardNumber === output.idCardNumber
                     )
+                ) {
+                    const userProfile = await upsertUserProfile({
+                        where: {
+                            idCardNumber: output.idCardNumber,
+                        },
+                        create: userProfileData,
+                        update: userProfileData,
+                    })
+
+                    await updateStudent({
+                        data: studentDataUpdate,
+                        where: {
+                            userProfileId: userProfile?.id,
+                        },
+                    })
+
+                    message.success('Cập nhật sinh viên thành công')
+                } else {
+                    const userProfile = await createUserProfile({
+                        data: userProfileData,
+                    })
+
+                    if (!userProfile?.id) {
+                        throw new Error(
+                            'Tạo userProfile thất bại: Không có ID trả về'
+                        )
+                    }
+
+                    const studentCreateData = buildStudentCreateData(
+                        output,
+                        userProfile.id
+                    )
+                    await createStudent({ data: studentCreateData })
+
+                    message.success('Thêm sinh viên thành công')
                 }
-
-                const studentCreateData = buildStudentCreateData(
-                    output,
-                    userProfile.id
-                )
-                await createStudent({ data: studentCreateData })
-
-                message.success('Thêm sinh viên thành công')
             }
 
             // refetch() lại danh sách level
@@ -304,6 +313,7 @@ const PutStudentModal = () => {
                     studentData.userProfile?.healthInsuranceNumber,
                 bankAccountNumber: studentData.userProfile?.bankAccountNumber,
                 bankName: studentData.userProfile?.bankName,
+                avatar: getMinioUrl(studentData.userProfile?.avatar),
 
                 // UserProfile fields với ID
                 firstName: studentData.userProfile?.firstName,
@@ -444,6 +454,8 @@ const PutStudentModal = () => {
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
                     type="CIVILIAN_STUDENT"
+                    avatar={avatar}
+                    setAvatar={setAvatar}
                 />
             </Col>
         </PutFormModal>

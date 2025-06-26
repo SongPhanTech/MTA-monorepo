@@ -5,15 +5,20 @@ import {
     UserOutlined,
 } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import { FilterLecture } from '@components/filter'
+import type { FilterProps } from '@components/filter/filter-lecture'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
     PutUserProfileLectureModal,
 } from '@components/modal'
+import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { getMinioUrl } from '@workspace/constant'
 import {
     useCountLecturer,
     useFindManyDM_CapBac,
@@ -25,12 +30,6 @@ import {
     useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
-
-import { FilterLecture } from '@components/filter'
-import type { FilterProps } from '@components/filter/filter-lecture'
-import EditIcon from '@components/icons/edit'
-import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
-import { getMinioUrl } from '@workspace/constant'
 import {
     Button,
     Col,

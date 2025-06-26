@@ -5,14 +5,17 @@ import { $Enums } from '@workspace/db'
 import {
     useCreateStaff,
     useCreateUserProfile,
+    useFindManyUserProfile,
     useFindUniqueStaff,
     useUpdateStaff,
     useUpdateUserProfile,
+    useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, message } from 'antd'
+import { Col, Form, type UploadFile, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { getMinioUrl } from '@workspace/constant'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
@@ -34,6 +37,8 @@ const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutStaffProfile>()
 
     const [activeKey, setActiveKey] = useState<string>('1')
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
+
     const { isOpen, onClose, input } =
         useDisclosure<PutUserProfileLectureProps>({
             tag: PutUserProfileStaffModal.name,
@@ -82,6 +87,18 @@ const PutUserProfileStaffModal = () => {
     const { mutateAsync: createStaff } = useCreateStaff()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
+    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
+    const { data = [] } = useFindManyUserProfile({
+        where: {
+            userType: $Enums.UserType.STAFF,
+            staffs: {
+                deletedAt: null, // Staff chưa bị xóa
+            },
+        },
+        select: {
+            idCardNumber: true,
+        },
+    })
 
     const buildUserProfileUpdateData = (
         output: UserProfileType,
@@ -232,12 +249,15 @@ const PutUserProfileStaffModal = () => {
         if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension: output.file.name.split('.').pop() ?? '',
+                extension:
+                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
+
             await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
-                body: output.file,
+                body: output.file.fileList?.[0]?.originFileObj,
             })
+
             fileName = resPresignedUrl.data.fileName
         }
         try {
@@ -277,22 +297,45 @@ const PutUserProfileStaffModal = () => {
 
                 message.success('Cập nhật cán bộ thành công')
             } else {
-                const userProfile = await createUserProfile({
-                    data: userProfileCreateData,
-                })
+                if (
+                    data.some(
+                        (item) => item.idCardNumber === output.idCardNumber
+                    )
+                ) {
+                    const userProfile = await upsertUserProfile({
+                        where: {
+                            idCardNumber: output.idCardNumber,
+                        },
+                        create: userProfileCreateData,
+                        update: userProfileData,
+                    })
 
-                if (!userProfile?.id) {
-                    throw new Error('Tạo hồ sơ người dùng thất bại')
+                    await updateStaff({
+                        data: staffUpdateData,
+                        where: {
+                            userProfileId: userProfile?.id,
+                        },
+                    })
+
+                    message.success('Cập nhật nhân viên thành công')
+                } else {
+                    const userProfile = await createUserProfile({
+                        data: userProfileCreateData,
+                    })
+
+                    if (!userProfile?.id) {
+                        throw new Error('Tạo hồ sơ người dùng thất bại')
+                    }
+
+                    const staffCreateData = buildStaffCreateData(
+                        output,
+                        userProfile?.id
+                    )
+
+                    await createStaff({ data: staffCreateData })
+
+                    message.success('Thêm mới cán bộ thành công')
                 }
-
-                const staffCreateData = buildStaffCreateData(
-                    output,
-                    userProfile.id
-                )
-
-                await createStaff({ data: staffCreateData })
-
-                message.success('Thêm mới cán bộ thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
@@ -399,6 +442,17 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
             }
             form.setFieldsValue(formData)
+
+            if (userProfile?.avatar) {
+                setAvatar([
+                    {
+                        uid: '-1',
+                        name: 'avatar.png',
+                        status: 'done',
+                        url: getMinioUrl(userProfile.avatar),
+                    },
+                ])
+            }
         }
     }, [staffData, form, id])
 
@@ -428,6 +482,8 @@ const PutUserProfileStaffModal = () => {
                     activeKey={activeKey}
                     setActiveKey={setActiveKey}
                     type="STAFF"
+                    avatar={avatar}
+                    setAvatar={setAvatar}
                 />
             </Col>
         </PutFormModal>
