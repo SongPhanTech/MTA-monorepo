@@ -303,11 +303,11 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
         trainingObjectType:
             typeof trainingObjectTypeCell?.v === 'string'
                 ? trainingObjectTypeCell?.v.trim()
-                : trainingObjectTypeCell?.v,
+                : undefined,
         trainingCourse:
             typeof trainingCourseCell?.v === 'string'
                 ? trainingCourseCell?.v.trim()
-                : trainingCourseCell?.v,
+                : undefined,
         students,
         errors,
     }

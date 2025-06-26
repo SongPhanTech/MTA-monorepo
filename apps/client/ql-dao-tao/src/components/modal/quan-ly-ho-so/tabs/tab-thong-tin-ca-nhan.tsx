@@ -428,13 +428,15 @@ export default function ThongTinCaNhanTab({
                             <Upload
                                 listType="picture-card"
                                 maxCount={1}
-                                fileList={avatar.length > 0 ? avatar : fileList}
+                                fileList={
+                                    avatar?.length > 0 ? avatar : fileList
+                                }
                                 onChange={onChange}
                                 onRemove={() => {
                                     setAvatar([])
                                 }}
                             >
-                                {avatar.length > 0 || fileList.length > 0
+                                {avatar?.length > 0 || fileList.length > 0
                                     ? ''
                                     : fileList.length < 1 && (
                                           <p

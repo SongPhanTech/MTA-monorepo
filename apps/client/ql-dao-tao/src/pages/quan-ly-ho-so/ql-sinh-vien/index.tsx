@@ -22,6 +22,7 @@ import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
+import ImportStudentModal from '@components/modal/import-excel-student'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
@@ -44,12 +45,14 @@ import {
     Flex,
     Image,
     Menu,
+    Popover,
     Row,
     Tag,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Ellipsis, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -62,6 +65,13 @@ export default function UserProfilePageDs() {
     const [filters, setFilters] = useState({
         searchText: '',
     })
+
+    const [importModalVisible, setImportModalVisible] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
 
     const router = useRouter()
 
@@ -403,6 +413,52 @@ export default function UserProfilePageDs() {
         </Menu>
     )
 
+    const handleImportConfirm = (importedData: any) => {
+        showSpinner()
+
+        try {
+            // const updatedScores = dataTable.map((record) => {
+            //     const importedScore = importedData.find(
+            //         (item) => item.studentCode === record.student?.code
+            //     )
+
+            //     if (importedScore) {
+            //         return {
+            //             id: record.id,
+            //             attendanceScore: importedScore.attendanceScore,
+            //             midtermScore: importedScore.midtermScore,
+            //             examScore: importedScore.examScore,
+            //         }
+            //     }
+            //     return record
+            // })
+
+            // // Cập nhật state
+            // const newScoreCC = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.attendanceScore || 0,
+            // }))
+            // const newScoreTX = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.midtermScore || 0,
+            // }))
+            // const newScoreThi = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.examScore || 0,
+            // }))
+
+            // setScoreCC(newScoreCC)
+            // setScoreTX(newScoreTX)
+            // setScoreThi(newScoreThi)
+
+            message.success('Nhập điểm từ file thành công!')
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -470,6 +526,48 @@ export default function UserProfilePageDs() {
                                 gap="8px"
                                 className="mt-1"
                             >
+                                <Popover
+                                    content={
+                                        <Flex
+                                            vertical
+                                            align="flex-start"
+                                            gap={4}
+                                        >
+                                            <Button
+                                                onClick={() =>
+                                                    setImportModalVisible(true)
+                                                }
+                                                className="w-full flex justify-start"
+                                            >
+                                                <FileUp />
+                                                Nhập điểm từ file
+                                            </Button>
+                                            <ImportStudentModal
+                                                visible={importModalVisible}
+                                                onCancel={() =>
+                                                    setImportModalVisible(false)
+                                                }
+                                                onConfirm={handleImportConfirm}
+                                                existingStudents={[]}
+                                            />
+                                            {/* <ExportScoreTemplate
+                                                selectedFixedClass={
+                                                    selectedFixedClass
+                                                }
+                                                dataTable={dataTable}
+                                            /> */}
+                                        </Flex>
+                                    }
+                                    trigger="click"
+                                    open={open}
+                                    onOpenChange={handleOpenChange}
+                                    placement="bottomLeft"
+                                    arrow={false}
+                                >
+                                    <Button>
+                                        <Ellipsis />
+                                    </Button>
+                                </Popover>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
