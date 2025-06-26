@@ -848,7 +848,6 @@ Table AcademicRankingConvert {
   base10Max Float [not null]
   base4Min Float [not null]
   base4Max Float [not null]
-  letter String [not null]
   graduated Boolean [not null]
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]

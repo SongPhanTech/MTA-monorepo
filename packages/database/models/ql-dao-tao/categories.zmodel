@@ -236,7 +236,6 @@ model AcademicRankingConvert extends Base {
   base10Max        Float
   base4Min         Float
   base4Max         Float
-  letter           String
   graduated        Boolean
 
   trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
