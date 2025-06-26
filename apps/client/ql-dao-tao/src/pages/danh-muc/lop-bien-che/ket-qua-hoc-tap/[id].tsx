@@ -81,6 +81,7 @@ export default function StudentScoreClassPage() {
                         trainingCourse: {
                             include: {
                                 scoreConverts: true,
+                                academicRankingConvert: true
                             },
                         },
                     },
