@@ -350,7 +350,7 @@ const ModalPrintToKQHT = () => {
                                         const notForFinalScore =
                                             !subjectItem.useForFinalScore
 
-                                        const score10 = score?.finalScore || 0
+                                        const score10 = score?.manualFinalScore || score?.finalScore || 0
                                         const score4 =
                                             convertScore(score10).base4
                                         const letterGrade =
@@ -398,7 +398,7 @@ const ModalPrintToKQHT = () => {
                                                 !subjectItem.useForFinalScore
 
                                             const score10 =
-                                                score?.finalScore || 0
+                                                score?.manualFinalScore || score?.finalScore || 0
                                             const score4 =
                                                 convertScore(score10).base4
                                             const letterGrade =

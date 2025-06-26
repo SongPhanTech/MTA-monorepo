@@ -325,53 +325,48 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Điểm hệ 10',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'finalScore',
-                                ],
                                 width: 100,
+                                render: (_, record) => {
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                    return subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore ?? ''
+                                },
                             },
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'finalScore',
-                                ],
                                 width: 100,
-                                render: (value) => convertScore(value).base4,
+                                render: (_, record) => {
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
+                                    return score !== undefined ? convertScore(score).base4 : ''
+                                },
                             },
                             {
                                 title: 'Điểm hệ chữ',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'finalScore',
-                                ],
                                 width: 120,
-                                render: (value) => convertScore(value).letter,
+                                render: (_, record) => {
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
+                                    return score !== undefined ? convertScore(score).letter : ''
+                                },
                             },
                             {
                                 title: 'Kết quả',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'finalScore',
-                                ],
                                 width: 100,
-                                render: (value: number) => {
-                                    const result = convertScore(value)
+                                render: (_: any, record: any) => {
+                                    const subjectClassStudent = record.subjectClassStudent?.[0]
+                                    const score = subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore
+                            
+                                    if (score === undefined || score === null) return null
+                            
+                                    const result = convertScore(score)
+                            
                                     return (
                                         <div className="flex items-center justify-center">
                                             {result.pass ? (
-                                                <Check
-                                                    size={18}
-                                                    color="green"
-                                                />
+                                                <Check size={18} color="green" />
                                             ) : (
                                                 <X size={18} color="red" />
                                             )}
