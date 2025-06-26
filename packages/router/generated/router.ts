@@ -84,6 +84,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc/lop-mon-hoc",
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN": "/quan-ly-diem/ql-diem-ren-luyen",
+    "QUAN_LY_DIEM_CONG": "/quan-ly-diem/ql-diem-cong",
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN_LOP_BIEN_CHE": "/quan-ly-diem/ql-diem-ren-luyen/lop-bien-che",
     "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",

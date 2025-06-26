@@ -474,6 +474,12 @@ const NAVIGATION: NavigationType = {
                             .QUAN_LY_DIEM_QL_DIEM_REN_LUYEN,
                         description: 'Nhập điểm rèn luyện',
                     },
+                    {
+                        id: 'ql-diem-cong',
+                        label: 'Quản lý điểm cộng',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CONG,
+                        description: 'Quản lý điểm cộng',
+                    },
                 ],
             },
             {
