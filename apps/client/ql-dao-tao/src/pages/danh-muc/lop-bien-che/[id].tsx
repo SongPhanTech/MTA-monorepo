@@ -68,6 +68,7 @@ export default function StudentFixedClassPage() {
     const [filters, setFilters] = useState({
         searchText: '',
         dateOfBirth: [],
+        gender: null,
     })
 
     const { data: fixedClass } = useFindUniqueFixedClass(
@@ -117,11 +118,11 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-
                 dateOfBirth: {
                     gte: filters.dateOfBirth?.[0],
                     lte: filters.dateOfBirth?.[1],
                 },
+                ...(filters.gender ? { gender: filters.gender } : {}),
             },
         },
         include: {
@@ -191,6 +192,8 @@ export default function StudentFixedClassPage() {
                     gte: filters.dateOfBirth?.[0],
                     lte: filters.dateOfBirth?.[1],
                 },
+
+                ...(filters.gender ? { gender: filters.gender } : {}),
             },
         },
     })
@@ -420,7 +423,6 @@ export default function StudentFixedClassPage() {
                                                 label: i.name,
                                             }
                                         })}
-                                        mode="multiple"
                                         style={{
                                             width: 200,
                                             marginRight: 8,

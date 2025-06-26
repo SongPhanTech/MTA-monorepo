@@ -1,3 +1,4 @@
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -6,7 +7,7 @@ import {
     useFindManySemester,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Input, Row, Select } from 'antd'
+import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -146,17 +147,13 @@ export default function RegisterClassManager({
                                 wrapperCol={{ span: 24 }}
                                 labelAlign="left"
                             >
-                                <Select
-                                    placeholder="Chọn kì học"
-                                    value={filters.semesterId || undefined}
-                                    options={semester.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
+                                <TreeSelectSemester
+                                    defaultValue={
+                                        filters.semesterId || undefined
+                                    }
                                     onChange={(val) =>
                                         handleFilterChange('semesterId', val)
                                     }
-                                    allowClear
                                 />
                             </Form.Item>
                         </Col>
@@ -203,8 +200,8 @@ export default function RegisterClassManager({
                         title: 'Thời gian học',
                         dataIndex: 'startDate',
                         width: 150,
-                        render: (value: string) =>
-                            dayjs(value).format('DD/MM/YYYY'),
+                        render: (record: string) =>
+                            record ? dayjs(record).format('DD/MM/YYYY') : '',
                     },
                     {
                         title: 'Kíp học',

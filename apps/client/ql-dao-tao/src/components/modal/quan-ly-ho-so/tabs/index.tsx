@@ -15,12 +15,21 @@ export default function TabQuanLyHoSo({
     setActiveKey,
     id,
     type,
+    avatar,
+    setAvatar,
 }: TabQuanLyHoSoProps) {
     const items: TabsProps['items'] = [
         {
             key: '1',
             label: 'Thông tin cá nhân',
-            children: <ThongTinCaNhanTab id={id} type={type} />,
+            children: (
+                <ThongTinCaNhanTab
+                    avatar={avatar}
+                    setAvatar={setAvatar}
+                    id={id}
+                    type={type}
+                />
+            ),
             forceRender: true,
         },
         {

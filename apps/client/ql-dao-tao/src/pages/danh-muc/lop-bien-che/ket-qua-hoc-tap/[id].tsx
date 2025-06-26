@@ -1,9 +1,18 @@
+import { SafetyCertificateOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-import { ModalPrintToKQHT } from '@components/modal'
+import {
+    ModalPrintToKQHT,
+    PutAddCertificateScoreModal,
+    PutAddOlympicScoreModal,
+} from '@components/modal'
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import { useScoreConverter } from '@hooks/scoreConverter'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type {
+    ArchivedAward,
+    ArchivedCertificate,
+    StudentSubjectScore,
+} from '@workspace/db'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -26,6 +35,24 @@ export default function StudentScoreClassPage() {
         dataStudent: any
     }>({
         tag: ModalPrintToKQHT.name,
+    })
+
+    const { onOpen: onOpenModalAddScore } = useDisclosure<{
+        id: string
+        list: string[]
+        studentId: string
+        subjectClassStudent: StudentSubjectScore
+    }>({
+        tag: PutAddOlympicScoreModal.name,
+    })
+
+    const { onOpen: onOpenModalAddCertificate } = useDisclosure<{
+        id: string
+        list: string[]
+        studentId: string
+        subjectClassStudent: StudentSubjectScore
+    }>({
+        tag: PutAddCertificateScoreModal.name,
     })
 
     const { data: student } = useFindUniqueStudent(
@@ -90,8 +117,21 @@ export default function StudentScoreClassPage() {
                 },
                 include: {
                     subjectClassStudent: {
+                        where: {
+                            studentId,
+                        },
                         include: {
                             subjectVersion: true,
+                            certificates: {
+                                include: {
+                                    archivedCertificate: true,
+                                },
+                            },
+                            awards: {
+                                include: {
+                                    archivedAward: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -114,16 +154,12 @@ export default function StudentScoreClassPage() {
         data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
     )
 
-    type subjectClassesChild = (typeof data)[number]['subjectClasses'][number]
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
         []
     )
-
-    const { showSpinner, hideSpinner } = useSpinner()
 
     return (
         <div>
@@ -228,6 +264,64 @@ export default function StudentScoreClassPage() {
                                 ],
                                 width: 100,
                             },
+
+                            {
+                                title: 'Điểm cộng',
+                                align: 'center',
+                                width: 120,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.awards.reduce(
+                                        (
+                                            acc: number,
+                                            curr: {
+                                                archivedAward: ArchivedAward
+                                            }
+                                        ) =>
+                                            acc +
+                                            (curr?.archivedAward?.bonusScore ??
+                                                0),
+                                        0
+                                    ),
+                            },
+                            {
+                                title: 'Chứng chỉ',
+                                align: 'center',
+                                width: 150,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.certificates
+                                        .map(
+                                            (i: {
+                                                archivedCertificate: ArchivedCertificate
+                                            }) => i?.archivedCertificate?.name
+                                        )
+                                        .join(', '),
+                            },
+                            {
+                                title: 'Điểm tương đương',
+                                align: 'center',
+                                width: 120,
+                                render: (__, { id, subjectClassStudent }) => {
+                                    const arr: { finalScore: number }[] =
+                                        subjectClassStudent?.[0]?.certificates.map(
+                                            (i: {
+                                                archivedCertificate: ArchivedCertificate
+                                            }) => {
+                                                return {
+                                                    ...i,
+                                                    finalScore:
+                                                        Number(
+                                                            i
+                                                                ?.archivedCertificate
+                                                                ?.finalScore
+                                                        ) || 0,
+                                                }
+                                            }
+                                        )
+                                    return arr?.length > 0
+                                        ? _.maxBy(arr, 'finalScore')?.finalScore
+                                        : ''
+                                },
+                            },
                             {
                                 title: 'Điểm hệ 10',
                                 align: 'center',
@@ -330,16 +424,59 @@ export default function StudentScoreClassPage() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 150,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => (
+                                render: (_, { id, subjectClassStudent }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip title="Cộng điểm">
                                             <BookCheckIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                }}
+                                                onClick={onOpenModalAddScore.bind(
+                                                    null,
+                                                    {
+                                                        id: subjectClassStudent?.[0]
+                                                            ?.id,
+                                                        studentId: studentId,
+                                                        list:
+                                                            subjectClassStudent?.length >
+                                                            0
+                                                                ? subjectClassStudent[0]?.awards.map(
+                                                                      (i: {
+                                                                          archivedAwardId: string
+                                                                      }) =>
+                                                                          i.archivedAwardId
+                                                                  )
+                                                                : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
+                                                    }
+                                                )}
+                                                size={16}
+                                            />
+                                        </Tooltip>
+
+                                        <Tooltip title="Thêm chứng chỉ">
+                                            <SafetyCertificateOutlined
+                                                onClick={onOpenModalAddCertificate.bind(
+                                                    null,
+                                                    {
+                                                        id: subjectClassStudent?.[0]
+                                                            ?.id,
+                                                        studentId: studentId,
+                                                        list:
+                                                            subjectClassStudent?.length >
+                                                            0
+                                                                ? subjectClassStudent[0]?.certificates.map(
+                                                                      (i: {
+                                                                          archivedCertificateId: string
+                                                                      }) =>
+                                                                          i.archivedCertificateId
+                                                                  )
+                                                                : [],
+                                                        subjectClassStudent:
+                                                            subjectClassStudent?.[0],
+                                                    }
+                                                )}
                                                 size={16}
                                             />
                                         </Tooltip>

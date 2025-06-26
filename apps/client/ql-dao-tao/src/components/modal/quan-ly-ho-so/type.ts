@@ -23,6 +23,7 @@ import type {
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
+import type { UploadFile, UploadProps } from 'antd'
 
 export type SibarItem = {
     key: string
@@ -50,11 +51,15 @@ export type StudentSiderbarProps = {
 export type TabQuanLyHoSoProps = {
     id?: string | null
     type: $Enums.UserType
+    avatar: UploadFile[]
+    setAvatar: (avatar: UploadFile[]) => void
 } & StudentSiderbarProps
 
 export type TabThongTinCaNhan = {
     id?: string | null
     type: $Enums.UserType
+    avatar: UploadFile[]
+    setAvatar: (avatar: UploadFile[]) => void
 }
 
 export type StudentModalProps = {
@@ -105,18 +110,27 @@ export type StaffProfileType = Staff & {
     userProfile: UserProfileType
 }
 
-export type PutLecturerProfile = LecturerProfileType & UserProfileType
+export type PutLecturerProfile = LecturerProfileType &
+    UserProfileType & {
+        file: UploadProps | null
+    }
 
-export type PutStudentProfile = StudentType & UserProfileType & FixedClassType
+export type PutStudentProfile = StudentType &
+    UserProfileType &
+    FixedClassType & {
+        file: UploadProps | null
+    }
 
 export type PutStaffProfile = StaffProfileType &
     UserProfileType &
     FixedClassType & {
-        file: File | null
+        file: UploadProps | null
     }
 
 export type PutModalType = StudentType &
     LecturerProfileType &
     UserProfileType &
     FixedClassType &
-    StaffProfileType
+    StaffProfileType & {
+        file: UploadProps | null
+    }
