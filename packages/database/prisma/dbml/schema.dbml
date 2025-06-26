@@ -1973,25 +1973,24 @@ Table StaffHistory {
 
 Table TrainingScoreSession {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  Name String [not null]
-  trainingObjectType TrainingObjectType
-  trainingObjectTypeId String
+  name String [not null]
   time DateTime [default: `now()`, not null]
   semester Semester [not null]
   semesterId String [not null]
-  status TrainingScoreSessionStatus [not null, default: 'ACTIVE']
+  trainingObjectType TrainingObjectType
+  trainingObjectTypeId String
   studentTrainingScore StudentTrainingScore [not null]
 }
 
 Table StudentTrainingScore {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -2002,11 +2001,15 @@ Table StudentTrainingScore {
   student Student [not null]
   studentId String [not null]
   score Float [not null, default: 0]
+
+  indexes {
+    (trainingScoreSessionId, studentId) [unique]
+  }
 }
 
 Table StudentTrainingSemester {
   id String [pk]
-  code String
+  code String [unique]
   active Boolean [not null, default: true]
   description String
   deletedAt DateTime
@@ -2221,13 +2224,8 @@ Enum Gender {
   Female
 }
 
-Enum TrainingScoreSessionStatus {
-  ACTIVE
-  INACTIVE
-}
-
 Enum StudentTrainingType {
-  EXCELENT
+  EXCELLENT
   GOOD
   FAIR
   AVERAGE
@@ -2488,9 +2486,9 @@ Ref: StaffHistory.staffTypeId > StaffType.id
 
 Ref: StaffHistory.staffPositionId > StaffPosition.id
 
-Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
-
 Ref: TrainingScoreSession.semesterId > Semester.id
+
+Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
 

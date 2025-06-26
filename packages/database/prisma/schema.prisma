@@ -193,15 +193,8 @@ enum Gender {
   @@schema("ql-danh-muc")
 }
 
-enum TrainingScoreSessionStatus {
-  ACTIVE
-  INACTIVE
-
-  @@schema("ql-nguoi-dung")
-}
-
 enum StudentTrainingType {
-  EXCELENT
+  EXCELLENT
   GOOD
   FAIR
   AVERAGE
@@ -450,7 +443,7 @@ model SchoolYear {
 /// Kỳ học
 model Semester {
   id                      String                    @id() @default(cuid())
-  code                    String?
+  code                    String?                   @unique()
   active                  Boolean                   @default(true)
   description             String?                   @db.Text()
   deletedAt               DateTime?
@@ -768,7 +761,7 @@ model SubjectClass {
 /// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType {
   id                   String                              @id() @default(cuid())
-  code                 String?
+  code                 String?                             @unique()
   active               Boolean                             @default(true)
   description          String?                             @db.Text()
   deletedAt            DateTime?
@@ -1106,7 +1099,7 @@ model TrainingKPI {
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
   id                      String                    @id() @default(cuid())
-  code                    String?
+  code                    String?                   @unique()
   active                  Boolean                   @default(true)
   description             String?                   @db.Text()
   deletedAt               DateTime?
@@ -2330,20 +2323,19 @@ model StaffHistory {
 }
 
 model TrainingScoreSession {
-  id                   String                     @id() @default(cuid())
-  code                 String?
-  active               Boolean                    @default(true)
-  description          String?                    @db.Text()
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime                   @default(now())
-  updatedAt            DateTime                   @updatedAt()
-  Name                 String
-  trainingObjectType   TrainingObjectType?        @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-  time                 DateTime                   @default(now())
-  semester             Semester                   @relation(fields: [semesterId], references: [id])
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt()
+  name                 String
+  time                 DateTime               @default(now())
+  semester             Semester               @relation(fields: [semesterId], references: [id])
   semesterId           String
-  status               TrainingScoreSessionStatus @default(ACTIVE)
+  trainingObjectType   TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
   studentTrainingScore StudentTrainingScore[]
 
   @@schema("ql-nguoi-dung")
@@ -2351,7 +2343,7 @@ model TrainingScoreSession {
 
 model StudentTrainingScore {
   id                     String               @id() @default(cuid())
-  code                   String?
+  code                   String?              @unique()
   active                 Boolean              @default(true)
   description            String?              @db.Text()
   deletedAt              DateTime?
@@ -2363,12 +2355,13 @@ model StudentTrainingScore {
   studentId              String
   score                  Float                @default(0)
 
+  @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-nguoi-dung")
 }
 
 model StudentTrainingSemester {
   id           String              @id() @default(cuid())
-  code         String?
+  code         String?             @unique()
   active       Boolean             @default(true)
   description  String?             @db.Text()
   deletedAt    DateTime?
