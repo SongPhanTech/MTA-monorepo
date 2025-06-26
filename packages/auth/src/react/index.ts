@@ -10,7 +10,7 @@ const fetchSession = async (): Promise<{
     error: Error | null
 }> => {
     try {
-        const response = await fetch('/api/auth', {
+        const response = await fetch('/api/sso', {
             method: 'GET',
             credentials: 'include',
         })

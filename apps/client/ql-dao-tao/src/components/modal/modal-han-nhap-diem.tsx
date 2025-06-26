@@ -18,13 +18,7 @@ export type PutSubjectClass = SubjectClass
 
 dayjs.extend(customParseFormat)
 
-interface Props {
-    onFilterChange: any
-    data: SubjectClass | null
-    onApply: (data: SubjectClass) => void
-}
-
-const HanNhapDiem = (props: Props) => {
+const HanNhapDiem = () => {
     const [form] = Form.useForm<PutSubjectClass>()
     const isLockScore = useWatch('isLockScore', form)
     const isLockExamScore = useWatch('isLockExamScore', form)
