@@ -23,27 +23,48 @@ const ExportScoreTemplate = ({
         const worksheet = workbook.addWorksheet('Mẫu nhập điểm')
 
         // Thiết lập style
+        const golbalFontStyle = {
+            font: { name: 'Times New Roman' },
+        }
+
         const headerTitleStyle = {
+            ...golbalFontStyle,
             font: { bold: true, size: 20 },
-            alignment: { horizontal: 'center', vertical: 'middle' },
+            alignment: {
+                horizontal: 'center' as const,
+                vertical: 'middle' as const,
+            },
         }
 
         const headerSubtitleStyle = {
+            ...golbalFontStyle,
             font: { bold: true, size: 14 },
-            alignment: { horizontal: 'left', vertical: 'middle' },
+            alignment: {
+                horizontal: 'left' as const,
+                vertical: 'middle' as const,
+            },
         }
 
         const headerSubtitleStyleCenter = {
+            ...golbalFontStyle,
             font: { bold: true, size: 14 },
-            alignment: { horizontal: 'center', vertical: 'middle' },
+            alignment: {
+                horizontal: 'center' as const,
+                vertical: 'middle' as const,
+            },
         }
 
         const headerSubtitleStyleRight = {
+            ...golbalFontStyle,
             font: { bold: true, size: 14 },
-            alignment: { horizontal: 'right', vertical: 'middle' },
+            alignment: {
+                horizontal: 'right' as const,
+                vertical: 'middle' as const,
+            },
         }
 
         const tableHeaderStyle = {
+            ...golbalFontStyle,
             font: {
                 bold: true,
                 size: 14,
@@ -59,38 +80,67 @@ const ExportScoreTemplate = ({
                 wrapText: true,
             },
             border: {
-                top: { style: 'thin', color: { argb: 'FF000000' } },
-                left: { style: 'thin', color: { argb: 'FF000000' } },
-                right: { style: 'thin', color: { argb: 'FF000000' } },
-                bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                top: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                left: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                right: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                bottom: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
             },
         }
 
         const dataCellStyle = {
-            font: { size: 13 },
+            ...golbalFontStyle,
+            font: { size: 14 },
             alignment: {
-                horizontal: 'center',
-                vertical: 'middle',
+                horizontal: 'center' as const,
+                vertical: 'middle' as const,
             },
             border: {
-                top: { style: 'thin', color: { argb: 'FF000000' } },
-                left: { style: 'thin', color: { argb: 'FF000000' } },
-                right: { style: 'thin', color: { argb: 'FF000000' } },
-                bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                top: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                left: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                right: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
+                bottom: {
+                    style: 'thin' as ExcelJS.BorderStyle,
+                    color: { argb: 'FF000000' },
+                },
             },
         }
 
         const dataTextCellStyle = {
             ...dataCellStyle,
             alignment: {
-                horizontal: 'left',
-                vertical: 'middle',
+                horizontal: 'left' as const,
+                vertical: 'middle' as const,
             },
         }
 
         const italicTextStyle = {
-            font: { size: 13, italic: true },
-            alignment: { horizontal: 'left', vertical: 'middle' },
+            ...golbalFontStyle,
+            font: { italic: true },
+            alignment: {
+                horizontal: 'left' as const,
+                vertical: 'middle' as const,
+            },
         }
 
         // Thêm các dòng tiêu đề
@@ -188,15 +238,49 @@ const ExportScoreTemplate = ({
                 record.examScore || '',
             ]
 
-            // Áp dụng style border cho tất cả các cell trong hàng
-            row.eachCell((cell: any) => {
-                if (cell.col === 3) {
-                    // Cột "Họ và Tên"
-                    cell.style = dataTextCellStyle
+            row.eachCell((cell: ExcelJS.Cell) => {
+                if (
+                    Number(cell.col) >= 6 &&
+                    Number(cell.col) <= 8 &&
+                    row.number >= 11
+                ) {
+                    cell.protection = { locked: false }
                 } else {
-                    cell.style = dataCellStyle
+                    cell.protection = { locked: true }
+                }
+
+                const baseStyle = {
+                    ...dataCellStyle,
+                    protection: cell.protection,
+                }
+
+                if (cell.col && Number(cell.col) === 3) {
+                    cell.style = {
+                        ...baseStyle,
+                        alignment: dataTextCellStyle.alignment,
+                    }
+                } else {
+                    cell.style = baseStyle
                 }
             })
+        })
+
+        worksheet.protect('', {
+            selectLockedCells: false,
+            selectUnlockedCells: true,
+            formatCells: false,
+            formatColumns: false,
+            formatRows: false,
+            insertColumns: false,
+            insertRows: false,
+            insertHyperlinks: false,
+            deleteColumns: false,
+            deleteRows: false,
+            sort: false,
+            autoFilter: false,
+            pivotTables: false,
+            objects: false,
+            scenarios: false,
         })
 
         // Điều chỉnh độ rộng cột
