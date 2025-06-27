@@ -14,6 +14,7 @@ import FixedClassApp from './api/fixed-class'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
 import UserProfileApp from './api/user-profile'
+import TrainingScoreApp from './api/training-score'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -68,6 +69,8 @@ app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
+app.route('/api/user-profile', UserProfileApp)
+app.route('/api/training-score', TrainingScoreApp)
 
 app.use(
     '/api/model/*',
