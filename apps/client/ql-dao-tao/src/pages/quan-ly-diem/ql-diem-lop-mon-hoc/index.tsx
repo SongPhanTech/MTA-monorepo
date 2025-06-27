@@ -41,6 +41,7 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
+import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -729,7 +730,7 @@ export default function SubjectClassScore() {
                                     onClick={() =>
                                         onOpen({
                                             dataTable,
-                                            type: 1,
+                                            type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
                                         })
                                     }
                                 >
@@ -741,7 +742,7 @@ export default function SubjectClassScore() {
                                     onClick={() =>
                                         onOpen({
                                             dataTable,
-                                            type: 0,
+                                            type: EnumInPhieuDiem.PHIEU_DIEM_NHAP,
                                         })
                                     }
                                 >

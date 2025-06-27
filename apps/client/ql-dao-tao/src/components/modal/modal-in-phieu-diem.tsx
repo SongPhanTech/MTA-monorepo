@@ -18,9 +18,14 @@ export type PutSubjectClass = SubjectClass
 
 dayjs.locale('vi')
 
+export enum EnumInPhieuDiem {
+    PHIEU_DIEM_NHAP = 0,    // In phiếu điểm nháp
+    PHIEU_DIEM_KHOA = 1     // In phiếu điểm và khóa
+  }
+
 type ModalPrintToKQHTInput = {
     dataTable: any
-    type?: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+    type?: EnumInPhieuDiem // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
 }
 
 const ModalPrintStudentSubjectScore = () => {
