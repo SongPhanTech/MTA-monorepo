@@ -352,7 +352,8 @@ model SubjectVersion extends Base {
   examType                 ExamType
   subjectEquivalentType    SubjectEquivalentType  @default(NONE) // loại môn học tương đương
   credit                   Int // số tín chỉ
-  period                   Int // số tiết
+  week                     Int? // số tuần
+  period                   Int                    @default(0) // số tiết
   numberOfTheory           Int? // số tiết lý thuyết
   numberOfPractical        Int? // số tiết bài tập
   numberOfSelfStudy        Int? // số tiết thảo luận/tự học
