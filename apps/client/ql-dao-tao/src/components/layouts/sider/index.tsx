@@ -4,6 +4,7 @@ import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type ReactNode, useState } from 'react'
+
 const { Sider } = Layout
 
 // Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
@@ -19,11 +20,7 @@ interface SiderDefaultLayoutProps {
 // Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
     return menus.map((item) => ({
-        label: item.children ? (
-            item.label
-        ) : (
-            <Link href={item.path || '#'}>{item.label}</Link>
-        ),
+        label: item.children ? item.label : <Link href={item.path || '#'}>{item.label}</Link>,
         key: item.path || item.id,
         icon: item.icon ? <item.icon /> : undefined,
         children: item.children
@@ -35,10 +32,7 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
     }))
 }
 
-const findOpenKeys = (
-    menus: MenuItem[],
-    currentPath: string | null
-): string[] => {
+const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] => {
     for (const item of menus) {
         if (item.children) {
             const childKeys = findOpenKeys(item.children, currentPath)
@@ -64,9 +58,7 @@ const SiderDefaultLayout = ({
     const pathname = usePathname()
 
     // State để quản lý các menu đang mở
-    const [openKeys, setOpenKeys] = useState<string[]>(
-        findOpenKeys(items, pathname)
-    )
+    const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
     return (
         <Sider
             style={{
@@ -84,9 +76,7 @@ const SiderDefaultLayout = ({
             theme={theme}
             width={280}
         >
-            <div className="flex items-center justify-center my-3">
-                {collapsed ? logo1 : logo2}
-            </div>
+            <div className="flex items-center justify-center my-3">{collapsed ? logo1 : logo2}</div>
             <Menu
                 className="pb-20"
                 theme={'light'}

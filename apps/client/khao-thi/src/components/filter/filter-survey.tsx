@@ -1,10 +1,7 @@
 import { FilterOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
-import {
-    useFindManySurveyObjectType,
-    useFindManySurveyTopic,
-} from '@workspace/db/hooks'
+import { useFindManySurveyObjectType, useFindManySurveyTopic } from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -66,12 +63,9 @@ const FilterSurvey = (props: Props) => {
         setOpen(false)
     }
 
-    const { data: surveyTopicData = [], refetch: refetchSurveyTopic } =
-        useFindManySurveyTopic()
-    const {
-        data: surveyObjectTypeData = [],
-        refetch: refetchSurveyObjectType,
-    } = useFindManySurveyObjectType()
+    const { data: surveyTopicData = [], refetch: refetchSurveyTopic } = useFindManySurveyTopic()
+    const { data: surveyObjectTypeData = [], refetch: refetchSurveyObjectType } =
+        useFindManySurveyObjectType()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -109,14 +103,12 @@ const FilterSurvey = (props: Props) => {
                                 <Select
                                     allowClear
                                     placeholder="Chọn đối tượng khảo sát"
-                                    options={surveyObjectTypeData.map(
-                                        (item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
-                                            }
+                                    options={surveyObjectTypeData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
                                         }
-                                    )}
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -148,10 +140,7 @@ const FilterSurvey = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <DatePicker
-                                    format="DD/MM/YYYY"
-                                    className="w-full"
-                                />
+                                <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
@@ -162,10 +151,7 @@ const FilterSurvey = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <DatePicker
-                                    format="DD/MM/YYYY"
-                                    className="w-full"
-                                />
+                                <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -199,12 +185,7 @@ const FilterSurvey = (props: Props) => {
             <Input
                 placeholder="Nhập tên khảo sát..."
                 style={{ width: 300, marginRight: 8 }}
-                prefix={
-                    <Search
-                        size={15}
-                        style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                    />
-                }
+                prefix={<Search size={15} style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
                 allowClear
                 onChange={(e) => onSearchChange('searchText', e.target.value)}
             />

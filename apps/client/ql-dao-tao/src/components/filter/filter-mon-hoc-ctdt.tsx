@@ -1,23 +1,11 @@
 import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import type { TrainingObjectType } from '@workspace/db'
-import {
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-} from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Popover,
-    Row,
-    Space,
-    Typography,
-} from 'antd'
+import { useFindManyTrainingCourse, useFindManyTrainingObjectType } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Popover, Row, Space, Typography } from 'antd'
 import { X } from 'lucide-react'
 import { useState } from 'react'
+
 const { Text } = Typography
 
 interface FilterProps {
@@ -63,8 +51,7 @@ const FilterMonHocCTDT = (props: Props) => {
         setOpen(false)
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
     })
@@ -132,12 +119,10 @@ const FilterMonHocCTDT = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn khoá đào tạo"
-                                    options={trainingCourseData.map(
-                                        (i: TrainingObjectType) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingCourseData.map((i: TrainingObjectType) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingLevelId',

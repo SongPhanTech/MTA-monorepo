@@ -8,10 +8,11 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, Progress, message } from 'antd'
+import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type DocumentFormType = {
     type: $Enums.DocumentType
     files: Record<
@@ -34,8 +35,7 @@ const ThemTaiLieu = () => {
 
     const { mutateAsync: createMany } = useCreateManyDocument()
 
-    const [selectedFile, setSelectedFile] =
-        useState<DocumentFormType['files'][0]>()
+    const [selectedFile, setSelectedFile] = useState<DocumentFormType['files'][0]>()
 
     const [form] = Form.useForm<DocumentFormType>()
 
@@ -61,7 +61,7 @@ const ThemTaiLieu = () => {
                     ...files,
                     ...valuesWithId.reduce(
                         (prev, item) => ({
-                            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+                            // biome-ignore lint/performance/noAccumulatingSpread: <>
                             ...prev,
                             [item.id]: {
                                 ...item,
@@ -83,11 +83,7 @@ const ThemTaiLieu = () => {
                     })
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
-                            const {
-                                loaded,
-                                total = 1,
-                                estimated = 0,
-                            } = progressEvent
+                            const { loaded, total = 1, estimated = 0 } = progressEvent
                             const percent = Math.floor((loaded * 100) / total)
                             form.setFieldsValue({
                                 files: {
@@ -103,14 +99,12 @@ const ThemTaiLieu = () => {
                         },
                     })
                     const resReaderDocument =
-                        await fetchReadDocumentContentDocumentDocumentReaderGet(
-                            {
-                                queryParams: {
-                                    uri_file: resPresignedUrl.fileName,
-                                    type,
-                                },
-                            }
-                        )
+                        await fetchReadDocumentContentDocumentDocumentReaderGet({
+                            queryParams: {
+                                uri_file: resPresignedUrl.fileName,
+                                type,
+                            },
+                        })
                     form.setFieldsValue({
                         files: {
                             ...form.getFieldValue('files'),
@@ -119,10 +113,8 @@ const ThemTaiLieu = () => {
                                 body: resReaderDocument.body,
                                 similar:
                                     resReaderDocument.document_simmilar &&
-                                    resReaderDocument.document_simmilar.length >
-                                        0
-                                        ? resReaderDocument.document_simmilar[0]
-                                              .score
+                                    resReaderDocument.document_simmilar.length > 0
+                                        ? resReaderDocument.document_simmilar[0].score
                                         : 0,
                                 progress: 100,
                             },
@@ -147,15 +139,10 @@ const ThemTaiLieu = () => {
 
     const onFinish = async (values: DocumentFormType) => {
         try {
-            if (
-                Object.values(values.files).some(
-                    (file) => file.similar && file.similar > 0.8
-                )
-            ) {
+            if (Object.values(values.files).some((file) => file.similar && file.similar > 0.8)) {
                 const confirmed = await modalThemTaiLieu.confirm({
                     title: 'Xác nhận thêm tài liệu tương đồng',
-                    content:
-                        'Bạn có chắc chắn muốn thêm tài liệu đã trùng lặp không?',
+                    content: 'Bạn có chắc chắn muốn thêm tài liệu đã trùng lặp không?',
                     okText: 'Đồng ý',
                     cancelText: 'Hủy',
                 })
@@ -164,16 +151,14 @@ const ThemTaiLieu = () => {
                 }
             }
             await createMany({
-                data: Object.values(values.files).map(
-                    ({ body, file, url }) => ({
-                        uri: url,
-                        title: file.name,
-                        fileType: file.type,
-                        type: values.type,
-                        body,
-                        fileSize: file.size,
-                    })
-                ),
+                data: Object.values(values.files).map(({ body, file, url }) => ({
+                    uri: url,
+                    title: file.name,
+                    fileType: file.type,
+                    type: values.type,
+                    body,
+                    fileSize: file.size,
+                })),
             })
             message.success('Thêm tài liệu thành công')
             onClose()
@@ -209,15 +194,9 @@ const ThemTaiLieu = () => {
                     }}
                 >
                     <Col span={24}>
-                        <FormItem
-                            form={form}
-                            name={'type'}
-                            label="Loại tài liệu"
-                        >
+                        <FormItem form={form} name={'type'} label="Loại tài liệu">
                             <Select
-                                defaultValue={
-                                    $Enums.DocumentType.ACADEMY_INFORMATION
-                                }
+                                defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
                                 options={DOCUMENT_TYPE}
                             />
                         </FormItem>
@@ -240,8 +219,7 @@ const ThemTaiLieu = () => {
                                 onClick={setSelectedFile.bind(null, file)}
                                 className={cn(
                                     'flex items-center gap-2 mt-2 border relative border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
-                                    selectedFile?.url === file.url &&
-                                        'bg-gray-100 border-primary'
+                                    selectedFile?.url === file.url && 'bg-gray-100 border-primary'
                                 )}
                             >
                                 {!!file.similar && (
@@ -251,38 +229,27 @@ const ThemTaiLieu = () => {
                                             bgColorSimilar(file.similar)
                                         )}
                                     >
-                                        {`  ${Math.floor(
-                                            file.similar * 100
-                                        )} % tương đồng`}
+                                        {`  ${Math.floor(file.similar * 100)} % tương đồng`}
                                     </span>
                                 )}
-                                <FileUploadIcon
-                                    fileType={file.file.type}
-                                    width={40}
-                                    height={40}
-                                />
+                                <FileUploadIcon fileType={file.file.type} width={40} height={40} />
                                 <div className="flex flex-col flex-1">
                                     <div className="max-w-[400px] truncate">
-                                        <span className="font-semibold ">
-                                            {file.file.name}
-                                        </span>
+                                        <span className="font-semibold ">{file.file.name}</span>
                                     </div>
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
 
                                         {!!file.timeLeft && !!file.progress && (
                                             <span className="text-gray-400 text-sm">
-                                                {` - ${Math.floor(
-                                                    file.timeLeft
-                                                )} giây`}
+                                                {` - ${Math.floor(file.timeLeft)} giây`}
                                             </span>
                                         )}
                                     </span>
 
-                                    {file.progress !== 0 &&
-                                        file.progress !== 100 && (
-                                            <Progress percent={file.progress} />
-                                        )}
+                                    {file.progress !== 0 && file.progress !== 100 && (
+                                        <Progress percent={file.progress} />
+                                    )}
                                 </div>
                                 <CloseCircleOutlined
                                     onClick={(e) => {
@@ -312,10 +279,7 @@ const ThemTaiLieu = () => {
                                 className="text-base cursor-pointer"
                             />
                         </div>
-                        <Input.TextArea
-                            value={selectedFile.body}
-                            className="h-full"
-                        />
+                        <Input.TextArea value={selectedFile.body} className="h-full" />
                     </div>
                 )}
             </div>

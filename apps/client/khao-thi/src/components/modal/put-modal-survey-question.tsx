@@ -79,7 +79,7 @@ const PutSurveyQuestionModal = () => {
     const { data: surveyQuestion } = useFindUniqueSurveyQuestion({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyQuestion) {
             form.setFieldsValue(surveyQuestion)
@@ -93,28 +93,16 @@ const PutSurveyQuestionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'
-            }
+            title={id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã câu hỏi khảo sát" required>
                     <Input placeholder="Nhập mã câu hỏi khảo sát" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
                     <Input placeholder="Nhập câu hỏi khảo sát" />
                 </FormItem>
             </Col>
@@ -140,14 +128,12 @@ const PutSurveyQuestionModal = () => {
                 >
                     <Select
                         placeholder="Chọn đối tượng khảo sát"
-                        options={surveyQuestionTypes.map(
-                            (i: SurveyQuestionType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={surveyQuestionTypes.map((i: SurveyQuestionType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>

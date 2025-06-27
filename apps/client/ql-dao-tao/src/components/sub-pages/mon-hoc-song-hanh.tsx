@@ -5,7 +5,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
@@ -15,9 +15,7 @@ type Props = {
 }
 
 // TODO: fix this page
-export default function MonHocSongHanhPage({
-    curriculumVersionSubjectId,
-}: Props) {
+export default function MonHocSongHanhPage({ curriculumVersionSubjectId }: Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -87,9 +85,7 @@ export default function MonHocSongHanhPage({
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -113,15 +109,12 @@ export default function MonHocSongHanhPage({
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên môn học song hành',
                                 dataIndex: 'subject',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Thao tác',
@@ -150,8 +143,7 @@ export default function MonHocSongHanhPage({
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

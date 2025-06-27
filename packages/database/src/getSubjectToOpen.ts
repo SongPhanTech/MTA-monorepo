@@ -72,7 +72,7 @@ const classWithOffset = classes.map(({ trainingCourse, ...cls }) => {
 
     const offset =
         (semester.schoolYear.startDate.getFullYear() -
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            // biome-ignore lint/style/noNonNullAssertion: <>
             trainingCourse!.semesterStart.schoolYear.startDate.getFullYear()) *
             2 +
         semesterOrder

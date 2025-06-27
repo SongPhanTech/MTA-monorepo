@@ -5,8 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UserSystemRole =
-    (typeof UserSystemRole)[keyof typeof UserSystemRole]
+export type UserSystemRole = (typeof UserSystemRole)[keyof typeof UserSystemRole]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UserSystemRole = {

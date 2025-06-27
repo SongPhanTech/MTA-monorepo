@@ -6,12 +6,8 @@ import { PutStudyRankModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountStudyRank,
-    useFindManyStudyRank,
-    useUpdateStudyRank,
-} from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { useCountStudyRank, useFindManyStudyRank, useUpdateStudyRank } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
@@ -95,9 +91,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -120,9 +114,7 @@ export default function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã xếp loại học tập',
@@ -144,8 +136,7 @@ export default function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

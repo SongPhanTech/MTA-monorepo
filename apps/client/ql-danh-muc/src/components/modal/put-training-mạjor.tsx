@@ -66,7 +66,7 @@ const PutTrainingMajorModal = () => {
     const { data: level } = useFindUniqueTrainingMajor({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +80,16 @@ const PutTrainingMajorModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa chuyên ngành đào tạo'
-                    : 'Thêm mới chuyên ngành đào tạo'
-            }
+            title={id ? 'Chỉnh sửa chuyên ngành đào tạo' : 'Thêm mới chuyên ngành đào tạo'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã chuyên ngành đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã chuyên ngành đào tạo" required>
                     <Input placeholder="Nhập mã chuyên ngành đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên chuyên ngành đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên chuyên ngành đào tạo" required>
                     <Input placeholder="Nhập chuyên ngành đào tạo" />
                 </FormItem>
             </Col>

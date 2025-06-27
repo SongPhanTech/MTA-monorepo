@@ -34,6 +34,7 @@ import {
 } from 'antd'
 import { Search, X } from 'lucide-react'
 import { useState } from 'react'
+
 const { Text } = Typography
 
 interface FilterProps {
@@ -79,9 +80,7 @@ const FilterChuongTrinhDT = (props: Props) => {
         console.log('filters', form.getFieldsValue())
         const values = form.getFieldsValue()
         const schoolYearId = values.schoolYearId
-        const selectedSchool = dataSchoolYear.find(
-            (item: SchoolYear) => item.id === schoolYearId
-        )
+        const selectedSchool = dataSchoolYear.find((item: SchoolYear) => item.id === schoolYearId)
         const newFilters = {
             ...filters,
             ...values,
@@ -91,26 +90,19 @@ const FilterChuongTrinhDT = (props: Props) => {
         setFilters(newFilters)
         setOpen(false)
     }
-    const options = Object.entries(CTDT_STATUS).map(
-        ([value, { label, color }]) => ({
-            value,
-            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-        })
-    )
-    const { data: trainingTimeData = [], refetch: refetchTime } =
-        useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel()
+    const options = Object.entries(CTDT_STATUS).map(([value, { label, color }]) => ({
+        value,
+        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+    }))
+    const { data: trainingTimeData = [], refetch: refetchTime } = useFindManyTrainingType()
+    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
-    const { data: trainingMajorData = [], refetch: refetchObjectMajor } =
-        useFindManyTrainingMajor({
-            orderBy: { name: 'asc' },
-        })
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear()
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: trainingMajorData = [], refetch: refetchObjectMajor } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const filterContent = (
@@ -150,16 +142,14 @@ const FilterChuongTrinhDT = (props: Props) => {
                                 <Select
                                     placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map(
-                                        (i: SchoolYear) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                                startDate: i.startDate,
-                                                endDate: i.endDate,
-                                            }
+                                    options={dataSchoolYear.map((i: SchoolYear) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                            startDate: i.startDate,
+                                            endDate: i.endDate,
                                         }
-                                    )}
+                                    })}
                                     // value={filters.schoolYearId}
                                     // onChange={(
                                     //     value: number | null,
@@ -240,12 +230,10 @@ const FilterChuongTrinhDT = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn bậc đào tạo"
-                                    options={trainingLevelData.map(
-                                        (i: TrainingLevel) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingLevelData.map((i: TrainingLevel) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingObjectTypeId',
@@ -267,12 +255,10 @@ const FilterChuongTrinhDT = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn thời gian đào tạo"
-                                    options={trainingTimeData.map(
-                                        (i: TrainingTime) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingTimeData.map((i: TrainingTime) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingFormId',
@@ -294,12 +280,10 @@ const FilterChuongTrinhDT = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn chuyên ngành đào tạo"
-                                    options={trainingMajorData.map(
-                                        (i: TrainingMajor) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingMajorData.map((i: TrainingMajor) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingLevelId',

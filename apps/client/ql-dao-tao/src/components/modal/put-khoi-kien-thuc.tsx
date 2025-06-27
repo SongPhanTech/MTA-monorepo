@@ -2,23 +2,19 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type {
-    TrainingBlock,
-    TrainingBlockOnCurriculumVersion,
-} from '@workspace/db'
+import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db'
 import {
     useCreateTrainingBlockOnCurriculumVersion,
     useFindManyTrainingBlock,
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, Select, message } from 'antd'
+import { Col, Form, InputNumber, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
-export type PutTrainingBlockOnCurriculumVersion =
-    TrainingBlockOnCurriculumVersion
+export type PutTrainingBlockOnCurriculumVersion = TrainingBlockOnCurriculumVersion
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -27,21 +23,19 @@ type TrainingBlockOnCurriculumVersionInput = {
 }
 const PutTrainingBlockOnCurriculumVersion = () => {
     const [form] = Form.useForm<PutTrainingBlockOnCurriculumVersion>()
-    const { isOpen, onClose, input } =
-        useDisclosure<TrainingBlockOnCurriculumVersionInput>({
-            tag: PutTrainingBlockOnCurriculumVersion.name,
-            onClose: form.resetFields,
-        })
+    const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
+        tag: PutTrainingBlockOnCurriculumVersion.name,
+        onClose: form.resetFields,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: initialValue } =
-        useFindUniqueTrainingBlockOnCurriculumVersion(
-            {
-                where: { id: input?.trainingBlockOnCurriculumVersionId },
-            },
-            { enable: !!input?.curriculumVersionId }
-        )
+    const { data: initialValue } = useFindUniqueTrainingBlockOnCurriculumVersion(
+        {
+            where: { id: input?.trainingBlockOnCurriculumVersionId },
+        },
+        { enable: !!input?.curriculumVersionId }
+    )
 
     const { data: trainingBlockData = [], refetch } = useFindManyTrainingBlock()
 
@@ -110,12 +104,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             className="min-w-[400px] w-[500px]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="trainingBlockId"
-                    label="Khối kiến thức"
-                    required
-                >
+                <FormItem form={form} name="trainingBlockId" label="Khối kiến thức" required>
                     <Select
                         placeholder="Chọn khối kiến thức"
                         options={trainingBlockData.map((i: TrainingBlock) => {

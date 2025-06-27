@@ -66,7 +66,7 @@ const PutTrainingBlockModal = () => {
     const { data: level } = useFindUniqueTrainingBlock({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -84,22 +84,12 @@ const PutTrainingBlockModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã khối kiến thức"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã khối kiến thức" required>
                     <Input placeholder="Nhập mã khối kiến thức" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên khối kiến thức"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên khối kiến thức" required>
                     <Input placeholder="Nhập khối kiến thức" />
                 </FormItem>
             </Col>

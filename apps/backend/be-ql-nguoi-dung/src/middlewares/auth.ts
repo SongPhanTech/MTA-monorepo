@@ -1,8 +1,4 @@
-import {
-    type OidcClaimsHook,
-    processOAuthCallback,
-    revokeSession,
-} from '@hono/oidc-auth'
+import { type OidcClaimsHook, processOAuthCallback, revokeSession } from '@hono/oidc-auth'
 import type { OpenAPIHono } from '@hono/zod-openapi'
 import type { OidcAuthClaims } from 'hono'
 import { HTTPException } from 'hono/http-exception'

@@ -1,22 +1,17 @@
 import Table from '@components/commons/table'
-import FilterSurvey, {
-    type FilterSurveyProps,
-} from '@components/filter/filter-survey'
+import FilterSurvey, { type FilterSurveyProps } from '@components/filter/filter-survey'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import {
-    useCountSurvey,
-    useFindManySurvey,
-    useUpdateSurvey,
-} from '@workspace/db/hooks'
-import { Button, Col, Flex, Row, message } from 'antd'
+import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type Filter = FilterSurveyProps & {
     searchText: string
 }
@@ -64,12 +59,8 @@ function TabDotKhaoSat() {
                       },
                   }
                 : {}),
-            ...(filters.surveyObjectTypeId
-                ? { surveyObjectId: filters.surveyObjectTypeId }
-                : {}),
-            ...(filters.surveyTopicId
-                ? { surveyTopicId: filters.surveyTopicId }
-                : {}),
+            ...(filters.surveyObjectTypeId ? { surveyObjectId: filters.surveyObjectTypeId } : {}),
+            ...(filters.surveyTopicId ? { surveyTopicId: filters.surveyTopicId } : {}),
         },
         include: {
             surveyObjectType: true,
@@ -162,9 +153,7 @@ function TabDotKhaoSat() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên đợt khảo sát',
@@ -172,29 +161,22 @@ function TabDotKhaoSat() {
                             },
                             {
                                 title: 'Chủ đề khảo sát',
-                                render: ({ surveyTopic }) =>
-                                    surveyTopic ? surveyTopic.name : '',
+                                render: ({ surveyTopic }) => (surveyTopic ? surveyTopic.name : ''),
                             },
                             {
                                 title: 'Đối tượng khảo sát',
                                 render: ({ surveyObjectType }) =>
-                                    surveyObjectType
-                                        ? surveyObjectType.name
-                                        : '',
+                                    surveyObjectType ? surveyObjectType.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 render: ({ startDate }) =>
-                                    startDate
-                                        ? dayjs(startDate).format('DD/MM/YYYY')
-                                        : '',
+                                    startDate ? dayjs(startDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
                                 render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
+                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Thao tác',
@@ -208,8 +190,7 @@ function TabDotKhaoSat() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

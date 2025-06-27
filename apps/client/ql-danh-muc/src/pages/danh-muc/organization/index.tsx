@@ -1,4 +1,3 @@
-import { convertToTree, searchTree } from '@/utils/convertOrganizationToTree'
 import { fetchUpdateUser } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -12,11 +11,12 @@ import {
     useFindManyDM_DonVi,
     useUpdateOrganization,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { convertToTree, searchTree } from '@/utils/convertOrganizationToTree'
 
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -95,9 +95,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -126,8 +124,7 @@ export default function Page() {
                             {
                                 title: 'Loại đơn vị',
                                 dataIndex: 'type',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Địa chỉ',
@@ -145,8 +142,7 @@ export default function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

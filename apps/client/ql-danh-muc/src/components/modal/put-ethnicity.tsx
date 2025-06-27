@@ -3,11 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Ethnicity } from '@workspace/db'
-import {
-    useCreateEthnicity,
-    useFindUniqueEthnicity,
-    useUpdateEthnicity,
-} from '@workspace/db/hooks'
+import { useCreateEthnicity, useFindUniqueEthnicity, useUpdateEthnicity } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -66,7 +62,7 @@ const PutEthnicityModal = () => {
     const { data: level } = useFindUniqueEthnicity({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)

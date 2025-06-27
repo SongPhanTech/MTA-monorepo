@@ -57,7 +57,7 @@ export async function appFetch<
                 .toLowerCase()
                 .includes('multipart/form-data')
         ) {
-            // biome-ignore lint/performance/noDelete: <explanation>
+            // biome-ignore lint/performance/noDelete: <>
             delete requestHeaders['Content-Type']
         }
 

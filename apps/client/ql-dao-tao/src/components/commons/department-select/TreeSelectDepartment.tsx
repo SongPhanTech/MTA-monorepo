@@ -1,9 +1,9 @@
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
-import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
+import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -26,33 +26,29 @@ const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
     const [value, setValue] = useState<string | undefined>(defaultValue)
 
     // Lấy thông tin SchoolYear
-    const {
-        data: organizationDataKhoa = [],
-        refetch: refetchOrganizationKhoa,
-    } = useFindManyDM_DonVi({
-        include: {
-            children: true,
-        },
-        // TODO: fetch Khoa only
-        where: {
-            // type: {
-            //     code: 'KHOA',
+    const { data: organizationDataKhoa = [], refetch: refetchOrganizationKhoa } =
+        useFindManyDM_DonVi({
+            include: {
+                children: true,
+            },
+            // TODO: fetch Khoa only
+            where: {
+                // type: {
+                //     code: 'KHOA',
+                // },
+            },
+        })
+    const { data: organizationDataBoMon = [], refetch: refetchOrganizationBoMon } =
+        useFindManyDM_DonVi({
+            // include: {
+            //     type: true,
             // },
-        },
-    })
-    const {
-        data: organizationDataBoMon = [],
-        refetch: refetchOrganizationBoMon,
-    } = useFindManyDM_DonVi({
-        // include: {
-        //     type: true,
-        // },
-        // where: {
-        //     type: {
-        //         code: 'BOMON',
-        //     },
-        // },
-    })
+            // where: {
+            //     type: {
+            //         code: 'BOMON',
+            //     },
+            // },
+        })
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         const khoaList = organizationDataKhoa || []

@@ -20,9 +20,7 @@ const SessionProvider: React.FC<{
     children: React.ReactNode
     session?: any | null | undefined
 }> = ({ children, session }) => {
-    const [sessionState, setSessionState] = React.useState<Session | null>(
-        session
-    )
+    const [sessionState, setSessionState] = React.useState<Session | null>(session)
     const [status, setStatus] = React.useState<SessionStatus | null>(null)
     const pathname = usePathname()
     const searchParams = useSearchParams() ?? ''

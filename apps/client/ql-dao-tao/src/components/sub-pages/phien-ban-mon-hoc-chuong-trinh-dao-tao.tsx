@@ -6,7 +6,7 @@ import { PutVersionSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Flex, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -69,9 +69,7 @@ export default function VersionProgramSubject({ record }: Props) {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, record, index) =>
-                                    index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
-                                    1,
+                                    index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
                                 title: 'Mã',
@@ -120,8 +118,7 @@ export default function VersionProgramSubject({ record }: Props) {
                                 dataIndex: 'bbtc',
                                 width: 80,
                                 align: 'center',
-                                render: (record) =>
-                                    record ? <div>BB</div> : <div>TC</div>,
+                                render: (record) => (record ? <div>BB</div> : <div>TC</div>),
                             },
                             {
                                 title: 'STTKB',
@@ -173,9 +170,7 @@ export default function VersionProgramSubject({ record }: Props) {
                                     return record?.status === 'IN_ACTIVE' ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -189,16 +184,12 @@ export default function VersionProgramSubject({ record }: Props) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

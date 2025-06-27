@@ -8,7 +8,7 @@ import {
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -29,10 +29,7 @@ const PutTrainingBlock = () => {
     const { showSpinner, hideSpinner } = useSpinner()
     const [active, setActive] = useState(true)
 
-    const { data: trainingBlock } = useFindUniqueTrainingBlock(
-        { where: { id } },
-        { enabled: !!id }
-    )
+    const { data: trainingBlock } = useFindUniqueTrainingBlock({ where: { id } }, { enabled: !!id })
 
     useEffect(() => {
         if (trainingBlock) {
@@ -93,30 +90,16 @@ const PutTrainingBlock = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa khối kiến thức CTDT'
-                    : 'Thêm mới khối kiến thức CTDT'
-            }
+            title={id ? 'Chỉnh sửa khối kiến thức CTDT' : 'Thêm mới khối kiến thức CTDT'}
             className="min-w-[400px] w-[500px]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã khối kiến thức"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã khối kiến thức" required>
                     <Input placeholder="Nhập mã khối kiến thức" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên khối kiến thức"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên khối kiến thức" required>
                     <Input placeholder="Nhập tên khối kiến thức" />
                 </FormItem>
             </Col>
@@ -162,12 +145,7 @@ const PutTrainingBlock = () => {
                 </FormItem>
             </Col>
             <Col span={12} className="flex items-center">
-                <FormItem
-                    form={form}
-                    name="active"
-                    label=""
-                    valuePropName="checked"
-                >
+                <FormItem form={form} name="active" label="" valuePropName="checked">
                     <div
                         style={{
                             display: 'flex',

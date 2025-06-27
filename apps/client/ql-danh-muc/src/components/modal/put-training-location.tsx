@@ -66,7 +66,7 @@ const PutTrainingLocaltionModal = () => {
     const { data: level } = useFindUniqueTrainingLocation({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,28 +80,16 @@ const PutTrainingLocaltionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa địa điểm đào tạo' : 'Thêm mới địa điểm đào tạo'
-            }
+            title={id ? 'Chỉnh sửa địa điểm đào tạo' : 'Thêm mới địa điểm đào tạo'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã địa điểm đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã địa điểm đào tạo" required>
                     <Input placeholder="Nhập mã địa điểm đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên địa điểm đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên địa điểm đào tạo" required>
                     <Input placeholder="Nhập địa điểm đào tạo" />
                 </FormItem>
             </Col>

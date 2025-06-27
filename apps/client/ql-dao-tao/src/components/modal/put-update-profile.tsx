@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { $Enums } from '@workspace/db'
-import { Button, Col, Form, Upload, message } from 'antd'
+import { Button, Col, Form, message, Upload } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUpdateProfile = {
@@ -86,9 +86,7 @@ const PutUpdateProfileModal = () => {
                         maxCount={1} // Chỉ cho chọn 1 file
                         accept=".xlsx,.xls" // Chỉ chấp nhận file Excel
                     >
-                        <Button icon={<UploadOutlined />}>
-                            Chọn file Excel
-                        </Button>
+                        <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
                     </Upload>
                 </FormItem>
             </Col>

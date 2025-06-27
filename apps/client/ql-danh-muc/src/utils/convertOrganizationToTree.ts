@@ -67,9 +67,7 @@ export const searchTree2 = (data: any[], searchText: string) => {
 
     const search = searchText.toLowerCase()
 
-    const filterData = data.filter((item: any) =>
-        item.name?.toLowerCase().includes(search)
-    )
+    const filterData = data.filter((item: any) => item.name?.toLowerCase().includes(search))
     console.log('search', search)
     console.log(filterData)
     return filterData

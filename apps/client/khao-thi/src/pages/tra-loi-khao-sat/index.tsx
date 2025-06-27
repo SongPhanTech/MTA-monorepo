@@ -1,21 +1,9 @@
 import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
 import type { SurveyQuestion } from '@workspace/db'
-import {
-    useCreateManySurveyAnswer,
-    useFindManySurveyQuestion,
-} from '@workspace/db/hooks'
+import { useCreateManySurveyAnswer, useFindManySurveyQuestion } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Card,
-    Checkbox,
-    Input,
-    Radio,
-    Space,
-    Typography,
-    message,
-} from 'antd'
+import { Button, Card, Checkbox, Input, message, Radio, Space, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -75,9 +63,7 @@ function SurveyPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleChange = (id: string, value: string | string[]) => {
-        const existingAnswerIndex = answers.findIndex(
-            (a) => a.surveyQuestionId === id
-        )
+        const existingAnswerIndex = answers.findIndex((a) => a.surveyQuestionId === id)
 
         if (existingAnswerIndex !== -1) {
             setAnswers((prev) => {
@@ -107,9 +93,7 @@ function SurveyPage() {
                 data: answers.map((item) => {
                     return {
                         ...item,
-                        answer: Array.isArray(item.answer)
-                            ? item.answer.join(',')
-                            : item.answer,
+                        answer: Array.isArray(item.answer) ? item.answer.join(',') : item.answer,
                         userId: 'cm9tpyicp0000s401big8i0s9',
                     }
                 }),
@@ -126,18 +110,14 @@ function SurveyPage() {
     return (
         <div className="min-h-screen py-5">
             <Card style={{ maxWidth: 800, margin: '0 auto' }}>
-                <Space
-                    direction="vertical"
-                    size="large"
-                    style={{ width: '100%' }}
-                >
+                <Space direction="vertical" size="large" style={{ width: '100%' }}>
                     <div>
                         <Title level={3} className="text-primary">
                             Trả lời khảo sát
                         </Title>
                         <Typography.Paragraph>
-                            Cảm ơn bạn đã dành thời gian tham gia khảo sát! Mục
-                            tiêu của khảo sát này là:
+                            Cảm ơn bạn đã dành thời gian tham gia khảo sát! Mục tiêu của khảo sát
+                            này là:
                         </Typography.Paragraph>
                         <ul
                             style={{
@@ -146,27 +126,21 @@ function SurveyPage() {
                                 listStyleType: 'disc',
                             }}
                         >
-                            <li>
-                                Thu thập ý kiến người dùng để cải thiện sản
-                                phẩm.
-                            </li>
+                            <li>Thu thập ý kiến người dùng để cải thiện sản phẩm.</li>
                             <li>Hiểu rõ nhu cầu và hành vi sử dụng của bạn.</li>
                             <li>
-                                Mọi thông tin sẽ được bảo mật và chỉ dùng cho
-                                mục đích nghiên cứu nội bộ.
+                                Mọi thông tin sẽ được bảo mật và chỉ dùng cho mục đích nghiên cứu
+                                nội bộ.
                             </li>
                         </ul>
                         <Typography.Paragraph>
-                            Vui lòng trả lời đầy đủ và trung thực. Khảo sát chỉ
-                            mất khoảng <strong>3-5 phút</strong>. Xin chân thành
-                            cảm ơn!
+                            Vui lòng trả lời đầy đủ và trung thực. Khảo sát chỉ mất khoảng{' '}
+                            <strong>3-5 phút</strong>. Xin chân thành cảm ơn!
                         </Typography.Paragraph>
                     </div>
                     {questions.map((q, index) => {
                         // Tìm câu trả lời hiện tại của câu hỏi này (nếu có)
-                        const currentAnswer = answers.find(
-                            (a) => a.surveyQuestionId === q.id
-                        )
+                        const currentAnswer = answers.find((a) => a.surveyQuestionId === q.id)
 
                         return (
                             <div key={q.id}>
@@ -175,9 +149,7 @@ function SurveyPage() {
                                 </Title>
                                 {q.type === 'single' && q.options && (
                                     <Radio.Group
-                                        onChange={(e) =>
-                                            handleChange(q.id, e.target.value)
-                                        }
+                                        onChange={(e) => handleChange(q.id, e.target.value)}
                                         value={currentAnswer?.answer as string}
                                     >
                                         <Space direction="vertical">
@@ -192,12 +164,8 @@ function SurveyPage() {
                                 {q.type === 'multiple' && q.options && (
                                     <Checkbox.Group
                                         options={q.options}
-                                        value={
-                                            currentAnswer?.answer as string[]
-                                        }
-                                        onChange={(val) =>
-                                            handleChange(q.id, val)
-                                        }
+                                        value={currentAnswer?.answer as string[]}
+                                        onChange={(val) => handleChange(q.id, val)}
                                     />
                                 )}
                                 {q.type === 'text' && (
@@ -205,9 +173,7 @@ function SurveyPage() {
                                         rows={4}
                                         placeholder="Nhập câu trả lời của bạn..."
                                         value={currentAnswer?.answer as string}
-                                        onChange={(e) =>
-                                            handleChange(q.id, e.target.value)
-                                        }
+                                        onChange={(e) => handleChange(q.id, e.target.value)}
                                     />
                                 )}
                             </div>

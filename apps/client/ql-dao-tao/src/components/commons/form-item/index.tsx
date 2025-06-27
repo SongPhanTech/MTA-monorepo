@@ -1,8 +1,4 @@
-import {
-    Form,
-    type FormInstance,
-    type FormItemProps as FormItemAntDrops,
-} from 'antd'
+import { Form, type FormInstance, type FormItemProps as FormItemAntDrops } from 'antd'
 
 type FormItemProps<T, K> = FormItemAntDrops & {
     form: FormInstance<T>

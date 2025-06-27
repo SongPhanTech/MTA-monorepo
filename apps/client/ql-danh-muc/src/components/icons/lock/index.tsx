@@ -1,6 +1,7 @@
 import { LockOutlined } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
+
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
 } & Omit<AntdIconProps, 'ref'> &
@@ -16,10 +17,7 @@ const LockIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <LockOutlined
-                    className="text-sm text-red-500 cursor-pointer"
-                    {...props}
-                />
+                <LockOutlined className="text-sm text-red-500 cursor-pointer" {...props} />
             </Popconfirm>
         </Tooltip>
     )

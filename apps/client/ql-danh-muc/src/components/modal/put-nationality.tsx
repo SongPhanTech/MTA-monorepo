@@ -66,7 +66,7 @@ const PutNationalityModal = () => {
     const { data: level } = useFindUniqueNationality({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -89,12 +89,7 @@ const PutNationalityModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên quốc tịch"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên quốc tịch" required>
                     <Input placeholder="Nhập quốc tịch" />
                 </FormItem>
             </Col>

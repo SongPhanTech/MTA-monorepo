@@ -1,10 +1,6 @@
 import { EyeOutlined, UnlockOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
-import {
-    fetchCreateUser,
-    fetchUpdateUser,
-    useListUsers,
-} from '@api/open-api/appComponents'
+import { fetchCreateUser, fetchUpdateUser, useListUsers } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import LockIcon from '@components/icons/lock'
@@ -15,18 +11,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
 import { useCountUser, useUpdateUser } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -158,9 +143,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -175,9 +158,7 @@ export default function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Họ và tên',
@@ -195,9 +176,7 @@ export default function Page() {
                                 title: 'Ngày tạo',
                                 dataIndex: 'createdAt',
                                 render: (_, { createdAt }) =>
-                                    createdAt
-                                        ? formatDateReadable(createdAt)
-                                        : '',
+                                    createdAt ? formatDateReadable(createdAt) : '',
                             },
                             {
                                 title: 'Trạng thái',
@@ -208,9 +187,7 @@ export default function Page() {
                                     return value ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -227,34 +204,24 @@ export default function Page() {
                                                         onConfirm: () =>
                                                             handleLockAcc(
                                                                 id,
-                                                                Boolean(
-                                                                    accountLocked
-                                                                )
+                                                                Boolean(accountLocked)
                                                             ),
                                                     }}
                                                 />
                                             ) : (
-                                                <Tooltip
-                                                    title="Mở khóa"
-                                                    placement="leftTop"
-                                                >
+                                                <Tooltip title="Mở khóa" placement="leftTop">
                                                     <UnlockOutlined
                                                         onClick={() =>
                                                             handleLockAcc(
                                                                 id,
-                                                                Boolean(
-                                                                    accountLocked
-                                                                )
+                                                                Boolean(accountLocked)
                                                             )
                                                         }
                                                         className="text-sm text-green-600 cursor-pointer"
                                                     />
                                                 </Tooltip>
                                             ))}
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
+                                        <Tooltip title="Xem chi tiết" placement="leftTop">
                                             <EyeOutlined
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
@@ -263,8 +230,7 @@ export default function Page() {
                                         {!/system|admin/i.test(name) && (
                                             <DeleteIcon
                                                 popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDelete(id),
+                                                    onConfirm: () => handleDelete(id),
                                                 }}
                                             />
                                         )}

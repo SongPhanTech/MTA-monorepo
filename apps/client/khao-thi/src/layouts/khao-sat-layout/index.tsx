@@ -8,17 +8,12 @@ import { SearchSystem } from '@workspace/ui'
 import { Layout, theme } from 'antd'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+
 const { Header, Content } = Layout
 
-const KhaoSatLayout = ({
-    children,
-    className,
-}: { children: ReactNode; className?: string }) => {
+const KhaoSatLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     const [collapsed, setCollapsed] = useState(() => {
-        return (
-            typeof window !== 'undefined' &&
-            localStorage.getItem('collapsed') === 'true'
-        )
+        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
     const menus = useMenuList()
 
@@ -34,22 +29,19 @@ const KhaoSatLayout = ({
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
-            const newValue =
-                value ?? localStorage.getItem('collapsed') === 'true'
+            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
             setCollapsed(newValue)
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         handleCollapsed()
     }, [])
 
     return (
         <IdleTimerProvider
-            timeout={
-                Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000
-            }
+            timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
             onIdle={signOutAction}
         >
             <Layout style={{ minHeight: '100vh' }} hasSider>
@@ -85,9 +77,7 @@ const KhaoSatLayout = ({
                     }}
                 >
                     <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
-                        <span className="text-lg font-bold text-primary">
-                            KHẢO THÍ
-                        </span>
+                        <span className="text-lg font-bold text-primary">KHẢO THÍ</span>
                         <div className="flex gap-2 items-center">
                             <SearchSystem />
                             <AvatarDropdown />

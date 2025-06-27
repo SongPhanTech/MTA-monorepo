@@ -65,10 +65,7 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
 }
 
 // Tìm các menu mở sẵn theo pathname
-const findOpenKeys = (
-    menus: MenuItem[],
-    currentPath: string | null
-): string[] => {
+const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] => {
     for (const item of menus) {
         if (item.children) {
             const childKeys = findOpenKeys(item.children, currentPath)
@@ -92,9 +89,7 @@ const SiderDefaultLayout = ({
     logo2,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
-    const [openKeys, setOpenKeys] = useState<string[]>(
-        findOpenKeys(items, pathname)
-    )
+    const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
 
     return (
         <Sider
@@ -113,9 +108,7 @@ const SiderDefaultLayout = ({
             theme={theme}
             width={280}
         >
-            <div className="flex items-center justify-center my-3">
-                {collapsed ? logo1 : logo2}
-            </div>
+            <div className="flex items-center justify-center my-3">{collapsed ? logo1 : logo2}</div>
             <Menu
                 theme={theme}
                 mode="inline"

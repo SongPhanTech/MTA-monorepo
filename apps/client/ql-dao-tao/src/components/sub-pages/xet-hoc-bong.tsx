@@ -2,17 +2,14 @@ import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
-import type {
-    TrainingCourse,
-    TrainingField,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingCourse, TrainingField, TrainingObjectType } from '@workspace/db'
 import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { Search } from 'lucide-react'
+
 dayjs.locale('vi')
 
 const XetHocBong = () => {
@@ -61,8 +58,7 @@ const XetHocBong = () => {
         },
     ]
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -102,10 +98,7 @@ const XetHocBong = () => {
                                     </Form.Item>
                                 </Col>
                                 <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingObjectId">
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
                                             options={trainingObjectTypeData.map(
@@ -125,10 +118,7 @@ const XetHocBong = () => {
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingCourseId">
                                         <Select
                                             placeholder="Khoá đào tạo"
                                             options={trainingCourseData.map(
@@ -148,18 +138,13 @@ const XetHocBong = () => {
                                     </Form.Item>
                                 </Col>
                                 <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingMajorId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingMajorId">
                                         <Select
                                             placeholder="Chọn ngành đào tạo"
-                                            options={trainingFieldData.map(
-                                                (i: TrainingField) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
+                                            options={trainingFieldData.map((i: TrainingField) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingMajorId',

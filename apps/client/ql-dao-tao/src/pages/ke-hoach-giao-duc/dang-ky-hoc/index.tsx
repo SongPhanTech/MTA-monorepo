@@ -51,12 +51,7 @@ export default function RegisterClass() {
             {
                 key: '1',
                 label: 'Lớp có môn theo KHGD',
-                content: (
-                    <FixedClass
-                        semesterId={semesterId}
-                        subjectClassId={subjectClassId}
-                    />
-                ),
+                content: <FixedClass semesterId={semesterId} subjectClassId={subjectClassId} />,
             },
             {
                 key: '2',
@@ -69,10 +64,7 @@ export default function RegisterClass() {
                 key: '1',
                 label: 'Học viên có môn theo KHGD',
                 content: (
-                    <StudentCourseByPlan
-                        semesterId={semesterId}
-                        subjectClassId={subjectClassId}
-                    />
+                    <StudentCourseByPlan semesterId={semesterId} subjectClassId={subjectClassId} />
                 ),
             },
             {
@@ -104,10 +96,7 @@ export default function RegisterClass() {
                 <Flex>
                     <Col span={activeLeftTab === '3' ? 24 : 14}>
                         <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
-                            <Tabs
-                                activeKey={activeLeftTab}
-                                onChange={setActiveLeftTab}
-                            >
+                            <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
                                 {leftTabs.map((tab) => (
                                     <Tabs.TabPane tab={tab.label} key={tab.key}>
                                         {tab.content}

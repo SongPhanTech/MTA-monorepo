@@ -18,7 +18,7 @@ export default function MonHocChuongTrinhPage({
     // const { data = [], refetch } = useFindManyCurriculumVersionSubject({
     //     where: {
     //         curriculumVersionId: {
-    //             // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    //             // biome-ignore lint/style/noNonNullAssertion: <>
     //             equals: curriculumVersionId!,
     //         },
     //     },
@@ -36,7 +36,7 @@ export default function MonHocChuongTrinhPage({
     // const { data: count } = useCountCurriculumVersionSubject({
     //     where: {
     //         curriculumVersionId: {
-    //             // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    //             // biome-ignore lint/style/noNonNullAssertion: <>
     //             equals: curriculumVersionId!,
     //         },
     //     },

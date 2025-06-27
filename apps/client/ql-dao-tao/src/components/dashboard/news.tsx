@@ -2,6 +2,7 @@ import { NotificationOutlined } from '@ant-design/icons'
 import { Alert, Card, Space } from 'antd'
 import dayjs from 'dayjs'
 import Link from 'next/link'
+
 const fakeData: any = [
     {
         id: 1,
@@ -26,8 +27,7 @@ const fakeData: any = [
     },
     {
         id: 3,
-        message:
-            'Thông báo phân bổ và hướng dẫn sử dụng tài khoản học liệu số năm học 2023-2024',
+        message: 'Thông báo phân bổ và hướng dẫn sử dụng tài khoản học liệu số năm học 2023-2024',
         name: 'Cán bộ giáo viên',
         avatar: 'https://static.vecteezy.com/ti/vetor-gratis/p3/2002300-icone-de-personagem-de-avatar-de-mulher-bonita-gratis-vetor.jpg',
         image: 'https://i0.wp.com/mmgroup.vn/wp-content/uploads/2021/02/cach-tao-tai-khoan-gmail.jpg?fit=760%2C430&quality=89&ssl=1',
@@ -64,11 +64,7 @@ function News() {
                     fakeData?.map((item: any) => {
                         // <Link to={`/quanlythongtindieuhanh/thongbao/${item?.id}`}>
                         return type !== 'card' ? (
-                            <Link
-                                key={item.id}
-                                target="_blank"
-                                href={item?.link}
-                            >
+                            <Link key={item.id} target="_blank" href={item?.link}>
                                 <Alert
                                     showIcon
                                     icon={<NotificationOutlined />}
@@ -76,9 +72,7 @@ function News() {
                                     message={
                                         <div>
                                             <span>
-                                                {dayjs(item?.date).format(
-                                                    'HH:mm DD/MM/YYYY'
-                                                )}
+                                                {dayjs(item?.date).format('HH:mm DD/MM/YYYY')}
                                             </span>{' '}
                                             - <span>{item.message}</span>
                                         </div>
@@ -94,11 +88,7 @@ function News() {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <img
-                                        src={item?.image}
-                                        style={{ width: '100%' }}
-                                        alt=""
-                                    />
+                                    <img src={item?.image} style={{ width: '100%' }} alt="" />
                                     <div style={{ paddingTop: '5px' }}>
                                         <span
                                             style={{
@@ -115,8 +105,7 @@ function News() {
                                                 color: '#595959',
                                             }}
                                         >
-                                            {item?.message &&
-                                            item.message.length > 40
+                                            {item?.message && item.message.length > 40
                                                 ? `${item.message.slice(0, 40)}...`
                                                 : item.message}
                                         </span>
@@ -127,16 +116,10 @@ function News() {
                                                 color: '#999999',
                                             }}
                                         >
-                                            {dayjs(item?.date).format(
-                                                'HH:mm DD/MM/YYYY'
-                                            )}
+                                            {dayjs(item?.date).format('HH:mm DD/MM/YYYY')}
                                         </span>
                                         <br />
-                                        <a
-                                            href={item?.link}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
+                                        <a href={item?.link} target="_blank" rel="noreferrer">
                                             Xem thêm
                                         </a>
                                     </div>

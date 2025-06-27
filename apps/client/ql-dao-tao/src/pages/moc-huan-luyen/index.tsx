@@ -13,7 +13,7 @@ import {
     useFindManySchoolYear,
     useUpdateMilestone,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -80,8 +80,7 @@ export default function MilestonePage() {
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear()
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()
@@ -115,9 +114,7 @@ export default function MilestonePage() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
@@ -131,14 +128,12 @@ export default function MilestonePage() {
                                     className="w-[70%]"
                                     placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map(
-                                        (i: SchoolYear) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
+                                    options={dataSchoolYear.map((i: SchoolYear) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
                                         }
-                                    )}
+                                    })}
                                     value={filters.schoolYearId}
                                     onChange={(value: number | null) => {
                                         setFilters((prev: any) => ({
@@ -169,9 +164,7 @@ export default function MilestonePage() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Nội dung',
@@ -187,22 +180,18 @@ export default function MilestonePage() {
                                 title: 'Năm học',
                                 align: 'center',
                                 dataIndex: 'schoolYear',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 align: 'center',
-                                render: ({ startDate }) =>
-                                    dayjs(startDate).format('DD/MM/YYYY'),
+                                render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
                                 align: 'center',
                                 render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
+                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -230,8 +219,7 @@ export default function MilestonePage() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

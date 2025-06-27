@@ -1,5 +1,5 @@
-import { env } from '@/env'
 import axios from 'axios'
+import { env } from '@/env'
 
 const postFormUrlEncoded = async (url: string, id_document: string) => {
     const params = new URLSearchParams()
@@ -14,9 +14,7 @@ const postFormUrlEncoded = async (url: string, id_document: string) => {
     return response.data
 }
 
-export const fetchChungkingAndVectorizeDocument = async (
-    id_document: string
-) => {
+export const fetchChungkingAndVectorizeDocument = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,

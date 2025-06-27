@@ -31,8 +31,7 @@ const PutOrganizationModal = () => {
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyDM_DonVi()
+    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyDM_DonVi()
 
     const { mutateAsync: createLevel } = useCreateOrganization()
     const { mutateAsync: updateLevel } = useUpdateOrganization()
@@ -82,7 +81,7 @@ const PutOrganizationModal = () => {
     const { data: level } = useFindUniqueOrganization({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -110,12 +109,7 @@ const PutOrganizationModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="typeId"
-                    label="Loại đơn vị"
-                    required
-                >
+                <FormItem form={form} name="typeId" label="Loại đơn vị" required>
                     <Select
                         placeholder="Chọn loại đơn vị"
                         options={data.map((i: OrganizationType) => {

@@ -20,6 +20,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
+
 dayjs.locale('vi')
 
 export type PutOneSubjectClassType = SubjectClass & {
@@ -39,9 +40,7 @@ const PutOneSubjectClassModal = () => {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     // const [enterGradeLecturerOptions, setEnterGradeLecturerOptions] = useState([])
-    const [dataSubmit, setDataSubmit] = useState<
-        (SubjectClass & { key: number })[]
-    >([])
+    const [dataSubmit, setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
@@ -65,8 +64,7 @@ const PutOneSubjectClassModal = () => {
                     examDate: output?.examDate,
                     scoreDeadline: output?.scoreDeadline,
                     examScoreDeadline: output.examScoreDeadline,
-                    lecturerAssignmentDeadline:
-                        output.lecturerAssignmentDeadline,
+                    lecturerAssignmentDeadline: output.lecturerAssignmentDeadline,
                 },
                 where: {
                     id,
@@ -90,10 +88,8 @@ const PutOneSubjectClassModal = () => {
         })
     }
 
-    const {
-        data: trainingLocationData = [],
-        refetch: refetchTrainingLocationData,
-    } = useFindManyTrainingLocation()
+    const { data: trainingLocationData = [], refetch: refetchTrainingLocationData } =
+        useFindManyTrainingLocation()
 
     const { data: subjectVersionData = [] } = useFindManySubjectVersion({})
 
@@ -110,12 +106,11 @@ const PutOneSubjectClassModal = () => {
         },
     })
 
-    const { data: lecturerData = [], refetch: refetchLecturer } =
-        useFindManyLecturer({
-            include: {
-                userProfile: true,
-            },
-        })
+    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
+        include: {
+            userProfile: true,
+        },
+    })
 
     const { data: subjectClassData } = useFindUniqueSubjectClass(
         {
@@ -140,29 +135,23 @@ const PutOneSubjectClassModal = () => {
     const mainLecturerForm = Form.useWatch('lecturerId', form)
     const extraLecturerForm = Form.useWatch('extraLecturerId', form)
     const enterGradeLecturerOptions = useMemo(() => {
-        const lecturers = lecturerData.find(
-            (lecturer) => lecturer.id === mainLecturerForm
-        )
+        const lecturers = lecturerData.find((lecturer) => lecturer.id === mainLecturerForm)
         const enterGradeLecturer = lecturerData.find(
             (lecturer) => lecturer.id === extraLecturerForm
         )
         return [lecturers, enterGradeLecturer]
     }, [mainLecturerForm, extraLecturerForm, lecturerData])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (subjectClassData) {
             form.setFieldsValue({
                 ...subjectClassData,
-                trainingLocationId:
-                    subjectClassData.room?.building?.trainingLocation?.id,
-                lecturerAssignmentDeadline:
-                    subjectClassData.lecturerAssignmentDeadline
-                        ? dayjs(subjectClassData.lecturerAssignmentDeadline)
-                        : null,
-                examDate: subjectClassData.examDate
-                    ? dayjs(subjectClassData.examDate)
+                trainingLocationId: subjectClassData.room?.building?.trainingLocation?.id,
+                lecturerAssignmentDeadline: subjectClassData.lecturerAssignmentDeadline
+                    ? dayjs(subjectClassData.lecturerAssignmentDeadline)
                     : null,
+                examDate: subjectClassData.examDate ? dayjs(subjectClassData.examDate) : null,
                 scoreDeadline: subjectClassData.scoreDeadline
                     ? dayjs(subjectClassData.scoreDeadline)
                     : null,
@@ -207,9 +196,7 @@ const PutOneSubjectClassModal = () => {
                         options={subjectVersionData.map((item) => {
                             return {
                                 ...item,
-                                label: item?.code
-                                    ? `${item?.code} - ${item?.name}`
-                                    : item?.name,
+                                label: item?.code ? `${item?.code} - ${item?.name}` : item?.name,
                                 value: item.id,
                             }
                         })}
@@ -222,25 +209,20 @@ const PutOneSubjectClassModal = () => {
                 <FormItem form={form} name="schedule" label="Kíp học" required>
                     <Select
                         placeholder="Chọn kíp học"
-                        options={Object.entries(
-                            SUBJECT_CLASS_SCHEDULE_TYPE
-                        ).map(([key, value_]) => {
-                            return {
-                                label: value_,
-                                value: key,
+                        options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                            ([key, value_]) => {
+                                return {
+                                    label: value_,
+                                    value: key,
+                                }
                             }
-                        })}
+                        )}
                         allowClear
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingLocationId"
-                    label="Địa điểm"
-                    required
-                >
+                <FormItem form={form} name="trainingLocationId" label="Địa điểm" required>
                     <Select
                         placeholder="Chọn địa điểm"
                         options={trainingLocationData.map((item) => {
@@ -254,12 +236,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="roomId"
-                    label="Chọn phòng học"
-                    required
-                >
+                <FormItem form={form} name="roomId" label="Chọn phòng học" required>
                     <Select
                         placeholder="Chọn kíp học"
                         options={roomData.map((item) => {
@@ -273,12 +250,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="maxStudent"
-                    label="Số SV tối đa"
-                    required
-                >
+                <FormItem form={form} name="maxStudent" label="Số SV tối đa" required>
                     <InputNumber
                         min={1}
                         step={1}
@@ -292,9 +264,7 @@ const PutOneSubjectClassModal = () => {
                     <Select
                         options={lecturerData
                             .filter(
-                                (lecturer) =>
-                                    lecturer?.id !==
-                                    form.getFieldValue('extraLecturerId')
+                                (lecturer) => lecturer?.id !== form.getFieldValue('extraLecturerId')
                             )
                             .map((i) => {
                                 return {
@@ -308,18 +278,10 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="extraLecturerId"
-                    label="Giảng viên 2"
-                >
+                <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
                     <Select
                         options={lecturerData
-                            .filter(
-                                (lecturer) =>
-                                    lecturer?.id !==
-                                    form.getFieldValue('lecturerId')
-                            )
+                            .filter((lecturer) => lecturer?.id !== form.getFieldValue('lecturerId'))
                             .map((i) => {
                                 return {
                                     value: i?.id,
@@ -331,11 +293,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="enterGradeLecturerId"
-                    label="Giảng viên chấm điểm"
-                >
+                <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
                     <Select
                         options={enterGradeLecturerOptions.map((i) => {
                             return {
@@ -348,16 +306,8 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="lecturerAssignmentDeadline"
-                    label="Hạn PCGD"
-                >
-                    <DatePicker
-                        placeholder="DD/MM/YYYY"
-                        format="DD/MM/YYYY"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
+                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -372,42 +322,18 @@ const PutOneSubjectClassModal = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="scoreDeadline"
-                    label="Hạn nhập điểm CC/TX"
-                >
-                    <DatePicker
-                        placeholder="DD/MM/YYYY"
-                        format="DD/MM/YYYY"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="scoreDeadline" label="Hạn nhập điểm CC/TX">
+                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="examScoreDeadline"
-                    label="Hạn nhập điểm thi"
-                >
-                    <DatePicker
-                        placeholder="DD/MM/YYYY"
-                        format="DD/MM/YYYY"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
+                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="examType"
-                    label="Hình thức thi"
-                    required
-                >
-                    <Select
-                        placeholder="Chọn hình thức thi"
-                        options={options}
-                    />
+                <FormItem form={form} name="examType" label="Hình thức thi" required>
+                    <Select placeholder="Chọn hình thức thi" options={options} />
                 </FormItem>
             </Col>
         </PutFormModal>

@@ -1,22 +1,16 @@
-import {
-    CopyOutlined,
-    EditFilled,
-    SafetyCertificateOutlined,
-} from '@ant-design/icons'
+import { CopyOutlined, EditFilled, SafetyCertificateOutlined } from '@ant-design/icons'
 import {
     fetchTerminateSessionBySessionId,
     useGetSessionsByUserId,
 } from '@api/open-api/appComponents'
 import FormItem from '@components/commons/form-item'
-import PutFormModal, {
-    type PutModalFormType,
-} from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { formatDateReadable, generatePassword } from '@lib/utils'
 import { useFindManyGroup, useFindUniqueUser } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, Space, Tooltip, message } from 'antd'
+import { Button, Col, Form, Input, message, Space, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUserFormType = {
@@ -46,18 +40,16 @@ const PutNguoiDungModal = () => {
         include: { groups: true },
     })
 
-    const { data: sessions, refetch: refetchSessions } = useGetSessionsByUserId(
-        {
-            pathParams: { id: id || '' },
-        }
-    )
+    const { data: sessions, refetch: refetchSessions } = useGetSessionsByUserId({
+        pathParams: { id: id || '' },
+    })
 
     const { data: groups = [] } = useFindManyGroup()
     const copyToClipboard = () => {
         navigator.clipboard.writeText(newPassword)
         message.success('Mật khẩu mới đã được sao chép!', 3)
     }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (user) {
             form.setFieldsValue({
@@ -107,12 +99,7 @@ const PutNguoiDungModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="username"
-                    label="Tên đăng nhập"
-                    required
-                >
+                <FormItem form={form} name="username" label="Tên đăng nhập" required>
                     <Input disabled={!!id} />
                 </FormItem>
             </Col>
@@ -141,11 +128,7 @@ const PutNguoiDungModal = () => {
                                 <Tooltip title={'Đổi mật khẩu'}>
                                     <EditFilled
                                         style={{ color: '#028850' }}
-                                        onClick={() =>
-                                            setIsAllowEditPassword(
-                                                (prev) => !prev
-                                            )
-                                        }
+                                        onClick={() => setIsAllowEditPassword((prev) => !prev)}
                                     />
                                 </Tooltip>
                             )}
@@ -179,10 +162,7 @@ const PutNguoiDungModal = () => {
                                             password: generated,
                                         })
                                         navigator.clipboard.writeText(generated)
-                                        message.success(
-                                            'Mật khẩu mới đã được sao chép!',
-                                            3
-                                        )
+                                        message.success('Mật khẩu mới đã được sao chép!', 3)
                                     }}
                                     disabled={!isAllowEditPassword && !!id}
                                     icon={<SafetyCertificateOutlined />}
@@ -228,9 +208,7 @@ const PutNguoiDungModal = () => {
                             title: 'Thời gian truy cập cuối',
                             dataIndex: 'lastAccessTime',
                             render: (_, { lastAccessTime }) =>
-                                lastAccessTime
-                                    ? formatDateReadable(lastAccessTime)
-                                    : '',
+                                lastAccessTime ? formatDateReadable(lastAccessTime) : '',
                         },
                         {
                             title: 'Thao tác',

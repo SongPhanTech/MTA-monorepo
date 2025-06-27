@@ -1,6 +1,7 @@
 import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
+
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }
@@ -12,10 +13,7 @@ const uuid = () => {
     return crypto.randomUUID()
 }
 
-const formatDate = (
-    date: string | Date | Dayjs,
-    unit?: 'Day' | 'Month' | 'Year'
-) => {
+const formatDate = (date: string | Date | Dayjs, unit?: 'Day' | 'Month' | 'Year') => {
     if (unit === 'Year') return dayjs(date).format('YYYY')
     if (unit === 'Month') return dayjs(date).format('MM/YYYY')
     return dayjs(date).format('DD/MM/YYYY')
@@ -69,10 +67,8 @@ const getUniqueArray = <T>(arr: Array<T>, key: keyof T) => {
 }
 
 const stringToSlug = (str: string) => {
-    const from =
-        'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ'
-    const to =
-        'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
+    const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ'
+    const to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
     let strOut = str
     for (let i = 0, l = from.length; i < l; i++) {
         strOut = strOut.replace(RegExp(from[i], 'gi'), to[i])
@@ -88,16 +84,14 @@ function generatePassword(length = 12): string {
     const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
     const numberChars = '0123456789'
     const specialChars = '!@#$%'
-    const allChars =
-        upperCaseChars + lowerCaseChars + numberChars + specialChars
+    const allChars = upperCaseChars + lowerCaseChars + numberChars + specialChars
 
     if (length < 4) {
         throw new Error('Password length must be at least 4 characters')
     }
 
     let password = ''
-    password +=
-        upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)]
+    password += upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)]
     password += numberChars[Math.floor(Math.random() * numberChars.length)]
     password += specialChars[Math.floor(Math.random() * specialChars.length)]
 

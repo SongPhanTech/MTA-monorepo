@@ -1,9 +1,9 @@
 import {
+    context,
+    propagation,
     type Span,
     SpanKind,
     SpanStatusCode,
-    context,
-    propagation,
     trace,
 } from '@opentelemetry/api'
 import { getConnInfo } from 'hono/bun'
@@ -32,8 +32,7 @@ export const tracingMiddleware = createMiddleware(async (c, next) => {
                 'http.referrer': c.req.raw.referrer,
                 'http.client_ip': getConnInfo(c).remote.address ?? '',
                 'http.user_agent': c.req.header('User-Agent') ?? '',
-                'http.request_content_length':
-                    c.req.header('Content-Length') ?? '',
+                'http.request_content_length': c.req.header('Content-Length') ?? '',
                 'http.request_content_type': c.req.header('Content-Type') ?? '',
                 type: 'server',
                 is_root: true,
@@ -59,10 +58,7 @@ export const tracingMiddleware = createMiddleware(async (c, next) => {
                 'http.response_content_length',
                 c.res.headers.get('Content-Length') ?? ''
             )
-            span.setAttribute(
-                'http.response_content_type',
-                c.res.headers.get('Content-Type') ?? ''
-            )
+            span.setAttribute('http.response_content_type', c.res.headers.get('Content-Type') ?? '')
 
             if (c.res.status >= 400) {
                 span.setAttribute('error', true)

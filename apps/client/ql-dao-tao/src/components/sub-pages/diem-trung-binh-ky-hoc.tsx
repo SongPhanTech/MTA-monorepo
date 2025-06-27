@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
+
 dayjs.locale('vi')
 
 const DiemTrungBinhKyHoc = () => {

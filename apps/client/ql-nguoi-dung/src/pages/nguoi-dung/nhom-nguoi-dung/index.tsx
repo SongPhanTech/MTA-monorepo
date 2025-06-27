@@ -8,22 +8,8 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import {
-    useCountGroup,
-    useFindManyGroup,
-    useUpdateGroup,
-} from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { useCountGroup, useFindManyGroup, useUpdateGroup } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -117,9 +103,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -134,9 +118,7 @@ export default function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Nhóm người dùng',
@@ -155,8 +137,7 @@ export default function Page() {
                                 dataIndex: 'createdAt',
                                 width: 200,
                                 align: 'center',
-                                render: (_, { createdAt }) =>
-                                    formatDateReadable(createdAt),
+                                render: (_, { createdAt }) => formatDateReadable(createdAt),
                             },
                             {
                                 title: 'Thao tác',
@@ -164,10 +145,7 @@ export default function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
+                                        <Tooltip title="Xem chi tiết" placement="leftTop">
                                             <EyeOutlined
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
@@ -175,8 +153,7 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

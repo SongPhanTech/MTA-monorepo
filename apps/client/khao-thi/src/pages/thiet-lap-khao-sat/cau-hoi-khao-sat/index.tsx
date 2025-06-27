@@ -13,10 +13,11 @@ import {
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row, message } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type Filter = FilterSurveyQuestionProps & {
     searchText: string
 }
@@ -152,9 +153,7 @@ function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã câu hỏi khảo sát',
@@ -168,14 +167,11 @@ function Page() {
                             {
                                 title: 'Loại câu hỏi khảo sát',
                                 render: ({ surveyQuestionType }) =>
-                                    surveyQuestionType
-                                        ? surveyQuestionType.name
-                                        : '',
+                                    surveyQuestionType ? surveyQuestionType.name : '',
                             },
                             {
                                 title: 'Tên khảo sát',
-                                render: ({ survey }) =>
-                                    survey ? survey.name : '',
+                                render: ({ survey }) => (survey ? survey.name : ''),
                             },
 
                             {
@@ -190,8 +186,7 @@ function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

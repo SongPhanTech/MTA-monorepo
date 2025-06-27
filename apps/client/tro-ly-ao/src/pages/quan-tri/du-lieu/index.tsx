@@ -1,7 +1,3 @@
-import {
-    deleteVectorRecordFAQ,
-    deleteVectorRecordHoiDap,
-} from '@/api/chunking_and_vectorize'
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
@@ -21,17 +17,11 @@ import {
     useFindManyDocument,
     useFindManyFAQ,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Input,
-    Tabs,
-    type TabsProps,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Input, message, Tabs, type TabsProps, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { deleteVectorRecordFAQ, deleteVectorRecordHoiDap } from '@/api/chunking_and_vectorize'
+
 function Page() {
     const [filters, setFilters] = useState<{
         title: string
@@ -89,9 +79,7 @@ function Page() {
                 mode: 'insensitive',
             },
         },
-        skip:
-            (tableParams.pagination.current - 1) *
-            tableParams.pagination.pageSize,
+        skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
         take: tableParams.pagination.pageSize,
     })
     useEffect(() => {
@@ -116,8 +104,7 @@ function Page() {
                 mode: 'insensitive',
             },
         },
-        skip:
-            (faqParams.pagination.current - 1) * faqParams.pagination.pageSize,
+        skip: (faqParams.pagination.current - 1) * faqParams.pagination.pageSize,
         take: faqParams.pagination.pageSize,
     })
     const { mutateAsync: deleteDocument } = useDeleteDocument()
@@ -128,10 +115,7 @@ function Page() {
             const vectorResult = await deleteVectorRecordHoiDap(id)
 
             if (vectorResult?.error === 'True') {
-                message.error(
-                    vectorResult?.message ||
-                        'Đã xảy ra lỗi khi xoá vector tài liệu'
-                )
+                message.error(vectorResult?.message || 'Đã xảy ra lỗi khi xoá vector tài liệu')
                 return
             }
 
@@ -148,10 +132,7 @@ function Page() {
         try {
             const vectorResult = await deleteVectorRecordFAQ(id)
             if (vectorResult?.error === 'True') {
-                message.error(
-                    vectorResult?.message ||
-                        'Đã xảy ra lỗi khi xoá vector câu hỏi'
-                )
+                message.error(vectorResult?.message || 'Đã xảy ra lỗi khi xoá vector câu hỏi')
                 return
             }
             await deleteFAQ({ where: { id } })
@@ -202,8 +183,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    filters.status ===
-                                        $Enums.DocumentStatus.APPROVE
+                                    filters.status === $Enums.DocumentStatus.APPROVE
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -219,8 +199,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    filters.status ===
-                                        $Enums.DocumentStatus.PENDING
+                                    filters.status === $Enums.DocumentStatus.PENDING
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -236,8 +215,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    filters.status ===
-                                        $Enums.DocumentStatus.DENY
+                                    filters.status === $Enums.DocumentStatus.DENY
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -286,9 +264,7 @@ function Page() {
                                     title: 'Loại tài liệu',
                                     dataIndex: 'type',
                                     render: (value) =>
-                                        DOCUMENT_TYPE.find(
-                                            (item) => item.value === value
-                                        )?.label,
+                                        DOCUMENT_TYPE.find((item) => item.value === value)?.label,
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -300,16 +276,14 @@ function Page() {
                                     dataIndex: 'fileSize',
                                     align: 'center',
                                     width: 120,
-                                    render: (value) =>
-                                        formatNiceBytes(`${value}`),
+                                    render: (value) => formatNiceBytes(`${value}`),
                                 },
                                 {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
                                     width: 180,
                                     align: 'center',
-                                    render: (value) =>
-                                        formatDateReadable(value),
+                                    render: (value) => formatDateReadable(value),
                                 },
                                 {
                                     title: 'Trạng thái',
@@ -321,11 +295,8 @@ function Page() {
                                         onClick: (e) => {
                                             e.stopPropagation()
                                             if (
-                                                record.status ===
-                                                    $Enums.DocumentStatus
-                                                        .PENDING ||
-                                                record.status ===
-                                                    $Enums.DocumentStatus.DENY
+                                                record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY
                                             ) {
                                                 openPheDuyetTaiLieu(record.id)
                                             }
@@ -367,25 +338,16 @@ function Page() {
                                     width: 80,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
-                                            <Tooltip
-                                                title="Xem chi tiết"
-                                                placement="leftTop"
-                                            >
+                                            <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
-                                                    onClick={() =>
-                                                        openPreviewTaiLieu(
-                                                            record.id
-                                                        )
-                                                    }
+                                                    onClick={() => openPreviewTaiLieu(record.id)}
                                                     className="text-blue-700 cursor-pointer text-lg"
                                                 />
                                             </Tooltip>
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () =>
-                                                        handleDeleteDocument(
-                                                            record.id
-                                                        ),
+                                                        handleDeleteDocument(record.id),
                                                 }}
                                             />
                                         </div>
@@ -423,10 +385,7 @@ function Page() {
                                     Câu hỏi thường gặp
                                 </span>
                             </div>
-                            <Button
-                                onClick={() => openPutCauHoi()}
-                                type="primary"
-                            >
+                            <Button onClick={() => openPutCauHoi()} type="primary">
                                 Thêm câu hỏi
                             </Button>
                         </div>
@@ -445,8 +404,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    faqFilter.status ===
-                                        $Enums.DocumentStatus.APPROVE
+                                    faqFilter.status === $Enums.DocumentStatus.APPROVE
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -462,8 +420,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    faqFilter.status ===
-                                        $Enums.DocumentStatus.PENDING
+                                    faqFilter.status === $Enums.DocumentStatus.PENDING
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -479,8 +436,7 @@ function Page() {
                             <Button
                                 className={cn(
                                     'border rounded px-4 py-1 font-medium',
-                                    faqFilter.status ===
-                                        $Enums.DocumentStatus.DENY
+                                    faqFilter.status === $Enums.DocumentStatus.DENY
                                         ? 'bg-primary text-white border-primary'
                                         : 'text-primary border-primary'
                                 )}
@@ -525,18 +481,15 @@ function Page() {
                                     width: 200,
                                     align: 'center',
                                     render: (value) => {
-                                        return DOCUMENT_TYPE.find(
-                                            (item) => item.value === value
-                                        )?.label
+                                        return DOCUMENT_TYPE.find((item) => item.value === value)
+                                            ?.label
                                     },
                                 },
                                 {
                                     title: 'Câu trả lời',
                                     dataIndex: 'answer',
                                     render: (value: string) =>
-                                        value?.length > 200
-                                            ? `${value.slice(0, 200)}...`
-                                            : value,
+                                        value?.length > 200 ? `${value.slice(0, 200)}...` : value,
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -548,11 +501,9 @@ function Page() {
                                     title: 'Ngày tải lên',
                                     dataIndex: 'createdAt',
                                     width: 180,
-                                    render: (value: string | Date) =>
-                                        formatDateReadable(value),
+                                    render: (value: string | Date) => formatDateReadable(value),
                                 },
-                                ...(faqFilter.status ===
-                                $Enums.DocumentStatus.DENY
+                                ...(faqFilter.status === $Enums.DocumentStatus.DENY
                                     ? [
                                           {
                                               title: 'Lý do từ chối',
@@ -572,15 +523,10 @@ function Page() {
                                         onClick: (e) => {
                                             e.stopPropagation()
                                             if (
-                                                record.status ===
-                                                    $Enums.DocumentStatus
-                                                        .PENDING ||
-                                                record.status ===
-                                                    $Enums.DocumentStatus.DENY
+                                                record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY
                                             ) {
-                                                openPheDuyetCauHoiThuongGap(
-                                                    record.id
-                                                )
+                                                openPheDuyetCauHoiThuongGap(record.id)
                                             }
                                         },
                                     }),
@@ -620,23 +566,15 @@ function Page() {
                                     width: 80,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
-                                            <Tooltip
-                                                title="Xem chi tiết"
-                                                placement="leftTop"
-                                            >
+                                            <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
-                                                    onClick={() =>
-                                                        openPutCauHoi(record.id)
-                                                    }
+                                                    onClick={() => openPutCauHoi(record.id)}
                                                     className="text-blue-700 cursor-pointer text-lg"
                                                 />
                                             </Tooltip>
                                             <DeleteIcon
                                                 popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDeleteFAQ(
-                                                            record.id
-                                                        ),
+                                                    onConfirm: () => handleDeleteFAQ(record.id),
                                                 }}
                                             />
                                         </div>

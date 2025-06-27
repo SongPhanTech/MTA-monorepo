@@ -5,11 +5,8 @@ import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import useScoreToWords from '@hooks/useScoreToWords'
 import type { SubjectClass } from '@workspace/db'
-import {
-    useFindUniqueSubjectClass,
-    useUpdateSubjectClass,
-} from '@workspace/db/hooks'
-import { Button, Col, Modal, Row, message } from 'antd'
+import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
+import { Button, Col, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -82,8 +79,7 @@ const ModalPrintStudentSubjectScore = () => {
     })
 
     const { convertScore } = useScoreConverter(
-        data?.subjectClassStudent?.[0]?.student?.fixedClass?.trainingCourse
-            ?.scoreConverts
+        data?.subjectClassStudent?.[0]?.student?.fixedClass?.trainingCourse?.scoreConverts
     )
 
     const firstTrainingCourse = useMemo(() => {
@@ -96,9 +92,7 @@ const ModalPrintStudentSubjectScore = () => {
         if (!data?.subjectClassStudent) return null
 
         const uniqTrainingCourse = new Set(
-            data.subjectClassStudent.map(
-                ({ student }) => student.fixedClass?.trainingCourse?.code
-            )
+            data.subjectClassStudent.map(({ student }) => student.fixedClass?.trainingCourse?.code)
         )
 
         return uniqTrainingCourse.size === 1 ? [...uniqTrainingCourse][0] : null
@@ -182,11 +176,7 @@ const ModalPrintStudentSubjectScore = () => {
         },
         {
             title: 'Khoa:',
-            value: (
-                <span>
-                    {data?.subject?.managementOrganization?.sTen || '-'}
-                </span>
-            ),
+            value: <span>{data?.subject?.managementOrganization?.sTen || '-'}</span>,
         },
         {
             title: 'Hình thức thi:',
@@ -241,9 +231,7 @@ const ModalPrintStudentSubjectScore = () => {
             title={
                 <div className="flex items-center justify-between w-[95%]">
                     <span>
-                        {input?.type === 0
-                            ? 'In phiếu điểm nháp'
-                            : 'In phiếu điểm và khóa'}
+                        {input?.type === 0 ? 'In phiếu điểm nháp' : 'In phiếu điểm và khóa'}
                     </span>
                     <Button
                         icon={<PrinterOutlined />}
@@ -274,9 +262,7 @@ const ModalPrintStudentSubjectScore = () => {
                         </div>
                         <div className="flex flex-col">
                             <span>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</span>
-                            <span className="normal-case">
-                                Độc lập - Tự do - Hạnh phúc
-                            </span>
+                            <span className="normal-case">Độc lập - Tự do - Hạnh phúc</span>
                             <hr className="text-black border-[1px] mx-14" />
                         </div>
                     </div>
@@ -296,31 +282,21 @@ const ModalPrintStudentSubjectScore = () => {
                 <div className="flex justify-between gap-5 mt-6">
                     <div className="flex flex-col gap-2.5 w-[50%]">
                         {basicInfoCol1?.filter(Boolean).map((item, index) => (
-                            <div
-                                key={item?.title || index}
-                                className="flex gap-2 w-full"
-                            >
+                            <div key={item?.title || index} className="flex gap-2 w-full">
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
                                 </span>
-                                <span className="text-sm font-semibold">
-                                    {item?.value}
-                                </span>
+                                <span className="text-sm font-semibold">{item?.value}</span>
                             </div>
                         ))}
                     </div>
                     <div className="flex flex-col gap-2.5 w-[50%]">
                         {basicInfoCol2?.filter(Boolean).map((item, index) => (
-                            <div
-                                key={item?.title || index}
-                                className="flex gap-2 w-full"
-                            >
+                            <div key={item?.title || index} className="flex gap-2 w-full">
                                 <span className="text-[#656565] text-sm min-w-32">
                                     {item?.title}
                                 </span>
-                                <span className="text-sm font-semibold">
-                                    {item?.value}
-                                </span>
+                                <span className="text-sm font-semibold">{item?.value}</span>
                             </div>
                         ))}
                     </div>
@@ -329,12 +305,8 @@ const ModalPrintStudentSubjectScore = () => {
                     {scoreCoefs.map((item) => (
                         <Col span={8} key={item.title}>
                             <div className="flex gap-1 items-center">
-                                <span className="text-[#656565] text-sm">
-                                    {item.title}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {item.value}
-                                </span>
+                                <span className="text-[#656565] text-sm">{item.title}</span>
+                                <span className="text-sm font-semibold">{item.value}</span>
                             </div>
                         </Col>
                     ))}
@@ -417,75 +389,56 @@ const ModalPrintStudentSubjectScore = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {input?.dataTable?.map(
-                                (item: any, index: number) => (
-                                    <tr key={item.id}>
-                                        <td className="border border-black text-center">
-                                            {index + 1}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.student?.code}
-                                        </td>
-                                        <td className="border border-black text-left px-1">
-                                            {
-                                                item?.student?.userProfile
-                                                    ?.fullname
-                                            }
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {dayjs(
-                                                item?.student?.userProfile
-                                                    ?.dateOfBirth
-                                            ).format('DD/MM/YYYY')}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.student?.fixedClass?.name}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.attendanceScore}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.midtermScore}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.examScore}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {item?.manualFinalScore ||
-                                                item?.finalScore}
-                                        </td>
-                                        <td className="border border-black text-center">
-                                            {''}
-                                        </td>
-                                        <td className="border border-black text-left">
-                                            {convert(
-                                                item?.manualFinalScore ||
-                                                    item?.finalScore
-                                            )}
-                                        </td>
-                                        <td className="border border-black text-left">
-                                            {(() => {
-                                                const statusTexts = []
+                            {input?.dataTable?.map((item: any, index: number) => (
+                                <tr key={item.id}>
+                                    <td className="border border-black text-center">{index + 1}</td>
+                                    <td className="border border-black text-center">
+                                        {item?.student?.code}
+                                    </td>
+                                    <td className="border border-black text-left px-1">
+                                        {item?.student?.userProfile?.fullname}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {dayjs(item?.student?.userProfile?.dateOfBirth).format(
+                                            'DD/MM/YYYY'
+                                        )}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {item?.student?.fixedClass?.name}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {item?.attendanceScore}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {item?.midtermScore}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {item?.examScore}
+                                    </td>
+                                    <td className="border border-black text-center">
+                                        {item?.manualFinalScore || item?.finalScore}
+                                    </td>
+                                    <td className="border border-black text-center">{''}</td>
+                                    <td className="border border-black text-left">
+                                        {convert(item?.manualFinalScore || item?.finalScore)}
+                                    </td>
+                                    <td className="border border-black text-left">
+                                        {(() => {
+                                            const statusTexts = []
 
-                                                if (item.examPostponed)
-                                                    statusTexts.push('Hoãn thi')
-                                                if (item.exempted)
-                                                    statusTexts.push('Miễn học')
-                                                if (item.withdrew)
-                                                    statusTexts.push('Rút khỏi')
-                                                if (item.examBanned)
-                                                    statusTexts.push('Cấm thi')
-                                                if (item.suspended)
-                                                    statusTexts.push('Đình chỉ')
+                                            if (item.examPostponed) statusTexts.push('Hoãn thi')
+                                            if (item.exempted) statusTexts.push('Miễn học')
+                                            if (item.withdrew) statusTexts.push('Rút khỏi')
+                                            if (item.examBanned) statusTexts.push('Cấm thi')
+                                            if (item.suspended) statusTexts.push('Đình chỉ')
 
-                                                return statusTexts.length > 0
-                                                    ? statusTexts.join(', ')
-                                                    : null
-                                            })()}
-                                        </td>
-                                    </tr>
-                                )
-                            )}
+                                            return statusTexts.length > 0
+                                                ? statusTexts.join(', ')
+                                                : null
+                                        })()}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -493,10 +446,7 @@ const ModalPrintStudentSubjectScore = () => {
                     <span className="font-semibold">Tổng hợp kết quả thi:</span>
                 </div>
                 <Row gutter={[16, 0]} className="mt-6 text-center">
-                    <Col
-                        span={8}
-                        className="flex flex-col items-center justify-center"
-                    >
+                    <Col span={8} className="flex flex-col items-center justify-center">
                         <div className="italic text-left">{formattedDate}</div>
                         <div className="uppercase font-bold">
                             <span>Phòng khảo thí & dbcl gd-đt</span>

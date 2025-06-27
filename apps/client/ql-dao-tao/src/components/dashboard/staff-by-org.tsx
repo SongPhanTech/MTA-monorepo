@@ -50,8 +50,7 @@ const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
         onReady: (chart: import('@ant-design/plots').Plot) => {
             try {
                 const { height } = chart._container.getBoundingClientRect()
-                const tooltipItem =
-                    data[Math.floor(Math.random() * data.length)]
+                const tooltipItem = data[Math.floor(Math.random() * data.length)]
                 chart.on(
                     'afterrender',
                     () => {

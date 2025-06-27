@@ -13,19 +13,10 @@ import { IdleTimerProvider } from 'react-idle-timer'
 
 const { Header, Content } = Layout
 
-const XuLyVanBanLayout = ({
-    children,
-    className,
-}: {
-    children: ReactNode
-    className?: string
-}) => {
+const XuLyVanBanLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     const router = useRouter()
     const [collapsed, setCollapsed] = useState(() => {
-        return (
-            typeof window !== 'undefined' &&
-            localStorage.getItem('collapsed') === 'true'
-        )
+        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
 
     const { status, data: userInfo } = useSession()
@@ -42,33 +33,26 @@ const XuLyVanBanLayout = ({
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
-            const newValue =
-                value ?? localStorage.getItem('collapsed') === 'true'
+            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
             setCollapsed(newValue)
             localStorage.setItem('collapsed', newValue.toString())
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         handleCollapsed()
     }, [])
 
     return (
         <IdleTimerProvider
-            timeout={
-                Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000
-            }
+            timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
             onIdle={signOutAction}
         >
             <Layout className="h-screen">
                 <Header className="fixed z-50 top-0 left-0 right-0 justify-between flex items-center bg-white shadow m-2 rounded-xl px-4">
                     <div className="flex items-center gap-4">
-                        <Image
-                            src={logo_mta}
-                            alt="logo_mta"
-                            className="w-10 h-10"
-                        />
+                        <Image src={logo_mta} alt="logo_mta" className="w-10 h-10" />
                         <span className="text-lg font-bold text-primary">
                             HỌC VIỆN KỸ THUẬT QUÂN SỰ
                         </span>

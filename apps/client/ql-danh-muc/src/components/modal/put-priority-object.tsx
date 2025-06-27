@@ -66,7 +66,7 @@ const PutPriorityObjectModal = () => {
     const { data: level } = useFindUniquePriorityObject({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +80,16 @@ const PutPriorityObjectModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa đối tượng ưu tiên'
-                    : 'Thêm mới đối tượng ưu tiên'
-            }
+            title={id ? 'Chỉnh sửa đối tượng ưu tiên' : 'Thêm mới đối tượng ưu tiên'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã đối tượng ưu tiên"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã đối tượng ưu tiên" required>
                     <Input placeholder="Nhập mã đối tượng ưu tiên" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên đối tượng ưu tiên"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên đối tượng ưu tiên" required>
                     <Input placeholder="Nhập đối tượng ưu tiên" />
                 </FormItem>
             </Col>

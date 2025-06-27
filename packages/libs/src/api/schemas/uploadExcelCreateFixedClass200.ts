@@ -7,5 +7,4 @@
 import type { ListOfundefined } from './listOfundefined'
 import type { UploadExcelCreateFixedClass200AllOf } from './uploadExcelCreateFixedClass200AllOf'
 
-export type UploadExcelCreateFixedClass200 = ListOfundefined &
-    UploadExcelCreateFixedClass200AllOf
+export type UploadExcelCreateFixedClass200 = ListOfundefined & UploadExcelCreateFixedClass200AllOf

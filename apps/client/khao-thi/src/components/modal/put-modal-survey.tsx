@@ -32,8 +32,7 @@ const PutSurveyModal = () => {
     const { mutateAsync: create } = useCreateSurvey()
     const { mutateAsync: update } = useUpdateSurvey()
 
-    const { data: surveyTopics = [], refetch: refetchTopic } =
-        useFindManySurveyTopic()
+    const { data: surveyTopics = [], refetch: refetchTopic } = useFindManySurveyTopic()
     const { data: surveyObjectTypes = [], refetch: refetchObjectType } =
         useFindManySurveyObjectType()
 
@@ -86,7 +85,7 @@ const PutSurveyModal = () => {
     const { data: survey } = useFindUniqueSurvey({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
             form.setFieldsValue({
@@ -118,12 +117,7 @@ const PutSurveyModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="surveyTopicId"
-                    label="Chủ đề khảo sát"
-                    required
-                >
+                <FormItem form={form} name="surveyTopicId" label="Chủ đề khảo sát" required>
                     <Select
                         placeholder="Chọn chủ đề khảo sát"
                         options={surveyTopics.map((i: SurveyTopic) => {
@@ -136,32 +130,20 @@ const PutSurveyModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="surveyObjectId"
-                    label="Đối tượng khảo sát"
-                    required
-                >
+                <FormItem form={form} name="surveyObjectId" label="Đối tượng khảo sát" required>
                     <Select
                         placeholder="Chọn đối tượng khảo sát"
-                        options={surveyObjectTypes.map(
-                            (i: SurveyObjectType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={surveyObjectTypes.map((i: SurveyObjectType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Thời gian bắt đầu"
-                    required
-                >
+                <FormItem form={form} name="startDate" label="Thời gian bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>

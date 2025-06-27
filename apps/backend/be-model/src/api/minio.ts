@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import {
     BucketItemDtoSchema,
     ListObjectDtoSchema,
@@ -70,9 +70,7 @@ app.openapi(
         path: '/presigned-url',
         method: 'get',
         request: {
-            query: z
-                .object({ objectName: z.string() })
-                .openapi('PresignedGetObjectDto'),
+            query: z.object({ objectName: z.string() }).openapi('PresignedGetObjectDto'),
         },
         responses: {
             200: {

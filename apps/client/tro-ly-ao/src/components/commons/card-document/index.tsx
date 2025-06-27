@@ -3,6 +3,7 @@ import type { Document } from '@workspace/db'
 import { Tooltip } from 'antd'
 import type { MouseEventHandler } from 'react'
 import { FileUploadIcon } from '../upload'
+
 type CardDocumentProps = {
     onDelete?: () => void
     onClick?: MouseEventHandler<HTMLDivElement>

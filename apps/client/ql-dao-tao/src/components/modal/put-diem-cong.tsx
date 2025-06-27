@@ -66,7 +66,7 @@ const PutOlympicScoreModal = () => {
         { enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             setTargetDisabled(false)
@@ -91,12 +91,7 @@ const PutOlympicScoreModal = () => {
             className="w-[500px]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên giải thưởng"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên giải thưởng" required>
                     <Input placeholder="Nhập tên giải thưởng" />
                 </FormItem>
             </Col>

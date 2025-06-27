@@ -10,7 +10,7 @@ import {
     useFindUniqueScoreConvert,
     useUpdateScoreConvert,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Radio, Switch, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -69,7 +69,7 @@ const PutConvertScore = () => {
     const { data: level } = useFindUniqueScoreConvert({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -83,18 +83,11 @@ const PutConvertScore = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa chuyển đổi điểm' : 'Thêm mới chuyển đổi điểm'
-            }
+            title={id ? 'Chỉnh sửa chuyển đổi điểm' : 'Thêm mới chuyển đổi điểm'}
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khoá học"
-                    required
-                >
+                <FormItem form={form} name="trainingCourseId" label="Khoá học" required>
                     <Select
                         options={trainingCourses?.map(({ id, name }) => ({
                             value: id,
@@ -105,23 +98,13 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="classification"
-                    label="Xếp loại"
-                    required
-                >
+                <FormItem form={form} name="classification" label="Xếp loại" required>
                     <Input placeholder="Xuất sắc..." />
                 </FormItem>
             </Col>
 
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="base10Min"
-                    label="Hệ 10 từ"
-                    required
-                >
+                <FormItem form={form} name="base10Min" label="Hệ 10 từ" required>
                     <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
@@ -131,12 +114,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="base10Max"
-                    label="Hệ 10 đến"
-                    required
-                >
+                <FormItem form={form} name="base10Max" label="Hệ 10 đến" required>
                     <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
@@ -157,11 +135,7 @@ const PutConvertScore = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="letter" label="Điểm chữ" required>
-                    <Input
-                        placeholder="Nhập điểm chữ"
-                        maxLength={2}
-                        style={{ width: '100%' }}
-                    />
+                    <Input placeholder="Nhập điểm chữ" maxLength={2} style={{ width: '100%' }} />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -173,12 +147,7 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="active"
-                    label="Kích hoạt"
-                    valuePropName="checked"
-                >
+                <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
                     <Switch defaultValue={true} />
                 </FormItem>
             </Col>

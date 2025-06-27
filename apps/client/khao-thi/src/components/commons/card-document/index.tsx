@@ -1,23 +1,17 @@
-import { env } from '@/env'
 import { DeleteFilled } from '@ant-design/icons'
-
 import { cn } from '@lib/utils'
 import type { Document } from '@workspace/db'
 import { Image, Popconfirm } from 'antd'
 import { useCallback, useMemo } from 'react'
+import { env } from '@/env'
 import { FileUploadIcon } from '../upload'
+
 type CardDocumentProps = {
     onDelete?: () => void
     className?: string
 } & Partial<Document>
 
-export const CardDocument = ({
-    title,
-    onDelete,
-    className,
-    fileType,
-    uri,
-}: CardDocumentProps) => {
+export const CardDocument = ({ title, onDelete, className, fileType, uri }: CardDocumentProps) => {
     const onDownload = async (url: string, fileName: string) => {
         const response = await fetch(url)
         if (!response.ok) throw new Error('Lỗi khi tải file')
@@ -43,8 +37,7 @@ export const CardDocument = ({
     }, [fileType])
 
     const getUrl = useCallback((path: string) => {
-        const isAbsolutePath =
-            path.startsWith('http') || path.startsWith('blob')
+        const isAbsolutePath = path.startsWith('http') || path.startsWith('blob')
         if (isAbsolutePath) return path
         return new URL(path, env.NEXT_PUBLIC_MINIO_ENDPOINT).href
     }, [])

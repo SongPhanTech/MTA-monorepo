@@ -388,8 +388,7 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
             {
                 id: '550e8407-e29b-41d4-a716-446655440001',
@@ -398,8 +397,7 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440002',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440002',
             },
             {
                 id: '550e8407-e29b-41d4-a716-446655440002',
@@ -408,8 +406,7 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:42.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:42.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
             {
                 id: '550e8407-e29b-41d4-a716-446655440003',
@@ -418,8 +415,7 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:43.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:43.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440002',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440002',
             },
             {
                 id: '550e8407-e29b-41d4-a716-446655440004',
@@ -428,8 +424,7 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:44.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:44.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440002',
-                managementOrganizationId:
-                    '550e8400-1234-41d4-a716-446655440000',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
         ],
     })
@@ -745,8 +740,7 @@ async function main() {
                     curriculumId: trainingMajorId,
                     name: curriculum,
                     trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
-                    trainingObjectTypeId:
-                        '550e8402-e29b-41d4-a716-446655440000',
+                    trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
                     trainingTimeId: '4years',
                 }))
             )
@@ -758,8 +752,7 @@ async function main() {
         data: {
             name: 'Công nghệ thông tin',
             code: 'CNTT-2023',
-            information:
-                'Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.',
+            information: 'Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.',
             description:
                 'Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.',
             managementOrganization: { connect: { Id: organization.Id } },

@@ -17,17 +17,7 @@ import {
     useFindManyBlockedIp,
     useUpdateBlockedIp,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -61,10 +51,7 @@ export default function Page() {
         where,
     })
     const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<
-        string,
-        PutGioiHanDiaChiMangFormType
-    >({
+    const { onOpen, onClose } = useDisclosure<string, PutGioiHanDiaChiMangFormType>({
         tag: PutGioiHanDiaChiMangDungModal.name,
         onOk,
     })
@@ -135,10 +122,7 @@ export default function Page() {
                         <Col span={24}>
                             <Flex justify="end">
                                 <Can I={'GIOI_HAN_DIA_CHI_MANG'} a="CREATE">
-                                    <Button
-                                        onClick={handleModal}
-                                        type="primary"
-                                    >
+                                    <Button onClick={handleModal} type="primary">
                                         Thêm mới
                                     </Button>
                                 </Can>
@@ -149,9 +133,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -166,9 +148,7 @@ export default function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Lý do',
@@ -186,9 +166,7 @@ export default function Page() {
                                 title: 'Ngày tạo',
                                 dataIndex: 'createdAt',
                                 render: (_, { createdAt }) =>
-                                    createdAt
-                                        ? formatDateReadable(createdAt)
-                                        : '',
+                                    createdAt ? formatDateReadable(createdAt) : '',
                             },
                             {
                                 title: 'Thao tác',
@@ -196,10 +174,7 @@ export default function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
+                                        <Tooltip title="Xem chi tiết" placement="leftTop">
                                             <EyeOutlined
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
@@ -207,8 +182,7 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

@@ -1,9 +1,4 @@
-import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
-import {
-    DownloadOutlined,
-    UploadOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
@@ -30,24 +25,14 @@ import {
     useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    DatePicker,
-    Dropdown,
-    Flex,
-    Image,
-    Input,
-    Menu,
-    Row,
-    message,
-} from 'antd'
-
+import { Button, Col, DatePicker, Dropdown, Flex, Image, Input, Menu, message, Row } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
+
 type Filter = FilterProps & {
     searchText: string
     organizationText: string
@@ -178,14 +163,12 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
-        useDisclosure<string>({
-            tag: PutUploadProfileModal.name,
-        })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
-        useDisclosure<string>({
-            tag: PutUpdateProfileModal.name,
-        })
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+        tag: PutUploadProfileModal.name,
+    })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+        tag: PutUpdateProfileModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -278,8 +261,7 @@ export default function UserProfilePageLecture() {
         hideSpinner()
     }
 
-    const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile()
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -372,10 +354,7 @@ export default function UserProfilePageLecture() {
                             <Input
                                 id="search"
                                 onChange={(e) =>
-                                    handleFilterChange(
-                                        'organizationText',
-                                        e.target.value
-                                    )
+                                    handleFilterChange('organizationText', e.target.value)
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
                             />
@@ -394,10 +373,7 @@ export default function UserProfilePageLecture() {
                                 </Button>
 
                                 {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <Dropdown
-                                    overlay={menuDownload}
-                                    trigger={['hover']}
-                                >
+                                <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button
                                         className="ml-4"
                                         type="primary"
@@ -407,10 +383,7 @@ export default function UserProfilePageLecture() {
                                     </Button>
                                 </Dropdown>
 
-                                <Dropdown
-                                    overlay={menuUpload}
-                                    trigger={['hover']}
-                                >
+                                <Dropdown overlay={menuUpload} trigger={['hover']}>
                                     <Button
                                         className="ml-4"
                                         type="primary"
@@ -476,9 +449,7 @@ export default function UserProfilePageLecture() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Ảnh',
@@ -489,11 +460,7 @@ export default function UserProfilePageLecture() {
                                     const avatar = record.userProfile?.avatar
 
                                     return avatar ? (
-                                        <Image
-                                            src={getMinioUrl(avatar)}
-                                            width={100}
-                                            height={80}
-                                        />
+                                        <Image src={getMinioUrl(avatar)} width={100} height={80} />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                                             <UserOutlined
@@ -514,8 +481,7 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'SHSQ/SHQN',
-                                render: (_, record) =>
-                                    record.userProfile?.officerNumber,
+                                render: (_, record) => record.userProfile?.officerNumber,
                                 align: 'center',
                                 width: 120,
                             },
@@ -542,13 +508,11 @@ export default function UserProfilePageLecture() {
                                         value: 'Female',
                                     },
                                 ],
-                                onFilter: (value, record) =>
-                                    record.userProfile?.gender === value,
+                                onFilter: (value, record) => record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
                                         : '',
                             },
@@ -566,56 +530,32 @@ export default function UserProfilePageLecture() {
                                                 selectedKeys.length > 0
                                                     ? (() => {
                                                           try {
-                                                              const [
-                                                                  start,
-                                                                  end,
-                                                              ] = JSON.parse(
+                                                              const [start, end] = JSON.parse(
                                                                   selectedKeys[0] as string
                                                               )
                                                               return [
-                                                                  dayjs(
-                                                                      start,
-                                                                      'DD/MM/YYYY'
-                                                                  ),
-                                                                  dayjs(
-                                                                      end,
-                                                                      'DD/MM/YYYY'
-                                                                  ),
+                                                                  dayjs(start, 'DD/MM/YYYY'),
+                                                                  dayjs(end, 'DD/MM/YYYY'),
                                                               ]
                                                           } catch {
-                                                              return [
-                                                                  null,
-                                                                  null,
-                                                              ]
+                                                              return [null, null]
                                                           }
                                                       })()
                                                     : [null, null]
                                             }
                                             onChange={(dates) => {
                                                 if (dates?.[0] && dates[1]) {
-                                                    const startDate =
-                                                        dates[0].format(
-                                                            'DD/MM/YYYY'
-                                                        )
-                                                    const endDate =
-                                                        dates[1].format(
-                                                            'DD/MM/YYYY'
-                                                        )
+                                                    const startDate = dates[0].format('DD/MM/YYYY')
+                                                    const endDate = dates[1].format('DD/MM/YYYY')
                                                     setSelectedKeys([
-                                                        JSON.stringify([
-                                                            startDate,
-                                                            endDate,
-                                                        ]),
+                                                        JSON.stringify([startDate, endDate]),
                                                     ])
                                                 } else {
                                                     setSelectedKeys([])
                                                 }
                                             }}
                                             format="DD/MM/YYYY"
-                                            placeholder={[
-                                                'Từ ngày',
-                                                'Đến ngày',
-                                            ]}
+                                            placeholder={['Từ ngày', 'Đến ngày']}
                                             style={{ width: '100%' }}
                                         />
                                         <div className="flex justify-between gap-2">
@@ -647,39 +587,28 @@ export default function UserProfilePageLecture() {
                                         return false
                                     }
 
-                                    const [startDate, endDate] = JSON.parse(
-                                        value
-                                    ) as string[]
+                                    const [startDate, endDate] = JSON.parse(value) as string[]
 
                                     const birthDate = dayjs(
                                         record.userProfile?.dateOfBirth,
                                         'DD/MM/YYYY'
                                     )
-                                    const filterStartDate = dayjs(
-                                        startDate,
-                                        'DD/MM/YYYY'
-                                    )
-                                    const filterEndDate = dayjs(
-                                        endDate,
-                                        'DD/MM/YYYY'
-                                    )
+                                    const filterStartDate = dayjs(startDate, 'DD/MM/YYYY')
+                                    const filterEndDate = dayjs(endDate, 'DD/MM/YYYY')
 
                                     console.log(filterStartDate)
                                     console.log(filterEndDate)
 
                                     return (
-                                        birthDate.isAfter(
-                                            filterStartDate,
-                                            'day'
-                                        ) &&
+                                        birthDate.isAfter(filterStartDate, 'day') &&
                                         birthDate.isBefore(filterEndDate, 'day')
                                     )
                                 },
                                 render: (_, record) =>
                                     record.userProfile?.dateOfBirth
-                                        ? dayjs(
-                                              record.userProfile?.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile?.dateOfBirth).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -695,9 +624,7 @@ export default function UserProfilePageLecture() {
                                     return record.organization?.Id === value
                                 },
                                 render: (_, record) => {
-                                    return (
-                                        record.organization?.sTen || 'Chưa có'
-                                    )
+                                    return record.organization?.sTen || 'Chưa có'
                                 },
                                 align: 'center',
                             },
@@ -709,14 +636,10 @@ export default function UserProfilePageLecture() {
                                     value: aca.Id,
                                 })),
                                 onFilter: (value, record) => {
-                                    return (
-                                        record.organization
-                                            ?.academicRankTypeId === value
-                                    )
+                                    return record.organization?.academicRankTypeId === value
                                 },
                                 render: (_, record) =>
-                                    record.userProfile?.academicRankType
-                                        ?.name || '',
+                                    record.userProfile?.academicRankType?.name || '',
                                 align: 'center',
                             },
                             {
@@ -731,18 +654,14 @@ export default function UserProfilePageLecture() {
                                         <DatePicker
                                             value={
                                                 selectedKeys[0]
-                                                    ? dayjs(
-                                                          selectedKeys[0] as string
-                                                      )
+                                                    ? dayjs(selectedKeys[0] as string)
                                                     : null
                                             }
                                             onChange={(date: Dayjs | null) => {
                                                 const formatted = date
                                                     ? date.format('DD/MM/YYYY')
                                                     : null
-                                                setSelectedKeys(
-                                                    formatted ? [formatted] : []
-                                                )
+                                                setSelectedKeys(formatted ? [formatted] : [])
                                             }}
                                             format="DD/MM/YYYY"
                                             placeholder="Chọn năm học hàm"
@@ -769,25 +688,19 @@ export default function UserProfilePageLecture() {
                                     </div>
                                 ),
                                 onFilter: (value, record) => {
-                                    if (
-                                        !value ||
-                                        !record.userProfile?.academicRankDate
-                                    )
+                                    if (!value || !record.userProfile?.academicRankDate)
                                         return false
 
                                     const filterDate = dayjs(value as string)
-                                    const recordDate = dayjs(
-                                        record.userProfile.academicRankDate
-                                    )
+                                    const recordDate = dayjs(record.userProfile.academicRankDate)
 
                                     return filterDate.isSame(recordDate, 'day')
                                 },
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
-                                        ? dayjs(
-                                              record.userProfile
-                                                  .academicRankDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.academicRankDate).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -799,14 +712,10 @@ export default function UserProfilePageLecture() {
                                     value: hv.Id,
                                 })),
                                 onFilter: (value, record) => {
-                                    return (
-                                        record.userProfile
-                                            ?.academicDegreeTypeId === value
-                                    )
+                                    return record.userProfile?.academicDegreeTypeId === value
                                 },
                                 render: (_, record) =>
-                                    record.userProfile?.academicDegreeType
-                                        ?.name || '',
+                                    record.userProfile?.academicDegreeType?.name || '',
                                 align: 'center',
                                 width: 120,
                             },
@@ -814,10 +723,9 @@ export default function UserProfilePageLecture() {
                                 title: 'Năm HV',
                                 render: (_, record) =>
                                     record.userProfile?.academicDegreeDate
-                                        ? dayjs(
-                                              record.userProfile
-                                                  .academicDegreeDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.academicDegreeDate).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -829,11 +737,9 @@ export default function UserProfilePageLecture() {
                                     text: type.name,
                                     value: type.id,
                                 })),
-                                onFilter: (value, record) =>
-                                    record.lecturerTypeId === value,
+                                onFilter: (value, record) => record.lecturerTypeId === value,
                                 width: 140,
-                                render: (_, record) =>
-                                    record.lecturerType?.name || '',
+                                render: (_, record) => record.lecturerType?.name || '',
                             },
                             // {
                             //     title: 'Năm CV',
@@ -854,8 +760,7 @@ export default function UserProfilePageLecture() {
                                     text: rank.sTen,
                                     value: rank.Id,
                                 })),
-                                render: (_, record) =>
-                                    record.userProfile?.rank?.name || '',
+                                render: (_, record) => record.userProfile?.rank?.name || '',
                                 align: 'center',
                                 width: 140,
                             },
@@ -864,9 +769,7 @@ export default function UserProfilePageLecture() {
                                 dataIndex: 'rankDate',
                                 render: (_, record) =>
                                     record.userProfile?.rankDate
-                                        ? dayjs(
-                                              record.userProfile.rankDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.rankDate).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,
@@ -886,8 +789,7 @@ export default function UserProfilePageLecture() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>
@@ -898,8 +800,7 @@ export default function UserProfilePageLecture() {
                         rowKey="id"
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: (selectedKeys) =>
-                                setSelectedRowKeys(selectedKeys),
+                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                         }}
                         pagination={{
                             total: count,
@@ -913,8 +814,6 @@ export default function UserProfilePageLecture() {
     )
 }
 
-UserProfilePageLecture.getLayout = function getLayout(
-    page: React.ReactElement
-) {
+UserProfilePageLecture.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

@@ -1,12 +1,7 @@
 import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import { KHOA_HL_STATUS } from '@constants/constants'
-import type {
-    SchoolYear,
-    TrainingForm,
-    TrainingObjectType,
-    TrainingType,
-} from '@workspace/db'
+import type { SchoolYear, TrainingForm, TrainingObjectType, TrainingType } from '@workspace/db'
 import {
     useFindManySchoolYear,
     useFindManyTrainingForm,
@@ -29,6 +24,7 @@ import {
 } from 'antd'
 import { Search, X } from 'lucide-react'
 import { useState } from 'react'
+
 const { Text } = Typography
 
 interface FilterProps {
@@ -66,23 +62,17 @@ const FilterKhoa = (props: Props) => {
         form.resetFields()
         setOpen(false)
     }
-    const { data: trainingFormData = [], refetch: refetchForm } =
-        useFindManyTrainingForm()
-    const { data: trainingTypeData = [], refetch: refetchType } =
-        useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } =
-        useFindManyTrainingLevel()
+    const { data: trainingFormData = [], refetch: refetchForm } = useFindManyTrainingForm()
+    const { data: trainingTypeData = [], refetch: refetchType } = useFindManyTrainingType()
+    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel()
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear()
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
 
     const handleApply = () => {
         const values = form.getFieldsValue()
         const schoolYearId = values.schoolYearId
-        const selectedSchool = dataSchoolYear.find(
-            (item: SchoolYear) => item.id === schoolYearId
-        )
+        const selectedSchool = dataSchoolYear.find((item: SchoolYear) => item.id === schoolYearId)
         const newFilters = {
             ...filters,
             ...values,
@@ -129,16 +119,14 @@ const FilterKhoa = (props: Props) => {
                                 <Select
                                     placeholder="Chọn năm học"
                                     allowClear
-                                    options={dataSchoolYear.map(
-                                        (i: SchoolYear) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                                startDate: i.startDate,
-                                                endDate: i.endDate,
-                                            }
+                                    options={dataSchoolYear.map((i: SchoolYear) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                            startDate: i.startDate,
+                                            endDate: i.endDate,
                                         }
-                                    )}
+                                    })}
                                     // value={filters.schoolYearId}
                                     // onChange={(
                                     //     value: number | null,
@@ -163,12 +151,10 @@ const FilterKhoa = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn loại hình đào tạo"
-                                    options={trainingTypeData.map(
-                                        (i: TrainingType) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingTypeData.map((i: TrainingType) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingTypeId',
@@ -217,12 +203,10 @@ const FilterKhoa = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn hình thức đào tạo"
-                                    options={trainingFormData.map(
-                                        (i: TrainingForm) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingFormData.map((i: TrainingForm) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingFormId',
@@ -244,12 +228,10 @@ const FilterKhoa = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn trình độ đào tạo"
-                                    options={trainingLevelData.map(
-                                        (i: TrainingForm) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
+                                    options={trainingLevelData.map((i: TrainingForm) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
                                     // onChange={(val) =>
                                     //     handleFilterChange(
                                     //         'trainingLevelId',

@@ -12,13 +12,14 @@ import {
     useFindUniqueBuilding,
     useUpdateRoom,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | undefined
 }
@@ -142,10 +143,7 @@ export default function BuildingPage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -178,9 +176,7 @@ export default function BuildingPage() {
                 <Col span={24}>
                     <span className="text-lg font-semibold">
                         Danh sách phòng{' '}
-                        {building
-                            ? `: ${building.trainingLocation?.name} - ${building.name}`
-                            : ''}
+                        {building ? `: ${building.trainingLocation?.name} - ${building.name}` : ''}
                     </span>
                     <Table
                         columns={[
@@ -189,11 +185,7 @@ export default function BuildingPage() {
                                 width: 60,
                                 align: 'center',
                                 render: (_, __, index) => {
-                                    return (
-                                        (currentPage - 1) * numberOfPages +
-                                        index +
-                                        1
-                                    )
+                                    return (currentPage - 1) * numberOfPages + index + 1
                                 },
                             },
                             {
@@ -221,9 +213,7 @@ export default function BuildingPage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -237,22 +227,16 @@ export default function BuildingPage() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={openPutRoom.bind(
-                                                        null,
-                                                        {
-                                                            buildingId,
-                                                            buildingCode:
-                                                                building?.code ??
-                                                                '',
-                                                            id,
-                                                        }
-                                                    )}
+                                                    onClick={openPutRoom.bind(null, {
+                                                        buildingId,
+                                                        buildingCode: building?.code ?? '',
+                                                        id,
+                                                    })}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

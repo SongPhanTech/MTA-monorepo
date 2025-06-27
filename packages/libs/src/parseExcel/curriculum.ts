@@ -1,8 +1,8 @@
 import { $Enums } from '@workspace/db'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { read, utils } from 'xlsx'
 import type { CellObject } from 'xlsx'
+import { read, utils } from 'xlsx'
 import type { ParseSheetError } from './types'
 
 dayjs.extend(customParseFormat)
@@ -180,10 +180,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
                 ?.toLocaleLowerCase()
                 .includes('điều kiện')
 
-            const semester =
-                Object.values(semesters).findIndex(
-                    (semester) => row[semester]
-                ) + 1
+            const semester = Object.values(semesters).findIndex((semester) => row[semester]) + 1
 
             trainingBlocks[trainingBlocks.length - 1]?.subjects.push({
                 name: row[cols.subjectName],

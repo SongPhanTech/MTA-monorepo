@@ -1,7 +1,5 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, {
-    type PutModalFormType,
-} from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { useFindFirstGroup } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
@@ -36,12 +34,7 @@ const PutQuyenCoBanModal = () => {
             title={input ? 'Chỉnh sửa quyền cơ bản' : 'Thêm mới quyền cơ bản'}
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên quyền cơ bản"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên quyền cơ bản" required>
                     <Input />
                 </FormItem>
             </Col>

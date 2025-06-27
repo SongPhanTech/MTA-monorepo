@@ -22,16 +22,8 @@ const SiderDefaultLayout = ({
     logo2,
 }: SiderDefaultLayoutProps) => {
     return (
-        <Sider
-            collapsible
-            onCollapse={onCollapse}
-            collapsed={collapsed}
-            theme={theme}
-            width={250}
-        >
-            <div className="flex items-center justify-center my-4">
-                {collapsed ? logo1 : logo2}
-            </div>
+        <Sider collapsible onCollapse={onCollapse} collapsed={collapsed} theme={theme} width={250}>
+            <div className="flex items-center justify-center my-4">{collapsed ? logo1 : logo2}</div>
             <Menu
                 theme={theme}
                 mode="inline"

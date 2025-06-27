@@ -11,9 +11,7 @@ const username = process.env.OPEN_OBSERVE_USERNAME
 const password = process.env.OPEN_OBSERVE_PASSWORD
 
 if (baseUrl && username && password) {
-    const credentials = Buffer.from(`${username}:${password}`).toString(
-        'base64'
-    )
+    const credentials = Buffer.from(`${username}:${password}`).toString('base64')
 
     const traceExporter = new OTLPTraceExporter({
         url: `${baseUrl}/api/default/v1/traces`,

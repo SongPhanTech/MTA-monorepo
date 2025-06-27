@@ -12,13 +12,14 @@ import {
     useFindUniqueSemester,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSemester = Semester
 import 'dayjs/locale/vi'
 import { useWatch } from 'antd/es/form/Form'
+export type PutSemester = Semester
+
 dayjs.locale('vi')
 
 type SemesterModalInput = {
@@ -93,15 +94,13 @@ const PutSemesterModal = () => {
     const { data: initialData } = useFindUniqueSemester({
         where: { id: input?.semesterId },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
                 startDate: dayjs(initialData.startDate),
-                endDate: initialData.endDate
-                    ? dayjs(initialData.endDate)
-                    : undefined,
+                endDate: initialData.endDate ? dayjs(initialData.endDate) : undefined,
             })
             setActive(initialData?.active)
         }
@@ -134,12 +133,7 @@ const PutSemesterModal = () => {
             </Col>
             {!input?.schoolYearId && (
                 <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="schoolYearId"
-                        label="Năm học"
-                        required
-                    >
+                    <FormItem form={form} name="schoolYearId" label="Năm học" required>
                         <Select
                             placeholder="Chọn năm học"
                             options={data.map((i: SchoolYear) => {
@@ -189,12 +183,7 @@ const PutSemesterModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Ngày bắt đầu"
-                    required
-                >
+                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
@@ -210,12 +199,7 @@ const PutSemesterModal = () => {
             </Col>
             {input?.semesterId && (
                 <Col span={12} className="flex items-center">
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label=""
-                        valuePropName="checked"
-                    >
+                    <FormItem form={form} name="active" label="" valuePropName="checked">
                         <div
                             style={{
                                 display: 'flex',
@@ -224,9 +208,7 @@ const PutSemesterModal = () => {
                             }}
                         >
                             <Switch checked={active} onChange={handleChange} />
-                            <span>
-                                {active ? 'Đang đào tạo' : 'Ngừng đào tạo'}
-                            </span>
+                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
                         </div>
                     </FormItem>
                 </Col>

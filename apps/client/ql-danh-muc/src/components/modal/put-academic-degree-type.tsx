@@ -66,7 +66,7 @@ const PutAcademicDegreeTypeModal = () => {
     const { data: level } = useFindUniqueAcademicDegreeType({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)

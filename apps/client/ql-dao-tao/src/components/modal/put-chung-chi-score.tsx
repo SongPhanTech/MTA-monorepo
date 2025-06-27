@@ -29,10 +29,8 @@ const PutCertificateScoreModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createArchivedCertificate } =
-        useCreateArchivedCertificate()
-    const { mutateAsync: updateArchivedCertificate } =
-        useUpdateArchivedCertificate()
+    const { mutateAsync: createArchivedCertificate } = useCreateArchivedCertificate()
+    const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
             showSpinner()
@@ -69,7 +67,7 @@ const PutCertificateScoreModal = () => {
         { enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             setTargetDisabled(false)
@@ -94,21 +92,12 @@ const PutCertificateScoreModal = () => {
             className="w-[500px]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên chứng chỉ"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên chứng chỉ" required>
                     <Input placeholder="Nhập tên chứng chỉ" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="finalScore"
-                    label="Điểm tương đương"
-                >
+                <FormItem form={form} name="finalScore" label="Điểm tương đương">
                     <InputNumber
                         placeholder="Nhập điểm tương đương"
                         className="w-full"

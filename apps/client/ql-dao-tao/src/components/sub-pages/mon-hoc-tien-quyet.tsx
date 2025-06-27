@@ -4,9 +4,7 @@ import type React from 'react'
 type Props = {
     curriculumVersionSubjectId: string
 }
-export default function MonHocTienQuyetPage({
-    curriculumVersionSubjectId,
-}: Props) {
+export default function MonHocTienQuyetPage({ curriculumVersionSubjectId }: Props) {
     return <></>
     // const [currentPage, setCurrentPage] = useState(1)
     // const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)

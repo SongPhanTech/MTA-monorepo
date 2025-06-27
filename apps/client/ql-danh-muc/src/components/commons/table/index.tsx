@@ -1,10 +1,7 @@
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    Empty,
-    Table as TableAntd,
-    type TableProps as TableAntdProps,
-} from 'antd'
+import { Empty, Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+
 type TableProps<T> = {
     columns?: ColumnsType<T>
     data?: T[]
@@ -33,9 +30,7 @@ const Table = <T extends Record<string, unknown>>({
             className="mt-4"
             columns={columns.map((column) => ({
                 ...column,
-                key:
-                    column.key ||
-                    (column as unknown as { dataIndex: string }).dataIndex,
+                key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
             }))}
             scroll={{ x: 'max-content' }}
             bordered

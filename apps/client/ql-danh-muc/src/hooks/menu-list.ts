@@ -5,11 +5,10 @@ import { useFindManyGroup } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
 import { useSession } from 'next-auth/react'
 import { useEffect, useMemo } from 'react'
+
 const useMenuList = () => {
     const { data } = useSession()
-    const setIsUpdateAbility = useStoreActions(
-        (actions) => actions.appState.setIsUpdateAbility
-    )
+    const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
     const { data: groups = [] } = useFindManyGroup({
         where: {
             users: {
@@ -29,20 +28,15 @@ const useMenuList = () => {
     const permissions = useMemo(
         () =>
             groups
-                .flatMap((group) =>
-                    group.roles.flatMap((role) => role.permissions)
-                )
-                .filter(
-                    (permission) =>
-                        permission.permissionType === $Enums.PermissionType.READ
-                ),
+                .flatMap((group) => group.roles.flatMap((role) => role.permissions))
+                .filter((permission) => permission.permissionType === $Enums.PermissionType.READ),
         [groups]
     )
     const permissionNames = useMemo(
         () => permissions.map((permission) => permission.name),
         [permissions]
     )
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         ability.update(
             permissions.map((permission) => ({

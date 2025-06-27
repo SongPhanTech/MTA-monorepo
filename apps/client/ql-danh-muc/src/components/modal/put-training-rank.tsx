@@ -66,7 +66,7 @@ const PutTraningRankModal = () => {
     const { data: level } = useFindUniqueTrainingRank({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +80,16 @@ const PutTraningRankModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa xếp loại rèn luyện'
-                    : 'Thêm mới xếp loại rèn luyện'
-            }
+            title={id ? 'Chỉnh sửa xếp loại rèn luyện' : 'Thêm mới xếp loại rèn luyện'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã xếp loại rèn luyện"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã xếp loại rèn luyện" required>
                     <Input placeholder="Nhập mã xếp loại rèn luyện" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên xếp loại rèn luyện"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên xếp loại rèn luyện" required>
                     <Input placeholder="Nhập xếp loại rèn luyện" />
                 </FormItem>
             </Col>

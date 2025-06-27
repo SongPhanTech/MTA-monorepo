@@ -66,7 +66,7 @@ const PutRegistrationAreaModal = () => {
     const { data: level } = useFindUniqueRegistrationArea({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,28 +80,16 @@ const PutRegistrationAreaModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa khu vực đăng ký' : 'Thêm mới khu vực đăng ký'
-            }
+            title={id ? 'Chỉnh sửa khu vực đăng ký' : 'Thêm mới khu vực đăng ký'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã khu vực đăng ký"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã khu vực đăng ký" required>
                     <Input placeholder="Nhập mã khu vực đăng ký" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên khu vực đăng ký"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên khu vực đăng ký" required>
                     <Input placeholder="Nhập khu vực đăng ký" />
                 </FormItem>
             </Col>

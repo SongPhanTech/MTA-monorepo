@@ -3,20 +3,8 @@ import FormItem from '@components/commons/form-item'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { $Enums } from '@workspace/db'
-import {
-    useCreateManyPrompt,
-    useFindFirstPrompt,
-    useUpdateManyPrompt,
-} from '@workspace/db/hooks'
-import {
-    Input as AntdInput,
-    Button,
-    Col,
-    Form,
-    Input,
-    Row,
-    message,
-} from 'antd'
+import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from '@workspace/db/hooks'
+import { Input as AntdInput, Button, Col, Form, Input, message, Row } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 
 type PromptFormType = {
@@ -59,7 +47,7 @@ const PromptQuestionAnswer = ({
         }
     }, [promptData, form])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (previewRef.current) {
             const height = previewRef.current.getBoundingClientRect().height
@@ -110,20 +98,14 @@ const PromptQuestionAnswer = ({
     return (
         <Form layout="vertical" onFinish={onFinish} form={form}>
             <div className="flex items-center justify-between mb-0">
-                <p className="text-lg font-semibold text-primary mb-0">
-                    {label}
-                </p>
+                <p className="text-lg font-semibold text-primary mb-0">{label}</p>
                 {!hideEditButton &&
                     (isEditing ? (
                         <div className="flex gap-1">
                             <Button size="small" onClick={handleCancel}>
                                 Huỷ
                             </Button>
-                            <Button
-                                size="small"
-                                type="primary"
-                                htmlType="submit"
-                            >
+                            <Button size="small" type="primary" htmlType="submit">
                                 Lưu
                             </Button>
                         </div>
@@ -134,9 +116,7 @@ const PromptQuestionAnswer = ({
                             icon={<EditOutlined />}
                             onClick={() => {
                                 if (previewRef.current) {
-                                    const height =
-                                        previewRef.current.getBoundingClientRect()
-                                            .height
+                                    const height = previewRef.current.getBoundingClientRect().height
                                     if (height > 0) setPreviewHeight(height)
                                 }
                                 setIsEditing(true)
@@ -160,9 +140,7 @@ const PromptQuestionAnswer = ({
                     ref={previewRef}
                     className="border border-primary rounded-md p-2 bg-gray-50 whitespace-pre-line"
                 >
-                    {currentPrompt || (
-                        <span className="text-gray-400">Chưa có nội dung</span>
-                    )}
+                    {currentPrompt || <span className="text-gray-400">Chưa có nội dung</span>}
                 </div>
             )}
             {/* Nút hành động đã được chuyển lên dòng tiêu đề khi isEditing */}
@@ -177,9 +155,7 @@ function Page() {
     )
     return (
         <div>
-            <span className="text-xl font-semibold text-gray-700">
-                Thiết lập Prompt
-            </span>
+            <span className="text-xl font-semibold text-gray-700">Thiết lập Prompt</span>
             <div className="my-3">
                 <AntdInput.Search
                     placeholder="Tìm theo tên ..."
@@ -190,10 +166,7 @@ function Page() {
             <Row gutter={[16, 16]} className="bg-white rounded-md shadow-sm">
                 {filteredList.map((item) => (
                     <Col span={24} key={item.value}>
-                        <PromptQuestionAnswer
-                            type={item.value}
-                            label={item.label}
-                        />
+                        <PromptQuestionAnswer type={item.value} label={item.label} />
                     </Col>
                 ))}
             </Row>

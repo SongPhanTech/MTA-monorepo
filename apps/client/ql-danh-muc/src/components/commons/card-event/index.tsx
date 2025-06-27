@@ -6,29 +6,16 @@ import {
     SendOutlined,
 } from '@ant-design/icons'
 import { Card, ConfigProvider, Popconfirm, Tooltip } from 'antd'
+
 interface CardDashBoardProps {
     time?: string
     date?: string
-    type?:
-        | 'primary'
-        | 'default'
-        | 'success'
-        | 'error'
-        | 'warning'
-        | 'disabled'
-        | string
+    type?: 'primary' | 'default' | 'success' | 'error' | 'warning' | 'disabled' | string
     title: string
     content: string | number
     location: string
 }
-export const CardEvent = ({
-    type,
-    title,
-    content,
-    location,
-    time,
-    date,
-}: CardDashBoardProps) => {
+export const CardEvent = ({ type, title, content, location, time, date }: CardDashBoardProps) => {
     function getTypeColor(type: string) {
         switch (type) {
             case 'primary':
@@ -86,19 +73,15 @@ export const CardEvent = ({
                                 <ClockCircleOutlined className="mr-2" />
                                 <span className="font-semibold">{time}</span>
                             </div>
-                            <div className="h-5 w-px bg-gray-500" />{' '}
-                            {/* Divider */}
+                            <div className="h-5 w-px bg-gray-500" /> {/* Divider */}
                             <div className="flex items-center text-base text-black">
                                 <CalendarOutlined className="mr-2" />
                                 <span className="font-semibold">{date}</span>
                             </div>
-                            <div className="h-5 w-px bg-gray-500" />{' '}
-                            {/* Divider */}
+                            <div className="h-5 w-px bg-gray-500" /> {/* Divider */}
                             <div className="flex items-center text-base text-black">
                                 <SendOutlined className="mr-2" />
-                                <span className="font-semibold">
-                                    {location}
-                                </span>
+                                <span className="font-semibold">{location}</span>
                             </div>
                         </div>
                         <div className="flex gap-2">
@@ -120,9 +103,7 @@ export const CardEvent = ({
                     </div>
                 }
             >
-                <p className="text-black text-xl font-semibold my-2 mt-0">
-                    {title}
-                </p>
+                <p className="text-black text-xl font-semibold my-2 mt-0">{title}</p>
                 <p className="text-gray-900 text-base">{content}</p>
             </Card>
         </ConfigProvider>

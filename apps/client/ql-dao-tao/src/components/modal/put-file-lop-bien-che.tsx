@@ -5,7 +5,7 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TrainingCourse } from '@workspace/db'
 import { useFindManyTrainingCourse } from '@workspace/db/hooks'
-import { Button, Col, Form, Upload, message } from 'antd'
+import { Button, Col, Form, message, Upload } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -52,20 +52,13 @@ const PutUploadFixedClassModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khóa"
-                    required
-                >
+                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
                     <Select
                         placeholder="Chọn khóa"
-                        options={trainingCourseData.map(
-                            (i: TrainingCourse) => ({
-                                value: i.id,
-                                label: i.name,
-                            })
-                        )}
+                        options={trainingCourseData.map((i: TrainingCourse) => ({
+                            value: i.id,
+                            label: i.name,
+                        }))}
                     />
                 </FormItem>
             </Col>
@@ -77,9 +70,7 @@ const PutUploadFixedClassModal = () => {
                     label="Tệp Excel"
                     required
                     valuePropName="fileList"
-                    getValueFromEvent={(e) =>
-                        Array.isArray(e) ? e : e?.fileList
-                    }
+                    getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
                 >
                     <Upload
                         beforeUpload={(file) => {
@@ -88,9 +79,7 @@ const PutUploadFixedClassModal = () => {
                                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
                                 file.type === 'application/vnd.ms-excel'
                             if (!isExcel) {
-                                message.error(
-                                    'Chỉ được phép tải lên file Excel (.xlsx, .xls)'
-                                )
+                                message.error('Chỉ được phép tải lên file Excel (.xlsx, .xls)')
                                 return Upload.LIST_IGNORE
                             }
                             return false // Không upload tự động
@@ -98,9 +87,7 @@ const PutUploadFixedClassModal = () => {
                         maxCount={1}
                         accept=".xlsx,.xls"
                     >
-                        <Button icon={<UploadOutlined />}>
-                            Chọn file Excel
-                        </Button>
+                        <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
                     </Upload>
                 </FormItem>
             </Col>

@@ -1,8 +1,10 @@
 import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
+import ExportTemplateExam from './in-phieu-danh-sach-thi'
 import ModalGPASemester from './modal-diem-trung-binh-lop'
 import HanNhapDiem from './modal-han-nhap-diem'
+import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
@@ -40,8 +42,6 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
-import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
-import ExportTemplateExam from './in-phieu-danh-sach-thi'
 export {
     ConfirmModal,
     PutSchoolYearModal,

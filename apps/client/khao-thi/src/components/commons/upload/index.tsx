@@ -1,4 +1,3 @@
-import { env } from '@/env'
 import { DeleteFilled } from '@ant-design/icons'
 import DocxIcon from '@assets/images/docx.svg'
 import PptIcon from '@assets/images/ppt.svg'
@@ -9,6 +8,7 @@ import { cn } from '@lib/utils'
 import { Button, Divider, Image } from 'antd'
 import ImageNext from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { env } from '@/env'
 
 type UploadDragAndDropWrapperProps = {
     onUpload: (
@@ -32,20 +32,15 @@ export const FileUploadIcon = ({
 } & (typeof ImageNext)['defaultProps']) => {
     const IconOfFile = useMemo(() => {
         if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ) {
             return DocxIcon
         }
-        if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ) {
+        if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
             return ExcelIcon
         }
         if (
-            fileType ===
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            fileType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
         ) {
             return PptIcon
         }
@@ -55,15 +50,7 @@ export const FileUploadIcon = ({
         return TxtIcon
     }, [fileType])
 
-    return (
-        <ImageNext
-            src={IconOfFile}
-            width={80}
-            height={80}
-            alt="icon-file"
-            {...rest}
-        />
-    )
+    return <ImageNext src={IconOfFile} width={80} height={80} alt="icon-file" {...rest} />
 }
 
 const UploadDragAndDrop = ({
@@ -79,8 +66,7 @@ const UploadDragAndDrop = ({
     const [fileType, setFileType] = useState<string | null>(null)
     const [imageFromValue, setImageFromValue] = useState(value)
     const getUrl = useCallback((path: string) => {
-        const isAbsolutePath =
-            path.startsWith('http') || path.startsWith('blob')
+        const isAbsolutePath = path.startsWith('http') || path.startsWith('blob')
         if (isAbsolutePath) return path
         return new URL(path, env.NEXT_PUBLIC_MINIO_ENDPOINT).href
     }, [])
@@ -236,12 +222,7 @@ const UploadDragAndDrop = ({
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <ImageNext
-                        width={28}
-                        height={20}
-                        alt="upload"
-                        src={UploadIcon}
-                    />
+                    <ImageNext width={28} height={20} alt="upload" src={UploadIcon} />
                     <p className="text-sm text-gray-500 text-center p-2">
                         {description || 'Kéo và thả tệp vào đây'}
                     </p>

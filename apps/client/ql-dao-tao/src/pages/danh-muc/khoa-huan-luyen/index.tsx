@@ -1,5 +1,7 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingCourseModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -11,15 +13,13 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-
-import Select from '@components/commons/select'
-import EditIcon from '@components/icons/edit'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 // const { Option } = Select;
 interface FilterProps {
     searchText: string | undefined
@@ -124,12 +124,10 @@ export default function TrainingCoursePage() {
         }
     }
 
-    const options = Object.entries(KHOA_HL_STATUS).map(
-        ([value, { label, color }]) => ({
-            value,
-            label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-        })
-    )
+    const options = Object.entries(KHOA_HL_STATUS).map(([value, { label, color }]) => ({
+        value,
+        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
+    }))
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -145,10 +143,7 @@ export default function TrainingCoursePage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -187,10 +182,7 @@ export default function TrainingCoursePage() {
                                             marginRight: 8,
                                         }}
                                         onChange={(val) =>
-                                            handleFilterChange(
-                                                'trainingObjectTypeId',
-                                                val
-                                            )
+                                            handleFilterChange('trainingObjectTypeId', val)
                                         }
                                         allowClear
                                     />
@@ -218,9 +210,7 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, record, index) =>
-                                    index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
-                                    1,
+                                    index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
                                 title: 'Mã khóa',
@@ -248,9 +238,7 @@ export default function TrainingCoursePage() {
                                 dataIndex: 'semesterStart',
                                 width: 150,
                                 render: (value) =>
-                                    value?.schoolYear?.name
-                                        ? value?.schoolYear?.name
-                                        : '',
+                                    value?.schoolYear?.name ? value?.schoolYear?.name : '',
                             },
                             {
                                 title: 'Niên khoá',
@@ -278,9 +266,7 @@ export default function TrainingCoursePage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -306,16 +292,12 @@ export default function TrainingCoursePage() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

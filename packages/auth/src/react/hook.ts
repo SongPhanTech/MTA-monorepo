@@ -3,9 +3,8 @@ import { fetchSession } from '.'
 import { SessionContext } from './provider'
 
 export const useSession = () => {
-    const { sessionState, setSessionState, setStatus, status } =
-        useContext(SessionContext)
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    const { sessionState, setSessionState, setStatus, status } = useContext(SessionContext)
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (status === 'loading') return
         if (!status) {

@@ -8,7 +8,7 @@ import {
     useFindUniqueTrainingLocation,
     useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Radio, message } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingLocation = TrainingLocation
@@ -64,7 +64,7 @@ const PutTrainingLocationModal = () => {
         { enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -84,28 +84,16 @@ const PutTrainingLocationModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa khu vực đào tạo' : 'Thêm mới khu vực đào tạo'
-            }
+            title={id ? 'Chỉnh sửa khu vực đào tạo' : 'Thêm mới khu vực đào tạo'}
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã khu vực đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã khu vực đào tạo" required>
                     <Input placeholder="Nhập mã khu vực đào tạo" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên khu vực đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên khu vực đào tạo" required>
                     <Input placeholder="Nhập tên khu vực đào tạo" />
                 </FormItem>
             </Col>
@@ -115,12 +103,7 @@ const PutTrainingLocationModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name={'active'}
-                    label="Trạng thái"
-                    required
-                >
+                <FormItem form={form} name={'active'} label="Trạng thái" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>

@@ -5,12 +5,8 @@ import { PutSemesterModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSemester,
-    useFindManySemester,
-    useUpdateSemester,
-} from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { useCountSemester, useFindManySemester, useUpdateSemester } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -93,9 +89,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
@@ -119,9 +113,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             // {
                             //     title: 'Mã học kỳ',
@@ -136,22 +128,18 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                 title: 'Năm học',
                                 align: 'center',
                                 dataIndex: 'schoolYear',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 align: 'center',
-                                render: ({ startDate }) =>
-                                    dayjs(startDate).format('DD/MM/YYYY'),
+                                render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
                                 align: 'center',
                                 render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
+                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -179,8 +167,7 @@ export default function SemesterPage({ selectedSchoolYear }: any) {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

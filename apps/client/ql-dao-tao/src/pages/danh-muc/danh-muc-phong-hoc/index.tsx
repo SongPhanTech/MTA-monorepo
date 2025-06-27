@@ -14,23 +14,14 @@ import {
     useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Building2Icon, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | undefined
 }
@@ -177,10 +168,7 @@ export default function TrainingLocationPage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -241,8 +229,7 @@ export default function TrainingLocationPage() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () =>
-                                            handleDelete(record.id),
+                                        onConfirm: () => handleDelete(record.id),
                                     }}
                                 />
                             </Row>
@@ -287,9 +274,7 @@ export default function TrainingLocationPage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -314,14 +299,9 @@ export default function TrainingLocationPage() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteBuilding(
-                                                                id
-                                                            ),
+                                                        onConfirm: () => handleDeleteBuilding(id),
                                                     }}
-                                                    onClick={(e) =>
-                                                        e.stopPropagation()
-                                                    }
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

@@ -1,11 +1,5 @@
-import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs'
-import NextDocument, {
-    type DocumentContext,
-    Head,
-    Html,
-    Main,
-    NextScript,
-} from 'next/document'
+import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
+import NextDocument, { type DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 
 export default class MyDocument extends NextDocument {
     render() {

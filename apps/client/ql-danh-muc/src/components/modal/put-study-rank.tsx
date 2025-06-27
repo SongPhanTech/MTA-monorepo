@@ -3,11 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { StudyRank } from '@workspace/db'
-import {
-    useCreateStudyRank,
-    useFindUniqueStudyRank,
-    useUpdateStudyRank,
-} from '@workspace/db/hooks'
+import { useCreateStudyRank, useFindUniqueStudyRank, useUpdateStudyRank } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -66,7 +62,7 @@ const PutStudyRankModal = () => {
     const { data: level } = useFindUniqueStudyRank({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +76,16 @@ const PutStudyRankModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa hình thức đào tạo'
-                    : 'Thêm mới hình thức đào tạo'
-            }
+            title={id ? 'Chỉnh sửa hình thức đào tạo' : 'Thêm mới hình thức đào tạo'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã hình thức đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã hình thức đào tạo" required>
                     <Input placeholder="Nhập mã hình thức đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên hình thức đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên hình thức đào tạo" required>
                     <Input placeholder="Nhập hình thức đào tạo" />
                 </FormItem>
             </Col>

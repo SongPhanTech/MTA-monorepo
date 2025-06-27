@@ -66,7 +66,7 @@ const PutTrainingLevelModal = () => {
     const { data: level } = useFindUniqueTrainingLevel({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -84,22 +84,12 @@ const PutTrainingLevelModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã bậc đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã bậc đào tạo" required>
                     <Input placeholder="Nhập mã bậc đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên bậc đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên bậc đào tạo" required>
                     <Input placeholder="Nhập bậc đào tạo" />
                 </FormItem>
             </Col>

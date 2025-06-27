@@ -66,7 +66,7 @@ const PutOrganizationTypeModal = () => {
     const { data: level } = useFindUniqueOrganizationType({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -84,22 +84,12 @@ const PutOrganizationTypeModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã loại đơn vị"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã loại đơn vị" required>
                     <Input placeholder="Nhập mã loại đơn vị" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên loại đơn vị"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên loại đơn vị" required>
                     <Input placeholder="Nhập tên loại đơn vị" />
                 </FormItem>
             </Col>

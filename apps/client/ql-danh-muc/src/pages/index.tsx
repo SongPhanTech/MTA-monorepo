@@ -3,6 +3,7 @@ import { useMenuList } from '@hooks/menu-list'
 import type { NextPage } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
+
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
     const { status } = useSession()

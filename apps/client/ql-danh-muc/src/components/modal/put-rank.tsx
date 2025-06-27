@@ -3,11 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Rank } from '@workspace/db'
-import {
-    useCreateRank,
-    useFindUniqueRank,
-    useUpdateRank,
-} from '@workspace/db/hooks'
+import { useCreateRank, useFindUniqueRank, useUpdateRank } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -66,7 +62,7 @@ const PutRankModal = () => {
     const { data: level } = useFindUniqueRank({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -84,22 +80,12 @@ const PutRankModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã cấp bậc hàm"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã cấp bậc hàm" required>
                     <Input placeholder="Nhập mã cấp bậc hàm" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên cấp bậc hàm"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên cấp bậc hàm" required>
                     <Input placeholder="Nhập tên cấp bậc hàm" />
                 </FormItem>
             </Col>

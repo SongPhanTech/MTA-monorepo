@@ -31,8 +31,7 @@ export const env = createEnv({
     runtimeEnv: {
         ENVIRONMENT: process.env.ENVIRONMENT,
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-        NEXT_PUBLIC_API_MODEL_BASE_URL:
-            process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
+        NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
         NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,

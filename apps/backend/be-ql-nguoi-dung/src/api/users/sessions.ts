@@ -1,8 +1,8 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '../..'
 import {
-    type Session,
     getSessionsByUserId,
+    type Session,
     terminateSessionBySessionId,
     terminateSessionsByUserId,
 } from '../../wso2is-apis/generated/sessions'
@@ -20,9 +20,7 @@ app.openapi(
             200: {
                 content: {
                     'application/json': {
-                        schema: getSessionsByUserIdResponse.openapi(
-                            'SessionsByUserId'
-                        ),
+                        schema: getSessionsByUserIdResponse.openapi('SessionsByUserId'),
                     },
                 },
                 description: 'Retrieve one user',
@@ -75,9 +73,7 @@ app.openapi(
             200: {
                 content: {
                     'application/json': {
-                        schema: z
-                            .object({})
-                            .openapi('TerminateSessionsByUserId'),
+                        schema: z.object({}).openapi('TerminateSessionsByUserId'),
                     },
                 },
                 description: 'Terminate one session',
@@ -130,9 +126,7 @@ app.openapi(
             200: {
                 content: {
                     'application/json': {
-                        schema: z
-                            .object({})
-                            .openapi('TerminateSessionBySessionId'),
+                        schema: z.object({}).openapi('TerminateSessionBySessionId'),
                     },
                 },
                 description: 'Terminate one session',
@@ -163,10 +157,7 @@ app.openapi(
         if (!user.ssoId) {
             return c.json({ message: 'User has no ssoId' }, 400)
         }
-        const { status, data } = await terminateSessionBySessionId(
-            user.ssoId,
-            sessionId
-        )
+        const { status, data } = await terminateSessionBySessionId(user.ssoId, sessionId)
 
         if (status !== 200 && 'message' in data) {
             return c.json(data, 500)

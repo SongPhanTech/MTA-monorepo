@@ -73,16 +73,15 @@ export default function QuaTrinhCongTacTab() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
-    const handleCollapseChange =
-        (collapseId: string) => (key: string | string[]) => {
-            if (key && key.length > 0) {
-                // Nếu collapse này được mở, đóng các collapse khác
-                setOpenCollapse(collapseId)
-            } else {
-                // Nếu collapse này bị đóng
-                setOpenCollapse(null)
-            }
+    const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
+        if (key && key.length > 0) {
+            // Nếu collapse này được mở, đóng các collapse khác
+            setOpenCollapse(collapseId)
+        } else {
+            // Nếu collapse này bị đóng
+            setOpenCollapse(null)
         }
+    }
 
     const handleModal = () => {}
 
@@ -97,9 +96,7 @@ export default function QuaTrinhCongTacTab() {
             >
                 {/* Học vị */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">Cấp bậc</span>
-                    }
+                    header={<span className="text-base font-semibold">Cấp bậc</span>}
                     key="1"
                     className="border-none"
                 >
@@ -120,9 +117,7 @@ export default function QuaTrinhCongTacTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên cấp bậc',
@@ -175,11 +170,7 @@ export default function QuaTrinhCongTacTab() {
             >
                 {/* Học hàm */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">
-                            Quá trình công tác
-                        </span>
-                    }
+                    header={<span className="text-base font-semibold">Quá trình công tác</span>}
                     key="1"
                     className="border-none mt"
                 >
@@ -200,9 +191,7 @@ export default function QuaTrinhCongTacTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Từ tháng năm',
@@ -280,9 +269,7 @@ export default function QuaTrinhCongTacTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Từ tháng năm',

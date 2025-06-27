@@ -1,10 +1,10 @@
-import { env } from '@/env'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { fetchCreateUser } from '@api/open-api/appComponents'
 import logo_mta from '@assets/images/logo_mta.png'
-import { Button, Form, Input, Typography, message } from 'antd'
+import { Button, Form, Input, message, Typography } from 'antd'
 import Image from 'next/image'
 import { useState } from 'react'
+import { env } from '@/env'
 
 export type DangKyTaiKhoanFormType = {
     username: string
@@ -72,22 +72,13 @@ export default function DangKyTaiKhoanPage() {
         <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
             <div className="bg-white shadow-lg rounded-2xl px-8 py-10 w-full max-w-md">
                 <div className="">
-                    <Image
-                        src={logo_mta}
-                        alt="logo_mta"
-                        className="w-16 h-16 mx-auto mb-4"
-                    />
+                    <Image src={logo_mta} alt="logo_mta" className="w-16 h-16 mx-auto mb-4" />
                 </div>
                 <Typography.Title level={3} className="text-center mb-4">
                     Đăng ký tài khoản Trợ lý ảo
                 </Typography.Title>
 
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    autoComplete="off"
-                >
+                <Form form={form} layout="vertical" onFinish={onFinish} autoComplete="off">
                     <Form.Item
                         name="name"
                         label="Họ và tên"
@@ -141,8 +132,7 @@ export default function DangKyTaiKhoanPage() {
                                 message: 'Vui lòng nhập mật khẩu',
                             },
                             {
-                                pattern:
-                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
                                 message:
                                     'Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt',
                             },
@@ -166,52 +156,38 @@ export default function DangKyTaiKhoanPage() {
                         <div className="mb-4 text-sm space-y-1 pl-2">
                             <div
                                 className={
-                                    passwordStatus.length
-                                        ? 'text-green-600'
-                                        : 'text-red-500'
+                                    passwordStatus.length ? 'text-green-600' : 'text-red-500'
                                 }
                             >
-                                {passwordStatus.length ? '✓' : '✗'} Ít nhất 8 ký
-                                tự
+                                {passwordStatus.length ? '✓' : '✗'} Ít nhất 8 ký tự
                             </div>
                             <div
                                 className={
-                                    passwordStatus.lowercase
-                                        ? 'text-green-600'
-                                        : 'text-red-500'
+                                    passwordStatus.lowercase ? 'text-green-600' : 'text-red-500'
                                 }
                             >
-                                {passwordStatus.lowercase ? '✓' : '✗'} Có chữ
-                                thường
+                                {passwordStatus.lowercase ? '✓' : '✗'} Có chữ thường
                             </div>
                             <div
                                 className={
-                                    passwordStatus.uppercase
-                                        ? 'text-green-600'
-                                        : 'text-red-500'
+                                    passwordStatus.uppercase ? 'text-green-600' : 'text-red-500'
                                 }
                             >
-                                {passwordStatus.uppercase ? '✓' : '✗'} Có chữ
-                                hoa
+                                {passwordStatus.uppercase ? '✓' : '✗'} Có chữ hoa
                             </div>
                             <div
                                 className={
-                                    passwordStatus.number
-                                        ? 'text-green-600'
-                                        : 'text-red-500'
+                                    passwordStatus.number ? 'text-green-600' : 'text-red-500'
                                 }
                             >
                                 {passwordStatus.number ? '✓' : '✗'} Có số
                             </div>
                             <div
                                 className={
-                                    passwordStatus.special
-                                        ? 'text-green-600'
-                                        : 'text-red-500'
+                                    passwordStatus.special ? 'text-green-600' : 'text-red-500'
                                 }
                             >
-                                {passwordStatus.special ? '✓' : '✗'} Có ký tự
-                                đặc biệt
+                                {passwordStatus.special ? '✓' : '✗'} Có ký tự đặc biệt
                             </div>
                         </div>
                     )}
@@ -229,16 +205,11 @@ export default function DangKyTaiKhoanPage() {
                                 },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (
-                                            !value ||
-                                            getFieldValue('password') === value
-                                        ) {
+                                        if (!value || getFieldValue('password') === value) {
                                             return Promise.resolve()
                                         }
                                         return Promise.reject(
-                                            new Error(
-                                                'Mật khẩu xác nhận không khớp'
-                                            )
+                                            new Error('Mật khẩu xác nhận không khớp')
                                         )
                                     },
                                 }),
@@ -246,9 +217,7 @@ export default function DangKyTaiKhoanPage() {
                         >
                             <Input.Password
                                 size="large"
-                                prefix={
-                                    <LockOutlined className="text-primary" />
-                                }
+                                prefix={<LockOutlined className="text-primary" />}
                                 placeholder="Xác nhận mật khẩu"
                             />
                         </Form.Item>
@@ -272,8 +241,7 @@ export default function DangKyTaiKhoanPage() {
                             type="link"
                             className="ml-2 p-0 text-primary"
                             onClick={() => {
-                                window.location.href =
-                                    env.NEXT_PUBLIC_TRO_LY_AO_URL
+                                window.location.href = env.NEXT_PUBLIC_TRO_LY_AO_URL
                             }}
                         >
                             Đăng nhập

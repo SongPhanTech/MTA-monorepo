@@ -4,11 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type {
-    TrainingField,
-    TrainingMajor,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingField, TrainingMajor, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingMajor,
     useFindManyDM_DonVi,
@@ -17,7 +13,7 @@ import {
     useFindUniqueTrainingMajor,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Radio, TreeSelect, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -52,8 +48,7 @@ const PutTrainingMajorModal = () => {
             },
         })
 
-    const { data: organizations = [], refetch: refetchOrganizations } =
-        useFindManyDM_DonVi()
+    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()
@@ -67,11 +62,9 @@ const PutTrainingMajorModal = () => {
                         ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: trainingObjectTypeIds.map(
-                                    (trainingObjectTypeId) => ({
-                                        trainingObjectTypeId,
-                                    })
-                                ),
+                                data: trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                                    trainingObjectTypeId,
+                                })),
                                 skipDuplicates: true,
                             },
                             deleteMany: {
@@ -91,11 +84,9 @@ const PutTrainingMajorModal = () => {
                         ...rest,
                         trainingObjectTypes: {
                             createMany: {
-                                data: trainingObjectTypeIds.map(
-                                    (trainingObjectTypeId) => ({
-                                        trainingObjectTypeId,
-                                    })
-                                ),
+                                data: trainingObjectTypeIds.map((trainingObjectTypeId) => ({
+                                    trainingObjectTypeId,
+                                })),
                             },
                         },
                     },
@@ -141,7 +132,7 @@ const PutTrainingMajorModal = () => {
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             setTargetDisabled(false)
@@ -169,20 +160,13 @@ const PutTrainingMajorModal = () => {
             className="w-[900px]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingFieldId"
-                    label="Ngành"
-                    required
-                >
+                <FormItem form={form} name="trainingFieldId" label="Ngành" required>
                     <Select
                         placeholder="Chọn ngành"
                         options={trainingFieldData.map((i: TrainingField) => {
                             return {
                                 value: i.id,
-                                label: i?.code
-                                    ? `${i?.code} - ${i.name}`
-                                    : i?.name,
+                                label: i?.code ? `${i?.code} - ${i.name}` : i?.name,
                             }
                         })}
                         onChange={(val) => handleMajorChange(val)}
@@ -200,14 +184,12 @@ const PutTrainingMajorModal = () => {
                         mode="multiple"
                         maxTagCount={'responsive'}
                         placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map(
-                            (i: TrainingObjectType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={trainingObjectTypeData.map((i: TrainingObjectType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                         disabled={targetDisabled}
                     />
                 </FormItem>
@@ -227,20 +209,13 @@ const PutTrainingMajorModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã chuyên ngành"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã chuyên ngành" required>
                     <Input placeholder="Nhập mã chuyên ngành" />
                 </FormItem>
             </Col>
@@ -250,12 +225,7 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên chuyên ngành"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên chuyên ngành" required>
                     <Input placeholder="Nhập tên chuyên ngành" />
                 </FormItem>
             </Col>
@@ -265,29 +235,17 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberCreditsMajor"
-                    label="Số TC Chuyên Ngành"
-                >
+                <FormItem form={form} name="numberCreditsMajor" label="Số TC Chuyên Ngành">
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberCreditsRequired"
-                    label="Số TC Bắt Buộc"
-                >
+                <FormItem form={form} name="numberCreditsRequired" label="Số TC Bắt Buộc">
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberCreditsElective"
-                    label="Số TC Lựa Chọn"
-                >
+                <FormItem form={form} name="numberCreditsElective" label="Số TC Lựa Chọn">
                     <InputNumber style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
@@ -297,12 +255,7 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name={'active'}
-                    label="Trạng thái"
-                    required
-                >
+                <FormItem form={form} name={'active'} label="Trạng thái" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>

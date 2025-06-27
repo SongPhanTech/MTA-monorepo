@@ -14,7 +14,7 @@ import {
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, Input, Row, TreeSelect, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, TreeSelect } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
@@ -83,16 +83,13 @@ export default function SubjectOpeningPlan() {
         [res]
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (schoolYears?.length) {
             const lastSchoolYear = schoolYears[schoolYears.length - 1]
 
             if (lastSchoolYear.semesters.length) {
-                const lastSemester =
-                    lastSchoolYear.semesters[
-                        lastSchoolYear.semesters.length - 1
-                    ]
+                const lastSemester = lastSchoolYear.semesters[lastSchoolYear.semesters.length - 1]
                 form.setFieldValue('semesterId', lastSemester.id)
                 setSelectedSemester({
                     id: lastSemester?.id,
@@ -139,8 +136,7 @@ export default function SubjectOpeningPlan() {
         hideSpinner()
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -157,19 +153,13 @@ export default function SubjectOpeningPlan() {
                                 onValuesChange={(filter: FilterProps) => {
                                     if (filter.schoolYearId) {
                                         const schoolYear = schoolYears?.find(
-                                            (item) =>
-                                                item.id === filter.schoolYearId
+                                            (item) => item.id === filter.schoolYearId
                                         )
                                         const lastSemester =
-                                            schoolYear?.semesters?.[
-                                                schoolYear.semesters.length - 1
-                                            ]
+                                            schoolYear?.semesters?.[schoolYear.semesters.length - 1]
 
                                         if (lastSemester) {
-                                            form.setFieldValue(
-                                                'semesterId',
-                                                lastSemester.id
-                                            )
+                                            form.setFieldValue('semesterId', lastSemester.id)
                                             debouncedRefetch()
                                             form.focusField('semesterId')
                                         }
@@ -205,9 +195,7 @@ export default function SubjectOpeningPlan() {
                                                 filterTreeNode={(input, node) =>
                                                     (node.title as string)
                                                         .toLowerCase()
-                                                        .includes(
-                                                            input.toLowerCase()
-                                                        )
+                                                        .includes(input.toLowerCase())
                                                 }
                                                 onSelect={(value, node) =>
                                                     setSelectedSemester({
@@ -229,9 +217,7 @@ export default function SubjectOpeningPlan() {
                                             <Select
                                                 placeholder="Chọn đối tượng đào tạo"
                                                 options={trainingObjectTypeData.map(
-                                                    (
-                                                        i: TrainingObjectType
-                                                    ) => ({
+                                                    (i: TrainingObjectType) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
@@ -251,9 +237,7 @@ export default function SubjectOpeningPlan() {
                                             <Select
                                                 placeholder="Khoá đào tạo"
                                                 options={trainingCourseData.map(
-                                                    (
-                                                        i: TrainingObjectType
-                                                    ) => ({
+                                                    (i: TrainingObjectType) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
@@ -288,9 +272,7 @@ export default function SubjectOpeningPlan() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã môn học',
@@ -321,7 +303,7 @@ export default function SubjectOpeningPlan() {
                                         }}
                                     >
                                         {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
                                             <li key={index}>
                                                 {`${val.subjectClassName} ${val.subjectClassCode}`}
                                             </li>
@@ -348,10 +330,8 @@ export default function SubjectOpeningPlan() {
                                         }}
                                     >
                                         {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                                            <li key={index}>
-                                                {`${val.fixedClassName}`}
-                                            </li>
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
+                                            <li key={index}>{`${val.fixedClassName}`}</li>
                                         ))}
                                     </ul>
                                 ),
@@ -374,10 +354,8 @@ export default function SubjectOpeningPlan() {
                                         }}
                                     >
                                         {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                                            <li key={index}>
-                                                {val.curriculumVersionName}
-                                            </li>
+                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
+                                            <li key={index}>{val.curriculumVersionName}</li>
                                         ))}
                                     </ul>
                                 ),
@@ -447,10 +425,7 @@ export default function SubjectOpeningPlan() {
                                                     semester: selectedSemester,
                                                 })}
                                             >
-                                                <CalendarPlus
-                                                    size={16}
-                                                    strokeWidth={2}
-                                                />
+                                                <CalendarPlus size={16} strokeWidth={2} />
                                                 Mở Lớp
                                             </Row>
                                         )

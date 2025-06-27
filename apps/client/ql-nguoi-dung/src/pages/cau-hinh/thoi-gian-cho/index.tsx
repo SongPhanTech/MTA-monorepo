@@ -1,7 +1,7 @@
 import {
-    type UpdateConfigsRequestBody,
     fetchGetConfigs,
     fetchUpdateConfigs,
+    type UpdateConfigsRequestBody,
 } from '@api/open-api/appComponents'
 import FormItem from '@components/commons/form-item'
 import useSpinner from '@hooks/spinner'
@@ -9,7 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig, useUpdateConfig } from '@workspace/db/hooks'
 import { Button } from '@workspace/ui'
-import { Col, Divider, Form, Input, Row, message } from 'antd'
+import { Col, Divider, Form, Input, message, Row } from 'antd'
 import { useEffect } from 'react'
 
 type Configs = {
@@ -21,10 +21,7 @@ export default function Page() {
 
     const getDataConfigs = async () => {
         const data = await fetchGetConfigs({})
-        form.setFieldValue(
-            'idleSessionTimeoutPeriod',
-            data.idleSessionTimeoutPeriod
-        )
+        form.setFieldValue('idleSessionTimeoutPeriod', data.idleSessionTimeoutPeriod)
         form.setFieldValue('rememberMePeriod', data.rememberMePeriod)
     }
 
@@ -40,14 +37,11 @@ export default function Page() {
 
     const { mutateAsync: updateConfigs } = useUpdateConfig()
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (isFetched) {
             getDataConfigs()
-            form.setFieldValue(
-                'userTimeout',
-                Number.parseFloat(userSessionTimeout?.value || '0')
-            )
+            form.setFieldValue('userTimeout', Number.parseFloat(userSessionTimeout?.value || '0'))
         }
     }, [isFetched])
 

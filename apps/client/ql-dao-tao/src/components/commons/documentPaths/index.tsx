@@ -1,13 +1,9 @@
-import {
-    CloseOutlined,
-    CloudUploadOutlined,
-    PaperClipOutlined,
-} from '@ant-design/icons'
-import { Tooltip, Typography, Upload, message } from 'antd'
+import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { message, Tooltip, Typography, Upload } from 'antd'
+import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
-import type { FormInstance } from 'antd/es/form'
 
 const { Dragger } = Upload
 const { Link } = Typography
@@ -22,10 +18,7 @@ interface UploadedFileItem {
     fileName: string // fileName từ resPresignedUrl
 }
 
-const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
-    form,
-    data,
-}) => {
+const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 
     const handleRemoveFile = (index: number): void => {
@@ -66,10 +59,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
 
             // Upload thành công: thêm file vào danh sách
             setFileList((prev: UploadedFileItem[]) => {
-                const newList = [
-                    ...prev,
-                    { file, fileName: resPresignedUrl.data.fileName },
-                ]
+                const newList = [...prev, { file, fileName: resPresignedUrl.data.fileName }]
                 const rawPaths = form.getFieldValue('documentPaths')
                 const currentPaths = Array.isArray(rawPaths) ? rawPaths : []
                 form.setFieldValue('documentPaths', [
@@ -115,8 +105,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     <CloudUploadOutlined style={{ color: '#52c41a' }} />
                 </p>
                 <p className="ant-upload-text text-[#111827] text-base font-normal">
-                    <Link className="text-[#2563EB] font-medium">Chọn tệp</Link>{' '}
-                    hoặc kéo và thả tệp vào đây
+                    <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp
+                    vào đây
                 </p>
                 <span className="text-[#4B5563] text-base font-normal">
                     Định dạng XLSX, XLS (tối đa 5MB)

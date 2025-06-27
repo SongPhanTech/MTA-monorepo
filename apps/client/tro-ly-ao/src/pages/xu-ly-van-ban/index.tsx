@@ -1,19 +1,10 @@
-import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
-import { readStreamToText } from '@/utils'
 import { CopyOutlined, FileSyncOutlined } from '@ant-design/icons'
 import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
-import {
-    Button,
-    Col,
-    Input,
-    Row,
-    Select,
-    Space,
-    Typography,
-    message,
-} from 'antd'
+import { Button, Col, Input, message, Row, Select, Space, Typography } from 'antd'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
+import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
+import { readStreamToText } from '@/utils'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -30,8 +21,7 @@ function Page() {
     const [outputText, setOutputText] = useState('')
     const [mode, setMode] = useState<Mode>('translate')
     const [loading, setLoading] = useState(false)
-    const [abortController, setAbortController] =
-        useState<AbortController | null>(null)
+    const [abortController, setAbortController] = useState<AbortController | null>(null)
 
     const handleTranslate = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
@@ -83,14 +73,10 @@ function Page() {
         try {
             setLoading(true)
             let result = ''
-            if (mode === 'translate')
-                result = await handleTranslate(controller.signal)
-            else if (mode === 'summarize')
-                result = await handleSummarize(controller.signal)
-            else if (mode === 'extraction')
-                result = await handleExtraction(controller.signal)
-            else if (mode === 'fix')
-                result = await handleFixSpelling(controller.signal)
+            if (mode === 'translate') result = await handleTranslate(controller.signal)
+            else if (mode === 'summarize') result = await handleSummarize(controller.signal)
+            else if (mode === 'extraction') result = await handleExtraction(controller.signal)
+            else if (mode === 'fix') result = await handleFixSpelling(controller.signal)
 
             setOutputText(result)
             message.success('Xử lý thành công')

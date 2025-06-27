@@ -1,15 +1,12 @@
-import {
-    DownloadOutlined,
-    UploadOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import { FilterSinhVien } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
-import {
-    PutStudentModal,
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
+import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
+import { PutStudentModal, PutUpdateProfileModal, PutUploadProfileModal } from '@components/modal'
+import ImportStudentModal from '@components/modal/import-excel-student'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -17,12 +14,6 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-
-import Select from '@components/commons/select'
-import { FilterSinhVien } from '@components/filter'
-import EditIcon from '@components/icons/edit'
-import ViewIcon from '@components/icons/view'
-import ImportStudentModal from '@components/modal/import-excel-student'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
@@ -37,19 +28,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Col,
-    Divider,
-    Dropdown,
-    Flex,
-    Image,
-    Menu,
-    Popover,
-    Row,
-    Tag,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Dropdown, Flex, Image, Menu, message, Popover, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp } from 'lucide-react'
@@ -75,10 +54,8 @@ export default function UserProfilePageDs() {
 
     const router = useRouter()
 
-    const [selectedTrainingObjectType, setSelectedTrainingObjectType] =
-        useState<string>()
-    const [selectedTrainingCourse, setSelectedTrainingCourse] =
-        useState<string>()
+    const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
+    const [selectedTrainingCourse, setSelectedTrainingCourse] = useState<string>()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
@@ -147,10 +124,8 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const {
-        data: TrainingOnjectTypeData = [],
-        refetch: refetchTrainingObjectType,
-    } = useFindManyTrainingObjectType()
+    const { data: TrainingOnjectTypeData = [], refetch: refetchTrainingObjectType } =
+        useFindManyTrainingObjectType()
 
     const handleTrainingObjectTypeChange = (value: string) => {
         setSelectedTrainingObjectType(value)
@@ -170,9 +145,7 @@ export default function UserProfilePageDs() {
 
         // Kiểm tra xem lớp hiện tại có thuộc khóa mới không
         if (selectedFixedClass) {
-            const selectedClass = FixedClassData?.find(
-                (cls) => cls.id === selectedFixedClass
-            )
+            const selectedClass = FixedClassData?.find((cls) => cls.id === selectedFixedClass)
 
             // Nếu lớp hiện tại không thuộc khóa mới được chọn
             if (selectedClass?.trainingCourseId !== value) {
@@ -182,8 +155,7 @@ export default function UserProfilePageDs() {
 
         // Nếu khóa chỉ có 1 lớp, tự động chọn lớp đó
         const classesInCourse =
-            FixedClassData?.filter((cls) => cls.trainingCourseId === value) ||
-            []
+            FixedClassData?.filter((cls) => cls.trainingCourseId === value) || []
 
         if (classesInCourse.length === 1 && !selectedFixedClass) {
             setSelectedFixedClass(classesInCourse[0].id)
@@ -204,8 +176,9 @@ export default function UserProfilePageDs() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: TrainingCurriculumVersionData = [] } =
-        useFindManyCurriculumVersion({ orderBy: { name: 'asc' } })
+    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -228,9 +201,7 @@ export default function UserProfilePageDs() {
         }
 
         return (
-            FixedClassData?.filter(
-                (cls) => cls.trainingCourseId === selectedTrainingCourse
-            ) || []
+            FixedClassData?.filter((cls) => cls.trainingCourseId === selectedTrainingCourse) || []
         )
     }, [FixedClassData, selectedTrainingCourse])
 
@@ -288,14 +259,12 @@ export default function UserProfilePageDs() {
         tag: PutStudentModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
-        useDisclosure<string>({
-            tag: PutUploadProfileModal.name,
-        })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
-        useDisclosure<string>({
-            tag: PutUpdateProfileModal.name,
-        })
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+        tag: PutUploadProfileModal.name,
+    })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+        tag: PutUpdateProfileModal.name,
+    })
     const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -346,8 +315,7 @@ export default function UserProfilePageDs() {
         hideSpinner()
     }
 
-    const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile()
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const handleFilterChange = (
         key: string,
@@ -525,23 +493,12 @@ export default function UserProfilePageDs() {
 
                         {/* Hàng chứa các button */}
                         <Col xs={24}>
-                            <Flex
-                                justify="end"
-                                wrap="wrap"
-                                gap="8px"
-                                className="mt-1"
-                            >
+                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Popover
                                     content={
-                                        <Flex
-                                            vertical
-                                            align="flex-start"
-                                            gap={4}
-                                        >
+                                        <Flex vertical align="flex-start" gap={4}>
                                             <Button
-                                                onClick={() =>
-                                                    setImportModalVisible(true)
-                                                }
+                                                onClick={() => setImportModalVisible(true)}
                                                 className="w-full flex justify-start"
                                             >
                                                 <FileUp />
@@ -549,9 +506,7 @@ export default function UserProfilePageDs() {
                                             </Button>
                                             <ImportStudentModal
                                                 visible={importModalVisible}
-                                                onCancel={() =>
-                                                    setImportModalVisible(false)
-                                                }
+                                                onCancel={() => setImportModalVisible(false)}
                                                 onConfirm={handleImportConfirm}
                                                 existingStudents={[]}
                                             />
@@ -576,25 +531,13 @@ export default function UserProfilePageDs() {
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-                                <Dropdown
-                                    overlay={menuDownload}
-                                    trigger={['hover']}
-                                >
-                                    <Button
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
+                                <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                    <Button type="primary" icon={<DownloadOutlined />}>
                                         Tải file mẫu
                                     </Button>
                                 </Dropdown>
-                                <Dropdown
-                                    overlay={menuUpload}
-                                    trigger={['hover']}
-                                >
-                                    <Button
-                                        type="primary"
-                                        icon={<UploadOutlined />}
-                                    >
+                                <Dropdown overlay={menuUpload} trigger={['hover']}>
+                                    <Button type="primary" icon={<UploadOutlined />}>
                                         Nhập file
                                     </Button>
                                 </Dropdown>
@@ -611,9 +554,7 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Ảnh',
@@ -657,9 +598,7 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 render: (record) =>
                                     record.userProfile?.dateOfBirth
-                                        ? dayjs(
-                                              record.userProfile.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -676,13 +615,11 @@ export default function UserProfilePageDs() {
                                         value: 'Female',
                                     },
                                 ],
-                                onFilter: (value, record) =>
-                                    record.userProfile?.gender === value,
+                                onFilter: (value, record) => record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
                                         : '',
                             },
@@ -697,9 +634,7 @@ export default function UserProfilePageDs() {
                                 onFilter: (value, record) =>
                                     record.trainingObjectType.name === value,
                                 render: (record) =>
-                                    record.trainingObjectType
-                                        ? record.trainingObjectType.name
-                                        : '',
+                                    record.trainingObjectType ? record.trainingObjectType.name : '',
                             },
                             {
                                 title: 'Lớp',
@@ -732,11 +667,8 @@ export default function UserProfilePageDs() {
                                     return trainingCourseName === value
                                 },
                                 render: (record) => {
-                                    const trainingCourse =
-                                        record?.fixedClass?.trainingCourse
-                                    return trainingCourse
-                                        ? trainingCourse?.name
-                                        : ''
+                                    const trainingCourse = record?.fixedClass?.trainingCourse
+                                    return trainingCourse ? trainingCourse?.name : ''
                                 },
                             },
                             {
@@ -749,15 +681,13 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingField =
-                                        record?.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor
-                                            ?.trainingField?.name
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.trainingField?.name
                                     return trainingField === value
                                 },
                                 render: (record) => {
-                                    return record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor
-                                        ?.trainingField?.name
+                                    return record?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.trainingField?.name
                                 },
                             },
                             {
@@ -770,28 +700,25 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingMajor =
-                                        record?.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor?.name
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.name
                                     return trainingMajor === value
                                 },
                                 render: (record) => {
-                                    return record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor?.name
+                                    return record?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name
                                 },
                             },
                             {
                                 title: 'Chương trình đào tạo',
                                 align: 'center',
                                 width: 180,
-                                filters: TrainingCurriculumVersionData.map(
-                                    (item) => ({
-                                        text: item.name,
-                                        value: item.name,
-                                    })
-                                ),
+                                filters: TrainingCurriculumVersionData.map((item) => ({
+                                    text: item.name,
+                                    value: item.name,
+                                })),
                                 render: (record) => {
-                                    return record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.name
+                                    return record?.fixedClass?.curriculumVersion?.curriculum?.name
                                 },
                             },
                             {
@@ -804,13 +731,9 @@ export default function UserProfilePageDs() {
                                             record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                         ]
                                     return statusInfo ? (
-                                        <Tag color={statusInfo.color}>
-                                            {statusInfo.label}
-                                        </Tag>
+                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
                                     ) : (
-                                        <Tag color="default">
-                                            Không xác định
-                                        </Tag>
+                                        <Tag color="default">Không xác định</Tag>
                                     )
                                 },
                             },
@@ -839,8 +762,7 @@ export default function UserProfilePageDs() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>
@@ -850,8 +772,7 @@ export default function UserProfilePageDs() {
                         rowKey="id"
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: (selectedKeys) =>
-                                setSelectedRowKeys(selectedKeys),
+                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                         }}
                         data={data}
                         pagination={{

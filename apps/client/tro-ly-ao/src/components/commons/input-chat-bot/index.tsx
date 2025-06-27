@@ -31,12 +31,11 @@ export default function ChatInput({
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto'
             const scrollHeight = textareaRef.current.scrollHeight
-            textareaRef.current.style.height =
-                scrollHeight <= 160 ? `${scrollHeight}px` : '160px'
+            textareaRef.current.style.height = scrollHeight <= 160 ? `${scrollHeight}px` : '160px'
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         resizeTextarea()
     }, [input])
@@ -91,19 +90,13 @@ export default function ChatInput({
                                             ? 'bg-primary text-white hover:opacity-80'
                                             : 'bg-gray-100 hover:bg-gray-200 text-[#aaa]'
                                     }`}
-                                    icon={
-                                        <QuestionCircleOutlined
-                                            style={{ fontSize: 16 }}
-                                        />
-                                    }
+                                    icon={<QuestionCircleOutlined style={{ fontSize: 16 }} />}
                                 />
                             </Tooltip>
                             {loading ? (
                                 <Button
                                     className="p-2"
-                                    icon={
-                                        <div className="w-2.5 h-2.5 bg-white" />
-                                    }
+                                    icon={<div className="w-2.5 h-2.5 bg-white" />}
                                     type="primary"
                                     shape="circle"
                                     danger
@@ -113,9 +106,7 @@ export default function ChatInput({
                                 <Button
                                     onClick={onSend}
                                     className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
-                                    icon={
-                                        <ArrowUpOutlined className="text-white text-[16px]" />
-                                    }
+                                    icon={<ArrowUpOutlined className="text-white text-[16px]" />}
                                 />
                             )}
                         </div>

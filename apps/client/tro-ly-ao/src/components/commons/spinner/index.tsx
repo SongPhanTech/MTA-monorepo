@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils'
 import useSpinner from '@hooks/spinner'
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const loaderVariants = cva('animate-spin text-primary', {
     variants: {
@@ -35,12 +35,7 @@ export function Spinner({ size, className }: SpinnerContentProps) {
                 zIndex: 9998,
             }}
         >
-            <Loader2
-                className={cn(
-                    loaderVariants({ size, show: isShow }),
-                    className
-                )}
-            />
+            <Loader2 className={cn(loaderVariants({ size, show: isShow }), className)} />
         </div>
     )
 }

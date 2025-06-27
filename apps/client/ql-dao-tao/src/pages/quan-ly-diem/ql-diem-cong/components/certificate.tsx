@@ -9,7 +9,7 @@ import {
     useFindManyArchivedCertificate,
     useUpdateArchivedCertificate,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -42,8 +42,7 @@ export default function ArchivedCertificate() {
     //     data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
     // )
 
-    const { mutateAsync: updateArchivedCertificate } =
-        useUpdateArchivedCertificate()
+    const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -108,17 +107,11 @@ export default function ArchivedCertificate() {
                         <Col span={24} className="mt-3">
                             <Flex justify="space-between">
                                 <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="searchText"
-                                    >
+                                    <Form.Item className="mb-0" name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
+                                                handleFilterChange('searchText', e.target.value)
                                             }
                                             placeholder="Tìm kiếm"
                                             allowClear
@@ -156,9 +149,7 @@ export default function ArchivedCertificate() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên chứng chỉ',
@@ -188,16 +179,12 @@ export default function ArchivedCertificate() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

@@ -59,9 +59,7 @@ export default function ClassSubject() {
     const { getExamTypeLabel } = useExamTypeOptions()
 
     const handleNavigate = (id: string) => {
-        router.push(
-            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`
-        )
+        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`)
     }
 
     const handleFilterChange = (key: string, value: string) => {
@@ -72,8 +70,7 @@ export default function ClassSubject() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     //#endregion
 
@@ -108,8 +105,7 @@ export default function ClassSubject() {
                       subjectClassStudent: {
                           some: {
                               student: {
-                                  trainingObjectTypeId:
-                                      filters.trainingObjectTypeId,
+                                  trainingObjectTypeId: filters.trainingObjectTypeId,
                               },
                           },
                       },
@@ -203,18 +199,11 @@ export default function ClassSubject() {
             if (item.examDate) {
                 if (!item.examScoreDeadline) {
                     const examDate = new Date(item.examDate)
-                    const examScoreDeadline = new Date(
-                        examDate.getTime() + 7 * 24 * 60 * 60 * 1000
-                    )
+                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000)
                     item.examScoreDeadline = examScoreDeadline
-                    if (
-                        item.examScoreDeadline <=
-                        new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
+                    if (item.examScoreDeadline <= new Date(new Date().setHours(24, 0, 0, 0))) {
                         item.isLockExamScore = true
-                    } else if (
-                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
+                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
                         item.isLockExamScore = true
                     } else {
                         item.isLockExamScore = false
@@ -226,21 +215,13 @@ export default function ClassSubject() {
                             isLockExamScore: item.isLockExamScore,
                         },
                     }).catch((error) => {
-                        message.error(
-                            'Error updating examScoreDeadline for item:',
-                            error
-                        )
+                        message.error('Error updating examScoreDeadline for item:', error)
                     })
                 } else {
                     const examDate = new Date(item.examDate)
-                    if (
-                        item.examScoreDeadline <
-                        new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
+                    if (item.examScoreDeadline < new Date(new Date().setHours(24, 0, 0, 0))) {
                         item.isLockExamScore = true
-                    } else if (
-                        examDate >= new Date(new Date().setHours(24, 0, 0, 0))
-                    ) {
+                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
                         item.isLockExamScore = true
                     } else {
                         item.isLockExamScore = false
@@ -249,18 +230,13 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { isLockExamScore: item.isLockExamScore },
                     }).catch((error) => {
-                        message.error(
-                            'Error updating examScoreDeadline for item:',
-                            error
-                        )
+                        message.error('Error updating examScoreDeadline for item:', error)
                     })
                 }
                 // Kiểm tra và cập nhật scoreDeadline
                 if (!item.scoreDeadline) {
                     const examDate = new Date(item.examDate)
-                    const scoreDeadline = new Date(
-                        examDate.getTime() - 7 * 24 * 60 * 60 * 1000
-                    )
+                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000)
                     item.scoreDeadline = scoreDeadline
                     if (item.scoreDeadline < new Date()) {
                         item.isLockScore = true
@@ -271,10 +247,7 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { scoreDeadline, isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        message.error(
-                            'Error updating scoreDeadline for item:',
-                            error
-                        )
+                        message.error('Error updating scoreDeadline for item:', error)
                     })
                 } else {
                     if (item.scoreDeadline < new Date()) {
@@ -286,17 +259,14 @@ export default function ClassSubject() {
                         where: { id: item.id },
                         data: { isLockScore: item.isLockScore },
                     }).catch((error) => {
-                        message.error(
-                            'Error updating scoreDeadline for item:',
-                            error
-                        )
+                        message.error('Error updating scoreDeadline for item:', error)
                     })
                 }
             }
         })
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         handleCheckExamDate()
     }, [])
@@ -313,10 +283,7 @@ export default function ClassSubject() {
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
+                                                handleFilterChange('searchText', e.target.value)
                                             }
                                             placeholder="Nhập tên lớp..."
                                             style={{ height: 32 }}
@@ -340,14 +307,9 @@ export default function ClassSubject() {
                                         labelAlign="left"
                                     >
                                         <TreeSelectSemester
-                                            defaultValue={
-                                                filters.semesterId || undefined
-                                            }
+                                            defaultValue={filters.semesterId || undefined}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'semesterId',
-                                                    val
-                                                )
+                                                handleFilterChange('semesterId', val)
                                             }
                                         />
                                     </Form.Item>
@@ -369,10 +331,7 @@ export default function ClassSubject() {
                                                 })
                                             )}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingObjectTypeId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingObjectTypeId', val)
                                             }
                                             allowClear
                                         />
@@ -388,12 +347,10 @@ export default function ClassSubject() {
                                     >
                                         <Select
                                             placeholder="Lớp MH"
-                                            options={dataTable.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
+                                            options={dataTable.map((i: TrainingObjectType) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -440,9 +397,7 @@ export default function ClassSubject() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã lớp',
@@ -459,16 +414,14 @@ export default function ClassSubject() {
                                 title: 'Môn học',
                                 dataIndex: 'tenMonHoc',
                                 width: 180,
-                                render: (text, record) =>
-                                    record.subject?.name || text,
+                                render: (text, record) => record.subject?.name || text,
                             },
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'stc',
                                 width: 100,
                                 align: 'center',
-                                render: (text, record) =>
-                                    record.subject?.credit || text,
+                                render: (text, record) => record.subject?.credit || text,
                             },
                             {
                                 title: 'Hình thức thi',
@@ -476,17 +429,14 @@ export default function ClassSubject() {
                                 width: 150,
                                 align: 'center',
                                 filterSearch: true,
-                                render: (record: ExamType) =>
-                                    getExamTypeLabel(record),
+                                render: (record: ExamType) => getExamTypeLabel(record),
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
                                 width: 150,
                                 render: (record: string) =>
-                                    record
-                                        ? dayjs(record).format('DD/MM/YYYY')
-                                        : '',
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
@@ -494,9 +444,7 @@ export default function ClassSubject() {
                                 width: 150,
                                 align: 'center',
                                 render: (record: string) =>
-                                    record
-                                        ? dayjs(record).format('DD/MM/YYYY')
-                                        : '',
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Hạn đợi',
@@ -510,9 +458,7 @@ export default function ClassSubject() {
                                 width: 150,
                                 align: 'center',
                                 render: (record: string) =>
-                                    record
-                                        ? dayjs(record).format('DD/MM/YYYY')
-                                        : '',
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Số ngày',
@@ -564,20 +510,10 @@ export default function ClassSubject() {
                                 width: 150,
                                 align: 'center',
                                 render: (text, record) => {
-                                    if (
-                                        record.active === true ||
-                                        record.active === 'active'
-                                    ) {
-                                        return (
-                                            <Tag color="green">
-                                                Đang hoạt động
-                                            </Tag>
-                                        )
+                                    if (record.active === true || record.active === 'active') {
+                                        return <Tag color="green">Đang hoạt động</Tag>
                                     }
-                                    if (
-                                        record.active === false ||
-                                        record.active === 'inactive'
-                                    ) {
+                                    if (record.active === false || record.active === 'inactive') {
                                         return <Tag color="red">Kết thúc</Tag>
                                     }
                                     return ''
@@ -597,9 +533,8 @@ export default function ClassSubject() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject
-                                                ?.managementOrganization
-                                                ?.name || 'Chưa có bộ môn'}
+                                            {record.subject?.managementOrganization?.name ||
+                                                'Chưa có bộ môn'}
                                         </span>
                                     )
                                 },
@@ -618,9 +553,8 @@ export default function ClassSubject() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject
-                                                ?.managementOrganization?.parent
-                                                ?.name || 'Chưa có khoa'}
+                                            {record.subject?.managementOrganization?.parent?.name ||
+                                                'Chưa có khoa'}
                                         </span>
                                     )
                                 },
@@ -635,14 +569,9 @@ export default function ClassSubject() {
                                         return (
                                             <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={() =>
-                                                    handleNavigate(id)
-                                                }
+                                                onClick={() => handleNavigate(id)}
                                             >
-                                                <CalendarPlus
-                                                    size={16}
-                                                    strokeWidth={2}
-                                                />
+                                                <CalendarPlus size={16} strokeWidth={2} />
                                                 Nhập điểm
                                             </Row>
                                         )

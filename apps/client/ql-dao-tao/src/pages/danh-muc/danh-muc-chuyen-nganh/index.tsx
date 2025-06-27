@@ -14,12 +14,13 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | undefined
     trainingObjectTypeId: string | undefined
@@ -147,8 +148,7 @@ export default function TrainingMajorPage() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     return (
         <div>
@@ -161,10 +161,7 @@ export default function TrainingMajorPage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -203,10 +200,7 @@ export default function TrainingMajorPage() {
                                             marginRight: 8,
                                         }}
                                         onChange={(val) =>
-                                            handleFilterChange(
-                                                'trainingObjectTypeId',
-                                                val
-                                            )
+                                            handleFilterChange('trainingObjectTypeId', val)
                                         }
                                         allowClear
                                     />
@@ -264,12 +258,7 @@ export default function TrainingMajorPage() {
                                               ) => {
                                                   return (
                                                       <div key={i?.id}>
-                                                          -{' '}
-                                                          {
-                                                              i
-                                                                  ?.trainingObjectType
-                                                                  ?.name
-                                                          }
+                                                          - {i?.trainingObjectType?.name}
                                                       </div>
                                                   )
                                               }
@@ -317,9 +306,7 @@ export default function TrainingMajorPage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -345,16 +332,12 @@ export default function TrainingMajorPage() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

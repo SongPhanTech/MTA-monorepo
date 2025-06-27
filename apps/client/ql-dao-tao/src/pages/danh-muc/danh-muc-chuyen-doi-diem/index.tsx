@@ -14,17 +14,7 @@ import {
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
 import type React from 'react'
@@ -81,10 +71,7 @@ export default function TrainingFieldPage() {
         },
         include: {
             scoreConverts: {
-                orderBy: [
-                    { trainingCourse: { createdAt: 'desc' } },
-                    { base10Max: 'desc' },
-                ],
+                orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
             },
         },
         orderBy: {
@@ -95,11 +82,7 @@ export default function TrainingFieldPage() {
     const { data: count } = useCountScoreConvert({
         where: {
             active:
-                filters.active === 'true'
-                    ? true
-                    : filters.active === 'false'
-                      ? false
-                      : undefined,
+                filters.active === 'true' ? true : filters.active === 'false' ? false : undefined,
             ...(filters.searchText && filters.searchText.trim() !== ''
                 ? {
                       AND: [
@@ -186,10 +169,7 @@ export default function TrainingFieldPage() {
                                         max={10}
                                         step={0.1}
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm điểm"
                                         style={{
@@ -220,9 +200,7 @@ export default function TrainingFieldPage() {
                                                     ? undefined
                                                     : item.value.toString(),
                                         }))}
-                                        onChange={(value) =>
-                                            handleFilterChange('active', value)
-                                        }
+                                        onChange={(value) => handleFilterChange('active', value)}
                                     />
                                 </Form.Item>
                             </Flex>
@@ -255,8 +233,7 @@ export default function TrainingFieldPage() {
 
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () =>
-                                            handleDeleteMultil(record),
+                                        onConfirm: () => handleDeleteMultil(record),
                                     }}
                                 />
                             </Row>
@@ -315,16 +292,12 @@ export default function TrainingFieldPage() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

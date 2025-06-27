@@ -1,8 +1,4 @@
-import {
-    DownloadOutlined,
-    UploadOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -42,12 +38,12 @@ import {
     Image,
     Input,
     Menu,
+    message,
     Popconfirm,
     Row,
     Select,
     Tag,
     Tooltip,
-    message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -56,6 +52,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 dayjs.locale('vi')
 
 export default function StudentFixedClassPage() {
@@ -284,8 +281,7 @@ export default function StudentFixedClassPage() {
         hideSpinner()
     }
 
-    const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile()
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const handleFilterChange = (
         key: string,
@@ -368,13 +364,9 @@ export default function StudentFixedClassPage() {
         <div>
             <Divider orientation="left" orientationMargin={0}>
                 {fixedClass?.trainingCourse?.trainingObjectType.name} -{' '}
-                {fixedClass?.trainingCourse?.name} -{' '}
-                {fixedClass?.curriculumVersion?.name} -{' '}
+                {fixedClass?.trainingCourse?.name} - {fixedClass?.curriculumVersion?.name} -{' '}
                 {fixedClass?.curriculumVersion?.curriculum.trainingMajor.name} -{' '}
-                {
-                    fixedClass?.curriculumVersion?.curriculum.trainingMajor
-                        .trainingField.name
-                }
+                {fixedClass?.curriculumVersion?.curriculum.trainingMajor.trainingField.name}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -386,10 +378,7 @@ export default function StudentFixedClassPage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -428,9 +417,7 @@ export default function StudentFixedClassPage() {
                                             marginRight: 8,
                                             height: 32,
                                         }}
-                                        onChange={(val) =>
-                                            handleFilterChange('gender', val)
-                                        }
+                                        onChange={(val) => handleFilterChange('gender', val)}
                                         allowClear
                                     />
                                 </Form.Item>
@@ -445,12 +432,7 @@ export default function StudentFixedClassPage() {
                                     onChange={(dates, dateStrings) => {
                                         handleFilterChange(
                                             'dateOfBirth',
-                                            dates
-                                                ? [
-                                                      dateStrings[0],
-                                                      dateStrings[1],
-                                                  ]
-                                                : []
+                                            dates ? [dateStrings[0], dateStrings[1]] : []
                                         )
                                     }}
                                     locale={CUSSTOM_VI_LOCALE}
@@ -461,12 +443,7 @@ export default function StudentFixedClassPage() {
 
                         {/* Hàng chứa các button */}
                         <Col xs={12}>
-                            <Flex
-                                justify="end"
-                                wrap="wrap"
-                                gap="8px"
-                                className="mt-1"
-                            >
+                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Popconfirm
                                     title="Xác nhận xóa dữ liệu?"
                                     description="Bạn có chắc chắn muốn xoá những sinh viên đã chọn ra khỏi lớp này không?"
@@ -480,9 +457,7 @@ export default function StudentFixedClassPage() {
                                         type="primary"
                                     >
                                         {selectedRowKeys?.length > 0 && (
-                                            <span>
-                                                ({selectedRowKeys?.length})
-                                            </span>
+                                            <span>({selectedRowKeys?.length})</span>
                                         )}
                                         Xoá SV khỏi lớp
                                     </Button>
@@ -491,25 +466,13 @@ export default function StudentFixedClassPage() {
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-                                <Dropdown
-                                    overlay={menuDownload}
-                                    trigger={['hover']}
-                                >
-                                    <Button
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
+                                <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                    <Button type="primary" icon={<DownloadOutlined />}>
                                         Tải file mẫu
                                     </Button>
                                 </Dropdown>
-                                <Dropdown
-                                    overlay={menuUpload}
-                                    trigger={['hover']}
-                                >
-                                    <Button
-                                        type="primary"
-                                        icon={<UploadOutlined />}
-                                    >
+                                <Dropdown overlay={menuUpload} trigger={['hover']}>
+                                    <Button type="primary" icon={<UploadOutlined />}>
                                         Nhập file
                                     </Button>
                                 </Dropdown>
@@ -522,8 +485,7 @@ export default function StudentFixedClassPage() {
                         rowKey="id"
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: (selectedKeys: any) =>
-                                setSelectedRowKeys(selectedKeys),
+                            onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
                         }}
                         columns={[
                             // {
@@ -539,9 +501,7 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Ảnh',
@@ -550,11 +510,7 @@ export default function StudentFixedClassPage() {
                                 render: (_, record) => {
                                     const avatar = record.userProfile?.avatar
                                     return avatar ? (
-                                        <Image
-                                            src={getMinioUrl(avatar)}
-                                            width={100}
-                                            height={80}
-                                        />
+                                        <Image src={getMinioUrl(avatar)} width={100} height={80} />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                                             <UserOutlined
@@ -587,9 +543,7 @@ export default function StudentFixedClassPage() {
                                 width: 100,
                                 render: (record) =>
                                     record.userProfile?.dateOfBirth
-                                        ? dayjs(
-                                              record.userProfile.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -599,8 +553,7 @@ export default function StudentFixedClassPage() {
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
                                         : '',
                             },
@@ -609,9 +562,8 @@ export default function StudentFixedClassPage() {
                                 width: 150,
                                 render: (record) => {
                                     return (
-                                        record?.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor
-                                            ?.trainingField?.name || ''
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.trainingField?.name || ''
                                     )
                                 },
                             },
@@ -620,9 +572,8 @@ export default function StudentFixedClassPage() {
                                 width: 180,
                                 render: (record) => {
                                     return (
-                                        record?.fixedClass?.curriculumVersion
-                                            ?.curriculum?.trainingMajor?.name ||
-                                        ''
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.name || ''
                                     )
                                 },
                             },
@@ -644,13 +595,9 @@ export default function StudentFixedClassPage() {
                                             record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                         ]
                                     return statusInfo ? (
-                                        <Tag color={statusInfo.color}>
-                                            {statusInfo.label}
-                                        </Tag>
+                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
                                     ) : (
-                                        <Tag color="default">
-                                            Không xác định
-                                        </Tag>
+                                        <Tag color="default">Không xác định</Tag>
                                     )
                                 },
                             },
@@ -683,8 +630,7 @@ export default function StudentFixedClassPage() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>
@@ -710,9 +656,5 @@ export default function StudentFixedClassPage() {
 }
 
 StudentFixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return (
-        <DefaultLayout headerChildren="Danh sách sinh viên lớp biên chế">
-            {page}
-        </DefaultLayout>
-    )
+    return <DefaultLayout headerChildren="Danh sách sinh viên lớp biên chế">{page}</DefaultLayout>
 }

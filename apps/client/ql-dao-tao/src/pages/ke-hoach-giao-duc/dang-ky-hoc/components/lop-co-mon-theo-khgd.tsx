@@ -6,10 +6,11 @@ import {
     enrollFixedClassOnSubjectClass,
     useFixedClassBySubjectClassSemester,
 } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
+
 // const { Option } = Select;
 
 interface FilterProps {
@@ -21,10 +22,7 @@ interface FixedClassProps {
     subjectClassId?: string | null
 }
 
-export default function FixedClass({
-    semesterId,
-    subjectClassId,
-}: FixedClassProps) {
+export default function FixedClass({ semesterId, subjectClassId }: FixedClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
@@ -52,9 +50,7 @@ export default function FixedClass({
     useEffect(() => {
         if (fixedClass?.data?.data) {
             const selectedKeys = fixedClass.data.data
-                .filter(
-                    (item: FixedClassBySubjectClassSemester) => item.checked
-                )
+                .filter((item: FixedClassBySubjectClassSemester) => item.checked)
                 .map((item: FixedClassBySubjectClassSemester) => item.id)
             setSelectedRowKeys(selectedKeys)
         }
@@ -93,10 +89,7 @@ export default function FixedClass({
                                     id="search"
                                     placeholder="Nhập tên lớp..."
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     style={{ height: 32 }}
                                     prefix={
@@ -129,9 +122,7 @@ export default function FixedClass({
                         align: 'center',
                         fixed: 'left',
                         render: (_, __, index) =>
-                            index +
-                            1 +
-                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
                     {
                         title: 'Tên lớp QL',
@@ -163,11 +154,7 @@ export default function FixedClass({
                 }}
             />
             <Flex justify="end" style={{ marginTop: 16 }}>
-                <Button
-                    type="primary"
-                    className="h-[32px] px-4"
-                    onClick={handleSave}
-                >
+                <Button type="primary" className="h-[32px] px-4" onClick={handleSave}>
                     Lưu
                 </Button>
             </Flex>

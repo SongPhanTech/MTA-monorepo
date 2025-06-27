@@ -1,6 +1,6 @@
 import {
-    type OidcClaimsHook,
     getAuth,
+    type OidcClaimsHook,
     oidcAuthMiddleware,
     processOAuthCallback,
     revokeSession,

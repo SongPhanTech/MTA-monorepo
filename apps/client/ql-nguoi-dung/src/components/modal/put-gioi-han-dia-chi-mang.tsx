@@ -1,7 +1,5 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, {
-    type PutModalFormType,
-} from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import { useFindUniqueBlockedIp } from '@workspace/db/hooks'
 import { Col, Form, Input } from 'antd'
 import { useEffect } from 'react'
@@ -27,7 +25,7 @@ const PutGioiHanDiaChiMangDungModal = () => {
         where: { id },
     })
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (blockedIp) {
             form.setFieldsValue({

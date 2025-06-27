@@ -1,4 +1,3 @@
-import { TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 import { SearchOutlined } from '@ant-design/icons'
 import { CardDocument } from '@components/commons/card-document'
 import { FileUploadIcon } from '@components/commons/upload'
@@ -8,19 +7,11 @@ import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
 import { useFindManyDocument } from '@workspace/db/hooks'
-import {
-    Button,
-    Divider,
-    Empty,
-    Input,
-    Modal,
-    Spin,
-    Typography,
-    message,
-} from 'antd'
+import { Button, Divider, Empty, Input, Modal, message, Spin, Typography } from 'antd'
 import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
+import { TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 
 const { Title } = Typography
 
@@ -28,8 +19,7 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState<string[]>([])
-    const [selectedDocument, setSelectedDocument] =
-        useState<(typeof documents)[0]>()
+    const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0]>()
 
     const { data: documents = [] } = useFindManyDocument({
         include: {
@@ -134,42 +124,26 @@ export default function Page() {
                         <div className="space-y-2 text-sm">
                             {' '}
                             <div>
-                                <p className="font-semibold text-gray-700">
-                                    Loại tài liệu
-                                </p>
+                                <p className="font-semibold text-gray-700">Loại tài liệu</p>
                                 <p>
                                     {
                                         DOCUMENT_TYPE.find(
-                                            (item) =>
-                                                item.value ===
-                                                selectedDocument.type
+                                            (item) => item.value === selectedDocument.type
                                         )?.label
                                     }
                                 </p>
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-700">
-                                    Kích thước
-                                </p>
-                                <p>
-                                    {formatNiceBytes(selectedDocument.fileSize)}
-                                </p>
+                                <p className="font-semibold text-gray-700">Kích thước</p>
+                                <p>{formatNiceBytes(selectedDocument.fileSize)}</p>
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-700">
-                                    Người đăng
-                                </p>
+                                <p className="font-semibold text-gray-700">Người đăng</p>
                                 <p>{selectedDocument.uploadedBy.name}</p>
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-700">
-                                    Ngày đăng
-                                </p>
-                                <p>
-                                    {formatDateReadable(
-                                        selectedDocument.createdAt
-                                    )}
-                                </p>
+                                <p className="font-semibold text-gray-700">Ngày đăng</p>
+                                <p>{formatDateReadable(selectedDocument.createdAt)}</p>
                             </div>
                         </div>
                         <Button
@@ -178,8 +152,7 @@ export default function Page() {
                                 e.stopPropagation()
                                 onDownload(
                                     getMinioUrl(selectedDocument.uri),
-                                    selectedDocument.title ||
-                                        selectedDocument.id
+                                    selectedDocument.title || selectedDocument.id
                                 )
                             }}
                         >

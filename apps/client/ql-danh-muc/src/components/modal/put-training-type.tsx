@@ -66,7 +66,7 @@ const PutTrainingTypeModal = () => {
     const { data: level } = useFindUniqueTrainingType({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +80,16 @@ const PutTrainingTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa loại hình đào tạo'
-                    : 'Thêm mới loại hình đào tạo'
-            }
+            title={id ? 'Chỉnh sửa loại hình đào tạo' : 'Thêm mới loại hình đào tạo'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã loại hình đào tạo"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã loại hình đào tạo" required>
                     <Input placeholder="Nhập mã loại hình đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên loại hình đào tạo"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên loại hình đào tạo" required>
                     <Input placeholder="Nhập loại hình đào tạo" />
                 </FormItem>
             </Col>

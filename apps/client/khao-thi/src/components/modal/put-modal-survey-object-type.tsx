@@ -66,7 +66,7 @@ const PutSurveyObjectTypeModal = () => {
     const { data: surveyObjectType } = useFindUniqueSurveyObjectType({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyObjectType) {
             form.setFieldsValue(surveyObjectType)
@@ -80,30 +80,16 @@ const PutSurveyObjectTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa đối tượng khảo sát'
-                    : 'Thêm mới đối tượng khảo sát'
-            }
+            title={id ? 'Chỉnh sửa đối tượng khảo sát' : 'Thêm mới đối tượng khảo sát'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã đối tượng khảo sát"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã đối tượng khảo sát" required>
                     <Input placeholder="Nhập mã đối tượng khảo sát" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên đối tượng khảo sát"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên đối tượng khảo sát" required>
                     <Input placeholder="Nhập tên đối tượng khảo sát" />
                 </FormItem>
             </Col>

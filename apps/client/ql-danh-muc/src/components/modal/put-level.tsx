@@ -3,11 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Level } from '@workspace/db'
-import {
-    useCreateLevel,
-    useFindUniqueLevel,
-    useUpdateLevel,
-} from '@workspace/db/hooks'
+import { useCreateLevel, useFindUniqueLevel, useUpdateLevel } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -66,7 +62,7 @@ const PutLevelModal = () => {
     const { data: level } = useFindUniqueLevel({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
@@ -80,30 +76,16 @@ const PutLevelModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa danh mục phân cấp'
-                    : 'Thêm mới danh mục phân cấp'
-            }
+            title={id ? 'Chỉnh sửa danh mục phân cấp' : 'Thêm mới danh mục phân cấp'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã danh mục phân cấp"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã danh mục phân cấp" required>
                     <Input placeholder="Nhập mã danh mục phân cấp" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên danh mục phân cấp"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên danh mục phân cấp" required>
                     <Input placeholder="Nhập tên danh mục phân cấp" />
                 </FormItem>
             </Col>
