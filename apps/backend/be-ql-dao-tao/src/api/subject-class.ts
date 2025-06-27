@@ -428,7 +428,7 @@ app.openapi(openSubjectClass, async (c) => {
             semesterYear,
             semesterType,
             trainingCourseId ?? null,
-            search ?? null,
+            search ? `%${search}%` : null,
             trainingMajorId ?? null,
             Number(page),
             Number(pageSize)
@@ -524,7 +524,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
             semesterYear,
             semesterType,
             subjectClassId,
-            search ?? null,
+            search ? `%${search}%` : null,
             Number(page),
             Number(pageSize)
         ) as any
@@ -638,7 +638,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
             semesterYear,
             semesterType,
             subjectClassId,
-            search ?? null,
+            search ? `%${search}%` : null,
             Number(page),
             Number(pageSize)
         ) as any
