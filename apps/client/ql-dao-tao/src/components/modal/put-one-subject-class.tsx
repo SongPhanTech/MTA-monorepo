@@ -207,7 +207,9 @@ const PutOneSubjectClassModal = () => {
                         options={subjectVersionData.map((item) => {
                             return {
                                 ...item,
-                                label: item.name,
+                                label: item?.code
+                                    ? `${item?.code} - ${item?.name}`
+                                    : item?.name,
                                 value: item.id,
                             }
                         })}

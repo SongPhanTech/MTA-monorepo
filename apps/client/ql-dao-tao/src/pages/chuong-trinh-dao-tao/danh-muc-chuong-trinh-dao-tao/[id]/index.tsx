@@ -241,9 +241,7 @@ export default function TrainingProgramSubjects() {
             trainingBlock: true,
         },
         orderBy: {
-            trainingBlock: {
-                priority: 'asc',
-            },
+            priority: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

@@ -4,11 +4,13 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { DM_DonVi, ExamType } from '@workspace/db'
 import {
+    useCountSubject,
     useFindManyDM_DonVi,
     useFindManySubject,
     useUpdateSubject,
@@ -40,6 +42,7 @@ interface FilterProps {
 
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         managementOrganizationId: '',
@@ -99,11 +102,67 @@ export default function SubjectList() {
                 : {}),
         },
         include: {
-            subjectVersion: true,
+            subjectVersion: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
             managementOrganization: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count, refetch: refetchCount } = useCountSubject({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              subjectVersion: {
+                                  some: {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
+                : {}),
+            ...(filters.examType
+                ? {
+                      subjectVersion: {
+                          some: {
+                              examType: {
+                                  in: filters.examType,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(typeof filters.active === 'boolean'
+                ? {
+                      subjectVersion: {
+                          some: {
+                              active: filters.active,
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -440,6 +499,13 @@ export default function SubjectList() {
                                 },
                             },
                         ]}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                         headerRight={({ id: subjectId }) => (
                             <Flex gap={8} align="center">
                                 <Tooltip

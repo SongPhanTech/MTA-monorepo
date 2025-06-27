@@ -37,7 +37,9 @@ const PutCurriculum = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor()
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
     const { mutateAsync: createCurriculum } = useCreateCurriculum()
     const { mutateAsync: updateCurriculum } = useUpdateCurriculum()

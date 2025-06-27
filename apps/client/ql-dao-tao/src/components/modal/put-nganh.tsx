@@ -138,7 +138,7 @@ const PutTrainingFieldModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa ngành' : 'Thêm mới ngành'}
-            className="w-[45vw]"
+            className="w-[900px]"
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã ngành" required>
@@ -169,6 +169,7 @@ const PutTrainingFieldModal = () => {
                 >
                     <Select
                         mode="multiple"
+                        maxTagCount={'responsive'}
                         placeholder="Chọn đối tượng đào tạo"
                         options={trainingObjectTypeData.map(
                             (i: TrainingObjectType) => {

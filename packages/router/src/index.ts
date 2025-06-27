@@ -348,19 +348,19 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục chuyên ngành',
                     },
                     {
+                        id: 'khoa-huan-luyen',
+                        label: 'Danh mục khoá đào tạo',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
+                        description: 'Danh mục khoá đào tạo',
+                    },
+                    {
                         id: 'danh-muc-chuyen-doi-diem',
                         label: 'Bảng chuyển đổi điểm',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO
                             .DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                         description: 'Bảng chuyển đổi điểm',
-                    },
-                    {
-                        id: 'khoa-huan-luyen',
-                        label: 'Danh mục khoá đào tạo',
-                        icon: BookOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
-                        description: 'Danh mục khoá đào tạo',
                     },
                     {
                         id: 'danh-muc-danh-muc-phong-hoc',

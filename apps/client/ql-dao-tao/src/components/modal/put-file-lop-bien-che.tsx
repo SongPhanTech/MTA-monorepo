@@ -27,7 +27,11 @@ const PutUploadFixedClassModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse()
+        useFindManyTrainingCourse({
+            orderBy: {
+                name: 'asc',
+            },
+        })
 
     async function onOk(output?: PutUploadFixedClass) {
         if (!output) return

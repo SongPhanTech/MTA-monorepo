@@ -130,12 +130,17 @@ const PutTrainingBlockSubject = () => {
                         allowClear
                         showSearch
                         placeholder="Chọn môn học"
-                        options={subjectVersionData.map((i: SubjectVersion) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
+                        options={subjectVersionData.map(
+                            (item: SubjectVersion) => {
+                                return {
+                                    ...item,
+                                    label: item?.code
+                                        ? `${item?.code} - ${item?.name}`
+                                        : item?.name,
+                                    value: item.id,
+                                }
                             }
-                        })}
+                        )}
                     />
                 </FormItem>
             </Col>

@@ -638,7 +638,7 @@ const ModalPrintToKQHT = () => {
 
                             return sortedRankings.map(
                                 (item: any, index: number) => {
-                                    let displayName = item.classification
+                                    const displayName = item.classification
 
                                     const formatNumber = (num: number) => {
                                         if (Number.isInteger(num)) {
