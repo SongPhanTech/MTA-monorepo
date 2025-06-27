@@ -670,7 +670,8 @@ model SubjectVersion {
   examType                 ExamType
   subjectEquivalentType    SubjectEquivalentType  @default(NONE)
   credit                   Int
-  period                   Int
+  week                     Int?
+  period                   Int                    @default(0)
   numberOfTheory           Int?
   numberOfPractical        Int?
   numberOfSelfStudy        Int?

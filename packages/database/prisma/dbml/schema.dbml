@@ -432,7 +432,8 @@ Table SubjectVersion {
   examType ExamType [not null]
   subjectEquivalentType SubjectEquivalentType [not null, default: 'NONE']
   credit Int [not null]
-  period Int [not null]
+  week Int
+  period Int [not null, default: 0]
   numberOfTheory Int
   numberOfPractical Int
   numberOfSelfStudy Int
