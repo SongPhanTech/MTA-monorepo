@@ -40,6 +40,8 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
+import ExportTemplateExam from './in-phieu-danh-sach-thi'
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -83,4 +85,6 @@ export {
     PutAddCertificateScoreModal,
     HanNhapDiem,
     PutCloneConvertScore,
+    ModalPrintStudentSubjectScore,
+    ExportTemplateExam,
 }
