@@ -166,7 +166,7 @@ const PutTrainingMajorModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa chuyên ngành' : 'Thêm mới chuyên ngành'}
-            className="w-[45vw]"
+            className="w-[900px]"
         >
             <Col span={12}>
                 <FormItem
@@ -180,7 +180,9 @@ const PutTrainingMajorModal = () => {
                         options={trainingFieldData.map((i: TrainingField) => {
                             return {
                                 value: i.id,
-                                label: `${i?.code} - ${i.name}`,
+                                label: i?.code
+                                    ? `${i?.code} - ${i.name}`
+                                    : i?.name,
                             }
                         })}
                         onChange={(val) => handleMajorChange(val)}
@@ -196,6 +198,7 @@ const PutTrainingMajorModal = () => {
                 >
                     <Select
                         mode="multiple"
+                        maxTagCount={'responsive'}
                         placeholder="Chọn đối tượng đào tạo"
                         options={trainingObjectTypeData.map(
                             (i: TrainingObjectType) => {

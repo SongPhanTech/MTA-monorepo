@@ -7,6 +7,7 @@ import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingMajorModal from './put-chuyen-nganh'
+import PutCloneConvertScore from './put-clone-convert-score'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutOlympicScoreModal from './put-diem-cong'
@@ -83,6 +84,7 @@ export {
     PutAddOlympicScoreModal,
     PutAddCertificateScoreModal,
     HanNhapDiem,
+    PutCloneConvertScore,
     ModalPrintStudentSubjectScore,
     ExportTemplateExam,
 }

@@ -64,6 +64,7 @@ const PutFixedClassModal = () => {
                       trainingObjectTypeId: trainingObjectTypeForm || '',
                   }
                 : {},
+            orderBy: { name: 'asc' },
         })
     // const trainingMajorForm = Form.useWatch('trainingMajorId', form)
     const { data: curriculumData = [], refetch: refetchCurriculum } =
@@ -87,17 +88,28 @@ const PutFixedClassModal = () => {
                     },
                 },
             },
+            orderBy: { name: 'asc' },
         })
     const { data: lecturerData = [], refetch: refetchLecturer } =
         useFindManyLecturer({
             include: {
                 userProfile: true,
             },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
         })
 
     const { data: staffData = [], refetch: refetchStaff } = useFindManyStaff({
         include: {
             userProfile: true,
+        },
+        orderBy: {
+            userProfile: {
+                firstName: 'asc',
+            },
         },
     })
 
@@ -126,6 +138,9 @@ const PutFixedClassModal = () => {
                         },
                     },
                 },
+            },
+            orderBy: {
+                name: 'asc',
             },
         })
     const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
@@ -291,10 +306,10 @@ const PutFixedClassModal = () => {
             ...i,
             children: i?.curriculumVersion.map((t) => ({
                 ...t,
-                title: ` ${t?.code} - ${t?.name}`,
+                title: t?.code ? `${t?.code} - ${t?.name}` : t?.name,
                 value: t?.id,
             })),
-            title: ` ${i?.code} - ${i?.name}`,
+            title: i?.code ? `${i?.code} - ${i?.name}` : i?.name,
             value: i?.id,
             selectable: false,
         }

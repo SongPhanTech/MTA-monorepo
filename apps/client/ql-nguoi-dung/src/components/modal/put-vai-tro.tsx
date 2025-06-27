@@ -112,6 +112,7 @@ const PutVaiTroModal = () => {
                 >
                     <Select
                         mode="multiple"
+                        maxTagCount={'responsive'}
                         showSearch
                         options={groups.map((group) => ({
                             label: group.name,

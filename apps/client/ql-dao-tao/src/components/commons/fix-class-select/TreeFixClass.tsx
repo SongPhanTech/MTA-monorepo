@@ -12,7 +12,9 @@ interface TreeFixClassProps {
 const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
     // Lấy danh sách Training Courses
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
-        useFindManyTrainingCourse({})
+        useFindManyTrainingCourse({
+            orderBy: { name: 'asc' },
+        })
 
     // Lấy danh sách Fixed Classes
     const { data: fixedClasses = [], isLoading: fixedClassesLoading } =

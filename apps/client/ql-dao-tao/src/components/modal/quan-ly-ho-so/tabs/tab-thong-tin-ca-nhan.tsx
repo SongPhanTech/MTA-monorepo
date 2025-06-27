@@ -135,7 +135,9 @@ export default function ThongTinCaNhanTab({
 
     const treeData = buildOrgTree(manageOrgData)
 
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyFixedClass({
@@ -649,7 +651,6 @@ export default function ThongTinCaNhanTab({
                                 name="fixedClassId"
                                 label="Lớp"
                                 className="mb-0"
-                                required
                             >
                                 <Select
                                     placeholder="Chọn lớp"

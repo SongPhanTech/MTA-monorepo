@@ -11,9 +11,9 @@ import {
 import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutTrainingBlock = TrainingBlock
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
+export type PutTrainingBlock = TrainingBlock
 dayjs.locale('vi')
 const PutTrainingBlock = () => {
     const [form] = Form.useForm<PutTrainingBlock>()

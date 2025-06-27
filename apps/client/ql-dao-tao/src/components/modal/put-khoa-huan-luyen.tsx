@@ -230,6 +230,7 @@ const PutTrainingCourseModal = () => {
                     form={form}
                     name="scoreToTakeExam"
                     label="Điểm tối thiểu được thi"
+                    required
                 >
                     <InputNumber
                         placeholder="Nhập điểm tối thiểu được thi"
@@ -242,6 +243,7 @@ const PutTrainingCourseModal = () => {
                     form={form}
                     name="scoreToPass"
                     label="Điểm tối thiểu để qua"
+                    required
                 >
                     <InputNumber
                         placeholder="Nhập điểm tối thiểu để qua"

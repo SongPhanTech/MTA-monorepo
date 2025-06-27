@@ -184,7 +184,7 @@ export default function TrainingProgramCatalog() {
             trainingMajor: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -266,9 +266,13 @@ export default function TrainingProgramCatalog() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor()
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

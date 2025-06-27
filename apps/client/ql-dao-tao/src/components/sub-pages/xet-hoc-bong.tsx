@@ -64,7 +64,9 @@ const XetHocBong = () => {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
 

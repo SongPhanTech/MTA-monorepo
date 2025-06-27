@@ -14,9 +14,9 @@ import { Col, Form, Input, InputNumber, Radio, Switch, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutConvertScoreFormType = ScoreConvert
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
+export type PutConvertScoreFormType = ScoreConvert
 dayjs.locale('vi')
 const PutConvertScore = () => {
     const [form] = Form.useForm<PutConvertScoreFormType>()
@@ -34,6 +34,7 @@ const PutConvertScore = () => {
     const { mutateAsync: updateScoreConvert } = useUpdateScoreConvert()
     const { data: trainingCourses } = useFindManyTrainingCourse({
         where: { active: true },
+        orderBy: { name: 'asc' },
     })
 
     async function onOk(output?: PutConvertScoreFormType) {
@@ -99,6 +100,7 @@ const PutConvertScore = () => {
                             value: id,
                             label: name,
                         }))}
+                        placeholder="Chọn khoá học"
                     />
                 </FormItem>
             </Col>
