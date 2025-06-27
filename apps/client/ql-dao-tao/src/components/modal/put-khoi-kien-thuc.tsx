@@ -15,10 +15,10 @@ import {
 import { Col, Form, InputNumber, Select, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutTrainingBlockOnCurriculumVersion =
-    TrainingBlockOnCurriculumVersion
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
+export type PutTrainingBlockOnCurriculumVersion =
+    TrainingBlockOnCurriculumVersion
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
@@ -40,7 +40,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             {
                 where: { id: input?.trainingBlockOnCurriculumVersionId },
             },
-            { enable: !!input?.trainingBlockOnCurriculumVersionId }
+            { enabled: !!input?.trainingBlockOnCurriculumVersionId }
         )
 
     const { data: trainingBlockData = [], refetch } = useFindManyTrainingBlock()

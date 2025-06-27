@@ -2,18 +2,31 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutConvertScore } from '@components/modal'
+import { PutCloneConvertScore, PutConvertScore } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { TrainingCourse } from '@workspace/db'
 import {
     useCountScoreConvert,
+    useCreateManyScoreConvert,
+    useDeleteManyScoreConvert,
+    useDeleteScoreConvert,
     useFindManyTrainingCourse,
-    useUpdateScoreConvert,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Row,
+    Tag,
+    Tooltip,
+    message,
+} from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { Copy, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -75,7 +88,7 @@ export default function TrainingFieldPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
     })
 
@@ -108,12 +121,19 @@ export default function TrainingFieldPage() {
         tag: PutConvertScore.name,
     })
 
+    const { onOpen: onOpenCopy } = useDisclosure<{ record: TrainingCourse }>({
+        tag: PutCloneConvertScore.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: UpdateScoreConvert } = useUpdateScoreConvert()
+
+    const { mutateAsync: createManyScoreConvert } = useCreateManyScoreConvert()
+    const { mutateAsync: UpdateScoreConvert } = useDeleteScoreConvert()
+    const { mutateAsync: UpdateManyScoreConvert } = useDeleteManyScoreConvert()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -121,8 +141,20 @@ export default function TrainingFieldPage() {
                 where: {
                     id,
                 },
-                data: {
-                    deletedAt: new Date(),
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    async function handleDeleteMultil(record: TrainingCourse) {
+        try {
+            showSpinner()
+
+            await UpdateManyScoreConvert({
+                where: {
+                    trainingCourseId: record.id,
                 },
             })
         } catch (error) {
@@ -208,6 +240,27 @@ export default function TrainingFieldPage() {
                 <Col span={24}>
                     <TableCollapse
                         data={data}
+                        headerRight={(record) => (
+                            <Row className="justify-center gap-2 mr-2">
+                                <Tooltip title="Nhân bản">
+                                    <Copy
+                                        onClick={onOpenCopy.bind(null, {
+                                            record,
+                                        })}
+                                        size={16}
+                                        strokeWidth={1.5}
+                                        className="text-sm cursor-pointer"
+                                    />
+                                </Tooltip>
+
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () =>
+                                            handleDeleteMultil(record),
+                                    }}
+                                />
+                            </Row>
+                        )}
                         columns={[
                             {
                                 title: 'Điểm hệ 10 từ',

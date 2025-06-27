@@ -180,8 +180,12 @@ export default function TeachingAssignment() {
         })
 
     const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+        useFindManyTrainingMajor({
+            orderBy: { name: 'asc' },
+        })
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: lecturerData = [], refetch: refetchLecturer } =
         useFindManyLecturer({

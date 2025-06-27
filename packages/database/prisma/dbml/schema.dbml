@@ -460,7 +460,7 @@ Table SubjectVersion {
   subjectClass SubjectClass [not null]
   studentSubjectScore StudentSubjectScore [not null]
 
-  Note: 'Phiên bản môn học'
+  Note: 'Phiên bản môn h��c'
 }
 
 Table TrainingBlockSubject {

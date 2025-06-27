@@ -100,7 +100,7 @@ export default function TrainingMajorPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

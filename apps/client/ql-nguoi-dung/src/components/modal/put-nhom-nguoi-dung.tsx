@@ -81,6 +81,7 @@ const PutNhomNguoiDungModal = () => {
                 <FormItem form={form} name="roles" label="Vai trò">
                     <Select
                         mode="multiple"
+                        maxTagCount={'responsive'}
                         allowClear
                         placeholder="Chọn vai trò"
                         options={roles.map((role) => ({
@@ -96,6 +97,7 @@ const PutNhomNguoiDungModal = () => {
                         showSearch
                         mode="multiple"
                         allowClear
+                        maxTagCount={'responsive'}
                         placeholder="Chọn người dùng"
                         optionFilterProp="label"
                         filterSort={(optionA, optionB) =>

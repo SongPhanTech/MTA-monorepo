@@ -100,25 +100,6 @@ const PutOlympicScoreModal = () => {
                     <Input placeholder="Nhập tên giải thưởng" />
                 </FormItem>
             </Col>
-            {/* <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="studentSubjectScoreIds"
-                    label="Môn học"
-                >
-                        <Select
-                        allowClear
-                        mode="multiple"
-                        placeholder="Chọn môn học"
-                        options={subjectData.map((item: Subject) => {
-                            return {
-                                value: item.id,
-                                label: item.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col> */}
             <Col span={24}>
                 <FormItem form={form} name="bonusScore" label="Điểm cộng">
                     <InputNumber

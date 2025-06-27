@@ -121,6 +121,7 @@ const PutNguoiDungModal = () => {
                     <Select
                         mode="multiple"
                         allowClear
+                        maxTagCount={'responsive'}
                         placeholder="Chọn nhóm người dùng"
                         options={groups.map((group) => ({
                             label: group.name,
