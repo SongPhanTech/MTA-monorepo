@@ -22,7 +22,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
 COPY ./apps/client/${PACKAGE}/.env.develop ./apps/client/${PACKAGE}/.env
-RUN echo "DATABASE_URL=postgres://root:SwanT3chDB@14.224.217.69:5432/mta" > packages/database/.env
 RUN pnpm generate
 RUN NODE_ENV=production pnpm build --filter=@client/${PACKAGE} -v
 
