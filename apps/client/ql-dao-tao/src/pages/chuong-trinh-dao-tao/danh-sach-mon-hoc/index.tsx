@@ -102,6 +102,9 @@ export default function SubjectList() {
             subjectVersion: true,
             managementOrganization: true,
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
     const debouncedRefetch = useCallback(
