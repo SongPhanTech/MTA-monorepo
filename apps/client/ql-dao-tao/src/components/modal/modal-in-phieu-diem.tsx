@@ -81,9 +81,6 @@ const ModalPrintStudentSubjectScore = () => {
             ?.scoreConverts
     )
 
-    console.log(convertScore(5).classification)
-    
-
     const firstTrainingCourse = useMemo(() => {
         return data?.subjectClassStudent.find(({ student }) =>
             Boolean(student.fixedClass?.trainingCourse)
