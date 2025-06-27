@@ -19,6 +19,7 @@ const ImportScoreModal = ({
     const [previewData, setPreviewData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -26,6 +27,7 @@ const ImportScoreModal = ({
 
         setFile(file)
         setFileName(file.name)
+        setSelectedRowKeys([]) // Reset selection khi chọn file mới
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -52,13 +54,14 @@ const ImportScoreModal = ({
             // Format dữ liệu theo cấu trúc mong muốn
             const formattedData = tableData
                 .map((row: any) => ({
-                    studentCode: row.__EMPTY, // Mã Sinh Viên
+                    key: row.__EMPTY, // Sử dụng mã sinh viên làm key
+                    studentCode: row.__EMPTY, // Mã sinh viên
                     studentName: row.__EMPTY_1, // Họ và Tên
-                    dobStudent: row.__EMPTY_2, // Ngày Sinh
+                    dobStudent: row.__EMPTY_2, // Ngày sinh
                     className: row.__EMPTY_3, // Tên lớp
                     attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm CC
                     midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm TX
-                    examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm Thi
+                    examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm thi
                 }))
                 .filter((item: any) => item.studentCode) // Lọc các dòng trống
 
@@ -71,7 +74,7 @@ const ImportScoreModal = ({
         setFile(null)
         setFileName('')
         setPreviewData([])
-        // Reset input file để có thể chọn lại file cùng tên
+        setSelectedRowKeys([])
         const fileInput = document.getElementById(
             'file-upload'
         ) as HTMLInputElement
@@ -86,10 +89,20 @@ const ImportScoreModal = ({
     }
 
     const handleConfirm = () => {
+        if (selectedRowKeys.length === 0) {
+            message.error('Vui lòng chọn ít nhất một sinh viên để import')
+            return
+        }
+
+        // Lọc chỉ những sinh viên được chọn
+        const selectedData = previewData.filter((item) =>
+            selectedRowKeys.includes(item.key)
+        )
+
         // Validate data
         const errors: string[] = []
 
-        previewData.forEach((item) => {
+        selectedData.forEach((item) => {
             // Kiểm tra mã sinh viên
             const existingStudent = existingStudents.find(
                 (s) => s.student?.code === item.studentCode
@@ -127,9 +140,16 @@ const ImportScoreModal = ({
         if (errors.length > 0) {
             message.error(`Lỗi: ${errors.join(', ')}`)
         } else {
-            onConfirm(previewData)
+            onConfirm(selectedData)
             handleCancel()
         }
+    }
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (selectedKeys: React.Key[]) => {
+            setSelectedRowKeys(selectedKeys)
+        },
     }
 
     const columns = [
@@ -213,7 +233,7 @@ const ImportScoreModal = ({
                     onClick={handleConfirm}
                     disabled={previewData.length === 0}
                 >
-                    Xác nhận
+                    Xác nhận ({selectedRowKeys.length} sinh viên được chọn)
                 </Button>,
             ]}
         >
@@ -254,9 +274,13 @@ const ImportScoreModal = ({
 
             {previewData.length > 0 ? (
                 <Table
+                    rowSelection={{
+                        type: 'checkbox',
+                        ...rowSelection,
+                    }}
                     columns={columns}
                     dataSource={previewData}
-                    rowKey="studentCode"
+                    rowKey="key"
                     pagination={false}
                     scroll={{ y: 400 }}
                     bordered

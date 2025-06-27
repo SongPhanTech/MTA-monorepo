@@ -426,7 +426,7 @@ export default function FixedClassPage({
                             {
                                 title: 'Chuyên ngành',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 dataIndex: 'curriculumVersion',
                                 render: (_, record) =>
                                     record?.curriculumVersion?.curriculum

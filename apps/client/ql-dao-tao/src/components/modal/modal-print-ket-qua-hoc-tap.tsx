@@ -1,11 +1,12 @@
 import { PrinterOutlined } from '@ant-design/icons'
+import { useAcademicRankingConverter } from '@hooks/academicRankingConvert'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { SubjectRequirementType } from '@workspace/db'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 
@@ -20,6 +21,7 @@ const ModalPrintToKQHT = () => {
     const formattedDate = `..., ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
     const [signerName, setSignerName] = useState('Đại tá, TS Nguyễn Trọng Lưu')
+    const [gpaScore, setGpaScore] = useState(0)
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
         tag: ModalPrintToKQHT.name,
@@ -31,15 +33,14 @@ const ModalPrintToKQHT = () => {
         },
         include: {
             fixedClasses: {
+                where: {
+                    id: input?.dataStudent?.fixedClassId,
+                },
                 include: {
-                    students: {
-                        where: {
-                            id: input?.dataStudent?.id,
-                        },
-                    },
                     trainingCourse: {
                         include: {
                             scoreConverts: true,
+                            academicRankingConvert: true,
                         },
                     },
                 },
@@ -66,6 +67,11 @@ const ModalPrintToKQHT = () => {
 
     const { convertScore } = useScoreConverter(
         subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.scoreConverts
+    )
+
+    const { convertAcademicRanking } = useAcademicRankingConverter(
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse
+            ?.academicRankingConvert
     )
 
     const handlePrint = useReactToPrint({
@@ -182,6 +188,35 @@ const ModalPrintToKQHT = () => {
             value: <span>{input?.dataStudent?.trainingForm?.name}</span>,
         },
     ]
+
+    useEffect(() => {
+        const validSubjects =
+            subjectScoreData?.trainingBlocks[0]?.subjects?.filter(
+                (subjectItem: any) =>
+                    subjectItem.print === true &&
+                    subjectItem.useForFinalScore === true
+            ) || []
+
+        let totalWeightedScore = 0
+        let totalCredits = 0
+
+        validSubjects.forEach((subjectItem: any) => {
+            const subject = subjectItem.subject
+            const score = subject.studentSubjectScore?.[0]
+            const credits = subject.credit || 0
+
+            if (score) {
+                const score10 = score.manualFinalScore || score.finalScore || 0
+                const score4 = convertScore(score10).base4 || 0
+
+                totalWeightedScore += score4 * credits
+                totalCredits += credits
+            }
+        })
+
+        const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
+        setGpaScore(Number(gpa.toFixed(2)))
+    }, [subjectScoreData, convertScore])
 
     return (
         <Modal
@@ -350,7 +385,10 @@ const ModalPrintToKQHT = () => {
                                         const notForFinalScore =
                                             !subjectItem.useForFinalScore
 
-                                        const score10 = score?.finalScore || 0
+                                        const score10 =
+                                            score?.manualFinalScore ||
+                                            score?.finalScore ||
+                                            0
                                         const score4 =
                                             convertScore(score10).base4
                                         const letterGrade =
@@ -398,7 +436,9 @@ const ModalPrintToKQHT = () => {
                                                 !subjectItem.useForFinalScore
 
                                             const score10 =
-                                                score?.finalScore || 0
+                                                score?.manualFinalScore ||
+                                                score?.finalScore ||
+                                                0
                                             const score4 =
                                                 convertScore(score10).base4
                                             const letterGrade =
@@ -487,11 +527,18 @@ const ModalPrintToKQHT = () => {
                                 Điểm trung bình chung tích lũy toàn khóa (Thanh
                                 điểm 4):{' '}
                             </span>
-                            <span className="font-bold">3,03</span>
+                            <span className="font-bold">
+                                {gpaScore.toFixed(2)}
+                            </span>
                         </div>
                         <div className="flex">
                             <div className="min-w-32">Xếp hạng:</div>
-                            <span className="font-bold">Khá</span>
+                            <span className="font-bold">
+                                {
+                                    convertAcademicRanking(gpaScore)
+                                        .classification
+                                }
+                            </span>
                         </div>
                     </div>
                     <div className="flex flex-col text-center mt-5">
@@ -577,82 +624,47 @@ const ModalPrintToKQHT = () => {
                     </div>
 
                     <p className="mt-2">
-                        - Phân loại tốt nghiệp theo thang điểm 4: {(() => {
-                            const uniqueClassifications = new Set()
+                        - Phân hạng tốt nghiệp theo thang điểm 4: {(() => {
+                            const rankingData =
+                                subjectScoreData?.fixedClasses?.[0]
+                                    ?.trainingCourse?.academicRankingConvert ||
+                                []
 
-                            return input?.dataTable?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
-                                ?.filter((item: any) => {
-                                    // Chỉ lấy từ Xuất sắc tới TB
-                                    const validClassifications = [
-                                        'Xuất sắc',
-                                        'Giỏi',
-                                        'Khá',
-                                        'TBK',
-                                        'TB',
-                                    ]
-                                    const isValid =
-                                        validClassifications.includes(
-                                            item.classification
-                                        )
+                            const sortedRankings = rankingData
+                                .filter((item: any) => item.graduated)
+                                .sort(
+                                    (a: any, b: any) => b.base4Min - a.base4Min
+                                )
 
-                                    // Loại bỏ trùng lặp
-                                    if (
-                                        isValid &&
-                                        !uniqueClassifications.has(
-                                            item.classification
-                                        )
-                                    ) {
-                                        uniqueClassifications.add(
-                                            item.classification
-                                        )
-                                        return true
-                                    }
-                                    return false
-                                })
-                                ?.sort((a: any, b: any) => b.base4 - a.base4)
-                                ?.map((item: any, index: any, array: any) => {
-                                    // Xác định tên hiển thị và khoảng điểm hệ 4
+                            return sortedRankings.map(
+                                (item: any, index: number) => {
                                     let displayName = item.classification
-                                    let range = ''
 
-                                    // Đổi tên hiển thị
-                                    if (item.classification === 'TBK')
-                                        displayName = 'Trung bình khá'
-                                    if (item.classification === 'TB')
-                                        displayName = 'Trung bình'
-
-                                    // Xác định khoảng điểm
-                                    switch (item.classification) {
-                                        case 'Xuất sắc':
-                                            range = '3.60-4.00'
-                                            break
-                                        case 'Giỏi':
-                                            range = '3.20-3.59'
-                                            break
-                                        case 'Khá':
-                                            range = '2.50-3.19'
-                                            break
-                                        case 'TBK':
-                                            range = '2.30-2.49'
-                                            break
-                                        case 'TB':
-                                            range = '2.00-2.29'
-                                            break
-                                        default:
-                                            range = ''
+                                    const formatNumber = (num: number) => {
+                                        if (Number.isInteger(num)) {
+                                            return num.toFixed(1)
+                                        }
+                                        const decimalPart = (
+                                            num.toString().split('.')[1] || ''
+                                        ).length
+                                        if (decimalPart === 1) {
+                                            return num.toFixed(2)
+                                        }
+                                        return num.toString()
                                     }
+
+                                    const range = `${formatNumber(item.base4Min)}-${formatNumber(item.base4Max)}`
 
                                     return (
-                                        <span
-                                            key={item.id || item.classification}
-                                        >
+                                        <span key={item.id || index}>
                                             {displayName}: {range}
-                                            {index < array.length - 1
+                                            {index < sortedRankings.length - 1
                                                 ? '; '
                                                 : ''}
                                         </span>
                                     )
-                                })
+                                }
+                            )
                         })()}
                         .(Loại tốt nghiệp có thể bị hạ mức theo quy chế đào tạo
                         đại học của HVKTQS được áp dụng tại thời điểm xét tốt
