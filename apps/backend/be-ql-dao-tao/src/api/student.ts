@@ -1,8 +1,12 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { Gender, type Prisma } from '@workspace/db'
-import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
+import {
+    parseSheetHeQuanSu,
+    zParseSheetError,
+} from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
     buildCurriculumMap,
     buildDistrictMap,
@@ -22,26 +26,9 @@ const importHeQuanSu = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: z.object({
+                    schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                        file: z
-                            .instanceof(File)
-                            .refine(
-                                (file) =>
-                                    [
-                                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-                                        'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm
-                                        'application/vnd.ms-excel.sheet.binary.macroEnabled.12', // .xlsb
-                                        'application/vnd.ms-excel', // .xls
-                                        'application/vnd.oasis.opendocument.spreadsheet', // .ods
-                                    ].includes(file.type),
-                                'Định dạng file không hỗ trợ'
-                            )
-                            .openapi({
-                                type: 'string',
-                                format: 'binary', // Required for OpenAPI file upload
-                            }),
-                    }),
+                    }).openapi('importHeQuanSu'),
                 },
             },
         },
@@ -59,7 +46,10 @@ const importHeQuanSu = createRoute({
             description: 'Invalid file type',
             content: {
                 'application/json': {
-                    schema: z.object({ message: z.string() }),
+                    schema: z.object({
+                        message: z.string(),
+                        errors: z.array(zParseSheetError).optional(),
+                    }),
                 },
             },
         },
@@ -172,6 +162,7 @@ app.openapi(importHeQuanSu, async (c) => {
                             id: curriculumVersionMap.get(student.curriculum),
                         },
                     },
+                    userProfile: {},
                 }
                 const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
                     {

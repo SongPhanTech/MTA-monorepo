@@ -4,6 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type {
+    Prisma,
     SchoolYear,
     TrainingCourse,
     TrainingObjectType,
@@ -20,10 +21,10 @@ import { Col, Form, Input, InputNumber, Radio, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
 }
-import 'dayjs/locale/vi'
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
     const [form] = Form.useForm<PutTrainingCourse>()
@@ -44,58 +45,24 @@ const PutTrainingCourseModal = () => {
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function onOk(output?: PutTrainingCourse) {
         if (!output) return
+        const { trainingObjectTypeId, semesterStartId, schoolYearId, ...rest } =
+            output
         try {
             showSpinner()
+            const data: Prisma.TrainingCourseCreateInput = {
+                trainingObjectType: {
+                    connect: { id: trainingObjectTypeId },
+                },
+                semesterStart: {
+                    connect: { id: semesterStartId },
+                },
+                ...rest,
+            }
             if (id) {
-                await updateTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startYear: output.startYear,
-                        endYear: output.endYear,
-                        academicYear: output.academicYear,
-                        maxTrainingTime: output.maxTrainingTime,
-                        admissionQuota: output.admissionQuota,
-                        trainingObjectType: {
-                            connect: {
-                                id: output.trainingObjectTypeId,
-                            },
-                        },
-                        semesterStart: {
-                            connect: {
-                                id: output.semesterStartId,
-                            },
-                        },
-                    },
-                    where: {
-                        id,
-                    },
-                })
+                await updateTrainingCourse({ data, where: { id } })
                 message.success('Cập nhật thành công')
             } else {
-                await createTrainingCourse({
-                    data: {
-                        code: output.code,
-                        name: output.name,
-                        description: output.description,
-                        startYear: output.startYear,
-                        endYear: output.endYear,
-                        academicYear: output.academicYear,
-                        maxTrainingTime: output.maxTrainingTime,
-                        admissionQuota: output.admissionQuota,
-                        trainingObjectType: {
-                            connect: {
-                                id: output.trainingObjectTypeId,
-                            },
-                        },
-                        semesterStart: {
-                            connect: {
-                                id: output.semesterStartId,
-                            },
-                        },
-                    },
-                })
+                await createTrainingCourse({ data })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
@@ -185,7 +152,7 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
 
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="name" label="Tên khoá học" required>
                     <Input placeholder="Nhập tên khoá học" />
                 </FormItem>
@@ -195,7 +162,7 @@ const PutTrainingCourseModal = () => {
                     form={form}
                     name="schoolYearId"
                     label="Năm học bắt đầu"
-                    required
+                    // required
                 >
                     <Select
                         placeholder="Chọn năm học bắt đầu"
@@ -223,6 +190,64 @@ const PutTrainingCourseModal = () => {
                                 label: `${i.name} năm ${i.schoolYear.name}`,
                             }
                         })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="coef_1"
+                    label="Hệ số điểm chuyên cần"
+                >
+                    <InputNumber
+                        placeholder="Nhập hệ số điểm chuyên cần"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="coef_2"
+                    label="Hệ số điểm thường xuyên"
+                >
+                    <InputNumber
+                        placeholder="Nhập hệ số điểm thường xuyên"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="coef_3" label="Hệ số điểm điểm thi">
+                    <InputNumber
+                        placeholder="Nhập hệ số điểm điểm thi"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="scoreToTakeExam"
+                    label="Điểm tối thiểu được thi"
+                    required
+                >
+                    <InputNumber
+                        placeholder="Nhập điểm tối thiểu được thi"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="scoreToPass"
+                    label="Điểm tối thiểu để qua"
+                    required
+                >
+                    <InputNumber
+                        placeholder="Nhập điểm tối thiểu để qua"
+                        className="w-full"
                     />
                 </FormItem>
             </Col>

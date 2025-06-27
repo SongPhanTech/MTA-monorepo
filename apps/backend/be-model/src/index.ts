@@ -43,7 +43,7 @@ const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 app.use(contextStorage())
 app.use('*', checkIp)
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 setupOpenApi(app)
 // setupAuth(app)
 

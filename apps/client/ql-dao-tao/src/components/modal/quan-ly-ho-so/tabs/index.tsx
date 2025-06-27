@@ -1,24 +1,22 @@
 import { Tabs, type TabsProps } from 'antd'
 import type { TabQuanLyHoSoProps } from '../type'
-import ThongTinCaNhanTab from './tab-thong-tin-ca-nhan'
+import KeKhaiTaiSanTab from './ke-khai-tai-san'
+import KhenThuongKyLuatTab from './khen-thuong-ky-luat'
+import ThanNhanTab from './tab-danh-sach-than-nhan'
+import DoiTuongChinhSachTab from './tab-doi-tuong-chinh-sach'
 import HocHamHocViTab from './tab-hoc-ham-hoc-vi'
-import TrinhDoChungChiTab from './tab-trinh-do-chung-chi'
 import QuaTrinhCongTacTab from './tab-qua-trinh-cong-tac'
 import QuaTrinhDaoTaoTab from './tab-qua-trinh-dao-tao'
-import KhenThuongKyLuatTab from './khen-thuong-ky-luat'
-import DoiTuongChinhSachTab from './tab-doi-tuong-chinh-sach'
-import KeKhaiTaiSanTab from './ke-khai-tai-san'
-import ThanNhanTab from './tab-danh-sach-than-nhan'
+import ThongTinCaNhanTab from './tab-thong-tin-ca-nhan'
+import TrinhDoChungChiTab from './tab-trinh-do-chung-chi'
 
 export default function TabQuanLyHoSo({
     activeKey,
     setActiveKey,
     id,
+    type,
     avatar,
     setAvatar,
-    setFileList,
-    fileList,
-    type,
 }: TabQuanLyHoSoProps) {
     const items: TabsProps['items'] = [
         {
@@ -26,11 +24,9 @@ export default function TabQuanLyHoSo({
             label: 'Thông tin cá nhân',
             children: (
                 <ThongTinCaNhanTab
+                    avatar={avatar}
+                    setAvatar={setAvatar}
                     id={id}
-                    avatar={avatar || []}
-                    setAvatar={setAvatar || (() => {})}
-                    setFileList={setFileList || (() => {})}
-                    fileList={fileList || []}
                     type={type}
                 />
             ),

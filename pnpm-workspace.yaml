@@ -2,7 +2,11 @@ packages:
   - apps/client/*
   - apps/backend/*
   - packages/*
+
 catalog:
+  file-saver: 2.0.5
+  exceljs: ^4.4.0
+  read-excel-file: ^5.8.8
   "react-to-print": ^3.1.0
   "@ant-design/cssinjs": ^1.22.1
   "@ant-design/icons": ^5.5.2
@@ -87,5 +91,5 @@ catalog:
   turbo: ^2.4.2
   typescript: ^5.8.3
   xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
-  zenstack: ^2.15.1
+  zenstack: ^2.16.0
   zod: 3.24.2

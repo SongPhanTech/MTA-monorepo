@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { SpanKind, context, trace } from '@opentelemetry/api'
+import { jwtAuth } from '@workspace/auth/hono'
 import { Prisma, PrismaClient, enhance } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -20,6 +21,7 @@ import { setupOpenApi } from './utils/openapi'
 import './otel'
 
 export const prisma = new PrismaClient()
+
 const app = new OpenAPIHono({ strict: false })
 const register = new Registry()
 
@@ -55,10 +57,10 @@ app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
 
-// const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
-// const jwksUri = `${issuer}/protocol/openid-connect/certs`
-// const audience = config.keycloak.clientId
-// app.use('/api/*', jwtAuth(jwksUri, audience, issuer))
+const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
+const jwksUri = `${issuer}/protocol/openid-connect/certs`
+const audience = config.keycloak.clientId
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
 setupOpenApi(app)
 

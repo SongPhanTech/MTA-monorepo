@@ -22,26 +22,19 @@ import Select from '@components/commons/select'
 import { FilterSinhVien } from '@components/filter'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
+import ImportStudentModal from '@components/modal/import-excel-student'
 import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTemplateFile,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useUpdateStudent,
-} from '@workspace/db/hooks'
-import {
-    useFindManyCurriculumVersion,
-    // useFindManyFixedClass,
-    // useFindManyStudent,
-    // useFindManyTemplateFile,
-    // useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    // useFindManyTrainingObjectType,
-    // useUpdateStudent,
+    useFindManyTrainingObjectType,
+    useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import {
@@ -52,12 +45,14 @@ import {
     Flex,
     Image,
     Menu,
+    Popover,
     Row,
     Tag,
     message,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Ellipsis, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -70,6 +65,13 @@ export default function UserProfilePageDs() {
     const [filters, setFilters] = useState({
         searchText: '',
     })
+
+    const [importModalVisible, setImportModalVisible] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
 
     const router = useRouter()
 
@@ -116,33 +118,30 @@ export default function UserProfilePageDs() {
         },
         include: {
             userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
+            trainingObjectType: true,
             fixedClass: {
                 include: {
                     trainingCourse: true,
                     curriculumVersion: {
                         include: {
-                            curriculum: true,
+                            curriculum: {
+                                include: {
+                                    trainingMajor: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            userProfile: {
+                firstName: 'asc',
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -163,6 +162,7 @@ export default function UserProfilePageDs() {
             include: {
                 fixedClass: true,
             },
+            orderBy: { name: 'asc' },
         })
 
     const handleTrainingCourseChange = (value: string) => {
@@ -200,10 +200,12 @@ export default function UserProfilePageDs() {
 
     const { data: TrainingFieldData = [] } = useFindManyTrainingField()
 
-    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor()
+    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: TrainingCurriculumVersionData = [] } =
-        useFindManyCurriculumVersion()
+        useFindManyCurriculumVersion({ orderBy: { name: 'asc' } })
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -416,6 +418,52 @@ export default function UserProfilePageDs() {
         </Menu>
     )
 
+    const handleImportConfirm = (importedData: any) => {
+        showSpinner()
+
+        try {
+            // const updatedScores = dataTable.map((record) => {
+            //     const importedScore = importedData.find(
+            //         (item) => item.studentCode === record.student?.code
+            //     )
+
+            //     if (importedScore) {
+            //         return {
+            //             id: record.id,
+            //             attendanceScore: importedScore.attendanceScore,
+            //             midtermScore: importedScore.midtermScore,
+            //             examScore: importedScore.examScore,
+            //         }
+            //     }
+            //     return record
+            // })
+
+            // // Cập nhật state
+            // const newScoreCC = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.attendanceScore || 0,
+            // }))
+            // const newScoreTX = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.midtermScore || 0,
+            // }))
+            // const newScoreThi = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.examScore || 0,
+            // }))
+
+            // setScoreCC(newScoreCC)
+            // setScoreTX(newScoreTX)
+            // setScoreThi(newScoreThi)
+
+            message.success('Nhập điểm từ file thành công!')
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -483,6 +531,48 @@ export default function UserProfilePageDs() {
                                 gap="8px"
                                 className="mt-1"
                             >
+                                <Popover
+                                    content={
+                                        <Flex
+                                            vertical
+                                            align="flex-start"
+                                            gap={4}
+                                        >
+                                            <Button
+                                                onClick={() =>
+                                                    setImportModalVisible(true)
+                                                }
+                                                className="w-full flex justify-start"
+                                            >
+                                                <FileUp />
+                                                Nhập điểm từ file
+                                            </Button>
+                                            <ImportStudentModal
+                                                visible={importModalVisible}
+                                                onCancel={() =>
+                                                    setImportModalVisible(false)
+                                                }
+                                                onConfirm={handleImportConfirm}
+                                                existingStudents={[]}
+                                            />
+                                            {/* <ExportScoreTemplate
+                                                selectedFixedClass={
+                                                    selectedFixedClass
+                                                }
+                                                dataTable={dataTable}
+                                            /> */}
+                                        </Flex>
+                                    }
+                                    trigger="click"
+                                    open={open}
+                                    onOpenChange={handleOpenChange}
+                                    placement="bottomLeft"
+                                    arrow={false}
+                                >
+                                    <Button>
+                                        <Ellipsis />
+                                    </Button>
+                                </Popover>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
@@ -528,16 +618,12 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Ảnh',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                className: 'flex justify-center',
                                 render: (_, record) => {
-                                    const avatar = record.userProfile?.avatar
-
+                                    const avatar = record?.userProfile?.avatar
                                     return avatar ? (
-                                        <Image
-                                            src={getMinioUrl(avatar)}
-                                            width={100}
-                                            height={80}
-                                        />
+                                        <Image src={getMinioUrl(avatar)} />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                                             <UserOutlined
@@ -591,7 +677,7 @@ export default function UserProfilePageDs() {
                                     },
                                 ],
                                 onFilter: (value, record) =>
-                                    record.userProfile.gender === value,
+                                    record.userProfile?.gender === value,
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
@@ -642,14 +728,14 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingCourseName =
-                                        record.fixedClass?.trainingCourse?.name
+                                        record?.fixedClass?.trainingCourse?.name
                                     return trainingCourseName === value
                                 },
                                 render: (record) => {
                                     const trainingCourse =
-                                        record.fixedClass?.trainingCourse
+                                        record?.fixedClass?.trainingCourse
                                     return trainingCourse
-                                        ? trainingCourse.name
+                                        ? trainingCourse?.name
                                         : ''
                                 },
                             },
@@ -684,12 +770,12 @@ export default function UserProfilePageDs() {
                                 })),
                                 onFilter: (value, record) => {
                                     const trainingMajor =
-                                        record.fixedClass?.curriculumVersion
+                                        record?.fixedClass?.curriculumVersion
                                             ?.curriculum?.trainingMajor?.name
                                     return trainingMajor === value
                                 },
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
+                                    return record?.fixedClass?.curriculumVersion
                                         ?.curriculum?.trainingMajor?.name
                                 },
                             },
@@ -704,7 +790,7 @@ export default function UserProfilePageDs() {
                                     })
                                 ),
                                 render: (record) => {
-                                    return record.fixedClass?.curriculumVersion
+                                    return record?.fixedClass?.curriculumVersion
                                         ?.curriculum?.name
                                 },
                             },

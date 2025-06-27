@@ -4,6 +4,8 @@
         "ignoreUnknown": true,
         "includes": [
             "**",
+            "!**/apps/backup/**/*",
+            "!**/apps/ql-danh-muc/**/*",
             "!**/.vscode",
             "!**/package.json",
             "!**/.next/**/*",
@@ -11,6 +13,7 @@
             "!**/open-api/**/*",
             "!**/*.json",
             "!**/lib/api/**/*",
+            "!**/packages/libs/src/api/schemas/**/*",
             "!**/.env",
             "!**/.env.*"
         ]
@@ -27,7 +30,7 @@
         "indentStyle": "space",
         "indentWidth": 4,
         "lineEnding": "lf",
-        "lineWidth": 80,
+        "lineWidth": 100,
         "attributePosition": "auto",
         "bracketSpacing": true
     },
@@ -49,9 +52,14 @@
         "enabled": true,
         "rules": {
             "recommended": true,
-            "a11y": { "useKeyWithClickEvents": "off" },
+            "a11y": {
+                "useKeyWithClickEvents": "off",
+                "noStaticElementInteractions": "off"
+            },
             "correctness": {
                 "noUnusedImports": "error",
+                "noUnusedVariables": "off",
+                "noUnusedFunctionParameters": "off",
                 "useExhaustiveDependencies": "warn"
             },
             "complexity": { "noBannedTypes": "off", "noForEach": "off" },

@@ -36,11 +36,11 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                       join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
                       left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
              where FC.active = true
-               and TBS."deletedAt" is not null
-               and TBOCV."deletedAt" is not null
-               and CV."deletedAt" is not null
-               and FC."deletedAt" is not null
-               and SC."deletedAt" is not null
+               and TBS."deletedAt" is null
+               and TBOCV."deletedAt" is null
+               and CV."deletedAt" is null
+               and FC."deletedAt" is null
+               and SC."deletedAt" is null
              group by CV.id, CV.name, FC.id, FC."startYear",
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
@@ -68,12 +68,12 @@ select json_build_object('subjectVersionCode', subject_version_code,'trainingMaj
        ) as data
 from FCS
 where training_block_subject_semester = fixed_class_semester and active = true and graduated = false and
-($3::TEXT IS NULL AND 1=1 OR training_course_id = $3) and
-($4::TEXT IS NULL AND 1=1 OR subject_version_name ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR subject_version_code ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) and
-($5::TEXT IS NULL AND 1=1 OR training_major_id = $5)
+(($3::TEXT IS NULL AND 1=1 OR training_course_id = $3) or
+($4::TEXT IS NULL AND 1=1 OR subject_version_name ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR subject_version_code ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) or
+($5::TEXT IS NULL AND 1=1 OR training_major_id = $5))
 group by subject_version_id, subject_version_code,
          subject_version_credit, subject_version_name, training_major_id, training_course_id
          limit $7 offset ($6 - 1) * $7

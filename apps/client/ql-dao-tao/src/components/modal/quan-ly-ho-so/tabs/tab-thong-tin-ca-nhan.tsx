@@ -1,9 +1,9 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import TreeSelect from '@components/commons/tree-select/TreeSelect'
 import { GENDER_LIST, STUDENT_STATUS_OPTIONS } from '@constants/constants'
 import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import {
     useFindManyCurriculumVersion,
     useFindManyDM_DanToc,
@@ -13,33 +13,108 @@ import {
     useFindManyDM_TonGiao,
     useFindManyFixedClass,
     useFindManyLecturerType,
+    useFindManyStaffPosition,
+    useFindManyStaffType,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
+    useFindManyUserProfile,
+    useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, Upload } from 'antd'
-import type { UploadFile, UploadProps } from 'antd'
+import {
+    AutoComplete,
+    Col,
+    Collapse,
+    Form,
+    Input,
+    Row,
+    TreeSelect,
+    Upload,
+    type UploadFile,
+    type UploadProps,
+} from 'antd'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
+import { debounce } from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PutModalType, TabThongTinCaNhan } from '../type'
 const { Panel } = Collapse
 
 export default function ThongTinCaNhanTab({
     id,
+    type,
     avatar,
     setAvatar,
-    setFileList,
-    fileList,
-    type,
 }: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
 
-    // const [searchIdCard, setSearchIdCard] = useState<string>('')
-    // const [idCardOptions, setIdCardOptions] = useState<
-    //     { value: string; label: string }[]
-    // >([])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+
+    const [cccd, setCccd] = useState('')
+
+    // Hook để lấy danh sách UserProfile để làm options cho AutoComplete
+    const { data: userProfileOptions = [] } = useFindManyUserProfile({
+        where: {
+            AND: [
+                {
+                    OR: [
+                        // STUDENT types - kiểm tra educationAndTraining không bị xóa
+                        ...(type.includes('STUDENT')
+                            ? [
+                                  {
+                                      educationAndTraining: {
+                                          some: {
+                                              deletedAt: null, // Thêm điều kiện không bị xóa
+                                          },
+                                      },
+                                  },
+                              ]
+                            : []),
+
+                        // LECTURER type - kiểm tra lecturer không bị xóa
+                        ...(type === 'LECTURER'
+                            ? [
+                                  {
+                                      lecturer: {
+                                          deletedAt: null, // Thêm điều kiện không bị xóa
+                                      },
+                                  },
+                              ]
+                            : []),
+
+                        // STAFF type - kiểm tra staffs không bị xóa
+                        ...(type === 'STAFF'
+                            ? [
+                                  {
+                                      staffs: {
+                                          deletedAt: null, // Thêm điều kiện không bị xóa
+                                      },
+                                  },
+                              ]
+                            : []),
+                    ],
+                },
+            ],
+        },
+        select: {
+            firstName: true,
+            lastName: true,
+            idCardNumber: true,
+        },
+    })
+
+    // Tạo options cho AutoComplete
+    const idCardOptions = useMemo(() => {
+        return userProfileOptions.map((profile) => ({
+            value: profile.idCardNumber,
+            label: `${profile.idCardNumber} - ${profile.lastName} ${profile.firstName}`,
+        }))
+    }, [userProfileOptions])
 
     const { data: registrationAreaData = [], refetch: refetchRe } =
         useFindManyDM_KhuVuc_DiaLy()
+
+    const { data: staffPositionData = [] } = useFindManyStaffPosition()
+
+    const { data: staffTypeData = [] } = useFindManyStaffType()
 
     const { data: nationalityData = [], refetch: refetchNa } =
         useFindManyDM_QuocGia()
@@ -60,21 +135,9 @@ export default function ThongTinCaNhanTab({
 
     const treeData = buildOrgTree(manageOrgData)
 
-    // const { data: idCardNumberData = [] } = useFindManyUserProfile({
-    //     select: {
-    //         idCardNumber: true,
-    //         userType: true,
-    //         lastName: true,
-    //         firstName: true,
-    //     },
-    //     where: {
-    //         userType: {
-    //             in: ['CIVILIAN_STUDENT', 'MILITARY_STUDENT'],
-    //         },
-    //     },
-    // })
-
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: fixedClassData = [], refetch: refetchFix } =
         useFindManyFixedClass({
@@ -86,48 +149,77 @@ export default function ThongTinCaNhanTab({
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const beforeUpload = (file: File) => {
-        const fileURL = URL.createObjectURL(file)
-
-        const newFile: UploadFile = {
-            uid: Date.now().toString(),
-            name: file.name,
-            status: 'done',
-            url: fileURL,
-            originFileObj: file as any,
+    const { data: cccdUserProfileData } = useFindUniqueUserProfile(
+        {
+            where: {
+                idCardNumber: cccd,
+            },
+            include: {
+                provinceCurrentAddress: true,
+                districtCurrentAddress: true,
+                communeCurrentAddress: true,
+                provinceOfBirth: true,
+                districtOfBirth: true,
+                communeOfBirth: true,
+                provinceHometown: true,
+                districtHometown: true,
+                communeHometown: true,
+                nationality: true,
+                religion: true,
+                ethnicity: true,
+                rank: true,
+                academicDegreeType: true,
+                academicRankType: true,
+                level: true,
+                educationAndTraining: type.includes('STUDENT')
+                    ? {
+                          include: {
+                              fixedClass: {
+                                  include: {
+                                      trainingCourse: true,
+                                      curriculumVersion: {
+                                          include: {
+                                              curriculum: {
+                                                  include: {
+                                                      trainingMajor: true,
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      }
+                    : false,
+                staffs:
+                    type === 'STAFF'
+                        ? {
+                              include: {
+                                  organization: true,
+                                  staffType: true,
+                                  staffPosition: true,
+                              },
+                          }
+                        : false,
+                lecturer:
+                    type === 'LECTURER'
+                        ? {
+                              include: {
+                                  organization: true,
+                                  lecturerType: true,
+                              },
+                          }
+                        : false,
+            },
+        },
+        {
+            enabled: !!cccd,
         }
-        setFileList([newFile])
-        return false
-    }
+    )
 
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList.slice(-1))
     }
-
-    // useEffect(() => {
-    //     if (idCardNumberData.length > 0) {
-    //         const options = idCardNumberData
-    //             .filter((profile) => profile.idCardNumber) // Lọc những record có CCCD
-    //             .map((profile) => {
-    //                 // Tạo full name từ lastName + firstName
-    //                 const fullName =
-    //                     `${profile.lastName || ''} ${profile.firstName || ''}`.trim()
-
-    //                 // Tạo label: "Họ tên - Số CCCD"
-    //                 const label = fullName
-    //                     ? `${fullName} - ${profile.idCardNumber}`
-    //                     : profile.idCardNumber // Fallback nếu không có tên
-
-    //                 return {
-    //                     value: profile.idCardNumber,
-    //                     label: label,
-    //                     searchText:
-    //                         `${fullName} ${profile.idCardNumber}`.toLowerCase(),
-    //                 }
-    //             })
-    //         setIdCardOptions(options)
-    //     }
-    // }, [idCardNumberData])
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -192,6 +284,137 @@ export default function ThongTinCaNhanTab({
         }
     }
 
+    // Hàm fill thông tin từ dữ liệu cccdUserProfileData
+    const fillUserInfo = useCallback(
+        (userData: any) => {
+            if (!userData) return
+
+            // Fill thông tin cơ bản từ UserProfile
+            form.setFieldsValue({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                dateOfBirth: userData.dateOfBirth
+                    ? dayjs(userData.dateOfBirth)
+                    : null,
+                gender: userData.gender,
+                phoneNumber: userData.phoneNumber,
+                email: userData.email,
+                idCardDate: userData.idCardDate
+                    ? dayjs(userData.idCardDate)
+                    : null,
+                officerNumber: userData.officerNumber,
+                healthInsuranceNumber: userData.healthInsuranceNumber,
+                bankAccountNumber: userData.bankAccountNumber,
+                bankName: userData.bankName,
+                currentAddress: userData.currentAddress,
+
+                // Địa chỉ
+                provinceCurrentAddressId: userData.provinceCurrentAddressId,
+                districtCurrentAddressId: userData.districtCurrentAddressId,
+                communeCurrentAddressId: userData.communeCurrentAddressId,
+                provinceOfBirthId: userData.provinceOfBirthId,
+                districtOfBirthId: userData.districtOfBirthId,
+                communeOfBirthId: userData.communeOfBirthId,
+                provincePermanentAddressId: userData.provincePermanentAddressId,
+                districtPermanentAddressId: userData.districtPermanentAddressId,
+                communePermanentAddressId: userData.communePermanentAddressId,
+                provinceHometownId: userData.provinceHometownId,
+                districtHometownId: userData.districtHometownId,
+                communeHometownId: userData.communeHometownId,
+
+                // Thông tin cá nhân khác
+                nationalityId: userData.nationalityId,
+                religionId: userData.religionId,
+                ethnicityId: userData.ethnicityId,
+                unionDate: userData.unionDate
+                    ? dayjs(userData.unionDate)
+                    : null,
+                unionPlace: userData.unionPlace,
+                CPVJoinDate: userData.CPVJoinDate
+                    ? dayjs(userData.CPVJoinDate)
+                    : null,
+                officialCPVDate: userData.officialCPVDate
+                    ? dayjs(userData.officialCPVDate)
+                    : null,
+                CPVJoinPlace: userData.CPVJoinPlace,
+                tenureDate: userData.tenureDate
+                    ? dayjs(userData.tenureDate)
+                    : null,
+            })
+
+            if (userData.avatar) {
+                const avatarFile: UploadFile = {
+                    uid: '-1',
+                    name: 'avatar.jpg',
+                    status: 'done',
+                    url: getMinioUrl(userData.avatar), // Sử dụng getMinioUrl để tạo URL hiển thị
+                }
+                setFileList([avatarFile])
+            } else {
+                setFileList([])
+            }
+
+            // Fill thông tin Student
+            if (
+                type.includes('STUDENT') &&
+                userData.educationAndTraining &&
+                userData.educationAndTraining.length > 0
+            ) {
+                const student = userData.educationAndTraining[0]
+                form.setFieldsValue({
+                    code: student.code,
+                    status: student.status,
+                    fixedClassId: student.fixedClassId,
+                    trainingCourseId: student.fixedClass?.trainingCourseId,
+                    curriculumVersionId:
+                        student.curriculumVersionId ||
+                        student.fixedClass?.curriculumVersionId,
+                    trainingObjectTypeId: student.trainingObjectTypeId,
+                    registrationAreaId: student.registrationAreaId,
+                })
+            }
+
+            // Fill thông tin Lecturer
+            if (type === 'LECTURER' && userData.lecturer) {
+                const lecturer = userData.lecturer
+                form.setFieldsValue({
+                    code: lecturer.code,
+                    organizationId: lecturer.organizationId,
+                    lecturerTypeId: lecturer.lecturerTypeId,
+                })
+            }
+
+            // Fill thông tin Staff
+            if (type === 'STAFF' && userData.staffs) {
+                const staff = userData.staffs
+                form.setFieldsValue({
+                    code: staff.code,
+                    organizationId: staff.organizationId,
+                    staffTypeId: staff.staffTypeId,
+                    staffPositionId: staff.staffPositionId,
+                })
+            }
+        },
+        [form, type]
+    )
+
+    // Hàm search với debounce
+    const debouncedSearch = useCallback(
+        debounce((cccd: string) => {
+            if (!id && cccd) {
+                setCccd(cccd)
+            }
+        }, 500),
+        []
+    )
+
+    // Effect để fill thông tin khi có dữ liệu từ API
+    useEffect(() => {
+        if (cccdUserProfileData && !id) {
+            fillUserInfo(cccdUserProfileData)
+        }
+    }, [cccdUserProfileData, fillUserInfo, id])
+
     return (
         <>
             <Row gutter={[16, 16]}>
@@ -206,17 +429,16 @@ export default function ThongTinCaNhanTab({
                         <Form.Item name={'file'} className="mb-0">
                             <Upload
                                 listType="picture-card"
-                                // fileList={fileList}
-                                fileList={avatar.length > 0 ? avatar : fileList}
+                                maxCount={1}
+                                fileList={
+                                    avatar?.length > 0 ? avatar : fileList
+                                }
                                 onChange={onChange}
-                                beforeUpload={beforeUpload}
                                 onRemove={() => {
-                                    setFileList([])
                                     setAvatar([])
-                                    return true
                                 }}
                             >
-                                {avatar.length > 0 || fileList.length > 0
+                                {avatar?.length > 0 || fileList.length > 0
                                     ? ''
                                     : fileList.length < 1 && (
                                           <p
@@ -242,7 +464,7 @@ export default function ThongTinCaNhanTab({
                                 className="mb-0"
                                 required
                             >
-                                {/* <AutoComplete
+                                <AutoComplete
                                     placeholder="Nhập hoặc chọn số CCCD"
                                     allowClear
                                     options={idCardOptions}
@@ -262,38 +484,70 @@ export default function ThongTinCaNhanTab({
                                         form.setFieldsValue({
                                             idCardNumber: value,
                                         })
-                                        debouncedSearch(value)
+                                        // Search ngay khi select từ dropdown
+                                        if (!id) {
+                                            debouncedSearch(value)
+                                        }
                                     }}
                                     onChange={(value) => {
                                         form.setFieldsValue({
                                             idCardNumber: value,
                                         })
-                                        debouncedSearch(value)
+
+                                        if (typeof value === 'string') {
+                                            if (value === '') {
+                                                form.resetFields()
+                                            } else {
+                                                debouncedSearch(value)
+                                            }
+                                        }
+
+                                        // Debounced search khi gõ tay
+                                        if (typeof value === 'string') {
+                                            debouncedSearch(value)
+                                        }
                                     }}
-                                /> */}
-                                <Input placeholder="Nhập số căn cước công dân" />
+                                />
                             </FormItem>
                         </Col>
-                        {type === 'STUDENT' && (
+                        {type === 'CIVILIAN_STUDENT' && (
                             <Col sm={12} lg={12}>
                                 <FormItem
                                     form={form}
                                     name="code"
-                                    label="Mã sinh viên / học viên"
+                                    label="Mã sinh viên"
                                     rules={[
                                         {
                                             required: true,
                                             message:
-                                                'Vui lòng nhập mã sinh viên / học viên!',
+                                                'Vui lòng nhập mã sinh viên!',
                                         },
                                     ]}
                                     className="mb-0"
                                 >
-                                    <Input placeholder="Nhập mã sinh viên / học viên" />
+                                    <Input placeholder="Nhập mã sinh viên" />
                                 </FormItem>
                             </Col>
                         )}
-
+                        {type === 'MILITARY_STUDENT' && (
+                            <Col sm={12} lg={12}>
+                                <FormItem
+                                    form={form}
+                                    name="code"
+                                    label="Mã học viên"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Vui lòng nhập mã học viên!',
+                                        },
+                                    ]}
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập mã học viên" />
+                                </FormItem>
+                            </Col>
+                        )}
                         {type === 'LECTURER' && (
                             <Col sm={12} lg={12}>
                                 <FormItem
@@ -310,6 +564,25 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <Input placeholder="Nhập mã giảng viên" />
+                                </FormItem>
+                            </Col>
+                        )}
+
+                        {type === 'STAFF' && (
+                            <Col sm={12} lg={12}>
+                                <FormItem
+                                    form={form}
+                                    name="code"
+                                    label="Mã cán bộ"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập mã cán bộ',
+                                        },
+                                    ]}
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập mã cán bộ" />
                                 </FormItem>
                             </Col>
                         )}
@@ -339,7 +612,19 @@ export default function ThongTinCaNhanTab({
                     </Row>
                 </Col>
 
-                {type === 'STUDENT' && (
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="code"
+                        label="Tên tài khoản"
+                        required
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập tên tài khoản" />
+                    </FormItem>
+                </Col>
+
+                {type.includes('STUDENT') && (
                     <>
                         <Col sm={12} lg={8}>
                             <FormItem
@@ -366,7 +651,6 @@ export default function ThongTinCaNhanTab({
                                 name="fixedClassId"
                                 label="Lớp"
                                 className="mb-0"
-                                required
                             >
                                 <Select
                                     placeholder="Chọn lớp"
@@ -450,8 +734,16 @@ export default function ThongTinCaNhanTab({
                                 className="mb-0"
                             >
                                 <TreeSelect
-                                    placeholder="Chọn đơn vị"
+                                    allowClear
+                                    showSearch
+                                    placeholder="Chọn đơn vị phụ trách"
+                                    treeDefaultExpandAll
                                     treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
                                 />
                             </FormItem>
                         </Col>
@@ -465,6 +757,64 @@ export default function ThongTinCaNhanTab({
                                 <Select
                                     placeholder="Chọn loại giảng viên"
                                     options={lecturerTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
+                            </FormItem>
+                        </Col>
+                    </>
+                )}
+
+                {type === 'STAFF' && (
+                    <>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="organizationId"
+                                label="Đơn vị"
+                                className="mb-0"
+                            >
+                                <TreeSelect
+                                    allowClear
+                                    showSearch
+                                    placeholder="Chọn đơn vị phụ trách"
+                                    treeDefaultExpandAll
+                                    treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node.title as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="staffTypeId"
+                                label="Loại cán bộ"
+                                className="mb-0"
+                            >
+                                <Select
+                                    placeholder="Chọn loại cán bộ"
+                                    options={staffTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem
+                                form={form}
+                                name="staffPositionId"
+                                label="Chức vụ cán bộ"
+                                className="mb-0"
+                            >
+                                <Select
+                                    placeholder="Chọn loại cán bộ"
+                                    options={staffPositionData.map((i) => ({
                                         value: i.id,
                                         label: i.name,
                                     }))}
@@ -564,25 +914,60 @@ export default function ThongTinCaNhanTab({
                 <Col sm={12} lg={8}>
                     <FormItem
                         form={form}
-                        name="registrationAreaId"
-                        label="Khu vực đăng ký"
+                        name="healthInsuranceNumber"
+                        label="Thẻ bảo hiểm y tế"
                         className="mb-0"
-                        normalize={(value) =>
-                            value === undefined ? null : value
-                        }
                     >
-                        <Select
-                            allowClear
-                            placeholder="Chọn khu vực đăng ký"
-                            options={registrationAreaData.map((i) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            })}
-                        />
+                        <Input placeholder="Nhập thẻ bảo hiểm y tế" />
                     </FormItem>
                 </Col>
+
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="bankAccountNumber"
+                        label="Số thẻ ngân hàng"
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập số thẻ ngân hàng" />
+                    </FormItem>
+                </Col>
+
+                <Col sm={12} lg={8}>
+                    <FormItem
+                        form={form}
+                        name="bankName"
+                        label="Ngân hàng"
+                        className="mb-0"
+                    >
+                        <Input placeholder="Nhập ngân hàng" />
+                    </FormItem>
+                </Col>
+
+                {type.includes('STUDENT') && (
+                    <Col sm={12} lg={8}>
+                        <FormItem
+                            form={form}
+                            name="registrationAreaId"
+                            label="Khu vực đăng ký"
+                            className="mb-0"
+                            normalize={(value) =>
+                                value === undefined ? null : value
+                            }
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn khu vực đăng ký"
+                                options={registrationAreaData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                )}
                 <Col sm={12} lg={8}>
                     <FormItem
                         form={form}
@@ -598,8 +983,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn quốc tịch"
                             options={nationalityData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -620,8 +1005,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn tôn giáo"
                             options={religionData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -642,8 +1027,8 @@ export default function ThongTinCaNhanTab({
                             placeholder="Chọn dân tộc"
                             options={ethnicityData.map((i) => {
                                 return {
-                                    value: i.id,
-                                    label: i.name,
+                                    value: i.Id,
+                                    label: i.sTen,
                                 }
                             })}
                         />
@@ -736,7 +1121,7 @@ export default function ThongTinCaNhanTab({
                 </Col>
             </Row>
 
-            <div className="mt-3">
+            <div className="mt-4">
                 <Collapse
                     ghost
                     accordion={true}
@@ -755,7 +1140,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthProvince"
+                                    name="provinceOfBirthId"
                                     className="mb-0"
                                     label="Tỉnh/Thành phố"
                                 >
@@ -768,7 +1153,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthDistrict"
+                                    name="districtOfBirthId"
                                     className="mb-0"
                                     label="Quận/Huyện"
                                 >
@@ -781,7 +1166,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="birthWard"
+                                    name="communeOfBirthId"
                                     className="mb-0"
                                     label="Phường/Xã"
                                 >
@@ -813,7 +1198,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownProvince"
+                                    name="provinceHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -825,7 +1210,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownDistrict"
+                                    name="districtHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -837,7 +1222,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="hometownWard"
+                                    name="communeHometownId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -868,7 +1253,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentProvince"
+                                    name="provincePermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -880,7 +1265,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentDistrict"
+                                    name="districtPermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -892,7 +1277,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={8}>
                                 <FormItem
                                     form={form}
-                                    name="permanentWard"
+                                    name="communePermanentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -923,7 +1308,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentProvince"
+                                    name="provinceCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -935,7 +1320,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentDistrict"
+                                    name="districtCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -947,7 +1332,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentWard"
+                                    name="communeCurrentAddressId"
                                     className="mb-0"
                                 >
                                     <Select
@@ -959,7 +1344,7 @@ export default function ThongTinCaNhanTab({
                             <Col span={6}>
                                 <FormItem
                                     form={form}
-                                    name="currentDetailAddress"
+                                    name="currentAddress"
                                     className="mb-0"
                                 >
                                     <Input

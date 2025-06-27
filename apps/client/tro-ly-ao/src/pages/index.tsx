@@ -9,8 +9,6 @@ export default function Page() {
     const { status } = useSession()
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        console.log('status', status)
-
         if (status === 'unauthenticated') {
             signIn()
         } else if (status === 'authenticated') {

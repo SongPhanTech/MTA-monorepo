@@ -1,6 +1,6 @@
 import AI_TYPES from '@constants/ai_types'
-import { useCurrentUser } from '@hooks/use-current-user'
 import ChatLayout from '@layouts/chat-layout'
+import { useSession } from '@workspace/auth/react'
 import { type DocumentType, MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import { Typography, message } from 'antd'
@@ -10,7 +10,7 @@ import { useState } from 'react'
 const { Title } = Typography
 export default function TroLyAo() {
     const router = useRouter()
-    const userCurrent = useCurrentUser()
+    const { data: userCurrent } = useSession()
 
     const { id: conversationId } = router.query
     const [loading, setLoading] = useState(false)
@@ -89,10 +89,10 @@ export default function TroLyAo() {
 
             const { label } = selectedAI
 
-            if (!currentConversationId && userCurrent?.id) {
+            if (!currentConversationId && userCurrent?.sDM_NhanVienId) {
                 const res = await createConversation({
                     data: {
-                        userId: userCurrent.id,
+                        userId: userCurrent.sDM_NhanVienId,
                         message: {
                             create: [
                                 {

@@ -65,7 +65,9 @@ const FilterMonHocCTDT = (props: Props) => {
 
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
