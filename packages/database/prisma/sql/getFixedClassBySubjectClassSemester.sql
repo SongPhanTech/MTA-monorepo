@@ -22,11 +22,11 @@
                       join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
                       left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
              where FC.active = true 
-               and TBS."deletedAt" is not null
-               and TBOCV."deletedAt" is not null
-               and CV."deletedAt" is not null
-               and FC."deletedAt" is not null
-               and SC."deletedAt" is not null
+               and TBS."deletedAt" is null
+               and TBOCV."deletedAt" is null
+               and CV."deletedAt" is null
+               and FC."deletedAt" is null
+               and SC."deletedAt" is null
              group by CV.id, CV.name, FC.id, FC."startYear", SC.id,
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
