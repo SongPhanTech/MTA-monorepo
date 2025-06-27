@@ -334,16 +334,16 @@ export default function TrainingBlock() {
                             //     dataIndex: 'specializedCredits',
                             //     width: 150,
                             // },
-                            // {
-                            //     title: 'Thứ tự',
-                            //     dataIndex: 'priority',
-                            //     sorter: (
-                            //         a: { priority: number },
-                            //         b: { priority: number }
-                            //     ) => a.priority - b.priority,
-                            //     align: 'center',
-                            //     width: 100,
-                            // },
+                            {
+                                title: 'Thứ tự',
+                                dataIndex: 'priority',
+                                sorter: (
+                                    a: { priority: number },
+                                    b: { priority: number }
+                                ) => a.priority - b.priority,
+                                align: 'center',
+                                width: 100,
+                            },
                             {
                                 title: 'Trạng thái',
                                 dataIndex: 'active',
