@@ -5,7 +5,7 @@ import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
-import { useCurrentUser } from '@hooks/use-current-user'
+import { useSession } from '@workspace/auth/react'
 import { CONFIG_KEY } from '@workspace/constant'
 import {
     useDeleteConversation,
@@ -37,7 +37,7 @@ const ChatLayout = ({
         )
     })
 
-    const userCurrent = useCurrentUser()
+    const { data: userCurrent } = useSession()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
@@ -84,7 +84,7 @@ const ChatLayout = ({
 
     const { data: conversation } = useFindManyConversation({
         where: {
-            userId: userCurrent?.id || '',
+            userId: userCurrent?.sDM_NhanVienId || '',
         },
         include: {
             message: true,

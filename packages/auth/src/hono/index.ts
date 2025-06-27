@@ -1,3 +1,4 @@
+import type { PrismaClient } from '@workspace/db'
 import type { Context, MiddlewareHandler } from 'hono'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { Session } from '..'
@@ -13,7 +14,8 @@ const getJwtFromRequest = (c: Context): string | null => {
 export const jwtAuth = (
     jwksUri: string,
     audience: string,
-    issuer: string
+    issuer: string,
+    prisma: PrismaClient
 ): MiddlewareHandler => {
     const JWKS = createRemoteJWKSet(new URL(jwksUri))
 
@@ -36,6 +38,23 @@ export const jwtAuth = (
                 id: payload.sDM_NhanVienId,
                 organizationUnitId: payload.sDM_DonViId,
             })
+            const existedUser = await prisma.user.findFirst({
+                where: {
+                    id: payload.sDM_NhanVienId,
+                },
+            })
+            if (!existedUser) {
+                // Create user if not exists
+                await prisma.user.create({
+                    data: {
+                        id: payload.sDM_NhanVienId,
+                        userName: payload.preferred_username || payload.name,
+                        email: payload.email,
+                        name: payload.name,
+                        ssoId: payload.sub,
+                    },
+                })
+            }
             await next()
         } catch (err) {
             console.error('JWT verification failed:', err)
