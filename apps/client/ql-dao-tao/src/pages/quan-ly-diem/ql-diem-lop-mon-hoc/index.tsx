@@ -406,54 +406,81 @@ export default function SubjectClassScore() {
     const handleSaveScores = async () => {
         try {
             showSpinner()
-            const scoresToUpdate = dataTable.map((record) => {
-                const ccScore = scoreCC.find((s) => s.id === record.id)
-                const txScore = scoreTX.find((s) => s.id === record.id)
-                const thiScore = scoreThi.find((s) => s.id === record.id)
-                const camThiScore = scoreCamThi.find((s) => s.id === record.id)
-                const hoanThiScore = scoreHoanThi.find(
-                    (s) => s.id === record.id
+
+            const scoresToUpdate = dataTable
+                .map((record) => {
+                    const ccScore = scoreCC.find((s) => s.id === record.id)
+                    const txScore = scoreTX.find((s) => s.id === record.id)
+                    const thiScore = scoreThi.find((s) => s.id === record.id)
+                    const camThiScore = scoreCamThi.find(
+                        (s) => s.id === record.id
+                    )
+                    const hoanThiScore = scoreHoanThi.find(
+                        (s) => s.id === record.id
+                    )
+                    const dinhChiScore = scoreDinhChi.find(
+                        (s) => s.id === record.id
+                    )
+                    const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
+                    const finalScore = Number(
+                        renderFinalScore(record).finalScore
+                    )
+
+                    const newData = {
+                        attendanceScore: ccScore ? ccScore.value : null,
+                        midtermScore: txScore ? txScore.value : null,
+                        examScore: thiScore ? thiScore.value : null,
+                        examBanned: camThiScore ? camThiScore.value : false,
+                        examPostponed: hoanThiScore
+                            ? hoanThiScore.value
+                            : false,
+                        suspended: dinhChiScore ? dinhChiScore.value : false,
+                        description: lyDoScore ? lyDoScore.value : '',
+                        finalScore: finalScore ? finalScore : null,
+                    }
+
+                    return {
+                        id: record.id,
+                        originalData: record,
+                        newData: newData,
+                    }
+                })
+                .filter(({ originalData, newData }) => {
+                    return (
+                        originalData.attendanceScore !==
+                            newData.attendanceScore ||
+                        originalData.midtermScore !== newData.midtermScore ||
+                        originalData.examScore !== newData.examScore ||
+                        originalData.examBanned !== newData.examBanned ||
+                        originalData.examPostponed !== newData.examPostponed ||
+                        originalData.suspended !== newData.suspended ||
+                        originalData.description !== newData.description ||
+                        originalData.finalScore !== newData.finalScore
+                    )
+                })
+
+            if (scoresToUpdate.length > 0) {
+                await Promise.all(
+                    scoresToUpdate.map(({ id, newData }) =>
+                        updateStudentSubjectScore({
+                            where: { id },
+                            data: newData,
+                        })
+                    )
                 )
-                const dinhChiScore = scoreDinhChi.find(
-                    (s) => s.id === record.id
+                message.success(
+                    `Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`
                 )
-                const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
-                const finalScore = Number(renderFinalScore(record).finalScore)
-                return {
-                    id: record.id,
-                    attendanceScore: ccScore ? ccScore.value : null,
-                    midtermScore: txScore ? txScore.value : null,
-                    examScore: thiScore ? thiScore.value : null,
-                    examBanned: camThiScore ? camThiScore.value : false,
-                    examPostponed: hoanThiScore ? hoanThiScore.value : false,
-                    suspended: dinhChiScore ? dinhChiScore.value : false,
-                    description: lyDoScore ? lyDoScore.value : '',
-                    finalScore: finalScore,
-                }
-            })
-            await Promise.all(
-                scoresToUpdate.map((score) =>
-                    updateStudentSubjectScore({
-                        where: { id: score.id },
-                        data: {
-                            attendanceScore: score.attendanceScore,
-                            midtermScore: score.midtermScore,
-                            examScore: score.examScore,
-                            examBanned: score.examBanned,
-                            examPostponed: score.examPostponed,
-                            suspended: score.suspended,
-                            description: score.description,
-                            finalScore: score.finalScore,
-                        },
-                    })
-                )
-            )
-            message.success('Điểm đã được lưu thành công!')
+            } else {
+                message.info('Không có thay đổi nào để cập nhật')
+            }
+
             clearCheckbox()
         } catch (error) {
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {
@@ -788,18 +815,15 @@ export default function SubjectClassScore() {
                                 dataIndex: 'name',
                                 width: 150,
                                 render: (text, record) =>
-                                    `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
+                                    `${record.student?.userProfile?.firstName || ''} ${record.student?.userProfile?.lastName || ''}`,
                             },
                             {
                                 title: 'Ngày sinh',
                                 dataIndex: 'tenMonHoc',
                                 width: 150,
-                                render: (text, record) =>
-                                    record.student?.userProfile?.dateOfBirth
-                                        ? new Date(
-                                              record.student.userProfile
-                                                  .dateOfBirth
-                                          ).toLocaleDateString('vi-VN')
+                                render: (record: string) =>
+                                    record
+                                        ? dayjs(record).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -839,7 +863,7 @@ export default function SubjectClassScore() {
                                                 type="number"
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
-                                                step={0.1}
+                                                step={0.5}
                                                 value={
                                                     Score !== null &&
                                                     Score !== undefined
@@ -955,7 +979,7 @@ export default function SubjectClassScore() {
                                                 type="number"
                                                 id={`score-tx-${record.id}`}
                                                 style={{ width: '100%' }}
-                                                step={0.1}
+                                                step={0.5}
                                                 value={
                                                     Score !== null &&
                                                     Score !== undefined
@@ -1072,7 +1096,7 @@ export default function SubjectClassScore() {
                                                 type="number"
                                                 id={`score-thi-${record.id}`}
                                                 style={{ width: '100%' }}
-                                                step={0.1}
+                                                step={0.5}
                                                 value={
                                                     Score !== null &&
                                                     Score !== undefined

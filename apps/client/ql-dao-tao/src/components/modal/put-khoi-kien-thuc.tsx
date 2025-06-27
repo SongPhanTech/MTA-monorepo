@@ -40,7 +40,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             {
                 where: { id: input?.trainingBlockOnCurriculumVersionId },
             },
-            { enabled: !!input?.trainingBlockOnCurriculumVersionId }
+            { enable: !!input?.curriculumVersionId }
         )
 
     const { data: trainingBlockData = [], refetch } = useFindManyTrainingBlock()
