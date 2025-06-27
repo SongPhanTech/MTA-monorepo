@@ -35,7 +35,7 @@ const useScoreToWords = () => {
             return `${capitalizeFirstLetter(numberWords[integerPart])} phẩy ${numberWords[decimalPart]}`
         }
 
-        return num.toString()
+        return num ? num.toString() : ''
     }
 
     return useMemo(
