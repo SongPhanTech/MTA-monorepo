@@ -76,7 +76,7 @@ export default function TrainingBlock() {
             },
         },
         orderBy: {
-            priority: 'asc',
+            name: 'asc',
         },
     })
 
@@ -125,8 +125,12 @@ export default function TrainingBlock() {
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-    const { data: curriculumData = [] } = useFindManyCurriculum()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
+    const { data: curriculumData = [] } = useFindManyCurriculum({
+        orderBy: { name: 'asc' },
+    })
 
     return (
         <div>
@@ -291,16 +295,16 @@ export default function TrainingBlock() {
                             //     dataIndex: 'specializedCredits',
                             //     width: 150,
                             // },
-                            {
-                                title: 'Thứ tự',
-                                dataIndex: 'priority',
-                                sorter: (
-                                    a: { priority: number },
-                                    b: { priority: number }
-                                ) => a.priority - b.priority,
-                                align: 'center',
-                                width: 100,
-                            },
+                            // {
+                            //     title: 'Thứ tự',
+                            //     dataIndex: 'priority',
+                            //     sorter: (
+                            //         a: { priority: number },
+                            //         b: { priority: number }
+                            //     ) => a.priority - b.priority,
+                            //     align: 'center',
+                            //     width: 100,
+                            // },
                             {
                                 title: 'Trạng thái',
                                 dataIndex: 'active',

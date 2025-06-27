@@ -139,7 +139,9 @@ export default function UserProfilePageDs() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            userProfile: {
+                firstName: 'asc',
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -160,6 +162,7 @@ export default function UserProfilePageDs() {
             include: {
                 fixedClass: true,
             },
+            orderBy: { name: 'asc' },
         })
 
     const handleTrainingCourseChange = (value: string) => {
@@ -197,10 +200,12 @@ export default function UserProfilePageDs() {
 
     const { data: TrainingFieldData = [] } = useFindManyTrainingField()
 
-    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor()
+    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: TrainingCurriculumVersionData = [] } =
-        useFindManyCurriculumVersion()
+        useFindManyCurriculumVersion({ orderBy: { name: 'asc' } })
 
     const handleFixedClassChange = (value: string) => {
         setSelectedFixedClass(value)
@@ -613,16 +618,12 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Ảnh',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
                                 className: 'flex justify-center',
                                 render: (_, record) => {
-                                    const avatar = record.userProfile?.avatar
+                                    const avatar = record?.userProfile?.avatar
                                     return avatar ? (
-                                        <Image
-                                            src={getMinioUrl(avatar)}
-                                            width={100}
-                                            height={80}
-                                        />
+                                        <Image src={getMinioUrl(avatar)} />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                                             <UserOutlined

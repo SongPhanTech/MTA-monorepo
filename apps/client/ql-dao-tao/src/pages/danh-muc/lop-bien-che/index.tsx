@@ -87,7 +87,7 @@ export default function FixedClassPage({
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -95,8 +95,12 @@ export default function FixedClassPage({
     const { data: trainingObjectTypeData = [] } =
         useFindManyTrainingObjectType()
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: count } = useCountFixedClass({
         where: {

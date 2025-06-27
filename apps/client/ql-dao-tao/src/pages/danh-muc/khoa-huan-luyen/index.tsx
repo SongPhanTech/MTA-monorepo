@@ -53,7 +53,7 @@ export default function TrainingCoursePage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

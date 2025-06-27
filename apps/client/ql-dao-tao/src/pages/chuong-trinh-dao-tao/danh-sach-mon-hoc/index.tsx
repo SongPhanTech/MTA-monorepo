@@ -99,9 +99,18 @@ export default function SubjectList() {
                 : {}),
         },
         include: {
-            subjectVersion: true,
+            subjectVersion: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
             managementOrganization: true,
         },
+        orderBy: {
+            name: 'asc',
+        },
+        take: 10,
+        skip: (currentPage - 1) * 10,
     })
 
     const debouncedRefetch = useCallback(

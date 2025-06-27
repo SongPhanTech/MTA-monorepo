@@ -104,7 +104,9 @@ const FilterChuongTrinhDT = (props: Props) => {
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
     const { data: trainingMajorData = [], refetch: refetchObjectMajor } =
-        useFindManyTrainingMajor()
+        useFindManyTrainingMajor({
+            orderBy: { name: 'asc' },
+        })
     const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
         useFindManySchoolYear()
     const { data: manageOrgData = [], refetch: refetchManageOrg } =

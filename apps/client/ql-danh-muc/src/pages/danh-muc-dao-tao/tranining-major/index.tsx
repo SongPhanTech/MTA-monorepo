@@ -28,6 +28,7 @@ export default function Page() {
                 contains: searchText,
             },
         },
+        orderBy: { name: 'asc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
