@@ -1,5 +1,15 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Col, Modal, Row, Space, Table, Tag, message } from 'antd'
+import {
+    Button,
+    Col,
+    Empty,
+    Modal,
+    Row,
+    Space,
+    Table,
+    Tag,
+    message,
+} from 'antd'
 import { useState } from 'react'
 
 import useSpinner from '@hooks/spinner'
@@ -115,7 +125,7 @@ const ImportStudentModal = ({
                 </Button>,
             ]}
         >
-            <div style={{ marginBottom: 16 }}>
+            <div className="rounded-lg border-[1px] border-solid border-blue-400 bg-blue-50 p-3 mb-4">
                 <input
                     id="file-upload"
                     type="file"
@@ -127,11 +137,13 @@ const ImportStudentModal = ({
                     onClick={() =>
                         document.getElementById('file-upload')?.click()
                     }
+                    type="primary"
+                    className="bg-[#1677ff] mb-4"
                 >
                     Chọn file
                 </Button>
 
-                {fileName && (
+                {fileName ? (
                     <Space style={{ marginLeft: 16 }}>
                         <Tag
                             closable
@@ -143,209 +155,212 @@ const ImportStudentModal = ({
                             {fileName}
                         </Tag>
                     </Space>
+                ) : (
+                    <span className="ml-3">Chưa có tệp nào được chọn</span>
                 )}
-                <Row>
+                <Row className="mb-2">
                     <ExportTemplateStudent />
                 </Row>
-                <p style={{ marginTop: 8 }}>
-                    Chọn file Excel mẫu đã xuất từ hệ thống
-                </p>
+                <p className="">Chọn file Excel mẫu đã xuất từ hệ thống</p>
             </div>
 
-            {previewData.length > 0 ? (
-                <>
-                    <Row className="text-xl font-[500] mb-3">
-                        Danh sách sinh viên
-                    </Row>
-                    <Row className="mb-3">
-                        <Col span={12}>
-                            <span>
-                                Đối tượng đào tạo:{' '}
-                                {data?.trainingObjectType ? (
-                                    data.trainingObjectType
-                                ) : (
-                                    <span className="text-[#e10b0b]">
-                                        Bạn chưa nhập đối tượng đào tạo
-                                    </span>
-                                )}
-                            </span>
-                        </Col>
-                        <Col span={12}>
-                            <span>
-                                Khoá học:{' '}
-                                {data?.trainingCourse ? (
-                                    data.trainingCourse
-                                ) : (
-                                    <span className="text-[#e10b0b]">
-                                        Bạn chưa nhập đối tượng đào tạo
-                                    </span>
-                                )}
-                            </span>
-                        </Col>
-                    </Row>
+            <>
+                <Row className="text-xl font-[500] mb-3">
+                    Danh sách sinh viên
+                </Row>
+                <Row className="mb-3">
+                    <Col span={12}>
+                        <span>
+                            Đối tượng đào tạo:{' '}
+                            {data?.trainingObjectType ? (
+                                data.trainingObjectType
+                            ) : previewData.length > 0 ? (
+                                <span className="text-[#e10b0b]">
+                                    Bạn chưa nhập đối tượng đào tạo
+                                </span>
+                            ) : (
+                                ''
+                            )}
+                        </span>
+                    </Col>
+                    <Col span={12}>
+                        <span>
+                            Khoá học:{' '}
+                            {data?.trainingCourse ? (
+                                data.trainingCourse
+                            ) : previewData.length > 0 ? (
+                                <span className="text-[#e10b0b]">
+                                    Bạn chưa nhập khoá đào tạo
+                                </span>
+                            ) : (
+                                ''
+                            )}
+                        </span>
+                    </Col>
+                </Row>
 
-                    <Table
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index: number) =>
-                                    index + 1 + (currentPage - 1) * 10,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                dataIndex: 'code',
-                                key: 'code',
-                                width: 150,
-                                align: 'center',
-                                render: (value: string) => (
-                                    <div className={!value ? 'td-error' : ''}>
-                                        {value}
-                                    </div>
-                                ),
-                            },
-                            {
-                                title: 'Họ và tên',
-                                dataIndex: 'fullname',
-                                key: 'fullname',
-                                align: 'center',
-                                width: 250,
-                                render: (value: string) => (
-                                    <div className={!value ? 'td-error' : ''}>
-                                        {value}
-                                    </div>
-                                ),
-                            },
-                            {
-                                title: 'Ngày sinh',
-                                dataIndex: 'dateOfBirth',
-                                key: 'dateOfBirth',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
-                                title: 'Giới tính',
-                                dataIndex: 'gender',
-                                align: 'center',
-                                key: 'gender',
-                                width: 100,
-                            },
-                            {
-                                title: 'Dân tộc',
-                                dataIndex: 'ethnicity',
-                                key: 'ethnicity',
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Quốc gia',
-                                dataIndex: 'nationality',
-                                key: 'nationality',
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Nguyên quán huyện',
-                                dataIndex: 'districtHometown',
-                                key: 'districtHometown',
-                                align: 'center',
-                                width: 200,
-                            },
-                            {
-                                title: 'Nguyên quán tỉnh',
-                                dataIndex: 'provinceHometown',
-                                key: 'provinceHometown',
-                                width: 150,
-                            },
-                            {
-                                title: 'Tổ hợp điểm',
-                                dataIndex: 'admissionBlock',
-                                key: 'admissionBlock',
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Tổng điểm',
-                                dataIndex: 'admissionScore',
-                                key: 'admissionScore',
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Điểm đánh giá NL',
-                                dataIndex: 'competencyAssessmentScore',
-                                key: 'competencyAssessmentScore',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
-                                title: 'Lớp quản lý',
-                                dataIndex: 'fixedClass',
-                                key: 'fixedClass',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
-                                title: 'Nghành',
-                                dataIndex: 'trainingField',
-                                key: 'trainingField',
-                                align: 'center',
-                                width: 150,
-                            },
+                <Table
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 50,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index: number) =>
+                                index + 1 + (currentPage - 1) * 10,
+                        },
+                        {
+                            title: 'Mã sinh viên',
+                            dataIndex: 'code',
+                            key: 'code',
+                            width: 150,
+                            align: 'center',
+                            render: (value: string) => (
+                                <div className={!value ? 'td-error' : ''}>
+                                    {value}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Họ và tên',
+                            dataIndex: 'fullname',
+                            key: 'fullname',
+                            align: 'center',
+                            width: 250,
+                            render: (value: string) => (
+                                <div className={!value ? 'td-error' : ''}>
+                                    {value}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Ngày sinh',
+                            dataIndex: 'dateOfBirth',
+                            key: 'dateOfBirth',
+                            align: 'center',
+                            width: 150,
+                        },
+                        {
+                            title: 'Giới tính',
+                            dataIndex: 'gender',
+                            align: 'center',
+                            key: 'gender',
+                            width: 100,
+                        },
+                        {
+                            title: 'Dân tộc',
+                            dataIndex: 'ethnicity',
+                            key: 'ethnicity',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Quốc gia',
+                            dataIndex: 'nationality',
+                            key: 'nationality',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Nguyên quán huyện',
+                            dataIndex: 'districtHometown',
+                            key: 'districtHometown',
+                            align: 'center',
+                            width: 200,
+                        },
+                        {
+                            title: 'Nguyên quán tỉnh',
+                            dataIndex: 'provinceHometown',
+                            key: 'provinceHometown',
+                            width: 150,
+                        },
+                        {
+                            title: 'Tổ hợp điểm',
+                            dataIndex: 'admissionBlock',
+                            key: 'admissionBlock',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Tổng điểm',
+                            dataIndex: 'admissionScore',
+                            key: 'admissionScore',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Điểm đánh giá NL',
+                            dataIndex: 'competencyAssessmentScore',
+                            key: 'competencyAssessmentScore',
+                            align: 'center',
+                            width: 150,
+                        },
+                        {
+                            title: 'Lớp quản lý',
+                            dataIndex: 'fixedClass',
+                            key: 'fixedClass',
+                            align: 'center',
+                            width: 150,
+                        },
+                        {
+                            title: 'Nghành',
+                            dataIndex: 'trainingField',
+                            key: 'trainingField',
+                            align: 'center',
+                            width: 150,
+                        },
 
-                            {
-                                title: 'Chuyên nghành',
-                                dataIndex: 'trainingMajor',
-                                key: 'trainingMajor',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
-                                title: 'Chương trình đào tạo',
-                                dataIndex: 'curriculum',
-                                key: 'curriculum',
-                                align: 'center',
-                                width: 200,
-                                render: (value: string) => (
-                                    <div className={!value ? 'td-error' : ''}>
-                                        {value}
-                                    </div>
-                                ),
-                            },
-                            {
-                                title: 'Ghi chú',
-                                dataIndex: 'description',
-                                key: 'description',
-                                align: 'center',
-                                width: 150,
-                            },
-                        ]}
-                        dataSource={previewData}
-                        rowKey="studentCode"
-                        pagination={{
-                            position: ['bottomRight'],
-                            defaultPageSize: 10,
-                            showSizeChanger: {
-                                labelRender: ({ value }) => `${value} / trang`,
-                                optionRender: (oriOption) =>
-                                    `${oriOption.value} / trang`,
-                            },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        {
+                            title: 'Chuyên nghành',
+                            dataIndex: 'trainingMajor',
+                            key: 'trainingMajor',
+                            align: 'center',
+                            width: 150,
+                        },
+                        {
+                            title: 'Chương trình đào tạo',
+                            dataIndex: 'curriculum',
+                            key: 'curriculum',
+                            align: 'center',
+                            width: 200,
+                            render: (value: string) => (
+                                <div className={!value ? 'td-error' : ''}>
+                                    {value}
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Ghi chú',
+                            dataIndex: 'description',
+                            key: 'description',
+                            align: 'center',
+                            width: 150,
+                        },
+                    ]}
+                    dataSource={previewData}
+                    rowKey="studentCode"
+                    pagination={{
+                        position: ['bottomRight'],
+                        defaultPageSize: 10,
+                        showSizeChanger: {
+                            labelRender: ({ value }) => `${value} / trang`,
+                            optionRender: (oriOption) =>
+                                `${oriOption.value} / trang`,
+                        },
+                        showTotal: (total, range) =>
+                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
 
-                            // onShowSizeChange(current, size) {
-                            //     pagination?.onShowSizeChange?.(size)
-                            // },
-                        }}
-                        scroll={{ x: 'max-content' }}
-                        bordered
-                    />
-                </>
-            ) : (
-                <p>Vui lòng chọn file Excel để xem trước dữ liệu</p>
-            )}
+                        // onShowSizeChange(current, size) {
+                        //     pagination?.onShowSizeChange?.(size)
+                        // },
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    bordered
+                    locale={{
+                        emptyText: <Empty description="Không có dữ liệu" />,
+                    }}
+                />
+            </>
         </Modal>
     )
 }

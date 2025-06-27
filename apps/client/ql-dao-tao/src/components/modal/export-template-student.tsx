@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Flex } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 interface ExportTemplateStudentProps {
@@ -244,7 +244,17 @@ const ExportTemplateStudent = () => {
         saveAs(new Blob([buffer]), 'Mau_nhap_sinh_vien.xlsx')
     }
 
-    return <Button onClick={exportTemplate}>Xuất mẫu</Button>
+    return (
+        <Flex>
+            <div
+                className="text-blue-500 cursor-pointer mr-1"
+                onClick={exportTemplate}
+            >
+                Xuất file mẫu
+            </div>
+            <div>(tải về mẫu Excel để điền dữ liệu)</div>
+        </Flex>
+    )
 }
 
 export default ExportTemplateStudent
