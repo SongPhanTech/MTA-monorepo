@@ -17,7 +17,7 @@ export const useExamTypeOptions = () => {
         { value: ExamType.Other, label: 'Loại khác' },
     ]
 
-    const getExamTypeLabel = (value: ExamType): string => {
+    const getExamTypeLabel = (value: ExamType | null | undefined): string => {
         return options.find((opt) => opt.value === value)?.label || ''
     }
 

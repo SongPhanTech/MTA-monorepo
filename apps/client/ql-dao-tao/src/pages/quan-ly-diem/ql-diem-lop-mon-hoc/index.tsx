@@ -1,9 +1,15 @@
+import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+import {
+    ExportTemplateExam,
+    ModalPrintStudentSubjectScore,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, TrainingObjectType } from '@workspace/db'
@@ -14,6 +20,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
+import { calcFinalScore } from '@workspace/libs/utils'
 import {
     Button,
     Checkbox,
@@ -32,10 +39,8 @@ import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
-import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
-import { useScoreConverter } from '@hooks/scoreConverter'
-import { calcFinalScore } from '@workspace/libs/utils'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -61,6 +66,7 @@ export default function SubjectClassScore() {
     const [selectedFixedClass, setSelectedFixedClass] = useState<
         string | undefined
     >(undefined)
+    const [subjectClassFullData, setSubjectClassFullData] = useState<any[]>([])
 
     const [nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
     const [nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
@@ -75,6 +81,13 @@ export default function SubjectClassScore() {
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
     }
+
+    const { onOpen, onClose } = useDisclosure<{
+        dataTable: any
+        type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+    }>({
+        tag: ModalPrintStudentSubjectScore.name,
+    })
 
     useEffect(() => {
         if (subjectId) {
@@ -174,11 +187,16 @@ export default function SubjectClassScore() {
                 : {}),
         },
         include: {
-            // subject: {
-            //     include: {
-            //         managementOrganization: true, // Bao gồm thông tin khoa/bộ môn
-            //     },
-            // },
+            subject: {
+                include: {
+                    managementOrganization: true,
+                },
+            },
+            semester: {
+                include: {
+                    schoolYear: true,
+                },
+            },
             mainLecturer: {
                 include: { userProfile: true },
             },
@@ -187,7 +205,16 @@ export default function SubjectClassScore() {
             },
             subjectClassStudent: {
                 include: {
-                    student: { include: { userProfile: true } },
+                    student: {
+                        include: {
+                            userProfile: true,
+                            fixedClass: {
+                                include: {
+                                    trainingCourse: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -515,6 +542,14 @@ export default function SubjectClassScore() {
         }
     }
 
+    useEffect(() => {
+        setSubjectClassFullData(subjectClassData)
+    }, [subjectClassData])
+
+    const selectedClassInfo = subjectClassFullData.find(
+        (item) => item.id === selectedFixedClass
+    )
+
     return (
         <div className="flex gap-2 pr-2">
             <Col
@@ -684,16 +719,33 @@ export default function SubjectClassScore() {
                                     </Button>
                                 </Popover>
 
-                                <Button disabled={!selectedFixedClass}>
-                                    <Printer stroke="black" />
-                                    In phiếu danh sách thi
-                                </Button>
-                                <Button disabled={!selectedFixedClass}>
-                                    <Printer stroke="black" />
+                                <ExportTemplateExam
+                                    selectedFixedClass={selectedFixedClass}
+                                    dataClass={selectedClassInfo}
+                                    dataTable={dataTable}
+                                />
+                                <Button
+                                    disabled={!selectedFixedClass}
+                                    onClick={() =>
+                                        onOpen({
+                                            dataTable,
+                                            type: 1,
+                                        })
+                                    }
+                                >
+                                    <Printer />
                                     In phiếu điểm và khóa
                                 </Button>
-                                <Button disabled={!selectedFixedClass}>
-                                    <Printer stroke="black" />
+                                <Button
+                                    disabled={!selectedFixedClass}
+                                    onClick={() =>
+                                        onOpen({
+                                            dataTable,
+                                            type: 0,
+                                        })
+                                    }
+                                >
+                                    <Printer />
                                     In phiếu điểm nháp
                                 </Button>
                                 <Button
