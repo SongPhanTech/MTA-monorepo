@@ -68,12 +68,12 @@ select json_build_object('subjectVersionCode', subject_version_code,'trainingMaj
        ) as data
 from FCS
 where training_block_subject_semester = fixed_class_semester and active = true and graduated = false and
-($3::TEXT IS NULL AND 1=1 OR training_course_id = $3) and
-($4::TEXT IS NULL AND 1=1 OR subject_version_name ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR subject_version_code ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) and
-($5::TEXT IS NULL AND 1=1 OR training_major_id = $5)
+(($3::TEXT IS NULL AND 1=1 OR training_course_id = $3) or
+($4::TEXT IS NULL AND 1=1 OR subject_version_name ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR subject_version_code ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) or
+($5::TEXT IS NULL AND 1=1 OR training_major_id = $5))
 group by subject_version_id, subject_version_code,
          subject_version_credit, subject_version_name, training_major_id, training_course_id
          limit $7 offset ($6 - 1) * $7

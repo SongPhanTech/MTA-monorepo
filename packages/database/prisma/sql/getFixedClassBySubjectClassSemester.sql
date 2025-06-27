@@ -33,7 +33,7 @@
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester)
 select count(*) OVER() AS full_count, fixed_class_id as "fixedClassId" from FCS
 where training_block_subject_semester = fixed_class_semester and subject_class_id = $3 and active = true and graduated = false and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) and
-($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) 
+(($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) or
+($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4))
 group by fixed_class_id
          limit $6 offset ($5 - 1) * $6
