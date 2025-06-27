@@ -6,7 +6,7 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
+import type { ArchivedAward, TrainingObjectType } from '@workspace/db'
 import {
     useCountStudentSubjectScore,
     useFindManyStudentSubjectScore,
@@ -34,6 +34,8 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import LopMonHocItem from './lop-mon-hoc'
 import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
+import { useScoreConverter } from '@hooks/scoreConverter'
+import { calcFinalScore } from '@workspace/libs/utils'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -222,6 +224,11 @@ export default function SubjectClassScore() {
                     semester: {
                         include: {
                             schoolYear: true,
+                            trainingCoursesStart: {
+                                include: {
+                                    scoreConverts: true,
+                                },
+                            },
                         },
                     },
                     mainLecturer: {
@@ -241,18 +248,32 @@ export default function SubjectClassScore() {
                     },
                 },
             },
+            awards: {
+                include: {
+                    archivedAward: true,
+                },
+            },
+            certificates: {
+                include: {
+                    archivedCertificate: true,
+                },
+            },
         },
         orderBy: {
             student: {
                 userProfile: {
                     firstName: 'asc',
-                    // lastName: 'asc',
                 },
             },
         },
         // take: numberOfPages,
         // skip: (currentPage - 1) * numberOfPages,
     })
+
+    const { convertScore } = useScoreConverter(
+        dataTable?.[0]?.subjectClass?.semester?.trainingCoursesStart?.[0]
+            ?.scoreConverts
+    )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -276,15 +297,6 @@ export default function SubjectClassScore() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
-    }
-    const handleChangeNhapDiemCC = (e: CheckboxChangeEvent) => {
-        setNhapDiemCC(e.target.checked)
-    }
-    const handleChangeNhapDiemTX = (e: CheckboxChangeEvent) => {
-        setNhapDiemTX(e.target.checked)
-    }
-    const handleChangeNhapDiemThi = (e: CheckboxChangeEvent) => {
-        setNhapDiemThi(e.target.checked)
     }
     // const handleChangeNhapDiemCong = (e: CheckboxChangeEvent) => {
     //     setNhapDiemCong(e.target.checked)
@@ -325,6 +337,37 @@ export default function SubjectClassScore() {
         []
     )
 
+    const renderFinalScore = (record: any) => {
+        const attendanceScore =
+            scoreCC.find((item) => item.id === record.id)?.value ??
+            (record.attendanceScore !== undefined
+                ? Number(record.attendanceScore)
+                : null)
+
+        const midtermScore =
+            scoreTX.find((item) => item.id === record.id)?.value ??
+            (record.midtermScore !== undefined
+                ? Number(record.midtermScore)
+                : null)
+
+        const examScore =
+            scoreThi.find((item) => item.id === record.id)?.value ??
+            (record.examScore !== undefined ? Number(record.examScore) : null)
+
+        const finalScore = calcFinalScore(
+            record.subjectClass.semester.trainingCoursesStart[0],
+            { ...record, attendanceScore, midtermScore, examScore }
+        )?.toFixed(1)
+
+        const converted = convertScore(Number(finalScore))
+
+        return {
+            finalScore,
+            base4: converted?.base4,
+            letter: converted?.letter,
+        }
+    }
+
     const clearCheckbox = () => {
         setNhapDiemCC(false)
         setNhapDiemTX(false)
@@ -347,6 +390,7 @@ export default function SubjectClassScore() {
                     (s) => s.id === record.id
                 )
                 const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
+                const finalScore = Number(renderFinalScore(record).finalScore)
                 return {
                     id: record.id,
                     attendanceScore: ccScore ? ccScore.value : null,
@@ -356,6 +400,7 @@ export default function SubjectClassScore() {
                     examPostponed: hoanThiScore ? hoanThiScore.value : false,
                     suspended: dinhChiScore ? dinhChiScore.value : false,
                     description: lyDoScore ? lyDoScore.value : '',
+                    finalScore: finalScore,
                 }
             })
             await Promise.all(
@@ -370,6 +415,7 @@ export default function SubjectClassScore() {
                             examPostponed: score.examPostponed,
                             suspended: score.suspended,
                             description: score.description,
+                            finalScore: score.finalScore,
                         },
                     })
                 )
@@ -741,7 +787,12 @@ export default function SubjectClassScore() {
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.1}
-                                                value={Score || ''}
+                                                value={
+                                                    Score !== null &&
+                                                    Score !== undefined
+                                                        ? Score
+                                                        : ''
+                                                }
                                                 onChange={(e) => {
                                                     const value = e.target.value
                                                     let newScore =
@@ -852,7 +903,12 @@ export default function SubjectClassScore() {
                                                 id={`score-tx-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.1}
-                                                value={Score || ''}
+                                                value={
+                                                    Score !== null &&
+                                                    Score !== undefined
+                                                        ? Score
+                                                        : ''
+                                                }
                                                 onChange={(e) => {
                                                     const value = e.target.value
                                                     let newScore =
@@ -964,7 +1020,12 @@ export default function SubjectClassScore() {
                                                 id={`score-thi-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.1}
-                                                value={Score || ''}
+                                                value={
+                                                    Score !== null &&
+                                                    Score !== undefined
+                                                        ? Score
+                                                        : ''
+                                                }
                                                 onChange={(e) => {
                                                     const value = e.target.value
                                                     let newScore =
@@ -1052,66 +1113,49 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Điểm cộng',
-                                dataIndex: 'code',
-                                width: 100,
                                 align: 'center',
-                                render: (text, record) => {
-                                    if (nhapDiemCong) {
-                                        return (
-                                            <Input
-                                                type="number"
-                                                style={{
-                                                    width: '100%',
-                                                }}
-                                                onChange={(e) => {
-                                                    // Handle input change for bonus score
-                                                }}
-                                                onBlur={(e) => {
-                                                    const { value } = e.target
-                                                    const numericValue =
-                                                        Number.parseFloat(value)
-                                                    const regex =
-                                                        /^(\d{1,2}(\.\d)?|10)$/
-                                                    if (
-                                                        !regex.test(value) ||
-                                                        Number.isNaN(
-                                                            numericValue
-                                                        ) ||
-                                                        numericValue < 0 ||
-                                                        numericValue > 10
-                                                    ) {
-                                                        e.target.style.borderColor =
-                                                            'red'
-                                                        message.error(
-                                                            'Điểm phải là số từ 0 đến 10 với tối đa 1 chữ số sau dấu .'
-                                                        )
-                                                    } else {
-                                                        e.target.style.borderColor =
-                                                            ''
-                                                    }
-                                                }}
-                                            />
-                                        )
-                                    }
-                                    return ''
-                                },
+                                width: 120,
+                                render: (_, record) =>
+                                    record.awards.reduce(
+                                        (
+                                            acc: number,
+                                            curr: {
+                                                archivedAward: ArchivedAward
+                                            }
+                                        ) =>
+                                            acc +
+                                            (curr?.archivedAward?.bonusScore ??
+                                                0),
+                                        0
+                                    ),
                             },
                             {
                                 title: 'Điểm HP',
-                                dataIndex: 'finalScore',
                                 width: 80,
                                 align: 'center',
+                                render: (record) => {
+                                    const { finalScore } =
+                                        renderFinalScore(record)
+                                    return finalScore
+                                },
                             },
                             {
                                 title: 'Điểm hệ 4',
                                 width: 100,
                                 align: 'center',
+                                render: (record) => {
+                                    const { base4 } = renderFinalScore(record)
+                                    return base4
+                                },
                             },
                             {
                                 title: 'Điểm chữ',
-                                dataIndex: '',
                                 width: 100,
                                 align: 'center',
+                                render: (record) => {
+                                    const { letter } = renderFinalScore(record)
+                                    return letter
+                                },
                             },
                             // #region Cấm thi/Hoãn thi/Đình chỉ
                             {
@@ -1343,29 +1387,6 @@ export default function SubjectClassScore() {
                                     return record.description || ''
                                 },
                             },
-                            // {
-                            //     title: 'Thao tác',
-                            //     width: 100,
-                            //     align: 'center',
-                            //     fixed: 'right',
-                            //     render: (_, { id }) => {
-                            //         if (id) {
-                            //             return (
-                            //                 <Row
-                            //                     className="flex justify-center items-center gap-2 text-[#028850]"
-                            //                     onClick={handleModal}
-                            //                 >
-                            //                     <CalendarPlus
-                            //                         size={16}
-                            //                         strokeWidth={2}
-                            //                     />
-                            //                     Nhập điểm
-                            //                 </Row>
-                            //             )
-                            //         }
-                            //         return ''
-                            //     },
-                            // },
                         ]}
                         data={dataTable}
                         pagination={{

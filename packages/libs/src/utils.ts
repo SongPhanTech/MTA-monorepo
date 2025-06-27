@@ -54,7 +54,11 @@ export const calcFinalScore = (
         return null
     }
 
-    if (rawFinalScore && rawFinalScore < coef.scoreToPass) {
+    if (
+        rawFinalScore &&
+        maxCertFinalScore === null &&
+        rawFinalScore < coef.scoreToPass
+    ) {
         return rawFinalScore
     }
 
