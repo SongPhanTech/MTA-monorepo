@@ -9,6 +9,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Curriculum, TrainingObjectType } from '@workspace/db'
 import {
+    useCountTrainingBlock,
     useFindManyCurriculum,
     useFindManyTrainingBlock,
     useFindManyTrainingCourse,
@@ -29,6 +30,7 @@ interface FilterProps {
 
 export default function TrainingBlock() {
     const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingCourseId: null,
@@ -76,7 +78,44 @@ export default function TrainingBlock() {
             },
         },
         orderBy: {
-            name: 'asc',
+            priority: 'asc',
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count, refetch: refetchCount } = useCountTrainingBlock({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.trainingObjectTypeId
+                ? {
+                      curriculumVersions: {
+                          some: {
+                              curriculumVersion: {
+                                  trainingObjectTypeId:
+                                      filters.trainingObjectTypeId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -355,6 +394,13 @@ export default function TrainingBlock() {
                                 },
                             },
                         ]}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                         data={trainingBlockData}
                     />
                 </Col>
