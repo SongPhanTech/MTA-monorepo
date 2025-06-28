@@ -87,6 +87,31 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         return treeNode.title.toLowerCase().includes(input.toLowerCase())
     }
 
+    // useEffect(() => {
+    //     const nowTime = new Date()
+    //     // Tự động chọn học kỳ hiện tại nếu có
+    //     const currentSemester = semesters?.find((semester) => {
+    //         const startDate = new Date(semester.startDate)
+    //         const endDate = new Date(semester.endDate)
+    //         return startDate <= nowTime && endDate >= nowTime
+    //     })
+    //     if (currentSemester) {
+    //         setInternalValue(currentSemester.id)
+    //         if (onChange) {
+    //             onChange(currentSemester.id)
+    //         }
+    //     } else {
+    //         // Nếu không có học kỳ hiện tại, chọn học kỳ đầu tiên
+    //         const firstSemester = semesters?.[0]
+    //         if (firstSemester) {
+    //             setInternalValue(firstSemester.id)
+    //             if (onChange) {
+    //                 onChange(firstSemester.id)
+    //             }
+    //         }
+    //     }
+    // })
+
     return (
         <TreeSelectAnt
             // multiple
