@@ -1,6 +1,6 @@
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { QueryClient } from '@tanstack/react-query'
 import type { FixedClassBySubjectClassSemester } from '@workspace/libs/api/schemas/fixedClassBySubjectClassSemester'
 import {
     enrollFixedClassOnSubjectClass,
@@ -28,8 +28,6 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
-
-    const queryClient = new QueryClient()
 
     const { data: fixedClass } = useFixedClassBySubjectClassSemester(
         {
@@ -72,7 +70,9 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
                 subjectClassId,
             })
             message.success('Gán lớp cố định thành công!')
-            queryClient.invalidateQueries()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
         } catch (error) {
             message.error('Có lỗi xảy ra khi gán lớp!')
         }

@@ -15,12 +15,11 @@ import { Col, Form, Input, InputNumber, message, Switch, TreeSelect } from 'antd
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSubjectVersion = SubjectVersion
 import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
-
+export type PutSubjectVersion = SubjectVersion
 dayjs.locale('vi')
 
 type PutSubjectVersionFormValues = PutSubjectVersion & {
@@ -202,6 +201,11 @@ const PutVersionSubjectModal = () => {
             }
             className="w-[60vw]"
         >
+            <Col span={12}>
+                <FormItem form={form} name="code" label="Mã môn học" required>
+                    <Input placeholder="Mã môn học" />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên môn học" required>
                     <Input placeholder="Tên môn học" />
