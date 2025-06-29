@@ -14,8 +14,8 @@ import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
 const XuLyVanBanLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
-    const router = useRouter()
-    const [collapsed, setCollapsed] = useState(() => {
+    const _router = useRouter()
+    const [_collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
 

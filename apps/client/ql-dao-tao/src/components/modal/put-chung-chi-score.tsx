@@ -18,7 +18,7 @@ dayjs.locale('vi')
 
 const PutCertificateScoreModal = () => {
     const [form] = Form.useForm<PutArchivedCertificate>()
-    const [targetDisabled, setTargetDisabled] = useState(true)
+    const [_targetDisabled, setTargetDisabled] = useState(true)
     const {
         isOpen,
         onClose,
@@ -54,7 +54,7 @@ const PutCertificateScoreModal = () => {
                 queryKey: ['ArchivedCertificate'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

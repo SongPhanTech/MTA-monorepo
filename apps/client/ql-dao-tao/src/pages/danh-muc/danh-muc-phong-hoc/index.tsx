@@ -130,7 +130,7 @@ export default function TrainingLocationPage() {
                 where: { id },
                 data: { deletedAt: new Date(), code: id, name: id },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -143,7 +143,7 @@ export default function TrainingLocationPage() {
                 where: { id },
                 data: { deletedAt: new Date(), code: id },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

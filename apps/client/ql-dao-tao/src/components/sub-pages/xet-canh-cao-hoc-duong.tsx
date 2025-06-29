@@ -9,7 +9,7 @@ import { Search } from 'lucide-react'
 dayjs.locale('vi')
 
 const XetCanhCaoHocDuong = () => {
-    async function onOk(output?: any) {
+    async function _onOk(output?: any) {
         if (!output) return
     }
 

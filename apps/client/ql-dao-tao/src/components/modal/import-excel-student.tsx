@@ -19,8 +19,8 @@ const ImportStudentModal = ({
     onConfirm,
     existingStudents,
 }: ImportStudentModalProps) => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(10)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [_numberOfPages, _setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
     const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
@@ -81,7 +81,7 @@ const ImportStudentModal = ({
             } else {
                 message.error(res?.data?.message || 'Nhâp dữ liệu sinh viên từ file thất bại')
             }
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi nhập điểm từ file')
         } finally {
             hideSpinner()

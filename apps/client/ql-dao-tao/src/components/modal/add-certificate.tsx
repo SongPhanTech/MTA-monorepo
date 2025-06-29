@@ -120,7 +120,7 @@ const PutAddCertificateScoreModal = () => {
             })
             message.success('Cập nhật thành công')
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

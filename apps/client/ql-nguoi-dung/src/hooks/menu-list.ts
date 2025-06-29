@@ -32,7 +32,7 @@ const useMenuList = () => {
                 .filter((permission) => permission.permissionType === $Enums.PermissionType.READ),
         [groups]
     )
-    const permissionNames = useMemo(
+    const _permissionNames = useMemo(
         () => permissions.map((permission) => permission.name),
         [permissions]
     )

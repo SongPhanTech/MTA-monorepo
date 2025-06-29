@@ -23,7 +23,7 @@ interface FilterProps {
 export default function ArchivedCertificate() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [_selectedRowKeys, _setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
@@ -54,7 +54,7 @@ export default function ArchivedCertificate() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

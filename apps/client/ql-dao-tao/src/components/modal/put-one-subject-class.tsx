@@ -40,7 +40,7 @@ const PutOneSubjectClassModal = () => {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     // const [enterGradeLecturerOptions, setEnterGradeLecturerOptions] = useState([])
-    const [dataSubmit, setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
+    const [_dataSubmit, _setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
@@ -75,7 +75,7 @@ const PutOneSubjectClassModal = () => {
                 queryKey: ['SubjectClass'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

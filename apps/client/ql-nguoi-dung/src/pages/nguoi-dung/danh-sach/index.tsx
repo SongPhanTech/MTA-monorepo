@@ -21,12 +21,12 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
     const { data, refetch } = useListUsers({})
 
     const { data: count } = useCountUser()
-    const router = useRouter()
+    const _router = useRouter()
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutUserFormType>({
@@ -75,7 +75,7 @@ export default function Page() {
                 queryKey: ['zenstack', 'User'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -96,7 +96,7 @@ export default function Page() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -115,7 +115,7 @@ export default function Page() {
                 },
             })
             message.success('Cập nhật thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

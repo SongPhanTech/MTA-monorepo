@@ -114,12 +114,12 @@ export default function SubjectOpeningPlan() {
         tag: PutOpenClassModal.name,
     })
 
-    const handleModal = () => {
+    const _handleModal = () => {
         onOpen()
     }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    async function handleDelete(id: string) {
+    async function _handleDelete(id: string) {
         try {
             showSpinner()
             await updateTrainingCourse({
@@ -130,7 +130,7 @@ export default function SubjectOpeningPlan() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

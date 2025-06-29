@@ -44,12 +44,12 @@ const { RangePicker } = DatePicker
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [organizationIds, setOrganizationIds] = useState<string[]>([])
+    const [_organizationIds, setOrganizationIds] = useState<string[]>([])
     const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
-    const [searchOrganization, setSearchOrganization] = useState<string>('')
+    const [_searchOrganization, setSearchOrganization] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const debouncedSearchText = _.debounce(setSearchOrganization, 200)
+    const _debouncedSearchText = _.debounce(setSearchOrganization, 200)
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
         organizationText: '',
@@ -255,7 +255,7 @@ export default function UserProfilePageLecture() {
                     },
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -334,7 +334,7 @@ export default function UserProfilePageLecture() {
         setFilters(newFilters)
     }
 
-    const handleRowOrganizationClick = (record: TreeNodeOrganization) => {
+    const _handleRowOrganizationClick = (record: TreeNodeOrganization) => {
         if (selectedRowId === record.id) {
             setSelectedRowId(null)
             setOrganizationIds([])

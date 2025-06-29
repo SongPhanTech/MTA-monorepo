@@ -41,7 +41,7 @@ const PutFixedClassModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
-    const TrainingCourseForm = Form.useWatch('trainingCourseId', form)
+    const _TrainingCourseForm = Form.useWatch('trainingCourseId', form)
 
     // const managementOrganizationForm = Form.useWatch(
     //     'managementOrganizationId',
@@ -261,7 +261,7 @@ const PutFixedClassModal = () => {
                 queryKey: ['FixedClass'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -271,7 +271,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue({
                 [field]: null,
             })
-        } catch (err) {
+        } catch (_err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
     }
@@ -285,7 +285,7 @@ const PutFixedClassModal = () => {
             form.setFieldsValue({
                 ...newValue,
             })
-        } catch (err) {
+        } catch (_err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
     }

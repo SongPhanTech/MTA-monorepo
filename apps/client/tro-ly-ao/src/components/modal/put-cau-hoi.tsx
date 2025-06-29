@@ -67,17 +67,17 @@ const PutCauHoi = () => {
                 message.success('Thêm tài liệu thành công')
             }
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
-    const handleDelete = async () => {
+    const _handleDelete = async () => {
         if (!id) return
         try {
             await deleteFAQ({ where: { id } })
             message.success('Xoá tài liệu thành công')
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Xoá thất bại')
         }
     }

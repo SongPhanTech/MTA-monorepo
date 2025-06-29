@@ -8,7 +8,7 @@ import EditIcon from '@components/icons/edit'
 dayjs.locale('vi')
 
 const DiemTrungBinhKyHoc = () => {
-    async function onOk(output?: any) {
+    async function _onOk(output?: any) {
         if (!output) return
     }
 

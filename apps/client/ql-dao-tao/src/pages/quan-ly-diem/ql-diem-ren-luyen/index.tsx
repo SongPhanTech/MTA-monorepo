@@ -46,7 +46,7 @@ export default function SubjectClassScore() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
+    const [_selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
     const [selectedSemester, setSelectedSemester] = useState<Semester | undefined>(undefined)
     const [arrMonth, setArrMonth] = useState<any[]>([])
     const [suaDiemCu, setSuaDiemCu] = useState<boolean>(false)
@@ -78,7 +78,7 @@ export default function SubjectClassScore() {
         tag: PutOpenClassModal.name,
     })
 
-    const handleModal = () => {
+    const _handleModal = () => {
         onOpen()
     }
 
@@ -189,7 +189,7 @@ export default function SubjectClassScore() {
                 setSelectedFixedClass(id[0].replace('class-', ''))
             }
             await refetch()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -204,14 +204,14 @@ export default function SubjectClassScore() {
             setSelectedSemester(semester)
 
             await refetch()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
     // #endregion
-    const rowSelection = {
+    const _rowSelection = {
         selectedRowKeys,
         onChange: (selectedKeys: any) => {
             setSelectedRowKeys(selectedKeys)

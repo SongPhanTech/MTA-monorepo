@@ -146,7 +146,7 @@ export default function TrainingBlock() {
                 },
             })
             message.success('Xóa thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

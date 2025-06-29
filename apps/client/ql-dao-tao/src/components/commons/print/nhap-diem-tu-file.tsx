@@ -17,7 +17,7 @@ const ImportScoreModal = ({
     existingStudents,
 }: ImportScoreModalProps) => {
     const [previewData, setPreviewData] = useState<any[]>([])
-    const [file, setFile] = useState<File | null>(null)
+    const [_file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 

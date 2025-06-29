@@ -425,7 +425,7 @@ export default function UserProfilePageDs() {
             // setScoreThi(newScoreThi)
 
             message.success('Nhập điểm từ file thành công!')
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi nhập điểm từ file')
         } finally {
             hideSpinner()

@@ -41,8 +41,8 @@ const dataKyLuat = [
 
 export default function KhenThuongKyLuatTab() {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
         if (key && key.length > 0) {

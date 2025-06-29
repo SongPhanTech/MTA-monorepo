@@ -98,7 +98,7 @@ const PutTrainingMajorModal = () => {
                 queryKey: ['TrainingMajor'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -127,7 +127,7 @@ const PutTrainingMajorModal = () => {
             } else {
                 setTargetDisabled(true)
             }
-        } catch (err) {
+        } catch (_err) {
             message.error('Lỗi khi tải đối tượng đào tạo')
         }
     }

@@ -18,9 +18,9 @@ export default function Page() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
-    const router = useRouter()
+    const _router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure({
         tag: PutNhomNguoiDungModal.name,
@@ -61,7 +61,7 @@ export default function Page() {
             }
             refetch()
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -74,7 +74,7 @@ export default function Page() {
                 where: { id },
                 data: { deletedAt: new Date() },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

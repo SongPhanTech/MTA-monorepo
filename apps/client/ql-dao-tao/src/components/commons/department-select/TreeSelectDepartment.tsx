@@ -26,34 +26,32 @@ const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
     const [value, setValue] = useState<string | undefined>(defaultValue)
 
     // Lấy thông tin SchoolYear
-    const { data: organizationDataKhoa = [], refetch: refetchOrganizationKhoa } =
-        useFindManyDM_DonVi({
-            include: {
-                children: true,
-            },
-            // TODO: fetch Khoa only
-            where: {
-                // type: {
-                //     code: 'KHOA',
-                // },
-            },
-        })
-    const { data: organizationDataBoMon = [], refetch: refetchOrganizationBoMon } =
-        useFindManyDM_DonVi({
-            // include: {
-            //     type: true,
+    const { data: organizationDataKhoa = [] } = useFindManyDM_DonVi({
+        include: {
+            children: true,
+        },
+        // TODO: fetch Khoa only
+        where: {
+            // type: {
+            //     code: 'KHOA',
             // },
-            // where: {
-            //     type: {
-            //         code: 'BOMON',
-            //     },
-            // },
-        })
+        },
+    })
+    const { data: organizationDataBoMon = [] } = useFindManyDM_DonVi({
+        // include: {
+        //     type: true,
+        // },
+        // where: {
+        //     type: {
+        //         code: 'BOMON',
+        //     },
+        // },
+    })
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         const khoaList = organizationDataKhoa || []
         const boMonList = organizationDataBoMon || []
-        organizationDataKhoa.map((khoa) => {})
+        organizationDataKhoa.map(() => {})
         return khoaList.map((khoa) => ({
             value: `khoa-${khoa.Id}`,
             title: khoa.sTen,

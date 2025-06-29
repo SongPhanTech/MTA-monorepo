@@ -19,7 +19,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         managementOrganizationId: undefined,
         name: '',
@@ -52,7 +52,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
         },
     })
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutSubjectModal.name,
     })
@@ -74,7 +74,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

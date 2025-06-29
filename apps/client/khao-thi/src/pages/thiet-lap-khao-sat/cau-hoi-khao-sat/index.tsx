@@ -24,7 +24,7 @@ type Filter = FilterSurveyQuestionProps & {
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
@@ -71,8 +71,8 @@ function Page() {
 
     const { data: count } = useCountSurveyQuestion()
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<string>({
+    const _debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen } = useDisclosure<string>({
         tag: PutSurveyQuestionModal.name,
     })
 
@@ -94,7 +94,7 @@ function Page() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

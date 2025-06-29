@@ -57,7 +57,7 @@ const ExportTemplateStudent = () => {
             },
         }
 
-        const headerSubtitleStyleRight = {
+        const _headerSubtitleStyleRight = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -138,7 +138,7 @@ const ExportTemplateStudent = () => {
             },
         }
 
-        const dataTextCellStyle = {
+        const _dataTextCellStyle = {
             ...dataCellStyle,
             alignment: {
                 horizontal: 'left' as const,

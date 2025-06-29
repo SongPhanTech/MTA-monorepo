@@ -53,7 +53,7 @@ export const getUserByToken = async (token: string) => {
     return getUser(data)
 }
 
-const oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
+const _oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
     return {
         sub: claims?.sub || orig?.sub || '',
         email: (claims?.email as string) || orig?.email || '',

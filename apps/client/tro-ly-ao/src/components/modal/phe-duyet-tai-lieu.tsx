@@ -60,7 +60,7 @@ const PheDuyetTaiLieu = () => {
                 message.success('Từ chối tài liệu')
             }
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Phê duyệt không thành công, vui lòng kiểm tra lại')
         } finally {
             setIsSubmitting(false)

@@ -64,7 +64,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerStyleNormal = {
+        const _headerStyleNormal = {
             ...golbalFontStyle,
             font: { size: 14 },
             alignment: {
@@ -74,7 +74,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerSubtitleStyleCenter = {
+        const _headerSubtitleStyleCenter = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -83,7 +83,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerSubtitleStyleRight = {
+        const _headerSubtitleStyleRight = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -172,7 +172,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const italicTextStyle = {
+        const _italicTextStyle = {
             ...golbalFontStyle,
             font: { italic: true },
             alignment: {

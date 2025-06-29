@@ -95,7 +95,7 @@ export default function TrainingCoursePage() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -124,7 +124,7 @@ export default function TrainingCoursePage() {
         }
     }
 
-    const options = Object.entries(KHOA_HL_STATUS).map(([value, { label, color }]) => ({
+    const _options = Object.entries(KHOA_HL_STATUS).map(([value, { label, color }]) => ({
         value,
         label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
     }))

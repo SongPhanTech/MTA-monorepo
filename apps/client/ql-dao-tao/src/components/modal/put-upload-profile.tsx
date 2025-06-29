@@ -20,11 +20,11 @@ const PutUploadProfileModal = () => {
         tag: PutUploadProfileModal.name,
         onClose: form.resetFields,
     })
-    const [typeId, setTypeId] = useState<string>()
+    const [typeId, _setTypeId] = useState<string>()
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const userTypeData = $Enums.UserType
+    const _userTypeData = $Enums.UserType
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return
@@ -63,7 +63,7 @@ const PutUploadProfileModal = () => {
                 queryKey: ['UserProfile'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

@@ -7,7 +7,7 @@ interface ChartProps {
 }
 
 const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
-    const chartRef = useRef(null)
+    const _chartRef = useRef(null)
 
     const data = [
         { letter: 'Công nghệ phần mềm', frequency: 15 },

@@ -28,7 +28,6 @@ import {
     Row,
     //   Select,
     Space,
-    Tag,
     TreeSelect,
     Typography,
 } from 'antd'
@@ -59,7 +58,7 @@ interface Props {
 }
 
 const FilterChuongTrinhDT = (props: Props) => {
-    const { filters, setFilters, debouncedRefetch } = props
+    const { filters, setFilters } = props
     const [form] = Form.useForm<FilterProps>()
     const [open, setOpen] = useState(false)
 
@@ -90,19 +89,14 @@ const FilterChuongTrinhDT = (props: Props) => {
         setFilters(newFilters)
         setOpen(false)
     }
-    const options = Object.entries(CTDT_STATUS).map(([value, { label, color }]) => ({
-        value,
-        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-    }))
-    const { data: trainingTimeData = [], refetch: refetchTime } = useFindManyTrainingType()
-    const { data: trainingLevelData = [], refetch: refetchLevel } = useFindManyTrainingLevel()
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
-    const { data: trainingMajorData = [], refetch: refetchObjectMajor } = useFindManyTrainingMajor({
+    const { data: trainingTimeData = [] } = useFindManyTrainingType()
+    const { data: trainingLevelData = [] } = useFindManyTrainingLevel()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
     })
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     const filterContent = (
@@ -309,7 +303,7 @@ const FilterChuongTrinhDT = (props: Props) => {
                                     // }
                                     placeholder="Chọn trạng thái"
                                     options={Object.entries(CTDT_STATUS).map(
-                                        ([value, { label, color }]) => ({
+                                        ([value, { label }]) => ({
                                             value,
                                             label, // hiển thị trong dropdown
                                         })

@@ -27,7 +27,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function MajorInforList({ infor }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [searchText, _setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
         managementOrganizationId: undefined,
@@ -94,13 +94,13 @@ export default function MajorInforList({ infor }: any) {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
+    const _handleModal = () => {
         onOpen()
     }
-    const handleModalUploadFixedClass = () => {
+    const _handleModalUploadFixedClass = () => {
         onOpenFixedClass()
     }
-    const handleModalDivision = () => {
+    const _handleModalDivision = () => {
         onOpenDivision()
     }
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -115,7 +115,7 @@ export default function MajorInforList({ infor }: any) {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

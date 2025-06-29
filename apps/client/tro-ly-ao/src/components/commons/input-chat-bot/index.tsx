@@ -24,7 +24,7 @@ export default function ChatInput({
     isFaqMode = false,
     onToggleFaqMode,
 }: ChatInputProps) {
-    const router = useRouter()
+    const _router = useRouter()
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     const resizeTextarea = () => {

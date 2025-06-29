@@ -17,7 +17,7 @@ export type PutArchivedAward = ArchivedAward
 dayjs.locale('vi')
 const PutOlympicScoreModal = () => {
     const [form] = Form.useForm<PutArchivedAward>()
-    const [targetDisabled, setTargetDisabled] = useState(true)
+    const [_targetDisabled, setTargetDisabled] = useState(true)
     const {
         isOpen,
         onClose,
@@ -53,7 +53,7 @@ const PutOlympicScoreModal = () => {
                 queryKey: ['ArchivedAward'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

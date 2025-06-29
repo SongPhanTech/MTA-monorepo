@@ -125,7 +125,7 @@ export default function TrainingFieldPage() {
                     id,
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -140,7 +140,7 @@ export default function TrainingFieldPage() {
                     trainingCourseId: record.id,
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

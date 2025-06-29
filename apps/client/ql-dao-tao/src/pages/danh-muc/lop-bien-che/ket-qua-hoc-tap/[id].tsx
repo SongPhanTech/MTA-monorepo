@@ -22,7 +22,7 @@ dayjs.locale('vi')
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
-    const [filters, setFilters] = useState({
+    const [_filters, _setFilters] = useState({
         searchText: '',
     })
 
@@ -148,7 +148,7 @@ export default function StudentScoreClassPage() {
 
     const { convertScore } = useScoreConverter(data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts)
 
-    const debouncedRefetch = useCallback(
+    const _debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),

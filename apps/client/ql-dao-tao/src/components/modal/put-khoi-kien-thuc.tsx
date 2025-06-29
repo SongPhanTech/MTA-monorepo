@@ -82,7 +82,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                 queryKey: ['TrainingBlock'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 

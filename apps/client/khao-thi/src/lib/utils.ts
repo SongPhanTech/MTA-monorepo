@@ -9,7 +9,7 @@ const getPageCount = (totalItems: number, itemsPerPage: number) => {
     return Math.ceil(totalItems / itemsPerPage)
 }
 
-const uuid = () => {
+const _uuid = () => {
     return crypto.randomUUID()
 }
 

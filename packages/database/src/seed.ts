@@ -748,7 +748,7 @@ async function main() {
         skipDuplicates: true,
     })
 
-    const curriculum = await prisma.curriculum.create({
+    const _curriculum = await prisma.curriculum.create({
         data: {
             name: 'Công nghệ thông tin',
             code: 'CNTT-2023',

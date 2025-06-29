@@ -73,7 +73,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'SubjectClass'],
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi gán lớp!')
         }
     }

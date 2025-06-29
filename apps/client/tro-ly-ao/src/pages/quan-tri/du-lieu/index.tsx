@@ -121,7 +121,7 @@ function Page() {
 
             await deleteDocument({ where: { id } })
             message.success('Xoá tài liệu thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Xoá tài liệu thất bại')
         }
     }
@@ -137,7 +137,7 @@ function Page() {
             }
             await deleteFAQ({ where: { id } })
             message.success('Xoá câu hỏi thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Xoá câu hỏi thất bại')
         }
     }

@@ -64,10 +64,10 @@ export default function SubjectClassScore() {
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [subjectClassFullData, setSubjectClassFullData] = useState<any[]>([])
 
-    const [nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
-    const [nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
-    const [nhapDiemThi, setNhapDiemThi] = useState<boolean>(false)
-    const [nhapDiemCong, setNhapDiemCong] = useState<boolean>(false)
+    const [_nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
+    const [_nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
+    const [_nhapDiemThi, setNhapDiemThi] = useState<boolean>(false)
+    const [_nhapDiemCong, _setNhapDiemCong] = useState<boolean>(false)
     const [camThi, setCamThi] = useState<boolean>(false)
     const { subjectId } = router.query
 
@@ -312,7 +312,7 @@ export default function SubjectClassScore() {
             showSpinner()
             setSelectedFixedClass(id)
             await refetch()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -320,7 +320,7 @@ export default function SubjectClassScore() {
     // const handleChangeNhapDiemCong = (e: CheckboxChangeEvent) => {
     //     setNhapDiemCong(e.target.checked)
     // }
-    const handleChangeCamThi = (e: CheckboxChangeEvent) => {
+    const _handleChangeCamThi = (e: CheckboxChangeEvent) => {
         setCamThi(e.target.checked)
     }
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
@@ -442,7 +442,7 @@ export default function SubjectClassScore() {
             }
 
             clearCheckbox()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
         } finally {
             hideSpinner()
@@ -529,7 +529,7 @@ export default function SubjectClassScore() {
             setScoreThi(newScoreThi)
 
             message.success('Nhập điểm từ file thành công!')
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi nhập điểm từ file')
         } finally {
             hideSpinner()

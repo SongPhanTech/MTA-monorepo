@@ -22,8 +22,8 @@ interface RegisterClassProps {
 }
 
 export default function RegisterResult({ setSemesterId, setSubjectClassId }: RegisterClassProps) {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [selectedRowKey, _setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         semesterId: null,

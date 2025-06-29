@@ -32,9 +32,8 @@ const PutSurveyModal = () => {
     const { mutateAsync: create } = useCreateSurvey()
     const { mutateAsync: update } = useUpdateSurvey()
 
-    const { data: surveyTopics = [], refetch: refetchTopic } = useFindManySurveyTopic()
-    const { data: surveyObjectTypes = [], refetch: refetchObjectType } =
-        useFindManySurveyObjectType()
+    const { data: surveyTopics = [] } = useFindManySurveyTopic()
+    const { data: surveyObjectTypes = [] } = useFindManySurveyObjectType()
 
     async function onOk(output?: Survey) {
         console.log(output)
@@ -76,7 +75,7 @@ const PutSurveyModal = () => {
                 queryKey: ['Level'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

@@ -18,27 +18,6 @@ interface Question {
     options?: string[]
 }
 
-const fakeSurvey: Question[] = [
-    {
-        id: 'q1',
-        type: 'single',
-        question: 'Bạn thích loại trái cây nào nhất?',
-        options: ['Táo', 'Chuối', 'Nho', 'Cam'],
-    },
-    {
-        id: 'q2',
-        type: 'multiple',
-        question: 'Bạn thường sử dụng framework nào?',
-        options: ['React', 'Vue', 'Angular', 'Svelte'],
-    },
-    {
-        id: 'q3',
-        type: 'text',
-        question: 'Bạn có góp ý gì cho sản phẩm không?',
-    },
-    // ... các câu hỏi khác giữ nguyên
-]
-
 function SurveyPage() {
     // Thay đổi cấu trúc của answers thành mảng
     const [answers, setAnswers] = useState<
@@ -48,7 +27,7 @@ function SurveyPage() {
         }>
     >([])
 
-    const { data = [], refetch } = useFindManySurveyQuestion()
+    const { data = [] } = useFindManySurveyQuestion()
     const { mutateAsync: createMany } = useCreateManySurveyAnswer()
     const router = useRouter()
 
@@ -101,7 +80,7 @@ function SurveyPage() {
 
             message.success('Nộp khảo sát thành công')
             router.push(ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG)
-        } catch (error) {
+        } catch (_error) {
             message.error('Nộp khảo sát thất bại')
         }
         hideSpinner()

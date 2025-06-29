@@ -55,7 +55,7 @@ export default function Page() {
         try {
             const response = await TimKiemTheoTuKhoa(input)
             setResults(response?.success_detail || [])
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
             message.warning('Không tìm thấy kết quả nào')
             setResults([])
         } finally {

@@ -40,7 +40,7 @@ export default function DangKyTaiKhoanPage() {
     const onFinish = async (values: DangKyTaiKhoanFormType) => {
         setIsLoading(true)
         try {
-            const response = await fetchCreateUser({
+            const _response = await fetchCreateUser({
                 body: {
                     email: String(values.email),
                     password: String(values.password),
@@ -61,7 +61,7 @@ export default function DangKyTaiKhoanPage() {
             })
             setPasswordValue('')
             message.success('Đăng ký tài khoản trợ lý ảo thành công!')
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra. Vui lòng thử lại sau.')
         } finally {
             setIsLoading(false)

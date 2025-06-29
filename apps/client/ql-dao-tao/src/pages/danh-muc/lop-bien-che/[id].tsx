@@ -252,7 +252,7 @@ export default function StudentFixedClassPage() {
                 },
             })
             setSelectedRowKeys([])
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -275,7 +275,7 @@ export default function StudentFixedClassPage() {
             }
             setOpen(false)
             setSelectedRowKeys([])
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

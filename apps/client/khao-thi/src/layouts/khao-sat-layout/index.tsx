@@ -12,10 +12,10 @@ import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
 const KhaoSatLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
-    const [collapsed, setCollapsed] = useState(() => {
+    const [_collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
-    const menus = useMenuList()
+    const _menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {

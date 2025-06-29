@@ -90,7 +90,7 @@ const PutOpenSubjectClassModal = () => {
                 queryKey: ['SubjectClass'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

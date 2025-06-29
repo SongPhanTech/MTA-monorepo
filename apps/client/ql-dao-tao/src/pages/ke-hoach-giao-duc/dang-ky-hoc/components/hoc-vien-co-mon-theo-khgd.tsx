@@ -96,7 +96,7 @@ export default function StudentCourseByPlan({
             message.success('Gán học sinh vào lớp thành công!')
             setInitialSelectedKeys(selectedRowKeys)
             queryClient.invalidateQueries({ queryKey: ['zenstack'] })
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi gán lớp!')
         }
     }

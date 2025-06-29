@@ -172,7 +172,7 @@ app.openapi(createUser, async (c) => {
     .openapi(getListUsers, async (c) => {
         const { page = 1, limit = 10, ...filter } = c.req.valid('query')
 
-        const where: Prisma.UserWhereInput = Object.fromEntries(
+        const _where: Prisma.UserWhereInput = Object.fromEntries(
             Object.entries(filter).map(([k, v]) => [k, { contains: v, mode: 'insensitive' }])
         )
 

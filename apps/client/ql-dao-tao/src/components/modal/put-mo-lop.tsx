@@ -88,7 +88,7 @@ const PutOpenClassModal = () => {
                     })),
                 })
             } else {
-                const res = await putManySubjectClass(
+                const _res = await putManySubjectClass(
                     form.getFieldValue('list').map((i: SubjectClass) => ({
                         id: i?.id,
                         schedule: i.schedule,
@@ -103,7 +103,7 @@ const PutOpenClassModal = () => {
                 )
             }
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -128,7 +128,7 @@ const PutOpenClassModal = () => {
             })
             // const result = dataSubmit.filter((i) => i?.id !== id)
             // setDataSubmit(result)
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -263,7 +263,7 @@ const PutOpenClassModal = () => {
         }
     }, [subjectClassData])
     const listForm = Form.useWatch('list', form)?.filter((i) => i?.name) ?? []
-    const disableMaxStudent = Form.useWatch('totalStudent', form)
+    const _disableMaxStudent = Form.useWatch('totalStudent', form)
     return (
         <PutFormModal
             open={isOpen}

@@ -14,7 +14,7 @@ import {
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSurveyQuestionTyoe = SurveyQuestion
+export type PutSurveyQuestionType = SurveyQuestion
 const PutSurveyQuestionModal = () => {
     const [form] = Form.useForm<SurveyQuestion>()
     const {
@@ -30,9 +30,8 @@ const PutSurveyQuestionModal = () => {
     const { mutateAsync: create } = useCreateSurveyQuestion()
     const { mutateAsync: update } = useUpdateSurveyQuestion()
 
-    const { data: surveys = [], refetch: refetchTopic } = useFindManySurvey()
-    const { data: surveyQuestionTypes = [], refetch: refetchObjectType } =
-        useFindManySurveyQuestionType()
+    const { data: surveys = [] } = useFindManySurvey()
+    const { data: surveyQuestionTypes = [] } = useFindManySurveyQuestionType()
 
     async function onOk(output?: SurveyQuestion) {
         console.log(output)
@@ -70,7 +69,7 @@ const PutSurveyQuestionModal = () => {
                 queryKey: ['Level'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

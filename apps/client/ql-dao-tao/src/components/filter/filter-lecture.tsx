@@ -36,7 +36,7 @@ interface Props {
 
     onSearchChange: any
 }
-const options = [
+const _options = [
     {
         value: '1',
         label: 'Đối tượng 1',

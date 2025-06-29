@@ -18,7 +18,7 @@ type Filter = FilterSurveyProps & {
 function TabDotKhaoSat() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
         surveyObjectTypeId: null,
@@ -72,7 +72,7 @@ function TabDotKhaoSat() {
 
     const { data: count } = useCountSurvey()
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutSurveyModal.name,
     })
@@ -95,7 +95,7 @@ function TabDotKhaoSat() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

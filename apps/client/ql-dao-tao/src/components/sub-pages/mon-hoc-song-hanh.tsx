@@ -18,7 +18,7 @@ type Props = {
 export default function MonHocSongHanhPage({ curriculumVersionSubjectId }: Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
     const { data = [], refetch } = useFindManySubjectVersion({
         where: {
@@ -66,7 +66,7 @@ export default function MonHocSongHanhPage({ curriculumVersionSubjectId }: Props
             //         deletedAt: new Date(),
             //     },
             // })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()

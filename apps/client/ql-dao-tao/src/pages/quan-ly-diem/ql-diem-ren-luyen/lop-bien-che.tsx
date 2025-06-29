@@ -13,7 +13,7 @@ interface FlatListProps {
     renderItem: (item: Item) => JSX.Element
 }
 
-const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
+const _FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
     return (
         <div>
             {data.map((item) => (
@@ -38,13 +38,13 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     onChangeSelected,
     selectedItem,
 }) => {
-    const data: Item[] = dataTable.map((item: { code: any; name: any; id: any }) => ({
+    const _data: Item[] = dataTable.map((item: { code: any; name: any; id: any }) => ({
         code: item.code,
         name: item.name,
         id: item.id,
     }))
 
-    const renderItem = (item: Item) => (
+    const _renderItem = (item: Item) => (
         <div
             onClick={() => {
                 onChangeSelected?.(item.id)

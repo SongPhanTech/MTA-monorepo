@@ -20,7 +20,7 @@ export default function Page() {
         label: searchText,
         subSystem: searchText,
     })
-    const router = useRouter()
+    const _router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
         tag: PutQuyenCoBanModal.name,

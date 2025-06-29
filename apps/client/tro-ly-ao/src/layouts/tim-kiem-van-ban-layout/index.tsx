@@ -20,8 +20,8 @@ const TimKiemVanBanLayout = ({
     children: ReactNode
     className?: string
 }) => {
-    const router = useRouter()
-    const [collapsed, setCollapsed] = useState(() => {
+    const _router = useRouter()
+    const [_collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
 

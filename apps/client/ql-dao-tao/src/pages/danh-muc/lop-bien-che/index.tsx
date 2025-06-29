@@ -31,7 +31,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, _setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
         trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
@@ -149,7 +149,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
