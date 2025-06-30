@@ -31,6 +31,8 @@
 		"clsx": "catalog:",
 		"dayjs": "catalog:",
 		"easy-peasy": "catalog:",
+		"exceljs": "catalog:",
+		"file-saver": "catalog:",
 		"lodash": "catalog:",
 		"lucide-react": "catalog:",
 		"minio": "catalog:",
