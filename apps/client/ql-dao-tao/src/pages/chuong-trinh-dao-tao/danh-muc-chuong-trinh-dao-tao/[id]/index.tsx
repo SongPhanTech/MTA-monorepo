@@ -532,15 +532,15 @@ export default function TrainingProgramSubjects() {
                                             value={selectedKeys[0]}
                                             onChange={(e) =>
                                                 setSelectedKeys(
-                                                    e.target.value ? [e.target.value] : [],
+                                                    e.target.value ? [e.target.value] : []
                                                 )
                                             }
                                             onPressEnter={() => {
                                                 handleFilterChange(
-                                                    "subjectCode",
-                                                    String(selectedKeys[0] || ""),
-                                                );
-                                                confirm();
+                                                    'subjectCode',
+                                                    String(selectedKeys[0] || '')
+                                                )
+                                                confirm()
                                             }}
                                             style={{
                                                 width: 188,
@@ -551,8 +551,8 @@ export default function TrainingProgramSubjects() {
                                             <Button
                                                 size="small"
                                                 onClick={() => {
-                                                    if (clearFilters) clearFilters();
-                                                    handleFilterChange("subjectCode", "");
+                                                    if (clearFilters) clearFilters()
+                                                    handleFilterChange('subjectCode', '')
                                                 }}
                                             >
                                                 Bỏ lọc
@@ -562,10 +562,10 @@ export default function TrainingProgramSubjects() {
                                                 size="small"
                                                 onClick={() => {
                                                     handleFilterChange(
-                                                        "subjectCode",
-                                                        String(selectedKeys[0] || ""),
-                                                    );
-                                                    confirm();
+                                                        'subjectCode',
+                                                        String(selectedKeys[0] || '')
+                                                    )
+                                                    confirm()
                                                 }}
                                             >
                                                 Lọc
@@ -576,7 +576,7 @@ export default function TrainingProgramSubjects() {
                                 filterIcon: (filtered) => (
                                     <FilterOutlined
                                         style={{
-                                            color: filtered ? "#1890ff" : undefined,
+                                            color: filtered ? '#1890ff' : undefined,
                                         }}
                                     />
                                 ),

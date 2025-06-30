@@ -471,22 +471,19 @@ const NAVIGATION: NavigationType = {
                         id: 'ql-ren-luyen',
                         label: 'QL đợt rèn luyện',
                         icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA,
                     },
                     {
                         id: 'danh-gia-ren-luyen',
                         label: 'Đánh giá rèn luyện',
                         icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA,
                     },
                     {
                         id: 'tong-hop-danh-gia-ren-luyen',
                         label: 'Tổng hợp đánh giá rèn luyện',
                         icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG,
                     },
                     {
                         id: 'user-profile-ds',
@@ -516,7 +513,6 @@ const NAVIGATION: NavigationType = {
                 label: 'Danh mục hồ sơ',
                 icon: ReadOutlined,
                 children: [
-                    
                     {
                         id: 'educational-level',
                         label: 'Trình độ học vấn',

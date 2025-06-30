@@ -6,9 +6,13 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType, TrainingScoreSession } from '@workspace/db'
 import {
-    useFindManyTrainingScoreSession, useFindManyTrainingObjectType, useCountTrainingScoreSession,
-    useFindManySemester, useCreateTrainingScoreSession, useUpdateTrainingScoreSession,
-    useDeleteTrainingScoreSession
+    useFindManyTrainingScoreSession,
+    useFindManyTrainingObjectType,
+    useCountTrainingScoreSession,
+    useFindManySemester,
+    useCreateTrainingScoreSession,
+    useUpdateTrainingScoreSession,
+    useDeleteTrainingScoreSession,
 } from '@workspace/db/hooks'
 import { Button, Col, DatePicker, Flex, Form, Input, Row, Tag, message } from 'antd'
 import _ from 'lodash'
@@ -66,15 +70,13 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: semesterData = [] } =
-        useFindManySemester({
-            orderBy: {
-                startDate: 'desc',
-            },
-        })
+    const { data: semesterData = [] } = useFindManySemester({
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
 
     // const { data: subjectClassData = [] } = useFindManyFixedClass({
     const { data: TrainingScoreSessionData = [], refetch } = useFindManyTrainingScoreSession({
@@ -92,9 +94,7 @@ export default function SubjectClassScore() {
                   ...(filters.trainingObjectTypeId
                       ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                       : {}),
-                  ...(filters.timeFilter &&
-                  filters.timeFilter[0] &&
-                  filters.timeFilter[1]
+                  ...(filters.timeFilter && filters.timeFilter[0] && filters.timeFilter[1]
                       ? {
                             time: {
                                 gte: new Date(filters.timeFilter[0]).toISOString(),
@@ -115,7 +115,6 @@ export default function SubjectClassScore() {
     })
     console.log('filters.timeFilter', filters.timeFilter)
 
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -134,7 +133,6 @@ export default function SubjectClassScore() {
             deletedAt: null,
         },
     })
-
 
     const handleChangeSemester = async (id: string) => {
         try {
@@ -176,17 +174,15 @@ export default function SubjectClassScore() {
             showSpinner()
             // Xử lý dữ liệu và gọi API để lưu đợt đánh giá
             console.log('Submitted Data:', data)
-            await createTrainingScoreSession(
-                {
-                    data: {
-                        name: data.tenDot,
-                        semesterId: data.hocKi,
-                        trainingObjectTypeId: data.doituong,
-                        time: data.thoiGian ? new Date(data.thoiGian).toISOString() : null,
-                        description: data.ghiChu || '',
-                    }
-                }
-            )
+            await createTrainingScoreSession({
+                data: {
+                    name: data.tenDot,
+                    semesterId: data.hocKi,
+                    trainingObjectTypeId: data.doituong,
+                    time: data.thoiGian ? new Date(data.thoiGian).toISOString() : null,
+                    description: data.ghiChu || '',
+                },
+            })
             message.success('Thêm mới đợt đánh giá thành công')
             setIsModalVisible(false)
             refetch()
@@ -208,7 +204,7 @@ export default function SubjectClassScore() {
                     trainingObjectTypeId: data.doituong,
                     time: data.thoiGian ? new Date(data.thoiGian).toISOString() : null,
                     description: data.ghiChu || '',
-                }
+                },
             })
             message.success('Cập nhật đợt đánh giá thành công')
             setIsModalVisible(false)
@@ -255,11 +251,7 @@ export default function SubjectClassScore() {
                 <Col span={24} className="flex justify-end">
                     <Row>
                         <Col span={20}>
-                            <Row
-                                gutter={[16, 16]}
-                                align="top"
-                                justify="space-between"
-                            >
+                            <Row gutter={[16, 16]} align="top" justify="space-between">
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
@@ -300,11 +292,7 @@ export default function SubjectClassScore() {
                                                 <TreeSelectSemester
                                                     style={{ height: 40 }}
                                                     placeholder="Học kỳ"
-                                                    onChange={(val) =>
-                                                        handleChangeSemester(
-                                                            val
-                                                        )
-                                                    }
+                                                    onChange={(val) => handleChangeSemester(val)}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -319,9 +307,7 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Chọn đối tượng đào tạo"
                                                     options={trainingObjectTypeData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
+                                                        (i: TrainingObjectType) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -370,7 +356,6 @@ export default function SubjectClassScore() {
                             </Row>
                         </Col>
                         <Col span={4}>
-
                             <Flex justify="end" gap={10}>
                                 {/* <Button
                                 onClick={handleModal}
@@ -389,7 +374,6 @@ export default function SubjectClassScore() {
                                     Thêm mới đợt đánh giá
                                 </Button>
                             </Flex>
-
                         </Col>
                         <Col span={24}>
                             <Table
@@ -403,19 +387,14 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         fixed: 'left',
                                         render: (_, __, index) =>
-                                            index +
-                                            1 +
-                                            (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE,
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Đợt đánh giá',
                                         dataIndex: 'name',
                                         width: 150,
                                         align: 'center',
-                                        render: (text, record) => (
-                                            <>{record.name || ''}</>
-                                        ),
+                                        render: (text, record) => <>{record.name || ''}</>,
                                     },
                                     {
                                         title: 'Đối tượng',
@@ -437,7 +416,10 @@ export default function SubjectClassScore() {
                                         render: (text, record) => {
                                             const date = new Date(record.time)
                                             const day = String(date.getDate()).padStart(2, '0')
-                                            const month = String(date.getMonth() + 1).padStart(2, '0')
+                                            const month = String(date.getMonth() + 1).padStart(
+                                                2,
+                                                '0'
+                                            )
                                             const year = date.getFullYear()
                                             return `${day}/${month}/${year}`
                                         },
@@ -468,7 +450,8 @@ export default function SubjectClassScore() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDeleteDotDanhGia(record.id),
+                                                        onConfirm: () =>
+                                                            handleDeleteDotDanhGia(record.id),
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
