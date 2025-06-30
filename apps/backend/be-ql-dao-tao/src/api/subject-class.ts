@@ -834,10 +834,10 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
     const { subjectClassId } = c.req.valid('query')
     const students = await listStudentInfo(subjectClassId)
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId }, // Tìm kiếm lớp biên chế
+        where: { id: subjectClassId }, // Tìm kiếm lớp niên chế
     })
     if (!subjectClass) {
-        return c.json({ message: `Không tìm thấy lớp biên chế ${subjectClassId}` }, 404)
+        return c.json({ message: `Không tìm thấy lớp niên chế ${subjectClassId}` }, 404)
     }
 
     const { date, month, year } = getCurrentDateForReport()

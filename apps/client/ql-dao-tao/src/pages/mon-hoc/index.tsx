@@ -147,7 +147,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                     className="w-[200px]"
                                     allowClear
                                     showSearch
-                                    placeholder="Chọn đơn vị phụ trách"
+                                    placeholder="Chọn đơn vị quản lý"
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>

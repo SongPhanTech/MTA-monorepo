@@ -139,7 +139,7 @@ const PutTrainingMajorModal = () => {
             form.setFieldsValue({
                 ...level,
                 trainingObjectTypeIds: level.trainingObjectTypes.map(
-                    (i) => i?.trainingObjectTypeId
+                    (i: { trainingObjectTypeId: string }) => i?.trainingObjectTypeId
                 ),
             })
         } else {
@@ -199,13 +199,13 @@ const PutTrainingMajorModal = () => {
                     form={form}
                     required
                     name="organizationId"
-                    label="Khoa phụ trách"
+                    label="Đơn vị quản lý"
                     className="mb-2"
                 >
                     <TreeSelect
                         allowClear
                         showSearch
-                        placeholder="Chọn đơn vị phụ trách"
+                        placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>

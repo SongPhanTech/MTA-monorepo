@@ -22,7 +22,7 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -161,74 +161,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
             return newFilters
         })
     }
-    // const { data: templateFile = [], refetch: refetchTemplateFile } =
-    //     useFindManyTemplateFile()
-    // const handleDownloadTemplate = (type: string) => {
-    //     const fileRecord = templateFile?.find((item) => item.code === type)
-    //     const fileLink = fileRecord ? fileRecord.path : null
-    //     if (fileLink) {
-    //         const link = document.createElement('a')
-    //         link.href = fileLink
-    //         link.setAttribute('download', '')
-    //         document.body.appendChild(link)
-    //         link.click()
-    //         document.body.removeChild(link)
-    //     }
-    // }
-
-    // const imtemsDivide = [
-    //     {
-    //         key: 'import',
-    //         label: 'Tải file mẫu xếp lớp',
-    //         onClick: () => handleDownloadTemplate('CLASS_DEVISION'),
-    //     },
-    //     {
-    //         key: 'update',
-    //         label: 'Nhập file xếp lớp',
-    //         onClick: () => handleModalDivision(),
-    //     },
-    // ]
-    // const itemsImport = [
-    //     {
-    //         key: 'create',
-    //         label: 'Thêm mới một lớp',
-    //         onClick: () => handleModal(),
-    //     },
-    //     {
-    //         key: 'download',
-    //         label: 'Tải file danh sách lớp mẫu',
-    //         onClick: () => handleDownloadTemplate('IMPORT_FIXCLASS'),
-    //     },
-    //     {
-    //         key: 'import',
-    //         label: 'Nhập file danh sách lớp',
-    //         onClick: () => handleModalUploadFixedClass(),
-    //     },
-    // ]
-
-    // const menuImport = (
-    //     <Menu>
-    //         {itemsImport.map((item) => (
-    //             <Menu.Item key={item.key} onClick={item.onClick}>
-    //                 {item.label}
-    //             </Menu.Item>
-    //         ))}
-    //     </Menu>
-    // )
-    // const menuDivision = (
-    //     <Menu>
-    //         {imtemsDivide.map((item) => (
-    //             <Menu.Item key={item.key} onClick={item.onClick}>
-    //                 {item.label}
-    //             </Menu.Item>
-    //         ))}
-    //     </Menu>
-    // )
-    // const treeData = buildOrgTree(manageOrgData)
-    // const renderExpandedRow = useCallback((record: FixedClass) => {
-    //     return <></>
-    //     // return <OptionsPage key={record.id} fixedClass={record} />
-    // }, [])
 
     return (
         <div>
@@ -355,42 +287,23 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã lớp biên chế',
+                                title: 'Mã lớp niên chế',
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
                                 dataIndex: 'code',
                             },
                             {
-                                title: 'Tên lớp biên chế',
+                                title: 'Tên lớp niên chế',
                                 align: 'center',
                                 width: 200,
+                                fixed: 'left',
                                 dataIndex: 'name',
-                            },
-                            {
-                                title: 'Tên viết tắt',
-                                dataIndex: 'summary',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đối tượng đào tạo',
-                                align: 'center',
-                                width: 180,
-                                render: (record) =>
-                                    record?.trainingCourse?.trainingObjectType?.name || '',
-                            },
-                            {
-                                title: 'Khóa',
-                                dataIndex: 'trainingCourse',
-                                align: 'center',
-                                width: 100,
-                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
-                                align: 'left',
+                                align: 'center',
                                 width: 200,
                                 render: (value) => (value?.sTen ? value?.sTen : ''),
                             },
@@ -403,6 +316,21 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
                                     '',
                             },
+                            {
+                                title: 'Khóa',
+                                dataIndex: 'trainingCourse',
+                                align: 'center',
+                                width: 100,
+                                render: (value) => (value?.name ? value?.name : ''),
+                            },
+                            {
+                                title: 'Đối tượng đào tạo',
+                                align: 'center',
+                                width: 180,
+                                render: (record) =>
+                                    record?.trainingCourse?.trainingObjectType?.name || '',
+                            },
+
                             {
                                 title: 'Trình độ đào tạo',
                                 align: 'center',
@@ -452,19 +380,19 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 150,
                                 align: 'center',
                             },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                fixed: 'right',
-                                width: 130,
-                                render: (value, record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang hoạt động</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     fixed: 'right',
+                            //     width: 130,
+                            //     render: (value, record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Không hoạt động</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

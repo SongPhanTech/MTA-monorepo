@@ -125,7 +125,7 @@ const PutSubjectModal = () => {
                     required
                 >
                     <TreeSelect
-                        placeholder="Chọn đơn vị phụ trách"
+                        placeholder="Chọn đơn vị quản lý"
                         allowClear
                         showSearch
                         treeDefaultExpandAll

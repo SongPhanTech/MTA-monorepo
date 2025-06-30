@@ -3,7 +3,7 @@ import { prisma } from '..'
 
 export const getBufferFromUrl = async (templateCode: string): Promise<Buffer> => {
     const templateFile = await prisma.templateFile.findFirst({
-        where: { code: templateCode }, // Tìm kiếm lớp biên chế
+        where: { code: templateCode }, // Tìm kiếm lớp niên chế
     })
     if (!templateFile) {
         console.log('Không tìm thấy template nào', templateCode)

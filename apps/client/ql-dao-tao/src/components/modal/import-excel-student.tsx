@@ -2,10 +2,11 @@ import { CloseOutlined } from '@ant-design/icons'
 import useSpinner from '@hooks/spinner'
 import { importHeQuanSu } from '@workspace/libs/api/training'
 import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
-import { Button, Col, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
+import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
 import ExportTemplateStudent from './export-template-student'
 
+const { Panel } = Collapse
 interface ImportStudentModalProps {
     visible: boolean
     onCancel: () => void
@@ -22,6 +23,7 @@ const ImportStudentModal = ({
     const [currentPage, _setCurrentPage] = useState(1)
     const [_numberOfPages, _setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])
+    const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
     const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
     const [data, setData] = useState<{
@@ -38,7 +40,7 @@ const ImportStudentModal = ({
         if (!file) return
 
         setFile(file)
-        setFileName(file.name)
+        setFileName(`Dữ liệu sinh viên.${file.name.split('.')[1]}`)
 
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -50,6 +52,8 @@ const ImportStudentModal = ({
             if (errors.length === 0) {
                 setDisbaledButton(false)
             }
+            setErrorData(errors)
+            console.log(errors)
         }
         reader.readAsArrayBuffer(file)
     }
@@ -143,7 +147,60 @@ const ImportStudentModal = ({
                 <p className="">Chọn file Excel mẫu đã xuất từ hệ thống</p>
             </div>
 
-            <Row className="text-xl font-[500] mb-3">Danh sách sinh viên</Row>
+            {errorData?.length > 0 && (
+                <Collapse defaultActiveKey={['1']} className="mb-6" bordered={false}>
+                    <Panel
+                        header={
+                            <div className="text-lg font-[500] text-red-500">Danh sách lỗi</div>
+                        }
+                        key="1"
+                    >
+                        <Row gutter={[16, 16]}>
+                            <Col span={24}>
+                                <Table
+                                    columns={[
+                                        {
+                                            title: 'STT',
+                                            width: 30,
+                                            align: 'center',
+                                            fixed: 'left',
+                                            render: (_, __, index: number) =>
+                                                index + 1 + (currentPage - 1) * 10,
+                                        },
+                                        {
+                                            title: 'Vị trí lỗi',
+                                            dataIndex: 'cellRef',
+                                            key: 'cellRef',
+                                            width: 150,
+                                            align: 'center',
+                                        },
+                                        {
+                                            title: 'Thông tin lỗi',
+                                            dataIndex: 'message',
+                                            key: 'message',
+                                            align: 'center',
+                                        },
+                                    ]}
+                                    dataSource={errorData}
+                                    pagination={false}
+                                    scroll={{ x: 'max-content' }}
+                                    bordered
+                                    locale={{
+                                        emptyText: <Empty description="Không có dữ liệu" />,
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    </Panel>
+                </Collapse>
+            )}
+
+            <Row className="text-xl font-[500] mb-3">
+                Danh sách sinh viên{' '}
+                {previewData.length > 0 && (
+                    <span className="ml-2">({previewData.length} sinh viên)</span>
+                )}
+            </Row>
             <Row className="mb-3">
                 <Col span={12}>
                     <span>
@@ -186,6 +243,7 @@ const ImportStudentModal = ({
                         key: 'code',
                         width: 150,
                         align: 'center',
+                        fixed: 'left',
                         render: (value: string) => (
                             <div className={!value ? 'td-error' : ''}>{value}</div>
                         ),
@@ -196,6 +254,7 @@ const ImportStudentModal = ({
                         key: 'fullname',
                         align: 'center',
                         width: 250,
+                        fixed: 'left',
                         render: (value: string) => (
                             <div className={!value ? 'td-error' : ''}>{value}</div>
                         ),
@@ -246,7 +305,7 @@ const ImportStudentModal = ({
                         dataIndex: 'admissionBlock',
                         key: 'admissionBlock',
                         align: 'center',
-                        width: 100,
+                        width: 150,
                     },
                     {
                         title: 'Tổng điểm',
@@ -270,7 +329,7 @@ const ImportStudentModal = ({
                         width: 150,
                     },
                     {
-                        title: 'Nghành',
+                        title: 'Ngành',
                         dataIndex: 'trainingField',
                         key: 'trainingField',
                         align: 'center',
@@ -278,7 +337,7 @@ const ImportStudentModal = ({
                     },
 
                     {
-                        title: 'Chuyên nghành',
+                        title: 'Chuyên ngành',
                         dataIndex: 'trainingMajor',
                         key: 'trainingMajor',
                         align: 'center',

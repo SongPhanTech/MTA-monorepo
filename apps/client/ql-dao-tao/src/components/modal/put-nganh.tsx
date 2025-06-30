@@ -114,7 +114,7 @@ const PutTrainingFieldModal = () => {
             form.setFieldsValue({
                 ...level,
                 trainingObjectTypeIds: level.trainingObjectTypes.map(
-                    (i) => i?.trainingObjectTypeId
+                    (i: { trainingObjectTypeId: string }) => i?.trainingObjectTypeId
                 ),
                 publishDate: dayjs(level.publishDate),
             })
@@ -182,7 +182,7 @@ const PutTrainingFieldModal = () => {
                     <TreeSelect
                         allowClear
                         showSearch
-                        placeholder="Chọn đơn vị phụ trách"
+                        placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>

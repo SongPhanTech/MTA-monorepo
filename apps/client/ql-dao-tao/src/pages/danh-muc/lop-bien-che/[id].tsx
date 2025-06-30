@@ -1,4 +1,4 @@
-import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -17,7 +17,6 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
     useFindManyStudent,
@@ -35,7 +34,6 @@ import {
     Dropdown,
     Flex,
     Form,
-    Image,
     Input,
     Menu,
     message,
@@ -464,7 +462,7 @@ export default function StudentFixedClassPage() {
                                 </Popconfirm>
                                 <Button type="primary">In danh sách</Button>
                                 <Button onClick={handleModal} type="primary">
-                                    Thêm mới
+                                    Thêm SV
                                 </Button>
                                 <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button type="primary" icon={<DownloadOutlined />}>
@@ -504,34 +502,17 @@ export default function StudentFixedClassPage() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Ảnh',
-                                align: 'center',
-                                width: 120,
-                                render: (_, record) => {
-                                    const avatar = record.userProfile?.avatar
-                                    return avatar ? (
-                                        <Image src={getMinioUrl(avatar)} width={100} height={80} />
-                                    ) : (
-                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                                            <UserOutlined
-                                                style={{
-                                                    fontSize: 32,
-                                                    color: '#bfbfbf',
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                },
-                            },
-                            {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
+                                fixed: 'left',
                                 width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Họ và tên',
                                 width: 150,
+                                fixed: 'left',
+                                align: 'center',
                                 render: (record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -560,6 +541,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Ngành',
                                 width: 150,
+                                align: 'center',
                                 render: (record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
@@ -570,6 +552,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Chuyên ngành',
                                 width: 180,
+                                align: 'center',
                                 render: (record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
@@ -580,6 +563,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Chương trình đào tạo',
                                 width: 250,
+                                align: 'center',
                                 render: (record) => {
                                     const curriculum = record.curriculumVersion
                                     return curriculum ? curriculum.name : ''
@@ -656,5 +640,5 @@ export default function StudentFixedClassPage() {
 }
 
 StudentFixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout headerChildren="Danh sách sinh viên lớp biên chế">{page}</DefaultLayout>
+    return <DefaultLayout headerChildren="Danh sách sinh viên lớp niên chế">{page}</DefaultLayout>
 }

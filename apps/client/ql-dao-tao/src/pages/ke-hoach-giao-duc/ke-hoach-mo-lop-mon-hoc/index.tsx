@@ -62,7 +62,7 @@ export default function SubjectOpeningPlan() {
             selectable: false,
             code: i?.code,
             children: i?.semesters?.length
-                ? i?.semesters.map((j) => ({
+                ? i?.semesters.map((j: { id: string; name: string; code: string }) => ({
                       title: j?.name,
                       key: j?.id,
                       value: j?.id,
@@ -112,6 +112,7 @@ export default function SubjectOpeningPlan() {
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutOpenClassModal.name,
+        onClose: refetch,
     })
 
     const _handleModal = () => {
@@ -171,11 +172,7 @@ export default function SubjectOpeningPlan() {
                                 <Flex>
                                     <Col span={8}>
                                         <Form.Item name="searchText">
-                                            <Input
-                                                id="search"
-                                                placeholder="Nhập tên lớp..."
-                                                allowClear
-                                            />
+                                            <Input id="search" placeholder="Tìm kiếm" allowClear />
                                         </Form.Item>
                                     </Col>
                                     <Col span={8}>
@@ -187,7 +184,7 @@ export default function SubjectOpeningPlan() {
                                             labelAlign="left"
                                         >
                                             <TreeSelect
-                                                placeholder="Chọn đơn vị phụ trách"
+                                                placeholder="Chọn đơn vị quản lý"
                                                 showSearch
                                                 treeDefaultExpandAll
                                                 treeData={treeData}
@@ -280,16 +277,20 @@ export default function SubjectOpeningPlan() {
                                 dataIndex: 'subjectVersionCode',
                                 align: 'center',
                                 width: 150,
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'subjectVersionName',
                                 width: 150,
+                                align: 'center',
+                                fixed: 'left',
                             },
                             {
-                                title: 'Danh sách lớp môn học',
+                                title: 'Danh sách lớp MH',
                                 dataIndex: 'subjectClass',
                                 width: 200,
+                                align: 'center',
                                 render: (
                                     values: {
                                         subjectClassName: string
@@ -312,7 +313,7 @@ export default function SubjectOpeningPlan() {
                                 ),
                             },
                             {
-                                title: 'Danh sách lớp biên chế',
+                                title: 'Danh sách lớp niên chế',
                                 dataIndex: 'fixedClass',
                                 width: 200,
                                 align: 'center',
@@ -341,6 +342,7 @@ export default function SubjectOpeningPlan() {
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
                                 width: 200,
+                                align: 'center',
                                 render: (
                                     values: {
                                         curriculumVersionName: string
@@ -398,7 +400,7 @@ export default function SubjectOpeningPlan() {
                                 align: 'center',
                             },
                             {
-                                title: 'Số lớp môn học',
+                                title: 'Số lớp MH',
                                 dataIndex: ['subjectClass', 'length'],
                                 width: 100,
                                 align: 'center',

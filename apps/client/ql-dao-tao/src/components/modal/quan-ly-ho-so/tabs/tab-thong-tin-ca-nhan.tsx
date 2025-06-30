@@ -675,7 +675,7 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
                                 <TreeSelect
                                     allowClear
                                     showSearch
-                                    placeholder="Chọn đơn vị phụ trách"
+                                    placeholder="Chọn đơn vị quản lý"
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
@@ -717,7 +717,7 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
                                 <TreeSelect
                                     allowClear
                                     showSearch
-                                    placeholder="Chọn đơn vị phụ trách"
+                                    placeholder="Chọn đơn vị quản lý"
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
@@ -978,7 +978,7 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
                     <FormItem
                         form={form}
                         name="tenureDate"
-                        label="Ngày vào biên chế"
+                        label="Ngày vào niên chế"
                         className="mb-0"
                     >
                         <DatePicker
