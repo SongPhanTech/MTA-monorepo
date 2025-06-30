@@ -126,6 +126,8 @@ model SchoolYear extends Base {
   semesters Semester[]
   milestone Milestone[]
   @@schema("ql-dao-tao")
+
+	studentTrainingSchoolYear StudentTrainingSchoolYear[]
 }
 
 enum SemesterType {
@@ -195,6 +197,8 @@ model TrainingCourse extends Base {
   scoreConverts          ScoreConvert[]
   academicRankingConvert AcademicRankingConvert[]
   @@schema("ql-dao-tao")
+
+	studentTrainingCourse StudentTrainingCourse[]
 }
 /// lớp biên chế
 model FixedClass extends Base {

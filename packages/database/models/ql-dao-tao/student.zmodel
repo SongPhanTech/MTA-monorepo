@@ -57,6 +57,10 @@ model Student extends Base {
   studentTrainingScore    StudentTrainingScore[]
   studentTrainingSemester StudentTrainingSemester[]
   @@schema("ql-dao-tao")
+
+	studentTrainingSchoolYear StudentTrainingSchoolYear[]
+
+	studentTrainingCourse StudentTrainingCourse[]
 }
 
 enum StudentStatus {
