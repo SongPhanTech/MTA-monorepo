@@ -191,20 +191,25 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
             const semester =
                 Object.values(semesters).findIndex((semester) => row[semester]) + 1 || null
 
+            const subjectName = row[cols.subjectName]?.trim() as string
+
+            // TODO: this is a bit magic words
+            const graduation = subjectName.toLowerCase().includes('tốt nghiệp')
+            const project = subjectName.startsWith('Dự án')
+
             trainingBlocks[trainingBlocks.length - 1]?.subjects.push({
-                name: row[cols.subjectName]?.trim() as string,
+                name: subjectName,
                 organizationCode: row[cols.organizationCode]?.trim(),
                 credit,
                 period,
                 semester,
-                useForFinalScore,
                 type: isMandatory
                     ? $Enums.SubjectRequirementType.Mandatory
                     : $Enums.SubjectRequirementType.Optional,
-                // TODO: check print, graduation, project
-                print: true,
-                graduation: false,
-                project: false,
+                useForFinalScore,
+                print: useForFinalScore,
+                graduation,
+                project,
             })
 
             continue
