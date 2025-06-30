@@ -27,33 +27,35 @@ const ModalPrintToKQHT = () => {
         tag: ModalPrintToKQHT.name,
     })
 
-    const { data: subjectScoreData } = useFindUniqueCurriculumVersion({
-        where: {
-            id: input?.dataStudent?.curriculumVersionId,
-        },
-        include: {
-            fixedClasses: {
-                where: {
-                    id: input?.dataStudent?.fixedClassId,
-                },
-                include: {
-                    trainingCourse: {
-                        include: {
-                            scoreConverts: true,
-                            academicRankingConvert: true,
+    const { data: subjectScoreData } = useFindUniqueCurriculumVersion(
+        {
+            where: {
+                id: input?.dataStudent?.curriculumVersionId,
+            },
+            include: {
+                fixedClasses: {
+                    where: {
+                        id: input?.dataStudent?.fixedClassId,
+                    },
+                    include: {
+                        trainingCourse: {
+                            include: {
+                                scoreConverts: true,
+                                academicRankingConvert: true,
+                            },
                         },
                     },
                 },
-            },
-            trainingBlocks: {
-                include: {
-                    subjects: {
-                        include: {
-                            subject: {
-                                include: {
-                                    studentSubjectScore: {
-                                        where: {
-                                            studentId: input?.dataStudent?.id,
+                trainingBlocks: {
+                    include: {
+                        subjects: {
+                            include: {
+                                subject: {
+                                    include: {
+                                        studentSubjectScore: {
+                                            where: {
+                                                studentId: input?.dataStudent?.id,
+                                            },
                                         },
                                     },
                                 },
@@ -63,7 +65,8 @@ const ModalPrintToKQHT = () => {
                 },
             },
         },
-    })
+        { enabel: input?.dataStudent?.curriculumVersionId }
+    )
 
     const { convertScore } = useScoreConverter(
         subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.scoreConverts

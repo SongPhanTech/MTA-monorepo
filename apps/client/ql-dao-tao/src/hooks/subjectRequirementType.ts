@@ -12,7 +12,7 @@ export const useSubjectRequirementTypeOptions = () => {
         { value: SubjectRequirementType.Optional, label: 'Tự chọn' },
     ]
 
-    const getSubjectRequirementTypeLabel = (value: SubjectRequirementType): string => {
+    const getSubjectRequirementTypeLabel = (value: SubjectRequirementType | null | undefined): string => {
         return options.find((opt) => opt.value === value)?.label || ''
     }
 

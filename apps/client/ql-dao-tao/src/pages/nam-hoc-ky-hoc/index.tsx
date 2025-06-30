@@ -1,4 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -6,6 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSchoolYearModal, PutSemesterModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { SchoolYear } from '@workspace/db'
@@ -18,7 +18,7 @@ import {
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -33,16 +33,35 @@ function YearAndSemester() {
     const [filters, setFilters] = useState<FilterProps>({
         schoolYearId: undefined,
     })
+    const { getSemesterTypeLabel } = useSemesterTypeOptions()
 
     const { data = [], refetch } = useFindManySchoolYear({
         where: {
-            id: filters.schoolYearId,
+            ...(filters.schoolYearId && filters.schoolYearId !== ''
+                ? {
+                      id: {
+                          contains: filters.schoolYearId,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
             ...(searchText && {
                 semesters: {
                     some: {
-                        name: {
-                            contains: searchText,
-                        },
+                        OR: [
+                            {
+                                name: {
+                                    contains: searchText,
+                                    mode: 'insensitive',
+                                },
+                            },
+                            {
+                                code: {
+                                    contains: searchText,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        ],
                     },
                 },
             }),
@@ -51,7 +70,28 @@ function YearAndSemester() {
             createdAt: 'desc',
         },
         include: {
-            semesters: true,
+            semesters: {
+                where: {
+                    ...(searchText !== ''
+                        ? {
+                              OR: [
+                                  {
+                                      name: {
+                                          contains: searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      code: {
+                                          contains: searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+                },
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -64,9 +104,27 @@ function YearAndSemester() {
 
     const { data: count } = useCountSchoolYear({
         where: {
-            name: {
-                contains: searchText,
-            },
+            id: filters.schoolYearId,
+            ...(searchText && {
+                OR: [
+                    {
+                        semesters: {
+                            some: {
+                                name: {
+                                    contains: searchText,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        },
+                    },
+                    {
+                        name: {
+                            contains: searchText,
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
+            }),
         },
     })
 
@@ -154,7 +212,7 @@ function YearAndSemester() {
                                     <Input
                                         id="search"
                                         onChange={(e) => debouncedSearchText(e.target.value)}
-                                        placeholder="Nhập tên kỳ học..."
+                                        placeholder="Tìm kiếm kỳ học..."
                                         className="py-0"
                                         prefix={
                                             <Search
@@ -190,11 +248,11 @@ function YearAndSemester() {
                     <Col span={12}>
                         <Flex justify="end" gap={10}>
                             <Button onClick={handleModal} className="border-primary text-primary">
-                                <PlusOutlined />
+                                <BookPlus />
                                 Thêm mới năm học
                             </Button>
                             <Button onClick={handleModalSemester} type="primary">
-                                <PlusOutlined />
+                                <BookPlus />
                                 Thêm mới kỳ học
                             </Button>
                         </Flex>
@@ -218,20 +276,27 @@ function YearAndSemester() {
                             title: 'Tên học kỳ',
                             dataIndex: 'name',
                             align: 'center',
-                            width: 340,
+                            width: 250,
+                        },
+                        {
+                            title: 'Loại học kỳ',
+                            dataIndex: 'semesterType',
+                            align: 'center',
+                            width: 100,
+                            render: (value) => getSemesterTypeLabel(value),
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             // dataIndex: 'startDate',
-                            width: 150,
+                            width: 132,
                             render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                         },
                         {
                             title: 'Thời gian kết thúc',
                             align: 'center',
                             // dataIndex: 'endDate',
-                            width: 170,
+                            width: 132,
                             render: ({ endDate }) =>
                                 endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                         },
@@ -239,7 +304,7 @@ function YearAndSemester() {
                             title: 'Mô tả',
                             dataIndex: 'description',
                             align: 'center',
-                            width: 500,
+                            width: 300,
                             render: (value) => <span className="line-clamp-1">{value}</span>,
                         },
                         {
@@ -304,6 +369,7 @@ function YearAndSemester() {
                         onChange: setCurrentPage,
                         onShowSizeChange: setNumberOfPages,
                     }}
+                    defaultExpandAll
                     headerRight={({ id }) => (
                         <div className="flex gap-2.5 w-[80px] items-center">
                             <CreateIcon

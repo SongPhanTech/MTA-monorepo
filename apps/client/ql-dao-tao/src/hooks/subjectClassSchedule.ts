@@ -12,7 +12,7 @@ export const useScheduleOptions = () => {
         { value: SubjectClassSchedule.EVENING, label: 'Tối' },
     ]
 
-    const getScheduleLabel = (value: SubjectClassSchedule): string => {
+    const getScheduleLabel = (value: SubjectClassSchedule | null | undefined): string => {
         return scheduleOptions.find((opt) => opt.value === value)?.label || ''
     }
 

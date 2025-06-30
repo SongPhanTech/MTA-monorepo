@@ -70,9 +70,12 @@ const PutSchoolYearModal = () => {
 
     const { data: schoolYearCount = 0 } = useCountSchoolYear()
 
-    const { data: level } = useFindUniqueSchoolYear({
-        where: { id },
-    })
+    const { data: level } = useFindUniqueSchoolYear(
+        {
+            where: { id },
+        },
+        { enabled: !!id }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {

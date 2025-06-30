@@ -1,6 +1,5 @@
-import { FilterOutlined, PlusOutlined } from '@ant-design/icons'
+import { FilterOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-import { FilterMonHocCTDT } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
@@ -30,7 +29,6 @@ import {
     Row,
     Select,
     Tag,
-    Tooltip,
     TreeSelect,
 } from 'antd'
 import _ from 'lodash'
@@ -39,6 +37,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import CreateIcon from '../../../../components/icons/create'
 
 interface FilterProps {
     searchText: string | null
@@ -417,7 +416,7 @@ export default function TrainingProgramSubjects() {
     const processedData = useMemo(() => {
         return data?.map((item) => ({
             ...item,
-            name: `KKT: ${item?.trainingBlock?.name}`,
+            name: `Khối kiến thức: ${item?.trainingBlock?.name}`,
         }))
     }, [data])
 
@@ -441,7 +440,7 @@ export default function TrainingProgramSubjects() {
                                                 handleFilterChange('searchText', e.target.value)
                                             }
                                             className="py-0"
-                                            placeholder="Nhập tên ngành..."
+                                            placeholder="Tìm kiếm"
                                             style={{
                                                 marginRight: 8,
                                                 height: '32px',
@@ -477,7 +476,7 @@ export default function TrainingProgramSubjects() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={6}>
+                                {/* <Col span={6}>
                                     <Flex justify="space-between" align="center">
                                         <FilterMonHocCTDT
                                             filters={filters}
@@ -485,7 +484,7 @@ export default function TrainingProgramSubjects() {
                                             debouncedRefetch={debouncedRefetch}
                                         />
                                     </Flex>
-                                </Col>
+                                </Col> */}
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -494,11 +493,12 @@ export default function TrainingProgramSubjects() {
                                     onClick={() =>
                                         onOpenTrainingBlock({
                                             curriculumVersionId: initialValue?.id as string,
+                                            trainingBlockOnCurriculumVersionId: '',
                                         })
                                     }
                                     type="primary"
                                 >
-                                    <PlusOutlined />
+                                    <BookPlus />
                                     Thêm khối kiến thức
                                 </Button>
                             </Flex>
@@ -519,6 +519,7 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'code'],
                                 width: 145,
                                 align: 'center',
+                                fixed: 'left',
                                 filterDropdown: ({
                                     setSelectedKeys,
                                     selectedKeys,
@@ -531,15 +532,15 @@ export default function TrainingProgramSubjects() {
                                             value={selectedKeys[0]}
                                             onChange={(e) =>
                                                 setSelectedKeys(
-                                                    e.target.value ? [e.target.value] : []
+                                                    e.target.value ? [e.target.value] : [],
                                                 )
                                             }
                                             onPressEnter={() => {
                                                 handleFilterChange(
-                                                    'subjectCode',
-                                                    String(selectedKeys[0] || '')
-                                                )
-                                                confirm()
+                                                    "subjectCode",
+                                                    String(selectedKeys[0] || ""),
+                                                );
+                                                confirm();
                                             }}
                                             style={{
                                                 width: 188,
@@ -550,8 +551,8 @@ export default function TrainingProgramSubjects() {
                                             <Button
                                                 size="small"
                                                 onClick={() => {
-                                                    if (clearFilters) clearFilters()
-                                                    handleFilterChange('subjectCode', '')
+                                                    if (clearFilters) clearFilters();
+                                                    handleFilterChange("subjectCode", "");
                                                 }}
                                             >
                                                 Bỏ lọc
@@ -561,10 +562,10 @@ export default function TrainingProgramSubjects() {
                                                 size="small"
                                                 onClick={() => {
                                                     handleFilterChange(
-                                                        'subjectCode',
-                                                        String(selectedKeys[0] || '')
-                                                    )
-                                                    confirm()
+                                                        "subjectCode",
+                                                        String(selectedKeys[0] || ""),
+                                                    );
+                                                    confirm();
                                                 }}
                                             >
                                                 Lọc
@@ -575,7 +576,7 @@ export default function TrainingProgramSubjects() {
                                 filterIcon: (filtered) => (
                                     <FilterOutlined
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filtered ? "#1890ff" : undefined,
                                         }}
                                     />
                                 ),
@@ -585,16 +586,18 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'code'],
                                 width: 145,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: ['subject', 'name'],
                                 width: 200,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Đơn vị quản lý',
-                                dataIndex: ['subject', 'managementOrganization', 'name'],
+                                dataIndex: ['subject', 'managementOrganization', 'sTen'],
                                 width: 200,
                                 align: 'center',
                             },
@@ -852,20 +855,16 @@ export default function TrainingProgramSubjects() {
                         data={processedData}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[75px] items-center">
-                                <Tooltip title={'Thêm môn học'} placement="left">
-                                    <BookPlus
-                                        size={16}
-                                        strokeWidth={1.5}
-                                        className="cursor-pointer"
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenTrainingBlockSubject({
-                                                trainingBlockOnCurriculumVersionId: id,
-                                                trainingBlockSubjectId: '',
-                                            })
-                                        }}
-                                    />
-                                </Tooltip>
+                                <CreateIcon
+                                    title={'Thêm môn học'}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenTrainingBlockSubject({
+                                            trainingBlockOnCurriculumVersionId: id,
+                                            trainingBlockSubjectId: '',
+                                        })
+                                    }}
+                                />
                                 <EditIcon
                                     onClick={(e) => {
                                         e.stopPropagation()
