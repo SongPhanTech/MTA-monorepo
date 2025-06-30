@@ -77,6 +77,7 @@ const PutVersionSubjectModal = () => {
             .map((subject) => ({
                 title: subject.name,
                 value: subject.id,
+                selectable: false,
                 children:
                     subject.subjectVersion.map((version: SubjectVersion) => ({
                         title: version.name,
@@ -244,7 +245,8 @@ const PutVersionSubjectModal = () => {
                 <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
                     <TreeSelect
                         treeData={treeData}
-                        treeCheckable={true}
+                        // treeCheckable={true}
+                        multiple={true}
                         treeDefaultExpandAll
                         showSearch
                         placeholder="Chọn môn học tiên quyết"
@@ -260,7 +262,9 @@ const PutVersionSubjectModal = () => {
                 <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
                     <TreeSelect
                         treeData={treeData}
-                        treeCheckable={true}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
                         showSearch
                         placeholder="Chọn môn học song hành"
                         style={{ width: '100%' }}
