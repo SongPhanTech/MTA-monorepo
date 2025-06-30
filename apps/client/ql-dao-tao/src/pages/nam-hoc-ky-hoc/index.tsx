@@ -314,7 +314,7 @@ function YearAndSemester() {
                                         semesterId: '',
                                     })
                                 }}
-                                title="Thêm năm học"
+                                title="Thêm học kỳ"
                             />
                             <EditIcon
                                 onClick={(e) => {

@@ -38,11 +38,12 @@ model StudentTrainingScore extends Base {
 }
 
 enum StudentTrainingType {
-  EXCELLENT  // Xuất sắc
   GOOD      // Tốt
   FAIR      // Khá
+  MEDIUM  // Trung bình khá
   AVERAGE   // Trung bình
   POOR      // Yếu
+  VERY_POOR // Kém
   @@schema("ql-nguoi-dung")
 }
 
@@ -60,3 +61,30 @@ model StudentTrainingSemester extends Base {
   @@schema("ql-nguoi-dung")
 }
 
+// Phân loại rèn luyện theo năm học (có thể thay đổi loại đánh giá)
+model StudentTrainingSchoolYear extends Base {
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+
+  scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
+  trainingType StudentTrainingType // loại đánh giá rèn luyện
+
+  @@schema("ql-nguoi-dung")
+}
+
+// Phân loại rèn luyện theo khóa học (có thể thay đổi loại đánh giá)
+model StudentTrainingCourse extends Base {
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+
+  TrainingCourse TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+
+  scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
+  trainingType StudentTrainingType // loại đánh giá rèn luyện
+
+  @@schema("ql-nguoi-dung")
+}

@@ -393,7 +393,7 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'ql-diem-cong',
                         label: 'Quản lý điểm cộng',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CONG,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CONG,
                         description: 'Quản lý điểm cộng',
                     },
                 ],
@@ -468,6 +468,27 @@ const NAVIGATION: NavigationType = {
                 icon: FileUser,
                 children: [
                     {
+                        id: 'ql-ren-luyen',
+                        label: 'QL đợt rèn luyện',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA,
+                    },
+                    {
+                        id: 'danh-gia-ren-luyen',
+                        label: 'Đánh giá rèn luyện',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA,
+                    },
+                    {
+                        id: 'tong-hop-danh-gia-ren-luyen',
+                        label: 'Tổng hợp đánh giá rèn luyện',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO
+                            .QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG,
+                    },
+                    {
                         id: 'user-profile-ds',
                         label: 'Quản lý hồ sơ sinh viên',
                         icon: IdcardOutlined,
@@ -495,6 +516,7 @@ const NAVIGATION: NavigationType = {
                 label: 'Danh mục hồ sơ',
                 icon: ReadOutlined,
                 children: [
+                    
                     {
                         id: 'educational-level',
                         label: 'Trình độ học vấn',
