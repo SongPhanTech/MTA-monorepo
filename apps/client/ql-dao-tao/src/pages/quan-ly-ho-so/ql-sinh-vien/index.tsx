@@ -1,4 +1,4 @@
-import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import { UploadOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { FilterSinhVien } from '@components/filter'
@@ -14,7 +14,6 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
@@ -28,10 +27,9 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Dropdown, Flex, Image, Menu, message, Popover, Row, Tag } from 'antd'
+import { Button, Col, Divider, Flex, Menu, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Ellipsis, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -424,9 +422,9 @@ export default function UserProfilePageDs() {
             // setScoreTX(newScoreTX)
             // setScoreThi(newScoreThi)
 
-            message.success('Nhập điểm từ file thành công!')
+            message.success('Nhập dữ liệu từ file thành công!')
         } catch (_error) {
-            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+            message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
         } finally {
             hideSpinner()
         }
@@ -494,53 +492,32 @@ export default function UserProfilePageDs() {
                         {/* Hàng chứa các button */}
                         <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                <Popover
-                                    content={
-                                        <Flex vertical align="flex-start" gap={4}>
-                                            <Button
-                                                onClick={() => setImportModalVisible(true)}
-                                                className="w-full flex justify-start"
-                                            >
-                                                <FileUp />
-                                                Nhập điểm từ file
-                                            </Button>
-                                            <ImportStudentModal
-                                                visible={importModalVisible}
-                                                onCancel={() => setImportModalVisible(false)}
-                                                onConfirm={handleImportConfirm}
-                                                existingStudents={[]}
-                                            />
-                                            {/* <ExportScoreTemplate
-                                                selectedFixedClass={
-                                                    selectedFixedClass
-                                                }
-                                                dataTable={dataTable}
-                                            /> */}
-                                        </Flex>
-                                    }
-                                    trigger="click"
-                                    open={open}
-                                    onOpenChange={handleOpenChange}
-                                    placement="bottomLeft"
-                                    arrow={false}
+                                <Button
+                                    type="primary"
+                                    onClick={() => setImportModalVisible(true)}
+                                    icon={<UploadOutlined />}
                                 >
-                                    <Button>
-                                        <Ellipsis />
-                                    </Button>
-                                </Popover>
+                                    Nhập dữ liêu Excel
+                                </Button>
+                                <ImportStudentModal
+                                    visible={importModalVisible}
+                                    onCancel={() => setImportModalVisible(false)}
+                                    onConfirm={handleImportConfirm}
+                                    existingStudents={[]}
+                                />
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button type="primary" icon={<DownloadOutlined />}>
                                         Tải file mẫu
                                     </Button>
-                                </Dropdown>
-                                <Dropdown overlay={menuUpload} trigger={['hover']}>
+                                </Dropdown> */}
+                                {/* <Dropdown overlay={menuUpload} trigger={['hover']}>
                                     <Button type="primary" icon={<UploadOutlined />}>
                                         Nhập file
                                     </Button>
-                                </Dropdown>
+                                </Dropdown> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -556,37 +533,39 @@ export default function UserProfilePageDs() {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            {
-                                title: 'Ảnh',
-                                align: 'center',
-                                width: 150,
-                                className: 'flex justify-center',
-                                render: (_, record) => {
-                                    const avatar = record?.userProfile?.avatar
-                                    return avatar ? (
-                                        <Image src={getMinioUrl(avatar)} />
-                                    ) : (
-                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                                            <UserOutlined
-                                                style={{
-                                                    fontSize: 32,
-                                                    color: '#bfbfbf',
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Ảnh',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     className: 'flex justify-center',
+                            //     render: (_, record) => {
+                            //         const avatar = record?.userProfile?.avatar
+                            //         return avatar ? (
+                            //             <Image src={getMinioUrl(avatar)} />
+                            //         ) : (
+                            //             <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                            //                 <UserOutlined
+                            //                     style={{
+                            //                         fontSize: 32,
+                            //                         color: '#bfbfbf',
+                            //                     }}
+                            //                 />
+                            //             </div>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Họ và tên',
                                 align: 'center',
                                 width: 180,
+                                fixed: 'left',
                                 render: (record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -710,7 +689,7 @@ export default function UserProfilePageDs() {
                                 },
                             },
                             {
-                                title: 'Chương trình đào tạo',
+                                title: 'CTĐT',
                                 align: 'center',
                                 width: 180,
                                 filters: TrainingCurriculumVersionData.map((item) => ({

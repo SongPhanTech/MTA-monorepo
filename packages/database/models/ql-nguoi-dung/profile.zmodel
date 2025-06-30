@@ -105,7 +105,7 @@ model UserProfile extends Base {
   CPVJoinPlace               String? // nơi vào Đảng
   positionCPV                DM_ChucVu?        @relation(fields: [positionCPVId], references: [Id])
   positionCPVId              String?
-  tenureDate                 DateTime? // ngày vào biên chế
+  tenureDate                 DateTime? // ngày vào niên chế
   enlistmentDate             DateTime? // ngày nhập ngũ
   dischargeDate              DateTime? // ngày xuất ngũ
 

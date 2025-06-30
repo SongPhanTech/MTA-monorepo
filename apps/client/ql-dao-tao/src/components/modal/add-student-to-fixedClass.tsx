@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -8,12 +7,12 @@ import {
 import useSpinner from '@hooks/spinner'
 import type { Student } from '@workspace/db'
 import { useCountStudent, useFindManyStudent, useUpdateManyStudent } from '@workspace/db/hooks'
-import { Col, Divider, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { ArrowBigLeftDash, ArrowBigRightDash, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,6 +31,7 @@ const AddStudentToFixedClassModal = () => {
     const [numberOfPagesNotClass, setNumberOfPagesNotClass] = useState(DEFAULT_PAGINATE_SIZE)
     const [currentPageNotClass, setCurrentPageNotClass] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+    const [selectedRowKeysInClass, setSelectedRowKeysInClass] = useState<string[]>([])
     const [form] = Form.useForm<{ list: Student[] }>()
     const {
         isOpen,
@@ -240,6 +240,16 @@ const AddStudentToFixedClassModal = () => {
     async function onOk() {
         try {
             showSpinner()
+            onClose()
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const handleAddStudentToClass = async () => {
+        try {
+            showSpinner()
             if (selectedRowKeys?.length > 0) {
                 await updateManyUserProfile({
                     where: {
@@ -252,11 +262,28 @@ const AddStudentToFixedClassModal = () => {
                     },
                 })
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['Subject'],
-            })
-            onClose()
+            setSelectedRowKeysInClass([])
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const handleRemoveStudentFromClass = async () => {
+        try {
+            showSpinner()
+            if (selectedRowKeysInClass?.length > 0) {
+                await updateManyUserProfile({
+                    where: {
+                        id: {
+                            in: selectedRowKeysInClass,
+                        },
+                    },
+                    data: {
+                        fixedClassId: null,
+                    },
+                })
+            }
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -296,299 +323,301 @@ const AddStudentToFixedClassModal = () => {
                     />
                 </Flex>
             </Col>
-            <Col span={12}>
-                <Row>
-                    <Col span={24}>
-                        <Divider orientation="left" orientationMargin={0}>
-                            Danh sách sinh viên trong lớp
-                        </Divider>
-                    </Col>
-                </Row>
-                <Table
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Mã sinh viên',
-                            dataIndex: 'code',
-                            width: 120,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Họ và tên',
-                            width: 150,
-                            render: (record) =>
-                                record.userProfile
-                                    ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
-                                    : '',
-                        },
-                        {
-                            title: 'Ngày sinh',
-                            align: 'center',
-                            width: 100,
-                            render: (record) =>
-                                record.userProfile?.dateOfBirth
-                                    ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                                    : '',
-                        },
-                        {
-                            title: 'Giới tính',
-                            align: 'center',
-                            width: 80,
-                            render: (record) =>
-                                record.userProfile?.gender
-                                    ? GENDER_MEAN[
-                                          record.userProfile.gender as keyof typeof GENDER_MEAN
-                                      ]
-                                    : '',
-                        },
-                        {
-                            title: 'Ngành',
-                            width: 150,
-                            render: (record) => {
-                                return (
-                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                                        ?.trainingField?.name || ''
-                                )
+            <Row gutter={[16, 16]}>
+                <Col span={11}>
+                    <Row>
+                        <Col span={24}>
+                            <Divider orientation="left" orientationMargin={0}>
+                                Danh sách sinh viên chưa có lớp
+                            </Divider>
+                        </Col>
+                    </Row>
+                    <Table
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPageNotClass - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            width: 180,
-                            render: (record) => {
-                                return (
-                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                                        ?.name || ''
-                                )
+                            {
+                                title: 'Mã sinh viên',
+                                dataIndex: 'code',
+                                width: 120,
+                                align: 'center',
                             },
-                        },
-                        {
-                            title: 'Chương trình đào tạo',
-                            width: 250,
-                            render: (record) => {
-                                const curriculum = record.curriculumVersion
-                                return curriculum ? curriculum.name : ''
+                            {
+                                title: 'Họ và tên',
+                                width: 150,
+                                align: 'center',
+                                render: (record) =>
+                                    record.userProfile
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
+                                        : '',
                             },
-                        },
-                        {
-                            title: 'Trạng thái',
-                            align: 'center',
-                            width: 120,
-                            render: (_, record) => {
-                                const statusInfo =
-                                    FIXED_CLASS_STUDENT_STATUS[
-                                        record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
-                                    ]
-                                return statusInfo ? (
-                                    <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
-                                ) : (
-                                    <Tag color="default">Không xác định</Tag>
-                                )
+                            {
+                                title: 'Ngày sinh',
+                                align: 'center',
+                                width: 100,
+                                render: (record) =>
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                        : '',
                             },
-                        },
-                        // {
-                        //     title: 'Thao tác',
-                        //     width: 100,
-                        //     align: 'center',
-                        //     fixed: 'right',
-                        //     render: (_, { id }) => (
-                        //         <Row className="justify-center gap-2">
-                        //             <Tooltip title="Kết quả học tập">
-                        //                 <BookCheckIcon
-                        //                     onClick={(e) => {
-                        //                         e.stopPropagation()
-                        //                         router.push(
-                        //                             ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
-                        //                                 '[id]',
-                        //                                 id
-                        //                             )
-                        //                         )
-                        //                     }}
-                        //                     size={16}
-                        //                 />
-                        //             </Tooltip>
-                        //             <EditIcon
-                        //                 onClick={onOpenUpdate.bind(null, {
-                        //                     id: id,
-                        //                 })}
-                        //                 className="text-sm text-blue-700 cursor-pointer"
-                        //             />
-                        //             <DeleteIcon
-                        //                 popConfirm={{
-                        //                     onConfirm: () =>
-                        //                         handleDelete(id),
-                        //                 }}
-                        //             />
-                        //         </Row>
-                        //     ),
-                        // },
-                    ]}
-                    data={data}
-                    scroll={{ x: 'max-content' }}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: setCurrentPage,
-                        onShowSizeChange: setNumberOfPages,
-                        showTotal: (total, range) =>
-                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                    }}
-                />
-            </Col>
-            <Col span={12}>
-                <Row>
-                    <Col span={24}>
-                        <Divider orientation="left" orientationMargin={0}>
-                            Danh sách sinh viên chưa có lớp
-                        </Divider>
-                    </Col>
-                </Row>
-                <Table
-                    rowKey="id"
-                    rowSelection={{
-                        selectedRowKeys,
-                        onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
-                    }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPageNotClass - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Mã sinh viên',
-                            dataIndex: 'code',
-                            width: 120,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Họ và tên',
-                            width: 150,
-                            render: (record) =>
-                                record.userProfile
-                                    ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
-                                    : '',
-                        },
-                        {
-                            title: 'Ngày sinh',
-                            align: 'center',
-                            width: 100,
-                            render: (record) =>
-                                record.userProfile?.dateOfBirth
-                                    ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                                    : '',
-                        },
-                        {
-                            title: 'Giới tính',
-                            align: 'center',
-                            width: 80,
-                            render: (record) =>
-                                record.userProfile?.gender
-                                    ? GENDER_MEAN[
-                                          record.userProfile.gender as keyof typeof GENDER_MEAN
-                                      ]
-                                    : '',
-                        },
-                        {
-                            title: 'Ngành',
-                            width: 150,
-                            render: (record) => {
-                                return record?.fixedClass?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.trainingField?.name
+                            {
+                                title: 'Giới tính',
+                                align: 'center',
+                                width: 80,
+                                render: (record) =>
+                                    record.userProfile?.gender
+                                        ? GENDER_MEAN[
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
+                                          ]
+                                        : '',
                             },
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            width: 180,
-                            render: (record) => {
-                                return record?.fixedClass?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.name
+                            {
+                                title: 'Ngành',
+                                width: 150,
+                                align: 'center',
+                                render: (record) => {
+                                    return record?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.trainingField?.name
+                                },
                             },
-                        },
-                        {
-                            title: 'Chương trình đào tạo',
-                            width: 250,
-                            render: (record) => {
-                                const curriculum = record.curriculumVersion
-                                return curriculum ? curriculum.name : ''
+                            {
+                                title: 'Chuyên ngành',
+                                width: 180,
+                                align: 'center',
+                                render: (record) => {
+                                    return record?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name
+                                },
                             },
-                        },
-                        {
-                            title: 'Trạng thái',
-                            align: 'center',
-                            width: 120,
-                            render: (_, record) => {
-                                const statusInfo =
-                                    FIXED_CLASS_STUDENT_STATUS[
-                                        record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
-                                    ]
-                                return statusInfo ? (
-                                    <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
-                                ) : (
-                                    <Tag color="default">Không xác định</Tag>
-                                )
+                            {
+                                title: 'CTĐT',
+                                width: 150,
+                                align: 'center',
+                                render: (record) => {
+                                    const curriculum = record.curriculumVersion
+                                    return curriculum ? curriculum.name : ''
+                                },
                             },
-                        },
-                        // {
-                        //     title: 'Thao tác',
-                        //     width: 100,
-                        //     align: 'center',
-                        //     fixed: 'right',
-                        //     render: (_, { id }) => (
-                        //         <Row className="justify-center gap-2">
-                        //             <Tooltip title="Kết quả học tập">
-                        //                 <BookCheckIcon
-                        //                     onClick={(e) => {
-                        //                         e.stopPropagation()
-                        //                         router.push(
-                        //                             ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
-                        //                                 '[id]',
-                        //                                 id
-                        //                             )
-                        //                         )
-                        //                     }}
-                        //                     size={16}
-                        //                 />
-                        //             </Tooltip>
-                        //             <EditIcon
-                        //                 onClick={onOpenUpdate.bind(null, {
-                        //                     id: id,
-                        //                 })}
-                        //                 className="text-sm text-blue-700 cursor-pointer"
-                        //             />
-                        //             <DeleteIcon
-                        //                 popConfirm={{
-                        //                     onConfirm: () =>
-                        //                         handleDelete(id),
-                        //                 }}
-                        //             />
-                        //         </Row>
-                        //     ),
-                        // },
-                    ]}
-                    data={dataStudentNotClass}
-                    scroll={{ x: 'max-content' }}
-                    pagination={{
-                        current: currentPageNotClass,
-                        pageSize: numberOfPagesNotClass,
-                        total: countNotClass,
-                        onChange: setCurrentPageNotClass,
-                        onShowSizeChange: setNumberOfPagesNotClass,
-                        showTotal: (total, range) =>
-                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                    }}
-                />
-            </Col>
+                            {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => {
+                                    const statusInfo =
+                                        FIXED_CLASS_STUDENT_STATUS[
+                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                        ]
+                                    return statusInfo ? (
+                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
+                                    ) : (
+                                        <Tag color="default">Không xác định</Tag>
+                                    )
+                                },
+                            },
+                        ]}
+                        data={dataStudentNotClass}
+                        scroll={{ x: 'max-content' }}
+                        pagination={{
+                            current: currentPageNotClass,
+                            pageSize: numberOfPagesNotClass,
+                            total: countNotClass,
+                            onChange: setCurrentPageNotClass,
+                            onShowSizeChange: setNumberOfPagesNotClass,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                    />
+                </Col>
+                <Col span={2} className="flex items-center justify-center">
+                    <Flex align="center" justify="center" vertical>
+                        <Tooltip title="Chỉnh sửa danh sách SV trong lớp" placement="top">
+                            <Button
+                                disabled={!selectedRowKeys?.length}
+                                className="mb-2"
+                                onClick={handleAddStudentToClass}
+                            >
+                                <ArrowBigRightDash className="cursor-pointer" />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title="Xoá SV khỏi lớp" placement="top">
+                            <Button
+                                disabled={!selectedRowKeysInClass?.length}
+                                className="mb-2"
+                                onClick={handleRemoveStudentFromClass}
+                            >
+                                <ArrowBigLeftDash className="cursor-pointer" />
+                            </Button>
+                        </Tooltip>
+                    </Flex>
+                </Col>
+                <Col span={11}>
+                    <Row>
+                        <Col span={24}>
+                            <Divider orientation="left" orientationMargin={0}>
+                                Danh sách sinh viên trong lớp
+                            </Divider>
+                        </Col>
+                    </Row>
+                    <Table
+                        rowKey="id"
+                        rowSelection={{
+                            selectedRowKeys: selectedRowKeysInClass,
+                            onChange: (selectedRowKeysInClass: any) =>
+                                setSelectedRowKeysInClass(selectedRowKeysInClass),
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã sinh viên',
+                                dataIndex: 'code',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Họ và tên',
+                                width: 150,
+                                align: 'center',
+                                render: (record) =>
+                                    record.userProfile
+                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
+                                        : '',
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                align: 'center',
+                                width: 100,
+                                render: (record) =>
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                        : '',
+                            },
+                            {
+                                title: 'Giới tính',
+                                align: 'center',
+                                width: 80,
+                                render: (record) =>
+                                    record.userProfile?.gender
+                                        ? GENDER_MEAN[
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
+                                          ]
+                                        : '',
+                            },
+                            {
+                                title: 'Ngành',
+                                width: 150,
+                                align: 'center',
+                                render: (record) => {
+                                    return (
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.trainingField?.name || ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Chuyên ngành',
+                                width: 180,
+                                align: 'center',
+                                render: (record) => {
+                                    return (
+                                        record?.fixedClass?.curriculumVersion?.curriculum
+                                            ?.trainingMajor?.name || ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'CTĐT',
+                                width: 150,
+                                align: 'center',
+                                render: (record) => {
+                                    const curriculum = record.curriculumVersion
+                                    return curriculum ? curriculum.name : ''
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => {
+                                    const statusInfo =
+                                        FIXED_CLASS_STUDENT_STATUS[
+                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                                        ]
+                                    return statusInfo ? (
+                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
+                                    ) : (
+                                        <Tag color="default">Không xác định</Tag>
+                                    )
+                                },
+                            },
+                            // {
+                            //     title: 'Thao tác',
+                            //     width: 100,
+                            //     align: 'center',
+                            //     fixed: 'right',
+                            //     render: (_, { id }) => (
+                            //         <Row className="justify-center gap-2">
+                            //             <Tooltip title="Kết quả học tập">
+                            //                 <BookCheckIcon
+                            //                     onClick={(e) => {
+                            //                         e.stopPropagation()
+                            //                         router.push(
+                            //                             ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
+                            //                                 '[id]',
+                            //                                 id
+                            //                             )
+                            //                         )
+                            //                     }}
+                            //                     size={16}
+                            //                 />
+                            //             </Tooltip>
+                            //             <EditIcon
+                            //                 onClick={onOpenUpdate.bind(null, {
+                            //                     id: id,
+                            //                 })}
+                            //                 className="text-sm text-blue-700 cursor-pointer"
+                            //             />
+                            //             <DeleteIcon
+                            //                 popConfirm={{
+                            //                     onConfirm: () =>
+                            //                         handleDelete(id),
+                            //                 }}
+                            //             />
+                            //         </Row>
+                            //     ),
+                            // },
+                        ]}
+                        data={data}
+                        scroll={{ x: 'max-content' }}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                    />
+                </Col>
+            </Row>
         </PutFormModal>
     )
 }

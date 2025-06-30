@@ -102,6 +102,7 @@ const PutOpenClassModal = () => {
                     }))
                 )
             }
+
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -138,9 +139,7 @@ const PutOpenClassModal = () => {
         setIsEdit(false)
         const numberOfClass = Number(form.getFieldValue('numberOfClass'))
         if (numberOfClass > 0) {
-            const cout = Math.ceil(
-                Number(form.getFieldValue('totalStudent')) / Number(numberOfClass)
-            )
+            const cout = Math.ceil(Number(dataClass?.countStudent) / Number(numberOfClass))
             const result = []
 
             for (let i = 0; i < Number(numberOfClass); i++) {
@@ -150,8 +149,8 @@ const PutOpenClassModal = () => {
                     name: subjectVersionData?.name,
                     maxStudent: Number(cout),
                     startDate: new Date(),
-                    semesterId: form.getFieldValue('semesterId'),
-                    subjectId: form.getFieldValue('subjectVersionId'),
+                    semesterId: dataClass?.semester?.id,
+                    subjectId: subjectVersionData?.id,
                     schedule: form.getFieldValue('schedule'),
                     subject: subjectVersionData,
                     examType: subjectVersionData?.examType,
@@ -173,8 +172,8 @@ const PutOpenClassModal = () => {
                     name: subjectVersionData?.name ? subjectVersionData?.name : '',
                     maxStudent: Number(maxStudent),
                     startDate: new Date(),
-                    semesterId: form.getFieldValue('semesterId'),
-                    subjectId: form.getFieldValue('subjectVersionId'),
+                    semesterId: dataClass?.semester?.id,
+                    subjectId: subjectVersionData.id,
                     schedule: form.getFieldValue('schedule'),
                     subject: subjectVersionData,
                     examType: subjectVersionData?.examType,
@@ -263,7 +262,6 @@ const PutOpenClassModal = () => {
         }
     }, [subjectClassData])
     const listForm = Form.useWatch('list', form)?.filter((i) => i?.name) ?? []
-    const _disableMaxStudent = Form.useWatch('totalStudent', form)
     return (
         <PutFormModal
             open={isOpen}
@@ -337,15 +335,9 @@ const PutOpenClassModal = () => {
                             placeholder="Nhập số lớp cần tạo"
                             step={1}
                             min={0}
-                            disabled={listForm?.length > 0}
                         />
                     </FormItem>
-                    <Button
-                        onClick={handleCreateTableForClass}
-                        type="primary"
-                        className="h-[32px]"
-                        disabled={listForm?.length > 0}
-                    >
+                    <Button onClick={handleCreateTableForClass} type="primary" className="h-[32px]">
                         Thêm LMH theo số lớp
                     </Button>
                 </Flex>
@@ -359,7 +351,6 @@ const PutOpenClassModal = () => {
                             placeholder="Nhập số SV tối đa"
                             step={1}
                             min={0}
-                            disabled={listForm?.length > 0}
                         />
                     </FormItem>
 
@@ -367,7 +358,6 @@ const PutOpenClassModal = () => {
                         onClick={handleCreateTableForMaxStudent}
                         type="primary"
                         className="h-[32px]"
-                        disabled={listForm?.length > 0}
                     >
                         Thêm LMH theo số SV tối đa
                     </Button>

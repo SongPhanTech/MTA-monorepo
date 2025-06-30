@@ -78,7 +78,7 @@ const XetCanhCaoHocDuong = () => {
                                             //     )
                                             // }
                                             className="py-0"
-                                            placeholder="Nhập tên học viên, lớp biên chế"
+                                            placeholder="Nhập tên học viên, lớp niên chế"
                                             prefix={
                                                 <Search
                                                     size={15}

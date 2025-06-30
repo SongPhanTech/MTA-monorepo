@@ -3,7 +3,13 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { FixedClass, TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    FixedClass,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCreateFixedClass,
     useFindManyCurriculum,
@@ -293,7 +299,7 @@ const PutFixedClassModal = () => {
     const curriculumTreeData = curriculumData.map((i) => {
         return {
             ...i,
-            children: i?.curriculumVersion.map((t) => ({
+            children: i?.curriculumVersion.map((t: CurriculumVersion) => ({
                 ...t,
                 title: t?.code ? `${t?.code} - ${t?.name}` : t?.name,
                 value: t?.id,
@@ -345,10 +351,10 @@ const PutFixedClassModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa lớp biên chế' : 'Thêm mới lớp biên chế'}
+            title={id ? 'Chỉnh sửa lớp niên chế' : 'Thêm mới lớp niên chế'}
             className="w-[45vw]"
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="curriculumVersionId"
@@ -398,13 +404,13 @@ const PutFixedClassModal = () => {
                 <FormItem
                     form={form}
                     name="managementOrganizationId"
-                    label="Khoa phụ trách"
+                    label="Đơn vị quản lý"
                     className="mb-2"
                 >
                     <TreeSelect
                         allowClear
                         showSearch
-                        placeholder="Chọn đơn vị phụ trách"
+                        placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
@@ -463,14 +469,14 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã lớp biên chế" required>
-                    <Input placeholder="Nhập mã lớp biên chế" />
+                <FormItem form={form} name="code" label="Mã lớp niên chế" required>
+                    <Input placeholder="Nhập mã lớp niên chế" />
                 </FormItem>
             </Col>
 
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên lớp biên chế" required>
-                    <Input placeholder="Nhập tên lớp biên chế" />
+                <FormItem form={form} name="name" label="Tên lớp niên chế" required>
+                    <Input placeholder="Nhập tên lớp niên chế" />
                 </FormItem>
             </Col>
 
@@ -489,7 +495,7 @@ const PutFixedClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="initSize" label="Sĩ số">
                     <InputNumber
                         style={{ width: '100%' }}
@@ -500,17 +506,9 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
 
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Đang hoạt động</Radio>
-                        <Radio value={false}>Ngừng hoạt động</Radio>
-                    </Radio.Group>
                 </FormItem>
             </Col>
             <Col span={12}>

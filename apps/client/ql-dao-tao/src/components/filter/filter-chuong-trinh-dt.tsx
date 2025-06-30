@@ -168,7 +168,7 @@ const FilterChuongTrinhDT = (props: Props) => {
                             >
                                 <TreeSelect
                                     allowClear
-                                    placeholder="Chọn đơn vị phụ trách"
+                                    placeholder="Chọn đơn vị quản lý"
                                     showSearch
                                     treeDefaultExpandAll
                                     treeData={treeData}

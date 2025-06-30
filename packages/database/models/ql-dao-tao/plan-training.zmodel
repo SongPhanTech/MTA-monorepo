@@ -200,7 +200,7 @@ model TrainingCourse extends Base {
   academicRankingConvert AcademicRankingConvert[]
   @@schema("ql-dao-tao")
 }
-/// lớp biên chế
+/// lớp niên chế
 model FixedClass extends Base {
   name                     String
   summary                  String?
@@ -305,7 +305,7 @@ model CurriculumVersion extends Base {
   renderPath            String? // Đường dẫn tài liệu kết xuất
 
   trainingBlocks        TrainingBlockOnCurriculumVersion[]
-  fixedClasses          FixedClass[] // Lớp biên chế
+  fixedClasses          FixedClass[] // Lớp niên chế
   students              Student[] // Học viên
 
   @@schema("ql-dao-tao")

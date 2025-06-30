@@ -266,7 +266,7 @@ export default function TrainingMajorPage() {
                                         : '',
                             },
                             {
-                                title: 'Khoa phụ trách',
+                                title: 'Đơn vị quản lý',
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,

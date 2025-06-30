@@ -308,55 +308,7 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
             },
-            {
-                id: 'category',
-                label: 'Danh mục',
-                icon: LayoutDashboard,
-                children: [
-                    {
-                        id: 'danh-muc-nganh',
-                        label: 'Danh mục ngành',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_NGANH,
-                        description: 'Danh mục ngành',
-                    },
-                    {
-                        id: 'danh-muc-chuyen-nganh',
-                        label: 'Danh mục chuyên ngành',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_NGANH,
-                        description: 'Danh mục chuyên ngành',
-                    },
-                    {
-                        id: 'khoa-huan-luyen',
-                        label: 'Danh mục khoá đào tạo',
-                        icon: BookOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
-                        description: 'Danh mục khoá đào tạo',
-                    },
-                    {
-                        id: 'danh-muc-chuyen-doi-diem',
-                        label: 'Bảng chuyển đổi điểm',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
-                        description: 'Bảng chuyển đổi điểm',
-                    },
-                    {
-                        id: 'danh-muc-danh-muc-phong-hoc',
-                        label: 'Danh mục phòng học',
-                        icon: TeamOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
-                        description: 'Danh mục phòng học',
-                    },
-                    {
-                        id: 'lop-bien-che',
-                        label: 'Quản lý lớp biên chế',
-                        icon: TeamOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
-                        description: 'Quản lý lớp biên chế',
-                    },
-                ],
-            },
+
             {
                 id: 'chuong-trinh-dao-tao-123',
                 label: 'Chương trình đào tạo',
@@ -364,16 +316,16 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: 'danh-muc-chuong-trinh-dao-tao',
-                        label: 'Danh mục chương trình đào tạo',
+                        label: 'Danh mục CTĐT',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                        description: 'Danh mục chương trình đào tạo',
+                        description: 'Danh mục CTĐT',
                     },
                     {
                         id: 'khoi-kien-thuc-ctdt',
-                        label: 'Khối kiến thức CTDT',
+                        label: 'Khối kiến thức CTĐT',
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                        description: 'Khối kiến thức CTDT',
+                        description: 'Khối kiến thức CTĐT',
                     },
                     {
                         id: 'danh-sach-mon-hoc',
@@ -383,16 +335,10 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-            {
-                id: 'schoolyear-semester',
-                label: 'Năm học kỳ học',
-                icon: CalendarFold,
-                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
-                description: 'Thông tin năm học, kỳ học',
-            },
+
             {
                 id: 'ke-hoach-giao-duc',
-                label: 'Kế hoạch giáo dục',
+                label: 'Kế hoạch đào tạo',
                 icon: CalendarFold,
                 children: [
                     {
@@ -459,7 +405,63 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                 description: 'Thông tin năm học, kỳ học',
             },
+            {
+                id: 'schoolyear-semester',
+                label: 'Năm học kỳ học',
+                icon: CalendarFold,
+                path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
+                description: 'Thông tin năm học, kỳ học',
+            },
+            {
+                id: 'danh-muc-chuyen-doi-diem',
+                label: 'Bảng chuyển đổi điểm',
+                icon: PieChartOutlined,
+                path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                description: 'Bảng chuyển đổi điểm',
+            },
+            {
+                id: 'category',
+                label: 'Danh mục',
+                icon: LayoutDashboard,
+                children: [
+                    {
+                        id: 'danh-muc-nganh',
+                        label: 'Danh mục ngành',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_NGANH,
+                        description: 'Danh mục ngành',
+                    },
+                    {
+                        id: 'danh-muc-chuyen-nganh',
+                        label: 'Danh mục chuyên ngành',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_NGANH,
+                        description: 'Danh mục chuyên ngành',
+                    },
+                    {
+                        id: 'khoa-huan-luyen',
+                        label: 'Danh mục khoá đào tạo',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
+                        description: 'Danh mục khoá đào tạo',
+                    },
 
+                    {
+                        id: 'danh-muc-danh-muc-phong-hoc',
+                        label: 'Danh mục phòng học',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
+                        description: 'Danh mục phòng học',
+                    },
+                    {
+                        id: 'lop-bien-che',
+                        label: 'Quản lý lớp niên chế',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
+                        description: 'Quản lý lớp niên chế',
+                    },
+                ],
+            },
             {
                 id: 'ql-ho-so',
                 label: 'Quản lý hồ sơ',

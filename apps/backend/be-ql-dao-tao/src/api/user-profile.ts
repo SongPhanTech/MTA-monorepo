@@ -227,7 +227,7 @@ app.openapi(uploadExcelUpdateUserProfile, async (c) => {
                         CPVJoinDate: parseDate(row[23]), // Ngày kết nạp Đảng
                         officialCPVDate: parseDate(row[24]), // Ngày chính thức Đảng
                         CPVJoinPlace: row[25] || '', // Nơi kết nạp Đảng
-                        tenureDate: parseDate(row[26]), // Ngày vào biên chế
+                        tenureDate: parseDate(row[26]), // Ngày vào niên chế
                         enlistmentDate: parseDate(row[27]), // Ngày nhập ngũ
                         dischargeDate: parseDate(row[28]), // Ngày xuất ngũ
                         rankName: row[29] || '', // Quân hàm
