@@ -1,4 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -19,10 +18,10 @@ import {
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { BookPlus, Eye, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -160,6 +159,7 @@ export default function TrainingProgramCatalog() {
                         : {}),
                 },
                 include: {
+                    trainingTime: true,
                     trainingBlocks: {
                         select: {
                             subjects: {
@@ -369,7 +369,7 @@ export default function TrainingProgramCatalog() {
                                                 handleFilterChange('searchText', e.target.value)
                                             }
                                             className="py-0"
-                                            placeholder="Nhập chương trình đào tạo"
+                                            placeholder="Tìm kiếm chương trình đào tạo"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -436,7 +436,7 @@ export default function TrainingProgramCatalog() {
                         <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
-                                    <PlusOutlined />
+                                    <BookPlus />
                                     Thêm chương trình
                                 </Button>
                             </Flex>
@@ -458,25 +458,15 @@ export default function TrainingProgramCatalog() {
                                 title: 'Mã CTĐT',
                                 dataIndex: 'code',
                                 align: 'center',
+                                fixed: 'left',
                                 width: 120,
                             },
                             {
                                 title: 'Tên chương trình',
                                 dataIndex: 'name',
                                 align: 'center',
+                                fixed: 'left',
                                 width: 180,
-                            },
-                            {
-                                title: 'Tên viết tắt',
-                                dataIndex: 'shortName',
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                dataIndex: 'englishName',
-                                align: 'center',
-                                width: 120,
                             },
                             {
                                 title: 'Tổng tín chỉ',
@@ -548,11 +538,16 @@ export default function TrainingProgramCatalog() {
                                 render: (value) => dayjs(value).year(),
                             },
                             {
-                                title: 'Thời gian đào tạo',
+                                title: 'Số kỳ học',
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Thời gian đào tạo',
+                                dataIndex: ['trainingTime', 'name'],
+                                align: 'center',
                                 width: 140,
-                                render: (value) => `${value} năm`,
                             },
                             {
                                 title: 'Trạng thái',
@@ -576,18 +571,13 @@ export default function TrainingProgramCatalog() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                <Tooltip title="Xem chi tiết" placement="top">
+                                                    <Eye
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                        className="text-base cursor-pointer"
                                                     />
-                                                </Tooltip> */}
+                                                </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()

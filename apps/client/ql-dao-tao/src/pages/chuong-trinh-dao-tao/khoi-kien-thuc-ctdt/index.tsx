@@ -183,7 +183,7 @@ export default function TrainingBlock() {
                                             onChange={(e) =>
                                                 handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Nhập tên ngành..."
+                                            placeholder="Tìm kiếm tên ngành..."
                                             className="py-0"
                                             prefix={
                                                 <Search

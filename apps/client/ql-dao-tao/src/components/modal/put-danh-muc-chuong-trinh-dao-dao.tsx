@@ -48,6 +48,7 @@ const PutCurriculum = () => {
         try {
             showSpinner()
             const data = {
+                code: output.code,
                 name: output.name,
                 englishName: output.englishName,
                 description: output.description,
@@ -114,6 +115,11 @@ const PutCurriculum = () => {
             title={id ? 'Sửa chương trình đào tạo' : 'Thêm chương trình đào tạo'}
             className="w-[60vw]"
         >
+            <Col span={12}>
+                <FormItem form={form} name="code" label="Mã chương trình" required>
+                    <Input placeholder="Nhập mã CTDT" />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên chương trình (tiếng việt)" required>
                     <Input placeholder="Nhập tên chương trình (tiếng việt)" />

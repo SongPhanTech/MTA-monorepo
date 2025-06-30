@@ -148,7 +148,7 @@ catalogs:
       specifier: ^4.4.0
       version: 4.4.0
     file-saver:
-      specifier: 2.0.5
+      specifier: ^2.0.5
       version: 2.0.5
     glob:
       specifier: ^11.0.0

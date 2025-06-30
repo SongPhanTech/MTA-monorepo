@@ -299,7 +299,7 @@ model CurriculumVersion extends Base {
   objectives            String? // II. Mục tiêu
   learningOutcome       String? // III. Chuẩn đầu ra
   inputStandard         String? // IV. Chuẩn đầu vào
-  time                  String? // V. Thời gian đào tạo
+  time                  String? // V. Thời gian toàn khóa
   structure             String? // VI. Cấu trúc chương trình đào tạo
   matrixLearningOutcome String? // VII. Ma trận chuẩn đầu ra
   summary               String? // VIII. Mô tả tóm tắt nội dung các học phần

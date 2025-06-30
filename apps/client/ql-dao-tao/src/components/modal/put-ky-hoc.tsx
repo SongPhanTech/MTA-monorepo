@@ -91,9 +91,12 @@ const PutSemesterModal = () => {
             : {},
     })
 
-    const { data: initialData } = useFindUniqueSemester({
-        where: { id: input?.semesterId },
-    })
+    const { data: initialData } = useFindUniqueSemester(
+        {
+            where: { id: input?.semesterId },
+        },
+        { enabled: !!input?.semesterId }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialData) {
@@ -152,7 +155,7 @@ const PutSemesterModal = () => {
                 </Col>
             )}
             <Col span={12}>
-                <FormItem form={form} name="semesterType" label="Loai học kỳ">
+                <FormItem form={form} name="semesterType" label="Loại học kỳ" required>
                     <Select
                         placeholder="Chọn loại học kỳ"
                         options={[

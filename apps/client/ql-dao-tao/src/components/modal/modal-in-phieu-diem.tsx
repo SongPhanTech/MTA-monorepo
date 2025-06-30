@@ -35,38 +35,40 @@ const ModalPrintStudentSubjectScore = () => {
         tag: ModalPrintStudentSubjectScore.name,
     })
 
-    const { data } = useFindUniqueSubjectClass({
-        where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
-        include: {
-            subject: {
-                include: {
-                    managementOrganization: true,
+    const { data } = useFindUniqueSubjectClass(
+        {
+            where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
+            include: {
+                subject: {
+                    include: {
+                        managementOrganization: true,
+                    },
                 },
-            },
-            semester: {
-                include: {
-                    schoolYear: true,
+                semester: {
+                    include: {
+                        schoolYear: true,
+                    },
                 },
-            },
-            mainLecturer: {
-                include: {
-                    userProfile: true,
+                mainLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
                 },
-            },
-            extraLecturer: {
-                include: {
-                    userProfile: true,
+                extraLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
                 },
-            },
-            subjectClassStudent: {
-                include: {
-                    student: {
-                        include: {
-                            fixedClass: {
-                                include: {
-                                    trainingCourse: {
-                                        include: {
-                                            scoreConverts: true,
+                subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: {
+                                            include: {
+                                                scoreConverts: true,
+                                            },
                                         },
                                     },
                                 },
@@ -76,7 +78,8 @@ const ModalPrintStudentSubjectScore = () => {
                 },
             },
         },
-    })
+        { enabel: input?.dataTable?.[0]?.subjectClass?.id }
+    )
 
     const { convertScore } = useScoreConverter(
         data?.subjectClassStudent?.[0]?.student?.fixedClass?.trainingCourse?.scoreConverts
@@ -105,7 +108,7 @@ const ModalPrintStudentSubjectScore = () => {
     async function onOk({ ...rest }: PutSubjectClass) {
         try {
             showSpinner()
-            if (input?.type === 1) {
+            if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
                 await updateSubjectClass({
                     data: {
                         isLockExamScore: true,
@@ -231,13 +234,15 @@ const ModalPrintStudentSubjectScore = () => {
             title={
                 <div className="flex items-center justify-between w-[95%]">
                     <span>
-                        {input?.type === 0 ? 'In phiếu điểm nháp' : 'In phiếu điểm và khóa'}
+                        {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP
+                            ? 'In phiếu điểm nháp'
+                            : 'In phiếu điểm và khóa'}
                     </span>
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={() => {
                             handlePrint()
-                            if (input?.type === 1) {
+                            if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
                                 onOk(data as PutSubjectClass)
                             }
                         }}
@@ -266,7 +271,7 @@ const ModalPrintStudentSubjectScore = () => {
                             <hr className="text-black border-[1px] mx-14" />
                         </div>
                     </div>
-                    {input?.type === 0 ? (
+                    {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP ? (
                         <div className="font-normal border max-w-32 mt-5 text-[18px] border-black">
                             Bản nháp
                         </div>
@@ -276,7 +281,7 @@ const ModalPrintStudentSubjectScore = () => {
 
                     <div className="mt-4 uppercase text-[20px]">Phiếu điểm</div>
                     <div className="text-sm normal-case font-normal italic">
-                        {`(${data?.semester?.name} Năm học ${data?.semester?.schoolYear?.name})`}
+                        {`(${data?.semester?.name} - ${data?.semester?.schoolYear?.name})`}
                     </div>
                 </div>
                 <div className="flex justify-between gap-5 mt-6">
