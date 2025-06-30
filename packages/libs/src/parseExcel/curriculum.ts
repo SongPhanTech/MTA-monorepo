@@ -9,7 +9,30 @@ dayjs.extend(customParseFormat)
 
 // TODO!: now depends on stt column(it need to be a integer), maybe need to change to more reliable way
 
-export const parseCurriculumSheet = (file: ArrayBufferLike) => {
+type TrainingBlockResult = {
+    name: string
+    priority: number
+    subjects: {
+        name: string
+        organizationCode: string | undefined
+        credit: number
+        period: number
+        semester: number | null
+        type: $Enums.SubjectRequirementType
+        useForFinalScore: boolean
+        graduation: boolean // có phải là môn học tốt nghiệp hay không
+        project: boolean // có phải là môn học đồ án hay không
+        print: boolean
+    }[]
+}
+
+type ParseCurriculumSheetResult = {
+    trainingMajor: string | undefined
+    errors: ParseSheetError[]
+    trainingBlocks: TrainingBlockResult[]
+}
+
+export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumSheetResult => {
     const wb = read(file)
     const sheetName = wb.SheetNames[0]
     if (!sheetName) {
@@ -24,12 +47,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
             cellRef: sheetName,
             message: `Không tìm thấy sheet "${sheetName}" trong file`,
         })
-        return {
-            trainingObjectType: '',
-            trainingCourse: '',
-            students: [],
-            errors,
-        }
+        return { trainingMajor: undefined, errors, trainingBlocks: [] }
     }
 
     // start: Các tham chiếu ô cố định trong sheet
@@ -47,6 +65,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
         semester9: 'W',
         semester10: 'X',
     } as const
+
     const cols = {
         stt: 'A',
         subjectName: 'B',
@@ -61,7 +80,10 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
     // end: Các tham chiếu ô cố định trong sheet
 
     const trainingMajorCell: CellObject | undefined = ws[trainingMajorRef]
-    if (trainingMajorCell?.t !== 's' || !trainingMajorCell.v) {
+    const trainingMajor = trainingMajorCell
+        ? trainingMajorCell.v?.toString().replace('Chuyên ngành: ', '').trim()
+        : ''
+    if (!trainingMajor) {
         errors.push({
             sheetRef: sheetName,
             cellRef: trainingMajorRef,
@@ -79,26 +101,12 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
         __rowNum__: number
     })[]
 
-    const trainingBlocks: {
-        name: string
-        priority: number
-        subjects: {
-            name: string | null
-            organizationCode: string | null
-            credit: number
-            period: number
-            semester: number
-            type: $Enums.SubjectRequirementType
-            useForFinalScore: boolean
-            graduation: boolean // có phải là môn học tốt nghiệp hay không
-            project: boolean // có phải là môn học đồ án hay không
-            print: boolean
-        }[]
-    }[] = []
+    const trainingBlocks: TrainingBlockResult[] = []
 
     let isMandatory = true
 
     for (const row of rows) {
+        // Khối kiến thức
         if (
             row[cols.stt] &&
             !row[cols.subjectName] &&
@@ -106,7 +114,6 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
             !row[cols.organizationCode] &&
             row[cols.credit]
         ) {
-            // Khối kiến thức
             const maybeTrainingBlock = row[cols.stt]?.split('.').pop()
             if (!maybeTrainingBlock) {
                 errors.push({
@@ -114,7 +121,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
                     cellRef: `${cols.stt}${row.__rowNum__ + 1}`,
                     message: `Tên khối kiến thức không hợp lệ: ${row[cols.stt]}`,
                 })
-                return { trainingBlocks, errors }
+                return { trainingMajor, trainingBlocks, errors }
             }
 
             // Bỏ qua nếu là khối kiến thức nhỏ
@@ -123,7 +130,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
             }
 
             trainingBlocks.push({
-                name: maybeTrainingBlock,
+                name: maybeTrainingBlock.trim(),
                 priority: trainingBlocks.length + 1,
                 subjects: [],
             })
@@ -176,15 +183,17 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
                 })
             }
 
+            // TODO: fix đang dựa vào cột ghi chú: Điều kiện
             const useForFinalScore = !row[cols.description]
                 ?.toLocaleLowerCase()
                 .includes('điều kiện')
 
-            const semester = Object.values(semesters).findIndex((semester) => row[semester]) + 1
+            const semester =
+                Object.values(semesters).findIndex((semester) => row[semester]) + 1 || null
 
             trainingBlocks[trainingBlocks.length - 1]?.subjects.push({
-                name: row[cols.subjectName],
-                organizationCode: row[cols.organizationCode],
+                name: row[cols.subjectName]?.trim() as string,
+                organizationCode: row[cols.organizationCode]?.trim(),
                 credit,
                 period,
                 semester,
@@ -192,6 +201,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
                 type: isMandatory
                     ? $Enums.SubjectRequirementType.Mandatory
                     : $Enums.SubjectRequirementType.Optional,
+                // TODO: check print, graduation, project
                 print: true,
                 graduation: false,
                 project: false,
@@ -203,5 +213,37 @@ export const parseCurriculumSheet = (file: ArrayBufferLike) => {
         console.log('skip:', Object.values(row).join('; '))
     }
 
-    return { trainingBlocks, errors }
+    if (trainingBlocks.length === 0) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: sheetName,
+            message: 'Không tìm thấy môn học trong file',
+        })
+    }
+
+    const duplicateTrainingBlocks = trainingBlocks
+        .map(({ name }) => name)
+        .filter((name, index, arr) => arr.indexOf(name) !== index)
+
+    if (duplicateTrainingBlocks.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Khối kiến thức bị trùng: ${duplicateTrainingBlocks.join(', ')}`,
+        })
+    }
+
+    const duplicateSubjects = trainingBlocks
+        .flatMap(({ subjects }) => subjects.map(({ name }) => name))
+        .filter((name, index, arr) => arr.indexOf(name) !== index)
+
+    if (duplicateSubjects.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Môn học bị trùng: ${duplicateSubjects.join(', ')}`,
+        })
+    }
+
+    return { trainingMajor, trainingBlocks, errors }
 }
