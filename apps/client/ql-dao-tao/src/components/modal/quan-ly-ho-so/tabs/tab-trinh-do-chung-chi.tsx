@@ -71,8 +71,7 @@ const dataTinHoc = [
 const dataQuocPhongAnNinh = [
     {
         id: '1',
-        boiDuongQuocPhongAnNinh:
-            'Khóa bồi dưỡng kiến thức QP-AN cho cán bộ lãnh đạo',
+        boiDuongQuocPhongAnNinh: 'Khóa bồi dưỡng kiến thức QP-AN cho cán bộ lãnh đạo',
         thoiGianBatDau: '01/03/2021',
         thoiGianKetThuc: '30/03/2021',
     },
@@ -80,19 +79,18 @@ const dataQuocPhongAnNinh = [
 
 export default function TrinhDoChungChiTab() {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
-    const handleCollapseChange =
-        (collapseId: string) => (key: string | string[]) => {
-            if (key && key.length > 0) {
-                // Nếu collapse này được mở, đóng các collapse khác
-                setOpenCollapse(collapseId)
-            } else {
-                // Nếu collapse này bị đóng
-                setOpenCollapse(null)
-            }
+    const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
+        if (key && key.length > 0) {
+            // Nếu collapse này được mở, đóng các collapse khác
+            setOpenCollapse(collapseId)
+        } else {
+            // Nếu collapse này bị đóng
+            setOpenCollapse(null)
         }
+    }
 
     const handleModal = () => {}
 
@@ -108,9 +106,7 @@ export default function TrinhDoChungChiTab() {
                 {/* Học vị */}
                 <Panel
                     header={
-                        <span className="text-base font-semibold">
-                            Trình độ lý luận chính trị
-                        </span>
+                        <span className="text-base font-semibold">Trình độ lý luận chính trị</span>
                     }
                     key="1"
                     className="border-none"
@@ -132,9 +128,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức đào tạo',
@@ -194,9 +188,7 @@ export default function TrinhDoChungChiTab() {
                 {/* Học hàm */}
                 <Panel
                     header={
-                        <span className="text-base font-semibold">
-                            Trình độ quản lý hành chính
-                        </span>
+                        <span className="text-base font-semibold">Trình độ quản lý hành chính</span>
                     }
                     key="1"
                     className="border-none mt"
@@ -218,9 +210,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức đào tạo',
@@ -281,9 +271,7 @@ export default function TrinhDoChungChiTab() {
                 {/* Học hàm */}
                 <Panel
                     header={
-                        <span className="text-base font-semibold">
-                            Trình độ quản lý nhà nước
-                        </span>
+                        <span className="text-base font-semibold">Trình độ quản lý nhà nước</span>
                     }
                     key="1"
                     className="border-none mt"
@@ -305,9 +293,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức đào tạo',
@@ -367,11 +353,7 @@ export default function TrinhDoChungChiTab() {
             >
                 {/* Học hàm */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">
-                            Ngoại ngữ
-                        </span>
-                    }
+                    header={<span className="text-base font-semibold">Ngoại ngữ</span>}
                     key="1"
                     className="border-none mt"
                 >
@@ -392,9 +374,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức đào tạo',
@@ -454,9 +434,7 @@ export default function TrinhDoChungChiTab() {
             >
                 {/* Học hàm */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">Tin học</span>
-                    }
+                    header={<span className="text-base font-semibold">Tin học</span>}
                     key="1"
                     className="border-none mt"
                 >
@@ -477,9 +455,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức đào tạo',
@@ -564,9 +540,7 @@ export default function TrinhDoChungChiTab() {
                                 align: 'center' as const,
                                 fixed: 'left' as const,
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Bồi dưỡng quốc phòng an ninh',

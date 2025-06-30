@@ -3,6 +3,7 @@ import Asgardeo from 'next-auth/providers/asgardeo'
 import 'next-auth/jwt'
 import { cookies } from 'next/headers'
 import { env } from './env'
+
 declare module 'next-auth/jwt' {
     interface JWT {
         user_id: string

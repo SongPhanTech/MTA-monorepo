@@ -1,5 +1,3 @@
-import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
-import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
@@ -13,28 +11,21 @@ import {
     useFindManyConversation,
     useFindUniqueConfig,
 } from '@workspace/db/hooks'
-import { Layout, Spin, message, theme } from 'antd'
+import { Layout, message, Spin, theme } from 'antd'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
+import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 
 const { Header, Content } = Layout
 
-const ChatLayout = ({
-    children,
-    className,
-}: {
-    children: ReactNode
-    className?: string
-}) => {
+const ChatLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     const router = useRouter()
     const [isDeleting, setIsDeleting] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
-        return (
-            typeof window !== 'undefined' &&
-            localStorage.getItem('collapsed') === 'true'
-        )
+        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
 
     const { data: userCurrent } = useSession()
@@ -51,8 +42,7 @@ const ChatLayout = ({
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
-            const newValue =
-                value ?? localStorage.getItem('collapsed') === 'true'
+            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
             setCollapsed(newValue)
             localStorage.setItem('collapsed', newValue.toString())
         }
@@ -77,7 +67,7 @@ const ChatLayout = ({
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         handleCollapsed()
     }, [])
@@ -90,28 +80,20 @@ const ChatLayout = ({
             message: true,
         },
     })
-    const conversationMenuList: ConversationDataFromAPI = (
-        conversation || []
-    ).map((item) => ({
+    const conversationMenuList: ConversationDataFromAPI = (conversation || []).map((item) => ({
         id: item.id,
         label: item.message?.[0]?.content || 'Đang tải...',
     }))
 
     return (
         <IdleTimerProvider
-            timeout={
-                Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000
-            }
+            timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
             onIdle={signOutAction}
         >
             <Layout className="h-screen">
                 <Header className="fixed z-50 top-0 left-0 right-0 justify-between flex items-center bg-white shadow m-2 rounded-xl px-4">
                     <div className="flex items-center gap-4">
-                        <Image
-                            src={logo_mta}
-                            alt="logo_mta"
-                            className="w-10 h-10"
-                        />
+                        <Image src={logo_mta} alt="logo_mta" className="w-10 h-10" />
                         <span className="text-lg font-bold text-primary">
                             HỌC VIỆN KỸ THUẬT QUÂN SỰ
                         </span>

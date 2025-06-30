@@ -56,7 +56,7 @@ export async function commonFetch<
                 .toLowerCase()
                 .includes('multipart/form-data')
         ) {
-            // biome-ignore lint/performance/noDelete: <explanation>
+            // biome-ignore lint/performance/noDelete: <>
             delete requestHeaders['Content-Type']
         }
 

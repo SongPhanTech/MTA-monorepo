@@ -4,6 +4,7 @@ import PieChart from '@components/dashboard/org-structure'
 import StaffByOrg from '@components/dashboard/staff-by-org'
 import DashboardLayout from '@layouts/dashboard-layout'
 import { Col, Row, Typography } from 'antd'
+
 const { Title } = Typography
 
 function Page() {
@@ -37,8 +38,7 @@ function Page() {
                             <div className="bg-white rounded shadow h-96 flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
-                                        Thống kê số lượng giảng viên theo trình
-                                        độ
+                                        Thống kê số lượng giảng viên theo trình độ
                                     </Title>
                                 </div>
                             </div>
@@ -47,8 +47,7 @@ function Page() {
                             <div className="bg-white rounded shadow h-96 flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
-                                        Thống kê số lượng học viên theo loại
-                                        hình đào tạo
+                                        Thống kê số lượng học viên theo loại hình đào tạo
                                     </Title>
                                 </div>
                             </div>
@@ -57,8 +56,7 @@ function Page() {
                             <div className="bg-white rounded shadow h-full flex flex-col">
                                 <div className="p-4">
                                     <Title level={4}>
-                                        Thống kê số lượng giảng viên theo đầu
-                                        mối
+                                        Thống kê số lượng giảng viên theo đầu mối
                                     </Title>
                                 </div>
                                 <div className="flex-1">

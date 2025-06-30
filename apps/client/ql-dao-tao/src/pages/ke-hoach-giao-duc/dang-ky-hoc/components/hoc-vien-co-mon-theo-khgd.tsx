@@ -8,17 +8,7 @@ import {
     enrollStudentOnSubjectClass,
     useStudentBySubjectClassSemester,
 } from '@workspace/libs/api/training'
-import {
-    App,
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    message,
-} from 'antd'
+import { App, Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -41,9 +31,7 @@ export default function StudentCourseByPlan({
     const [currentPage, setCurrentPage] = useState(1)
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>(
-        []
-    )
+    const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
@@ -97,9 +85,7 @@ export default function StudentCourseByPlan({
     const handleSaveStudentClass = async () => {
         if (!subjectClassId) return
 
-        const removedStudents = initialSelectedKeys.filter(
-            (key) => !selectedRowKeys.includes(key)
-        )
+        const removedStudents = initialSelectedKeys.filter((key) => !selectedRowKeys.includes(key))
 
         try {
             await enrollStudentOnSubjectClass({
@@ -110,7 +96,7 @@ export default function StudentCourseByPlan({
             message.success('Gán học sinh vào lớp thành công!')
             setInitialSelectedKeys(selectedRowKeys)
             queryClient.invalidateQueries({ queryKey: ['zenstack'] })
-        } catch (error) {
+        } catch (_error) {
             message.error('Có lỗi xảy ra khi gán lớp!')
         }
     }
@@ -118,9 +104,7 @@ export default function StudentCourseByPlan({
     useEffect(() => {
         if (students) {
             const checkedStudentIds = students
-                .filter(
-                    (item: StudentClassBySubjectClassSemester) => item.checked
-                )
+                .filter((item: StudentClassBySubjectClassSemester) => item.checked)
                 .map((item: StudentClassBySubjectClassSemester) => item.id)
 
             setSelectedRowKeys(checkedStudentIds)
@@ -132,10 +116,8 @@ export default function StudentCourseByPlan({
         <App>
             <Divider orientation="left" orientationMargin={0}>
                 {initialValue?.code} - {initialValue?.name} -{' '}
-                {initialValue?.schedule
-                    ? getScheduleLabel(initialValue.schedule)
-                    : ''}{' '}
-                - {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
+                {initialValue?.schedule ? getScheduleLabel(initialValue.schedule) : ''} -{' '}
+                {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
                 {initialValue?.mainLecturer?.userProfile?.firstName}
             </Divider>
 
@@ -148,10 +130,7 @@ export default function StudentCourseByPlan({
                                     id="search"
                                     placeholder="Nhập tên học viên"
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     prefix={
                                         <Search
@@ -179,9 +158,7 @@ export default function StudentCourseByPlan({
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
-                                index +
-                                1 +
-                                (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Mã sinh viên',
@@ -195,9 +172,7 @@ export default function StudentCourseByPlan({
                             align: 'center',
                             width: 150,
                             render: (record) =>
-                                record.userProfile
-                                    ? `${record.userProfile.lastName}`
-                                    : '',
+                                record.userProfile ? `${record.userProfile.lastName}` : '',
                         },
                         {
                             title: 'Tên',
@@ -207,21 +182,15 @@ export default function StudentCourseByPlan({
                                 a: StudentClassBySubjectClassSemester,
                                 b: StudentClassBySubjectClassSemester
                             ) => {
-                                const nameA = a.userProfile
-                                    ? `${a.userProfile.firstName}`
-                                    : ''
-                                const nameB = b.userProfile
-                                    ? `${b.userProfile.firstName}`
-                                    : ''
+                                const nameA = a.userProfile ? `${a.userProfile.firstName}` : ''
+                                const nameB = b.userProfile ? `${b.userProfile.firstName}` : ''
                                 return nameA.localeCompare(nameB, 'vi', {
                                     sensitivity: 'base',
                                 })
                             },
                             defaultSortOrder: 'ascend',
                             render: (record) =>
-                                record.userProfile
-                                    ? `${record.userProfile.firstName}`
-                                    : '',
+                                record.userProfile ? `${record.userProfile.firstName}` : '',
                         },
                         {
                             title: 'Ngày sinh',
@@ -229,9 +198,7 @@ export default function StudentCourseByPlan({
                             width: 100,
                             render: (record) =>
                                 record.userProfile?.dateOfBirth
-                                    ? dayjs(
-                                          record.userProfile.dateOfBirth
-                                      ).format('DD/MM/YYYY')
+                                    ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                     : '',
                         },
                         {
@@ -241,8 +208,7 @@ export default function StudentCourseByPlan({
                             render: (record) =>
                                 record.userProfile?.gender
                                     ? GENDER_MEAN[
-                                          record.userProfile
-                                              .gender as keyof typeof GENDER_MEAN
+                                          record.userProfile.gender as keyof typeof GENDER_MEAN
                                       ]
                                     : '',
                         },
@@ -260,8 +226,7 @@ export default function StudentCourseByPlan({
                             align: 'center',
                             width: 100,
                             render: (record) => {
-                                const trainingCourse =
-                                    record.fixedClass?.trainingCourse
+                                const trainingCourse = record.fixedClass?.trainingCourse
                                 return trainingCourse ? trainingCourse.name : ''
                             },
                         },
@@ -271,8 +236,7 @@ export default function StudentCourseByPlan({
                             width: 130,
                             render: (record) => {
                                 const trainingMajor =
-                                    record.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor
+                                    record.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                                 return trainingMajor?.name || ''
                             },
                         },
@@ -295,11 +259,7 @@ export default function StudentCourseByPlan({
                         type="primary"
                         className="h-[32px] px-4"
                         onClick={handleSaveStudentClass}
-                        disabled={
-                            !subjectClassId ||
-                            !semesterId ||
-                            selectedRowKeys.length <= 0
-                        }
+                        disabled={!subjectClassId || !semesterId || selectedRowKeys.length <= 0}
                     >
                         Lưu
                     </Button>

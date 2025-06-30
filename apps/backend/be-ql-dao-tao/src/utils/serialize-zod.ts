@@ -1,11 +1,4 @@
-import {
-    ZodArray,
-    ZodNullable,
-    ZodObject,
-    ZodOptional,
-    type ZodTypeAny,
-    z,
-} from 'zod'
+import { ZodArray, ZodNullable, ZodObject, ZodOptional, type ZodTypeAny, z } from 'zod'
 
 export interface SerializedField {
     path: string
@@ -24,9 +17,7 @@ export const SerializedFieldSchema = SerializedFieldScalar.extend({
     items: z.array(SerializedFieldScalar).optional(),
 }).openapi('SerializedField')
 
-export const SerializedFieldsSchema = z
-    .array(SerializedFieldSchema)
-    .openapi('SerializedFields')
+export const SerializedFieldsSchema = z.array(SerializedFieldSchema).openapi('SerializedFields')
 
 function unwrap(schema: ZodTypeAny): ZodTypeAny {
     let current = schema

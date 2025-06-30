@@ -1,10 +1,6 @@
 import type { StudentSiderbarProps } from './type'
 
-const SidebarMenu = ({
-    activeKey,
-    setActiveKey,
-    tabs,
-}: StudentSiderbarProps) => {
+const SidebarMenu = ({ activeKey, setActiveKey, tabs }: StudentSiderbarProps) => {
     return (
         <div className="space-y-2">
             {tabs?.map((item) => {

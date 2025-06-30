@@ -1,9 +1,6 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums } from '@workspace/db'
-import {
-    getFixedClassBySubjectClassSemester,
-    getSubjectClassBySemester,
-} from '@workspace/db/sql'
+import { getFixedClassBySubjectClassSemester, getSubjectClassBySemester } from '@workspace/db/sql'
 import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
@@ -185,11 +182,9 @@ const enrollFixedClassOnSubjectClass = createRoute({
             content: {
                 'application/json': {
                     schema: z.object({
-                        fixedClassIds: z
-                            .array(z.string())
-                            .openapi('fixedClassIds', {
-                                description: 'Danh sách ID lớp quản lý',
-                            }),
+                        fixedClassIds: z.array(z.string()).openapi('fixedClassIds', {
+                            description: 'Danh sách ID lớp quản lý',
+                        }),
                         subjectClassId: z.string().openapi('subjectClassId', {
                             description: 'ID của lớp môn học',
                         }),
@@ -225,16 +220,12 @@ const enrollStudentOnSubjectClass = createRoute({
             content: {
                 'application/json': {
                     schema: z.object({
-                        addStudentIds: z
-                            .array(z.string())
-                            .openapi('studentIds', {
-                                description: 'Danh sách ID học viên',
-                            }),
-                        removeStudentIds: z
-                            .array(z.string())
-                            .openapi('removeStudentIds', {
-                                description: 'Danh sách ID học viên cần xóa',
-                            }),
+                        addStudentIds: z.array(z.string()).openapi('studentIds', {
+                            description: 'Danh sách ID học viên',
+                        }),
+                        removeStudentIds: z.array(z.string()).openapi('removeStudentIds', {
+                            description: 'Danh sách ID học viên cần xóa',
+                        }),
                         subjectClassId: z.string().openapi('subjectClassId', {
                             description: 'ID của lớp môn học',
                         }),
@@ -316,12 +307,9 @@ const exportExcelListStudentSubjectClass = createRoute({
         200: {
             description: 'Export list of student SubjectClass as .xlsx',
             content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                    {
-                        schema: z
-                            .any()
-                            .openapi({ type: 'string', format: 'binary' }),
-                    },
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
             },
         },
         400: {
@@ -351,8 +339,7 @@ const uploadExcelImportScore = createRoute({
     operationId: 'uploadExcelImportScore',
     path: '/upload-excel-import-score',
     method: 'post',
-    description:
-        'Import điểm lớp môn học \n\n [subjectClassId] là id của lớp học',
+    description: 'Import điểm lớp môn học \n\n [subjectClassId] là id của lớp học',
     tags: ['SubjectClass'],
     summary: 'Import file nhập điểm',
     request: {
@@ -392,14 +379,8 @@ const uploadExcelImportScore = createRoute({
 })
 
 app.openapi(openSubjectClass, async (c) => {
-    const {
-        semesterId,
-        search,
-        page,
-        pageSize,
-        trainingCourseId,
-        trainingMajorId,
-    } = c.req.valid('query')
+    const { semesterId, search, page, pageSize, trainingCourseId, trainingMajorId } =
+        c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -418,8 +399,7 @@ app.openapi(openSubjectClass, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType =
-        semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
     const res = await prisma.$queryRawTyped<{
         data: OpenSubjectClass
@@ -444,27 +424,21 @@ app.openapi(openSubjectClass, async (c) => {
                     fixedClass: item.fixedClass.filter(
                         (value, index, self) =>
                             index ===
-                                self.findIndex(
-                                    (t) => t.fixedClassId === value.fixedClassId
-                                ) && !!value.fixedClassId
+                                self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
+                            !!value.fixedClassId
                     ),
                     curriculumVersion: item.curriculumVersion.filter(
                         (value, index, self) =>
                             index ===
                                 self.findIndex(
-                                    (t) =>
-                                        t.curriculumVersionId ===
-                                        value.curriculumVersionId
+                                    (t) => t.curriculumVersionId === value.curriculumVersionId
                                 ) && !!value.curriculumVersionId
                     ),
                     subjectClass: item.subjectClass.filter(
                         (value, index, self) =>
                             index ===
-                                self.findIndex(
-                                    (t) =>
-                                        t.subjectClassId ===
-                                        value.subjectClassId
-                                ) && !!value.subjectClassId
+                                self.findIndex((t) => t.subjectClassId === value.subjectClassId) &&
+                            !!value.subjectClassId
                     ),
                     countStudent: item.fixedClass.reduce(
                         (acc, curr) => acc + curr.fixedClassCount,
@@ -478,8 +452,7 @@ app.openapi(openSubjectClass, async (c) => {
 })
 
 app.openapi(fixedClassBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId } =
-        c.req.valid('query')
+    const { semesterId, search, page, pageSize, subjectClassId } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -513,8 +486,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType =
-        semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
     const res = await prisma.$queryRawTyped<{
         full_count: number
@@ -580,9 +552,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
         {
             data: fixedClasses.map((e) => ({
                 ...e,
-                checked: !!e.subjectClasses.find(
-                    (sc) => sc.id === subjectClassId
-                ),
+                checked: !!e.subjectClasses.find((sc) => sc.id === subjectClassId),
             })),
             count: res.length > 0 && res[0] ? Number(res[0].full_count) : 0,
             success: true,
@@ -592,8 +562,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
 })
 
 app.openapi(studentBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId } =
-        c.req.valid('query')
+    const { semesterId, search, page, pageSize, subjectClassId } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -627,8 +596,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType =
-        semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
     const res = await prisma.$queryRawTyped<{
         fixedClassId: string
@@ -795,8 +763,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
 })
 
 app.openapi(enrollStudentOnSubjectClass, async (c) => {
-    const { subjectClassId, addStudentIds, removeStudentIds } =
-        c.req.valid('json')
+    const { subjectClassId, addStudentIds, removeStudentIds } = c.req.valid('json')
 
     const subjectClass = await prisma.subjectClass.findUnique({
         where: { id: subjectClassId },
@@ -851,16 +818,14 @@ app.openapi(putManySubjectClass, async (c) => {
                 select: { id: true },
             })
             return { success: true, id: cls.id }
-        } catch (error) {
+        } catch (_error) {
             // TODO: send to sentry
             return { success: false, id: cls.id }
         }
     })
 
     const results = await Promise.all(updates)
-    const failedIds = results
-        .filter(({ success }) => !success)
-        .map(({ id }) => id)
+    const failedIds = results.filter(({ success }) => !success).map(({ id }) => id)
 
     return c.json({ success: failedIds.length === 0, failedIds }, 200)
 })
@@ -872,10 +837,7 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
         where: { id: subjectClassId }, // Tìm kiếm lớp biên chế
     })
     if (!subjectClass) {
-        return c.json(
-            { message: `Không tìm thấy lớp biên chế ${subjectClassId}` },
-            404
-        )
+        return c.json({ message: `Không tìm thấy lớp biên chế ${subjectClassId}` }, 404)
     }
 
     const { date, month, year } = getCurrentDateForReport()
@@ -888,16 +850,13 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
         student: students,
     }
 
-    const templateBuffer = await getBufferFromUrl(
-        'LIST_STUDENT_SUBJECTCLASS_EXCEL'
-    )
+    const templateBuffer = await getBufferFromUrl('LIST_STUDENT_SUBJECTCLASS_EXCEL')
     const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
 
     // Set response headers
     const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class')
     return c.body(excelBuffer, 200, {
-        'Content-Type':
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
     })
 })

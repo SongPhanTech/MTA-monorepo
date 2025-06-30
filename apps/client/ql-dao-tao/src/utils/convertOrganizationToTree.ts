@@ -96,9 +96,7 @@ export const findNodeById = (
     return null
 }
 
-export const getAllDescendants = (
-    node: TreeNodeOrganization
-): TreeNodeOrganization[] => {
+export const getAllDescendants = (node: TreeNodeOrganization): TreeNodeOrganization[] => {
     let result: TreeNodeOrganization[] = []
     if (node.children?.length) {
         for (const child of node.children) {

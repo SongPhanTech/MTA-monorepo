@@ -23,23 +23,22 @@ const data = [
 
 export default function HocHamHocViTab() {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const { onOpen } = useDisclosure({
         tag: PutHocHamHocViModal.name,
     })
 
-    const handleCollapseChange =
-        (collapseId: string) => (key: string | string[]) => {
-            if (key && key.length > 0) {
-                // Nếu collapse này được mở, đóng các collapse khác
-                setOpenCollapse(collapseId)
-            } else {
-                // Nếu collapse này bị đóng
-                setOpenCollapse(null)
-            }
+    const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
+        if (key && key.length > 0) {
+            // Nếu collapse này được mở, đóng các collapse khác
+            setOpenCollapse(collapseId)
+        } else {
+            // Nếu collapse này bị đóng
+            setOpenCollapse(null)
         }
+    }
 
     const handleModal = () => {
         onOpen()
@@ -56,9 +55,7 @@ export default function HocHamHocViTab() {
             >
                 {/* Học vị */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">Học vị</span>
-                    }
+                    header={<span className="text-base font-semibold">Học vị</span>}
                     key="1"
                     className="border-none"
                 >
@@ -79,9 +76,7 @@ export default function HocHamHocViTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Học vị',
@@ -140,9 +135,7 @@ export default function HocHamHocViTab() {
             >
                 {/* Học hàm */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">Học hàm</span>
-                    }
+                    header={<span className="text-base font-semibold">Học hàm</span>}
                     key="1"
                     className="border-none mt"
                 >
@@ -163,9 +156,7 @@ export default function HocHamHocViTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Học vị',

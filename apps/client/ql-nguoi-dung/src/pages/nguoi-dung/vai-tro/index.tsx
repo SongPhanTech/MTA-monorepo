@@ -7,23 +7,8 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable } from '@lib/utils'
-import {
-    useCountRole,
-    useCreateRole,
-    useFindManyRole,
-    useUpdateRole,
-} from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tooltip,
-    message,
-} from 'antd'
+import { useCountRole, useCreateRole, useFindManyRole, useUpdateRole } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,7 +17,7 @@ export default function Page() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
     const { data = [], refetch } = useFindManyRole({
         skip: (currentPage - 1) * numberOfPages,
@@ -63,20 +48,19 @@ export default function Page() {
                     data: {
                         name: output.name,
                         permissions: {
-                            connectOrCreate: output.permissions.flatMap(
-                                (item) =>
-                                    item.permissionTypes.map((type) => ({
-                                        where: {
-                                            name_permissionType: {
-                                                name: item.id,
-                                                permissionType: type,
-                                            },
-                                        },
-                                        create: {
+                            connectOrCreate: output.permissions.flatMap((item) =>
+                                item.permissionTypes.map((type) => ({
+                                    where: {
+                                        name_permissionType: {
                                             name: item.id,
                                             permissionType: type,
                                         },
-                                    }))
+                                    },
+                                    create: {
+                                        name: item.id,
+                                        permissionType: type,
+                                    },
+                                }))
                             ),
                         },
                         groups: {
@@ -92,20 +76,19 @@ export default function Page() {
                     data: {
                         name: output.name,
                         permissions: {
-                            connectOrCreate: output.permissions.flatMap(
-                                (item) =>
-                                    item.permissionTypes.map((type) => ({
-                                        where: {
-                                            name_permissionType: {
-                                                name: item.id,
-                                                permissionType: type,
-                                            },
-                                        },
-                                        create: {
+                            connectOrCreate: output.permissions.flatMap((item) =>
+                                item.permissionTypes.map((type) => ({
+                                    where: {
+                                        name_permissionType: {
                                             name: item.id,
                                             permissionType: type,
                                         },
-                                    }))
+                                    },
+                                    create: {
+                                        name: item.id,
+                                        permissionType: type,
+                                    },
+                                }))
                             ),
                         },
                         groups: {
@@ -119,7 +102,7 @@ export default function Page() {
             }
             refetch()
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -131,7 +114,7 @@ export default function Page() {
                 where: { id },
                 data: { deletedAt: new Date() },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -161,9 +144,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>
@@ -178,9 +159,7 @@ export default function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên vai trò',
@@ -199,15 +178,13 @@ export default function Page() {
                                 dataIndex: 'permissions',
                                 width: 200,
                                 align: 'center',
-                                render: (_, { permissions }) =>
-                                    permissions.length,
+                                render: (_, { permissions }) => permissions.length,
                             },
                             {
                                 title: 'Ngày tạo',
                                 width: 200,
                                 align: 'center',
-                                render: (_, { createdAt }) =>
-                                    formatDateReadable(createdAt),
+                                render: (_, { createdAt }) => formatDateReadable(createdAt),
                             },
                             {
                                 title: 'Thao tác',
@@ -215,10 +192,7 @@ export default function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
+                                        <Tooltip title="Xem chi tiết" placement="leftTop">
                                             <EyeOutlined
                                                 onClick={onOpen.bind(null, id)}
                                                 className="text-sm text-blue-700 cursor-pointer"
@@ -226,8 +200,7 @@ export default function Page() {
                                         </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

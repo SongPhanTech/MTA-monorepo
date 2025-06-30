@@ -11,7 +11,7 @@ import {
     useFindUniqueCurriculum,
     useUpdateCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Switch, TreeSelect, message } from 'antd'
+import { Col, Form, Input, message, Switch, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -73,7 +73,7 @@ const PutCurriculum = () => {
                 queryKey: ['TrainingCourse'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -88,7 +88,7 @@ const PutCurriculum = () => {
     const treeData = buildOrgTree(manageOrgData)
     const [active, setActive] = useState(true)
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialData) {
             form.setFieldsValue({
@@ -111,37 +111,21 @@ const PutCurriculum = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Sửa chương trình đào tạo' : 'Thêm chương trình đào tạo'
-            }
+            title={id ? 'Sửa chương trình đào tạo' : 'Thêm chương trình đào tạo'}
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên chương trình (tiếng việt)"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên chương trình (tiếng việt)" required>
                     <Input placeholder="Nhập tên chương trình (tiếng việt)" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="englishName"
-                    label="Tên chương trình (tiếng anh)"
-                >
+                <FormItem form={form} name="englishName" label="Tên chương trình (tiếng anh)">
                     <Input placeholder="Nhập tên chương trình (tiếng anh)" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingMajorId"
-                    label="Chuyên ngành đào tạo"
-                    required
-                >
+                <FormItem form={form} name="trainingMajorId" label="Chuyên ngành đào tạo" required>
                     <Select
                         placeholder="Chọn chuyên ngành đào tạo"
                         options={trainingMajorData.map((i: TrainingMajor) => {
@@ -167,9 +151,7 @@ const PutCurriculum = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>
@@ -180,22 +162,13 @@ const PutCurriculum = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="documentPaths"
-                    label="Tài liệu đính kèm"
-                >
+                <FormItem form={form} name="documentPaths" label="Tài liệu đính kèm">
                     <DocumentPaths form={form} data={document} />
                 </FormItem>
             </Col>
             {id && (
                 <Col span={12} className="flex items-center">
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label=""
-                        valuePropName="checked"
-                    >
+                    <FormItem form={form} name="active" label="" valuePropName="checked">
                         <div
                             style={{
                                 display: 'flex',
@@ -204,9 +177,7 @@ const PutCurriculum = () => {
                             }}
                         >
                             <Switch checked={active} onChange={handleChange} />
-                            <span>
-                                {active ? 'Đang đào tạo' : 'Ngừng đào tạo'}
-                            </span>
+                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
                         </div>
                     </FormItem>
                 </Col>

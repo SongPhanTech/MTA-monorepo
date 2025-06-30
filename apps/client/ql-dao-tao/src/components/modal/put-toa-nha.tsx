@@ -3,12 +3,8 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Building } from '@workspace/db'
-import {
-    useCreateBuilding,
-    useFindUniqueBuilding,
-    useUpdateBuilding,
-} from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Radio, message } from 'antd'
+import { useCreateBuilding, useFindUniqueBuilding, useUpdateBuilding } from '@workspace/db/hooks'
+import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingLocation = Building
@@ -56,7 +52,7 @@ const PutBuildingModal = () => {
                 queryKey: ['Building'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -69,7 +65,7 @@ const PutBuildingModal = () => {
         { enabled: !!id }
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -104,12 +100,7 @@ const PutBuildingModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="floor" label="Số tầng">
-                    <InputNumber
-                        className="w-full"
-                        step={1}
-                        min={0}
-                        placeholder="Nhập số tầng"
-                    />
+                    <InputNumber className="w-full" step={1} min={0} placeholder="Nhập số tầng" />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -118,12 +109,7 @@ const PutBuildingModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name={'active'}
-                    label="Trạng thái"
-                    required
-                >
+                <FormItem form={form} name={'active'} label="Trạng thái" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>

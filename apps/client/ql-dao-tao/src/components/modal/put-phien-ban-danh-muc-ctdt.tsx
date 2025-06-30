@@ -3,7 +3,6 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { TrainingLanguage } from '@workspace/db'
 import type {
     CurriculumVersion,
     DiplomaType,
@@ -11,6 +10,7 @@ import type {
     TrainingObjectType,
     TrainingTime,
 } from '@workspace/db'
+import { TrainingLanguage } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
     useFindManyDiplomaType,
@@ -20,7 +20,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, Switch, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -53,15 +53,12 @@ const PutCurriculumVersion = () => {
 
     const { data: trainingTimeData = [] } = useFindManyTrainingTime()
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
 
-    const { mutateAsync: createCurriculumVersion } =
-        useCreateCurriculumVersion()
-    const { mutateAsync: updateCurriculumVersion } =
-        useUpdateCurriculumVersion()
+    const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
+    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -114,7 +111,7 @@ const PutCurriculumVersion = () => {
                 queryKey: ['TrainingCourse'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -125,7 +122,7 @@ const PutCurriculumVersion = () => {
     })
     const [active, setActive] = useState(true)
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
@@ -161,21 +158,12 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên phiên bản (tiếng việt)"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên phiên bản (tiếng việt)" required>
                     <Input placeholder="Nhập tên phiên bản (tiếng việt)" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="englishName"
-                    label="Tên phiên bản (tiếng anh)"
-                >
+                <FormItem form={form} name="englishName" label="Tên phiên bản (tiếng anh)">
                     <Input placeholder="Nhập tên phiên bản (tiếng anh)" />
                 </FormItem>
             </Col>
@@ -185,11 +173,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    label="Ngôn ngữ đào tạo"
-                    name="trainingLanguage"
-                >
+                <FormItem form={form} label="Ngôn ngữ đào tạo" name="trainingLanguage">
                     <Select
                         placeholder="Chọn ngôn ngữ đào tạo"
                         options={trainingLanguageOptions}
@@ -200,24 +184,12 @@ const PutCurriculumVersion = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="yearCreation" label="Năm tạo">
-                    <InputNumber
-                        placeholder="Nhập năm tạo"
-                        className="w-full"
-                        step={1}
-                    />
+                    <InputNumber placeholder="Nhập năm tạo" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="yearApplication"
-                    label="Năm áp dụng"
-                >
-                    <InputNumber
-                        placeholder="Nhập năm áp dụng"
-                        className="w-full"
-                        step={1}
-                    />
+                <FormItem form={form} name="yearApplication" label="Năm áp dụng">
+                    <InputNumber placeholder="Nhập năm áp dụng" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -229,23 +201,16 @@ const PutCurriculumVersion = () => {
                 >
                     <Select
                         placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map(
-                            (i: TrainingObjectType) => ({
-                                value: i.id,
-                                label: i.name,
-                            })
-                        )}
+                        options={trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                            value: i.id,
+                            label: i.name,
+                        }))}
                         allowClear
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    label="Trình độ đào tạo"
-                    name="trainingLevelId"
-                    required
-                >
+                <FormItem form={form} label="Trình độ đào tạo" name="trainingLevelId" required>
                     <Select
                         placeholder="Chọn trình độ đào tạo"
                         options={trainingLevelData.map((i: TrainingForm) => ({
@@ -257,12 +222,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    label="Thời gian đào tạo"
-                    name="trainingTimeId"
-                    required
-                >
+                <FormItem form={form} label="Thời gian đào tạo" name="trainingTimeId" required>
                     <Select
                         placeholder="Chọn thời gian đào tạo"
                         options={trainingTimeData.map((i: TrainingTime) => ({
@@ -306,11 +266,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="diplomaTypeId"
-                    label="Loại văn bằng"
-                >
+                <FormItem form={form} name="diplomaTypeId" label="Loại văn bằng">
                     <Select
                         placeholder="Chọn loại văn bằng"
                         options={diplomaTypeData.map((i: DiplomaType) => ({
@@ -346,11 +302,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="requiredCredits"
-                    label="Số tín chỉ bắt buộc"
-                >
+                <FormItem form={form} name="requiredCredits" label="Số tín chỉ bắt buộc">
                     <InputNumber
                         placeholder="Nhập số tín chỉ bắt buộc"
                         className="w-full"
@@ -359,11 +311,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="electiveCredits"
-                    label="Số tín chỉ tự chọn"
-                >
+                <FormItem form={form} name="electiveCredits" label="Số tín chỉ tự chọn">
                     <InputNumber
                         placeholder="Nhập số tín chỉ tự chọn"
                         className="w-full"
@@ -372,11 +320,7 @@ const PutCurriculumVersion = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="documentPaths"
-                    label="Tài liệu đính kèm"
-                >
+                <FormItem form={form} name="documentPaths" label="Tài liệu đính kèm">
                     <DocumentPaths form={form} data={document} />
                 </FormItem>
             </Col>
@@ -386,11 +330,7 @@ const PutCurriculumVersion = () => {
                         key: '1',
                         label: 'Vị trí công việc',
                         children: (
-                            <FormItem
-                                form={form}
-                                name="description"
-                                label="Mô tả"
-                            >
+                            <FormItem form={form} name="description" label="Mô tả">
                                 <Input.TextArea placeholder="Nhập mô tả" />
                             </FormItem>
                         ),
@@ -444,12 +384,7 @@ const PutCurriculumVersion = () => {
             />
             {input?.versionId && (
                 <Col span={12} className="flex items-center">
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label=""
-                        valuePropName="checked"
-                    >
+                    <FormItem form={form} name="active" label="" valuePropName="checked">
                         <div
                             style={{
                                 display: 'flex',
@@ -458,9 +393,7 @@ const PutCurriculumVersion = () => {
                             }}
                         >
                             <Switch checked={active} onChange={handleChange} />
-                            <span>
-                                {active ? 'Đang đào tạo' : 'Ngừng đào tạo'}
-                            </span>
+                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
                         </div>
                     </FormItem>
                 </Col>

@@ -9,7 +9,7 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, TreeSelect, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -63,16 +63,13 @@ const PutSubjectListModal = () => {
 
             queryClient.invalidateQueries({ queryKey: ['Subject'] })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
-    const { data: subject } = useFindUniqueSubject(
-        { where: { id } },
-        { enabled: !!id }
-    )
+    const { data: subject } = useFindUniqueSubject({ where: { id } }, { enabled: !!id })
 
     useEffect(() => {
         if (subject) {
@@ -92,29 +89,14 @@ const PutSubjectListModal = () => {
             title={id ? 'Sửa danh sách môn học' : 'Thêm danh sách môn học'}
             className="w-[60vw]"
         >
-            {/* <Col span={12}>
-                <FormItem form={form} name="trainingObjectTypeId" label="ĐTĐT">
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map(
-                            (i: TrainingObjectType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            }
-                        )}
-                    />
-                </FormItem>
-            </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên môn học" required>
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã">
-                    <Input placeholder="Nhập mã" />
+                <FormItem form={form} name="code" label="Mã môn học" required>
+                    <Input placeholder="Nhập mã môn học" />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -123,10 +105,7 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={24}>
-                <Form.Item
-                    name="managementOrganizationId"
-                    label="Đơn vị quản lý"
-                >
+                <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                     <TreeSelect
                         treeData={treeData}
                         showSearch
@@ -138,17 +117,9 @@ const PutSubjectListModal = () => {
                             const isLeaf = !node.children
                             return (
                                 isLeaf &&
-                                (node.title as string)
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
+                                (node.title as string).toLowerCase().includes(input.toLowerCase())
                             )
                         }}
-                        // onChange={( extra ) => {
-                        //     const node = extra.triggerNode;
-                        //     if (node.props.children) {
-                        //         form.setFieldsValue({ managementOrganizationId: undefined });
-                        //     }
-                        // }}
                     />
                 </Form.Item>
             </Col>

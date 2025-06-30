@@ -54,10 +54,7 @@ const findMenuItemByKey = (menus: MenuItem[], key: string): MenuItem | null => {
 }
 
 // Tìm openKeys dựa vào path hiện tại
-const findOpenKeys = (
-    menus: MenuItem[],
-    currentPath: string | null
-): string[] => {
+const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] => {
     for (const item of menus) {
         if (item.children) {
             const childKeys = findOpenKeys(item.children, currentPath)
@@ -72,17 +69,10 @@ const findOpenKeys = (
     return []
 }
 
-const SiderChatLayout = ({
-    collapsed,
-    theme,
-    items,
-    onCollapse,
-}: SiderDefaultLayoutProps) => {
+const SiderChatLayout = ({ collapsed, theme, items, onCollapse }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
     const router = useRouter()
-    const [openKeys, setOpenKeys] = useState<string[]>(
-        findOpenKeys(items, pathname)
-    )
+    const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
 
     // Tìm item đầu tiên hợp lệ
     const getFirstValidItem = (menus: MenuItem[]): MenuItem | null => {
@@ -99,18 +89,12 @@ const SiderChatLayout = ({
     const firstItem = getFirstValidItem(items)
 
     // Filter menu để loại bỏ item đầu tiên khỏi menu
-    const filterFirstItem = (
-        menus: MenuItem[],
-        excludePath: string | undefined
-    ): MenuItem[] => {
+    const filterFirstItem = (menus: MenuItem[], excludePath: string | undefined): MenuItem[] => {
         return menus
             .map((item) => {
                 if (item.path === excludePath) return null
                 if (item.children) {
-                    const filteredChildren = filterFirstItem(
-                        item.children,
-                        excludePath
-                    )
+                    const filteredChildren = filterFirstItem(item.children, excludePath)
                     if (filteredChildren.length === 0) return null
                     return { ...item, children: filteredChildren }
                 }

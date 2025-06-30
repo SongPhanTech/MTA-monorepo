@@ -81,8 +81,7 @@ export default {
         THERE_IS_ERROR: 'Ohhh, đã có lỗi xảy ra',
         THANKS_FOR_CONFIRMATION: 'Chúc mừng bạn đã xác thực thành công',
         REGISTED_USER: 'Đăng ký tài khoản thành công',
-        CHECK_FOR_VERIFY_MAIL:
-            'Bạn vui lòng kiểm tra email để nhận email xác thực tài khoản!',
+        CHECK_FOR_VERIFY_MAIL: 'Bạn vui lòng kiểm tra email để nhận email xác thực tài khoản!',
         FULLNAME_REQUIRE: 'Họ và tên là trường bắt buộc.',
         USERNAME_REQUIRE: 'Tên đăng nhập là trường bắt buộc.',
         EMAIL_REQUIRE: 'E-mail là trường bắt buộc.',
@@ -275,11 +274,9 @@ export default {
         DELETE_NOTIFICATION_FAIL: 'Xóa thông báo thất bại',
         GET_NOTIFICATION_CATES_SUCCESS: 'Tải danh mục thông báo thành công',
         GET_NOTIFICATION_CATES_FAIL: 'Tải danh mục thông báo thất bại',
-        UPDATE_NOTIFICATION_CATE_SUCCESS:
-            'Cập nhật danh mục thông báo thành công',
+        UPDATE_NOTIFICATION_CATE_SUCCESS: 'Cập nhật danh mục thông báo thành công',
         UPDATE_NOTIFICATION_CATE_FAIL: 'Cập nhật danh mục thông báo thất bại',
-        CREATE_NOTIFICATION_CATE_SUCCESS:
-            'Tạo mới danh mục thông báo thành công',
+        CREATE_NOTIFICATION_CATE_SUCCESS: 'Tạo mới danh mục thông báo thành công',
         CREATE_NOTIFICATION_CATE_FAIL: 'Tạo mới danh mục thông báo thất bại',
         DELETE_NOTIFICATION_CATE_SUCCESS: 'Xóa danh mục thông báo thành công',
         DELETE_NOTIFICATION_CATE_FAIL: 'Xóa danh mục thông báo thất bại',
@@ -337,11 +334,9 @@ export default {
         DELETE_FORM_BUILDER_FAIL: 'Xóa biểu mẫu thất bại',
         GET_FORM_BUILDER_CATES_SUCCESS: 'Tải danh mục biểu mẫu thành công',
         GET_FORM_BUILDER_CATES_FAIL: 'Tải danh mục biểu mẫu thất bại',
-        UPDATE_FORM_BUILDER_CATE_SUCCESS:
-            'Cập nhật danh mục biểu mẫu thành công',
+        UPDATE_FORM_BUILDER_CATE_SUCCESS: 'Cập nhật danh mục biểu mẫu thành công',
         UPDATE_FORM_BUILDER_CATE_FAIL: 'Cập nhật danh mục biểu mẫu thất bại',
-        CREATE_FORM_BUILDER_CATE_SUCCESS:
-            'Tạo mới danh mục biểu mẫu thành công',
+        CREATE_FORM_BUILDER_CATE_SUCCESS: 'Tạo mới danh mục biểu mẫu thành công',
         CREATE_FORM_BUILDER_CATE_FAIL: 'Tạo mới danh mục biểu mẫu thất bại',
         DELETE_FORM_BUILDER_CATE_SUCCESS: 'Xóa danh mục biểu mẫu thành công',
         DELETE_FORM_BUILDER_CATE_FAIL: 'Xóa danh mục biểu mẫu thất bại',
@@ -440,8 +435,7 @@ export default {
         USER_NOT_FOUND: 'Không tìm thấy tài khoản',
         DELETE_USERS_SUCCESS: 'Thực hiện xóa nhiều thành viên thành công',
         EDIT_BLOCK_USERS_SUCCESS: 'Thực hiện khóa nhiều thành viên thành công',
-        EDIT_ACTIVE_USERS_SUCCESS:
-            'Thực hiện kích hoạt nhiều thành viên thành công',
+        EDIT_ACTIVE_USERS_SUCCESS: 'Thực hiện kích hoạt nhiều thành viên thành công',
 
         // config
         GET_CONFIG_SUCCESS: 'Tải dữ liệu cấu hình thành công',

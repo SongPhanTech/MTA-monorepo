@@ -1,6 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { jwtAuth } from '@workspace/auth/hono'
-import { Prisma, PrismaClient, enhance } from '@workspace/db'
+import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
 import { contextStorage } from 'hono/context-storage'

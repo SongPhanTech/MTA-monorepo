@@ -16,12 +16,13 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | null
     trainingCourseId: string | null
@@ -62,8 +63,7 @@ export default function TrainingBlock() {
                       curriculumVersions: {
                           some: {
                               curriculumVersion: {
-                                  trainingObjectTypeId:
-                                      filters.trainingObjectTypeId,
+                                  trainingObjectTypeId: filters.trainingObjectTypeId,
                               },
                           },
                       },
@@ -109,8 +109,7 @@ export default function TrainingBlock() {
                       curriculumVersions: {
                           some: {
                               curriculumVersion: {
-                                  trainingObjectTypeId:
-                                      filters.trainingObjectTypeId,
+                                  trainingObjectTypeId: filters.trainingObjectTypeId,
                               },
                           },
                       },
@@ -147,7 +146,7 @@ export default function TrainingBlock() {
                 },
             })
             message.success('Xóa thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -161,8 +160,7 @@ export default function TrainingBlock() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -183,10 +181,7 @@ export default function TrainingBlock() {
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
+                                                handleFilterChange('searchText', e.target.value)
                                             }
                                             placeholder="Nhập tên ngành..."
                                             className="py-0"
@@ -219,10 +214,7 @@ export default function TrainingBlock() {
                                                 })
                                             )}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingObjectTypeId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingObjectTypeId', val)
                                             }
                                             allowClear
                                         />
@@ -245,10 +237,7 @@ export default function TrainingBlock() {
                                                 })
                                             )}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingCourseId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingCourseId', val)
                                             }
                                             allowClear
                                         />
@@ -264,12 +253,10 @@ export default function TrainingBlock() {
                                     >
                                         <Select
                                             placeholder="Chương trình đào tạo"
-                                            options={curriculumData.map(
-                                                (i: Curriculum) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
+                                            options={curriculumData.map((i: Curriculum) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
                                             // onChange={(val) =>
                                             //     handleFilterChange(
                                             //         'trainingObjectTypeId',
@@ -304,9 +291,7 @@ export default function TrainingBlock() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã khối kiến thức',
@@ -337,10 +322,8 @@ export default function TrainingBlock() {
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'priority',
-                                sorter: (
-                                    a: { priority: number },
-                                    b: { priority: number }
-                                ) => a.priority - b.priority,
+                                sorter: (a: { priority: number }, b: { priority: number }) =>
+                                    a.priority - b.priority,
                                 align: 'center',
                                 width: 100,
                             },
@@ -354,8 +337,7 @@ export default function TrainingBlock() {
                                     { text: 'Ngừng đào tạo', value: false },
                                 ],
                                 filterMultiple: false,
-                                onFilter: (value, record) =>
-                                    record.active === value,
+                                onFilter: (value, record) => record.active === value,
                                 fixed: 'right',
                                 render: (record) => {
                                     return !record ? (
@@ -375,16 +357,12 @@ export default function TrainingBlock() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

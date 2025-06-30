@@ -7,10 +7,11 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, Progress, message } from 'antd'
+import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type DocumentFormType = {
     type: $Enums.DocumentType
     files: Record<
@@ -29,8 +30,7 @@ const AddTaiLieu = () => {
     })
     const { mutateAsync: createMany } = useCreateManyDocument()
 
-    const [selectedFile, setSelectedFile] =
-        useState<DocumentFormType['files'][0]>()
+    const [selectedFile, setSelectedFile] = useState<DocumentFormType['files'][0]>()
 
     const [form] = Form.useForm<DocumentFormType>()
 
@@ -54,7 +54,7 @@ const AddTaiLieu = () => {
                     ...files,
                     ...valuesWithId.reduce(
                         (prev, item) => ({
-                            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+                            // biome-ignore lint/performance/noAccumulatingSpread: <>
                             ...prev,
                             [item.id]: {
                                 ...item,
@@ -100,20 +100,18 @@ const AddTaiLieu = () => {
     const onFinish = async (values: DocumentFormType) => {
         try {
             await createMany({
-                data: Object.values(values.files).map(
-                    ({ body, file, url }) => ({
-                        uri: url,
-                        title: file.name,
-                        fileType: file.type,
-                        type: values.type,
-                        body,
-                        fileSize: file.size,
-                    })
-                ),
+                data: Object.values(values.files).map(({ body, file, url }) => ({
+                    uri: url,
+                    title: file.name,
+                    fileType: file.type,
+                    type: values.type,
+                    body,
+                    fileSize: file.size,
+                })),
             })
             message.success('Thêm tài liệu thành công')
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
@@ -139,15 +137,9 @@ const AddTaiLieu = () => {
                     }}
                 >
                     <Col span={24}>
-                        <FormItem
-                            form={form}
-                            name={'type'}
-                            label="Loại tài liệu"
-                        >
+                        <FormItem form={form} name={'type'} label="Loại tài liệu">
                             <Select
-                                defaultValue={
-                                    $Enums.DocumentType.ACADEMY_INFORMATION
-                                }
+                                defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
                                 options={DOCUMENT_TYPE}
                             />
                         </FormItem>
@@ -169,24 +161,17 @@ const AddTaiLieu = () => {
                                 onClick={setSelectedFile.bind(null, file)}
                                 className="flex items-center gap-2 mt-2 border border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100"
                             >
-                                <FileUploadIcon
-                                    fileType={file.file.type}
-                                    width={40}
-                                    height={40}
-                                />
+                                <FileUploadIcon fileType={file.file.type} width={40} height={40} />
                                 <div className="flex flex-col flex-1">
                                     <div className="max-w-[400px] truncate">
-                                        <span className="font-semibold ">
-                                            {file.file.name}
-                                        </span>
+                                        <span className="font-semibold ">{file.file.name}</span>
                                     </div>
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
                                     </span>
-                                    {file.progress !== 0 &&
-                                        file.progress !== 100 && (
-                                            <Progress percent={file.progress} />
-                                        )}
+                                    {file.progress !== 0 && file.progress !== 100 && (
+                                        <Progress percent={file.progress} />
+                                    )}
                                 </div>
                                 <CloseCircleOutlined
                                     onClick={(e) => {
@@ -204,13 +189,8 @@ const AddTaiLieu = () => {
                 </Form>
                 {selectedFile && (
                     <div className={cn('flex flex-col gap-2 w-3/5')}>
-                        <span>
-                            Xem trước tài liệu: {selectedFile.file.name}
-                        </span>
-                        <Input.TextArea
-                            value={selectedFile.body}
-                            className="mt-4 h-full"
-                        />
+                        <span>Xem trước tài liệu: {selectedFile.file.name}</span>
+                        <Input.TextArea value={selectedFile.body} className="mt-4 h-full" />
                     </div>
                 )}
             </div>

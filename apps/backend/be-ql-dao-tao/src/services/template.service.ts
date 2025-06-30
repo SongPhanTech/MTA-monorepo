@@ -1,9 +1,7 @@
 import axios from 'axios'
 import { prisma } from '..'
 
-export const getBufferFromUrl = async (
-    templateCode: string
-): Promise<Buffer> => {
+export const getBufferFromUrl = async (templateCode: string): Promise<Buffer> => {
     const templateFile = await prisma.templateFile.findFirst({
         where: { code: templateCode }, // Tìm kiếm lớp biên chế
     })

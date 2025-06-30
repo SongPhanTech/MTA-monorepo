@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,7 +19,8 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { customTrainingFetch } from './custom-instance'
 import type {
     ClassDivision,
     ClassDivision200Item,
@@ -57,7 +58,6 @@ import type {
     UploadExcelUpdateUserProfile400,
 } from './schemas'
 
-import { customTrainingFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -84,10 +84,9 @@ export type uploadExcelCreateUserProfileResponseComposite =
     | uploadExcelCreateUserProfileResponse200
     | uploadExcelCreateUserProfileResponse400
 
-export type uploadExcelCreateUserProfileResponse =
-    uploadExcelCreateUserProfileResponseComposite & {
-        headers: Headers
-    }
+export type uploadExcelCreateUserProfileResponse = uploadExcelCreateUserProfileResponseComposite & {
+    headers: Headers
+}
 
 export const getUploadExcelCreateUserProfileUrl = () => {
     return '/api/UserProfile/upload-excel-create-user-profile'
@@ -130,9 +129,7 @@ export const getUploadExcelCreateUserProfileMutationOptions = <
 > => {
     const mutationKey = ['uploadExcelCreateUserProfile']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -152,10 +149,8 @@ export const getUploadExcelCreateUserProfileMutationOptions = <
 export type UploadExcelCreateUserProfileMutationResult = NonNullable<
     Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>
 >
-export type UploadExcelCreateUserProfileMutationBody =
-    UploadExcelCreateUserProfile
-export type UploadExcelCreateUserProfileMutationError =
-    UploadExcelCreateUserProfile400
+export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
+export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
 
 /**
  * @summary Upload Excel Create UserProfile
@@ -180,8 +175,7 @@ export const useUploadExcelCreateUserProfile = <
     { data: UploadExcelCreateUserProfile },
     TContext
 > => {
-    const mutationOptions =
-        getUploadExcelCreateUserProfileMutationOptions(options)
+    const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -204,10 +198,9 @@ export type uploadExcelUpdateUserProfileResponseComposite =
     | uploadExcelUpdateUserProfileResponse200
     | uploadExcelUpdateUserProfileResponse400
 
-export type uploadExcelUpdateUserProfileResponse =
-    uploadExcelUpdateUserProfileResponseComposite & {
-        headers: Headers
-    }
+export type uploadExcelUpdateUserProfileResponse = uploadExcelUpdateUserProfileResponseComposite & {
+    headers: Headers
+}
 
 export const getUploadExcelUpdateUserProfileUrl = () => {
     return '/api/UserProfile/upload-excel-update-user-profile'
@@ -249,9 +242,7 @@ export const getUploadExcelUpdateUserProfileMutationOptions = <
 > => {
     const mutationKey = ['uploadExcelUpdateUserProfile']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -271,10 +262,8 @@ export const getUploadExcelUpdateUserProfileMutationOptions = <
 export type UploadExcelUpdateUserProfileMutationResult = NonNullable<
     Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>
 >
-export type UploadExcelUpdateUserProfileMutationBody =
-    UploadExcelUpdateUserProfile
-export type UploadExcelUpdateUserProfileMutationError =
-    UploadExcelUpdateUserProfile400
+export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
+export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
 
 /**
  * @summary Upload Excel Update UserProfile
@@ -299,8 +288,7 @@ export const useUploadExcelUpdateUserProfile = <
     { data: UploadExcelUpdateUserProfile },
     TContext
 > => {
-    const mutationOptions =
-        getUploadExcelUpdateUserProfileMutationOptions(options)
+    const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -325,10 +313,9 @@ export type uploadExcelCreateFixedClassResponseComposite =
     | uploadExcelCreateFixedClassResponse200
     | uploadExcelCreateFixedClassResponse400
 
-export type uploadExcelCreateFixedClassResponse =
-    uploadExcelCreateFixedClassResponseComposite & {
-        headers: Headers
-    }
+export type uploadExcelCreateFixedClassResponse = uploadExcelCreateFixedClassResponseComposite & {
+    headers: Headers
+}
 
 export const getUploadExcelCreateFixedClassUrl = () => {
     return '/api/fixed-class/FixedClass/upload-excel-create-fixed-class'
@@ -340,10 +327,7 @@ export const uploadExcelCreateFixedClass = async (
 ): Promise<uploadExcelCreateFixedClassResponse> => {
     const formData = new FormData()
     formData.append('file', uploadExcelCreateFixedClass.file)
-    formData.append(
-        'trainingCourseId',
-        uploadExcelCreateFixedClass.trainingCourseId
-    )
+    formData.append('trainingCourseId', uploadExcelCreateFixedClass.trainingCourseId)
 
     return customTrainingFetch<uploadExcelCreateFixedClassResponse>(
         getUploadExcelCreateFixedClassUrl(),
@@ -374,9 +358,7 @@ export const getUploadExcelCreateFixedClassMutationOptions = <
 > => {
     const mutationKey = ['uploadExcelCreateFixedClass']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -396,10 +378,8 @@ export const getUploadExcelCreateFixedClassMutationOptions = <
 export type UploadExcelCreateFixedClassMutationResult = NonNullable<
     Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>
 >
-export type UploadExcelCreateFixedClassMutationBody =
-    UploadExcelCreateFixedClass
-export type UploadExcelCreateFixedClassMutationError =
-    UploadExcelCreateFixedClass400
+export type UploadExcelCreateFixedClassMutationBody = UploadExcelCreateFixedClass
+export type UploadExcelCreateFixedClassMutationError = UploadExcelCreateFixedClass400
 
 /**
  * @summary Upload Excel Create FixedClass
@@ -424,8 +404,7 @@ export const useUploadExcelCreateFixedClass = <
     { data: UploadExcelCreateFixedClass },
     TContext
 > => {
-    const mutationOptions =
-        getUploadExcelCreateFixedClassMutationOptions(options)
+    const mutationOptions = getUploadExcelCreateFixedClassMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -444,9 +423,7 @@ export type classDivisionResponse400 = {
     status: 400
 }
 
-export type classDivisionResponseComposite =
-    | classDivisionResponse200
-    | classDivisionResponse400
+export type classDivisionResponseComposite = classDivisionResponse200 | classDivisionResponse400
 
 export type classDivisionResponse = classDivisionResponseComposite & {
     headers: Headers
@@ -470,10 +447,7 @@ export const classDivision = async (
     })
 }
 
-export const getClassDivisionMutationOptions = <
-    TError = void,
-    TContext = unknown,
->(options?: {
+export const getClassDivisionMutationOptions = <TError = void, TContext = unknown>(options?: {
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof classDivision>>,
         TError,
@@ -489,9 +463,7 @@ export const getClassDivisionMutationOptions = <
 > => {
     const mutationKey = ['classDivision']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -508,9 +480,7 @@ export const getClassDivisionMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type ClassDivisionMutationResult = NonNullable<
-    Awaited<ReturnType<typeof classDivision>>
->
+export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
 export type ClassDivisionMutationBody = ClassDivision
 export type ClassDivisionMutationError = undefined
 
@@ -580,23 +550,17 @@ export const getDocxListStudentFixedClassLabelsQueryOptions = <
     TError = unknown,
 >(options?: {
     query?: Partial<
-        UseQueryOptions<
-            Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
-            TError,
-            TData
-        >
+        UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getDocxListStudentFixedClassLabelsQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getDocxListStudentFixedClassLabelsQueryKey()
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
-    > = ({ signal }) =>
-        docxListStudentFixedClassLabels({ signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>> = ({
+        signal,
+    }) => docxListStudentFixedClassLabels({ signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
@@ -704,10 +668,9 @@ export function useDocxListStudentFixedClassLabels<
 } {
     const queryOptions = getDocxListStudentFixedClassLabelsQueryOptions(options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -738,22 +701,16 @@ export type exportStudentFixedClassDocxResponseComposite =
     | exportStudentFixedClassDocxResponse400
     | exportStudentFixedClassDocxResponse404
 
-export type exportStudentFixedClassDocxResponse =
-    exportStudentFixedClassDocxResponseComposite & {
-        headers: Headers
-    }
+export type exportStudentFixedClassDocxResponse = exportStudentFixedClassDocxResponseComposite & {
+    headers: Headers
+}
 
-export const getExportStudentFixedClassDocxUrl = (
-    params: ExportStudentFixedClassDocxParams
-) => {
+export const getExportStudentFixedClassDocxUrl = (params: ExportStudentFixedClassDocxParams) => {
     const normalizedParams = new URLSearchParams()
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -793,24 +750,18 @@ export const getExportStudentFixedClassDocxQueryOptions = <
     params: ExportStudentFixedClassDocxParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getExportStudentFixedClassDocxQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getExportStudentFixedClassDocxQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
-    > = ({ signal }) =>
-        exportStudentFixedClassDocx(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>> = ({
+        signal,
+    }) => exportStudentFixedClassDocx(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
@@ -833,11 +784,7 @@ export function useExportStudentFixedClassDocx<
     params: ExportStudentFixedClassDocxParams,
     options: {
         query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
@@ -860,11 +807,7 @@ export function useExportStudentFixedClassDocx<
     params: ExportStudentFixedClassDocxParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
@@ -887,11 +830,7 @@ export function useExportStudentFixedClassDocx<
     params: ExportStudentFixedClassDocxParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
@@ -910,11 +849,7 @@ export function useExportStudentFixedClassDocx<
     params: ExportStudentFixedClassDocxParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
@@ -922,15 +857,11 @@ export function useExportStudentFixedClassDocx<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 } {
-    const queryOptions = getExportStudentFixedClassDocxQueryOptions(
-        params,
-        options
-    )
+    const queryOptions = getExportStudentFixedClassDocxQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -964,10 +895,7 @@ export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -982,20 +910,14 @@ export const openSubjectClass = async (
     params: OpenSubjectClassParams,
     options?: RequestInit
 ): Promise<openSubjectClassResponse> => {
-    return customTrainingFetch<openSubjectClassResponse>(
-        getOpenSubjectClassUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+    return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params), {
+        ...options,
+        method: 'GET',
+    })
 }
 
 export const getOpenSubjectClassQueryKey = (params: OpenSubjectClassParams) => {
-    return [
-        '/api/subject-class/open-subject-class',
-        ...(params ? [params] : []),
-    ] as const
+    return ['/api/subject-class/open-subject-class', ...(params ? [params] : [])] as const
 }
 
 export const getOpenSubjectClassQueryOptions = <
@@ -1005,23 +927,17 @@ export const getOpenSubjectClassQueryOptions = <
     params: OpenSubjectClassParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClass>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof openSubjectClass>>
-    > = ({ signal }) => openSubjectClass(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
+        openSubjectClass(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof openSubjectClass>>,
@@ -1030,9 +946,7 @@ export const getOpenSubjectClassQueryOptions = <
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type OpenSubjectClassQueryResult = NonNullable<
-    Awaited<ReturnType<typeof openSubjectClass>>
->
+export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
 export type OpenSubjectClassQueryError = undefined
 
 export function useOpenSubjectClass<
@@ -1042,11 +956,7 @@ export function useOpenSubjectClass<
     params: OpenSubjectClassParams,
     options: {
         query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClass>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
@@ -1069,11 +979,7 @@ export function useOpenSubjectClass<
     params: OpenSubjectClassParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClass>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
@@ -1096,11 +1002,7 @@ export function useOpenSubjectClass<
     params: OpenSubjectClassParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClass>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
@@ -1119,11 +1021,7 @@ export function useOpenSubjectClass<
     params: OpenSubjectClassParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof openSubjectClass>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
@@ -1133,10 +1031,9 @@ export function useOpenSubjectClass<
 } {
     const queryOptions = getOpenSubjectClassQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -1173,10 +1070,7 @@ export const getFixedClassBySubjectClassSemesterUrl = (
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -1227,14 +1121,11 @@ export const getFixedClassBySubjectClassSemesterQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ??
-        getFixedClassBySubjectClassSemesterQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getFixedClassBySubjectClassSemesterQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
-    > = ({ signal }) =>
-        fixedClassBySubjectClassSemester(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>> = ({
+        signal,
+    }) => fixedClassBySubjectClassSemester(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
@@ -1263,9 +1154,7 @@ export function useFixedClassBySubjectClassSemester<
         > &
             Pick<
                 DefinedInitialDataOptions<
-                    Awaited<
-                        ReturnType<typeof fixedClassBySubjectClassSemester>
-                    >,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
                     TError,
                     Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
                 >,
@@ -1292,9 +1181,7 @@ export function useFixedClassBySubjectClassSemester<
         > &
             Pick<
                 UndefinedInitialDataOptions<
-                    Awaited<
-                        ReturnType<typeof fixedClassBySubjectClassSemester>
-                    >,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
                     TError,
                     Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
                 >,
@@ -1348,15 +1235,11 @@ export function useFixedClassBySubjectClassSemester<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 } {
-    const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(
-        params,
-        options
-    )
+    const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -1393,10 +1276,7 @@ export const getStudentBySubjectClassSemesterUrl = (
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -1447,14 +1327,11 @@ export const getStudentBySubjectClassSemesterQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ??
-        getStudentBySubjectClassSemesterQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getStudentBySubjectClassSemesterQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof studentBySubjectClassSemester>>
-    > = ({ signal }) =>
-        studentBySubjectClassSemester(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof studentBySubjectClassSemester>>> = ({
+        signal,
+    }) => studentBySubjectClassSemester(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
@@ -1564,15 +1441,11 @@ export function useStudentBySubjectClassSemester<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 } {
-    const queryOptions = getStudentBySubjectClassSemesterQueryOptions(
-        params,
-        options
-    )
+    const queryOptions = getStudentBySubjectClassSemesterQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -1643,9 +1516,7 @@ export const getEnrollFixedClassOnSubjectClassMutationOptions = <
 > => {
     const mutationKey = ['enrollFixedClassOnSubjectClass']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1665,17 +1536,13 @@ export const getEnrollFixedClassOnSubjectClassMutationOptions = <
 export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
     Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
 >
-export type EnrollFixedClassOnSubjectClassMutationBody =
-    EnrollFixedClassOnSubjectClassBody
+export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
 export type EnrollFixedClassOnSubjectClassMutationError = undefined
 
 /**
  * @summary Đăng ký lớp môn học cho lớp quản lý
  */
-export const useEnrollFixedClassOnSubjectClass = <
-    TError = void,
-    TContext = unknown,
->(
+export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
@@ -1692,8 +1559,7 @@ export const useEnrollFixedClassOnSubjectClass = <
     { data: EnrollFixedClassOnSubjectClassBody },
     TContext
 > => {
-    const mutationOptions =
-        getEnrollFixedClassOnSubjectClassMutationOptions(options)
+    const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -1716,10 +1582,9 @@ export type enrollStudentOnSubjectClassResponseComposite =
     | enrollStudentOnSubjectClassResponse200
     | enrollStudentOnSubjectClassResponse400
 
-export type enrollStudentOnSubjectClassResponse =
-    enrollStudentOnSubjectClassResponseComposite & {
-        headers: Headers
-    }
+export type enrollStudentOnSubjectClassResponse = enrollStudentOnSubjectClassResponseComposite & {
+    headers: Headers
+}
 
 export const getEnrollStudentOnSubjectClassUrl = () => {
     return '/api/subject-class/enroll-student-on-subject-class'
@@ -1762,9 +1627,7 @@ export const getEnrollStudentOnSubjectClassMutationOptions = <
 > => {
     const mutationKey = ['enrollStudentOnSubjectClass']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1784,17 +1647,13 @@ export const getEnrollStudentOnSubjectClassMutationOptions = <
 export type EnrollStudentOnSubjectClassMutationResult = NonNullable<
     Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>
 >
-export type EnrollStudentOnSubjectClassMutationBody =
-    EnrollStudentOnSubjectClassBody
+export type EnrollStudentOnSubjectClassMutationBody = EnrollStudentOnSubjectClassBody
 export type EnrollStudentOnSubjectClassMutationError = undefined
 
 /**
  * @summary Đăng ký lớp môn học cho học viên
  */
-export const useEnrollStudentOnSubjectClass = <
-    TError = void,
-    TContext = unknown,
->(
+export const useEnrollStudentOnSubjectClass = <TError = void, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
@@ -1811,8 +1670,7 @@ export const useEnrollStudentOnSubjectClass = <
     { data: EnrollStudentOnSubjectClassBody },
     TContext
 > => {
-    const mutationOptions =
-        getEnrollStudentOnSubjectClassMutationOptions(options)
+    const mutationOptions = getEnrollStudentOnSubjectClassMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -1826,13 +1684,11 @@ export type putManySubjectClassResponse200 = {
     status: 200
 }
 
-export type putManySubjectClassResponseComposite =
-    putManySubjectClassResponse200
+export type putManySubjectClassResponseComposite = putManySubjectClassResponse200
 
-export type putManySubjectClassResponse =
-    putManySubjectClassResponseComposite & {
-        headers: Headers
-    }
+export type putManySubjectClassResponse = putManySubjectClassResponseComposite & {
+    headers: Headers
+}
 
 export const getPutManySubjectClassUrl = () => {
     return '/api/subject-class'
@@ -1842,18 +1698,15 @@ export const putManySubjectClass = async (
     subjectClasses: SubjectClasses[],
     options?: RequestInit
 ): Promise<putManySubjectClassResponse> => {
-    return customTrainingFetch<putManySubjectClassResponse>(
-        getPutManySubjectClassUrl(),
-        {
-            ...options,
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers,
-            },
-            body: JSON.stringify(subjectClasses),
-        }
-    )
+    return customTrainingFetch<putManySubjectClassResponse>(getPutManySubjectClassUrl(), {
+        ...options,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            ...options?.headers,
+        },
+        body: JSON.stringify(subjectClasses),
+    })
 }
 
 export const getPutManySubjectClassMutationOptions = <
@@ -1875,9 +1728,7 @@ export const getPutManySubjectClassMutationOptions = <
 > => {
     const mutationKey = ['putManySubjectClass']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1961,10 +1812,7 @@ export const getExportStudentSubjectClassExcelUrl = (
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -1999,9 +1847,7 @@ export const getExportStudentSubjectClassExcelQueryKey = (
 
 export const getExportStudentSubjectClassExcelQueryOptions = <
     TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-    TError =
-        | ExportStudentSubjectClassExcel400
-        | ExportStudentSubjectClassExcel404,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
 >(
     params: ExportStudentSubjectClassExcelParams,
     options?: {
@@ -2017,14 +1863,11 @@ export const getExportStudentSubjectClassExcelQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ??
-        getExportStudentSubjectClassExcelQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getExportStudentSubjectClassExcelQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
-    > = ({ signal }) =>
-        exportStudentSubjectClassExcel(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>> = ({
+        signal,
+    }) => exportStudentSubjectClassExcel(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
@@ -2042,9 +1885,7 @@ export type ExportStudentSubjectClassExcelQueryError =
 
 export function useExportStudentSubjectClassExcel<
     TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-    TError =
-        | ExportStudentSubjectClassExcel400
-        | ExportStudentSubjectClassExcel404,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
 >(
     params: ExportStudentSubjectClassExcelParams,
     options: {
@@ -2071,9 +1912,7 @@ export function useExportStudentSubjectClassExcel<
 }
 export function useExportStudentSubjectClassExcel<
     TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-    TError =
-        | ExportStudentSubjectClassExcel400
-        | ExportStudentSubjectClassExcel404,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
 >(
     params: ExportStudentSubjectClassExcelParams,
     options?: {
@@ -2100,9 +1939,7 @@ export function useExportStudentSubjectClassExcel<
 }
 export function useExportStudentSubjectClassExcel<
     TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-    TError =
-        | ExportStudentSubjectClassExcel400
-        | ExportStudentSubjectClassExcel404,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
 >(
     params: ExportStudentSubjectClassExcelParams,
     options?: {
@@ -2125,9 +1962,7 @@ export function useExportStudentSubjectClassExcel<
 
 export function useExportStudentSubjectClassExcel<
     TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-    TError =
-        | ExportStudentSubjectClassExcel400
-        | ExportStudentSubjectClassExcel404,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
 >(
     params: ExportStudentSubjectClassExcelParams,
     options?: {
@@ -2144,15 +1979,11 @@ export function useExportStudentSubjectClassExcel<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 } {
-    const queryOptions = getExportStudentSubjectClassExcelQueryOptions(
-        params,
-        options
-    )
+    const queryOptions = getExportStudentSubjectClassExcelQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -2179,10 +2010,9 @@ export type uploadExcelImportScoreResponseComposite =
     | uploadExcelImportScoreResponse200
     | uploadExcelImportScoreResponse400
 
-export type uploadExcelImportScoreResponse =
-    uploadExcelImportScoreResponseComposite & {
-        headers: Headers
-    }
+export type uploadExcelImportScoreResponse = uploadExcelImportScoreResponseComposite & {
+    headers: Headers
+}
 
 export const getUploadExcelImportScoreUrl = () => {
     return '/api/subject-class/upload-excel-import-score'
@@ -2196,14 +2026,11 @@ export const uploadExcelImportScore = async (
     formData.append('file', uploadExcelImportScore.file)
     formData.append('subjectClassId', uploadExcelImportScore.subjectClassId)
 
-    return customTrainingFetch<uploadExcelImportScoreResponse>(
-        getUploadExcelImportScoreUrl(),
-        {
-            ...options,
-            method: 'POST',
-            body: formData,
-        }
-    )
+    return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
 }
 
 export const getUploadExcelImportScoreMutationOptions = <
@@ -2225,9 +2052,7 @@ export const getUploadExcelImportScoreMutationOptions = <
 > => {
     const mutationKey = ['uploadExcelImportScore']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -2253,10 +2078,7 @@ export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
 /**
  * @summary Import file nhập điểm
  */
-export const useUploadExcelImportScore = <
-    TError = UploadExcelImportScore400,
-    TContext = unknown,
->(
+export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof uploadExcelImportScore>>,
@@ -2288,9 +2110,7 @@ export type importHeQuanSuResponse400 = {
     status: 400
 }
 
-export type importHeQuanSuResponseComposite =
-    | importHeQuanSuResponse200
-    | importHeQuanSuResponse400
+export type importHeQuanSuResponseComposite = importHeQuanSuResponse200 | importHeQuanSuResponse400
 
 export type importHeQuanSuResponse = importHeQuanSuResponseComposite & {
     headers: Headers
@@ -2306,10 +2126,7 @@ export const importHeQuanSu = async (
 ): Promise<importHeQuanSuResponse> => {
     const formData = new FormData()
     formData.append('file', importHeQuanSu.file)
-    if (
-        importHeQuanSu.timeout !== undefined &&
-        importHeQuanSu.timeout !== null
-    ) {
+    if (importHeQuanSu.timeout !== undefined && importHeQuanSu.timeout !== null) {
         formData.append('timeout', importHeQuanSu.timeout.toString())
     }
 
@@ -2339,9 +2156,7 @@ export const getImportHeQuanSuMutationOptions = <
 > => {
     const mutationKey = ['importHeQuanSu']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -2358,16 +2173,11 @@ export const getImportHeQuanSuMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type ImportHeQuanSuMutationResult = NonNullable<
-    Awaited<ReturnType<typeof importHeQuanSu>>
->
+export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
 export type ImportHeQuanSuMutationBody = ImportHeQuanSu
 export type ImportHeQuanSuMutationError = ImportHeQuanSu400
 
-export const useImportHeQuanSu = <
-    TError = ImportHeQuanSu400,
-    TContext = unknown,
->(
+export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof importHeQuanSu>>,

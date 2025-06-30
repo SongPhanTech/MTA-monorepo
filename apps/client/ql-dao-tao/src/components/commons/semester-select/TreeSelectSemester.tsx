@@ -1,9 +1,9 @@
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import { useFindManySchoolYear, useFindManySemester } from '@workspace/db/hooks'
-import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
+import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -27,9 +27,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     onChange,
     onPopupScroll,
 }) => {
-    const [internalValue, setInternalValue] = useState<string | undefined>(
-        defaultValue
-    )
+    const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue)
 
     useEffect(() => {
         if (propValue !== undefined) {
@@ -42,11 +40,9 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         orderBy: { startDate: 'desc' },
     })
 
-    const { data: semesters, isLoading: semesterLoading } = useFindManySemester(
-        {
-            orderBy: { startDate: 'desc' },
-        }
-    )
+    const { data: semesters, isLoading: semesterLoading } = useFindManySemester({
+        orderBy: { startDate: 'desc' },
+    })
 
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
@@ -57,10 +53,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
                 selectable: false, // Make the node unselectable without changing its color
                 children:
                     semesters
-                        ?.filter(
-                            (semester) =>
-                                semester.schoolYearId === schoolYear.id
-                        )
+                        ?.filter((semester) => semester.schoolYearId === schoolYear.id)
                         .map((semester) => ({
                             value: semester.id,
                             title: semester.name,

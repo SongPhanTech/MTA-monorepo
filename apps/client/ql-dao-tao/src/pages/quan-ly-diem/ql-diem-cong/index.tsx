@@ -29,10 +29,7 @@ export default function ClassSubject() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
-                        <Tabs
-                            activeKey={activeLeftTab}
-                            onChange={setActiveLeftTab}
-                        >
+                        <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
                             {leftTabs.map((tab) => (
                                 <Tabs.TabPane tab={tab.label} key={tab.key}>
                                     {tab.content}

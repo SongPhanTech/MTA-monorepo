@@ -13,7 +13,7 @@ import {
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, InputNumber, Select, message } from 'antd'
+import { Checkbox, Col, Form, InputNumber, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -28,13 +28,11 @@ type TrainingBlockOnCurriculumVersionInput = {
 }
 const PutTrainingBlockSubject = () => {
     const [form] = Form.useForm<PutTrainingBlockSubject>()
-    const { options: subjectRequirementTypeOptions } =
-        useSubjectRequirementTypeOptions()
-    const { isOpen, onClose, input } =
-        useDisclosure<TrainingBlockOnCurriculumVersionInput>({
-            tag: PutTrainingBlockSubject.name,
-            onClose: form.resetFields,
-        })
+    const { options: subjectRequirementTypeOptions } = useSubjectRequirementTypeOptions()
+    const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
+        tag: PutTrainingBlockSubject.name,
+        onClose: form.resetFields,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -42,8 +40,7 @@ const PutTrainingBlockSubject = () => {
         where: { id: input?.trainingBlockSubjectId },
     })
 
-    const { data: subjectVersionData = [], refetch } =
-        useFindManySubjectVersion()
+    const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion()
 
     useEffect(() => {
         if (initialValue) {
@@ -64,10 +61,8 @@ const PutTrainingBlockSubject = () => {
         }
     }, [initialValue, form])
 
-    const { mutateAsync: createTrainingBlockSubject } =
-        useCreateTrainingBlockSubject()
-    const { mutateAsync: updateTrainingBlockSubject } =
-        useUpdateTrainingBlockSubject()
+    const { mutateAsync: createTrainingBlockSubject } = useCreateTrainingBlockSubject()
+    const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
     async function onOk(output?: PutTrainingBlockSubject) {
         if (!input || !output) return
 
@@ -75,8 +70,7 @@ const PutTrainingBlockSubject = () => {
             showSpinner()
             const payload = {
                 subjectId: output.subjectId,
-                trainingBlockOnCurriculumVersionId:
-                    input.trainingBlockOnCurriculumVersionId,
+                trainingBlockOnCurriculumVersionId: input.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
                 useForFinalScore: output?.useForFinalScore,
@@ -103,7 +97,7 @@ const PutTrainingBlockSubject = () => {
                 queryKey: ['TrainingBlockSubject'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
@@ -130,26 +124,19 @@ const PutTrainingBlockSubject = () => {
                         allowClear
                         showSearch
                         placeholder="Chọn môn học"
-                        options={subjectVersionData.map(
-                            (item: SubjectVersion) => {
-                                return {
-                                    ...item,
-                                    label: item?.code
-                                        ? `${item?.code} - ${item?.name}`
-                                        : item?.name,
-                                    value: item.id,
-                                }
+                        options={subjectVersionData.map((item: SubjectVersion) => {
+                            return {
+                                ...item,
+                                label: item?.code ? `${item?.code} - ${item?.name}` : item?.name,
+                                value: item.id,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="semester" label="Kỳ học dự kiến">
-                    <InputNumber
-                        placeholder="Chọn kỳ học dự kiến"
-                        className="w-full"
-                    />
+                    <InputNumber placeholder="Chọn kỳ học dự kiến" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -191,12 +178,7 @@ const PutTrainingBlockSubject = () => {
             <Col span={24}>
                 <div className="flex justify-between items-center mb-6">
                     <span>Có phải là môn học đồ án hay không?</span>
-                    <FormItem
-                        form={form}
-                        name="project"
-                        valuePropName="checked"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="project" valuePropName="checked" className="mb-0">
                         <Checkbox />
                     </FormItem>
                 </div>
@@ -204,12 +186,7 @@ const PutTrainingBlockSubject = () => {
             <Col span={24}>
                 <div className="flex justify-between items-center mb-6">
                     <span>Có in trên bảng điểm hay không?</span>
-                    <FormItem
-                        form={form}
-                        name="print"
-                        valuePropName="checked"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="print" valuePropName="checked" className="mb-0">
                         <Checkbox />
                     </FormItem>
                 </div>

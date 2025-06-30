@@ -1,7 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { SpanKind, context, trace } from '@opentelemetry/api'
+import { context, SpanKind, trace } from '@opentelemetry/api'
 import { jwtAuth } from '@workspace/auth/hono'
-import { Prisma, PrismaClient, enhance } from '@workspace/db'
+import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
 import { contextStorage, getContext } from 'hono/context-storage'
@@ -10,6 +10,7 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
+import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
@@ -71,6 +72,7 @@ app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
 app.route('/api/user-profile', UserProfileApp)
 app.route('/api/training-score', TrainingScoreApp)
+app.route('/api/curriculum', CurriculumApp)
 
 app.use(
     '/api/model/*',
@@ -95,9 +97,7 @@ app.onError((err, c) => {
             attributes: { 'error.message': err.message },
             kind: SpanKind.INTERNAL,
         },
-        parentSpan
-            ? trace.setSpan(context.active(), parentSpan)
-            : context.active()
+        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
     )
 
     subSpan.recordException(err)

@@ -2,14 +2,8 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    PutOneSubjectClassModal,
-    PutOpenSubjectClassModal,
-} from '@components/modal'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    SUBJECT_CLASS_SCHEDULE_TYPE,
-} from '@constants/constants'
+import { PutOneSubjectClassModal, PutOpenSubjectClassModal } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -30,7 +24,7 @@ import {
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
-import { Button, Checkbox, Col, Flex, Input, Row, message } from 'antd'
+import { Button, Checkbox, Col, Flex, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
@@ -63,9 +57,7 @@ export default function TeachingAssignment() {
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             semester: {
-                ...(filters.semesterStartId
-                    ? { id: filters.semesterStartId }
-                    : {}),
+                ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
                 ...(filters.trainingCourseId
                     ? {
                           trainingCoursesStart: {
@@ -171,13 +163,12 @@ export default function TeachingAssignment() {
         })
     }
 
-    const { data: semesterData = [], refetch: refetchSemesters } =
-        useFindManySemester({
-            where: {},
-            include: {
-                schoolYear: true,
-            },
-        })
+    const { data: semesterData = [], refetch: refetchSemesters } = useFindManySemester({
+        where: {},
+        include: {
+            schoolYear: true,
+        },
+    })
 
     const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
         useFindManyTrainingMajor({
@@ -187,12 +178,11 @@ export default function TeachingAssignment() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: lecturerData = [], refetch: refetchLecturer } =
-        useFindManyLecturer({
-            include: {
-                userProfile: true,
-            },
-        })
+    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
+        include: {
+            userProfile: true,
+        },
+    })
     async function handleChangeData() {
         try {
             showSpinner()
@@ -201,8 +191,7 @@ export default function TeachingAssignment() {
                     id: subjectClass.id,
                     lecturerId: subjectClass.lecturerId ?? null,
                     extraLecturerId: subjectClass.extraLecturerId ?? null,
-                    enterGradeLecturerId:
-                        subjectClass.enterGradeLecturerId ?? null,
+                    enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
                 }))
             )
             if (res?.data?.failedIds?.length) {
@@ -215,7 +204,7 @@ export default function TeachingAssignment() {
             await refetch()
             setIsEdit(false)
             setDataSubmit([...data])
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -232,7 +221,7 @@ export default function TeachingAssignment() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -278,10 +267,7 @@ export default function TeachingAssignment() {
         }
     }
 
-    const handleChangeEnterGradeLecturer = (
-        record: SubjectClass,
-        value: string | undefined
-    ) => {
+    const handleChangeEnterGradeLecturer = (record: SubjectClass, value: string | undefined) => {
         if (value) {
             const itemChange = lecturerData.find((i) => i?.id === value)
             setDataSubmit((prev) =>
@@ -328,7 +314,7 @@ export default function TeachingAssignment() {
         setDataSubmit([...data])
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data) {
             setDataSubmit([...data])
@@ -343,12 +329,7 @@ export default function TeachingAssignment() {
                         <Col span={4}>
                             <Input
                                 id="search"
-                                onChange={(e) =>
-                                    handleFilterChange(
-                                        'searchText',
-                                        e.target.value
-                                    )
-                                }
+                                onChange={(e) => handleFilterChange('searchText', e.target.value)}
                                 style={{ width: '100%' }}
                                 placeholder="Tìm kiếm"
                                 allowClear
@@ -364,44 +345,34 @@ export default function TeachingAssignment() {
                                     }
                                 })}
                                 style={{ width: '100%' }}
-                                onChange={(val) =>
-                                    handleFilterChange('semesterStartId', val)
-                                }
+                                onChange={(val) => handleFilterChange('semesterStartId', val)}
                             />
                         </Col>
                         <Col span={4}>
                             <Select
                                 placeholder="Chọn khóa"
-                                options={trainingCourseData.map(
-                                    (i: TrainingCourse) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
+                                options={trainingCourseData.map((i: TrainingCourse) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
                                     }
-                                )}
+                                })}
                                 style={{ width: '100%' }}
-                                onChange={(val) =>
-                                    handleFilterChange('trainingCourseId', val)
-                                }
+                                onChange={(val) => handleFilterChange('trainingCourseId', val)}
                                 allowClear
                             />
                         </Col>
                         <Col span={4}>
                             <Select
                                 placeholder="Chọn chuyên ngành"
-                                options={trainingMajorData.map(
-                                    (i: TrainingMajor) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
+                                options={trainingMajorData.map((i: TrainingMajor) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
                                     }
-                                )}
+                                })}
                                 style={{ width: '100%' }}
-                                onChange={(val) =>
-                                    handleFilterChange('trainingMajorId', val)
-                                }
+                                onChange={(val) => handleFilterChange('trainingMajorId', val)}
                             />
                         </Col>
 
@@ -466,18 +437,14 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'PCGD',
                                 align: 'center',
                                 width: 100,
                                 dataIndex: 'lecturerId',
-                                render: (value) => (
-                                    <Checkbox checked={!!value} />
-                                ),
+                                render: (value) => <Checkbox checked={!!value} />,
                             },
                             {
                                 title: 'Mã lớp môn học',
@@ -497,8 +464,7 @@ export default function TeachingAssignment() {
                                 dataIndex: 'subject',
                                 width: 100,
                                 align: 'center',
-                                render: (value) =>
-                                    value?.credit ? value?.credit : '',
+                                render: (value) => (value?.credit ? value?.credit : ''),
                             },
                             {
                                 title: 'Số SV tối đa',
@@ -511,8 +477,7 @@ export default function TeachingAssignment() {
                                 dataIndex: 'subjectClassStudent',
                                 width: 100,
                                 align: 'center',
-                                render: (value) =>
-                                    value?.length ? value?.length : '',
+                                render: (value) => (value?.length ? value?.length : ''),
                             },
                             {
                                 title: 'Giảng viên 1',
@@ -524,8 +489,7 @@ export default function TeachingAssignment() {
                                         options={lecturerData
                                             .filter(
                                                 (lecturer) =>
-                                                    lecturer?.id !==
-                                                    record?.extraLecturerId
+                                                    lecturer?.id !== record?.extraLecturerId
                                             )
                                             .map((i) => {
                                                 return {
@@ -556,9 +520,7 @@ export default function TeachingAssignment() {
                                         style={{ width: '100%' }}
                                         options={lecturerData
                                             .filter(
-                                                (lecturer) =>
-                                                    lecturer?.id !==
-                                                    record?.lecturerId
+                                                (lecturer) => lecturer?.id !== record?.lecturerId
                                             )
                                             .map((i) => {
                                                 return {
@@ -566,9 +528,7 @@ export default function TeachingAssignment() {
                                                     label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
                                                 }
                                             })}
-                                        value={
-                                            record?.extraLecturerId || undefined
-                                        }
+                                        value={record?.extraLecturerId || undefined}
                                         placeholder="Chọn giảng viên"
                                         onChange={(selectedValue) =>
                                             handleChangeLecturer(
@@ -587,8 +547,7 @@ export default function TeachingAssignment() {
                                 dataIndex: 'subject',
                                 align: 'center',
                                 width: 150,
-                                render: (value) =>
-                                    getExamTypeLabel(value?.examType) || '',
+                                render: (value) => getExamTypeLabel(value?.examType) || '',
                             },
                             {
                                 title: 'Kíp học',
@@ -607,8 +566,7 @@ export default function TeachingAssignment() {
                                 width: 150,
                                 render: (value) =>
                                     value?.building?.trainingLocation?.name
-                                        ? value?.building?.trainingLocation
-                                              ?.name
+                                        ? value?.building?.trainingLocation?.name
                                         : '',
                             },
                             {
@@ -619,8 +577,7 @@ export default function TeachingAssignment() {
                                     <Select
                                         style={{ width: '100%' }}
                                         options={
-                                            record?.mainLecturer &&
-                                            record?.extraLecturer
+                                            record?.mainLecturer && record?.extraLecturer
                                                 ? [
                                                       {
                                                           label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
@@ -647,16 +604,10 @@ export default function TeachingAssignment() {
                                                       ]
                                                     : []
                                         }
-                                        value={
-                                            record?.enterGradeLecturerId ||
-                                            undefined
-                                        }
+                                        value={record?.enterGradeLecturerId || undefined}
                                         placeholder="Chọn giảng viên"
                                         onChange={(selectedValue) =>
-                                            handleChangeEnterGradeLecturer(
-                                                record,
-                                                selectedValue
-                                            )
+                                            handleChangeEnterGradeLecturer(record, selectedValue)
                                         }
                                         disabled={!isEdit && record?.lecturerId}
                                     />
@@ -674,8 +625,7 @@ export default function TeachingAssignment() {
                                 dataIndex: 'examDate',
                                 align: 'center',
                                 width: 100,
-                                render: (value) =>
-                                    value ? formatDate(value) : '',
+                                render: (value) => (value ? formatDate(value) : ''),
                             },
 
                             {
@@ -683,23 +633,20 @@ export default function TeachingAssignment() {
                                 dataIndex: 'lecturerAssignmentDeadline',
                                 width: 100,
                                 align: 'center',
-                                render: (value) =>
-                                    value ? formatDate(value) : '',
+                                render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
                                 title: 'Hạn nhập điểm CC/TX',
                                 dataIndex: 'scoreDeadline',
                                 width: 150,
                                 align: 'center',
-                                render: (value) =>
-                                    value ? formatDate(value) : '',
+                                render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
                                 title: 'Hạn nhập điểm thi',
                                 dataIndex: 'examScoreDeadline',
                                 width: 150,
-                                render: (value) =>
-                                    value ? formatDate(value) : '',
+                                render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
                                 title: 'Đơn vị phụ trách',
@@ -717,10 +664,7 @@ export default function TeachingAssignment() {
                                 width: 150,
                                 align: 'center',
                                 render: (value) => (
-                                    <Checkbox
-                                        checked={value.subjectEquivalentType}
-                                        disabled
-                                    />
+                                    <Checkbox checked={value.subjectEquivalentType} disabled />
                                 ),
                             },
                             {
@@ -751,16 +695,12 @@ export default function TeachingAssignment() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpenEditSubjectClass.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpenEditSubjectClass.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

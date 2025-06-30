@@ -58,9 +58,7 @@ const Table = <T extends Record<string, unknown>>({
                 }}
                 onChange={handleChange}
                 pagination={pagination}
-                rowClassName={(_, index) =>
-                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                }
+                rowClassName={(_, index) => (index % 2 === 0 ? 'bg-white' : 'bg-gray-50')}
                 expandable={expandable}
                 rowKey={rowKey}
                 {...rest}

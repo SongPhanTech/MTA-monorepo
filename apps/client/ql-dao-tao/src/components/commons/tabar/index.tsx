@@ -1,5 +1,5 @@
-import { Tabs as TabAntd } from 'antd'
 import type { TabsProps as TabsAntdProps } from 'antd'
+import { Tabs as TabAntd } from 'antd'
 import { useState } from 'react'
 
 type TabsProps = {

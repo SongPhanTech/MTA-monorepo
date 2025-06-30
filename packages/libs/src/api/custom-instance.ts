@@ -1,7 +1,4 @@
-export const fetchInstance = async (
-    url: string,
-    options?: RequestInit
-): Promise<Response> => {
+export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = localStorage.getItem('ACCESS_TOKEN')
 
     const payload: RequestInit = {
@@ -42,10 +39,7 @@ const getUrl = (baseUrl: string, contextUrl: string): string => {
     return requestUrl.toString()
 }
 
-export const customModelFetch = async <T>(
-    url: string,
-    options: RequestInit
-): Promise<T> => {
+export const customModelFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl('https://api.model.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)
@@ -54,10 +48,7 @@ export const customModelFetch = async <T>(
     return { status: response.status, data, headers: response.headers } as T
 }
 
-export const customUserFetch = async <T>(
-    url: string,
-    options: RequestInit
-): Promise<T> => {
+export const customUserFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl('https://api.user.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)
@@ -66,10 +57,7 @@ export const customUserFetch = async <T>(
     return { status: response.status, data, headers: response.headers } as T
 }
 
-export const customTrainingFetch = async <T>(
-    url: string,
-    options: RequestInit
-): Promise<T> => {
+export const customTrainingFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl('https://api.daotao.mta.swantech.vn', url)
 
     const response = await fetchInstance(requestUrl, options)

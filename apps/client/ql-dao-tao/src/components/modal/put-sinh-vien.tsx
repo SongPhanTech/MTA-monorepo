@@ -1,6 +1,4 @@
 import { queryClient } from '@api/index'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
-
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { getMinioUrl } from '@workspace/constant'
@@ -14,6 +12,7 @@ import {
     useUpdateUserProfile,
     useUpsertUserProfile,
 } from '@workspace/db/hooks'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { UploadFile } from 'antd'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
@@ -23,11 +22,7 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
 import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
-import {
-    type PutStudentProfile,
-    type UserProfileType,
-    tabs,
-} from './quan-ly-ho-so/type'
+import { type PutStudentProfile, tabs, type UserProfileType } from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
 
@@ -61,13 +56,12 @@ const PutStudentModal = () => {
     const { id, preSelectedValues } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: fixedClassData = [], refetch: refetchFix } =
-        useFindManyFixedClass({
-            include: {
-                trainingCourse: true,
-                curriculumVersion: true,
-            },
-        })
+    const { data: fixedClassData = [], refetch: refetchFix } = useFindManyFixedClass({
+        include: {
+            trainingCourse: true,
+            curriculumVersion: true,
+        },
+    })
 
     const { data: studentData } = useFindUniqueStudent({
         where: { id: id || '' },
@@ -115,10 +109,7 @@ const PutStudentModal = () => {
         },
     })
 
-    const buildUserProfileUpdateData = (
-        output: UserProfileType,
-        fileName?: string
-    ) => ({
+    const buildUserProfileUpdateData = (output: UserProfileType, fileName?: string) => ({
         avatar: fileName || undefined,
         userType: output.userType,
         firstName: output.firstName,
@@ -179,10 +170,7 @@ const PutStudentModal = () => {
         userProfileId: output.userProfileId,
     })
 
-    const buildStudentCreateData = (
-        output: PutStudentProfile,
-        userProfileId: string
-    ) => ({
+    const buildStudentCreateData = (output: PutStudentProfile, userProfileId: string) => ({
         ...buildStudentUpdateData(output),
         userProfileId,
     })
@@ -193,8 +181,7 @@ const PutStudentModal = () => {
         if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension:
-                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
+                extension: output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
 
             await fetch(resPresignedUrl.data.url, {
@@ -207,10 +194,7 @@ const PutStudentModal = () => {
         try {
             showSpinner()
 
-            const userProfileData = buildUserProfileUpdateData(
-                output,
-                fileName ?? undefined
-            )
+            const userProfileData = buildUserProfileUpdateData(output, fileName ?? undefined)
 
             const studentDataUpdate = buildStudentUpdateData(output)
 
@@ -241,11 +225,7 @@ const PutStudentModal = () => {
                 message.success('Cập nhật sinh viên thành công')
             } else {
                 // CREATE MODE
-                if (
-                    data.some(
-                        (item) => item.idCardNumber === output.idCardNumber
-                    )
-                ) {
+                if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
                     const userProfile = await upsertUserProfile({
                         where: {
                             idCardNumber: output.idCardNumber,
@@ -268,15 +248,10 @@ const PutStudentModal = () => {
                     })
 
                     if (!userProfile?.id) {
-                        throw new Error(
-                            'Tạo userProfile thất bại: Không có ID trả về'
-                        )
+                        throw new Error('Tạo userProfile thất bại: Không có ID trả về')
                     }
 
-                    const studentCreateData = buildStudentCreateData(
-                        output,
-                        userProfile.id
-                    )
+                    const studentCreateData = buildStudentCreateData(output, userProfile.id)
                     await createStudent({ data: studentCreateData })
 
                     message.success('Thêm sinh viên thành công')
@@ -300,17 +275,13 @@ const PutStudentModal = () => {
             form.setFieldsValue({
                 // Student fields với ID
                 code: studentData.code,
-                trainingObjectTypeId:
-                    studentData.trainingObjectTypeId ?? undefined,
+                trainingObjectTypeId: studentData.trainingObjectTypeId ?? undefined,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 registrationAreaId: studentData.registrationAreaId ?? undefined,
-                trainingCourseId:
-                    studentData.fixedClass?.trainingCourse?.id ?? undefined,
+                trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
-                curriculumVersionId:
-                    studentData.curriculumVersionId ?? undefined,
-                healthInsuranceNumber:
-                    studentData.userProfile?.healthInsuranceNumber,
+                curriculumVersionId: studentData.curriculumVersionId ?? undefined,
+                healthInsuranceNumber: studentData.userProfile?.healthInsuranceNumber,
                 bankAccountNumber: studentData.userProfile?.bankAccountNumber,
                 bankName: studentData.userProfile?.bankName,
                 avatar: getMinioUrl(studentData.userProfile?.avatar),
@@ -334,8 +305,7 @@ const PutStudentModal = () => {
                 contactAddress: studentData.userProfile?.contactAddress,
                 phoneNumber: studentData.userProfile?.phoneNumber,
                 email: studentData.userProfile?.email,
-                nationalityId:
-                    studentData.userProfile?.nationalityId ?? undefined,
+                nationalityId: studentData.userProfile?.nationalityId ?? undefined,
                 religionId: studentData.userProfile?.religionId ?? undefined,
                 ethnicityId: studentData.userProfile?.ethnicityId ?? undefined,
                 unionDate: studentData.userProfile?.unionDate
@@ -362,10 +332,8 @@ const PutStudentModal = () => {
                 familyPhone: studentData.userProfile?.familyPhone,
                 rankId: studentData.userProfile?.rankId ?? undefined,
                 levelId: studentData.userProfile?.levelId,
-                academicDegreeTypeId:
-                    studentData.userProfile?.academicDegreeTypeId ?? undefined,
-                academicRankTypeId:
-                    studentData.userProfile?.academicRankTypeId ?? undefined,
+                academicDegreeTypeId: studentData.userProfile?.academicDegreeTypeId ?? undefined,
+                academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
                 positionCPVId: studentData.userProfile?.positionCPVId,
             })
 
@@ -387,13 +355,11 @@ const PutStudentModal = () => {
             const fieldsToSet: PreFillFormFields = {}
 
             if (preSelectedValues.trainingObjectTypeId) {
-                fieldsToSet.trainingObjectTypeId =
-                    preSelectedValues.trainingObjectTypeId
+                fieldsToSet.trainingObjectTypeId = preSelectedValues.trainingObjectTypeId
             }
 
             if (preSelectedValues.curriculumVersionId) {
-                fieldsToSet.curriculumVersionId =
-                    preSelectedValues.curriculumVersionId
+                fieldsToSet.curriculumVersionId = preSelectedValues.curriculumVersionId
             }
 
             if (preSelectedValues.fixedClassId) {
@@ -403,19 +369,13 @@ const PutStudentModal = () => {
                     (cls) => cls.id === preSelectedValues.fixedClassId
                 )
                 if (selectedClass?.trainingCourseId) {
-                    fieldsToSet.trainingCourseId =
-                        selectedClass.trainingCourseId
+                    fieldsToSet.trainingCourseId = selectedClass.trainingCourseId
                 }
-                if (
-                    selectedClass?.curriculumVersionId &&
-                    !preSelectedValues.curriculumVersionId
-                ) {
-                    fieldsToSet.curriculumVersionId =
-                        selectedClass.curriculumVersionId
+                if (selectedClass?.curriculumVersionId && !preSelectedValues.curriculumVersionId) {
+                    fieldsToSet.curriculumVersionId = selectedClass.curriculumVersionId
                 }
             } else if (preSelectedValues.trainingCourseId) {
-                fieldsToSet.trainingCourseId =
-                    preSelectedValues.trainingCourseId
+                fieldsToSet.trainingCourseId = preSelectedValues.trainingCourseId
             }
 
             if (Object.keys(fieldsToSet).length > 0) {
@@ -431,22 +391,14 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa sinh viên/ học viên'
-                    : 'Thêm sinh viên/ học viên'
-            }
+            title={id ? 'Chỉnh sửa sinh viên/ học viên' : 'Thêm sinh viên/ học viên'}
             className="w-[90vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Col xs={24} md={5}>
-                <SidebarMenu
-                    tabs={tabs}
-                    activeKey={activeKey}
-                    setActiveKey={setActiveKey}
-                />
+                <SidebarMenu tabs={tabs} activeKey={activeKey} setActiveKey={setActiveKey} />
             </Col>
 
             <Col xs={24} md={19}>

@@ -76,8 +76,7 @@ export default {
         LOGIN_NOW: 'login now',
         THANKS_FOR_CONFIRMATION: 'Thanks for your confirmation',
         REGISTED_USER: 'Successfully register a user',
-        CHECK_FOR_VERIFY_MAIL:
-            'Please check your email and click to verify link!',
+        CHECK_FOR_VERIFY_MAIL: 'Please check your email and click to verify link!',
         FULLNAME_REQUIRE: 'Full name is required.',
         USERNAME_REQUIRE: 'Username is required.',
         EMAIL_REQUIRE: 'E-mail is required.',
@@ -92,8 +91,7 @@ export default {
             'Please enter your e-mail. You will receive a link to create a new password via e-mail.',
         FORGOT_PASSWORD_CHANGE_PASS_HELP_TEXT:
             'Please enter your new password and enter password again to change your password',
-        CONFIRM_LEAVE_PAGE:
-            'This will lose your changes. Are you sure want leave the page?',
+        CONFIRM_LEAVE_PAGE: 'This will lose your changes. Are you sure want leave the page?',
         PLEASE_CHECK_EMAIL: 'Please check your email',
         WE_SENT_EMAIL_FORGOT_PASSWORD:
             'There is an forgot password e-mail that sent to you, please click to the forgot password link to change password. The link will be exoired after 3 days.',
@@ -250,17 +248,13 @@ export default {
         UPDATE_NOTIFICATION_FAIL: 'Update notification failed',
         DELETE_NOTIFICATION_SUCCESS: 'Delete notification successfully',
         DELETE_NOTIFICATION_FAIL: 'Delete notification failed',
-        GET_NOTIFICATION_CATES_SUCCESS:
-            'Get notification categories successfully',
+        GET_NOTIFICATION_CATES_SUCCESS: 'Get notification categories successfully',
         GET_NOTIFICATION_CATES_FAIL: 'Get notification categories failed',
-        UPDATE_NOTIFICATION_CATE_SUCCESS:
-            'Update notification category successfully',
+        UPDATE_NOTIFICATION_CATE_SUCCESS: 'Update notification category successfully',
         UPDATE_NOTIFICATION_CATE_FAIL: 'Update notification category failed',
-        CREATE_NOTIFICATION_CATE_SUCCESS:
-            'Create notification category successfully',
+        CREATE_NOTIFICATION_CATE_SUCCESS: 'Create notification category successfully',
         CREATE_NOTIFICATION_CATE_FAIL: 'Create notification category failed',
-        DELETE_NOTIFICATION_CATE_SUCCESS:
-            'Delete notification category successfully',
+        DELETE_NOTIFICATION_CATE_SUCCESS: 'Delete notification category successfully',
         DELETE_NOTIFICATION_CATE_FAIL: 'Delete notification category failed',
 
         // media
@@ -314,17 +308,13 @@ export default {
         UPDATE_THALASSEMIA_FAIL: 'Update thalassemia failed',
         DELETE_THALASSEMIA_SUCCESS: 'Delete thalassemia successfully',
         DELETE_THALASSEMIA_FAIL: 'Delete thalassemia failed',
-        GET_THALASSEMIA_CATES_SUCCESS:
-            'Get thalassemia categories successfully',
+        GET_THALASSEMIA_CATES_SUCCESS: 'Get thalassemia categories successfully',
         GET_THALASSEMIA_CATES_FAIL: 'Get thalassemia categories failed',
-        UPDATE_THALASSEMIA_CATE_SUCCESS:
-            'Update thalassemia category successfully',
+        UPDATE_THALASSEMIA_CATE_SUCCESS: 'Update thalassemia category successfully',
         UPDATE_THALASSEMIA_CATE_FAIL: 'Update thalassemia category failed',
-        CREATE_THALASSEMIA_CATE_SUCCESS:
-            'Create thalassemia category successfully',
+        CREATE_THALASSEMIA_CATE_SUCCESS: 'Create thalassemia category successfully',
         CREATE_THALASSEMIA_CATE_FAIL: 'Create thalassemia category failed',
-        DELETE_THALASSEMIA_CATE_SUCCESS:
-            'Delete thalassemia category successfully',
+        DELETE_THALASSEMIA_CATE_SUCCESS: 'Delete thalassemia category successfully',
         DELETE_THALASSEMIA_CATE_FAIL: 'Delete thalassemia category failed',
 
         // supersonic
@@ -340,14 +330,11 @@ export default {
         DELETE_SUPERSONIC_FAIL: 'Delete supersonic failed',
         GET_SUPERSONIC_CATES_SUCCESS: 'Get supersonic categories successfully',
         GET_SUPERSONIC_CATES_FAIL: 'Get supersonic categories failed',
-        UPDATE_SUPERSONIC_CATE_SUCCESS:
-            'Update supersonic category successfully',
+        UPDATE_SUPERSONIC_CATE_SUCCESS: 'Update supersonic category successfully',
         UPDATE_SUPERSONIC_CATE_FAIL: 'Update supersonic category failed',
-        CREATE_SUPERSONIC_CATE_SUCCESS:
-            'Create supersonic category successfully',
+        CREATE_SUPERSONIC_CATE_SUCCESS: 'Create supersonic category successfully',
         CREATE_SUPERSONIC_CATE_FAIL: 'Create supersonic category failed',
-        DELETE_SUPERSONIC_CATE_SUCCESS:
-            'Delete supersonic category successfully',
+        DELETE_SUPERSONIC_CATE_SUCCESS: 'Delete supersonic category successfully',
         DELETE_SUPERSONIC_CATE_FAIL: 'Delete supersonic category failed',
 
         // doubletriple
@@ -361,17 +348,13 @@ export default {
         UPDATE_DOUBLETRIPLE_FAIL: 'Update doubletriple failed',
         DELETE_DOUBLETRIPLE_SUCCESS: 'Delete doubletriple successfully',
         DELETE_DOUBLETRIPLE_FAIL: 'Delete doubletriple failed',
-        GET_DOUBLETRIPLE_CATES_SUCCESS:
-            'Get doubletriple categories successfully',
+        GET_DOUBLETRIPLE_CATES_SUCCESS: 'Get doubletriple categories successfully',
         GET_DOUBLETRIPLE_CATES_FAIL: 'Get doubletriple categories failed',
-        UPDATE_DOUBLETRIPLE_CATE_SUCCESS:
-            'Update doubletriple category successfully',
+        UPDATE_DOUBLETRIPLE_CATE_SUCCESS: 'Update doubletriple category successfully',
         UPDATE_DOUBLETRIPLE_CATE_FAIL: 'Update doubletriple category failed',
-        CREATE_DOUBLETRIPLE_CATE_SUCCESS:
-            'Create doubletriple category successfully',
+        CREATE_DOUBLETRIPLE_CATE_SUCCESS: 'Create doubletriple category successfully',
         CREATE_DOUBLETRIPLE_CATE_FAIL: 'Create doubletriple category failed',
-        DELETE_DOUBLETRIPLE_CATE_SUCCESS:
-            'Delete doubletriple category successfully',
+        DELETE_DOUBLETRIPLE_CATE_SUCCESS: 'Delete doubletriple category successfully',
         DELETE_DOUBLETRIPLE_CATE_FAIL: 'Delete doubletriple category failed',
 
         // chromosome
@@ -387,14 +370,11 @@ export default {
         DELETE_CHROMOSOME_FAIL: 'Delete chromosome failed',
         GET_CHROMOSOME_CATES_SUCCESS: 'Get chromosome categories successfully',
         GET_CHROMOSOME_CATES_FAIL: 'Get chromosome categories failed',
-        UPDATE_CHROMOSOME_CATE_SUCCESS:
-            'Update chromosome category successfully',
+        UPDATE_CHROMOSOME_CATE_SUCCESS: 'Update chromosome category successfully',
         UPDATE_CHROMOSOME_CATE_FAIL: 'Update chromosome category failed',
-        CREATE_CHROMOSOME_CATE_SUCCESS:
-            'Create chromosome category successfully',
+        CREATE_CHROMOSOME_CATE_SUCCESS: 'Create chromosome category successfully',
         CREATE_CHROMOSOME_CATE_FAIL: 'Create chromosome category failed',
-        DELETE_CHROMOSOME_CATE_SUCCESS:
-            'Delete chromosome category successfully',
+        DELETE_CHROMOSOME_CATE_SUCCESS: 'Delete chromosome category successfully',
         DELETE_CHROMOSOME_CATE_FAIL: 'Delete chromosome category failed',
 
         // blood

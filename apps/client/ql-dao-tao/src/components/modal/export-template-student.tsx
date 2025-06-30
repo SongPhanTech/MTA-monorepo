@@ -1,6 +1,7 @@
 import { Flex } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
+
 interface ExportTemplateStudentProps {
     selectedFixedClass: string | undefined
     dataTable: any[]
@@ -56,7 +57,7 @@ const ExportTemplateStudent = () => {
             },
         }
 
-        const headerSubtitleStyleRight = {
+        const _headerSubtitleStyleRight = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -137,7 +138,7 @@ const ExportTemplateStudent = () => {
             },
         }
 
-        const dataTextCellStyle = {
+        const _dataTextCellStyle = {
             ...dataCellStyle,
             alignment: {
                 horizontal: 'left' as const,
@@ -155,8 +156,7 @@ const ExportTemplateStudent = () => {
         }
 
         worksheet.mergeCells('A1:D2')
-        worksheet.getCell('A1').value =
-            'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
+        worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('A1').style = headerTitleStyle
 
         worksheet.getRow(1).height = 20
@@ -246,10 +246,7 @@ const ExportTemplateStudent = () => {
 
     return (
         <Flex>
-            <div
-                className="text-blue-500 cursor-pointer mr-1"
-                onClick={exportTemplate}
-            >
+            <div className="text-blue-500 cursor-pointer mr-1" onClick={exportTemplate}>
                 Xuất file mẫu
             </div>
             <div>(tải về mẫu Excel để điền dữ liệu)</div>

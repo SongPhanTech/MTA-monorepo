@@ -64,7 +64,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerStyleNormal = {
+        const _headerStyleNormal = {
             ...golbalFontStyle,
             font: { size: 14 },
             alignment: {
@@ -74,7 +74,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerSubtitleStyleCenter = {
+        const _headerSubtitleStyleCenter = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -83,7 +83,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const headerSubtitleStyleRight = {
+        const _headerSubtitleStyleRight = {
             ...golbalFontStyle,
             font: { bold: true, size: 14 },
             alignment: {
@@ -172,7 +172,7 @@ const ExportTemplateExam = ({
             },
         }
 
-        const italicTextStyle = {
+        const _italicTextStyle = {
             ...golbalFontStyle,
             font: { italic: true },
             alignment: {
@@ -182,8 +182,7 @@ const ExportTemplateExam = ({
         }
 
         worksheet.mergeCells('A1:D2')
-        worksheet.getCell('A1').value =
-            'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
+        worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('A1').style = headerTitleStyle
 
         worksheet.getRow(1).height = 30
@@ -246,15 +245,13 @@ const ExportTemplateExam = ({
         worksheet.getCell('I6').value = 'Ngày thi: '
         worksheet.getCell('I6').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('J6').value =
-            `${dayjs(dataClass?.examDate).format('DD/MM/YYYY') || ''}`
+        worksheet.getCell('J6').value = `${dayjs(dataClass?.examDate).format('DD/MM/YYYY') || ''}`
         worksheet.getCell('J6').style = headerSubtitleStyleLeft
 
         worksheet.getCell('E7').value = 'Khoa: '
         worksheet.getCell('E7').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('F7').value =
-            `${dataClass?.subject?.managementOrganization?.sTen || ''}`
+        worksheet.getCell('F7').value = `${dataClass?.subject?.managementOrganization?.sTen || ''}`
         worksheet.getCell('F7').style = headerSubtitleStyleLeft
 
         worksheet.getCell('I7').value = 'Số tín chỉ: '
@@ -266,15 +263,13 @@ const ExportTemplateExam = ({
         worksheet.getCell('E8').value = 'Quân số: '
         worksheet.getCell('E8').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('F8').value =
-            `${dataClass?.subjectClassStudent?.length || ''}`
+        worksheet.getCell('F8').value = `${dataClass?.subjectClassStudent?.length || ''}`
         worksheet.getCell('F8').style = headerSubtitleStyleLeft
 
         worksheet.getCell('I8').value = 'Hình thức thi: '
         worksheet.getCell('I8').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('J8').value =
-            `${getExamTypeLabel(dataClass?.examType) || ''}`
+        worksheet.getCell('J8').value = `${getExamTypeLabel(dataClass?.examType) || ''}`
         worksheet.getCell('J8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('E9:F9')
@@ -328,9 +323,7 @@ const ExportTemplateExam = ({
                 record?.student?.code || '',
                 `${record.student?.userProfile?.fullname || ''}`,
                 record.student?.userProfile?.dateOfBirth
-                    ? new Date(
-                          record.student.userProfile.dateOfBirth
-                      ).toLocaleDateString('vi-VN')
+                    ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                     : '',
                 record.student?.fixedClass?.name || '',
                 record.attendanceScore || '',
@@ -384,14 +377,11 @@ const ExportTemplateExam = ({
 
         worksheet.mergeCells(`A${footerStartRow + 1}:L${footerStartRow + 1}`)
         worksheet.getCell(`A${footerStartRow + 1}`).value = 'Tổng số tờ:'
-        worksheet.getCell(`A${footerStartRow + 1}`).style =
-            headerSubtitleStyleLeft
+        worksheet.getCell(`A${footerStartRow + 1}`).style = headerSubtitleStyleLeft
 
         worksheet.mergeCells(`A${footerStartRow + 2}:L${footerStartRow + 2}`)
-        worksheet.getCell(`A${footerStartRow + 2}`).value =
-            'Nhận xét tình hình thi:'
-        worksheet.getCell(`A${footerStartRow + 2}`).style =
-            headerSubtitleStyleLeft
+        worksheet.getCell(`A${footerStartRow + 2}`).value = 'Nhận xét tình hình thi:'
+        worksheet.getCell(`A${footerStartRow + 2}`).style = headerSubtitleStyleLeft
 
         worksheet.mergeCells(`A${footerStartRow + 4}:F${footerStartRow + 4}`)
         worksheet.getCell(`A${footerStartRow + 4}`).value = 'CÁN BỘ COI THI 1'
@@ -403,10 +393,7 @@ const ExportTemplateExam = ({
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
-        saveAs(
-            new Blob([buffer]),
-            `Phieu_danh_sach_thi_lop_${dataClass?.name || 'unknown'}.xlsx`
-        )
+        saveAs(new Blob([buffer]), `Phieu_danh_sach_thi_lop_${dataClass?.name || 'unknown'}.xlsx`)
     }
 
     return (

@@ -1,11 +1,12 @@
-import { fetchFAQDocument } from '@/api/chunking_and_vectorize'
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useUpdateFAQ } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, Radio, message } from 'antd'
+import { Col, Form, Input, Modal, message, Radio } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { fetchFAQDocument } from '@/api/chunking_and_vectorize'
+
 type PheDuyetCauHoiThuongGapFormType = {
     status: $Enums.DocumentStatus
     reason: string
@@ -38,9 +39,7 @@ const PheDuyetCauHoiThuongGap = () => {
                 const result = await fetchFAQDocument(documentId)
 
                 if ((result as any)?.error === 'True') {
-                    message.error(
-                        'Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp'
-                    )
+                    message.error('Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp')
                     return
                 }
             }
@@ -51,10 +50,7 @@ const PheDuyetCauHoiThuongGap = () => {
                 },
                 data: {
                     status: values.status,
-                    reason:
-                        values.status === $Enums.DocumentStatus.APPROVE
-                            ? null
-                            : values.reason,
+                    reason: values.status === $Enums.DocumentStatus.APPROVE ? null : values.reason,
                 },
             })
 
@@ -65,7 +61,7 @@ const PheDuyetCauHoiThuongGap = () => {
             }
 
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Phê duyệt không thành công, vui lòng kiểm tra lại')
         } finally {
             setIsSubmitting(false)
@@ -90,21 +86,12 @@ const PheDuyetCauHoiThuongGap = () => {
                     className={cn('mt-4', 'w-full')}
                 >
                     <Col span={24}>
-                        <FormItem
-                            form={form}
-                            name={'status'}
-                            label="Trạng thái"
-                            required
-                        >
+                        <FormItem form={form} name={'status'} label="Trạng thái" required>
                             <Radio.Group buttonStyle="solid">
-                                <Radio.Button
-                                    value={$Enums.DocumentStatus.APPROVE}
-                                >
+                                <Radio.Button value={$Enums.DocumentStatus.APPROVE}>
                                     Phê duyệt
                                 </Radio.Button>
-                                <Radio.Button
-                                    value={$Enums.DocumentStatus.DENY}
-                                >
+                                <Radio.Button value={$Enums.DocumentStatus.DENY}>
                                     Từ chối
                                 </Radio.Button>
                             </Radio.Group>
@@ -112,11 +99,7 @@ const PheDuyetCauHoiThuongGap = () => {
                     </Col>
                     {status === $Enums.DocumentStatus.DENY && (
                         <Col span={24}>
-                            <FormItem
-                                form={form}
-                                name={'reason'}
-                                label="Lý do từ chối"
-                            >
+                            <FormItem form={form} name={'reason'} label="Lý do từ chối">
                                 <Input.TextArea placeholder="Nhập lý do từ chối" />
                             </FormItem>
                         </Col>

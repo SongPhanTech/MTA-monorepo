@@ -48,7 +48,7 @@ function App({ Component, pageProps }: AppProps) {
         setProgress(0)
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         router.events.on('routeChangeStart', onRouteChangeStart)
         router.events.on('routeChangeComplete', onRouteChangeComplete)

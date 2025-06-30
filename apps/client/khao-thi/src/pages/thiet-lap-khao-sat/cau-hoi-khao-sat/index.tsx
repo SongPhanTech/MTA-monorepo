@@ -13,17 +13,18 @@ import {
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row, message } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type Filter = FilterSurveyQuestionProps & {
     searchText: string
 }
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
 
     const [filters, setFilters] = useState<Filter>({
         searchText: '',
@@ -70,8 +71,8 @@ function Page() {
 
     const { data: count } = useCountSurveyQuestion()
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
-    const { onOpen, onClose } = useDisclosure<string>({
+    const _debouncedSearchText = _.debounce(setSearchText, 500)
+    const { onOpen } = useDisclosure<string>({
         tag: PutSurveyQuestionModal.name,
     })
 
@@ -93,7 +94,7 @@ function Page() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -152,9 +153,7 @@ function Page() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã câu hỏi khảo sát',
@@ -168,14 +167,11 @@ function Page() {
                             {
                                 title: 'Loại câu hỏi khảo sát',
                                 render: ({ surveyQuestionType }) =>
-                                    surveyQuestionType
-                                        ? surveyQuestionType.name
-                                        : '',
+                                    surveyQuestionType ? surveyQuestionType.name : '',
                             },
                             {
                                 title: 'Tên khảo sát',
-                                render: ({ survey }) =>
-                                    survey ? survey.name : '',
+                                render: ({ survey }) => (survey ? survey.name : ''),
                             },
 
                             {
@@ -190,8 +186,7 @@ function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

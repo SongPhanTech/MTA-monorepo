@@ -4,12 +4,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import useSpinner from '@hooks/spinner'
-import type {
-    Room,
-    SubjectClass,
-    SubjectClassSchedule,
-    SubjectVersion,
-} from '@workspace/db'
+import type { Room, SubjectClass, SubjectClassSchedule, SubjectVersion } from '@workspace/db'
 import {
     useCreateManySubjectClass,
     useFindManyRoom,
@@ -18,17 +13,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    DatePicker,
-    Empty,
-    Flex,
-    Form,
-    InputNumber,
-    Row,
-    message,
-} from 'antd'
+import { Button, Col, DatePicker, Empty, Flex, Form, InputNumber, message, Row } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -37,6 +22,7 @@ import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { putManySubjectClass } from '@workspace/libs/api/training'
+
 dayjs.locale('vi')
 
 export type OpenSubjectClassType = OpenSubjectClass & {
@@ -96,14 +82,13 @@ const PutOpenClassModal = () => {
                         maxStudent: i?.maxStudent,
                         examDate: i.examDate,
                         examScoreDeadline: i.examScoreDeadline,
-                        lecturerAssignmentDeadline:
-                            i.lecturerAssignmentDeadline,
+                        lecturerAssignmentDeadline: i.lecturerAssignmentDeadline,
                         scoreDeadline: i.scoreDeadline,
                         examType: i.examType,
                     })),
                 })
             } else {
-                const res = await putManySubjectClass(
+                const _res = await putManySubjectClass(
                     form.getFieldValue('list').map((i: SubjectClass) => ({
                         id: i?.id,
                         schedule: i.schedule,
@@ -111,15 +96,14 @@ const PutOpenClassModal = () => {
                         roomId: i?.roomId,
                         examDate: i.examDate,
                         examScoreDeadline: i.examScoreDeadline,
-                        lecturerAssignmentDeadline:
-                            i.lecturerAssignmentDeadline,
+                        lecturerAssignmentDeadline: i.lecturerAssignmentDeadline,
                         scoreDeadline: i.scoreDeadline,
                         examType: i.examType,
                     }))
                 )
             }
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -144,7 +128,7 @@ const PutOpenClassModal = () => {
             })
             // const result = dataSubmit.filter((i) => i?.id !== id)
             // setDataSubmit(result)
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -155,8 +139,7 @@ const PutOpenClassModal = () => {
         const numberOfClass = Number(form.getFieldValue('numberOfClass'))
         if (numberOfClass > 0) {
             const cout = Math.ceil(
-                Number(form.getFieldValue('totalStudent')) /
-                    Number(numberOfClass)
+                Number(form.getFieldValue('totalStudent')) / Number(numberOfClass)
             )
             const result = []
 
@@ -181,17 +164,13 @@ const PutOpenClassModal = () => {
         setIsEdit(false)
         const maxStudent = Number(form.getFieldValue('maxStudent'))
         if (Number(maxStudent) > 0) {
-            const cout = Math.ceil(
-                Number(form.getFieldValue('totalStudent')) / Number(maxStudent)
-            )
+            const cout = Math.ceil(Number(form.getFieldValue('totalStudent')) / Number(maxStudent))
             const result = []
             for (let i = 0; i < cout; i++) {
                 result.push({
                     key: i + 1,
                     code: `${subjectVersionData?.code} 0${i + 1}`,
-                    name: subjectVersionData?.name
-                        ? subjectVersionData?.name
-                        : '',
+                    name: subjectVersionData?.name ? subjectVersionData?.name : '',
                     maxStudent: Number(maxStudent),
                     startDate: new Date(),
                     semesterId: form.getFieldValue('semesterId'),
@@ -206,27 +185,23 @@ const PutOpenClassModal = () => {
     }
 
     const handleChangeDateExam = (date: Dayjs, key: number) => {
-        const result = form
-            .getFieldValue('list')
-            .map((i: SubjectClass, index: number) => {
-                if (key === index) {
-                    return {
-                        ...i,
-                        examDate: date,
-                        scoreDeadline: date.add(-10, 'day'),
-                        examScoreDeadline: date.add(10, 'day'),
-                    }
+        const result = form.getFieldValue('list').map((i: SubjectClass, index: number) => {
+            if (key === index) {
+                return {
+                    ...i,
+                    examDate: date,
+                    scoreDeadline: date.add(-10, 'day'),
+                    examScoreDeadline: date.add(10, 'day'),
                 }
-                return i
-            })
+            }
+            return i
+        })
         form.setFieldsValue({ list: result })
     }
 
     const handleChangeLocation = (value: string, key: string) => {}
-    const {
-        data: trainingLocationData = [],
-        refetch: refetchTrainingLocationData,
-    } = useFindManyTrainingLocation()
+    const { data: trainingLocationData = [], refetch: refetchTrainingLocationData } =
+        useFindManyTrainingLocation()
 
     const TrainingLocationForm = Form.useWatch('trainingLocationId', form)
 
@@ -263,7 +238,7 @@ const PutOpenClassModal = () => {
             }
         )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (subjectClassData?.length) {
             const totalStudent = subjectClassData.reduce(
@@ -273,18 +248,13 @@ const PutOpenClassModal = () => {
             form.setFieldsValue({
                 totalStudent: totalStudent,
                 schedule: subjectClassData[0]?.schedule,
-                trainingLocationId:
-                    subjectClassData[0]?.room?.building?.trainingLocationId,
+                trainingLocationId: subjectClassData[0]?.room?.building?.trainingLocationId,
                 list: subjectClassData.map((i, index: number) => ({
                     ...i,
                     key: index + 1,
                     examDate: i.examDate ? dayjs(i.examDate) : null,
-                    scoreDeadline: i.scoreDeadline
-                        ? dayjs(i.scoreDeadline)
-                        : null,
-                    examScoreDeadline: i.examScoreDeadline
-                        ? dayjs(i.examScoreDeadline)
-                        : null,
+                    scoreDeadline: i.scoreDeadline ? dayjs(i.scoreDeadline) : null,
+                    examScoreDeadline: i.examScoreDeadline ? dayjs(i.examScoreDeadline) : null,
                     lecturerAssignmentDeadline: i.lecturerAssignmentDeadline
                         ? dayjs(i.lecturerAssignmentDeadline)
                         : null,
@@ -293,7 +263,7 @@ const PutOpenClassModal = () => {
         }
     }, [subjectClassData])
     const listForm = Form.useWatch('list', form)?.filter((i) => i?.name) ?? []
-    const disableMaxStudent = Form.useWatch('totalStudent', form)
+    const _disableMaxStudent = Form.useWatch('totalStudent', form)
     return (
         <PutFormModal
             open={isOpen}
@@ -332,24 +302,20 @@ const PutOpenClassModal = () => {
                 <FormItem form={form} name="schedule" label="Kíp học" required>
                     <Select
                         placeholder="Chọn kíp học"
-                        options={Object.entries(
-                            SUBJECT_CLASS_SCHEDULE_TYPE
-                        ).map(([key, value_]) => {
-                            return {
-                                label: value_,
-                                value: key,
+                        options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                            ([key, value_]) => {
+                                return {
+                                    label: value_,
+                                    value: key,
+                                }
                             }
-                        })}
+                        )}
                         allowClear
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="trainingLocationId"
-                    label="Địa điểm"
-                >
+                <FormItem form={form} name="trainingLocationId" label="Địa điểm">
                     <Select
                         placeholder="Chọn địa điểm"
                         options={trainingLocationData.map((item) => {
@@ -365,12 +331,7 @@ const PutOpenClassModal = () => {
             <Col span={12}>
                 <Flex gap={12} align="center">
                     <span className="min-w-[100px]">Số LMH</span>
-                    <FormItem
-                        className="w-full mb-0"
-                        form={form}
-                        name="numberOfClass"
-                        label=""
-                    >
+                    <FormItem className="w-full mb-0" form={form} name="numberOfClass" label="">
                         <InputNumber
                             className="w-full"
                             placeholder="Nhập số lớp cần tạo"
@@ -392,12 +353,7 @@ const PutOpenClassModal = () => {
             <Col span={12}>
                 <Flex gap={12} align="center">
                     <span className="min-w-[100px]">Số SV tối đa</span>
-                    <FormItem
-                        className="w-full mb-0"
-                        form={form}
-                        name="maxStudent"
-                        label=""
-                    >
+                    <FormItem className="w-full mb-0" form={form} name="maxStudent" label="">
                         <InputNumber
                             className="w-full"
                             placeholder="Nhập số SV tối đa"
@@ -443,8 +399,7 @@ const PutOpenClassModal = () => {
                                 dataIndex: 'subject',
                                 width: 100,
                                 align: 'center',
-                                render: (value: SubjectVersion) =>
-                                    value?.credit,
+                                render: (value: SubjectVersion) => value?.credit,
                             },
                             {
                                 title: 'SV nợ',
@@ -457,8 +412,7 @@ const PutOpenClassModal = () => {
                                 dataIndex: 'subject',
                                 width: 100,
                                 align: 'center',
-                                render: (value: SubjectVersion) =>
-                                    value?.period,
+                                render: (value: SubjectVersion) => value?.period,
                             },
                             {
                                 title: 'Số SV max',
@@ -484,19 +438,14 @@ const PutOpenClassModal = () => {
                                 render: (_, __, index) => (
                                     <Form.Item
                                         className="w-full mb-0"
-                                        name={[
-                                            'list',
-                                            index,
-                                            'lecturerAssignmentDeadline',
-                                        ]}
+                                        name={['list', index, 'lecturerAssignmentDeadline']}
                                         label=""
                                     >
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
                                             disabledDate={(date) =>
-                                                date &&
-                                                date < dayjs().startOf('day')
+                                                date && date < dayjs().startOf('day')
                                             }
                                         />
                                     </Form.Item>
@@ -516,15 +465,9 @@ const PutOpenClassModal = () => {
                                             format="DD/MM/YYYY"
                                             className="w-full"
                                             disabledDate={(date) =>
-                                                date &&
-                                                date < dayjs().startOf('day')
+                                                date && date < dayjs().startOf('day')
                                             }
-                                            onChange={(date) =>
-                                                handleChangeDateExam(
-                                                    date,
-                                                    index
-                                                )
-                                            }
+                                            onChange={(date) => handleChangeDateExam(date, index)}
                                         />
                                     </Form.Item>
                                 ),
@@ -543,8 +486,7 @@ const PutOpenClassModal = () => {
                                             format="DD/MM/YYYY"
                                             className="w-full"
                                             disabledDate={(date) =>
-                                                date &&
-                                                date < dayjs().startOf('day')
+                                                date && date < dayjs().startOf('day')
                                             }
                                         />
                                     </Form.Item>
@@ -557,19 +499,14 @@ const PutOpenClassModal = () => {
                                 render: (record, __, index) => (
                                     <Form.Item
                                         className="w-full mb-0"
-                                        name={[
-                                            'list',
-                                            index,
-                                            'examScoreDeadline',
-                                        ]}
+                                        name={['list', index, 'examScoreDeadline']}
                                         label=""
                                     >
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             className="w-full"
                                             disabledDate={(date) =>
-                                                date &&
-                                                date < dayjs().startOf('day')
+                                                date && date < dayjs().startOf('day')
                                             }
                                         />
                                     </Form.Item>
@@ -612,10 +549,7 @@ const PutOpenClassModal = () => {
                                             })}
                                             className="w-full"
                                             onChange={(value) =>
-                                                handleChangeLocation(
-                                                    value,
-                                                    record
-                                                )
+                                                handleChangeLocation(value, record)
                                             }
                                         />
                                     </Form.Item>
@@ -629,10 +563,7 @@ const PutOpenClassModal = () => {
                                 render: (value) =>
                                     trainingLocationData.find(
                                         (item) =>
-                                            item.id ===
-                                            form.getFieldValue(
-                                                'trainingLocationId'
-                                            )
+                                            item.id === form.getFieldValue('trainingLocationId')
                                     )?.name || '',
                             },
                             {
@@ -646,10 +577,7 @@ const PutOpenClassModal = () => {
                                             <Row className="justify-center gap-2">
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(
-                                                                record?.id
-                                                            ),
+                                                        onConfirm: () => handleDelete(record?.id),
                                                     }}
                                                 />
                                             </Row>

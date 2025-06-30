@@ -20,9 +20,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ fields, className }) => {
                 {fields.map((field) => (
                     <React.Fragment key={field.value?.toString()}>
                         <Col span={4}>
-                            <p className="font-semibold text-base">
-                                {field.label}
-                            </p>
+                            <p className="font-semibold text-base">{field.label}</p>
                         </Col>
                         <Col span={20}>
                             <p className="text-base">: {field.value}</p>

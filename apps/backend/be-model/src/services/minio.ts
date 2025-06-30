@@ -70,37 +70,21 @@ export class MinIOService {
         console.log(`Bucket ${this.bucketName} is ready`)
     }
 
-    async generatePresignedUrl({
-        path: folder,
-        extension,
-    }: PresignedUrlDto): Promise<UrlDto> {
+    async generatePresignedUrl({ path: folder, extension }: PresignedUrlDto): Promise<UrlDto> {
         const uuid = randomUUIDv7('base64')
         const dateFolder = dayjs().format('YYYY-MM-DD')
         const path = `${folder}/${dateFolder}/${uuid}${extension ? `.${extension}` : ''}`
-        const url = await this.minioClient.presignedPutObject(
-            this.bucketName,
-            path,
-            3600
-        )
+        const url = await this.minioClient.presignedPutObject(this.bucketName, path, 3600)
 
         return { url, fileName: `${this.bucketName}/${path}` }
     }
 
     async findAll({ path, limit, startAfter }: ListObjectDto) {
-        return this.listObjectsWithLimit(
-            this.bucketName,
-            path,
-            limit,
-            startAfter
-        )
+        return this.listObjectsWithLimit(this.bucketName, path, limit, startAfter)
     }
 
     async presignedGetObject(objectName: string): Promise<UrlDto> {
-        const url = await this.minioClient.presignedGetObject(
-            this.bucketName,
-            objectName,
-            3600
-        )
+        const url = await this.minioClient.presignedGetObject(this.bucketName, objectName, 3600)
         return { url, fileName: objectName }
     }
 
@@ -115,12 +99,7 @@ export class MinIOService {
         startAfter?: string,
         recursive = false
     ) {
-        const stream = this.minioClient.listObjectsV2(
-            bucketName,
-            prefix,
-            recursive,
-            startAfter
-        )
+        const stream = this.minioClient.listObjectsV2(bucketName, prefix, recursive, startAfter)
         let count = 0
 
         return new Promise<BucketItem[]>((resolve, reject) => {

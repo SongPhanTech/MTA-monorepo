@@ -1,5 +1,5 @@
-import { env } from '@/env'
 import { signOut } from 'next-auth/react'
+import { env } from '@/env'
 
 const signOutAction = () => {
     const formDom = document.createElement('form')

@@ -1,23 +1,11 @@
-import {
-    SpanKind,
-    SpanStatusCode,
-    context,
-    propagation,
-    trace,
-} from '@opentelemetry/api'
+import { context, propagation, SpanKind, SpanStatusCode, trace } from '@opentelemetry/api'
 import { getContext } from 'hono/context-storage'
 
-export async function userFetch<T>(
-    path: string,
-    options?: RequestInit
-): Promise<T> {
+export async function userFetch<T>(path: string, options?: RequestInit): Promise<T> {
     return customFetch<T>('users', path, options)
 }
 
-export async function serverFetch<T>(
-    path: string,
-    options?: RequestInit
-): Promise<T> {
+export async function serverFetch<T>(path: string, options?: RequestInit): Promise<T> {
     return customFetch<T>('server', path, options)
 }
 
@@ -33,14 +21,9 @@ export async function customFetch<T>(
     // const username = process.env.OIDC_CLIENT_ID
     // const password = process.env.OIDC_CLIENT_SECRET
 
-    const credentials = Buffer.from(`${username}:${password}`).toString(
-        'base64'
-    )
+    const credentials = Buffer.from(`${username}:${password}`).toString('base64')
 
-    const url =
-        type === 'scim2'
-            ? `${baseUrl}/${type}${path}`
-            : `${baseUrl}/api/${type}/v1${path}`
+    const url = type === 'scim2' ? `${baseUrl}/${type}${path}` : `${baseUrl}/api/${type}/v1${path}`
 
     const tracer = trace.getTracer('external_request')
     const parentSpan = getContext().var.rootSpan
@@ -54,9 +37,7 @@ export async function customFetch<T>(
             },
             kind: SpanKind.CLIENT,
         },
-        parentSpan
-            ? trace.setSpan(context.active(), parentSpan)
-            : context.active()
+        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
     )
 
     try {

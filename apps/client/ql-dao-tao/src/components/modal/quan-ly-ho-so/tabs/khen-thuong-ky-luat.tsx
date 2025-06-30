@@ -41,19 +41,18 @@ const dataKyLuat = [
 
 export default function KhenThuongKyLuatTab() {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [currentPage, _setCurrentPage] = useState(1)
+    const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
-    const handleCollapseChange =
-        (collapseId: string) => (key: string | string[]) => {
-            if (key && key.length > 0) {
-                // Nếu collapse này được mở, đóng các collapse khác
-                setOpenCollapse(collapseId)
-            } else {
-                // Nếu collapse này bị đóng
-                setOpenCollapse(null)
-            }
+    const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
+        if (key && key.length > 0) {
+            // Nếu collapse này được mở, đóng các collapse khác
+            setOpenCollapse(collapseId)
+        } else {
+            // Nếu collapse này bị đóng
+            setOpenCollapse(null)
         }
+    }
 
     const handleModal = () => {}
 
@@ -68,11 +67,7 @@ export default function KhenThuongKyLuatTab() {
             >
                 {/* Học vị */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">
-                            Thông tin khen thưởng
-                        </span>
-                    }
+                    header={<span className="text-base font-semibold">Thông tin khen thưởng</span>}
                     key="1"
                     className="border-none"
                 >
@@ -93,9 +88,7 @@ export default function KhenThuongKyLuatTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức khen thưởng',
@@ -154,11 +147,7 @@ export default function KhenThuongKyLuatTab() {
             >
                 {/* Học hàm */}
                 <Panel
-                    header={
-                        <span className="text-base font-semibold">
-                            Thông tin kỷ luật
-                        </span>
-                    }
+                    header={<span className="text-base font-semibold">Thông tin kỷ luật</span>}
                     key="1"
                     className="border-none mt"
                 >
@@ -179,9 +168,7 @@ export default function KhenThuongKyLuatTab() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Hình thức kỷ luật',

@@ -83,9 +83,7 @@ export const FixedClassBySubjectClassSemester = z
     })
     .openapi('FixedClassBySubjectClassSemester')
 
-export type FixedClassBySubjectClassSemester = z.infer<
-    typeof FixedClassBySubjectClassSemester
->
+export type FixedClassBySubjectClassSemester = z.infer<typeof FixedClassBySubjectClassSemester>
 
 export const StudentClassBySubjectClassSemester = z
     .object({
@@ -149,9 +147,7 @@ export const StudentClassBySubjectClassSemester = z
     })
     .openapi('StudentClassBySubjectClassSemester')
 
-export type StudentClassBySubjectClassSemester = z.infer<
-    typeof StudentClassBySubjectClassSemester
->
+export type StudentClassBySubjectClassSemester = z.infer<typeof StudentClassBySubjectClassSemester>
 
 export const EnrollFixedClassOnSubjectClass = z
     .object({
@@ -215,6 +211,4 @@ export const EnrollFixedClassOnSubjectClass = z
     })
     .openapi('EnrollFixedClassOnSubjectClass')
 
-export type EnrollFixedClassOnSubjectClass = z.infer<
-    typeof EnrollFixedClassOnSubjectClass
->
+export type EnrollFixedClassOnSubjectClass = z.infer<typeof EnrollFixedClassOnSubjectClass>

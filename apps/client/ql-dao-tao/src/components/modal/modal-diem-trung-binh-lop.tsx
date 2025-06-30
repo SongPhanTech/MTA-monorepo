@@ -4,11 +4,12 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Tabs from '@components/commons/tabar'
 import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
-import XetHocBong from '@components/sub-pages/xet-hoc-bong'
 import XetCanhCaoHocDuong from '@components/sub-pages/xet-canh-cao-hoc-duong'
 import XetCanhCaoHocTap from '@components/sub-pages/xet-canh-cao-hoc-tap'
-import XetThoiHoc from '@components/sub-pages/xet-thoi-hoc'
+import XetHocBong from '@components/sub-pages/xet-hoc-bong'
 import XetLuuBan from '@components/sub-pages/xet-luu-ban'
+import XetThoiHoc from '@components/sub-pages/xet-thoi-hoc'
+
 dayjs.locale('vi')
 
 const ModalGPASemester = () => {

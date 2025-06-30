@@ -1,13 +1,13 @@
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import {
     useFindFirstSchoolYear,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { TreeSelectProps } from 'antd'
+import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Define props for our custom component
 interface CustomTreeSelectProps {
@@ -32,13 +32,12 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
     const [value, setValue] = useState<string | undefined>(defaultValue)
 
     // Lấy thông tin SchoolYear
-    const { data: schoolYear, isLoading: schoolYearLoading } =
-        useFindFirstSchoolYear({
-            where: {
-                id: schoolYearId || undefined,
-            },
-            skip: schoolYearId ? 0 : 1,
-        })
+    const { data: schoolYear, isLoading: schoolYearLoading } = useFindFirstSchoolYear({
+        where: {
+            id: schoolYearId || undefined,
+        },
+        skip: schoolYearId ? 0 : 1,
+    })
 
     // Lấy danh sách TrainingCourse
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
@@ -47,15 +46,14 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
         })
 
     // Lấy danh sách FixedClass
-    const { data: fixedClasses = [], isLoading: fixedClassesLoading } =
-        useFindManyFixedClass({
-            where: {
-                trainingCourseId: {
-                    in: trainingCourses.map((course) => course.id),
-                },
+    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
+        where: {
+            trainingCourseId: {
+                in: trainingCourses.map((course) => course.id),
             },
-            // skip: trainingCourses.length ? 0 : 1,
-        })
+        },
+        // skip: trainingCourses.length ? 0 : 1,
+    })
 
     // Tạo treeData từ trainingCourses và fixedClasses
     const treeData: TreeNodeType[] = useMemo(() => {
@@ -63,9 +61,7 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
             value: `course-${course.id}`,
             title: course.name,
             children: fixedClasses
-                .filter(
-                    (fixedClass) => fixedClass.trainingCourseId === course.id
-                )
+                .filter((fixedClass) => fixedClass.trainingCourseId === course.id)
                 .map((fixedClass) => ({
                     value: fixedClass.id,
                     title: fixedClass.name,
@@ -107,11 +103,7 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
             onPopupScroll={handlePopupScroll}
             filterTreeNode={filterTreeNode}
             treeNodeFilterProp="title"
-            loading={
-                schoolYearLoading ||
-                trainingCoursesLoading ||
-                fixedClassesLoading
-            }
+            loading={schoolYearLoading || trainingCoursesLoading || fixedClassesLoading}
         />
     )
 }

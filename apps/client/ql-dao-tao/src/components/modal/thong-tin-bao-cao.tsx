@@ -5,13 +5,13 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ThongTinBaoCaoModal = () => {
-    const [labels, setLabels] = useState<any[]>([])
+    const [labels, _setLabels] = useState<any[]>([])
     const { isOpen, onClose } = useDisclosure<string>({
         tag: ThongTinBaoCaoModal.name,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const flattenSchema = (schema: any[], parentPath = ''): any[] => {
+    const _flattenSchema = (schema: any[], parentPath = ''): any[] => {
         return schema.flatMap((item, index) => {
             const fullPath = parentPath ? `${item.path}` : item.path
             const row = {
@@ -22,7 +22,7 @@ const ThongTinBaoCaoModal = () => {
             }
 
             if (item.type === 'array' && item.items) {
-                return [row, ...flattenSchema(item.items, fullPath)]
+                return [row, ..._flattenSchema(item.items, fullPath)]
             }
 
             return row

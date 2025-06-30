@@ -1,28 +1,27 @@
 {
-    "name": "@backend/be-model",
-    "type": "module",
-    "scripts": {
-        "dev": "bun run --hot src/index.ts",
-        "build": "bun build.ts",
-        "compile": "bun build --compile --sourcemap --bytecode src/index.ts --outfile dist/myapp",
-        "postcompile": "rm -f .*.bun-build",
-        "start": "bun dist/index.js"
-    },
-    "dependencies": {
-        "@hono/oidc-auth": "catalog:",
-        "@hono/zod-openapi": "catalog:",
-        "@scalar/hono-api-reference": "catalog:",
-        "dayjs": "catalog:",
-        "hono": "catalog:",
-        "minio": "catalog:",
-        "prom-client": "catalog:",
-        "zod": "catalog:"
-    },
-    "devDependencies": {
-        "@types/bun": "catalog:",
-        "@workspace/biome-config": "workspace:*",
-        "@workspace/db": "workspace:*",
-        "@workspace/typescript-config": "workspace:*",
-        "@workspace/auth": "workspace:*"
-    }
+  "name": "@backend/be-model",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build.ts",
+    "compile": "bun build --compile --sourcemap --bytecode src/index.ts --outfile dist/myapp",
+    "postcompile": "rm -f .*.bun-build",
+    "start": "bun dist/index.js"
+  },
+  "dependencies": {
+    "@hono/oidc-auth": "catalog:",
+    "@hono/zod-openapi": "catalog:",
+    "@scalar/hono-api-reference": "catalog:",
+    "dayjs": "catalog:",
+    "hono": "catalog:",
+    "minio": "catalog:",
+    "prom-client": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@workspace/db": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "@workspace/auth": "workspace:*"
+  }
 }

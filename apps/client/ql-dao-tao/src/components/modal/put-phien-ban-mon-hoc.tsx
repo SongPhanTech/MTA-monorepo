@@ -11,15 +11,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import {
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    Switch,
-    TreeSelect,
-    message,
-} from 'antd'
+import { Col, Form, Input, InputNumber, message, Switch, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -85,6 +77,7 @@ const PutVersionSubjectModal = () => {
             .map((subject) => ({
                 title: subject.name,
                 value: subject.id,
+                selectable: false,
                 children:
                     subject.subjectVersion.map((version: SubjectVersion) => ({
                         title: version.name,
@@ -99,8 +92,7 @@ const PutVersionSubjectModal = () => {
 
         try {
             showSpinner()
-            const values =
-                (await form.validateFields()) as PutSubjectVersionFormValues
+            const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
             const payload = {
                 code: output.code,
@@ -117,9 +109,7 @@ const PutVersionSubjectModal = () => {
                 numberOfReview: output.numberOfReview,
                 credit: output.credit,
                 period: output.period,
-                managementOrganizationId: subject
-                    ? subject.managementOrganizationId
-                    : '',
+                managementOrganizationId: subject ? subject.managementOrganizationId : '',
                 subjectId: subjectId ? subjectId : '',
                 objectives: output.objectives,
                 learningOutcome: output.learningOutcome,
@@ -170,7 +160,7 @@ const PutVersionSubjectModal = () => {
 
             queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
 
@@ -223,12 +213,7 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="examType"
-                    label="Hình thức thi"
-                    required
-                >
+                <FormItem form={form} name="examType" label="Hình thức thi" required>
                     <Select
                         placeholder="Chọn hình thức thi"
                         options={options?.map((item) => ({
@@ -257,42 +242,35 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <Form.Item
-                    name="prerequisiteSubjectIds"
-                    label="Môn học tiên quyết"
-                >
+                <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
                     <TreeSelect
                         treeData={treeData}
-                        treeCheckable={true}
+                        // treeCheckable={true}
+                        multiple={true}
                         treeDefaultExpandAll
                         showSearch
                         placeholder="Chọn môn học tiên quyết"
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </Form.Item>
             </Col>
             <Col span={12}>
-                <Form.Item
-                    name="coRequisiteSubjectIds"
-                    label="Môn học song hành"
-                >
+                <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
                     <TreeSelect
                         treeData={treeData}
-                        treeCheckable={true}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
                         showSearch
                         placeholder="Chọn môn học song hành"
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </Form.Item>
@@ -308,84 +286,37 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfTheory"
-                    label="Số tiết lý thuyết"
-                >
-                    <InputNumber
-                        placeholder="Số tiết lý thuyết"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết">
+                    <InputNumber placeholder="Số tiết lý thuyết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfPractical"
-                    label="Số tiết bài tập"
-                >
-                    <InputNumber
-                        placeholder="Số tiết bài tập"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfPractical" label="Số tiết bài tập">
+                    <InputNumber placeholder="Số tiết bài tập" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfSelfStudy"
-                    label="Số tiết thảo luận/tự học"
-                >
-                    <InputNumber
-                        placeholder="Số tiết thảo luận/tự học"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfSelfStudy" label="Số tiết thảo luận/tự học">
+                    <InputNumber placeholder="Số tiết thảo luận/tự học" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfPractice"
-                    label="Số tiết thí nghiệm/thực hành"
-                >
-                    <InputNumber
-                        placeholder="Số tiết thí nghiệm/thực hành"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfPractice" label="Số tiết thí nghiệm/thực hành">
+                    <InputNumber placeholder="Số tiết thí nghiệm/thực hành" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfReview"
-                    label="Số tiết ôn tập"
-                >
-                    <InputNumber
-                        placeholder="Số tiết ôn tập"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfReview" label="Số tiết ôn tập">
+                    <InputNumber placeholder="Số tiết ôn tập" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfExam"
-                    label="Số tiết KT/thi"
-                >
-                    <InputNumber
-                        placeholder="Số tiết KT/thi"
-                        className="w-full"
-                    />
+                <FormItem form={form} name="numberOfExam" label="Số tiết KT/thi">
+                    <InputNumber placeholder="Số tiết KT/thi" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12} className="flex items-center">
-                <FormItem
-                    form={form}
-                    name="active"
-                    label=""
-                    valuePropName="checked"
-                >
+                <FormItem form={form} name="active" label="" valuePropName="checked">
                     <div
                         style={{
                             display: 'flex',
@@ -400,11 +331,7 @@ const PutVersionSubjectModal = () => {
             </Col>
             {/*  */}
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="documentPaths"
-                    label="Tài liệu đính kèm"
-                >
+                <FormItem form={form} name="documentPaths" label="Tài liệu đính kèm">
                     <DocumentPaths form={form} data={document} />
                 </FormItem>
             </Col>
@@ -415,10 +342,7 @@ const PutVersionSubjectModal = () => {
                         label: 'Mục tiêu',
                         children: (
                             <FormItem form={form} name="objectives">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập mục tiêu"
-                                />
+                                <Input.TextArea rows={6} placeholder="Nhập mục tiêu" />
                             </FormItem>
                         ),
                     },
@@ -427,10 +351,7 @@ const PutVersionSubjectModal = () => {
                         label: 'Chuẩn đầu ra',
                         children: (
                             <FormItem form={form} name="learningOutcome">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập chuẩn đầu ra"
-                                />
+                                <Input.TextArea rows={6} placeholder="Nhập chuẩn đầu ra" />
                             </FormItem>
                         ),
                     },
@@ -487,10 +408,7 @@ const PutVersionSubjectModal = () => {
                         label: 'Quy định của học phần',
                         children: (
                             <FormItem form={form} name="rules">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập quy định của học phần"
-                                />
+                                <Input.TextArea rows={6} placeholder="Nhập quy định của học phần" />
                             </FormItem>
                         ),
                     },

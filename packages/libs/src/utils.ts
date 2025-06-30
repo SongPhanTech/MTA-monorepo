@@ -43,22 +43,14 @@ export const calcFinalScore = (
             )
 
     const maxCertFinalScore = subjectScore.certificates?.length
-        ? Math.max(
-              ...subjectScore.certificates.map(
-                  (cert) => cert.archivedCertificate.finalScore
-              )
-          )
+        ? Math.max(...subjectScore.certificates.map((cert) => cert.archivedCertificate.finalScore))
         : null
 
     if (rawFinalScore === null && maxCertFinalScore === null) {
         return null
     }
 
-    if (
-        rawFinalScore &&
-        maxCertFinalScore === null &&
-        rawFinalScore < coef.scoreToPass
-    ) {
+    if (rawFinalScore && maxCertFinalScore === null && rawFinalScore < coef.scoreToPass) {
         return rawFinalScore
     }
 
@@ -67,8 +59,5 @@ export const calcFinalScore = (
         0
     )
 
-    return Math.min(
-        Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore,
-        10
-    )
+    return Math.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
 }

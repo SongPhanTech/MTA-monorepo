@@ -7,12 +7,8 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { Student } from '@workspace/db'
-import {
-    useCountStudent,
-    useFindManyStudent,
-    useUpdateManyStudent,
-} from '@workspace/db/hooks'
-import { Col, Divider, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { useCountStudent, useFindManyStudent, useUpdateManyStudent } from '@workspace/db/hooks'
+import { Col, Divider, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
@@ -21,6 +17,7 @@ import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 dayjs.locale('vi')
 
 interface FilterProps {
@@ -32,9 +29,7 @@ const AddStudentToFixedClassModal = () => {
     const fixedClassId = router.query.id as string
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPagesNotClass, setNumberOfPagesNotClass] = useState(
-        DEFAULT_PAGINATE_SIZE
-    )
+    const [numberOfPagesNotClass, setNumberOfPagesNotClass] = useState(DEFAULT_PAGINATE_SIZE)
     const [currentPageNotClass, setCurrentPageNotClass] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [form] = Form.useForm<{ list: Student[] }>()
@@ -262,7 +257,7 @@ const AddStudentToFixedClassModal = () => {
                 queryKey: ['Subject'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -282,9 +277,7 @@ const AddStudentToFixedClassModal = () => {
                 <Flex>
                     <Input
                         id="search"
-                        onChange={(e) =>
-                            handleFilterChange('searchText', e.target.value)
-                        }
+                        onChange={(e) => handleFilterChange('searchText', e.target.value)}
                         placeholder="Tìm kiếm"
                         style={{
                             width: 300,
@@ -319,9 +312,7 @@ const AddStudentToFixedClassModal = () => {
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
-                                index +
-                                1 +
-                                (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Mã sinh viên',
@@ -343,9 +334,7 @@ const AddStudentToFixedClassModal = () => {
                             width: 100,
                             render: (record) =>
                                 record.userProfile?.dateOfBirth
-                                    ? dayjs(
-                                          record.userProfile.dateOfBirth
-                                      ).format('DD/MM/YYYY')
+                                    ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                     : '',
                         },
                         {
@@ -355,8 +344,7 @@ const AddStudentToFixedClassModal = () => {
                             render: (record) =>
                                 record.userProfile?.gender
                                     ? GENDER_MEAN[
-                                          record.userProfile
-                                              .gender as keyof typeof GENDER_MEAN
+                                          record.userProfile.gender as keyof typeof GENDER_MEAN
                                       ]
                                     : '',
                         },
@@ -365,8 +353,7 @@ const AddStudentToFixedClassModal = () => {
                             width: 150,
                             render: (record) => {
                                 return (
-                                    record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor
+                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                                         ?.trainingField?.name || ''
                                 )
                             },
@@ -376,8 +363,8 @@ const AddStudentToFixedClassModal = () => {
                             width: 180,
                             render: (record) => {
                                 return (
-                                    record?.fixedClass?.curriculumVersion
-                                        ?.curriculum?.trainingMajor?.name || ''
+                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                        ?.name || ''
                                 )
                             },
                         },
@@ -399,9 +386,7 @@ const AddStudentToFixedClassModal = () => {
                                         record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                     ]
                                 return statusInfo ? (
-                                    <Tag color={statusInfo.color}>
-                                        {statusInfo.label}
-                                    </Tag>
+                                    <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
                                 ) : (
                                     <Tag color="default">Không xác định</Tag>
                                 )
@@ -469,8 +454,7 @@ const AddStudentToFixedClassModal = () => {
                     rowKey="id"
                     rowSelection={{
                         selectedRowKeys,
-                        onChange: (selectedKeys: any) =>
-                            setSelectedRowKeys(selectedKeys),
+                        onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
                     }}
                     columns={[
                         {
@@ -479,10 +463,7 @@ const AddStudentToFixedClassModal = () => {
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
-                                index +
-                                1 +
-                                (currentPageNotClass - 1) *
-                                    DEFAULT_PAGINATE_SIZE,
+                                index + 1 + (currentPageNotClass - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Mã sinh viên',
@@ -504,9 +485,7 @@ const AddStudentToFixedClassModal = () => {
                             width: 100,
                             render: (record) =>
                                 record.userProfile?.dateOfBirth
-                                    ? dayjs(
-                                          record.userProfile.dateOfBirth
-                                      ).format('DD/MM/YYYY')
+                                    ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                     : '',
                         },
                         {
@@ -516,8 +495,7 @@ const AddStudentToFixedClassModal = () => {
                             render: (record) =>
                                 record.userProfile?.gender
                                     ? GENDER_MEAN[
-                                          record.userProfile
-                                              .gender as keyof typeof GENDER_MEAN
+                                          record.userProfile.gender as keyof typeof GENDER_MEAN
                                       ]
                                     : '',
                         },
@@ -525,17 +503,16 @@ const AddStudentToFixedClassModal = () => {
                             title: 'Ngành',
                             width: 150,
                             render: (record) => {
-                                return record?.fixedClass?.curriculumVersion
-                                    ?.curriculum?.trainingMajor?.trainingField
-                                    ?.name
+                                return record?.fixedClass?.curriculumVersion?.curriculum
+                                    ?.trainingMajor?.trainingField?.name
                             },
                         },
                         {
                             title: 'Chuyên ngành',
                             width: 180,
                             render: (record) => {
-                                return record?.fixedClass?.curriculumVersion
-                                    ?.curriculum?.trainingMajor?.name
+                                return record?.fixedClass?.curriculumVersion?.curriculum
+                                    ?.trainingMajor?.name
                             },
                         },
                         {
@@ -556,9 +533,7 @@ const AddStudentToFixedClassModal = () => {
                                         record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
                                     ]
                                 return statusInfo ? (
-                                    <Tag color={statusInfo.color}>
-                                        {statusInfo.label}
-                                    </Tag>
+                                    <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
                                 ) : (
                                     <Tag color="default">Không xác định</Tag>
                                 )

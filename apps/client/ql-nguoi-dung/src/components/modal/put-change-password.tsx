@@ -1,7 +1,5 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, {
-    type PutModalFormType,
-} from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import { Col, Form, Input } from 'antd'
 import { type ChangeEvent, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -83,15 +81,12 @@ const PutChangePasswordModal = () => {
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
-                                const referencePassword =
-                                    getFieldValue('newPassword')
+                                const referencePassword = getFieldValue('newPassword')
                                 if (!value || referencePassword === value) {
                                     return Promise.resolve()
                                 }
 
-                                return Promise.reject(
-                                    new Error('• Mật khẩu xác nhận không khớp')
-                                )
+                                return Promise.reject(new Error('• Mật khẩu xác nhận không khớp'))
                             },
                         }),
                     ]}

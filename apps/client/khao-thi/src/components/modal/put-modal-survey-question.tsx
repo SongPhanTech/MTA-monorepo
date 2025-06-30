@@ -14,7 +14,7 @@ import {
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSurveyQuestionTyoe = SurveyQuestion
+export type PutSurveyQuestionType = SurveyQuestion
 const PutSurveyQuestionModal = () => {
     const [form] = Form.useForm<SurveyQuestion>()
     const {
@@ -30,9 +30,8 @@ const PutSurveyQuestionModal = () => {
     const { mutateAsync: create } = useCreateSurveyQuestion()
     const { mutateAsync: update } = useUpdateSurveyQuestion()
 
-    const { data: surveys = [], refetch: refetchTopic } = useFindManySurvey()
-    const { data: surveyQuestionTypes = [], refetch: refetchObjectType } =
-        useFindManySurveyQuestionType()
+    const { data: surveys = [] } = useFindManySurvey()
+    const { data: surveyQuestionTypes = [] } = useFindManySurveyQuestionType()
 
     async function onOk(output?: SurveyQuestion) {
         console.log(output)
@@ -70,7 +69,7 @@ const PutSurveyQuestionModal = () => {
                 queryKey: ['Level'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -79,7 +78,7 @@ const PutSurveyQuestionModal = () => {
     const { data: surveyQuestion } = useFindUniqueSurveyQuestion({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyQuestion) {
             form.setFieldsValue(surveyQuestion)
@@ -93,28 +92,16 @@ const PutSurveyQuestionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'
-            }
+            title={id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
             className="w-[30vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã câu hỏi khảo sát" required>
                     <Input placeholder="Nhập mã câu hỏi khảo sát" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
                     <Input placeholder="Nhập câu hỏi khảo sát" />
                 </FormItem>
             </Col>
@@ -140,14 +127,12 @@ const PutSurveyQuestionModal = () => {
                 >
                     <Select
                         placeholder="Chọn đối tượng khảo sát"
-                        options={surveyQuestionTypes.map(
-                            (i: SurveyQuestionType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
+                        options={surveyQuestionTypes.map((i: SurveyQuestionType) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>

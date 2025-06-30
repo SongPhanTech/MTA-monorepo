@@ -7,7 +7,7 @@ interface ChartProps {
 }
 
 const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
-    const chartRef = useRef(null)
+    const _chartRef = useRef(null)
 
     const data = [
         { letter: 'Công nghệ phần mềm', frequency: 15 },
@@ -50,8 +50,7 @@ const StaffByOrg: React.FC<ChartProps> = ({ className }) => {
         onReady: (chart: import('@ant-design/plots').Plot) => {
             try {
                 const { height } = chart._container.getBoundingClientRect()
-                const tooltipItem =
-                    data[Math.floor(Math.random() * data.length)]
+                const tooltipItem = data[Math.floor(Math.random() * data.length)]
                 chart.on(
                     'afterrender',
                     () => {

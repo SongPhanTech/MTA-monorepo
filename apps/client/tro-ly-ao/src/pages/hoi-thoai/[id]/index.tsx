@@ -1,4 +1,3 @@
-import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
@@ -13,6 +12,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 
 export default function Page() {
     const router = useRouter()
@@ -20,12 +20,9 @@ export default function Page() {
     const scrollRef = useRef<HTMLDivElement>(null)
     const [isFaqMode, setIsFaqMode] = useState(false)
     const [input, setInput] = useState('')
-    const [messages, setMessages] = useState<
-        { id: number; role: string; content: string }[]
-    >([])
+    const [messages, setMessages] = useState<{ id: number; role: string; content: string }[]>([])
     const [loading, setLoading] = useState(false)
-    const [abortController, setAbortController] =
-        useState<AbortController | null>(null)
+    const [abortController, setAbortController] = useState<AbortController | null>(null)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -128,9 +125,7 @@ export default function Page() {
     useEffect(() => {
         if (messageList) {
             const sortedMessages = [...messageList].sort(
-                (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
+                (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
             )
 
             const mappedMessages = sortedMessages.map((msg) => ({
@@ -142,7 +137,7 @@ export default function Page() {
         }
     }, [messageList])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight
@@ -152,10 +147,7 @@ export default function Page() {
     return (
         <div className="flex flex-col h-full items-center bg-white">
             <div className="w-full flex flex-col h-full px-4">
-                <div
-                    ref={scrollRef}
-                    className="flex-1 overflow-y-auto pb-4 no-scrollbar"
-                >
+                <div ref={scrollRef} className="flex-1 overflow-y-auto pb-4 no-scrollbar">
                     {messages.length === 0 ? (
                         <div className="flex justify-center items-center h-full text-gray-400">
                             Bắt đầu cuộc trò chuyện...
@@ -168,9 +160,7 @@ export default function Page() {
                                     key={msg.id}
                                     style={{
                                         justifyContent:
-                                            msg.role === 'USER'
-                                                ? 'flex-end'
-                                                : 'flex-start',
+                                            msg.role === 'USER' ? 'flex-end' : 'flex-start',
                                         border: 'none',
                                         padding: '8px 0',
                                     }}
@@ -201,33 +191,24 @@ export default function Page() {
                                                 {msg.role === 'USER' ? (
                                                     <div
                                                         style={{
-                                                            whiteSpace:
-                                                                'pre-wrap',
+                                                            whiteSpace: 'pre-wrap',
                                                         }}
                                                         className="font-normal"
                                                     >
                                                         {msg.content}
                                                     </div>
                                                 ) : (
-                                                    <ReactMarkdown>
-                                                        {msg.content}
-                                                    </ReactMarkdown>
+                                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
                                                 )}
                                                 <Button
                                                     size="small"
                                                     icon={<CopyOutlined />}
                                                     className={`absolute bottom-0 ${
-                                                        msg.role === 'USER'
-                                                            ? 'right-0'
-                                                            : 'left-0'
+                                                        msg.role === 'USER' ? 'right-0' : 'left-0'
                                                     } opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-primary text-white`}
                                                     onClick={() => {
-                                                        navigator.clipboard.writeText(
-                                                            msg.content
-                                                        )
-                                                        message.success(
-                                                            'Đã sao chép nội dung!'
-                                                        )
+                                                        navigator.clipboard.writeText(msg.content)
+                                                        message.success('Đã sao chép nội dung!')
                                                     }}
                                                     type="text"
                                                 />

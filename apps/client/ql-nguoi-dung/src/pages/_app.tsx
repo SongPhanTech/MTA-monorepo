@@ -12,10 +12,10 @@ import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
 import { StoreProvider } from 'easy-peasy'
 import type { NextComponentType } from 'next'
-import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { SessionProvider } from 'next-auth/react'
 import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
@@ -48,7 +48,7 @@ function App({ Component, pageProps }: AppProps) {
         setProgress(0)
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         router.events.on('routeChangeStart', onRouteChangeStart)
         router.events.on('routeChangeComplete', onRouteChangeComplete)

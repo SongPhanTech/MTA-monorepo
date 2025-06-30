@@ -74,23 +74,16 @@ export interface Meta {
 }
 
 export class SCIMClient {
-    private async request<T>(
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<T> {
+    private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const headers = {
             'Content-Type': 'application/scim+json',
             ...options.headers,
         }
 
-        const { data, status } = await customFetch<{ data: T; status: number }>(
-            'scim2',
-            endpoint,
-            {
-                ...options,
-                headers,
-            }
-        )
+        const { data, status } = await customFetch<{ data: T; status: number }>('scim2', endpoint, {
+            ...options,
+            headers,
+        })
 
         if (status >= 400) {
             throw new HTTPException(500, {
@@ -135,10 +128,7 @@ export class SCIMClient {
         })
     }
 
-    async updateUser(
-        id: string,
-        updates: Partial<UserCreateRequest>
-    ): Promise<UserResponse> {
+    async updateUser(id: string, updates: Partial<UserCreateRequest>): Promise<UserResponse> {
         return this.request<UserResponse>(`/Users/${id}`, {
             method: 'PUT',
             body: JSON.stringify(updates),

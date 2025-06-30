@@ -3,10 +3,11 @@ import ChatLayout from '@layouts/chat-layout'
 import { useSession } from '@workspace/auth/react'
 import { type DocumentType, MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
-import { Typography, message } from 'antd'
+import { message, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
+
 const { Title } = Typography
 export default function TroLyAo() {
     const router = useRouter()
@@ -15,9 +16,9 @@ export default function TroLyAo() {
     const { id: conversationId } = router.query
     const [loading, setLoading] = useState(false)
     const { mutateAsync: createConversation } = useCreateConversation()
-    const [currentConversationId, setCurrentConversationId] = useState<
-        string | undefined
-    >(conversationId as string)
+    const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(
+        conversationId as string
+    )
 
     // const handleClick = async (key: string) => {
     //     try {
@@ -136,18 +137,14 @@ export default function TroLyAo() {
             {/* <h2 className="text-2xl font-semibold mb-6">Chọn loại Trợ lý AI</h2> */}
             {Object.entries(groupedAITypes).map(([group, items]) => (
                 <div key={group} className="mb-10">
-                    <h3 className="text-lg font-medium text-gray-700 mb-4">
-                        {group}
-                    </h3>
+                    <h3 className="text-lg font-medium text-gray-700 mb-4">{group}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {items.map((item) => (
                             <div
                                 key={item.key}
                                 onClick={() => handleClick(item.key)}
                                 className={`group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:shadow-xl ${
-                                    loading
-                                        ? 'pointer-events-none opacity-50'
-                                        : ''
+                                    loading ? 'pointer-events-none opacity-50' : ''
                                 }`}
                             >
                                 <div className="flex items-center gap-3 cursor-pointer">

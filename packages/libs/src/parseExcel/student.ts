@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { read, utils } from 'xlsx'
 import type { CellObject } from 'xlsx'
+import { read, utils } from 'xlsx'
 import type { ParseSheetError } from './types'
 
 dayjs.extend(customParseFormat)
@@ -29,11 +29,10 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
 
     const errors: ParseSheetError[] = []
     const data = wb.SheetNames.map((name) => {
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        // biome-ignore lint/style/noNonNullAssertion: <>
         const ws = wb.Sheets[name]!
 
-        const trainingObjectTypeCell: CellObject | undefined =
-            ws[trainingObjectTypeRef]
+        const trainingObjectTypeCell: CellObject | undefined = ws[trainingObjectTypeRef]
         if (trainingObjectTypeCell?.t !== 's' || !trainingObjectTypeCell.v) {
             errors.push({
                 sheetRef: name,
@@ -72,22 +71,15 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
         })[]
 
         const students = data
-            .filter((row) =>
-                Number.isInteger(Number.parseFloat(row[cols.stt] || ''))
-            )
+            .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
             .map((row) => {
-                const dateOfBirth = dayjs(
-                    row[cols.dateOfBirth],
-                    'DD/MM/YYYY'
-                ).startOf('day')
+                const dateOfBirth = dayjs(row[cols.dateOfBirth], 'DD/MM/YYYY').startOf('day')
 
                 return {
                     stt: row[cols.stt],
                     code: row[cols.code]?.trim(),
                     fullname: row[cols.fullname]?.trim(),
-                    dateOfBirth: dateOfBirth.isValid()
-                        ? dateOfBirth.toDate()
-                        : null,
+                    dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
                     gender: row[cols.gender]?.trim(),
                     placeOfBirth: row[cols.placeOfBirth]?.trim(),
                 }
@@ -103,10 +95,7 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
                 typeof trainingCourseCell?.v === 'string'
                     ? trainingCourseCell?.v.trim()
                     : trainingCourseCell?.v,
-            name:
-                typeof classNameCell?.v === 'string'
-                    ? classNameCell?.v.trim()
-                    : classNameCell?.v,
+            name: typeof classNameCell?.v === 'string' ? classNameCell?.v.trim() : classNameCell?.v,
             students,
             errors,
         }
@@ -200,8 +189,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
     }
     // end: Các tham chiếu ô cố định trong sheet
 
-    const trainingObjectTypeCell: CellObject | undefined =
-        ws[trainingObjectTypeRef]
+    const trainingObjectTypeCell: CellObject | undefined = ws[trainingObjectTypeRef]
     if (trainingObjectTypeCell?.t !== 's' || !trainingObjectTypeCell.v) {
         errors.push({
             sheetRef: sheetName,
@@ -229,14 +217,9 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
     })[]
 
     const students = data
-        .filter((row) =>
-            Number.isInteger(Number.parseFloat(row[cols.stt] || ''))
-        )
+        .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
         .map((row) => {
-            const dateOfBirth = dayjs(
-                row[cols.dateOfBirth],
-                'DD/MM/YYYY'
-            ).startOf('day')
+            const dateOfBirth = dayjs(row[cols.dateOfBirth], 'DD/MM/YYYY').startOf('day')
 
             if (!row[cols.code]) {
                 errors.push({
@@ -275,9 +258,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
                 registerNumber: row[cols.registerNumber]?.trim(),
                 code: row[cols.code]?.trim() as string,
                 fullname: row[cols.fullname]?.trim() as string,
-                dateOfBirth: dateOfBirth.isValid()
-                    ? dateOfBirth.toDate()
-                    : null,
+                dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
                 gender: row[cols.gender]?.trim(),
                 ethnicity: row[cols.ethnicity]?.trim(),
                 nationality: row[cols.nationality]?.trim(),
@@ -285,8 +266,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
                 provinceHometown: row[cols.provinceHometown]?.trim(),
                 admissionBlock: row[cols.admissionBlock]?.trim(),
                 admissionScore: row[cols.admissionScore]?.trim(),
-                competencyAssessmentScore:
-                    row[cols.competencyAssessmentScore]?.trim(),
+                competencyAssessmentScore: row[cols.competencyAssessmentScore]?.trim(),
                 fixedClass: row[cols.fixedClass]?.trim() as string,
                 trainingField: row[cols.trainingField]?.trim(),
                 trainingMajor: row[cols.trainingMajor]?.trim(),
@@ -295,15 +275,25 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
             }
         })
 
+    const duplicateCodes = students
+        .map((student) => student.code)
+        .filter((code, index, arr) => arr.indexOf(code) !== index)
+
+    if (duplicateCodes.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: '',
+            message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}`,
+        })
+    }
+
     return {
         trainingObjectType:
             typeof trainingObjectTypeCell?.v === 'string'
                 ? trainingObjectTypeCell?.v.trim()
                 : undefined,
         trainingCourse:
-            typeof trainingCourseCell?.v === 'string'
-                ? trainingCourseCell?.v.trim()
-                : undefined,
+            typeof trainingCourseCell?.v === 'string' ? trainingCourseCell?.v.trim() : undefined,
         students,
         errors,
     }

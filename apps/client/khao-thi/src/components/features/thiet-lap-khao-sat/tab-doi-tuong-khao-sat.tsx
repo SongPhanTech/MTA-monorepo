@@ -8,7 +8,7 @@ import {
     useFindManySurveyObjectType,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { EditIcon } from 'lucide-react'
 import { useState } from 'react'
@@ -54,7 +54,7 @@ function TabDoiTuongKhaoSat() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -64,23 +64,12 @@ function TabDoiTuongKhaoSat() {
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Flex
-                        justify="space-between"
-                        align="center"
-                        wrap="wrap"
-                        gap="16px"
-                    >
-                        <Form.Item
-                            label="Tìm kiếm"
-                            name="search"
-                            style={{ marginBottom: 0 }}
-                        >
+                    <Flex justify="space-between" align="center" wrap="wrap" gap="16px">
+                        <Form.Item label="Tìm kiếm" name="search" style={{ marginBottom: 0 }}>
                             <Input
                                 id="search"
                                 style={{ width: 300 }}
-                                onChange={(e) =>
-                                    debouncedSearchText(e.target.value)
-                                }
+                                onChange={(e) => debouncedSearchText(e.target.value)}
                                 placeholder="Tìm kiếm ..."
                             />
                         </Form.Item>
@@ -98,9 +87,7 @@ function TabDoiTuongKhaoSat() {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã đối tượng khảo sát',
@@ -123,8 +110,7 @@ function TabDoiTuongKhaoSat() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

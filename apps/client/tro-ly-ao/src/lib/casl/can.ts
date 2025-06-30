@@ -22,10 +22,7 @@ const menus = NAVIGATION.TRO_LY_AO.menus.flatMap((menu) => {
 })
 const Can = ({ children, I, a }: CanProps) => {
     const { can } = useAbility()
-    const subject = useMemo(
-        () => menus.find((menu) => menu.id === I)?.path ?? I,
-        [I]
-    )
+    const subject = useMemo(() => menus.find((menu) => menu.id === I)?.path ?? I, [I])
     if (!can(subject, a)) {
         return null
     }

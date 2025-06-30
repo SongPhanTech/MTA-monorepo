@@ -16,17 +16,7 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    Row,
-    Tag,
-    Tooltip,
-    message,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -189,10 +179,7 @@ export default function SubjectList() {
         onOpen()
     }
 
-    const handleModalSubjectVersion = (
-        subjectId: string,
-        subjectVersionId: string
-    ) => {
+    const handleModalSubjectVersion = (subjectId: string, subjectVersionId: string) => {
         onOpenSubjectVersion({ subjectId, subjectVersionId })
     }
 
@@ -210,7 +197,7 @@ export default function SubjectList() {
                 },
             })
             message.success('Xóa thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -228,16 +215,13 @@ export default function SubjectList() {
                 },
             })
             message.success('Xóa thành công')
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
-    const handleFilterChange = (
-        key: string,
-        value: string | ExamType[] | boolean
-    ) => {
+    const handleFilterChange = (key: string, value: string | ExamType[] | boolean) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -249,9 +233,7 @@ export default function SubjectList() {
         return SubjectData?.map((item) => ({
             ...item,
             name: `${item?.name}${
-                item?.managementOrganization?.sTen
-                    ? ` - ${item?.managementOrganization?.sTen}`
-                    : ''
+                item?.managementOrganization?.sTen ? ` - ${item?.managementOrganization?.sTen}` : ''
             }`,
         }))
     }, [SubjectData])
@@ -268,12 +250,9 @@ export default function SubjectList() {
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
+                                                handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Nhập tên môn..."
+                                            placeholder="Tìm kiếm tên môn..."
                                             className="py-0"
                                             prefix={
                                                 <Search
@@ -297,17 +276,12 @@ export default function SubjectList() {
                                     >
                                         <Select
                                             placeholder="Chọn đơn vị quản lý"
-                                            options={organization.map(
-                                                (i: DM_DonVi) => ({
-                                                    value: i.Id,
-                                                    label: i.sTen,
-                                                })
-                                            )}
+                                            options={organization.map((i: DM_DonVi) => ({
+                                                value: i.Id,
+                                                label: i.sTen,
+                                            }))}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'managementOrganizationId',
-                                                    val
-                                                )
+                                                handleFilterChange('managementOrganizationId', val)
                                             }
                                             allowClear
                                         />
@@ -318,7 +292,7 @@ export default function SubjectList() {
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
                                 <Button onClick={handleModal} type="primary">
-                                    <PlusOutlined />
+                                    <BookPlus />
                                     Thêm
                                 </Button>
                             </Flex>
@@ -335,10 +309,7 @@ export default function SubjectList() {
                         defaultExpandAll
                         onChange={(pagination, filters) => {
                             if (filters.examType) {
-                                handleFilterChange(
-                                    'examType',
-                                    filters.examType as ExamType[]
-                                )
+                                handleFilterChange('examType', filters.examType as ExamType[])
                             } else {
                                 handleFilterChange('examType', '')
                             }
@@ -346,10 +317,7 @@ export default function SubjectList() {
                             const activeFilter = Array.isArray(filters.active)
                                 ? filters.active[0]
                                 : undefined
-                            handleFilterChange(
-                                'active',
-                                activeFilter as boolean | ''
-                            )
+                            handleFilterChange('active', activeFilter as boolean | '')
                         }}
                         columns={[
                             {
@@ -361,7 +329,6 @@ export default function SubjectList() {
                             {
                                 title: 'Tên phiên bản',
                                 dataIndex: 'name',
-                                // sorter: (a, b) => a.name - b.name,
                                 width: 200,
                             },
                             {
@@ -388,48 +355,42 @@ export default function SubjectList() {
                                 title: 'LT',
                                 dataIndex: 'numberOfTheory',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfTheory - b.numberOfTheory,
+                                sorter: (a, b) => a.numberOfTheory - b.numberOfTheory,
                                 align: 'center',
                             },
                             {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfPractical - b.numberOfPractical,
+                                sorter: (a, b) => a.numberOfPractical - b.numberOfPractical,
                                 align: 'center',
                             },
                             {
                                 title: 'ThL',
                                 dataIndex: 'numberOfSelfStudy',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfSelfStudy - b.numberOfSelfStudy,
+                                sorter: (a, b) => a.numberOfSelfStudy - b.numberOfSelfStudy,
                                 align: 'center',
                             },
                             {
                                 title: 'TN, TH',
                                 dataIndex: 'numberOfPractice',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfPractice - b.numberOfPractice,
+                                sorter: (a, b) => a.numberOfPractice - b.numberOfPractice,
                                 align: 'center',
                             },
                             {
                                 title: 'Ôn',
                                 dataIndex: 'numberOfReview',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfReview - b.numberOfReview,
+                                sorter: (a, b) => a.numberOfReview - b.numberOfReview,
                                 align: 'center',
                             },
                             {
                                 title: 'KT, Thi',
                                 dataIndex: 'numberOfExam',
                                 width: 120,
-                                sorter: (a, b) =>
-                                    a.numberOfExam - b.numberOfExam,
+                                sorter: (a, b) => a.numberOfExam - b.numberOfExam,
                                 align: 'center',
                             },
                             {
@@ -442,8 +403,7 @@ export default function SubjectList() {
                                     value: opt.value,
                                 })),
                                 filterSearch: true,
-                                render: (value: ExamType) =>
-                                    getExamTypeLabel(value),
+                                render: (value: ExamType) => getExamTypeLabel(value),
                             },
                             {
                                 title: 'Trạng thái',
@@ -461,9 +421,7 @@ export default function SubjectList() {
                                     return !record ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -473,8 +431,7 @@ export default function SubjectList() {
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, record) => {
-                                    const { id: subjectVersionId, subjectId } =
-                                        record
+                                    const { id: subjectVersionId, subjectId } = record
                                     return subjectVersionId ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
@@ -488,10 +445,7 @@ export default function SubjectList() {
                                             />
                                             <DeleteIcon
                                                 popConfirm={{
-                                                    onConfirm: () =>
-                                                        handleDelete(
-                                                            subjectVersionId
-                                                        ),
+                                                    onConfirm: () => handleDelete(subjectVersionId),
                                                 }}
                                             />
                                         </Row>
@@ -508,17 +462,9 @@ export default function SubjectList() {
                         }}
                         headerRight={({ id: subjectId }) => (
                             <Flex gap={8} align="center">
-                                <Tooltip
-                                    title="Thêm mới phiên bản môn học"
-                                    placement="bottomLeft"
-                                >
+                                <Tooltip title="Thêm mới phiên bản môn học" placement="bottomLeft">
                                     <BookPlus
-                                        onClick={() =>
-                                            handleModalSubjectVersion(
-                                                subjectId,
-                                                ''
-                                            )
-                                        }
+                                        onClick={() => handleModalSubjectVersion(subjectId, '')}
                                         className="cursor-pointer"
                                     />
                                 </Tooltip>
@@ -528,8 +474,7 @@ export default function SubjectList() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () =>
-                                            handleDeleteSubject(subjectId),
+                                        onConfirm: () => handleDeleteSubject(subjectId),
                                     }}
                                 />
                             </Flex>

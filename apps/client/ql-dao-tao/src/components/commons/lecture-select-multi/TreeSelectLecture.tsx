@@ -1,10 +1,9 @@
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
-import { TreeSelect as TreeSelectAnt } from 'antd'
 import type { SelectProps } from 'antd'
-import { message } from 'antd'
+import { message, TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgTree(
@@ -26,9 +25,7 @@ function buildOrgTree(
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
                     .map((lecturer) => ({
-                        title:
-                            lecturer.userProfile?.fullName ||
-                            'Giảng viên không tên',
+                        title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
                         value: `${lecturer.id}`,
                         selectable: true,
                         children: [],

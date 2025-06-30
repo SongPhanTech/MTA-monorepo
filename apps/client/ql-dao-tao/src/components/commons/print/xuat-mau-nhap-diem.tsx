@@ -8,10 +8,7 @@ interface ExportScoreTemplateProps {
     dataTable: any[]
 }
 
-const ExportScoreTemplate = ({
-    selectedFixedClass,
-    dataTable,
-}: ExportScoreTemplateProps) => {
+const ExportScoreTemplate = ({ selectedFixedClass, dataTable }: ExportScoreTemplateProps) => {
     const exportTemplate = async () => {
         if (!selectedFixedClass || dataTable.length === 0) return
 
@@ -228,9 +225,7 @@ const ExportScoreTemplate = ({
                 record.student?.code || '',
                 `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
                 record.student?.userProfile?.dateOfBirth
-                    ? new Date(
-                          record.student.userProfile.dateOfBirth
-                      ).toLocaleDateString('vi-VN')
+                    ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                     : '',
                 record.student?.fixedClass?.name || '',
                 record.attendanceScore || '',
@@ -239,11 +234,7 @@ const ExportScoreTemplate = ({
             ]
 
             row.eachCell((cell: ExcelJS.Cell) => {
-                if (
-                    Number(cell.col) >= 6 &&
-                    Number(cell.col) <= 8 &&
-                    row.number >= 11
-                ) {
+                if (Number(cell.col) >= 6 && Number(cell.col) <= 8 && row.number >= 11) {
                     cell.protection = { locked: false }
                 } else {
                     cell.protection = { locked: true }
@@ -297,10 +288,7 @@ const ExportScoreTemplate = ({
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
-        saveAs(
-            new Blob([buffer]),
-            `Mau_nhap_diem_${subjectClass?.code || 'unknown'}.xlsx`
-        )
+        saveAs(new Blob([buffer]), `Mau_nhap_diem_${subjectClass?.code || 'unknown'}.xlsx`)
     }
 
     return (

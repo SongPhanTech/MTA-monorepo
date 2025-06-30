@@ -3,6 +3,7 @@ import { useMenuList } from '@hooks/menu-list'
 import type { NextPage } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
+
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
     const { status } = useSession()
@@ -15,9 +16,7 @@ const IndexPage: NextPage = () => {
             if (firstMenu.length > 0) {
                 // window.location.href = firstMenu[0].path
                 console.log(
-                    firstMenu[0].path
-                        ? firstMenu[0].path
-                        : firstMenu[0].children?.[0]?.path || ''
+                    firstMenu[0].path ? firstMenu[0].path : firstMenu[0].children?.[0]?.path || ''
                 )
                 window.location.href = firstMenu[0].path
                     ? firstMenu[0].path

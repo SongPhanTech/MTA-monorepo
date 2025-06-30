@@ -5,7 +5,7 @@ import {
     useFindManyChatBotConfig,
     useUpdateChatBotConfig,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, InputNumber, Row, message } from 'antd'
+import { Button, Col, Form, InputNumber, message, Row } from 'antd'
 import { useEffect, useState } from 'react'
 
 // Mâu tham số cho LLM
@@ -26,15 +26,11 @@ function Page() {
     useEffect(() => {
         if (chatbotConfig) {
             const values = {
-                temperature: chatbotConfig.find((e) => e.name === 'temperature')
-                    ?.value,
+                temperature: chatbotConfig.find((e) => e.name === 'temperature')?.value,
                 topP: chatbotConfig.find((e) => e.name === 'topP')?.value,
                 topK: chatbotConfig.find((e) => e.name === 'topK')?.value,
-                maxTokens: chatbotConfig.find((e) => e.name === 'maxTokens')
-                    ?.value,
-                presencePenalty: chatbotConfig.find(
-                    (e) => e.name === 'presencePenalty'
-                )?.value,
+                maxTokens: chatbotConfig.find((e) => e.name === 'maxTokens')?.value,
+                presencePenalty: chatbotConfig.find((e) => e.name === 'presencePenalty')?.value,
             }
             form.setFieldsValue(values)
             setInitialValues(values)
@@ -86,9 +82,7 @@ function Page() {
     return (
         <div>
             <div className="flex items-center justify-between mb-4 bg-white rounded-md">
-                <span className="text-xl font-semibold text-gray-700">
-                    Thiết lập tham số
-                </span>
+                <span className="text-xl font-semibold text-gray-700">Thiết lập tham số</span>
             </div>
             <Form
                 form={form}
@@ -104,12 +98,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber
-                                max={1}
-                                min={0}
-                                step={0.01}
-                                disabled={!isEditing}
-                            />
+                            <InputNumber max={1} min={0} step={0.01} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -119,11 +108,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber
-                                min={0}
-                                step={1}
-                                disabled={!isEditing}
-                            />
+                            <InputNumber min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -133,11 +118,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber
-                                min={0}
-                                step={1}
-                                disabled={!isEditing}
-                            />
+                            <InputNumber min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -147,11 +128,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber
-                                min={0}
-                                step={1}
-                                disabled={!isEditing}
-                            />
+                            <InputNumber min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -161,11 +138,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber
-                                min={0}
-                                step={1}
-                                disabled={!isEditing}
-                            />
+                            <InputNumber min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                 </Row>

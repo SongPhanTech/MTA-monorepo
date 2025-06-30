@@ -12,11 +12,7 @@ export function parseDate(input?: number | string | Date): Date | null {
         // Check if input is a DD/MM/YYYY string
         if (typeof input === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
             const [day, month, year] = input.split('/').map(Number)
-            if (
-                year !== undefined &&
-                month !== undefined &&
-                day !== undefined
-            ) {
+            if (year !== undefined && month !== undefined && day !== undefined) {
                 return new Date(year, month - 1, day)
             }
         }
@@ -37,22 +33,18 @@ export const getCurrentDateForReport = () => {
     return { date, month, year }
 }
 
-export const buildEthnicityMap = async (
+export const buildEthnicityMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name)))
-    )
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     const existing = await prisma.dM_DanToc.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {
@@ -63,22 +55,18 @@ export const buildEthnicityMap = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildNationalityMap = async (
+export const buildNationalityMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name)))
-    )
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     const existing = await prisma.dM_QuocGia.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {
@@ -89,22 +77,18 @@ export const buildNationalityMap = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildProvinceMap = async (
+export const buildProvinceMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name)))
-    )
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     const existing = await prisma.dM_Tinh.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {
@@ -115,22 +99,18 @@ export const buildProvinceMap = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildDistrictMap = async (
+export const buildDistrictMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name)))
-    )
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     const existing = await prisma.dM_QuanHuyen.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {
@@ -141,22 +121,15 @@ export const buildDistrictMap = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildWardMap = async (
-    prisma: PrismaClient,
-    names: (string | undefined)[]
-) => {
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name)))
-    )
+export const buildWardMapOrThrow = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
     const existing = await prisma.dM_XaPhuong.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {
@@ -167,7 +140,7 @@ export const buildWardMap = async (
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
-export const buildCurriculumMap = async (
+export const buildCurriculumMapOrThrow = async (
     prisma: PrismaClient,
     students: {
         curriculum: string
@@ -177,11 +150,7 @@ export const buildCurriculumMap = async (
 ) => {
     const categorySet = new Set<string>(
         students.map((s) =>
-            JSON.stringify([
-                s.curriculum,
-                s.trainingMajor ?? null,
-                s.trainingField ?? null,
-            ])
+            JSON.stringify([s.curriculum, s.trainingMajor ?? null, s.trainingField ?? null])
         )
     )
 
@@ -189,39 +158,21 @@ export const buildCurriculumMap = async (
         (s) => JSON.parse(s) as [string, string | null, string | null]
     )
 
-    uniqueTuples.map(([curriculum, trainingMajor, trainingField]) => ({
-        name: curriculum,
-        ...(trainingMajor && trainingField
-            ? {
-                  curriculum: {
-                      trainingMajor: {
-                          name: trainingMajor,
-                          trainingField: { name: trainingField },
-                      },
-                  },
-              }
-            : {}),
-    }))
-
     const existing = await prisma.curriculumVersion.findMany({
         where: {
-            OR: uniqueTuples.map(
-                ([curriculum, trainingMajor, trainingField]) => ({
-                    name: curriculum,
-                    ...(trainingMajor && trainingField
-                        ? {
-                              curriculum: {
-                                  trainingMajor: {
-                                      name: trainingMajor,
-                                      trainingField: {
-                                          name: trainingField,
-                                      },
-                                  },
+            OR: uniqueTuples.map(([curriculum, trainingMajor, trainingField]) => ({
+                name: curriculum,
+                ...(trainingMajor && trainingField
+                    ? {
+                          curriculum: {
+                              trainingMajor: {
+                                  name: trainingMajor,
+                                  trainingField: { name: trainingField },
                               },
-                          }
-                        : {}),
-                })
-            ),
+                          },
+                      }
+                    : {}),
+            })),
         },
         select: {
             id: true,
@@ -239,18 +190,14 @@ export const buildCurriculumMap = async (
         },
     })
 
-    // TODO: upgrade biome v2
     const missing = uniqueTuples.filter(
         ([curriculum, trainingMajor, trainingField]) =>
             !existing.some(
                 (version) =>
                     version.name === curriculum &&
-                    (!trainingMajor ||
-                        trainingMajor ===
-                            version.curriculum.trainingMajor.name) &&
+                    (!trainingMajor || trainingMajor === version.curriculum.trainingMajor.name) &&
                     (!trainingField ||
-                        trainingField ===
-                            version.curriculum.trainingMajor.trainingField.name)
+                        trainingField === version.curriculum.trainingMajor.trainingField.name)
             )
     )
 
@@ -264,6 +211,80 @@ export const buildCurriculumMap = async (
                                 ? ` - ${trainingMajor} - ${trainingField}`
                                 : ''
                         }`
+                )
+                .join('; ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ name, id }) => [name, id]))
+}
+
+export const buildTrainingBlockMapOrThrow = async (prisma: PrismaClient, names: string[]) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    const existing = await prisma.trainingBlock.findMany({
+        where: { name: { in: uniqNames, mode: 'insensitive' } },
+        select: { name: true, id: true },
+    })
+
+    const missing = uniqNames.filter((name) => !existing.some((item) => item.name === name))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Khối kiến thức không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ name, id }) => [name, id]))
+
+    // // Normalize existing names to lowercase for case-insensitive matching
+    // const existingMap = new Map(existing.map(({ name, id }) => [name.toLowerCase(), id]))
+
+    // // Build result map using the original uniqNames
+    // const result = new Map<string, string>()
+    // for (const name of uniqNames) {
+    //     const id = existingMap.get(name.toLowerCase())
+    //     if (id) {
+    //         result.set(name, id)
+    //     }
+    // }
+
+    // return result
+}
+
+export const buildSubjectMapOrThrow = async (
+    prisma: PrismaClient,
+    subjects: { name: string; organizationCode?: string; credit?: number }[]
+) => {
+    const subjectSet = new Set<string>(
+        subjects.map((s) => JSON.stringify([s.name, s.organizationCode ?? null, s.credit ?? null]))
+    )
+
+    const uniqueTuples = Array.from(subjectSet).map(
+        (s) => JSON.parse(s) as [string, string | null, number | null]
+    )
+
+    const existing = await prisma.subjectVersion.findMany({
+        where: {
+            OR: uniqueTuples.map(([name, organizationCode, credit]) => ({
+                name,
+                ...(organizationCode ? { managementOrganization: { sMa: organizationCode } } : {}),
+                ...(credit ? { credit } : {}),
+            })),
+        },
+        select: { id: true, name: true },
+    })
+
+    const missing = uniqueTuples.filter(
+        ([name]) => !existing.some((version) => version.name === name)
+    )
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Phiên bản môn học không tồn tại: ${missing
+                .map(
+                    ([name, organizationCode, credit]) =>
+                        `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
                 )
                 .join('; ')}`,
         })

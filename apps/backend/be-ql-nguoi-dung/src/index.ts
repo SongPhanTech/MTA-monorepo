@@ -1,6 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { SpanKind, context, trace } from '@opentelemetry/api'
-import { Prisma, PrismaClient, enhance } from '@workspace/db'
+import { context, SpanKind, trace } from '@opentelemetry/api'
+import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
 import { contextStorage, getContext } from 'hono/context-storage'
@@ -80,9 +80,7 @@ app.onError((err, c) => {
             attributes: { 'error.message': err.message },
             kind: SpanKind.INTERNAL,
         },
-        parentSpan
-            ? trace.setSpan(context.active(), parentSpan)
-            : context.active()
+        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
     )
 
     subSpan.recordException(err)

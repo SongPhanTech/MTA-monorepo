@@ -1,13 +1,7 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal, {
-    type PutModalFormType,
-} from '@components/commons/put-modal'
+import PutFormModal, { type PutModalFormType } from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import {
-    useFindManyRole,
-    useFindManyUser,
-    useFindUniqueGroup,
-} from '@workspace/db/hooks'
+import { useFindManyRole, useFindManyUser, useFindUniqueGroup } from '@workspace/db/hooks'
 import { Col, Form, Input, Table } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -36,7 +30,7 @@ const PutNhomNguoiDungModal = () => {
     const { data: users = [] } = useFindManyUser()
     const { data: roles = [] } = useFindManyRole()
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (isSuccess) {
             form.setFieldsValue({
@@ -60,20 +54,13 @@ const PutNhomNguoiDungModal = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={
-                input ? 'Chỉnh sửa nhóm người dùng' : 'Thêm mới nhóm người dùng'
-            }
+            title={input ? 'Chỉnh sửa nhóm người dùng' : 'Thêm mới nhóm người dùng'}
         >
             <Col span={12}>
                 <FormItem form={form} name="id" hidden>
                     <Input />
                 </FormItem>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên nhóm người dùng"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên nhóm người dùng" required>
                     <Input />
                 </FormItem>
             </Col>
@@ -104,11 +91,7 @@ const PutNhomNguoiDungModal = () => {
                             (optionA?.label ?? '')
                                 .toString()
                                 .toLowerCase()
-                                .localeCompare(
-                                    (optionB?.label ?? '')
-                                        .toString()
-                                        .toLowerCase()
-                                )
+                                .localeCompare((optionB?.label ?? '').toString().toLowerCase())
                         }
                         options={users.map((user) => ({
                             label: user.name,

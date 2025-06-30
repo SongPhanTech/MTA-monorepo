@@ -34,14 +34,7 @@ function Page() {
             children: <TabLoaiCauHoiKhaoSat />,
         },
     ]
-    return (
-        <Tabs
-            defaultActiveKey="1"
-            items={items}
-            onChange={onChange}
-            type="card"
-        />
-    )
+    return <Tabs defaultActiveKey="1" items={items} onChange={onChange} type="card" />
 }
 
 export default Page

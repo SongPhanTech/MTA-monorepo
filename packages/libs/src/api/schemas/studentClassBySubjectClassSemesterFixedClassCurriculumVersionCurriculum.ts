@@ -6,10 +6,9 @@
  */
 import type { StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor } from './studentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor'
 
-export type StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculum =
-    {
-        id: string
-        name: string
-        code: string
-        trainingMajor: StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor
-    }
+export type StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculum = {
+    id: string
+    name: string
+    code: string
+    trainingMajor: StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor
+}

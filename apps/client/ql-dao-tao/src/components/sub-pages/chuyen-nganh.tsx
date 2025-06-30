@@ -18,7 +18,7 @@ import {
     useFindManyTrainingCourse,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, Row, Tag, TreeSelect, message } from 'antd'
+import { Checkbox, Col, Form, Input, message, Row, Tag, TreeSelect } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -27,7 +27,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function MajorInforList({ infor }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [searchText, _setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
         managementOrganizationId: undefined,
@@ -59,8 +59,7 @@ export default function MajorInforList({ infor }: any) {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
 
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
@@ -87,23 +86,21 @@ export default function MajorInforList({ infor }: any) {
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } =
-        useDisclosure<string>({
-            tag: PutUploadFixedClassModal.name,
-        })
-    const { onOpen: onOpenDivision, onClose: onCloseDivision } =
-        useDisclosure<string>({
-            tag: PutUploadDivisionModal.name,
-        })
+    const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } = useDisclosure<string>({
+        tag: PutUploadFixedClassModal.name,
+    })
+    const { onOpen: onOpenDivision, onClose: onCloseDivision } = useDisclosure<string>({
+        tag: PutUploadDivisionModal.name,
+    })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
+    const _handleModal = () => {
         onOpen()
     }
-    const handleModalUploadFixedClass = () => {
+    const _handleModalUploadFixedClass = () => {
         onOpenFixedClass()
     }
-    const handleModalDivision = () => {
+    const _handleModalDivision = () => {
         onOpenDivision()
     }
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -118,7 +115,7 @@ export default function MajorInforList({ infor }: any) {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -130,8 +127,7 @@ export default function MajorInforList({ infor }: any) {
             return newFilters
         })
     }
-    const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile()
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -145,30 +141,21 @@ export default function MajorInforList({ infor }: any) {
                                 <Input
                                     id="search"
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item
-                                name="managementOrganizationId"
-                                label="Đơn vị quản lý"
-                            >
+                            <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                                 <TreeSelect
                                     placeholder="Chọn đơn vị quản lý"
                                     allowClear
                                     showSearch
                                     treeDefaultExpandAll
                                     onChange={(val) =>
-                                        handleFilterChange(
-                                            'managementOrganizationId',
-                                            val
-                                        )
+                                        handleFilterChange('managementOrganizationId', val)
                                     }
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
@@ -192,9 +179,7 @@ export default function MajorInforList({ infor }: any) {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Phiên bản',
@@ -273,18 +258,14 @@ export default function MajorInforList({ infor }: any) {
                                 dataIndex: 'isStandardProgram',
                                 align: 'center',
                                 width: 120,
-                                render: (value: boolean) => (
-                                    <Checkbox checked={!!value} disabled />
-                                ),
+                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
                             },
                             {
                                 title: 'Khoá sửa',
                                 dataIndex: 'isLocked',
                                 align: 'center',
                                 width: 120,
-                                render: (value: boolean) => (
-                                    <Checkbox checked={!!value} disabled />
-                                ),
+                                render: (value: boolean) => <Checkbox checked={!!value} disabled />,
                             },
                             {
                                 title: 'Trạng thái',
@@ -295,9 +276,7 @@ export default function MajorInforList({ infor }: any) {
                                     return record?.status === 'IN_ACTIVE' ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -323,16 +302,12 @@ export default function MajorInforList({ infor }: any) {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

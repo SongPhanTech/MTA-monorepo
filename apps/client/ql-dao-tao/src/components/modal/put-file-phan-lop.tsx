@@ -3,7 +3,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { Button, Col, Form, Upload, type UploadFile, message } from 'antd'
+import { Button, Col, Form, message, Upload, type UploadFile } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUploadDivision = {
     file: UploadFile<any>[]
@@ -41,7 +41,7 @@ const PutUploadDivisionModal = () => {
                 queryKey: ['UserProfile'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -75,9 +75,7 @@ const PutUploadDivisionModal = () => {
                                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
                                 file.type === 'application/vnd.ms-excel'
                             if (!isExcel) {
-                                message.error(
-                                    'Chỉ được phép tải lên file Excel (.xlsx, .xls)'
-                                )
+                                message.error('Chỉ được phép tải lên file Excel (.xlsx, .xls)')
                                 return Upload.LIST_IGNORE
                             }
                             return false // Không upload tự động
@@ -85,9 +83,7 @@ const PutUploadDivisionModal = () => {
                         maxCount={1}
                         accept=".xlsx,.xls"
                     >
-                        <Button icon={<UploadOutlined />}>
-                            Chọn file Excel
-                        </Button>
+                        <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
                     </Upload>
                 </FormItem>
             </Col>

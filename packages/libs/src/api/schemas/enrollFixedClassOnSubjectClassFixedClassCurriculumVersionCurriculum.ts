@@ -6,10 +6,9 @@
  */
 import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor'
 
-export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum =
-    {
-        id: string
-        name: string
-        code: string
-        trainingMajor: EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor
-    }
+export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum = {
+    id: string
+    name: string
+    code: string
+    trainingMajor: EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor
+}

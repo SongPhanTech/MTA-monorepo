@@ -9,7 +9,7 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, TreeSelect, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -39,8 +39,7 @@ const PutSubjectModal = () => {
                 await updateSubject({
                     data: {
                         name: output.name,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
+                        managementOrganizationId: output.managementOrganizationId,
                         information: output.information,
                     },
                     where: {
@@ -52,8 +51,7 @@ const PutSubjectModal = () => {
                 await createSubject({
                     data: {
                         name: output.name,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
+                        managementOrganizationId: output.managementOrganizationId,
                         information: output.information,
                     },
                 })
@@ -64,7 +62,7 @@ const PutSubjectModal = () => {
                 queryKey: ['Subject'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -73,14 +71,13 @@ const PutSubjectModal = () => {
     const { data: level } = useFindUniqueSubject({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
         }
     }, [level])
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
     return (
@@ -94,12 +91,7 @@ const PutSubjectModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên nhóm môn học"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên nhóm môn học" required>
                     <Input placeholder="Nhập tên nhóm môn học" />
                 </FormItem>
             </Col>
@@ -117,9 +109,7 @@ const PutSubjectModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>

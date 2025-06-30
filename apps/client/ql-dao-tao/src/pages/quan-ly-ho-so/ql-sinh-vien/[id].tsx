@@ -19,9 +19,7 @@ export default function StudentDetailPage() {
     const router = useRouter()
     const studentId = router.query.id as string
 
-    const [activeCollapse, setActiveCollapse] = useState<string[]>([
-        'thong-tin-chung',
-    ])
+    const [activeCollapse, setActiveCollapse] = useState<string[]>(['thong-tin-chung'])
 
     const handleCollapseChange = (key: string | string[]) => {
         setActiveCollapse(Array.isArray(key) ? key : [key])
@@ -42,33 +40,22 @@ export default function StudentDetailPage() {
             </div>
 
             {/* Các collapse chứa thông tin chi tiết */}
-            <Collapse
-                activeKey={activeCollapse}
-                onChange={handleCollapseChange}
-                ghost
-            >
+            <Collapse activeKey={activeCollapse} onChange={handleCollapseChange} ghost>
                 <Panel
                     header={
-                        <div className="text-lg font-semibold text-blue-600">
-                            Thông tin chung
-                        </div>
+                        <div className="text-lg font-semibold text-blue-600">Thông tin chung</div>
                     }
                     key="thong-tin-chung"
                     className="border-none"
                 >
                     <div className="p-4">
-                        <ThongTinCaNhanTab
-                            type={'CIVILIAN_STUDENT'}
-                            id={studentId}
-                        />
+                        <ThongTinCaNhanTab type={'CIVILIAN_STUDENT'} id={studentId} />
                     </div>
                 </Panel>
 
                 <Panel
                     header={
-                        <div className="text-lg font-semibold text-green-600">
-                            Học hàm, học vị
-                        </div>
+                        <div className="text-lg font-semibold text-green-600">Học hàm, học vị</div>
                     }
                     key="hoc-ham-hoc-vi"
                     className="border-none"
@@ -108,9 +95,7 @@ export default function StudentDetailPage() {
 
                 <Panel
                     header={
-                        <div className="text-lg font-semibold text-cyan-600">
-                            Quá trình đào tạo
-                        </div>
+                        <div className="text-lg font-semibold text-cyan-600">Quá trình đào tạo</div>
                     }
                     key="qua-trinh-dao-tao"
                     className="border-none border-gray-200"
@@ -150,9 +135,7 @@ export default function StudentDetailPage() {
 
                 <Panel
                     header={
-                        <div className="text-lg font-semibold text-red-600">
-                            Kê khai tài sản
-                        </div>
+                        <div className="text-lg font-semibold text-red-600">Kê khai tài sản</div>
                     }
                     key="ke-khai-tai-san"
                     className="border-none border-gray-200"
@@ -163,11 +146,7 @@ export default function StudentDetailPage() {
                 </Panel>
 
                 <Panel
-                    header={
-                        <div className="text-lg font-semibold text-pink-600">
-                            Thân nhân
-                        </div>
-                    }
+                    header={<div className="text-lg font-semibold text-pink-600">Thân nhân</div>}
                     key="than-nhan"
                     className="border-none border-gray-200"
                 >

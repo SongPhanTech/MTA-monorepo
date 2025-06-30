@@ -4,10 +4,11 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
+
 dayjs.locale('vi')
 
 const DiemTrungBinhKyHoc = () => {
-    async function onOk(output?: any) {
+    async function _onOk(output?: any) {
         if (!output) return
     }
 

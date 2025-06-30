@@ -2,10 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    useCreateManyScoreConvert,
-    useFindManyTrainingCourse,
-} from '@workspace/db/hooks'
+import { useCreateManyScoreConvert, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -44,14 +41,7 @@ const PutCloneConvertScore = () => {
 
             await createManyScoreConvert({
                 data: input?.record?.scoreConverts.map(
-                    ({
-                        id,
-                        createdAt,
-                        updatedAt,
-                        $type,
-                        key,
-                        ...rest
-                    }: Item) => ({
+                    ({ id, createdAt, updatedAt, $type, key, ...rest }: Item) => ({
                         ...rest,
                         trainingCourseId: output.trainingCourseId,
                     })
@@ -63,7 +53,7 @@ const PutCloneConvertScore = () => {
                 queryKey: ['SchoolYear'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -80,12 +70,7 @@ const PutCloneConvertScore = () => {
             className="w-[400px]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="trainingCourseId"
-                    label="Khoá học"
-                    required
-                >
+                <FormItem form={form} name="trainingCourseId" label="Khoá học" required>
                     <Select
                         options={trainingCourses?.map(({ id, name }) => ({
                             value: id,

@@ -7,7 +7,7 @@ import {
     useFindManyArchivedAward,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Input, Row, message } from 'antd'
+import { Col, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -51,8 +51,7 @@ const PutAddOlympicScoreModal = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { mutateAsync: updateStudentSubjectScore } =
-        useUpdateStudentSubjectScore()
+    const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
 
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
         where: {
@@ -160,10 +159,7 @@ const PutAddOlympicScoreModal = () => {
                                 <Input
                                     id="search"
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     placeholder="Tìm kiếm"
                                     allowClear
@@ -190,8 +186,7 @@ const PutAddOlympicScoreModal = () => {
                     rowKey="id"
                     rowSelection={{
                         selectedRowKeys,
-                        onChange: (selectedKeys) =>
-                            setSelectedRowKeys(selectedKeys),
+                        onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                     }}
                     id="training-category"
                     columns={[
@@ -201,9 +196,7 @@ const PutAddOlympicScoreModal = () => {
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
-                                index +
-                                1 +
-                                (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Tên giải thưởng',
