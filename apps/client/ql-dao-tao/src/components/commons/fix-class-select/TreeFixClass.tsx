@@ -1,7 +1,4 @@
-import {
-    useFindManyFixedClass,
-    useFindManyTrainingCourse,
-} from '@workspace/db/hooks' // Thay bằng hook thực tế của bạn
+import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks' // Thay bằng hook thực tế của bạn
 import { Spin, Tree } from 'antd'
 import type React from 'react'
 
@@ -17,14 +14,13 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
         })
 
     // Lấy danh sách Fixed Classes
-    const { data: fixedClasses = [], isLoading: fixedClassesLoading } =
-        useFindManyFixedClass({
-            where: {
-                trainingCourseId: {
-                    in: trainingCourses.map((course) => course.id),
-                },
+    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
+        where: {
+            trainingCourseId: {
+                in: trainingCourses.map((course) => course.id),
             },
-        })
+        },
+    })
 
     // Tạo cấu trúc cây từ dữ liệu
     const treeData = trainingCourses.map((course) => ({

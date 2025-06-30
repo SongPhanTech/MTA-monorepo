@@ -54,25 +54,19 @@ const PreviewTaiLieu = () => {
                         className="w-[120px] h-[120px]"
                         fileType={selectedDocument.fileType}
                     />
-                    <span className="font-bold text-lg">
-                        {selectedDocument.title}
-                    </span>
+                    <span className="font-bold text-lg">{selectedDocument.title}</span>
                 </div>
 
                 <Divider />
 
                 <div className="flex flex-col gap-2">
-                    <span className="font-semibold text-base">
-                        Thông tin về tài liệu
-                    </span>
+                    <span className="font-semibold text-base">Thông tin về tài liệu</span>
                     <div>
                         <p className="font-semibold">Loại tài liệu</p>
                         <p>
                             {
-                                DOCUMENT_TYPE.find(
-                                    (item) =>
-                                        item.value === selectedDocument.type
-                                )?.label
+                                DOCUMENT_TYPE.find((item) => item.value === selectedDocument.type)
+                                    ?.label
                             }
                         </p>
                     </div>

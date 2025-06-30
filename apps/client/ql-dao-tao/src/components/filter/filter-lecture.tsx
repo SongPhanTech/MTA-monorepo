@@ -36,7 +36,7 @@ interface Props {
 
     onSearchChange: any
 }
-const options = [
+const _options = [
     {
         value: '1',
         label: 'Đối tượng 1',
@@ -69,12 +69,9 @@ const FilterLecture = (props: Props) => {
 
     const { data: priorityObjectData = [], refetch: refetchPriorityObject } =
         useFindManyPriorityObject()
-    const { data: nationalityData = [], refetch: refetchNationality } =
-        useFindManyDM_QuocGia()
-    const { data: religionData = [], refetch: refetchReligion } =
-        useFindManyDM_TonGiao()
-    const { data: ethnicityData = [], refetch: refetchEthnicity } =
-        useFindManyDM_DanToc()
+    const { data: nationalityData = [], refetch: refetchNationality } = useFindManyDM_QuocGia()
+    const { data: religionData = [], refetch: refetchReligion } = useFindManyDM_TonGiao()
+    const { data: ethnicityData = [], refetch: refetchEthnicity } = useFindManyDM_DanToc()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -209,12 +206,7 @@ const FilterLecture = (props: Props) => {
                 placeholder="Tìm kiếm theo tên giảng viên..."
                 style={{ width: 300, marginRight: 8 }}
                 className="py-0"
-                prefix={
-                    <Search
-                        size={15}
-                        style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                    />
-                }
+                prefix={<Search size={15} style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
                 allowClear
                 onChange={(e) => onSearchChange('searchText', e.target.value)}
             />

@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { FixedClassScalarSchema } from '@workspace/db/zod/models'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
@@ -10,10 +10,7 @@ import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { listStudentInfo } from '../services/fixed-class.service'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
-import {
-    SerializedFieldsSchema,
-    serializeZodSchema,
-} from '../utils/serialize-zod'
+import { SerializedFieldsSchema, serializeZodSchema } from '../utils/serialize-zod'
 import { ListOf } from '../zod/base'
 
 const uploadExcelCreateFixedClass = createRoute({
@@ -122,12 +119,9 @@ const exportDocxListStudentFixedClass = createRoute({
         200: {
             description: 'Export list of  student FixedClass as .docx',
             content: {
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                    {
-                        schema: z
-                            .any()
-                            .openapi({ type: 'string', format: 'binary' }),
-                    },
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
             },
         },
 
@@ -228,18 +222,12 @@ app.openapi(classDivision, async (c) => {
     // Lấy sheet đầu tiên
     const sheetName = workbook.SheetNames[0]
     if (!sheetName) {
-        return c.json(
-            { message: 'No sheets found in the uploaded Excel file' },
-            400
-        )
+        return c.json({ message: 'No sheets found in the uploaded Excel file' }, 400)
     }
     const sheet = workbook.Sheets[sheetName]
 
     if (!sheet) {
-        return c.json(
-            { message: 'Sheet is undefined in the uploaded Excel file' },
-            400
-        )
+        return c.json({ message: 'Sheet is undefined in the uploaded Excel file' }, 400)
     }
 
     // Chuyển đổi dữ liệu từ sheet thành JSON
@@ -295,10 +283,7 @@ app.openapi(exportDocxListStudentFixedClass, async (c) => {
         where: { id: fixedClassId }, // Tìm kiếm lớp biên chế
     })
     if (!fixedClass) {
-        return c.json(
-            { message: `Không tìm thấy lớp biên chế ${fixedClassId}` },
-            404
-        )
+        return c.json({ message: `Không tìm thấy lớp biên chế ${fixedClassId}` }, 404)
     }
 
     const { date, month, year } = getCurrentDateForReport()
@@ -320,8 +305,7 @@ app.openapi(exportDocxListStudentFixedClass, async (c) => {
 
     const reportDocx = document.render(templateData)
     return c.body(reportDocx.getZip().generate({ type: 'nodebuffer' }), 200, {
-        'Content-Type':
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="DSLop_${fixedClass.name}.docx"`,
     })
 })

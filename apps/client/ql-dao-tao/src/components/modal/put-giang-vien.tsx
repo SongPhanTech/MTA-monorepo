@@ -21,12 +21,8 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
 import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
+import type { LecturerProfileType, PutLecturerProfile, UserProfileType } from './quan-ly-ho-so/type'
 import { tabs } from './quan-ly-ho-so/type'
-import type {
-    LecturerProfileType,
-    PutLecturerProfile,
-    UserProfileType,
-} from './quan-ly-ho-so/type'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -47,11 +43,10 @@ const PutUserProfileLectureModal = () => {
     const [activeKey, setActiveKey] = useState<string>('1')
     const [avatar, setAvatar] = useState<UploadFile[]>([])
 
-    const { isOpen, onClose, input } =
-        useDisclosure<PutUserProfileLectureProps>({
-            tag: PutUserProfileLectureModal.name,
-            onClose: form.resetFields,
-        })
+    const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
+        tag: PutUserProfileLectureModal.name,
+        onClose: form.resetFields,
+    })
 
     // const {
     //     onOpen: onOpenModalOganizationUser,
@@ -245,9 +240,7 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildLecturerUpdateData = (
-        output: LecturerProfileType
-    ): Prisma.LecturerUpdateInput => ({
+    const buildLecturerUpdateData = (output: LecturerProfileType): Prisma.LecturerUpdateInput => ({
         code: output.code,
         ...(output.organizationId && {
             organization: { connect: { Id: output.organizationId } },
@@ -273,8 +266,7 @@ const PutUserProfileLectureModal = () => {
         if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension:
-                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
+                extension: output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
 
             await fetch(resPresignedUrl.data.url, {
@@ -288,15 +280,9 @@ const PutUserProfileLectureModal = () => {
         try {
             showSpinner()
 
-            const userProfileData = buildUserProfileUpdateData(
-                output,
-                fileName ?? undefined
-            )
+            const userProfileData = buildUserProfileUpdateData(output, fileName ?? undefined)
 
-            const userProfileCreateData = buildUserProfileCreateData(
-                output,
-                fileName ?? undefined
-            )
+            const userProfileCreateData = buildUserProfileCreateData(output, fileName ?? undefined)
 
             const lecturerDataUpdate = buildLecturerUpdateData(output)
 
@@ -326,11 +312,7 @@ const PutUserProfileLectureModal = () => {
                 message.success('Cập nhật giảng viên thành công')
             } else {
                 // CREATE MODE - sử dụng upsert
-                if (
-                    data.some(
-                        (item) => item.idCardNumber === output.idCardNumber
-                    )
-                ) {
+                if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
                     // Sử dụng upsert để create hoặc update UserProfile
                     const userProfile = await upsertUserProfile({
                         where: {
@@ -360,10 +342,7 @@ const PutUserProfileLectureModal = () => {
                         throw new Error('Tạo hồ sơ người dùng thất bại')
                     }
 
-                    const lecturerCreateData = buildLecturerCreateData(
-                        output,
-                        userProfile.id
-                    )
+                    const lecturerCreateData = buildLecturerCreateData(output, userProfile.id)
 
                     await createLecturer({ data: lecturerCreateData })
 
@@ -376,7 +355,7 @@ const PutUserProfileLectureModal = () => {
                 queryKey: ['Lecturer'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -402,15 +381,11 @@ const PutUserProfileLectureModal = () => {
                 // Thông tin cơ bản từ UserProfile
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
-                dateOfBirth: userProfile.dateOfBirth
-                    ? dayjs(userProfile.dateOfBirth)
-                    : null,
+                dateOfBirth: userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null,
                 placeOfBirth: userProfile.placeOfBirth,
                 homeTown: userProfile.homeTown,
                 idCardNumber: userProfile.idCardNumber,
-                idCardDate: userProfile.idCardDate
-                    ? dayjs(userProfile.idCardDate)
-                    : null,
+                idCardDate: userProfile.idCardDate ? dayjs(userProfile.idCardDate) : null,
                 officerNumber: userProfile.officerNumber,
                 healthInsuranceNumber: userProfile.healthInsuranceNumber,
                 bankAccountNumber: userProfile.bankAccountNumber,
@@ -425,26 +400,18 @@ const PutUserProfileLectureModal = () => {
                 familyName: userProfile.familyName,
 
                 // Thông tin Đoàn/Đảng/Nhập ngũ
-                unionDate: userProfile.unionDate
-                    ? dayjs(userProfile.unionDate)
-                    : null,
+                unionDate: userProfile.unionDate ? dayjs(userProfile.unionDate) : null,
                 unionPlace: userProfile.unionPlace,
-                CPVJoinDate: userProfile.CPVJoinDate
-                    ? dayjs(userProfile.CPVJoinDate)
-                    : null,
+                CPVJoinDate: userProfile.CPVJoinDate ? dayjs(userProfile.CPVJoinDate) : null,
                 officialCPVDate: userProfile.officialCPVDate
                     ? dayjs(userProfile.officialCPVDate)
                     : null,
                 CPVJoinPlace: userProfile.CPVJoinPlace,
-                tenureDate: userProfile.tenureDate
-                    ? dayjs(userProfile.tenureDate)
-                    : null,
+                tenureDate: userProfile.tenureDate ? dayjs(userProfile.tenureDate) : null,
                 enlistmentDate: userProfile.enlistmentDate
                     ? dayjs(userProfile.enlistmentDate)
                     : null,
-                dischargeDate: userProfile.dischargeDate
-                    ? dayjs(userProfile.dischargeDate)
-                    : null,
+                dischargeDate: userProfile.dischargeDate ? dayjs(userProfile.dischargeDate) : null,
 
                 // Relations IDs
                 nationalityId: userProfile.nationalityId,
@@ -456,9 +423,7 @@ const PutUserProfileLectureModal = () => {
                 academicRankTypeId: userProfile.academicRankTypeId,
 
                 // Lịch sử - Dates
-                rankDate: userProfile.rankDate
-                    ? dayjs(userProfile.rankDate)
-                    : null,
+                rankDate: userProfile.rankDate ? dayjs(userProfile.rankDate) : null,
                 academicRankDate: userProfile.academicRankDate
                     ? dayjs(userProfile.academicRankDate)
                     : null,
@@ -496,11 +461,7 @@ const PutUserProfileLectureModal = () => {
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Col xs={24} md={5}>
-                <SidebarMenu
-                    tabs={tabs}
-                    activeKey={activeKey}
-                    setActiveKey={setActiveKey}
-                />
+                <SidebarMenu tabs={tabs} activeKey={activeKey} setActiveKey={setActiveKey} />
             </Col>
 
             <Col xs={24} md={19}>

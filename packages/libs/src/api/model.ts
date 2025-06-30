@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,7 +19,8 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { customModelFetch } from './custom-instance'
 import type {
     BucketItemDto,
     ListObjectsParams,
@@ -28,7 +29,6 @@ import type {
     UrlDto,
 } from './schemas'
 
-import { customModelFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -40,13 +40,11 @@ export type generatePresignedUrlResponse200 = {
     status: 200
 }
 
-export type generatePresignedUrlResponseComposite =
-    generatePresignedUrlResponse200
+export type generatePresignedUrlResponseComposite = generatePresignedUrlResponse200
 
-export type generatePresignedUrlResponse =
-    generatePresignedUrlResponseComposite & {
-        headers: Headers
-    }
+export type generatePresignedUrlResponse = generatePresignedUrlResponseComposite & {
+    headers: Headers
+}
 
 export const getGeneratePresignedUrlUrl = () => {
     return '/api/minio/generate-presigned-url'
@@ -56,18 +54,15 @@ export const generatePresignedUrl = async (
     presignedUrlDto: PresignedUrlDto,
     options?: RequestInit
 ): Promise<generatePresignedUrlResponse> => {
-    return customModelFetch<generatePresignedUrlResponse>(
-        getGeneratePresignedUrlUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers,
-            },
-            body: JSON.stringify(presignedUrlDto),
-        }
-    )
+    return customModelFetch<generatePresignedUrlResponse>(getGeneratePresignedUrlUrl(), {
+        ...options,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...options?.headers,
+        },
+        body: JSON.stringify(presignedUrlDto),
+    })
 }
 
 export const getGeneratePresignedUrlMutationOptions = <
@@ -89,9 +84,7 @@ export const getGeneratePresignedUrlMutationOptions = <
 > => {
     const mutationKey = ['generatePresignedUrl']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -152,18 +145,13 @@ export const getListObjectsUrl = (params: ListObjectsParams) => {
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
     const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/minio?${stringifiedParams}`
-        : '/api/minio'
+    return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : '/api/minio'
 }
 
 export const listObjects = async (
@@ -186,13 +174,7 @@ export const getListObjectsQueryOptions = <
 >(
     params: ListObjectsParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listObjects>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
         request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
@@ -200,9 +182,8 @@ export const getListObjectsQueryOptions = <
 
     const queryKey = queryOptions?.queryKey ?? getListObjectsQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listObjects>>> = ({
-        signal,
-    }) => listObjects(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listObjects>>> = ({ signal }) =>
+        listObjects(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof listObjects>>,
@@ -211,24 +192,13 @@ export const getListObjectsQueryOptions = <
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListObjectsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof listObjects>>
->
+export type ListObjectsQueryResult = NonNullable<Awaited<ReturnType<typeof listObjects>>>
 export type ListObjectsQueryError = unknown
 
-export function useListObjects<
-    TData = Awaited<ReturnType<typeof listObjects>>,
-    TError = unknown,
->(
+export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listObjects>>,
-                TError,
-                TData
-            >
-        > &
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> &
             Pick<
                 DefinedInitialDataOptions<
                     Awaited<ReturnType<typeof listObjects>>,
@@ -243,19 +213,10 @@ export function useListObjects<
 ): DefinedUseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useListObjects<
-    TData = Awaited<ReturnType<typeof listObjects>>,
-    TError = unknown,
->(
+export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listObjects>>,
-                TError,
-                TData
-            >
-        > &
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> &
             Pick<
                 UndefinedInitialDataOptions<
                     Awaited<ReturnType<typeof listObjects>>,
@@ -270,19 +231,10 @@ export function useListObjects<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useListObjects<
-    TData = Awaited<ReturnType<typeof listObjects>>,
-    TError = unknown,
->(
+export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listObjects>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
@@ -290,19 +242,10 @@ export function useListObjects<
     queryKey: DataTag<QueryKey, TData, TError>
 }
 
-export function useListObjects<
-    TData = Awaited<ReturnType<typeof listObjects>>,
-    TError = unknown,
->(
+export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listObjects>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
@@ -311,10 +254,9 @@ export function useListObjects<
 } {
     const queryOptions = getListObjectsQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -337,10 +279,7 @@ export const getPresignedGetObjectUrl = (params: PresignedGetObjectParams) => {
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
@@ -355,18 +294,13 @@ export const presignedGetObject = async (
     params: PresignedGetObjectParams,
     options?: RequestInit
 ): Promise<presignedGetObjectResponse> => {
-    return customModelFetch<presignedGetObjectResponse>(
-        getPresignedGetObjectUrl(params),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+    return customModelFetch<presignedGetObjectResponse>(getPresignedGetObjectUrl(params), {
+        ...options,
+        method: 'GET',
+    })
 }
 
-export const getPresignedGetObjectQueryKey = (
-    params: PresignedGetObjectParams
-) => {
+export const getPresignedGetObjectQueryKey = (params: PresignedGetObjectParams) => {
     return ['/api/minio/presigned-url', ...(params ? [params] : [])] as const
 }
 
@@ -377,23 +311,16 @@ export const getPresignedGetObjectQueryOptions = <
     params: PresignedGetObjectParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof presignedGetObject>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
         request?: SecondParameter<typeof customModelFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getPresignedGetObjectQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getPresignedGetObjectQueryKey(params)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof presignedGetObject>>
-    > = ({ signal }) =>
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof presignedGetObject>>> = ({ signal }) =>
         presignedGetObject(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
@@ -415,11 +342,7 @@ export function usePresignedGetObject<
     params: PresignedGetObjectParams,
     options: {
         query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof presignedGetObject>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
@@ -442,11 +365,7 @@ export function usePresignedGetObject<
     params: PresignedGetObjectParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof presignedGetObject>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
@@ -469,11 +388,7 @@ export function usePresignedGetObject<
     params: PresignedGetObjectParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof presignedGetObject>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
         request?: SecondParameter<typeof customModelFetch>
     },
@@ -489,11 +404,7 @@ export function usePresignedGetObject<
     params: PresignedGetObjectParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof presignedGetObject>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
         >
         request?: SecondParameter<typeof customModelFetch>
     },
@@ -503,10 +414,9 @@ export function usePresignedGetObject<
 } {
     const queryOptions = getPresignedGetObjectQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 

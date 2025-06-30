@@ -27,26 +27,18 @@ const navigationToOptions = (navs?: MenuItem[]): SearchSystemOptionType[] => {
     }))
 }
 
-const options: SearchSystemOptionType[] = Object.entries(NAVIGATION).map(
-    ([key, value]) => ({
-        value: key,
-        label: value.label,
-        children: navigationToOptions(value.menus),
-    })
-)
+const options: SearchSystemOptionType[] = Object.entries(NAVIGATION).map(([key, value]) => ({
+    value: key,
+    label: value.label,
+    children: navigationToOptions(value.menus),
+}))
 
-const onChange: CascaderProps<SearchSystemOptionType>['onChange'] = (
-    value,
-    selectedOptions
-) => {
+const onChange: CascaderProps<SearchSystemOptionType>['onChange'] = (value, selectedOptions) => {
     console.log(value, selectedOptions)
 }
 const filter = (inputValue: string, path: SearchSystemOptionType[]) =>
     path.some(
-        (option) =>
-            (option.label as string)
-                .toLowerCase()
-                .indexOf(inputValue.toLowerCase()) > -1
+        (option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1
     )
 const SearchSystem = () => {
     return (

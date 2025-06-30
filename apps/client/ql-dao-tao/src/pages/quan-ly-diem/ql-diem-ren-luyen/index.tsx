@@ -16,14 +16,15 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd'
 import type { CheckboxChangeEvent } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { Save, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopBienCheItem from './lop-bien-che'
+
 // const { Option } = Select;
 interface FilterProps {
     schoolYearId: string | null //Năm học
@@ -44,15 +45,9 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedFixedClass, setSelectedFixedClass] = useState<
-        string | undefined
-    >(undefined)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<
-        string | undefined
-    >(undefined)
-    const [selectedSemester, setSelectedSemester] = useState<
-        Semester | undefined
-    >(undefined)
+    const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
+    const [_selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
+    const [selectedSemester, setSelectedSemester] = useState<Semester | undefined>(undefined)
     const [arrMonth, setArrMonth] = useState<any[]>([])
     const [suaDiemCu, setSuaDiemCu] = useState<boolean>(false)
     const [nhapDiemMoi, setNhapDiemMoi] = useState<boolean>(false)
@@ -83,7 +78,7 @@ export default function SubjectClassScore() {
         tag: PutOpenClassModal.name,
     })
 
-    const handleModal = () => {
+    const _handleModal = () => {
         onOpen()
     }
 
@@ -95,23 +90,21 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: schoolYearData = [] } = useFindManySchoolYear({
         orderBy: {
             startDate: 'desc',
         },
     })
-    const { data: semesterData = [], refetch: refetchSemester } =
-        useFindManySemester({
-            where: {
-                schoolYearId: filters.schoolYearId || undefined,
-            },
-            orderBy: {
-                startDate: 'desc',
-            },
-        })
+    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester({
+        where: {
+            schoolYearId: filters.schoolYearId || undefined,
+        },
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
 
     // const { data: subjectClassData = [] } = useFindManyFixedClass({
     const { data: subjectClassData = [] } = useFindManySubjectClass({
@@ -192,14 +185,11 @@ export default function SubjectClassScore() {
             showSpinner()
             console.log('Selected Fixed Class ID:', id)
             if (id[0].includes('class-')) {
-                console.log(
-                    'Selected Fixed Class ID:',
-                    id[0].replace('class-', '')
-                )
+                console.log('Selected Fixed Class ID:', id[0].replace('class-', ''))
                 setSelectedFixedClass(id[0].replace('class-', ''))
             }
             await refetch()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -214,14 +204,14 @@ export default function SubjectClassScore() {
             setSelectedSemester(semester)
 
             await refetch()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
     // #endregion
-    const rowSelection = {
+    const _rowSelection = {
         selectedRowKeys,
         onChange: (selectedKeys: any) => {
             setSelectedRowKeys(selectedKeys)
@@ -294,11 +284,7 @@ export default function SubjectClassScore() {
                 <Col span={20} className="flex justify-end">
                     <Row>
                         <Col span={24}>
-                            <Row
-                                gutter={[16, 16]}
-                                align="top"
-                                justify="space-between"
-                            >
+                            <Row gutter={[16, 16]} align="top" justify="space-between">
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
@@ -338,9 +324,7 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Năm học"
                                                     options={schoolYearData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
+                                                        (i: TrainingObjectType) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -350,10 +334,7 @@ export default function SubjectClassScore() {
                                                     }}
                                                     allowClear
                                                     onChange={(val) => {
-                                                        handleFilterChange(
-                                                            'schoolYearId',
-                                                            val
-                                                        )
+                                                        handleFilterChange('schoolYearId', val)
                                                         refetchSemester()
                                                     }}
                                                 />
@@ -370,9 +351,7 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Học kỳ"
                                                     options={semesterData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
+                                                        (i: TrainingObjectType) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -380,11 +359,7 @@ export default function SubjectClassScore() {
                                                     style={{
                                                         height: 40,
                                                     }}
-                                                    onChange={(val) =>
-                                                        handleChangeSemester(
-                                                            val
-                                                        )
-                                                    }
+                                                    onChange={(val) => handleChangeSemester(val)}
                                                     allowClear
                                                 />
                                             </Form.Item>
@@ -400,9 +375,7 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Chọn đối tượng đào tạo"
                                                     options={trainingObjectTypeData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
+                                                        (i: TrainingObjectType) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -423,9 +396,7 @@ export default function SubjectClassScore() {
 
                                         <Col span={4} className="flex">
                                             <FilterSubjectClass
-                                                onFilterChange={
-                                                    handleFilterChange
-                                                }
+                                                onFilterChange={handleFilterChange}
                                                 filters={filters}
                                                 onApply={handleFilterApply}
                                             />
@@ -435,17 +406,11 @@ export default function SubjectClassScore() {
 
                                 <Col span={6}>
                                     <Flex justify="end" gap={4}>
-                                        <Button
-                                            type="primary"
-                                            className="h-[40px]"
-                                        >
+                                        <Button type="primary" className="h-[40px]">
                                             <Save stroke="white" />
                                             Lưu
                                         </Button>
-                                        <Button
-                                            type="primary"
-                                            className="h-[40px]"
-                                        >
+                                        <Button type="primary" className="h-[40px]">
                                             <EditIcon stroke="white" />
                                             Nhập từ file danh sách
                                         </Button>
@@ -503,17 +468,13 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         fixed: 'left',
                                         render: (_, __, index) =>
-                                            index +
-                                            1 +
-                                            (currentPage - 1) *
-                                                DEFAULT_PAGINATE_SIZE,
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
                                         align: 'center',
                                         width: 150,
-                                        render: (_, record) =>
-                                            record.code || '',
+                                        render: (_, record) => record.code || '',
                                     },
                                     {
                                         title: 'Họ và tên',
@@ -521,18 +482,12 @@ export default function SubjectClassScore() {
                                         width: 150,
                                         render: (text, record) => (
                                             <>
-                                                {record.userProfile?.lastName ||
-                                                    ''}{' '}
-                                                {record.userProfile
-                                                    ?.firstName || ''}{' '}
-                                                <br />
+                                                {record.userProfile?.lastName || ''}{' '}
+                                                {record.userProfile?.firstName || ''} <br />
                                                 {record.userProfile?.dateOfBirth
                                                     ? new Date(
-                                                          record.userProfile
-                                                              .dateOfBirth
-                                                      ).toLocaleDateString(
-                                                          'vi-VN'
-                                                      )
+                                                          record.userProfile.dateOfBirth
+                                                      ).toLocaleDateString('vi-VN')
                                                     : ''}
                                             </>
                                         ),
@@ -543,8 +498,7 @@ export default function SubjectClassScore() {
                                         width: 150,
                                         align: 'center',
                                         render: (text, record) =>
-                                            record.fixedClass?.name ||
-                                            'Chưa có lớp',
+                                            record.fixedClass?.name || 'Chưa có lớp',
                                     },
                                     ...monthColumns,
                                 ]}

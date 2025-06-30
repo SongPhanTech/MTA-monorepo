@@ -9,9 +9,7 @@ export type ApiConversation = {
 
 export type ConversationDataFromAPI = ApiConversation[]
 
-export function generateMenusTroLyAo(
-    data?: ConversationDataFromAPI
-): MenuItem[] {
+export function generateMenusTroLyAo(data?: ConversationDataFromAPI): MenuItem[] {
     const safeData: ApiConversation[] = data || []
 
     const historyItems: MenuItem[] = safeData.map((item, index) => ({

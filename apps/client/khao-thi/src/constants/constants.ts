@@ -1,5 +1,5 @@
-import { env } from '@/env'
 import { $Enums } from '@workspace/db'
+import { env } from '@/env'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
@@ -32,13 +32,11 @@ const DOCUMENT_TYPE = [
         label: 'Thông tin về các chương trình đào tạo',
     },
     {
-        value: $Enums.DocumentType
-            .REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS,
+        value: $Enums.DocumentType.REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS,
         label: 'Quy định, chế độ, chính sách với Học viên quân sự',
     },
     {
-        value: $Enums.DocumentType
-            .REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS,
+        value: $Enums.DocumentType.REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS,
         label: 'Quy định, chế độ, chính sách với Sinh viên dân sự',
     },
     {
@@ -46,8 +44,7 @@ const DOCUMENT_TYPE = [
         label: 'Đảng, công tác Chính trị',
     },
     {
-        value: $Enums.DocumentType
-            .INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY,
+        value: $Enums.DocumentType.INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY,
         label: 'Hướng dẫn, quy định nội bộ của Học viện',
     },
     {
@@ -56,10 +53,4 @@ const DOCUMENT_TYPE = [
     },
 ]
 
-export {
-    DEFAULT_PAGINATE_SIZE,
-    MAX_INPUT_LENGTH,
-    MAX_TEXTAREA_LENGTH,
-    API_BASE_URL,
-    DOCUMENT_TYPE,
-}
+export { DEFAULT_PAGINATE_SIZE, MAX_INPUT_LENGTH, MAX_TEXTAREA_LENGTH, API_BASE_URL, DOCUMENT_TYPE }

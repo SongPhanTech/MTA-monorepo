@@ -1,6 +1,7 @@
 import type { Session, SessionStatus } from '..'
 import { useSession } from './hook'
 import SessionProvider from './provider'
+
 const signIn = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin`
 }
@@ -38,11 +39,4 @@ const getSession = async () => {
     return (await fetchSession()).data
 }
 
-export {
-    signIn,
-    signOut,
-    getSession,
-    fetchSession,
-    useSession,
-    SessionProvider,
-}
+export { signIn, signOut, getSession, fetchSession, useSession, SessionProvider }

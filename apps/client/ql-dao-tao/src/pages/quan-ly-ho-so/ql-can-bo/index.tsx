@@ -1,8 +1,4 @@
-import {
-    DownloadOutlined,
-    UploadOutlined,
-    UserOutlined,
-} from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-hoc-vien'
@@ -23,17 +19,7 @@ import {
     useFindManyTemplateFile,
     useUpdateStaff,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Dropdown,
-    Flex,
-    Image,
-    Input,
-    Menu,
-    Row,
-    message,
-} from 'antd'
+import { Button, Col, Dropdown, Flex, Image, Input, Menu, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
@@ -169,13 +155,12 @@ export default function StaffManagement() {
                     },
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
-    const { data: templateFile = [], refetch: refetchTemplateFile } =
-        useFindManyTemplateFile()
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -196,15 +181,13 @@ export default function StaffManagement() {
         onOpenModalAdd()
     }
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } =
-        useDisclosure<string>({
-            tag: PutUploadProfileModal.name,
-        })
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+        tag: PutUploadProfileModal.name,
+    })
 
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } =
-        useDisclosure<string>({
-            tag: PutUpdateProfileModal.name,
-        })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+        tag: PutUpdateProfileModal.name,
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -298,10 +281,7 @@ export default function StaffManagement() {
                             <Input
                                 id="search"
                                 onChange={(e) =>
-                                    handleFilterChange(
-                                        'organizationText',
-                                        e.target.value
-                                    )
+                                    handleFilterChange('organizationText', e.target.value)
                                 }
                                 placeholder="Tìm kiếm theo tên đơn vị"
                             />
@@ -320,10 +300,7 @@ export default function StaffManagement() {
                                 </Button>
 
                                 {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <Dropdown
-                                    overlay={menuDownload}
-                                    trigger={['hover']}
-                                >
+                                <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button
                                         className="ml-4"
                                         type="primary"
@@ -333,10 +310,7 @@ export default function StaffManagement() {
                                     </Button>
                                 </Dropdown>
 
-                                <Dropdown
-                                    overlay={menuUpload}
-                                    trigger={['hover']}
-                                >
+                                <Dropdown overlay={menuUpload} trigger={['hover']}>
                                     <Button
                                         className="ml-4"
                                         type="primary"
@@ -359,9 +333,7 @@ export default function StaffManagement() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Ảnh',
@@ -372,11 +344,7 @@ export default function StaffManagement() {
                                     const avatar = record.userProfile?.avatar
 
                                     return avatar ? (
-                                        <Image
-                                            src={getMinioUrl(avatar)}
-                                            width={100}
-                                            height={80}
-                                        />
+                                        <Image src={getMinioUrl(avatar)} width={100} height={80} />
                                     ) : (
                                         <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                                             <UserOutlined
@@ -397,8 +365,7 @@ export default function StaffManagement() {
                             },
                             {
                                 title: 'SHSQ/SHQN',
-                                render: (_, record) =>
-                                    record.userProfile?.officerNumber,
+                                render: (_, record) => record.userProfile?.officerNumber,
                                 align: 'center',
                                 width: 120,
                             },
@@ -418,8 +385,7 @@ export default function StaffManagement() {
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
-                                              record.userProfile
-                                                  .gender as keyof typeof GENDER_MEAN
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
                                         : '',
                             },
@@ -427,9 +393,7 @@ export default function StaffManagement() {
                                 title: 'Ngày sinh',
                                 render: (_, record) =>
                                     record.userProfile?.dateOfBirth
-                                        ? dayjs(
-                                              record.userProfile.dateOfBirth
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,
@@ -438,9 +402,7 @@ export default function StaffManagement() {
                                 title: 'Đơn vị',
                                 width: 200,
                                 render: (_, record) => {
-                                    return (
-                                        record.organization?.sTen || 'Chưa có'
-                                    )
+                                    return record.organization?.sTen || 'Chưa có'
                                 },
                                 align: 'center',
                             },
@@ -448,18 +410,16 @@ export default function StaffManagement() {
                                 title: 'Học hàm',
                                 width: 120,
                                 render: (_, record) =>
-                                    record.userProfile?.academicRankType
-                                        ?.name || '',
+                                    record.userProfile?.academicRankType?.name || '',
                                 align: 'center',
                             },
                             {
                                 title: 'Năm HH',
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
-                                        ? dayjs(
-                                              record.userProfile
-                                                  .academicRankDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.academicRankDate).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -467,8 +427,7 @@ export default function StaffManagement() {
                             {
                                 title: 'Học vị',
                                 render: (_, record) =>
-                                    record.userProfile?.academicDegreeType
-                                        ?.name || '',
+                                    record.userProfile?.academicDegreeType?.name || '',
                                 align: 'center',
                                 width: 120,
                             },
@@ -476,10 +435,9 @@ export default function StaffManagement() {
                                 title: 'Năm HV',
                                 render: (_, record) =>
                                     record.userProfile?.academicDegreeDate
-                                        ? dayjs(
-                                              record.userProfile
-                                                  .academicDegreeDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.academicDegreeDate).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 120,
@@ -488,14 +446,12 @@ export default function StaffManagement() {
                                 title: 'Loại cán bộ',
                                 align: 'center',
                                 width: 120,
-                                render: (_, record) =>
-                                    record.staffType?.name || '',
+                                render: (_, record) => record.staffType?.name || '',
                             },
                             {
                                 title: 'Cập bậc hàm',
                                 dataIndex: 'rankId',
-                                render: (_, record) =>
-                                    record.userProfile?.rank?.name || '',
+                                render: (_, record) => record.userProfile?.rank?.name || '',
                                 align: 'center',
                                 width: 120,
                             },
@@ -504,9 +460,7 @@ export default function StaffManagement() {
                                 dataIndex: 'rankDate',
                                 render: (_, record) =>
                                     record.userProfile?.rankDate
-                                        ? dayjs(
-                                              record.userProfile.rankDate
-                                          ).format('DD/MM/YYYY')
+                                        ? dayjs(record.userProfile.rankDate).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
                                 width: 100,
@@ -526,8 +480,7 @@ export default function StaffManagement() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>
@@ -538,8 +491,7 @@ export default function StaffManagement() {
                         rowKey="id"
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: (selectedKeys) =>
-                                setSelectedRowKeys(selectedKeys),
+                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                         }}
                         pagination={{
                             total: count,

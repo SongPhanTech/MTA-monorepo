@@ -1,6 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons'
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
+
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
 } & Omit<AntdIconProps, 'ref'> &
@@ -16,10 +17,7 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <DeleteOutlined
-                    className="text-sm text-red-600 cursor-pointer"
-                    {...props}
-                />
+                <DeleteOutlined className="text-sm text-red-600 cursor-pointer" {...props} />
             </Popconfirm>
         </Tooltip>
     )

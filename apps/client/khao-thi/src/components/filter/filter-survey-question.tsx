@@ -1,9 +1,6 @@
 import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
-import {
-    useFindManySurvey,
-    useFindManySurveyQuestionType,
-} from '@workspace/db/hooks'
+import { useFindManySurvey, useFindManySurveyQuestionType } from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -55,8 +52,7 @@ const FilterSurveyQuestion = (props: Props) => {
         setOpen(false)
     }
 
-    const { data: surveyData = [], refetch: refetchSurvey } =
-        useFindManySurvey()
+    const { data: surveyData = [], refetch: refetchSurvey } = useFindManySurvey()
     const { data: surveyQuestionTypeData = [], refetch: refetchSurveyType } =
         useFindManySurveyQuestionType()
 
@@ -96,14 +92,12 @@ const FilterSurveyQuestion = (props: Props) => {
                                 <Select
                                     allowClear
                                     placeholder="Chọn loại khảo sát"
-                                    options={surveyQuestionTypeData.map(
-                                        (item) => {
-                                            return {
-                                                value: item.id,
-                                                label: item.name,
-                                            }
+                                    options={surveyQuestionTypeData.map((item) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name,
                                         }
-                                    )}
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -158,12 +152,7 @@ const FilterSurveyQuestion = (props: Props) => {
             <Input
                 placeholder="Nhập câu hỏi khảo sát..."
                 style={{ width: 300, marginRight: 8 }}
-                prefix={
-                    <Search
-                        size={15}
-                        style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                    />
-                }
+                prefix={<Search size={15} style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
                 allowClear
                 onChange={(e) => onSearchChange('searchText', e.target.value)}
             />

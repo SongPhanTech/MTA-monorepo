@@ -8,11 +8,7 @@ import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    TrainingCourse,
-    TrainingMajor,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -23,7 +19,7 @@ import {
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -31,6 +27,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 interface FilterProps {
     searchText: string | undefined
     trainingObjectId: string | undefined
@@ -141,8 +138,7 @@ export default function TrainingProgramCatalog() {
                               ],
                           }
                         : {}),
-                    ...(filters.trainingObjectId &&
-                    filters.trainingObjectId !== ''
+                    ...(filters.trainingObjectId && filters.trainingObjectId !== ''
                         ? {
                               trainingObjectTypeId: {
                                   contains: filters.trainingObjectId,
@@ -150,8 +146,7 @@ export default function TrainingProgramCatalog() {
                               },
                           }
                         : {}),
-                    ...(filters.trainingCourseId &&
-                    filters.trainingCourseId !== ''
+                    ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                         ? {
                               fixedClasses: {
                                   some: {
@@ -263,8 +258,7 @@ export default function TrainingProgramCatalog() {
         },
     })
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -281,15 +275,14 @@ export default function TrainingProgramCatalog() {
         []
     )
 
-    const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } =
-        useDisclosure<string>({
-            tag: PutCurriculum.name,
-        })
+    const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } = useDisclosure<string>({
+        tag: PutCurriculum.name,
+    })
 
-    const {
-        onOpen: onOpenCurriculumVersion,
-        onClose: onCloseCurriculumVersion,
-    } = useDisclosure<{ curriculumId: string; versionId: string }>({
+    const { onOpen: onOpenCurriculumVersion, onClose: onCloseCurriculumVersion } = useDisclosure<{
+        curriculumId: string
+        versionId: string
+    }>({
         tag: PutCurriculumVersion.name,
     })
 
@@ -310,14 +303,13 @@ export default function TrainingProgramCatalog() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
-    const { mutateAsync: updateCurriculumVersion } =
-        useUpdateCurriculumVersion()
+    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
     async function handleDeleteCurriculumVersion(id: string) {
         try {
             showSpinner()
@@ -329,7 +321,7 @@ export default function TrainingProgramCatalog() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -347,8 +339,7 @@ export default function TrainingProgramCatalog() {
         if (record?.id) {
             router.push(
                 `${
-                    ROUTER_PATH.QL_DAO_TAO
-                        .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
+                    ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
                 }/${record.id}`
             )
         }
@@ -358,9 +349,7 @@ export default function TrainingProgramCatalog() {
         return data?.map((item) => ({
             ...item,
             name: `${item?.name}${
-                item?.managementOrganization?.sTen
-                    ? ` - ${item?.managementOrganization?.sTen}`
-                    : ''
+                item?.managementOrganization?.sTen ? ` - ${item?.managementOrganization?.sTen}` : ''
             }`,
         }))
     }, [data])
@@ -377,10 +366,7 @@ export default function TrainingProgramCatalog() {
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange(
-                                                    'searchText',
-                                                    e.target.value
-                                                )
+                                                handleFilterChange('searchText', e.target.value)
                                             }
                                             className="py-0"
                                             placeholder="Nhập chương trình đào tạo"
@@ -397,10 +383,7 @@ export default function TrainingProgramCatalog() {
                                     </Form.Item>
                                 </Col>
                                 <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingObjectId">
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
                                             options={trainingObjectTypeData.map(
@@ -410,20 +393,14 @@ export default function TrainingProgramCatalog() {
                                                 })
                                             )}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingObjectId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingObjectId', val)
                                             }
                                             allowClear
                                         />
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingCourseId">
                                         <Select
                                             placeholder="Khoá đào tạo"
                                             options={trainingCourseData.map(
@@ -433,33 +410,22 @@ export default function TrainingProgramCatalog() {
                                                 })
                                             )}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingCourseId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingCourseId', val)
                                             }
                                             allowClear
                                         />
                                     </Form.Item>
                                 </Col>
                                 <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingMajorId"
-                                    >
+                                    <Form.Item className="mb-0" name="trainingMajorId">
                                         <Select
                                             placeholder="Chọn chuyên ngành đào tạo"
-                                            options={trainingMajorData.map(
-                                                (i: TrainingMajor) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
+                                            options={trainingMajorData.map((i: TrainingMajor) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
                                             onChange={(val) =>
-                                                handleFilterChange(
-                                                    'trainingMajorId',
-                                                    val
-                                                )
+                                                handleFilterChange('trainingMajorId', val)
                                             }
                                             allowClear
                                         />
@@ -537,9 +503,7 @@ export default function TrainingProgramCatalog() {
                                                                 credit?: number
                                                             }
                                                         }
-                                                    ) =>
-                                                        sum +
-                                                        (subject?.credit || 0),
+                                                    ) => sum + (subject?.credit || 0),
                                                     0
                                                 ) || 0
                                             return total + blockCredit
@@ -567,11 +531,7 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'description',
                                 align: 'center',
                                 width: 200,
-                                render: (value) => (
-                                    <span className="line-clamp-1">
-                                        {value}
-                                    </span>
-                                ),
+                                render: (value) => <span className="line-clamp-1">{value}</span>,
                             },
                             {
                                 title: 'Năm khởi tạo',
@@ -603,9 +563,7 @@ export default function TrainingProgramCatalog() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -633,26 +591,19 @@ export default function TrainingProgramCatalog() {
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        onOpenCurriculumVersion(
-                                                            {
-                                                                curriculumId:
-                                                                    curriculumId,
-                                                                versionId: id,
-                                                            }
-                                                        )
+                                                        onOpenCurriculumVersion({
+                                                            curriculumId: curriculumId,
+                                                            versionId: id,
+                                                        })
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
-                                                            handleDeleteCurriculumVersion(
-                                                                id
-                                                            ),
+                                                            handleDeleteCurriculumVersion(id),
                                                     }}
-                                                    onClick={(e) =>
-                                                        e.stopPropagation()
-                                                    }
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )
@@ -682,8 +633,7 @@ export default function TrainingProgramCatalog() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () =>
-                                            handleDeleteCurriculum(id),
+                                        onConfirm: () => handleDeleteCurriculum(id),
                                     }}
                                     onClick={(e) => e.stopPropagation()}
                                 />
@@ -704,8 +654,6 @@ export default function TrainingProgramCatalog() {
     )
 }
 
-TrainingProgramCatalog.getLayout = function getLayout(
-    page: React.ReactElement
-) {
+TrainingProgramCatalog.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

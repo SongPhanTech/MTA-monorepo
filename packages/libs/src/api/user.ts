@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,7 +19,8 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { customUserFetch } from './custom-instance'
 import type {
     Configs,
     GetConfigs500,
@@ -45,7 +46,6 @@ import type {
     UserUpdate,
 } from './schemas'
 
-import { customUserFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -72,10 +72,9 @@ export type getSessionsByUserIdResponseComposite =
     | getSessionsByUserIdResponse400
     | getSessionsByUserIdResponse500
 
-export type getSessionsByUserIdResponse =
-    getSessionsByUserIdResponseComposite & {
-        headers: Headers
-    }
+export type getSessionsByUserIdResponse = getSessionsByUserIdResponseComposite & {
+    headers: Headers
+}
 
 export const getGetSessionsByUserIdUrl = (id: string) => {
     return `/api/user/${id}/sessions`
@@ -85,13 +84,10 @@ export const getSessionsByUserId = async (
     id: string,
     options?: RequestInit
 ): Promise<getSessionsByUserIdResponse> => {
-    return customUserFetch<getSessionsByUserIdResponse>(
-        getGetSessionsByUserIdUrl(id),
-        {
-            ...options,
-            method: 'GET',
-        }
-    )
+    return customUserFetch<getSessionsByUserIdResponse>(getGetSessionsByUserIdUrl(id), {
+        ...options,
+        method: 'GET',
+    })
 }
 
 export const getGetSessionsByUserIdQueryKey = (id: string) => {
@@ -105,42 +101,32 @@ export const getGetSessionsByUserIdQueryOptions = <
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getSessionsByUserId>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData>
         >
         request?: SecondParameter<typeof customUserFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey =
-        queryOptions?.queryKey ?? getGetSessionsByUserIdQueryKey(id)
+    const queryKey = queryOptions?.queryKey ?? getGetSessionsByUserIdQueryKey(id)
 
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getSessionsByUserId>>
-    > = ({ signal }) => getSessionsByUserId(id, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByUserId>>> = ({ signal }) =>
+        getSessionsByUserId(id, { signal, ...requestOptions })
 
     return {
         queryKey,
         queryFn,
         enabled: !!id,
         ...queryOptions,
-    } as UseQueryOptions<
-        Awaited<ReturnType<typeof getSessionsByUserId>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    } as UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 }
 
 export type GetSessionsByUserIdQueryResult = NonNullable<
     Awaited<ReturnType<typeof getSessionsByUserId>>
 >
-export type GetSessionsByUserIdQueryError =
-    | GetSessionsByUserId400
-    | GetSessionsByUserId500
+export type GetSessionsByUserIdQueryError = GetSessionsByUserId400 | GetSessionsByUserId500
 
 export function useGetSessionsByUserId<
     TData = Awaited<ReturnType<typeof getSessionsByUserId>>,
@@ -149,11 +135,7 @@ export function useGetSessionsByUserId<
     id: string,
     options: {
         query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getSessionsByUserId>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
@@ -176,11 +158,7 @@ export function useGetSessionsByUserId<
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getSessionsByUserId>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
@@ -203,11 +181,7 @@ export function useGetSessionsByUserId<
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getSessionsByUserId>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData>
         >
         request?: SecondParameter<typeof customUserFetch>
     },
@@ -223,11 +197,7 @@ export function useGetSessionsByUserId<
     id: string,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getSessionsByUserId>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData>
         >
         request?: SecondParameter<typeof customUserFetch>
     },
@@ -237,10 +207,9 @@ export function useGetSessionsByUserId<
 } {
     const queryOptions = getGetSessionsByUserIdQueryOptions(id, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -267,10 +236,9 @@ export type terminateSessionsByUserIdResponseComposite =
     | terminateSessionsByUserIdResponse400
     | terminateSessionsByUserIdResponse500
 
-export type terminateSessionsByUserIdResponse =
-    terminateSessionsByUserIdResponseComposite & {
-        headers: Headers
-    }
+export type terminateSessionsByUserIdResponse = terminateSessionsByUserIdResponseComposite & {
+    headers: Headers
+}
 
 export const getTerminateSessionsByUserIdUrl = (id: string) => {
     return `/api/user/${id}/sessions`
@@ -280,13 +248,10 @@ export const terminateSessionsByUserId = async (
     id: string,
     options?: RequestInit
 ): Promise<terminateSessionsByUserIdResponse> => {
-    return customUserFetch<terminateSessionsByUserIdResponse>(
-        getTerminateSessionsByUserIdUrl(id),
-        {
-            ...options,
-            method: 'DELETE',
-        }
-    )
+    return customUserFetch<terminateSessionsByUserIdResponse>(getTerminateSessionsByUserIdUrl(id), {
+        ...options,
+        method: 'DELETE',
+    })
 }
 
 export const getTerminateSessionsByUserIdMutationOptions = <
@@ -308,9 +273,7 @@ export const getTerminateSessionsByUserIdMutationOptions = <
 > => {
     const mutationKey = ['terminateSessionsByUserId']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -380,15 +343,11 @@ export type terminateSessionBySessionIdResponseComposite =
     | terminateSessionBySessionIdResponse400
     | terminateSessionBySessionIdResponse500
 
-export type terminateSessionBySessionIdResponse =
-    terminateSessionBySessionIdResponseComposite & {
-        headers: Headers
-    }
+export type terminateSessionBySessionIdResponse = terminateSessionBySessionIdResponseComposite & {
+    headers: Headers
+}
 
-export const getTerminateSessionBySessionIdUrl = (
-    id: string,
-    sessionId: string
-) => {
+export const getTerminateSessionBySessionIdUrl = (id: string, sessionId: string) => {
     return `/api/user/${id}/sessions/${sessionId}`
 }
 
@@ -425,9 +384,7 @@ export const getTerminateSessionBySessionIdMutationOptions = <
 > => {
     const mutationKey = ['terminateSessionBySessionId']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -472,8 +429,7 @@ export const useTerminateSessionBySessionId = <
     { id: string; sessionId: string },
     TContext
 > => {
-    const mutationOptions =
-        getTerminateSessionBySessionIdMutationOptions(options)
+    const mutationOptions = getTerminateSessionBySessionIdMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -505,10 +461,7 @@ export const createUser = async (
     })
 }
 
-export const getCreateUserMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
+export const getCreateUserMutationOptions = <TError = unknown, TContext = unknown>(options?: {
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof createUser>>,
         TError,
@@ -524,9 +477,7 @@ export const getCreateUserMutationOptions = <
 > => {
     const mutationKey = ['createUser']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -543,9 +494,7 @@ export const getCreateUserMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type CreateUserMutationResult = NonNullable<
-    Awaited<ReturnType<typeof createUser>>
->
+export type CreateUserMutationResult = NonNullable<Awaited<ReturnType<typeof createUser>>>
 export type CreateUserMutationBody = UserCreate
 export type CreateUserMutationError = unknown
 
@@ -587,18 +536,13 @@ export const getListUsersUrl = (params?: ListUsersParams) => {
 
     Object.entries(params || {}).forEach(([key, value]) => {
         if (value !== undefined) {
-            normalizedParams.append(
-                key,
-                value === null ? 'null' : value.toString()
-            )
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
         }
     })
 
     const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0
-        ? `/api/user?${stringifiedParams}`
-        : '/api/user'
+    return stringifiedParams.length > 0 ? `/api/user?${stringifiedParams}` : '/api/user'
 }
 
 export const listUsers = async (
@@ -621,13 +565,7 @@ export const getListUsersQueryOptions = <
 >(
     params?: ListUsersParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listUsers>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     }
 ) => {
@@ -635,9 +573,8 @@ export const getListUsersQueryOptions = <
 
     const queryKey = queryOptions?.queryKey ?? getListUsersQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = ({
-        signal,
-    }) => listUsers(params, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = ({ signal }) =>
+        listUsers(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof listUsers>>,
@@ -646,24 +583,13 @@ export const getListUsersQueryOptions = <
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListUsersQueryResult = NonNullable<
-    Awaited<ReturnType<typeof listUsers>>
->
+export type ListUsersQueryResult = NonNullable<Awaited<ReturnType<typeof listUsers>>>
 export type ListUsersQueryError = unknown
 
-export function useListUsers<
-    TData = Awaited<ReturnType<typeof listUsers>>,
-    TError = unknown,
->(
+export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params: undefined | ListUsersParams,
     options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listUsers>>,
-                TError,
-                TData
-            >
-        > &
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>> &
             Pick<
                 DefinedInitialDataOptions<
                     Awaited<ReturnType<typeof listUsers>>,
@@ -678,19 +604,10 @@ export function useListUsers<
 ): DefinedUseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useListUsers<
-    TData = Awaited<ReturnType<typeof listUsers>>,
-    TError = unknown,
->(
+export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listUsers>>,
-                TError,
-                TData
-            >
-        > &
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>> &
             Pick<
                 UndefinedInitialDataOptions<
                     Awaited<ReturnType<typeof listUsers>>,
@@ -705,19 +622,10 @@ export function useListUsers<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useListUsers<
-    TData = Awaited<ReturnType<typeof listUsers>>,
-    TError = unknown,
->(
+export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listUsers>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -725,19 +633,10 @@ export function useListUsers<
     queryKey: DataTag<QueryKey, TData, TError>
 }
 
-export function useListUsers<
-    TData = Awaited<ReturnType<typeof listUsers>>,
-    TError = unknown,
->(
+export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof listUsers>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -746,10 +645,9 @@ export function useListUsers<
 } {
     const queryOptions = getListUsersQueryOptions(params, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -784,10 +682,7 @@ export const updateUser = async (
     })
 }
 
-export const getUpdateUserMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
+export const getUpdateUserMutationOptions = <TError = unknown, TContext = unknown>(options?: {
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof updateUser>>,
         TError,
@@ -803,9 +698,7 @@ export const getUpdateUserMutationOptions = <
 > => {
     const mutationKey = ['updateUser']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -822,9 +715,7 @@ export const getUpdateUserMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type UpdateUserMutationResult = NonNullable<
-    Awaited<ReturnType<typeof updateUser>>
->
+export type UpdateUserMutationResult = NonNullable<Awaited<ReturnType<typeof updateUser>>>
 export type UpdateUserMutationBody = UserUpdate
 export type UpdateUserMutationError = unknown
 
@@ -885,13 +776,7 @@ export const getGetOneUserQueryOptions = <
 >(
     id: string,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOneUser>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     }
 ) => {
@@ -899,40 +784,26 @@ export const getGetOneUserQueryOptions = <
 
     const queryKey = queryOptions?.queryKey ?? getGetOneUserQueryKey(id)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOneUser>>> = ({
-        signal,
-    }) => getOneUser(id, { signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOneUser>>> = ({ signal }) =>
+        getOneUser(id, { signal, ...requestOptions })
 
     return {
         queryKey,
         queryFn,
         enabled: !!id,
         ...queryOptions,
-    } as UseQueryOptions<
-        Awaited<ReturnType<typeof getOneUser>>,
-        TError,
-        TData
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    } as UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 }
 
-export type GetOneUserQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getOneUser>>
->
+export type GetOneUserQueryResult = NonNullable<Awaited<ReturnType<typeof getOneUser>>>
 export type GetOneUserQueryError = unknown
 
-export function useGetOneUser<
-    TData = Awaited<ReturnType<typeof getOneUser>>,
-    TError = unknown,
->(
+export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOneUser>>,
-                TError,
-                TData
-            >
-        > &
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData>> &
             Pick<
                 DefinedInitialDataOptions<
                     Awaited<ReturnType<typeof getOneUser>>,
@@ -947,19 +818,10 @@ export function useGetOneUser<
 ): DefinedUseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useGetOneUser<
-    TData = Awaited<ReturnType<typeof getOneUser>>,
-    TError = unknown,
->(
+export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOneUser>>,
-                TError,
-                TData
-            >
-        > &
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData>> &
             Pick<
                 UndefinedInitialDataOptions<
                     Awaited<ReturnType<typeof getOneUser>>,
@@ -974,19 +836,10 @@ export function useGetOneUser<
 ): UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
 }
-export function useGetOneUser<
-    TData = Awaited<ReturnType<typeof getOneUser>>,
-    TError = unknown,
->(
+export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOneUser>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -994,19 +847,10 @@ export function useGetOneUser<
     queryKey: DataTag<QueryKey, TData, TError>
 }
 
-export function useGetOneUser<
-    TData = Awaited<ReturnType<typeof getOneUser>>,
-    TError = unknown,
->(
+export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getOneUser>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -1015,10 +859,9 @@ export function useGetOneUser<
 } {
     const queryOptions = getGetOneUserQueryOptions(id, options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -1052,10 +895,7 @@ export const createGroup = async (
     })
 }
 
-export const getCreateGroupMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
+export const getCreateGroupMutationOptions = <TError = unknown, TContext = unknown>(options?: {
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof createGroup>>,
         TError,
@@ -1071,9 +911,7 @@ export const getCreateGroupMutationOptions = <
 > => {
     const mutationKey = ['createGroup']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1090,9 +928,7 @@ export const getCreateGroupMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type CreateGroupMutationResult = NonNullable<
-    Awaited<ReturnType<typeof createGroup>>
->
+export type CreateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof createGroup>>>
 export type CreateGroupMutationBody = GroupCreate
 export type CreateGroupMutationError = unknown
 
@@ -1146,10 +982,7 @@ export const updateGroup = async (
     })
 }
 
-export const getUpdateGroupMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
+export const getUpdateGroupMutationOptions = <TError = unknown, TContext = unknown>(options?: {
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof updateGroup>>,
         TError,
@@ -1165,9 +998,7 @@ export const getUpdateGroupMutationOptions = <
 > => {
     const mutationKey = ['updateGroup']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1184,9 +1015,7 @@ export const getUpdateGroupMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type UpdateGroupMutationResult = NonNullable<
-    Awaited<ReturnType<typeof updateGroup>>
->
+export type UpdateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroup>>>
 export type UpdateGroupMutationBody = GroupUpdate
 export type UpdateGroupMutationError = unknown
 
@@ -1222,9 +1051,7 @@ export type getConfigsResponse500 = {
     status: 500
 }
 
-export type getConfigsResponseComposite =
-    | getConfigsResponse200
-    | getConfigsResponse500
+export type getConfigsResponseComposite = getConfigsResponse200 | getConfigsResponse500
 
 export type getConfigsResponse = getConfigsResponseComposite & {
     headers: Headers
@@ -1234,9 +1061,7 @@ export const getGetConfigsUrl = () => {
     return '/api/is/configs'
 }
 
-export const getConfigs = async (
-    options?: RequestInit
-): Promise<getConfigsResponse> => {
+export const getConfigs = async (options?: RequestInit): Promise<getConfigsResponse> => {
     return customUserFetch<getConfigsResponse>(getGetConfigsUrl(), {
         ...options,
         method: 'GET',
@@ -1251,18 +1076,15 @@ export const getGetConfigsQueryOptions = <
     TData = Awaited<ReturnType<typeof getConfigs>>,
     TError = GetConfigs500,
 >(options?: {
-    query?: Partial<
-        UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>
-    >
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>>
     request?: SecondParameter<typeof customUserFetch>
 }) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
     const queryKey = queryOptions?.queryKey ?? getGetConfigsQueryKey()
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigs>>> = ({
-        signal,
-    }) => getConfigs({ signal, ...requestOptions })
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigs>>> = ({ signal }) =>
+        getConfigs({ signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getConfigs>>,
@@ -1271,9 +1093,7 @@ export const getGetConfigsQueryOptions = <
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetConfigsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getConfigs>>
->
+export type GetConfigsQueryResult = NonNullable<Awaited<ReturnType<typeof getConfigs>>>
 export type GetConfigsQueryError = GetConfigs500
 
 export function useGetConfigs<
@@ -1281,13 +1101,7 @@ export function useGetConfigs<
     TError = GetConfigs500,
 >(
     options: {
-        query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getConfigs>>,
-                TError,
-                TData
-            >
-        > &
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>> &
             Pick<
                 DefinedInitialDataOptions<
                     Awaited<ReturnType<typeof getConfigs>>,
@@ -1307,13 +1121,7 @@ export function useGetConfigs<
     TError = GetConfigs500,
 >(
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getConfigs>>,
-                TError,
-                TData
-            >
-        > &
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>> &
             Pick<
                 UndefinedInitialDataOptions<
                     Awaited<ReturnType<typeof getConfigs>>,
@@ -1333,13 +1141,7 @@ export function useGetConfigs<
     TError = GetConfigs500,
 >(
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getConfigs>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -1352,13 +1154,7 @@ export function useGetConfigs<
     TError = GetConfigs500,
 >(
     options?: {
-        query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof getConfigs>>,
-                TError,
-                TData
-            >
-        >
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigs>>, TError, TData>>
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
@@ -1367,10 +1163,9 @@ export function useGetConfigs<
 } {
     const queryOptions = getGetConfigsQueryOptions(options)
 
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-        TData,
-        TError
-    > & { queryKey: DataTag<QueryKey, TData, TError> }
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
     query.queryKey = queryOptions.queryKey
 
@@ -1387,9 +1182,7 @@ export type updateConfigsResponse500 = {
     status: 500
 }
 
-export type updateConfigsResponseComposite =
-    | updateConfigsResponse200
-    | updateConfigsResponse500
+export type updateConfigsResponseComposite = updateConfigsResponse200 | updateConfigsResponse500
 
 export type updateConfigsResponse = updateConfigsResponseComposite & {
     headers: Headers
@@ -1430,9 +1223,7 @@ export const getUpdateConfigsMutationOptions = <
 > => {
     const mutationKey = ['updateConfigs']
     const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation &&
-          'mutationKey' in options.mutation &&
-          options.mutation.mutationKey
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
             : { ...options, mutation: { ...options.mutation, mutationKey } }
         : { mutation: { mutationKey }, request: undefined }
@@ -1449,9 +1240,7 @@ export const getUpdateConfigsMutationOptions = <
     return { mutationFn, ...mutationOptions }
 }
 
-export type UpdateConfigsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof updateConfigs>>
->
+export type UpdateConfigsMutationResult = NonNullable<Awaited<ReturnType<typeof updateConfigs>>>
 export type UpdateConfigsMutationBody = UpdateConfigsBody
 export type UpdateConfigsMutationError = UpdateConfigs500
 

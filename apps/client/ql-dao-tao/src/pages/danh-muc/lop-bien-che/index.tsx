@@ -12,11 +12,7 @@ import {
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    CurriculumVersion,
-    TrainingCourse,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { CurriculumVersion, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyCurriculumVersion,
@@ -26,18 +22,16 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function FixedClassPage({
-    trainingCourse,
-}: { trainingCourse?: TrainingCourse }) {
+export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, _setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
         trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
@@ -92,8 +86,7 @@ export default function FixedClassPage({
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -156,7 +149,7 @@ export default function FixedClassPage({
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -247,10 +240,7 @@ export default function FixedClassPage({
                                 <Input
                                     id="search"
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     placeholder="Tìm kiếm"
                                     allowClear
@@ -274,10 +264,7 @@ export default function FixedClassPage({
                                         })
                                     )}
                                     onChange={(val) =>
-                                        handleFilterChange(
-                                            'trainingObjectTypeId',
-                                            val
-                                        )
+                                        handleFilterChange('trainingObjectTypeId', val)
                                     }
                                     allowClear
                                 />
@@ -287,20 +274,13 @@ export default function FixedClassPage({
                             <Form.Item name="trainingCourseId" label="">
                                 <Select
                                     placeholder="Chọn khóa"
-                                    options={trainingCourseData.map(
-                                        (i: TrainingCourse) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
+                                    options={trainingCourseData.map((i: TrainingCourse) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
                                         }
-                                    )}
-                                    onChange={(val) =>
-                                        handleFilterChange(
-                                            'trainingCourseId',
-                                            val
-                                        )
-                                    }
+                                    })}
+                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
                                     allowClear
                                 />
                             </Form.Item>
@@ -310,19 +290,14 @@ export default function FixedClassPage({
                             <Form.Item name="curriculumVersionId" label="">
                                 <Select
                                     placeholder="Chọn chương trình đào tạo"
-                                    options={curriculumVersionData.map(
-                                        (i: CurriculumVersion) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
+                                    options={curriculumVersionData.map((i: CurriculumVersion) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
                                         }
-                                    )}
+                                    })}
                                     onChange={(val) =>
-                                        handleFilterChange(
-                                            'curriculumVersionId',
-                                            val
-                                        )
+                                        handleFilterChange('curriculumVersionId', val)
                                     }
                                     allowClear
                                 />
@@ -330,10 +305,7 @@ export default function FixedClassPage({
                         </Col>
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={handleOpenGPASemester}
-                                    type="primary"
-                                >
+                                <Button onClick={handleOpenGPASemester} type="primary">
                                     GPA kỳ học
                                 </Button>
                                 <Button onClick={handleModal} type="primary">
@@ -380,9 +352,7 @@ export default function FixedClassPage({
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã lớp biên chế',
@@ -408,24 +378,21 @@ export default function FixedClassPage({
                                 align: 'center',
                                 width: 180,
                                 render: (record) =>
-                                    record?.trainingCourse?.trainingObjectType
-                                        ?.name || '',
+                                    record?.trainingCourse?.trainingObjectType?.name || '',
                             },
                             {
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
                                 width: 100,
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
                                 align: 'left',
                                 width: 200,
-                                render: (value) =>
-                                    value?.sTen ? value?.sTen : '',
+                                render: (value) => (value?.sTen ? value?.sTen : ''),
                             },
                             {
                                 title: 'Chuyên ngành',
@@ -433,24 +400,22 @@ export default function FixedClassPage({
                                 width: 200,
                                 dataIndex: 'curriculumVersion',
                                 render: (_, record) =>
-                                    record?.curriculumVersion?.curriculum
-                                        ?.trainingMajor?.name || '',
+                                    record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                                    '',
                             },
                             {
                                 title: 'Trình độ đào tạo',
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'curriculumVersion',
-                                render: (value) =>
-                                    value?.trainingLevel?.name || '',
+                                render: (value) => value?.trainingLevel?.name || '',
                             },
                             {
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
                                 align: 'center',
                                 width: 250,
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
 
                             {
@@ -459,11 +424,7 @@ export default function FixedClassPage({
                                 width: 150,
                                 dataIndex: 'graduated',
                                 render: (value) =>
-                                    value ? (
-                                        <CheckOutlined className="text-[#028850]" />
-                                    ) : (
-                                        ''
-                                    ),
+                                    value ? <CheckOutlined className="text-[#028850]" /> : '',
                             },
                             {
                                 title: 'Giáo viên chủ nhiệm',
@@ -500,9 +461,7 @@ export default function FixedClassPage({
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -522,8 +481,7 @@ export default function FixedClassPage({
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

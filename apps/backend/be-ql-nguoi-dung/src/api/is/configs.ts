@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { getConfigs, patchConfigs } from '../../wso2is-apis/generated/config'
 import { getConfigsResponse } from '../../wso2is-apis/generated/zod/config'
 

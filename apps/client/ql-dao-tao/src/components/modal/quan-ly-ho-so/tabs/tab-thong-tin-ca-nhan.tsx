@@ -36,14 +36,10 @@ import dayjs from 'dayjs'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PutModalType, TabThongTinCaNhan } from '../type'
+
 const { Panel } = Collapse
 
-export default function ThongTinCaNhanTab({
-    id,
-    type,
-    avatar,
-    setAvatar,
-}: TabThongTinCaNhan) {
+export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
 
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -109,27 +105,21 @@ export default function ThongTinCaNhanTab({
         }))
     }, [userProfileOptions])
 
-    const { data: registrationAreaData = [], refetch: refetchRe } =
-        useFindManyDM_KhuVuc_DiaLy()
+    const { data: registrationAreaData = [], refetch: refetchRe } = useFindManyDM_KhuVuc_DiaLy()
 
     const { data: staffPositionData = [] } = useFindManyStaffPosition()
 
     const { data: staffTypeData = [] } = useFindManyStaffType()
 
-    const { data: nationalityData = [], refetch: refetchNa } =
-        useFindManyDM_QuocGia()
+    const { data: nationalityData = [], refetch: refetchNa } = useFindManyDM_QuocGia()
 
-    const { data: religionData = [], refetch: refetchReli } =
-        useFindManyDM_TonGiao()
+    const { data: religionData = [], refetch: refetchReli } = useFindManyDM_TonGiao()
 
-    const { data: ethnicityData = [], refetch: refetchEth } =
-        useFindManyDM_DanToc()
+    const { data: ethnicityData = [], refetch: refetchEth } = useFindManyDM_DanToc()
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
 
@@ -139,13 +129,12 @@ export default function ThongTinCaNhanTab({
         orderBy: { name: 'asc' },
     })
 
-    const { data: fixedClassData = [], refetch: refetchFix } =
-        useFindManyFixedClass({
-            include: {
-                trainingCourse: true,
-                curriculumVersion: true,
-            },
-        })
+    const { data: fixedClassData = [], refetch: refetchFix } = useFindManyFixedClass({
+        include: {
+            trainingCourse: true,
+            curriculumVersion: true,
+        },
+    })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
@@ -223,10 +212,7 @@ export default function ThongTinCaNhanTab({
 
     // Thêm useMemo và watch fields
     const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
-    const selectedCurriculumVersionId = Form.useWatch(
-        'curriculumVersionId',
-        form
-    )
+    const selectedCurriculumVersionId = Form.useWatch('curriculumVersionId', form)
 
     const filteredFixedClasses = useMemo(() => {
         if (!selectedTrainingCourseId && !selectedCurriculumVersionId) {
@@ -235,8 +221,7 @@ export default function ThongTinCaNhanTab({
 
         return fixedClassData.filter((cls) => {
             const matchesCourse =
-                !selectedTrainingCourseId ||
-                cls.trainingCourseId === selectedTrainingCourseId
+                !selectedTrainingCourseId || cls.trainingCourseId === selectedTrainingCourseId
             const matchesCurriculum =
                 !selectedCurriculumVersionId ||
                 cls.curriculumVersionId === selectedCurriculumVersionId
@@ -252,17 +237,11 @@ export default function ThongTinCaNhanTab({
 
         // Lấy danh sách khóa học có chứa chương trình đào tạo đã chọn
         const coursesWithCurriculum = fixedClassData
-            .filter(
-                (cls) => cls.curriculumVersionId === selectedCurriculumVersionId
-            )
+            .filter((cls) => cls.curriculumVersionId === selectedCurriculumVersionId)
             .map((cls) => cls.trainingCourseId)
-            .filter(
-                (courseId, index, array) => array.indexOf(courseId) === index
-            ) // Remove duplicates
+            .filter((courseId, index, array) => array.indexOf(courseId) === index) // Remove duplicates
 
-        return trainingCourseData.filter((course) =>
-            coursesWithCurriculum.includes(course.id)
-        )
+        return trainingCourseData.filter((course) => coursesWithCurriculum.includes(course.id))
     }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
 
     // Cập nhật handleFixedClassChange hoàn chỉnh
@@ -293,15 +272,11 @@ export default function ThongTinCaNhanTab({
             form.setFieldsValue({
                 firstName: userData.firstName,
                 lastName: userData.lastName,
-                dateOfBirth: userData.dateOfBirth
-                    ? dayjs(userData.dateOfBirth)
-                    : null,
+                dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
                 gender: userData.gender,
                 phoneNumber: userData.phoneNumber,
                 email: userData.email,
-                idCardDate: userData.idCardDate
-                    ? dayjs(userData.idCardDate)
-                    : null,
+                idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
                 officerNumber: userData.officerNumber,
                 healthInsuranceNumber: userData.healthInsuranceNumber,
                 bankAccountNumber: userData.bankAccountNumber,
@@ -326,20 +301,12 @@ export default function ThongTinCaNhanTab({
                 nationalityId: userData.nationalityId,
                 religionId: userData.religionId,
                 ethnicityId: userData.ethnicityId,
-                unionDate: userData.unionDate
-                    ? dayjs(userData.unionDate)
-                    : null,
+                unionDate: userData.unionDate ? dayjs(userData.unionDate) : null,
                 unionPlace: userData.unionPlace,
-                CPVJoinDate: userData.CPVJoinDate
-                    ? dayjs(userData.CPVJoinDate)
-                    : null,
-                officialCPVDate: userData.officialCPVDate
-                    ? dayjs(userData.officialCPVDate)
-                    : null,
+                CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
+                officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 CPVJoinPlace: userData.CPVJoinPlace,
-                tenureDate: userData.tenureDate
-                    ? dayjs(userData.tenureDate)
-                    : null,
+                tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
             })
 
             if (userData.avatar) {
@@ -367,8 +334,7 @@ export default function ThongTinCaNhanTab({
                     fixedClassId: student.fixedClassId,
                     trainingCourseId: student.fixedClass?.trainingCourseId,
                     curriculumVersionId:
-                        student.curriculumVersionId ||
-                        student.fixedClass?.curriculumVersionId,
+                        student.curriculumVersionId || student.fixedClass?.curriculumVersionId,
                     trainingObjectTypeId: student.trainingObjectTypeId,
                     registrationAreaId: student.registrationAreaId,
                 })
@@ -430,9 +396,7 @@ export default function ThongTinCaNhanTab({
                             <Upload
                                 listType="picture-card"
                                 maxCount={1}
-                                fileList={
-                                    avatar?.length > 0 ? avatar : fileList
-                                }
+                                fileList={avatar?.length > 0 ? avatar : fileList}
                                 onChange={onChange}
                                 onRemove={() => {
                                     setAvatar([])
@@ -471,14 +435,10 @@ export default function ThongTinCaNhanTab({
                                     filterOption={(inputValue, option) =>
                                         option?.value
                                             .toUpperCase()
-                                            .indexOf(
-                                                inputValue.toUpperCase()
-                                            ) !== -1 ||
+                                            .indexOf(inputValue.toUpperCase()) !== -1 ||
                                         option?.label
                                             .toUpperCase()
-                                            .indexOf(
-                                                inputValue.toUpperCase()
-                                            ) !== -1
+                                            .indexOf(inputValue.toUpperCase()) !== -1
                                     }
                                     onSelect={(value) => {
                                         form.setFieldsValue({
@@ -519,8 +479,7 @@ export default function ThongTinCaNhanTab({
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                'Vui lòng nhập mã sinh viên!',
+                                            message: 'Vui lòng nhập mã sinh viên!',
                                         },
                                     ]}
                                     className="mb-0"
@@ -538,8 +497,7 @@ export default function ThongTinCaNhanTab({
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                'Vui lòng nhập mã học viên!',
+                                            message: 'Vui lòng nhập mã học viên!',
                                         },
                                     ]}
                                     className="mb-0"
@@ -557,8 +515,7 @@ export default function ThongTinCaNhanTab({
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                'Vui lòng nhập mã giảng viên',
+                                            message: 'Vui lòng nhập mã giảng viên',
                                         },
                                     ]}
                                     className="mb-0"
@@ -636,32 +593,23 @@ export default function ThongTinCaNhanTab({
                             >
                                 <Select
                                     placeholder="Chọn đối tượng đào tạo"
-                                    options={trainingObjectTypeData.map(
-                                        (value) => ({
-                                            value: value.id,
-                                            label: value.name,
-                                        })
-                                    )}
+                                    options={trainingObjectTypeData.map((value) => ({
+                                        value: value.id,
+                                        label: value.name,
+                                    }))}
                                 />
                             </FormItem>
                         </Col>
                         <Col sm={12} lg={8}>
-                            <FormItem
-                                form={form}
-                                name="fixedClassId"
-                                label="Lớp"
-                                className="mb-0"
-                            >
+                            <FormItem form={form} name="fixedClassId" label="Lớp" className="mb-0">
                                 <Select
                                     placeholder="Chọn lớp"
                                     optionFilterProp="label"
                                     onChange={handleFixedClassChange}
-                                    options={filteredFixedClasses.map(
-                                        (value) => ({
-                                            value: value.id,
-                                            label: `${value.code}-${value.name}`,
-                                        })
-                                    )}
+                                    options={filteredFixedClasses.map((value) => ({
+                                        value: value.id,
+                                        label: `${value.code}-${value.name}`,
+                                    }))}
                                 />
                             </FormItem>
                         </Col>
@@ -674,12 +622,10 @@ export default function ThongTinCaNhanTab({
                             >
                                 <Select
                                     placeholder="Chọn khóa"
-                                    options={filteredTrainingCourses.map(
-                                        (value) => ({
-                                            value: value.id,
-                                            label: value.name,
-                                        })
-                                    )}
+                                    options={filteredTrainingCourses.map((value) => ({
+                                        value: value.id,
+                                        label: value.name,
+                                    }))}
                                 />
                             </FormItem>
                         </Col>
@@ -694,22 +640,15 @@ export default function ThongTinCaNhanTab({
                                     placeholder={'Chọn chương trình đào tạo'}
                                     showSearch
                                     optionFilterProp="label"
-                                    options={curriculumVersionData.map(
-                                        (value) => ({
-                                            value: value.id,
-                                            label: value.name,
-                                        })
-                                    )}
+                                    options={curriculumVersionData.map((value) => ({
+                                        value: value.id,
+                                        label: value.name,
+                                    }))}
                                 />
                             </FormItem>
                         </Col>
                         <Col sm={12} lg={8}>
-                            <FormItem
-                                form={form}
-                                name="status"
-                                label="Trạng thái"
-                                className="mb-0"
-                            >
+                            <FormItem form={form} name="status" label="Trạng thái" className="mb-0">
                                 <Select
                                     placeholder="Chọn trạng thái"
                                     options={STUDENT_STATUS_OPTIONS.map((v) => {
@@ -825,35 +764,21 @@ export default function ThongTinCaNhanTab({
                 )}
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="dateOfBirth"
-                        label="Ngày sinh"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="dateOfBirth" label="Ngày sinh" className="mb-0">
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="idCardDate"
-                        label="Ngày cấp CCCD"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="idCardDate" label="Ngày cấp CCCD" className="mb-0">
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
@@ -870,12 +795,7 @@ export default function ThongTinCaNhanTab({
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="gender"
-                        label="Giới tính"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
                         <Select
                             allowClear
                             placeholder="Chọn giới tính"
@@ -890,23 +810,13 @@ export default function ThongTinCaNhanTab({
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="phoneNumber"
-                        label="Số điện thoại"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="phoneNumber" label="Số điện thoại" className="mb-0">
                         <Input placeholder="Nhập số điện thoại" />
                     </FormItem>
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="email"
-                        label="Thư điện tử"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="email" label="Thư điện tử" className="mb-0">
                         <Input placeholder="Nhập thư điện tử" />
                     </FormItem>
                 </Col>
@@ -934,12 +844,7 @@ export default function ThongTinCaNhanTab({
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="bankName"
-                        label="Ngân hàng"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="bankName" label="Ngân hàng" className="mb-0">
                         <Input placeholder="Nhập ngân hàng" />
                     </FormItem>
                 </Col>
@@ -951,9 +856,7 @@ export default function ThongTinCaNhanTab({
                             name="registrationAreaId"
                             label="Khu vực đăng ký"
                             className="mb-0"
-                            normalize={(value) =>
-                                value === undefined ? null : value
-                            }
+                            normalize={(value) => (value === undefined ? null : value)}
                         >
                             <Select
                                 allowClear
@@ -974,9 +877,7 @@ export default function ThongTinCaNhanTab({
                         name="nationalityId"
                         label="Quốc tịch"
                         className="mb-0"
-                        normalize={(value) =>
-                            value === undefined ? null : value
-                        }
+                        normalize={(value) => (value === undefined ? null : value)}
                     >
                         <Select
                             allowClear
@@ -996,9 +897,7 @@ export default function ThongTinCaNhanTab({
                         name="religionId"
                         label="Tôn giáo"
                         className="mb-0"
-                        normalize={(value) =>
-                            value === undefined ? null : value
-                        }
+                        normalize={(value) => (value === undefined ? null : value)}
                     >
                         <Select
                             allowClear
@@ -1018,9 +917,7 @@ export default function ThongTinCaNhanTab({
                         name="ethnicityId"
                         label="Dân tộc"
                         className="mb-0"
-                        normalize={(value) =>
-                            value === undefined ? null : value
-                        }
+                        normalize={(value) => (value === undefined ? null : value)}
                     >
                         <Select
                             allowClear
@@ -1036,44 +933,25 @@ export default function ThongTinCaNhanTab({
                 </Col>
 
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="unionDate"
-                        label="Ngày vào đoàn"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="unionDate" label="Ngày vào đoàn" className="mb-0">
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="unionPlace"
-                        label="Nơi vào đoàn"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="unionPlace" label="Nơi vào đoàn" className="mb-0">
                         <Input placeholder="Nhập nơi vào đoàn" />
                     </FormItem>
                 </Col>
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="CPVJoinDate"
-                        label="Ngày vào Đảng"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="CPVJoinDate" label="Ngày vào Đảng" className="mb-0">
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
@@ -1087,19 +965,12 @@ export default function ThongTinCaNhanTab({
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
                 <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="CPVJoinPlace"
-                        label="Nơi vào Đảng"
-                        className="mb-0"
-                    >
+                    <FormItem form={form} name="CPVJoinPlace" label="Nơi vào Đảng" className="mb-0">
                         <Input placeholder="Nhập nơi vào Đảng" />
                     </FormItem>
                 </Col>
@@ -1113,25 +984,17 @@ export default function ThongTinCaNhanTab({
                         <DatePicker
                             format="DD/MM/YYYY"
                             className="w-full"
-                            disabledDate={(date) =>
-                                date && date > dayjs().endOf('day')
-                            }
+                            disabledDate={(date) => date && date > dayjs().endOf('day')}
                         />
                     </FormItem>
                 </Col>
             </Row>
 
             <div className="mt-4">
-                <Collapse
-                    ghost
-                    accordion={true}
-                    className="bg-gray-50 shadow-sm"
-                >
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
                     <Panel
                         header={
-                            <span className="text-base font-medium text-gray-800">
-                                Nơi sinh
-                            </span>
+                            <span className="text-base font-medium text-gray-800">Nơi sinh</span>
                         }
                         key="1"
                         className="border-none mb-2"
@@ -1144,10 +1007,7 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                     label="Tỉnh/Thành phố"
                                 >
-                                    <Select
-                                        placeholder="Chọn tỉnh/thành phố"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -1157,10 +1017,7 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                     label="Quận/Huyện"
                                 >
-                                    <Select
-                                        placeholder="Chọn quận/huyện"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -1170,76 +1027,42 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                     label="Phường/Xã"
                                 >
-                                    <Select
-                                        placeholder="Chọn phường/xã"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
                             </Col>
                         </Row>
                     </Panel>
                 </Collapse>
 
-                <Collapse
-                    ghost
-                    accordion={true}
-                    className="bg-gray-50 shadow-sm"
-                >
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
                     <Panel
                         header={
-                            <span className="text-base font-medium text-gray-800">
-                                Quê quán
-                            </span>
+                            <span className="text-base font-medium text-gray-800">Quê quán</span>
                         }
                         key="2"
                         className="border-none mb-2"
                     >
                         <Row gutter={[16, 16]}>
                             <Col span={8}>
-                                <FormItem
-                                    form={form}
-                                    name="provinceHometownId"
-                                    className="mb-0"
-                                >
-                                    <Select
-                                        placeholder="Chọn tỉnh/thành phố"
-                                        className="w-full"
-                                    />
+                                <FormItem form={form} name="provinceHometownId" className="mb-0">
+                                    <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem
-                                    form={form}
-                                    name="districtHometownId"
-                                    className="mb-0"
-                                >
-                                    <Select
-                                        placeholder="Chọn quận/huyện"
-                                        className="w-full"
-                                    />
+                                <FormItem form={form} name="districtHometownId" className="mb-0">
+                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem
-                                    form={form}
-                                    name="communeHometownId"
-                                    className="mb-0"
-                                >
-                                    <Select
-                                        placeholder="Chọn phường/xã"
-                                        className="w-full"
-                                    />
+                                <FormItem form={form} name="communeHometownId" className="mb-0">
+                                    <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
                             </Col>
                         </Row>
                     </Panel>
                 </Collapse>
 
-                <Collapse
-                    ghost
-                    accordion={true}
-                    className="bg-gray-50 shadow-sm"
-                >
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
                     <Panel
                         header={
                             <span className="text-base font-medium text-gray-800">
@@ -1256,10 +1079,7 @@ export default function ThongTinCaNhanTab({
                                     name="provincePermanentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn tỉnh/thành phố"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -1268,10 +1088,7 @@ export default function ThongTinCaNhanTab({
                                     name="districtPermanentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn quận/huyện"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -1280,21 +1097,14 @@ export default function ThongTinCaNhanTab({
                                     name="communePermanentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn phường/xã"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
                             </Col>
                         </Row>
                     </Panel>
                 </Collapse>
 
-                <Collapse
-                    ghost
-                    accordion={true}
-                    className="bg-gray-50 shadow-sm"
-                >
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
                     <Panel
                         header={
                             <span className="text-base font-medium text-gray-800">
@@ -1311,10 +1121,7 @@ export default function ThongTinCaNhanTab({
                                     name="provinceCurrentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn tỉnh/thành phố"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={6}>
@@ -1323,10 +1130,7 @@ export default function ThongTinCaNhanTab({
                                     name="districtCurrentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn quận/huyện"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={6}>
@@ -1335,22 +1139,12 @@ export default function ThongTinCaNhanTab({
                                     name="communeCurrentAddressId"
                                     className="mb-0"
                                 >
-                                    <Select
-                                        placeholder="Chọn phường/xã"
-                                        className="w-full"
-                                    />
+                                    <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
                             </Col>
                             <Col span={6}>
-                                <FormItem
-                                    form={form}
-                                    name="currentAddress"
-                                    className="mb-0"
-                                >
-                                    <Input
-                                        placeholder="Nhập địa chỉ cụ thể"
-                                        className="w-full"
-                                    />
+                                <FormItem form={form} name="currentAddress" className="mb-0">
+                                    <Input placeholder="Nhập địa chỉ cụ thể" className="w-full" />
                                 </FormItem>
                             </Col>
                         </Row>

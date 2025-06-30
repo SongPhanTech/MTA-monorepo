@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { Gender } from '@workspace/db'
 import { UserProfileScalarSchema } from '@workspace/db/zod/models'
 import { splitFullName } from '@workspace/libs/utils'
@@ -59,9 +59,7 @@ const uploadExcelUpdateUserProfile = createRoute({
         body: {
             content: {
                 'multipart/form-data': {
-                    schema: UploadExcelModel.openapi(
-                        'uploadExcelUpdateUserProfile'
-                    ),
+                    schema: UploadExcelModel.openapi('uploadExcelUpdateUserProfile'),
                 },
             },
         },
@@ -189,10 +187,9 @@ app.openapi(uploadExcelUpdateUserProfile, async (c) => {
                 const priorityObject = await prisma.priorityObject.findFirst({
                     where: { name: row[9] }, // đối tượng ưu tiên
                 })
-                const registrationArea =
-                    await prisma.registrationArea.findFirst({
-                        where: { name: row[10] }, // khu vực đăng ký
-                    })
+                const registrationArea = await prisma.registrationArea.findFirst({
+                    where: { name: row[10] }, // khu vực đăng ký
+                })
                 const nationality = await prisma.nationality.findFirst({
                     where: { name: row[11] }, // quốc tịch
                 })

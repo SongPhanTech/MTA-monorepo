@@ -1,6 +1,7 @@
 // lib/axios-instance.ts
-import { env } from '@/env'
+
 import axios from 'axios'
+import { env } from '@/env'
 
 const axiosInstanceChatbot = axios.create({
     baseURL: `${env.NEXT_PUBLIC_CHAT_BOT_URL}`,

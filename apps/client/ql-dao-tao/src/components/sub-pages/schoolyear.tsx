@@ -5,22 +5,15 @@ import { PutSchoolYearModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSchoolYear,
-    useFindManySchoolYear,
-    useUpdateSchoolYear,
-} from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, Row, message } from 'antd'
+import { useCountSchoolYear, useFindManySchoolYear, useUpdateSchoolYear } from '@workspace/db/hooks'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function SchoolYearPage({
-    selectedSchoolYear,
-    setSelectedSchoolYear,
-}: any) {
+export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYear }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -68,7 +61,7 @@ export default function SchoolYearPage({
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -87,9 +80,7 @@ export default function SchoolYearPage({
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm"
                                 />
                             </Form.Item>
@@ -113,9 +104,7 @@ export default function SchoolYearPage({
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             // {
                             //     title: 'Mã năm học',
@@ -130,17 +119,14 @@ export default function SchoolYearPage({
                                 title: 'Ngày bắt đầu',
                                 align: 'center',
                                 // dataIndex: 'startDate',
-                                render: ({ startDate }) =>
-                                    dayjs(startDate).format('DD/MM/YYYY'),
+                                render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Ngày kết thúc',
                                 align: 'center',
                                 // dataIndex: 'endDate',
                                 render: ({ endDate }) =>
-                                    endDate
-                                        ? dayjs(endDate).format('DD/MM/YYYY')
-                                        : '',
+                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -174,8 +160,7 @@ export default function SchoolYearPage({
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                             onClick={(e: any) => {
                                                 e.stopPropagation()

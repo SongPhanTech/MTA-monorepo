@@ -4,9 +4,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 export default async function middleware(req: NextRequest) {
     const session = await auth(req.cookies.get('x-token')?.value)
     if (!session && req.nextUrl.pathname !== ROUTER_PATH.QL_NGUOI_DUNG.INDEX) {
-        return NextResponse.rewrite(
-            new URL(ROUTER_PATH.QL_NGUOI_DUNG.INDEX, req.url)
-        )
+        return NextResponse.rewrite(new URL(ROUTER_PATH.QL_NGUOI_DUNG.INDEX, req.url))
     }
     return NextResponse.next()
 }

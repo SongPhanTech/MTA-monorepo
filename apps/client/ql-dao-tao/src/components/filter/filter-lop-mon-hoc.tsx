@@ -16,14 +16,13 @@ import {
     Space,
     Typography,
 } from 'antd'
+import dayjs from 'dayjs'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { CUSSTOM_VI_LOCALE } from '@constants/constants'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useExamTypeOptions } from '@hooks/examType'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 dayjs.extend(customParseFormat)
 
@@ -169,12 +168,7 @@ const FilterSubjectClass = (props: Props) => {
                                         allowClear
                                         onChange={(dates, dateStrings) => {
                                             ApplyFilterExamDate(
-                                                dates
-                                                    ? [
-                                                          dateStrings[0],
-                                                          dateStrings[1],
-                                                      ]
-                                                    : null
+                                                dates ? [dateStrings[0], dateStrings[1]] : null
                                             )
                                         }}
                                         locale={CUSSTOM_VI_LOCALE}
@@ -197,9 +191,7 @@ const FilterSubjectClass = (props: Props) => {
                                             maxHeight: 400,
                                             overflow: 'auto',
                                         }}
-                                        defaultValue={
-                                            filters.BoMonId || undefined
-                                        }
+                                        defaultValue={filters.BoMonId || undefined}
                                         onChange={(value) => {
                                             form.setFieldsValue({
                                                 BoMonId: value,

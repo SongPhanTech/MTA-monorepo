@@ -1,9 +1,6 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { Gender, type Prisma } from '@workspace/db'
-import {
-    parseSheetHeQuanSu,
-    zParseSheetError,
-} from '@workspace/libs/parseExcel'
+import { parseSheetHeQuanSu, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
@@ -71,10 +68,7 @@ app.openapi(importHeQuanSu, async (c) => {
         .filter((code, index, arr) => arr.indexOf(code) !== index)
 
     if (duplicateCodes.length) {
-        return c.json(
-            { message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}` },
-            400
-        )
+        return c.json({ message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}` }, 400)
     }
 
     const trainingObjectType = await prisma.trainingObjectType.findFirst({
@@ -95,10 +89,7 @@ app.openapi(importHeQuanSu, async (c) => {
     })
 
     if (!trainingCourse) {
-        return c.json(
-            { message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` },
-            400
-        )
+        return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
     const ethnicityMap = await buildEthnicityMap(
@@ -129,9 +120,7 @@ app.openapi(importHeQuanSu, async (c) => {
                 const existsFixedClass = await tx.fixedClass.findFirst({
                     where: {
                         name: student.fixedClass,
-                        curriculumVersionId: curriculumVersionMap.get(
-                            student.curriculum
-                        ),
+                        curriculumVersionId: curriculumVersionMap.get(student.curriculum),
                     },
                 })
 
@@ -140,9 +129,7 @@ app.openapi(importHeQuanSu, async (c) => {
                     : await tx.fixedClass.create({
                           data: {
                               name: student.fixedClass,
-                              curriculumVersionId: curriculumVersionMap.get(
-                                  student.curriculum
-                              ),
+                              curriculumVersionId: curriculumVersionMap.get(student.curriculum),
                               startYear: new Date().getFullYear(),
                               trainingCourseId: trainingCourse.id,
                           },
@@ -170,21 +157,13 @@ app.openapi(importHeQuanSu, async (c) => {
                         // TODO: need to use idCardNumber
                         idCardNumber: student.code,
                         code: student.code,
-                        gender:
-                            student.gender === 'Nữ'
-                                ? Gender.Female
-                                : Gender.Male,
-                        ethnicityId:
-                            ethnicityMap.get(student.ethnicity || null) || null,
-                        nationalityId:
-                            nationalityMap.get(student.nationality || null) ||
-                            null,
+                        gender: student.gender === 'Nữ' ? Gender.Female : Gender.Male,
+                        ethnicityId: ethnicityMap.get(student.ethnicity || null) || null,
+                        nationalityId: nationalityMap.get(student.nationality || null) || null,
                         provinceHometownId:
-                            provinceMap.get(student.provinceHometown || null) ||
-                            null,
+                            provinceMap.get(student.provinceHometown || null) || null,
                         districtHometownId:
-                            districtMap.get(student.districtHometown || null) ||
-                            null,
+                            districtMap.get(student.districtHometown || null) || null,
                     }
 
                 if (existingStudent) {
@@ -213,10 +192,7 @@ app.openapi(importHeQuanSu, async (c) => {
         { timeout: timeout * 1000 }
     )
 
-    return c.json(
-        { message: `Import students successfully: ${data.students.length}` },
-        200
-    )
+    return c.json({ message: `Import students successfully: ${data.students.length}` }, 200)
 })
 
 export default app

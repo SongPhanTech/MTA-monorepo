@@ -1,6 +1,4 @@
-export async function readStreamToText(
-    stream: ReadableStream<Uint8Array>
-): Promise<string> {
+export async function readStreamToText(stream: ReadableStream<Uint8Array>): Promise<string> {
     const reader = stream.getReader()
     const decoder = new TextDecoder('utf-8')
     let result = ''

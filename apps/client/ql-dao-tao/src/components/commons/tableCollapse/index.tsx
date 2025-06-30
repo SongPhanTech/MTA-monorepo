@@ -134,9 +134,7 @@ const TableCollapse = <T extends Data>({
                 render: (_, record) => {
                     if (record.$type !== 'child') return ''
 
-                    const order = allChildren.findIndex(
-                        (item) => item.key === record.key
-                    )
+                    const order = allChildren.findIndex((item) => item.key === record.key)
                     return order >= 0
                         ? order +
                               1 +
@@ -159,13 +157,7 @@ const TableCollapse = <T extends Data>({
                     : 1,
             }),
         }))
-    }, [
-        rest.columns,
-        childrenFieldName,
-        allChildren,
-        currentPage,
-        pagination?.current,
-    ])
+    }, [rest.columns, childrenFieldName, allChildren, currentPage, pagination?.current])
 
     return (
         <>
@@ -206,8 +198,7 @@ const TableCollapse = <T extends Data>({
                             }
                         },
                         style: { cursor: 'pointer' },
-                        className:
-                            record.id === selectedRow ? 'bg-blue-100' : '',
+                        className: record.id === selectedRow ? 'bg-blue-100' : '',
                     }
                 }}
                 expandable={{
@@ -229,9 +220,7 @@ const TableCollapse = <T extends Data>({
                                             onExpand(record, e)
                                         }}
                                         style={{
-                                            transform: expanded
-                                                ? 'rotate(0deg)'
-                                                : 'rotate(-90deg)',
+                                            transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)',
                                             marginRight: 8,
                                             fontSize: 12,
                                             position: 'sticky',

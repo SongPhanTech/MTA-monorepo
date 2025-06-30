@@ -67,9 +67,7 @@ export default function CadreEvaluation() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, record, index) =>
-                                    index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
-                                    1,
+                                    index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
                                 title: 'Mã chuyên ngành',

@@ -1,5 +1,6 @@
 import TreeFixClass from '@components/commons/fix-class-select/TreeFixClass'
 import type React from 'react'
+
 interface Item {
     code: string | null
     name: string
@@ -12,7 +13,7 @@ interface FlatListProps {
     renderItem: (item: Item) => JSX.Element
 }
 
-const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
+const _FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
     return (
         <div>
             {data.map((item) => (
@@ -37,19 +38,13 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     onChangeSelected,
     selectedItem,
 }) => {
-    const data: Item[] = dataTable.map(
-        (item: {
-            code: any
-            name: any
-            id: any
-        }) => ({
-            code: item.code,
-            name: item.name,
-            id: item.id,
-        })
-    )
+    const _data: Item[] = dataTable.map((item: { code: any; name: any; id: any }) => ({
+        code: item.code,
+        name: item.name,
+        id: item.id,
+    }))
 
-    const renderItem = (item: Item) => (
+    const _renderItem = (item: Item) => (
         <div
             onClick={() => {
                 onChangeSelected?.(item.id)
@@ -60,8 +55,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
                 borderRadius: '8px',
                 marginBottom: '4px',
                 width: '100%',
-                backgroundColor:
-                    selectedItem === item.id ? '#daf2ed' : 'transparent',
+                backgroundColor: selectedItem === item.id ? '#daf2ed' : 'transparent',
             }}
         >
             <h3>
@@ -74,10 +68,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
 
     return (
         <div style={{ width: '100%', padding: '16px', borderRadius: '8px' }}>
-            <h2
-                className="text-lg font-semibold"
-                style={{ marginBottom: '12px' }}
-            >
+            <h2 className="text-lg font-semibold" style={{ marginBottom: '12px' }}>
                 Danh sách lớp
             </h2>
             <TreeFixClass

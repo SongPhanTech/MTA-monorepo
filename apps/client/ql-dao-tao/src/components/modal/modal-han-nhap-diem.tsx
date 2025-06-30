@@ -1,15 +1,12 @@
 import type { SubjectClass } from '@workspace/db'
-import { Col, DatePicker, Form, Radio, message } from 'antd'
+import { Col, DatePicker, Form, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import {
-    useFindUniqueSubjectClass,
-    useUpdateSubjectClass,
-} from '@workspace/db/hooks'
+import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { useWatch } from 'antd/es/form/Form'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useEffect } from 'react'
@@ -53,7 +50,7 @@ const HanNhapDiem = () => {
                 isLockExamScore: initialValue.isLockExamScore,
             })
         }
-    }, [initialValue])
+    }, [initialValue, form.setFieldsValue])
 
     const { mutateAsync: update } = useUpdateSubjectClass()
 
@@ -81,7 +78,7 @@ const HanNhapDiem = () => {
                 queryKey: ['SubjectClass'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -98,12 +95,7 @@ const HanNhapDiem = () => {
             width={900}
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    label="Khóa điểm ĐQT"
-                    labelAlign="left"
-                    name="isLockScore"
-                >
+                <FormItem form={form} label="Khóa điểm ĐQT" labelAlign="left" name="isLockScore">
                     <Radio.Group
                         onChange={(e) => {
                             form.setFieldsValue({

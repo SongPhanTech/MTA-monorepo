@@ -1,6 +1,7 @@
 import { Tooltip } from 'antd'
-import { Eye } from 'lucide-react'
 import type { LucideProps } from 'lucide-react'
+import { Eye } from 'lucide-react'
+
 type ViewIconProps = LucideProps
 
 const ViewIcon = (props: ViewIconProps) => {

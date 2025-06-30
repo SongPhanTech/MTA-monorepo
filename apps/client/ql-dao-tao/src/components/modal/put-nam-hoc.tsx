@@ -14,8 +14,8 @@ import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSchoolYearFormType = SchoolYear
 import 'dayjs/locale/vi'
+export type PutSchoolYearFormType = SchoolYear
 dayjs.locale('vi')
 const PutSchoolYearModal = () => {
     const [form] = Form.useForm<PutSchoolYearFormType>()
@@ -62,7 +62,7 @@ const PutSchoolYearModal = () => {
                 queryKey: ['SchoolYear'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -73,7 +73,7 @@ const PutSchoolYearModal = () => {
     const { data: level } = useFindUniqueSchoolYear({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue({
@@ -120,12 +120,7 @@ const PutSchoolYearModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Ngày bắt đầu"
-                    required
-                >
+                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>

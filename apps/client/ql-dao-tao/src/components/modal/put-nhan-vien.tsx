@@ -12,7 +12,7 @@ import {
     useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, type UploadFile, message } from 'antd'
+import { Col, Form, message, type UploadFile } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { getMinioUrl } from '@workspace/constant'
@@ -20,12 +20,8 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
 import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
+import type { PutStaffProfile, StaffProfileType, UserProfileType } from './quan-ly-ho-so/type'
 import { tabs } from './quan-ly-ho-so/type'
-import type {
-    PutStaffProfile,
-    StaffProfileType,
-    UserProfileType,
-} from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
 // export type PutUserProfile = UserProfile;
@@ -39,11 +35,10 @@ const PutUserProfileStaffModal = () => {
     const [activeKey, setActiveKey] = useState<string>('1')
     const [avatar, setAvatar] = useState<UploadFile[]>([])
 
-    const { isOpen, onClose, input } =
-        useDisclosure<PutUserProfileLectureProps>({
-            tag: PutUserProfileStaffModal.name,
-            onClose: form.resetFields,
-        })
+    const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
+        tag: PutUserProfileStaffModal.name,
+        onClose: form.resetFields,
+    })
 
     // const {
     //     onOpen: onOpenModalOganizationUser,
@@ -100,10 +95,7 @@ const PutUserProfileStaffModal = () => {
         },
     })
 
-    const buildUserProfileUpdateData = (
-        output: UserProfileType,
-        fileName?: string
-    ) => ({
+    const buildUserProfileUpdateData = (output: UserProfileType, fileName?: string) => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -164,10 +156,7 @@ const PutUserProfileStaffModal = () => {
         }),
     })
 
-    const buildUserProfileCreateData = (
-        output: UserProfileType,
-        fileName?: string
-    ) => ({
+    const buildUserProfileCreateData = (output: UserProfileType, fileName?: string) => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -235,10 +224,7 @@ const PutUserProfileStaffModal = () => {
         staffPositionId: output.staffPositionId,
     })
 
-    const buildStaffCreateData = (
-        output: StaffProfileType,
-        userProfileId: string
-    ) => ({
+    const buildStaffCreateData = (output: StaffProfileType, userProfileId: string) => ({
         ...buildStaffUpdateData(output),
         userProfileId,
     })
@@ -249,8 +235,7 @@ const PutUserProfileStaffModal = () => {
         if (output.file) {
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'avatar',
-                extension:
-                    output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
+                extension: output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
             })
 
             await fetch(resPresignedUrl.data.url, {
@@ -262,14 +247,8 @@ const PutUserProfileStaffModal = () => {
         }
         try {
             showSpinner()
-            const userProfileData = buildUserProfileUpdateData(
-                output,
-                fileName ?? undefined
-            )
-            const userProfileCreateData = buildUserProfileCreateData(
-                output,
-                fileName ?? undefined
-            )
+            const userProfileData = buildUserProfileUpdateData(output, fileName ?? undefined)
+            const userProfileCreateData = buildUserProfileCreateData(output, fileName ?? undefined)
             const staffUpdateData = buildStaffUpdateData(output)
 
             if (id) {
@@ -297,11 +276,7 @@ const PutUserProfileStaffModal = () => {
 
                 message.success('Cập nhật cán bộ thành công')
             } else {
-                if (
-                    data.some(
-                        (item) => item.idCardNumber === output.idCardNumber
-                    )
-                ) {
+                if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
                     const userProfile = await upsertUserProfile({
                         where: {
                             idCardNumber: output.idCardNumber,
@@ -327,10 +302,7 @@ const PutUserProfileStaffModal = () => {
                         throw new Error('Tạo hồ sơ người dùng thất bại')
                     }
 
-                    const staffCreateData = buildStaffCreateData(
-                        output,
-                        userProfile?.id
-                    )
+                    const staffCreateData = buildStaffCreateData(output, userProfile?.id)
 
                     await createStaff({ data: staffCreateData })
 
@@ -342,7 +314,7 @@ const PutUserProfileStaffModal = () => {
                 queryKey: ['Staff'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -369,18 +341,14 @@ const PutUserProfileStaffModal = () => {
                 bankAccountNumber: userProfile.bankAccountNumber,
                 bankName: userProfile.bankName,
 
-                dateOfBirth: userProfile.dateOfBirth
-                    ? dayjs(userProfile.dateOfBirth)
-                    : undefined,
+                dateOfBirth: userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : undefined,
 
                 placeOfBirth: userProfile.placeOfBirth,
                 avatar: userProfile.avatar,
                 homeTown: userProfile.homeTown,
                 idCardNumber: userProfile.idCardNumber,
 
-                idCardDate: userProfile.idCardDate
-                    ? dayjs(userProfile.idCardDate)
-                    : undefined,
+                idCardDate: userProfile.idCardDate ? dayjs(userProfile.idCardDate) : undefined,
 
                 officerNumber: userProfile.officerNumber,
                 gender: userProfile.gender,
@@ -392,15 +360,11 @@ const PutUserProfileStaffModal = () => {
                 familyPhone: userProfile.familyPhone,
                 familyName: userProfile.familyName,
 
-                unionDate: userProfile.unionDate
-                    ? dayjs(userProfile.unionDate)
-                    : undefined,
+                unionDate: userProfile.unionDate ? dayjs(userProfile.unionDate) : undefined,
 
                 unionPlace: userProfile.unionPlace,
 
-                CPVJoinDate: userProfile.CPVJoinDate
-                    ? dayjs(userProfile.CPVJoinDate)
-                    : undefined,
+                CPVJoinDate: userProfile.CPVJoinDate ? dayjs(userProfile.CPVJoinDate) : undefined,
 
                 officialCPVDate: userProfile.officialCPVDate
                     ? dayjs(userProfile.officialCPVDate)
@@ -408,9 +372,7 @@ const PutUserProfileStaffModal = () => {
 
                 CPVJoinPlace: userProfile.CPVJoinPlace,
 
-                tenureDate: userProfile.tenureDate
-                    ? dayjs(userProfile.tenureDate)
-                    : undefined,
+                tenureDate: userProfile.tenureDate ? dayjs(userProfile.tenureDate) : undefined,
 
                 enlistmentDate: userProfile.enlistmentDate
                     ? dayjs(userProfile.enlistmentDate)
@@ -429,9 +391,7 @@ const PutUserProfileStaffModal = () => {
                 academicDegreeTypeId: userProfile.academicDegreeType?.Id,
                 academicRankTypeId: userProfile.academicRankType?.Id,
 
-                rankDate: userProfile.rankDate
-                    ? dayjs(userProfile.rankDate)
-                    : undefined,
+                rankDate: userProfile.rankDate ? dayjs(userProfile.rankDate) : undefined,
 
                 academicRankDate: userProfile.academicRankDate
                     ? dayjs(userProfile.academicRankDate)
@@ -470,11 +430,7 @@ const PutUserProfileStaffModal = () => {
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Col xs={24} md={5}>
-                <SidebarMenu
-                    tabs={tabs}
-                    activeKey={activeKey}
-                    setActiveKey={setActiveKey}
-                />
+                <SidebarMenu tabs={tabs} activeKey={activeKey} setActiveKey={setActiveKey} />
             </Col>
 
             <Col xs={24} md={19}>

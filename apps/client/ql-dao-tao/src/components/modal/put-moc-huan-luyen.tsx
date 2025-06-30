@@ -16,8 +16,8 @@ import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutMilestone = Milestone
 import 'dayjs/locale/vi'
+export type PutMilestone = Milestone
 dayjs.locale('vi')
 const PutMilestoneModal = () => {
     const [form] = Form.useForm<PutMilestone>()
@@ -35,8 +35,7 @@ const PutMilestoneModal = () => {
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchMilestones } =
-        useFindManyMilestone()
+    const { data: organizations = [], refetch: refetchMilestones } = useFindManyMilestone()
 
     const { mutateAsync: createMilestone } = useCreateMilestone()
     const { mutateAsync: updateMilestone } = useUpdateMilestone()
@@ -77,7 +76,7 @@ const PutMilestoneModal = () => {
                 queryKey: ['Milestone'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -86,7 +85,7 @@ const PutMilestoneModal = () => {
     const { data: level } = useFindUniqueMilestone({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue({
@@ -122,12 +121,7 @@ const PutMilestoneModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="schoolYearId"
-                    label="Năm học"
-                    required
-                >
+                <FormItem form={form} name="schoolYearId" label="Năm học" required>
                     <Select
                         placeholder="Chọn năm học"
                         options={data.map((i: SchoolYear) => {
@@ -140,22 +134,12 @@ const PutMilestoneModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Ngày bắt đầu"
-                    required
-                >
+                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="endDate"
-                    label="Ngày kết thúc"
-                    required
-                >
+                <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>

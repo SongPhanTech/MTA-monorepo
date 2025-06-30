@@ -75,18 +75,12 @@ const useQuyenCoBan = (input?: Partial<QuyenCoBanInput>) => {
         }
         return quyenCoBan.filter(
             (item) =>
-                toLowerCaseString(item?.label).includes(
-                    toLowerCaseString(input?.label)
-                ) ||
-                toLowerCaseString(item?.subSystem).includes(
-                    toLowerCaseString(input?.subSystem)
-                ) ||
+                toLowerCaseString(item?.label).includes(toLowerCaseString(input?.label)) ||
+                toLowerCaseString(item?.subSystem).includes(toLowerCaseString(input?.subSystem)) ||
                 toLowerCaseString(item?.description).includes(
                     toLowerCaseString(input?.description)
                 ) ||
-                toLowerCaseString(item?.id).includes(
-                    toLowerCaseString(input?.id)
-                )
+                toLowerCaseString(item?.id).includes(toLowerCaseString(input?.id))
         )
     }, [input, quyenCoBan])
 
@@ -96,18 +90,12 @@ const useQuyenCoBan = (input?: Partial<QuyenCoBanInput>) => {
         }
         return quyenCoBanFlat.filter(
             (item) =>
-                toLowerCaseString(item?.label).includes(
-                    toLowerCaseString(input?.label)
-                ) ||
-                toLowerCaseString(item?.subSystem).includes(
-                    toLowerCaseString(input?.subSystem)
-                ) ||
+                toLowerCaseString(item?.label).includes(toLowerCaseString(input?.label)) ||
+                toLowerCaseString(item?.subSystem).includes(toLowerCaseString(input?.subSystem)) ||
                 toLowerCaseString(item?.description).includes(
                     toLowerCaseString(input?.description)
                 ) ||
-                toLowerCaseString(item?.id).includes(
-                    toLowerCaseString(input?.id)
-                )
+                toLowerCaseString(item?.id).includes(toLowerCaseString(input?.id))
         )
     }, [input, quyenCoBanFlat])
 

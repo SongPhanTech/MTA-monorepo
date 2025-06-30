@@ -1,9 +1,7 @@
 import type { AcademicRankingConvert } from '@workspace/db'
 import { useMemo } from 'react'
 
-export function useAcademicRankingConverter(
-    scoreRanges: AcademicRankingConvert[] = []
-) {
+export function useAcademicRankingConverter(scoreRanges: AcademicRankingConvert[] = []) {
     const filteredAndSortedRanges = useMemo(() => {
         return [...scoreRanges]
             .filter((range) => range.base4Min >= 2.0)
@@ -12,8 +10,7 @@ export function useAcademicRankingConverter(
 
     const convertAcademicRanking = (finalScore: number) => {
         const matched = filteredAndSortedRanges.find(
-            (range) =>
-                finalScore >= range.base4Min && finalScore < range.base4Max
+            (range) => finalScore >= range.base4Min && finalScore < range.base4Max
         )
 
         return {

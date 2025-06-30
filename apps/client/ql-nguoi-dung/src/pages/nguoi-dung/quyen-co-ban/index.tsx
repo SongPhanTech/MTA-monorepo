@@ -20,7 +20,7 @@ export default function Page() {
         label: searchText,
         subSystem: searchText,
     })
-    const router = useRouter()
+    const _router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
         tag: PutQuyenCoBanModal.name,
@@ -50,9 +50,7 @@ export default function Page() {
                             <Form.Item label="Tìm kiếm" name="search">
                                 <Input
                                     id="search"
-                                    onChange={(e) =>
-                                        debouncedSearchText(e.target.value)
-                                    }
+                                    onChange={(e) => debouncedSearchText(e.target.value)}
                                     placeholder="Tìm kiếm theo tên,..."
                                 />
                             </Form.Item>

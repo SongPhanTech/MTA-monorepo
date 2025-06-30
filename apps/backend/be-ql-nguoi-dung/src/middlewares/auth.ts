@@ -1,8 +1,4 @@
-import {
-    type OidcClaimsHook,
-    processOAuthCallback,
-    revokeSession,
-} from '@hono/oidc-auth'
+import { type OidcClaimsHook, processOAuthCallback, revokeSession } from '@hono/oidc-auth'
 import type { OpenAPIHono } from '@hono/zod-openapi'
 import type { OidcAuthClaims } from 'hono'
 import { HTTPException } from 'hono/http-exception'
@@ -57,7 +53,7 @@ export const getUserByToken = async (token: string) => {
     return getUser(data)
 }
 
-const oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
+const _oidcClaimsHook: OidcClaimsHook = async (orig, claims, response) => {
     return {
         sub: claims?.sub || orig?.sub || '',
         email: (claims?.email as string) || orig?.email || '',

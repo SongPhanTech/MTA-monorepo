@@ -2,23 +2,15 @@ import {
     CategoryScale,
     Chart as ChartJS,
     Legend,
-    LineElement,
     LinearScale,
+    LineElement,
     PointElement,
     Title,
     Tooltip,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export const options = {
     responsive: true,
@@ -37,10 +29,7 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
 
 // Hàm tạo dữ liệu ngẫu nhiên trong khoảng giá trị cho trước
 const generateRandomData = (min: number, max: number, length: number) => {
-    return Array.from(
-        { length },
-        () => Math.floor(Math.random() * (max - min + 1)) + min
-    )
+    return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min)
 }
 
 export const data = {

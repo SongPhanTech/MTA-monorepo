@@ -67,9 +67,7 @@ export default function ProfessionalTitleOfResearcher() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, record, index) =>
-                                    index +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE +
-                                    1,
+                                    index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
                                 title: 'Mã chuyên ngành',
@@ -124,8 +122,6 @@ export default function ProfessionalTitleOfResearcher() {
     )
 }
 
-ProfessionalTitleOfResearcher.getLayout = function getLayout(
-    page: React.ReactElement
-) {
+ProfessionalTitleOfResearcher.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

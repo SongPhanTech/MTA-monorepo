@@ -3,15 +3,11 @@ import Select from '@components/commons/select'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import {
-    useCreateFAQ,
-    useDeleteFAQ,
-    useFindFirstFAQ,
-    useUpdateFAQ,
-} from '@workspace/db/hooks'
+import { useCreateFAQ, useDeleteFAQ, useFindFirstFAQ, useUpdateFAQ } from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type FAQFormType = {
     type: $Enums.DocumentType
     question: string
@@ -35,6 +31,7 @@ const PutCauHoi = () => {
         },
     })
 
+    const [form] = Form.useForm<FAQFormType>()
     useEffect(() => {
         if (id && detail) {
             form.setFieldsValue({
@@ -43,9 +40,7 @@ const PutCauHoi = () => {
                 answer: detail.answer ?? '',
             })
         }
-    }, [detail, id])
-
-    const [form] = Form.useForm<FAQFormType>()
+    }, [detail, id, form.setFieldsValue])
 
     const onFinish = async (values: FAQFormType) => {
         try {
@@ -72,17 +67,17 @@ const PutCauHoi = () => {
                 message.success('Thêm tài liệu thành công')
             }
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
-    const handleDelete = async () => {
+    const _handleDelete = async () => {
         if (!id) return
         try {
             await deleteFAQ({ where: { id } })
             message.success('Xoá tài liệu thành công')
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Xoá thất bại')
         }
     }
@@ -98,21 +93,9 @@ const PutCauHoi = () => {
             open={isOpen}
             className={cn('min-w-[50vw]')}
             onCancel={onClose}
-            okText={
-                id && detail?.status === $Enums.DocumentStatus.APPROVE
-                    ? undefined
-                    : 'Đồng ý'
-            }
-            cancelText={
-                id && detail?.status === $Enums.DocumentStatus.APPROVE
-                    ? undefined
-                    : 'Hủy'
-            }
-            onOk={
-                id && detail?.status === $Enums.DocumentStatus.APPROVE
-                    ? undefined
-                    : form.submit
-            }
+            okText={id && detail?.status === $Enums.DocumentStatus.APPROVE ? undefined : 'Đồng ý'}
+            cancelText={id && detail?.status === $Enums.DocumentStatus.APPROVE ? undefined : 'Hủy'}
+            onOk={id && detail?.status === $Enums.DocumentStatus.APPROVE ? undefined : form.submit}
             footer={
                 id ? (
                     <div className="flex justify-end items-center">
@@ -136,10 +119,7 @@ const PutCauHoi = () => {
                         ) : (
                             <div className="flex gap-2">
                                 <Button onClick={onClose}>Hủy</Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => form.submit()}
-                                >
+                                <Button type="primary" onClick={() => form.submit()}>
                                     Đồng ý
                                 </Button>
                             </div>
@@ -159,9 +139,7 @@ const PutCauHoi = () => {
                 <Col span={24}>
                     <FormItem form={form} name={'type'} label="Loại tài liệu">
                         <Select
-                            defaultValue={
-                                $Enums.DocumentType.ACADEMY_INFORMATION
-                            }
+                            defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
                             options={DOCUMENT_TYPE}
                         />
                     </FormItem>

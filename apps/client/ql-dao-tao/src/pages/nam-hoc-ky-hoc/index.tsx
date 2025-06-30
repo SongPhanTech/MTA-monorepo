@@ -15,7 +15,7 @@ import {
     useUpdateSchoolYear,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -78,10 +78,9 @@ function YearAndSemester() {
         }, 500),
         []
     )
-    const { onOpen: onOpenSchoolYear, onClose: onCloseSchoolYear } =
-        useDisclosure<string>({
-            tag: PutSchoolYearModal.name,
-        })
+    const { onOpen: onOpenSchoolYear, onClose: onCloseSchoolYear } = useDisclosure<string>({
+        tag: PutSchoolYearModal.name,
+    })
 
     const { onOpen: onOpenSemester, onClose: onCloseSemester } = useDisclosure<{
         schoolYearId: string
@@ -111,7 +110,7 @@ function YearAndSemester() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -129,7 +128,7 @@ function YearAndSemester() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -154,9 +153,7 @@ function YearAndSemester() {
                                 <Form.Item name="search">
                                     <Input
                                         id="search"
-                                        onChange={(e) =>
-                                            debouncedSearchText(e.target.value)
-                                        }
+                                        onChange={(e) => debouncedSearchText(e.target.value)}
                                         placeholder="Nhập tên kỳ học..."
                                         className="py-0"
                                         prefix={
@@ -175,20 +172,13 @@ function YearAndSemester() {
                                 <Form.Item name="schoolYearId">
                                     <Select
                                         placeholder="Chọn năm học"
-                                        options={dataFilterSchoolYear.map(
-                                            (i: SchoolYear) => {
-                                                return {
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }
+                                        options={dataFilterSchoolYear.map((i: SchoolYear) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
                                             }
-                                        )}
-                                        onChange={(val) =>
-                                            handleFilterChange(
-                                                'schoolYearId',
-                                                val
-                                            )
-                                        }
+                                        })}
+                                        onChange={(val) => handleFilterChange('schoolYearId', val)}
                                         allowClear
                                     />
                                 </Form.Item>
@@ -199,17 +189,11 @@ function YearAndSemester() {
                     {/* Thêm mới */}
                     <Col span={12}>
                         <Flex justify="end" gap={10}>
-                            <Button
-                                onClick={handleModal}
-                                className="border-primary text-primary"
-                            >
+                            <Button onClick={handleModal} className="border-primary text-primary">
                                 <PlusOutlined />
                                 Thêm mới năm học
                             </Button>
-                            <Button
-                                onClick={handleModalSemester}
-                                type="primary"
-                            >
+                            <Button onClick={handleModalSemester} type="primary">
                                 <PlusOutlined />
                                 Thêm mới kỳ học
                             </Button>
@@ -241,8 +225,7 @@ function YearAndSemester() {
                             align: 'center',
                             // dataIndex: 'startDate',
                             width: 150,
-                            render: ({ startDate }) =>
-                                dayjs(startDate).format('DD/MM/YYYY'),
+                            render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                         },
                         {
                             title: 'Thời gian kết thúc',
@@ -250,18 +233,14 @@ function YearAndSemester() {
                             // dataIndex: 'endDate',
                             width: 170,
                             render: ({ endDate }) =>
-                                endDate
-                                    ? dayjs(endDate).format('DD/MM/YYYY')
-                                    : '',
+                                endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                         },
                         {
                             title: 'Mô tả',
                             dataIndex: 'description',
                             align: 'center',
                             width: 500,
-                            render: (value) => (
-                                <span className="line-clamp-1">{value}</span>
-                            ),
+                            render: (value) => <span className="line-clamp-1">{value}</span>,
                         },
                         {
                             title: 'Trạng thái',
@@ -307,8 +286,7 @@ function YearAndSemester() {
                                     />
                                     <DeleteIcon
                                         popConfirm={{
-                                            onConfirm: () =>
-                                                handleDeleteSemester(id),
+                                            onConfirm: () => handleDeleteSemester(id),
                                         }}
                                         onClick={(e) => {
                                             e.stopPropagation()

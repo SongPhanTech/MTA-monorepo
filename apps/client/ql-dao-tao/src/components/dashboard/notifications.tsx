@@ -1,6 +1,7 @@
 import { NotificationOutlined } from '@ant-design/icons'
 import { Alert, Space } from 'antd'
 import Link from 'next/link'
+
 interface NotificationData {
     ID: number
     title: string
@@ -73,15 +74,10 @@ function Notification() {
                                     icon={<NotificationOutlined />}
                                     message={
                                         <div>
-                                            <span>{item?.title}</span>:{' '}
-                                            <span>{item.content}</span>
+                                            <span>{item?.title}</span>: <span>{item.content}</span>
                                         </div>
                                     }
-                                    type={
-                                        item.type === 'IMPORTANT'
-                                            ? 'error'
-                                            : 'info'
-                                    }
+                                    type={item.type === 'IMPORTANT' ? 'error' : 'info'}
                                 />
                             </Link>
                         )

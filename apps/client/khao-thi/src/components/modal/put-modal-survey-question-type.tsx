@@ -57,7 +57,7 @@ const PutSurveyQuestionTypeModal = () => {
                 queryKey: ['Level'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -66,7 +66,7 @@ const PutSurveyQuestionTypeModal = () => {
     const { data: surveyObjectType } = useFindUniqueSurveyQuestionType({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyObjectType) {
             form.setFieldsValue(surveyObjectType)
@@ -80,30 +80,16 @@ const PutSurveyQuestionTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                id
-                    ? 'Chỉnh sửa loại câu hỏi khảo sát'
-                    : 'Thêm mới loại câu hỏi khảo sát'
-            }
+            title={id ? 'Chỉnh sửa loại câu hỏi khảo sát' : 'Thêm mới loại câu hỏi khảo sát'}
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="code"
-                    label="Mã loại câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="code" label="Mã loại câu hỏi khảo sát" required>
                     <Input placeholder="Nhập mã loại câu hỏi khảo sát" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem
-                    form={form}
-                    name="name"
-                    label="Tên loại câu hỏi khảo sát"
-                    required
-                >
+                <FormItem form={form} name="name" label="Tên loại câu hỏi khảo sát" required>
                     <Input placeholder="Nhập tên loại câu hỏi khảo sát" />
                 </FormItem>
             </Col>

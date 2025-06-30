@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Modal, Space, Table, Tag, message } from 'antd'
+import { Button, Modal, message, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
 
@@ -17,7 +17,7 @@ const ImportScoreModal = ({
     existingStudents,
 }: ImportScoreModalProps) => {
     const [previewData, setPreviewData] = useState<any[]>([])
-    const [file, setFile] = useState<File | null>(null)
+    const [_file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
@@ -38,9 +38,7 @@ const ImportScoreModal = ({
 
             // Tìm vị trí bắt đầu của bảng dữ liệu (dòng có STT)
             const tableStartIndex = jsonData.findIndex(
-                (item: any) =>
-                    item['IMPORT ĐIỂM'] === 'STT' ||
-                    item.__EMPTY === 'Mã sinh viên'
+                (item: any) => item['IMPORT ĐIỂM'] === 'STT' || item.__EMPTY === 'Mã sinh viên'
             )
 
             if (tableStartIndex === -1) {
@@ -75,9 +73,7 @@ const ImportScoreModal = ({
         setFileName('')
         setPreviewData([])
         setSelectedRowKeys([])
-        const fileInput = document.getElementById(
-            'file-upload'
-        ) as HTMLInputElement
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement
         if (fileInput) {
             fileInput.value = ''
         }
@@ -95,9 +91,7 @@ const ImportScoreModal = ({
         }
 
         // Lọc chỉ những sinh viên được chọn
-        const selectedData = previewData.filter((item) =>
-            selectedRowKeys.includes(item.key)
-        )
+        const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.key))
 
         // Validate data
         const errors: string[] = []
@@ -109,9 +103,7 @@ const ImportScoreModal = ({
             )
 
             if (!existingStudent) {
-                errors.push(
-                    `Mã sinh viên ${item.studentCode} không tồn tại trong lớp`
-                )
+                errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)
             }
 
             // Kiểm tra điểm có đủ 3 loại không
@@ -245,11 +237,7 @@ const ImportScoreModal = ({
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
                 />
-                <Button
-                    onClick={() =>
-                        document.getElementById('file-upload')?.click()
-                    }
-                >
+                <Button onClick={() => document.getElementById('file-upload')?.click()}>
                     Chọn file
                 </Button>
 
@@ -258,18 +246,14 @@ const ImportScoreModal = ({
                         <Tag
                             closable
                             onClose={handleRemoveFile}
-                            closeIcon={
-                                <CloseOutlined style={{ color: 'red' }} />
-                            }
+                            closeIcon={<CloseOutlined style={{ color: 'red' }} />}
                         >
                             {fileName}
                         </Tag>
                     </Space>
                 )}
 
-                <p style={{ marginTop: 8 }}>
-                    Chọn file Excel mẫu đã xuất từ hệ thống
-                </p>
+                <p style={{ marginTop: 8 }}>Chọn file Excel mẫu đã xuất từ hệ thống</p>
             </div>
 
             {previewData.length > 0 ? (

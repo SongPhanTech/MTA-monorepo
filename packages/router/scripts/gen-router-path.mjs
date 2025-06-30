@@ -46,18 +46,11 @@ for (const subsystem of subsystems.sort()) {
     })
 
     for (const page of pages.sort()) {
-        if (ignorePages.some((ignorePage) => page.includes(ignorePage)))
-            continue
+        if (ignorePages.some((ignorePage) => page.includes(ignorePage))) continue
         const key = page.replace(`${subsystem}/src/pages`, '')
         routerPath[subsystemKey][cleanPath(key)] = cleanRouter(key)
 
-        console.log(
-            'Processing:',
-            subsystemKey,
-            cleanPath(key),
-            '=>',
-            cleanRouter(key)
-        )
+        console.log('Processing:', subsystemKey, cleanPath(key), '=>', cleanRouter(key))
     }
 }
 

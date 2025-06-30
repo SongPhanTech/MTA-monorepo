@@ -8,8 +8,7 @@ export function useScoreConverter(scoreRanges: ScoreConvert[] = []) {
 
     const convertScore = (finalScore: number) => {
         const matched = sortedRanges.find(
-            (range) =>
-                finalScore >= range.base10Min && finalScore <= range.base10Max
+            (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
         )
 
         if (!matched) {

@@ -2,10 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSubjectModal } from '@components/modal'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    SUBJECT_EQUIVALENT_TYPE,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import {
@@ -15,24 +12,14 @@ import {
     useFindManySubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Row,
-    TreeSelect,
-    message,
-} from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row, TreeSelect } from 'antd'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
+    const [_searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         managementOrganizationId: undefined,
         name: '',
@@ -65,7 +52,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
         },
     })
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
+    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutSubjectModal.name,
     })
@@ -87,13 +74,12 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } =
-        useFindManySchoolYear()
+    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
     useEffect(() => {
         if (dataSchoolYear && dataSchoolYear.length > 0) {
             const today = new Date()
@@ -113,8 +99,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
             }
         }
     }, [dataSchoolYear])
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -143,19 +128,12 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 <Input
                                     allowClear
                                     onPressEnter={(e) => {
-                                        const value =
-                                            e.currentTarget.value?.trim()
+                                        const value = e.currentTarget.value?.trim()
                                         handleFilterChange('name', value)
                                     }}
                                     onChange={(e) => {
-                                        if (
-                                            !e.target.value ||
-                                            e.target.value === ''
-                                        ) {
-                                            handleFilterChange(
-                                                'name',
-                                                undefined
-                                            )
+                                        if (!e.target.value || e.target.value === '') {
+                                            handleFilterChange('name', undefined)
                                         }
                                     }}
                                 />
@@ -178,10 +156,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                             .includes(input.toLowerCase())
                                     }
                                     onChange={(val) =>
-                                        handleFilterChange(
-                                            'managementOrganizationId',
-                                            val
-                                        )
+                                        handleFilterChange('managementOrganizationId', val)
                                     }
                                 />
                             </Flex>
@@ -206,9 +181,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 width: 20,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên môn',
@@ -219,8 +192,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
-                                render: (value) =>
-                                    value?.name ? value?.name : '',
+                                render: (value) => (value?.name ? value?.name : ''),
                             },
                             {
                                 title: 'Loại môn học tương đương',
@@ -292,8 +264,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () =>
-                                                    handleDelete(id),
+                                                onConfirm: () => handleDelete(id),
                                             }}
                                         />
                                     </Row>

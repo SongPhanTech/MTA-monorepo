@@ -9,7 +9,7 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, TreeSelect, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -63,16 +63,13 @@ const PutSubjectListModal = () => {
 
             queryClient.invalidateQueries({ queryKey: ['Subject'] })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
-    const { data: subject } = useFindUniqueSubject(
-        { where: { id } },
-        { enabled: !!id }
-    )
+    const { data: subject } = useFindUniqueSubject({ where: { id } }, { enabled: !!id })
 
     useEffect(() => {
         if (subject) {
@@ -123,10 +120,7 @@ const PutSubjectListModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={24}>
-                <Form.Item
-                    name="managementOrganizationId"
-                    label="Đơn vị quản lý"
-                >
+                <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                     <TreeSelect
                         treeData={treeData}
                         showSearch
@@ -138,9 +132,7 @@ const PutSubjectListModal = () => {
                             const isLeaf = !node.children
                             return (
                                 isLeaf &&
-                                (node.title as string)
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
+                                (node.title as string).toLowerCase().includes(input.toLowerCase())
                             )
                         }}
                         // onChange={( extra ) => {

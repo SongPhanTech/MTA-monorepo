@@ -3,16 +3,12 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import {
-    useFindManySemester,
-    useFindManySubjectClass,
-} from '@workspace/db/hooks'
+import { useFindManySemester, useFindManySubjectClass } from '@workspace/db/hooks'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useEffect } from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -28,7 +24,7 @@ export default function RegisterClassManager({
     setSemesterId,
     setSubjectClassId,
 }: RegisterClassProps) {
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, _setCurrentPage] = useState(1)
     const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -84,6 +80,13 @@ export default function RegisterClassManager({
         },
     })
 
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
     useEffect(() => {
         if (semester.length > 0 && !filters.semesterId) {
             const latestSemesterId = semester[0].id
@@ -93,14 +96,7 @@ export default function RegisterClassManager({
                 return newFilters
             })
         }
-    }, [semester, filters])
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
+    }, [semester, filters, debouncedRefetch])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -121,10 +117,7 @@ export default function RegisterClassManager({
                                     id="search"
                                     placeholder="Nhập tên lớp..."
                                     onChange={(e) =>
-                                        handleFilterChange(
-                                            'searchText',
-                                            e.target.value
-                                        )
+                                        handleFilterChange('searchText', e.target.value)
                                     }
                                     style={{ height: 32 }}
                                     prefix={
@@ -148,12 +141,8 @@ export default function RegisterClassManager({
                                 labelAlign="left"
                             >
                                 <TreeSelectSemester
-                                    defaultValue={
-                                        filters.semesterId || undefined
-                                    }
-                                    onChange={(val) =>
-                                        handleFilterChange('semesterId', val)
-                                    }
+                                    defaultValue={filters.semesterId || undefined}
+                                    onChange={(val) => handleFilterChange('semesterId', val)}
                                 />
                             </Form.Item>
                         </Col>
@@ -172,9 +161,7 @@ export default function RegisterClassManager({
                     },
                     style: { cursor: 'pointer' },
                     className:
-                        record.id === selectedRowKey
-                            ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
-                            : '',
+                        record.id === selectedRowKey ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]' : '',
                 })}
                 selectedRow={selectedRowKey}
                 columns={[
@@ -185,9 +172,7 @@ export default function RegisterClassManager({
                         align: 'center',
                         fixed: 'left',
                         render: (_, __, index) =>
-                            index +
-                            1 +
-                            (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
                     {
                         title: 'Lớp môn học',
@@ -219,8 +204,7 @@ export default function RegisterClassManager({
                         title: 'Giảng viên 1',
                         dataIndex: ['mainLecturer', 'userProfile'],
                         width: 250,
-                        render: (record) =>
-                            record && `${record.code} - ${record.fullname}`,
+                        render: (record) => record && `${record.code} - ${record.fullname}`,
                     },
                     {
                         title: 'Số tín chỉ',
@@ -260,8 +244,7 @@ export default function RegisterClassManager({
                         width: 120,
                         render: (record: SubjectClassData) =>
                             record?.fixedClasses?.reduce(
-                                (acc: number, curr) =>
-                                    acc + (curr?._count?.students ?? 0),
+                                (acc: number, curr) => acc + (curr?._count?.students ?? 0),
                                 0
                             ),
                     },

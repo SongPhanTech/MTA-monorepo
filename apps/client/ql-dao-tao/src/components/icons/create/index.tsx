@@ -1,6 +1,7 @@
 import { Tooltip } from 'antd'
 import type { LucideProps } from 'lucide-react'
 import { Plus } from 'lucide-react'
+
 type CreateIconProps = LucideProps & {
     title?: string
 }
@@ -8,12 +9,7 @@ type CreateIconProps = LucideProps & {
 const CreateIcon = ({ title, ...props }: CreateIconProps) => {
     return (
         <Tooltip title={title ? title : 'Thêm mới'} placement="left">
-            <Plus
-                size={18}
-                strokeWidth={1.5}
-                className="text-base cursor-pointer"
-                {...props}
-            />
+            <Plus size={18} strokeWidth={1.5} className="text-base cursor-pointer" {...props} />
         </Tooltip>
     )
 }

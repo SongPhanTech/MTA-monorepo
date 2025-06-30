@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { $Enums } from '@workspace/db'
-import { Button, Col, Form, Upload, message } from 'antd'
+import { Button, Col, Form, message, Upload } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutUploadProfile = {
@@ -20,20 +20,18 @@ const PutUploadProfileModal = () => {
         tag: PutUploadProfileModal.name,
         onClose: form.resetFields,
     })
-    const [typeId, setTypeId] = useState<string>()
+    const [typeId, _setTypeId] = useState<string>()
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const userTypeData = $Enums.UserType
+    const _userTypeData = $Enums.UserType
 
     async function onOk(output?: PutUploadProfile) {
         if (!output) return
         try {
             showSpinner()
             const fileList = output.file
-            const file = Array.isArray(fileList)
-                ? fileList[0]?.originFileObj
-                : null
+            const file = Array.isArray(fileList) ? fileList[0]?.originFileObj : null
             const formData = new FormData()
 
             formData.append('file', file)
@@ -65,7 +63,7 @@ const PutUploadProfileModal = () => {
                 queryKey: ['UserProfile'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -113,9 +111,7 @@ const PutUploadProfileModal = () => {
                         maxCount={1} // Chỉ cho chọn 1 file
                         accept=".xlsx,.xls" // Chỉ chấp nhận file Excel
                     >
-                        <Button icon={<UploadOutlined />}>
-                            Chọn file Excel
-                        </Button>
+                        <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
                     </Upload>
                 </FormItem>
             </Col>

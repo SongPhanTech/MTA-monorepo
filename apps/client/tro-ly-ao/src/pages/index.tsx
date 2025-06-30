@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 export default function Page() {
     const router = useRouter()
     const { status } = useSession()
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (status === 'unauthenticated') {
             signIn()

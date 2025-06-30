@@ -38,12 +38,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     selectedItem,
 }) => {
     const data: Item[] = dataTable.map(
-        (item: {
-            mainLecturer: any
-            code?: any
-            name: any
-            id: any
-        }) => ({
+        (item: { mainLecturer: any; code?: any; name: any; id: any }) => ({
             code: item.code === null ? undefined : item.code,
             name: item.name,
             lecture: item.mainLecturer?.userProfile
@@ -64,8 +59,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
                 marginBottom: '2px',
                 width: '100%',
                 cursor: 'pointer',
-                backgroundColor:
-                    selectedItem === item.id ? '#daf2ed' : 'transparent',
+                backgroundColor: selectedItem === item.id ? '#daf2ed' : 'transparent',
             }}
         >
             <h3>
@@ -84,10 +78,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
                 borderRadius: '8px',
             }}
         >
-            <h2
-                className="text-lg font-semibold px-[6]"
-                style={{ marginBottom: '12px' }}
-            >
+            <h2 className="text-lg font-semibold px-[6]" style={{ marginBottom: '12px' }}>
                 Danh sách lớp
             </h2>
             <FlatList data={data} renderItem={renderItem} />

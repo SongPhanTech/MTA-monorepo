@@ -14,7 +14,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -100,7 +100,7 @@ export default function TrainingFieldPage() {
                     deletedAt: new Date(),
                 },
             })
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -114,8 +114,7 @@ export default function TrainingFieldPage() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     return (
         <div>
@@ -128,10 +127,7 @@ export default function TrainingFieldPage() {
                                     <Input
                                         id="search"
                                         onChange={(e) =>
-                                            handleFilterChange(
-                                                'searchText',
-                                                e.target.value
-                                            )
+                                            handleFilterChange('searchText', e.target.value)
                                         }
                                         placeholder="Tìm kiếm"
                                         style={{
@@ -170,10 +166,7 @@ export default function TrainingFieldPage() {
                                             marginRight: 8,
                                         }}
                                         onChange={(val) =>
-                                            handleFilterChange(
-                                                'trainingObjectTypeId',
-                                                val
-                                            )
+                                            handleFilterChange('trainingObjectTypeId', val)
                                         }
                                         allowClear
                                     />
@@ -202,9 +195,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index +
-                                    1 +
-                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Mã ngành',
@@ -246,9 +237,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (organization: DM_DonVi) =>
-                                    organization?.sTen
-                                        ? organization?.sTen
-                                        : '',
+                                    organization?.sTen ? organization?.sTen : '',
                             },
 
                             {
@@ -262,11 +251,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 150,
                                 render: ({ publishDate }) =>
-                                    publishDate
-                                        ? dayjs(publishDate).format(
-                                              'DD/MM/YYYY'
-                                          )
-                                        : '',
+                                    publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Trạng thái',
@@ -276,9 +261,7 @@ export default function TrainingFieldPage() {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (
-                                        <Tag color="success">
-                                            Đang hoạt động
-                                        </Tag>
+                                        <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
                             },
@@ -305,16 +288,12 @@ export default function TrainingFieldPage() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={onOpen.bind(
-                                                        null,
-                                                        id
-                                                    )}
+                                                    onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(id),
+                                                        onConfirm: () => handleDelete(id),
                                                     }}
                                                 />
                                             </Row>

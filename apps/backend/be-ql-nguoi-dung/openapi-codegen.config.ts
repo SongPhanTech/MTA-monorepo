@@ -1,8 +1,5 @@
 import { defineConfig } from '@openapi-codegen/cli'
-import {
-    generateFetchers,
-    generateSchemaTypes,
-} from '@openapi-codegen/typescript'
+import { generateFetchers, generateSchemaTypes } from '@openapi-codegen/typescript'
 export default defineConfig({
     sessionMgt: {
         from: {

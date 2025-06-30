@@ -18,10 +18,7 @@ const items: MenuProps['items'] = [
     {
         key: 'DANG_XUAT',
         label: (
-            <Button
-                onClick={signOutAction}
-                className="text-red-500 flex items-center gap-2"
-            >
+            <Button onClick={signOutAction} className="text-red-500 flex items-center gap-2">
                 <LogoutOutlined />
                 <span>Đăng xuất</span>
             </Button>
@@ -29,13 +26,9 @@ const items: MenuProps['items'] = [
     },
 ]
 const AvatarDropdown = () => {
-    const pathname = usePathname()
+    const _pathname = usePathname()
     return (
-        <Dropdown
-            menu={{ items }}
-            placement="bottomLeft"
-            className="cursor-pointer"
-        >
+        <Dropdown menu={{ items }} placement="bottomLeft" className="cursor-pointer">
             <Avatar size="large" icon={<UserOutlined />} />
         </Dropdown>
     )

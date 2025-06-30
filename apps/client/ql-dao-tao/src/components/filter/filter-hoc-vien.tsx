@@ -96,10 +96,7 @@ const FilterHocVien = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <Select
-                                    placeholder="Chọn đối tượng ưu tiên"
-                                    options={options}
-                                />
+                                <Select placeholder="Chọn đối tượng ưu tiên" options={options} />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
@@ -110,10 +107,7 @@ const FilterHocVien = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <Select
-                                    placeholder="Chọn quốc tịch"
-                                    options={options}
-                                />
+                                <Select placeholder="Chọn quốc tịch" options={options} />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
@@ -124,10 +118,7 @@ const FilterHocVien = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <Select
-                                    placeholder="Chọn tôn giáo"
-                                    options={options}
-                                />
+                                <Select placeholder="Chọn tôn giáo" options={options} />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
@@ -138,10 +129,7 @@ const FilterHocVien = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <Select
-                                    placeholder="Chọn dân tộc"
-                                    options={options}
-                                />
+                                <Select placeholder="Chọn dân tộc" options={options} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -175,9 +163,7 @@ const FilterHocVien = (props: Props) => {
             <Form.Item name="searchText">
                 <Input
                     id="search"
-                    onChange={(e) =>
-                        handleFilterChange('searchText', e.target.value)
-                    }
+                    onChange={(e) => handleFilterChange('searchText', e.target.value)}
                     placeholder="Nhập tên học viên..."
                     style={{
                         width: 300,

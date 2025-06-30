@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor =
-    {
-        id: string
-        name: string
-        code: string
-    }
+export type EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculumTrainingMajor = {
+    id: string
+    name: string
+    code: string
+}

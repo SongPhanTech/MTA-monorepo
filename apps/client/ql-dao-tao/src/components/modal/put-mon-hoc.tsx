@@ -13,7 +13,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, TreeSelect, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
@@ -43,8 +43,7 @@ const PutSubjectModal = () => {
                 await updateSubjectVersion({
                     data: {
                         name: output.name,
-                        managementOrganizationId:
-                            output.managementOrganizationId,
+                        managementOrganizationId: output.managementOrganizationId,
                         subjectEquivalentType: output.subjectEquivalentType,
                         credit: +output.credit,
                         period: +output.period,
@@ -84,7 +83,7 @@ const PutSubjectModal = () => {
                 queryKey: ['Subject'],
             })
             onClose()
-        } catch (error) {
+        } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
@@ -93,17 +92,15 @@ const PutSubjectModal = () => {
     const { data: level } = useFindUniqueSubjectVersion({
         where: { id },
     })
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
         }
     }, [level])
-    const { data: manageOrgData = [], refetch: refetchManageOrg } =
-        useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
-    const { data: subjectGroupData = [], refetch: refetchSGroup } =
-        useFindManySubject()
+    const { data: subjectGroupData = [], refetch: refetchSGroup } = useFindManySubject()
 
     return (
         <PutFormModal
@@ -134,9 +131,7 @@ const PutSubjectModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string)
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>
@@ -172,14 +167,12 @@ const PutSubjectModal = () => {
                     <Select
                         allowClear
                         placeholder="Chọn loại môn học tương đương"
-                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(
-                            ([key, value_]) => {
-                                return {
-                                    label: value_,
-                                    value: key,
-                                }
+                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(([key, value_]) => {
+                            return {
+                                label: value_,
+                                value: key,
                             }
-                        )}
+                        })}
                     />
                 </FormItem>
             </Col>
@@ -194,32 +187,17 @@ const PutSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfTheory"
-                    label="Số tiết lý thuyết"
-                    required
-                >
+                <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết" required>
                     <Input placeholder="Nhập số tiết lý thuyết" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfPractice"
-                    label="Số tiết thực hành"
-                    required
-                >
+                <FormItem form={form} name="numberOfPractice" label="Số tiết thực hành" required>
                     <Input placeholder="Nhập số tiết thực hành" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfSelfStudy"
-                    label="Số tiết tự học"
-                    required
-                >
+                <FormItem form={form} name="numberOfSelfStudy" label="Số tiết tự học" required>
                     <Input placeholder="Nhập số tiết tự học" />
                 </FormItem>
             </Col>
@@ -244,12 +222,7 @@ const PutSubjectModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="numberOfOther"
-                    label="Số tiết khác"
-                    required
-                >
+                <FormItem form={form} name="numberOfOther" label="Số tiết khác" required>
                     <Input placeholder="Nhập số tiết khác" />
                 </FormItem>
             </Col>

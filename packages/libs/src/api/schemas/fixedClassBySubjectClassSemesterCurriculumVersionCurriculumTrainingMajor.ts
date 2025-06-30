@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type FixedClassBySubjectClassSemesterCurriculumVersionCurriculumTrainingMajor =
-    {
-        id: string
-        name: string
-        code: string
-    }
+export type FixedClassBySubjectClassSemesterCurriculumVersionCurriculumTrainingMajor = {
+    id: string
+    name: string
+    code: string
+}

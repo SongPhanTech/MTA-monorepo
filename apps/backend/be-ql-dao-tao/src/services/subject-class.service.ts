@@ -1,6 +1,6 @@
+import * as XLSX from 'xlsx'
 import { prisma } from '..'
 import type { StudentInfo, StudentTemplateData } from '../dto/student-info.dto'
-import * as XLSX from 'xlsx'
 
 export const listStudentInfo = async (subjectClassId: string) => {
     // Query studentSubjectScore with related student and userProfile
@@ -25,9 +25,7 @@ export const listStudentInfo = async (subjectClassId: string) => {
         const profile = student.userProfile
 
         if (!profile) {
-            throw new Error(
-                `User profile not found for student ID: ${student.id}`
-            )
+            throw new Error(`User profile not found for student ID: ${student.id}`)
         }
 
         return {

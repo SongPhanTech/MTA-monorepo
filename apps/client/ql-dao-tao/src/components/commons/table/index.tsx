@@ -1,11 +1,8 @@
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    Empty,
-    Table as TableAntd,
-    type TableProps as TableAntdProps,
-} from 'antd'
+import { Empty, Table as TableAntd, type TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import type { TableRowSelection } from 'antd/es/table/interface'
+
 type TableProps<T> = {
     columns?: ColumnsType<T>
     data?: T[]
@@ -45,9 +42,7 @@ const Table = <T extends Record<string, unknown>>({
             columns={
                 columns.map((column) => ({
                     ...column,
-                    key:
-                        column.key ||
-                        (column as unknown as { dataIndex: string }).dataIndex,
+                    key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
                 })) as ColumnsType<T>
             }
             // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}

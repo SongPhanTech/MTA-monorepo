@@ -8,11 +8,7 @@ import {
 import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    ArchivedAward,
-    ArchivedCertificate,
-    StudentSubjectScore,
-} from '@workspace/db'
+import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -26,7 +22,7 @@ dayjs.locale('vi')
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
-    const [filters, setFilters] = useState({
+    const [_filters, _setFilters] = useState({
         searchText: '',
     })
 
@@ -150,11 +146,9 @@ export default function StudentScoreClassPage() {
         },
     })
 
-    const { convertScore } = useScoreConverter(
-        data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
-    )
+    const { convertScore } = useScoreConverter(data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts)
 
-    const debouncedRefetch = useCallback(
+    const _debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
@@ -164,16 +158,11 @@ export default function StudentScoreClassPage() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                {student?.code} - {student?.userProfile?.lastName}{' '}
-                {student?.userProfile?.firstName} -{' '}
-                {student?.trainingObjectType?.name} -{' '}
-                {student?.fixedClass?.trainingCourse?.name} -{' '}
-                {student?.curriculumVersion?.name} -{' '}
+                {student?.code} - {student?.userProfile?.lastName} {student?.userProfile?.firstName}{' '}
+                - {student?.trainingObjectType?.name} - {student?.fixedClass?.trainingCourse?.name}{' '}
+                - {student?.curriculumVersion?.name} -{' '}
                 {student?.curriculumVersion?.curriculum.trainingMajor.name} -{' '}
-                {
-                    student?.curriculumVersion?.curriculum.trainingMajor
-                        .trainingField.name
-                }
+                {student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -181,12 +170,7 @@ export default function StudentScoreClassPage() {
                     <Row gutter={[8, 8]} align="top" justify="space-between">
                         {/* Hàng chứa các button */}
                         <Col xs={24}>
-                            <Flex
-                                justify="end"
-                                wrap="wrap"
-                                gap="8px"
-                                className="mt-1"
-                            >
+                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Button
                                     type="primary"
                                     onClick={() =>
@@ -213,55 +197,33 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'subjectVersion',
-                                    'code',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'code'],
                                 fixed: 'left',
                                 width: 120,
                             },
                             {
                                 title: 'Tên môn học',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'subjectVersion',
-                                    'name',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'name'],
                                 fixed: 'left',
                                 width: 200,
                             },
                             {
                                 title: 'Điểm chuyên cần',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'attendanceScore',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'attendanceScore'],
                                 width: 130,
                             },
                             {
                                 title: 'Điểm thường xuyên',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'midtermScore',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'midtermScore'],
                                 width: 150,
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'examScore',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'examScore'],
                                 width: 100,
                             },
 
@@ -276,10 +238,7 @@ export default function StudentScoreClassPage() {
                                             curr: {
                                                 archivedAward: ArchivedAward
                                             }
-                                        ) =>
-                                            acc +
-                                            (curr?.archivedAward?.bonusScore ??
-                                                0),
+                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
                                         0
                                     ),
                             },
@@ -290,9 +249,8 @@ export default function StudentScoreClassPage() {
                                 render: (_, { id, subjectClassStudent }) =>
                                     subjectClassStudent?.[0]?.certificates
                                         .map(
-                                            (i: {
-                                                archivedCertificate: ArchivedCertificate
-                                            }) => i?.archivedCertificate?.name
+                                            (i: { archivedCertificate: ArchivedCertificate }) =>
+                                                i?.archivedCertificate?.name
                                         )
                                         .join(', '),
                             },
@@ -303,16 +261,12 @@ export default function StudentScoreClassPage() {
                                 render: (__, { id, subjectClassStudent }) => {
                                     const arr: { finalScore: number }[] =
                                         subjectClassStudent?.[0]?.certificates.map(
-                                            (i: {
-                                                archivedCertificate: ArchivedCertificate
-                                            }) => {
+                                            (i: { archivedCertificate: ArchivedCertificate }) => {
                                                 return {
                                                     ...i,
                                                     finalScore:
                                                         Number(
-                                                            i
-                                                                ?.archivedCertificate
-                                                                ?.finalScore
+                                                            i?.archivedCertificate?.finalScore
                                                         ) || 0,
                                                 }
                                             }
@@ -327,8 +281,7 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_, record) => {
-                                    const subjectClassStudent =
-                                        record?.subjectClassStudent?.[0]
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     return (
                                         subjectClassStudent?.manualFinalScore ??
                                         subjectClassStudent?.finalScore ??
@@ -341,14 +294,11 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_, record) => {
-                                    const subjectClassStudent =
-                                        record?.subjectClassStudent?.[0]
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ??
                                         subjectClassStudent?.finalScore
-                                    return score !== undefined
-                                        ? convertScore(score).base4
-                                        : ''
+                                    return score !== undefined ? convertScore(score).base4 : ''
                                 },
                             },
                             {
@@ -356,14 +306,11 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => {
-                                    const subjectClassStudent =
-                                        record?.subjectClassStudent?.[0]
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ??
                                         subjectClassStudent?.finalScore
-                                    return score !== undefined
-                                        ? convertScore(score).letter
-                                        : ''
+                                    return score !== undefined ? convertScore(score).letter : ''
                                 },
                             },
                             {
@@ -371,24 +318,19 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 100,
                                 render: (_: any, record: any) => {
-                                    const subjectClassStudent =
-                                        record.subjectClassStudent?.[0]
+                                    const subjectClassStudent = record.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ??
                                         subjectClassStudent?.finalScore
 
-                                    if (score === undefined || score === null)
-                                        return null
+                                    if (score === undefined || score === null) return null
 
                                     const result = convertScore(score)
 
                                     return (
                                         <div className="flex items-center justify-center">
                                             {result.pass ? (
-                                                <Check
-                                                    size={18}
-                                                    color="green"
-                                                />
+                                                <Check size={18} color="green" />
                                             ) : (
                                                 <X size={18} color="red" />
                                             )}
@@ -399,18 +341,10 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Ghi chú',
                                 align: 'center',
-                                dataIndex: [
-                                    'subjectClassStudent',
-                                    '0',
-                                    'description',
-                                ],
+                                dataIndex: ['subjectClassStudent', '0', 'description'],
                                 width: 200,
                                 render: (value: string) => {
-                                    return (
-                                        <span className="line-clamp-1">
-                                            {value}
-                                        </span>
-                                    )
+                                    return <span className="line-clamp-1">{value}</span>
                                 },
                             },
                             {
@@ -418,8 +352,7 @@ export default function StudentScoreClassPage() {
                                 align: 'center',
                                 width: 120,
                                 render: (_, record) => {
-                                    const status =
-                                        record.subjectClassStudent?.[0]?.status
+                                    const status = record.subjectClassStudent?.[0]?.status
 
                                     const statusInfo = status
                                         ? SUBJECT_CLASS_STUDENT_STATUS[
@@ -428,13 +361,8 @@ export default function StudentScoreClassPage() {
                                         : undefined
 
                                     return (
-                                        <Tag
-                                            color={
-                                                statusInfo?.color ?? 'default'
-                                            }
-                                        >
-                                            {statusInfo?.label ??
-                                                'Không xác định'}
+                                        <Tag color={statusInfo?.color ?? 'default'}>
+                                            {statusInfo?.label ?? 'Không xác định'}
                                         </Tag>
                                     )
                                 },
@@ -448,52 +376,38 @@ export default function StudentScoreClassPage() {
                                     <Row className="justify-center gap-2">
                                         <Tooltip title="Cộng điểm">
                                             <BookCheckIcon
-                                                onClick={onOpenModalAddScore.bind(
-                                                    null,
-                                                    {
-                                                        id: subjectClassStudent?.[0]
-                                                            ?.id,
-                                                        studentId: studentId,
-                                                        list:
-                                                            subjectClassStudent?.length >
-                                                            0
-                                                                ? subjectClassStudent[0]?.awards.map(
-                                                                      (i: {
-                                                                          archivedAwardId: string
-                                                                      }) =>
-                                                                          i.archivedAwardId
-                                                                  )
-                                                                : [],
-                                                        subjectClassStudent:
-                                                            subjectClassStudent?.[0],
-                                                    }
-                                                )}
+                                                onClick={onOpenModalAddScore.bind(null, {
+                                                    id: subjectClassStudent?.[0]?.id,
+                                                    studentId: studentId,
+                                                    list:
+                                                        subjectClassStudent?.length > 0
+                                                            ? subjectClassStudent[0]?.awards.map(
+                                                                  (i: {
+                                                                      archivedAwardId: string
+                                                                  }) => i.archivedAwardId
+                                                              )
+                                                            : [],
+                                                    subjectClassStudent: subjectClassStudent?.[0],
+                                                })}
                                                 size={16}
                                             />
                                         </Tooltip>
 
                                         <Tooltip title="Thêm chứng chỉ">
                                             <SafetyCertificateOutlined
-                                                onClick={onOpenModalAddCertificate.bind(
-                                                    null,
-                                                    {
-                                                        id: subjectClassStudent?.[0]
-                                                            ?.id,
-                                                        studentId: studentId,
-                                                        list:
-                                                            subjectClassStudent?.length >
-                                                            0
-                                                                ? subjectClassStudent[0]?.certificates.map(
-                                                                      (i: {
-                                                                          archivedCertificateId: string
-                                                                      }) =>
-                                                                          i.archivedCertificateId
-                                                                  )
-                                                                : [],
-                                                        subjectClassStudent:
-                                                            subjectClassStudent?.[0],
-                                                    }
-                                                )}
+                                                onClick={onOpenModalAddCertificate.bind(null, {
+                                                    id: subjectClassStudent?.[0]?.id,
+                                                    studentId: studentId,
+                                                    list:
+                                                        subjectClassStudent?.length > 0
+                                                            ? subjectClassStudent[0]?.certificates.map(
+                                                                  (i: {
+                                                                      archivedCertificateId: string
+                                                                  }) => i.archivedCertificateId
+                                                              )
+                                                            : [],
+                                                    subjectClassStudent: subjectClassStudent?.[0],
+                                                })}
                                                 size={16}
                                             />
                                         </Tooltip>
@@ -513,7 +427,5 @@ export default function StudentScoreClassPage() {
 }
 
 StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return (
-        <DefaultLayout headerChildren="Kết quả học tập">{page}</DefaultLayout>
-    )
+    return <DefaultLayout headerChildren="Kết quả học tập">{page}</DefaultLayout>
 }

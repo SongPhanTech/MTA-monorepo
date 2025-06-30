@@ -39,7 +39,7 @@ export default function ChatInput({
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         // Điều chỉnh chiều cao khi input thay đổi
         resizeTextarea()
