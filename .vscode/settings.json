@@ -7,8 +7,10 @@
     "source.removeUnusedImports": "explicit"
   },
   "cSpell.words": [
+    "blankrows",
     "CTĐT",
     "cuid",
+    "defval",
     "Docxtemplater",
     "Quanly",
     "SCIM"

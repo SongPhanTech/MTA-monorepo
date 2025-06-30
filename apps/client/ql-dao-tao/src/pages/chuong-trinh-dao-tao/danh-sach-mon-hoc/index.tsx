@@ -252,7 +252,7 @@ export default function SubjectList() {
                                             onChange={(e) =>
                                                 handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Nhập tên môn..."
+                                            placeholder="Tìm kiếm tên môn..."
                                             className="py-0"
                                             prefix={
                                                 <Search
@@ -292,7 +292,7 @@ export default function SubjectList() {
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
                                 <Button onClick={handleModal} type="primary">
-                                    <PlusOutlined />
+                                    <BookPlus />
                                     Thêm
                                 </Button>
                             </Flex>
@@ -329,7 +329,6 @@ export default function SubjectList() {
                             {
                                 title: 'Tên phiên bản',
                                 dataIndex: 'name',
-                                // sorter: (a, b) => a.name - b.name,
                                 width: 200,
                             },
                             {

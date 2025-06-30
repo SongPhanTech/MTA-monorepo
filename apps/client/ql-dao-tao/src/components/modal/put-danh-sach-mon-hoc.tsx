@@ -89,29 +89,14 @@ const PutSubjectListModal = () => {
             title={id ? 'Sửa danh sách môn học' : 'Thêm danh sách môn học'}
             className="w-[60vw]"
         >
-            {/* <Col span={12}>
-                <FormItem form={form} name="trainingObjectTypeId" label="ĐTĐT">
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map(
-                            (i: TrainingObjectType) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            }
-                        )}
-                    />
-                </FormItem>
-            </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên môn học" required>
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã">
-                    <Input placeholder="Nhập mã" />
+                <FormItem form={form} name="code" label="Mã môn học" required>
+                    <Input placeholder="Nhập mã môn học" />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -135,12 +120,6 @@ const PutSubjectListModal = () => {
                                 (node.title as string).toLowerCase().includes(input.toLowerCase())
                             )
                         }}
-                        // onChange={( extra ) => {
-                        //     const node = extra.triggerNode;
-                        //     if (node.props.children) {
-                        //         form.setFieldsValue({ managementOrganizationId: undefined });
-                        //     }
-                        // }}
                     />
                 </Form.Item>
             </Col>

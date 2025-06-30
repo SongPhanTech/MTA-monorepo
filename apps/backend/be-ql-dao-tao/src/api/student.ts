@@ -5,11 +5,11 @@ import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
-    buildCurriculumMap,
-    buildDistrictMap,
-    buildEthnicityMap,
-    buildNationalityMap,
-    buildProvinceMap,
+    buildCurriculumMapOrThrow,
+    buildDistrictMapOrThrow,
+    buildEthnicityMapOrThrow,
+    buildNationalityMapOrThrow,
+    buildProvinceMapOrThrow,
 } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
@@ -63,14 +63,6 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
     }
 
-    const duplicateCodes = data.students
-        .map((student) => student.code)
-        .filter((code, index, arr) => arr.indexOf(code) !== index)
-
-    if (duplicateCodes.length) {
-        return c.json({ message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}` }, 400)
-    }
-
     const trainingObjectType = await prisma.trainingObjectType.findFirst({
         where: { name: data.trainingObjectType as string, active: true },
     })
@@ -92,27 +84,27 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
-    const ethnicityMap = await buildEthnicityMap(
+    const ethnicityMap = await buildEthnicityMapOrThrow(
         prisma,
         data.students.map((student) => student.ethnicity)
     )
 
-    const nationalityMap = await buildNationalityMap(
+    const nationalityMap = await buildNationalityMapOrThrow(
         prisma,
         data.students.map((student) => student.nationality)
     )
 
-    const provinceMap = await buildProvinceMap(
+    const provinceMap = await buildProvinceMapOrThrow(
         prisma,
         data.students.map((student) => student.provinceHometown)
     )
 
-    const districtMap = await buildDistrictMap(
+    const districtMap = await buildDistrictMapOrThrow(
         prisma,
         data.students.map((student) => student.districtHometown)
     )
 
-    const curriculumVersionMap = await buildCurriculumMap(prisma, data.students)
+    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
 
     await prisma.$transaction(
         async (tx) => {

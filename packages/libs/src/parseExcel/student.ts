@@ -275,6 +275,18 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
             }
         })
 
+    const duplicateCodes = students
+        .map((student) => student.code)
+        .filter((code, index, arr) => arr.indexOf(code) !== index)
+
+    if (duplicateCodes.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: '',
+            message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}`,
+        })
+    }
+
     return {
         trainingObjectType:
             typeof trainingObjectTypeCell?.v === 'string'

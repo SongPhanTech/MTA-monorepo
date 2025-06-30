@@ -10,6 +10,7 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
+import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
@@ -68,6 +69,7 @@ app.route('/api', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
+app.route('/api/curriculum', CurriculumApp)
 
 app.use(
     '/api/model/*',

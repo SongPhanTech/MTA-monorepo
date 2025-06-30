@@ -86,6 +86,13 @@ enum SubjectClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingObjectTypes {
+  MILITARY
+  CIVILIAN
+
+  @@schema("ql-dao-tao")
+}
+
 enum AcademicRankingBaseType {
   Base10
   Base4
@@ -513,8 +520,11 @@ model TrainingCourse {
   coef_1                 Float                    @default(0.1)
   coef_2                 Float                    @default(0.3)
   coef_3                 Float                    @default(0.6)
-  scoreToTakeExam        Float                    @default(1)
+  scoreToTakeExam        Float                    @default(0)
   scoreToPass            Float                    @default(4)
+  scoreToPassConditional Float                    @default(5)
+  scoreToTakeGraduation  Float                    @default(5)
+  scoreToPassGraduation  Float                    @default(5.5)
   trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId   String
   fixedClass             FixedClass[]
@@ -767,7 +777,6 @@ model SubjectClass {
   @@schema("ql-dao-tao")
 }
 
-/// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType {
   id                   String                              @id() @default(cuid())
   code                 String?                             @unique()
@@ -777,6 +786,7 @@ model TrainingObjectType {
   createdAt            DateTime                            @default(now())
   updatedAt            DateTime                            @updatedAt()
   name                 String                              @unique()
+  type                 TrainingObjectTypes
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
