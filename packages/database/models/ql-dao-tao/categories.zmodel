@@ -6,18 +6,25 @@ import '../ql-nguoi-dung/profile'
 import '../ql-danh-muc/core-categories'
 import '../ql-nguoi-dung/training-score'
 
-/// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
+enum TrainingObjectTypes {
+  MILITARY // Học viên quân sự
+  CIVILIAN // Học viên dân sự
+  // INTERNATIONAL // Học viên quốc tế
+
+  @@schema("ql-dao-tao")
+}
+
 model TrainingObjectType extends Base {
   name                 String                              @unique
+  type                 TrainingObjectTypes
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
   students             Student[]
+  trainingScoreSession TrainingScoreSession[]
 
   @@schema("ql-dao-tao")
-
-  trainingScoreSession TrainingScoreSession[]
 }
 
 /// đối tượng ưu tiên

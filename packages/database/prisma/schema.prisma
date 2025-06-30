@@ -86,6 +86,13 @@ enum SubjectClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingObjectTypes {
+  MILITARY
+  CIVILIAN
+
+  @@schema("ql-dao-tao")
+}
+
 enum AcademicRankingBaseType {
   Base10
   Base4
@@ -767,7 +774,6 @@ model SubjectClass {
   @@schema("ql-dao-tao")
 }
 
-/// đối tượng đào tạo (Quân sư, dân sự, quốc tế)
 model TrainingObjectType {
   id                   String                              @id() @default(cuid())
   code                 String?                             @unique()
@@ -777,6 +783,7 @@ model TrainingObjectType {
   createdAt            DateTime                            @default(now())
   updatedAt            DateTime                            @updatedAt()
   name                 String                              @unique()
+  type                 TrainingObjectTypes
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
