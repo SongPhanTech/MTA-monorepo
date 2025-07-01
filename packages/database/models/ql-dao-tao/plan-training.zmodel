@@ -318,7 +318,8 @@ model CurriculumVersion extends Base {
 
 /// môn học
 model Subject extends Base {
-  name                     String
+  name                     String           @unique
+  englishName              String?          @unique
 
   managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String

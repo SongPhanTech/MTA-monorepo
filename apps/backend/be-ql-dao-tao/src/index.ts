@@ -61,6 +61,7 @@ app.use('*', checkIp)
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
+// TODO!: uncomment
 // app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
 setupOpenApi(app)

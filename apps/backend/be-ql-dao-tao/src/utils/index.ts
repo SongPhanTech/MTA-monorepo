@@ -292,3 +292,25 @@ export const buildSubjectMapOrThrow = async (
 
     return new Map(existing.map(({ name, id }) => [name, id]))
 }
+
+export const buildOrganizationMapOrThrow = async (
+    prisma: PrismaClient,
+    codes: (string | null)[]
+) => {
+    const uniqCodes = Array.from(new Set(codes.filter((code): code is string => Boolean(code))))
+
+    const existing = await prisma.dM_DonVi.findMany({
+        where: { sMa: { in: uniqCodes } },
+        select: { sMa: true, Id: true },
+    })
+
+    const missing = uniqCodes.filter((code) => !existing.some(({ sMa }) => sMa === code))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Đơn vị không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ sMa, Id }) => [sMa, Id]))
+}
