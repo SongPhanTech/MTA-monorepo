@@ -1,6 +1,6 @@
+import * as XLSX from 'xlsx'
 import { prisma } from '..'
 import type { StudentInfo, StudentTemplateData } from '../dto/student-info.dto'
-import * as XLSX from 'xlsx'
 
 export const listStudentInfo = async (fixedClassId: string) => {
     const fixedClasses = await prisma.fixedClass.findUnique({
@@ -16,26 +16,21 @@ export const listStudentInfo = async (fixedClassId: string) => {
     if (!fixedClasses) {
         throw new Error('Lớp học không tồn tại')
     }
-    const studentsInfo: StudentInfo[] = fixedClasses.students.map(
-        ({ userProfile }, idx) => {
-            return {
-                stt: idx + 1,
-                id: userProfile?.id ?? '',
-                name: `${userProfile?.lastName} ${userProfile?.firstName}`,
-                code: userProfile?.code || '',
-                birth: userProfile?.dateOfBirth
-                    ? new Date(userProfile.dateOfBirth).toLocaleDateString(
-                          'vi-VN'
-                      )
-                    : '',
-                hometown: userProfile?.homeTown || '',
-            }
+    const studentsInfo: StudentInfo[] = fixedClasses.students.map(({ userProfile }, idx) => {
+        return {
+            stt: idx + 1,
+            id: userProfile?.id ?? '',
+            name: `${userProfile?.lastName} ${userProfile?.firstName}`,
+            code: userProfile?.code || '',
+            birth: userProfile?.dateOfBirth
+                ? new Date(userProfile.dateOfBirth).toLocaleDateString('vi-VN')
+                : '',
+            hometown: userProfile?.homeTown || '',
         }
-    )
+    })
 
     return studentsInfo
 }
-
 
 // Sanitize filename
 export const sanitizeFilename = (name: string): string => {
@@ -66,9 +61,7 @@ export const populateExcelTemplate = (
     }
 
     const headers = ['STT', 'ID', 'Name', 'Code', 'Date of Birth', 'Hometown']
-    const startRow = 8 
-
-   
+    const startRow = 8
 
     // Write student data
     templateData.student.forEach((student, index) => {

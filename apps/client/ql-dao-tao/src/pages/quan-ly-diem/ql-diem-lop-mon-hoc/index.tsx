@@ -7,7 +7,6 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { ExportTemplateExam, ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, TrainingObjectType } from '@workspace/db'
@@ -19,18 +18,7 @@ import {
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { calcFinalScore } from '@workspace/libs/utils'
-import {
-    Button,
-    Checkbox,
-    type CheckboxChangeEvent,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Popover,
-    Row,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
@@ -60,9 +48,9 @@ export default function SubjectClassScore() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [subjectClassFullData, setSubjectClassFullData] = useState<any[]>([])
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
     const [_nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
     const [_nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
@@ -122,7 +110,6 @@ export default function SubjectClassScore() {
 
     //#region Mới
     /* Mới */
-
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
@@ -218,76 +205,71 @@ export default function SubjectClassScore() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore({
-        where: {
-            // ...(
-            //     filters.searchText && filters.searchText !== '' ? {
-            //         OR: [
-            //             // { name: { contains: filters.searchText } },
-            //             { code: { contains: filters.searchText } },
-            //         ],
-            //     } : {}
-            // ),
-            subjectClassId: selectedFixedClass || '',
-            deletedAt: null,
+    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                subjectClassId: selectedFixedClass || '',
+                deletedAt: null,
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                            },
+                        },
+                    },
+                },
+                subjectClass: {
+                    include: {
+                        subject: true,
+                        semester: {
+                            include: {
+                                schoolYear: true,
+                            },
+                        },
+                        mainLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        extraLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        enterGradeLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+                awards: {
+                    include: {
+                        archivedAward: true,
+                    },
+                },
+                certificates: {
+                    include: {
+                        archivedCertificate: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+            // take: numberOfPages,
+            // skip: (currentPage - 1) * numberOfPages,
         },
-        include: {
-            student: {
-                include: {
-                    userProfile: true,
-                    fixedClass: {
-                        include: {
-                            trainingCourse: true,
-                        },
-                    },
-                },
-            },
-            subjectClass: {
-                include: {
-                    subject: true,
-                    semester: {
-                        include: {
-                            schoolYear: true,
-                        },
-                    },
-                    mainLecturer: {
-                        include: {
-                            userProfile: true,
-                        },
-                    },
-                    extraLecturer: {
-                        include: {
-                            userProfile: true,
-                        },
-                    },
-                    enterGradeLecturer: {
-                        include: {
-                            userProfile: true,
-                        },
-                    },
-                },
-            },
-            awards: {
-                include: {
-                    archivedAward: true,
-                },
-            },
-            certificates: {
-                include: {
-                    archivedCertificate: true,
-                },
-            },
-        },
-        orderBy: {
-            student: {
-                userProfile: {
-                    firstName: 'asc',
-                },
-            },
-        },
-        // take: numberOfPages,
-        // skip: (currentPage - 1) * numberOfPages,
-    })
+        { refetchOnWindowFocus: false }
+    )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -304,33 +286,31 @@ export default function SubjectClassScore() {
 
     const handleChangeFixedClass = async (id: string) => {
         try {
+            if (hasUnsavedChanges) {
+                const shouldProceed = confirm(
+                    'Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?'
+                )
+                if (!shouldProceed) {
+                    return
+                }
+            }
+
             showSpinner()
             setSelectedFixedClass(id)
             await refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
-    // const handleChangeNhapDiemCong = (e: CheckboxChangeEvent) => {
-    //     setNhapDiemCong(e.target.checked)
-    // }
-    const _handleChangeCamThi = (e: CheckboxChangeEvent) => {
-        setCamThi(e.target.checked)
-    }
+
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
             const updatedFilters = { ...prev, ...newFilters }
             debouncedRefetch()
             return updatedFilters
         })
-    }
-    // #endregion
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys)
-        },
     }
     // #region Lưu điểm
     const [scoreCC, setScoreCC] = useState<{ id: string; value: number }[]>([])
@@ -389,7 +369,12 @@ export default function SubjectClassScore() {
                     const finalScore = Number(renderFinalScore(record).finalScore)
 
                     const parseScoreValue = (value: any) => {
-                        if (value === undefined || value === null || value === '' || isNaN(value)) {
+                        if (
+                            value === undefined ||
+                            value === null ||
+                            value === '' ||
+                            Number.isNaN(value)
+                        ) {
                             return null
                         }
                         return Number(value)
@@ -445,6 +430,7 @@ export default function SubjectClassScore() {
                     )
                 )
                 message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                setHasUnsavedChanges(false)
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
             }
@@ -587,6 +573,26 @@ export default function SubjectClassScore() {
             }
         }
     }
+
+    useEffect(() => {
+        if (!hasUnsavedChanges) return
+
+        const handleRouteChange = (url: string) => {
+            if (
+                router.pathname !== url &&
+                !confirm('Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?')
+            ) {
+                router.events.emit('routeChangeError')
+                throw 'Route change aborted'
+            }
+        }
+
+        router.events.on('routeChangeStart', handleRouteChange)
+
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChange)
+        }
+    }, [hasUnsavedChanges, router])
 
     return (
         <div className="flex gap-2 pr-2">
@@ -785,18 +791,20 @@ export default function SubjectClassScore() {
                                 title: 'Mã sinh viên',
                                 align: 'center',
                                 width: 150,
+                                fixed: 'left',
                                 render: (_, record) => record.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',
                                 dataIndex: 'name',
                                 width: 150,
+                                fixed: 'left',
                                 render: (text, record) =>
-                                    `${record.student?.userProfile?.firstName || ''} ${record.student?.userProfile?.lastName || ''}`,
+                                    `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
                             },
                             {
                                 title: 'Ngày sinh',
-                                dataIndex: 'tenMonHoc',
+                                dataIndex: ['student', 'userProfile', 'dateOfBirth'],
                                 width: 150,
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
@@ -866,6 +874,7 @@ export default function SubjectClassScore() {
                                                             },
                                                         ]
                                                     })
+                                                    setHasUnsavedChanges(true)
                                                 }}
                                                 onKeyDown={(e) =>
                                                     handleScoreInputKeyDown(
@@ -938,6 +947,7 @@ export default function SubjectClassScore() {
                                                             },
                                                         ]
                                                     })
+                                                    setHasUnsavedChanges(true)
                                                 }}
                                                 onKeyDown={(e) =>
                                                     handleScoreInputKeyDown(
@@ -973,7 +983,8 @@ export default function SubjectClassScore() {
                                     if (
                                         isEditable &&
                                         record.attendanceScore &&
-                                        record.midtermScore
+                                        record.midtermScore &&
+                                        !record.subjectClass.isLockExamScore
                                     ) {
                                         const currentScore =
                                             Score !== null && Score !== undefined ? Score : ''
@@ -1014,6 +1025,7 @@ export default function SubjectClassScore() {
                                                             },
                                                         ]
                                                     })
+                                                    setHasUnsavedChanges(true)
                                                 }}
                                                 onKeyDown={(e) =>
                                                     handleScoreInputKeyDown(

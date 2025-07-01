@@ -1,4 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
@@ -404,6 +403,12 @@ export default function SubjectList() {
                                 })),
                                 filterSearch: true,
                                 render: (value: ExamType) => getExamTypeLabel(value),
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                                width: 200,
+                                render: (record) => <div className="line-clamp-2">{record}</div>,
                             },
                             {
                                 title: 'Trạng thái',
