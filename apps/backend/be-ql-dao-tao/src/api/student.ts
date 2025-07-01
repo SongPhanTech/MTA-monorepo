@@ -61,7 +61,7 @@ const importHeQuanSu = createRoute({
     },
 })
 
-const dsRaSoatHocBong = createRoute({
+const dsRaSoatHocBongExcel = createRoute({
     operationId: 'exportStudentScholarship',
     path: '/export-xlsx-list-student-to-check-scholarship',
     tags: ['Student'],
@@ -91,6 +91,42 @@ const dsRaSoatHocBong = createRoute({
                     schema: z.object({
                         message: z.string(),
                     }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const dsRaSoatHocBongJson = createRoute({
+    operationId: 'exportStudentScholarshipJson',
+    path: '/export-json-list-student-to-check-scholarship',
+    tags: ['Student'],
+    summary: 'Danh sách sinh viên trong rà soát học bổng',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện học bổng dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student scholarship as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
                 },
             },
         },
@@ -241,7 +277,7 @@ app.openapi(importHeQuanSu, async (c) => {
     return c.json({ message: `Import students successfully: ${data.students.length}` }, 200)
 })
 
-app.openapi(dsRaSoatHocBong, async (c) => {
+app.openapi(dsRaSoatHocBongExcel, async (c) => {
     const { semesterId } = c.req.valid('query')
     const student = await listStudentInfo(semesterId)
 
@@ -263,6 +299,16 @@ app.openapi(dsRaSoatHocBong, async (c) => {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
     })
+})
+
+app.openapi(dsRaSoatHocBongJson, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    const student = await listStudentInfo(semesterId)
+
+    if (!student || student.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    return c.json(student, 200)
 })
 
 export default app

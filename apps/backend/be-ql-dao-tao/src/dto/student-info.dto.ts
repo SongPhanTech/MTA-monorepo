@@ -34,6 +34,11 @@ export const StudentScholarship = z.object({
     diemRenLuyen: z.number().describe('Điểm rèn luyện'),
     xepLoaiRenLuyen: z.string().describe('Xếp loại rèn luyện'),
     biKyLuat: z.boolean().describe('Bị kỷ luật từ khiển trách trở lên'),
+    chucVuHocVien: z.string().describe('Chức vụ học viên'),
+    diemThuong: z.number().describe('Điểm thưởng chức vụ'),
+    quocTich: z.string().describe('Quốc tịch'),
+    duDieuKienHocBong: z.boolean().describe('Đủ điều kiện học bổng'),
+    ghiChu: z.string().describe('Ghi chú'),
 })
 export const StudentTemplateData = z.object({
     date: z.string().describe('Ngày'),

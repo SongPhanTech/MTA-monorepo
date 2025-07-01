@@ -8,7 +8,7 @@ interface ScoreConvertResult {
     diemD: number
 }
 const GiaTriDiemCvaD = async (trainingCourseId: string, scoreConvert: ScoreConvertItem[]) => {
-    // Lấy giá trị điểm C và D từ bảng chuyển đổi điểm
+    // Lấy giá trị điểm C và D từ bảng chuyển đổi điểms
     const diemCObj = scoreConvert.find(
         (item: { trainingCourseId: string; letter: string }) =>
             item.trainingCourseId === trainingCourseId && item.letter === 'C'
@@ -17,7 +17,6 @@ const GiaTriDiemCvaD = async (trainingCourseId: string, scoreConvert: ScoreConve
         (item: { trainingCourseId: string; letter: string }) =>
             item.trainingCourseId === trainingCourseId && item.letter === 'D'
     )
-
     return {
         diemC: diemCObj ? diemCObj.base10Min : 0,
         diemD: diemDObj ? diemDObj.base10Min : 0,
@@ -295,7 +294,7 @@ const ThongTinHocKy = async (
     })
 
     if (!phienBanCTDT?.curriculumVersionId) {
-        console.error('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên:', studentId)
+        console.log('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên:', studentId)
         return {
             kyDangHoc: DsHocKy.length,
             kyCuoi: false,
@@ -464,6 +463,11 @@ export const listStudentInfo = async (semesterId: string) => {
                 trinhDoTinHoc: false,
                 kyDangHoc: ThongTinHocKySinhVien.kyDangHoc || 0,
                 kyCuoi: ThongTinHocKySinhVien.kyCuoi || false,
+                chucVuHocVien: 'Không', // Chức vụ học viên
+                quocTich: 'Việt Nam', // Quốc tịch
+                duDieuKienHocBong: true, // Điều kiện học bổng
+                ghiChu: '', // Ghi chú,
+                diemThuong: 0, // Điểm thưởng
             }
         })
     )
