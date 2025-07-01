@@ -7,9 +7,7 @@ interface UseCloneCurriculumVersionProps {
     refetch?: () => void
 }
 
-export const useCloneCurriculumVersion = ({
-    refetch,
-}: UseCloneCurriculumVersionProps) => {
+export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersionProps) => {
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -25,8 +23,8 @@ export const useCloneCurriculumVersion = ({
             const cloneData: Prisma.CurriculumVersionCreateInput = {
                 name: `${originalVersion?.name} (Bản sao)`,
                 code: originalVersion.code
-                ? `${originalVersion.code}-COPY-${Date.now()}`
-                : `COPY-${Date.now()}`,
+                    ? `${originalVersion.code}-COPY-${Date.now()}`
+                    : `COPY-${Date.now()}`,
                 curriculum: { connect: { id: originalVersion?.curriculumId } },
                 trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
                 trainingLevel: { connect: { id: originalVersion.trainingLevelId } },
