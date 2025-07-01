@@ -3,64 +3,86 @@ import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
-import '../ql-dao-tao/categories'
-import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
-import '../ql-nguoi-dung/training-score'
+import 'training-score'
+import 'categories'
+import 'plan-training'
+import 'scholarship'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
-  from                    DateTime? // từ ngày
-  to                      DateTime? // đến ngày
+  from                      DateTime? // từ ngày
+  to                        DateTime? // đến ngày
 
-  trainingLocation        TrainingLocation?         @relation(fields: [trainingLocationId], references: [id])
-  trainingLocationId      String?
+  trainingLocation          TrainingLocation?           @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId        String?
 
   /// đối tượng ưu tiên
-  priorityObject          PriorityObject[]
+  priorityObject            PriorityObject[]
 
-  status                  StudentStatus             @default(ENROLLED)
+  status                    StudentStatus               @default(ENROLLED)
 
-  fixedClass              FixedClass?               @relation(fields: [fixedClassId], references: [id])
-  fixedClassId            String?
-  subjectClassStudent     StudentSubjectScore[]
+  fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
+  fixedClassId              String?
+  subjectClassStudent       StudentSubjectScore[]
 
-  userProfileId           String
-  userProfile             UserProfile               @relation(fields: [userProfileId], references: [id])
+  userProfileId             String
+  userProfile               UserProfile                 @relation(fields: [userProfileId], references: [id])
 
-  trainingLevel           TrainingLevel?            @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId         String?
+  trainingLevel             TrainingLevel?              @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId           String?
 
-  trainingObjectType      TrainingObjectType?       @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
-  trainingObjectTypeId    String?
+  trainingObjectType        TrainingObjectType?         @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId      String?
 
-  trainingType            TrainingType?             @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId          String?
+  trainingType              TrainingType?               @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId            String?
 
-  trainingForm            TrainingForm?             @relation(fields: [trainingFormId], references: [id])
-  trainingFormId          String?
+  trainingForm              TrainingForm?               @relation(fields: [trainingFormId], references: [id])
+  trainingFormId            String?
 
-  registrationArea        DM_KhuVuc_DiaLy?          @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
-  registrationAreaId      String?
+  registrationArea          DM_KhuVuc_DiaLy?            @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
+  registrationAreaId        String?
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion       CurriculumVersion?        @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId     String?
+  curriculumVersion         CurriculumVersion?          @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId       String?
 
-  studyRank               StudyRank?                @relation(fields: [studyRankId], references: [id])
-  studyRankId             String?
+  studyRank                 StudyRank?                  @relation(fields: [studyRankId], references: [id])
+  studyRankId               String?
 
-  trainingRank            TrainingRank?             @relation(fields: [trainingRankId], references: [id])
-  trainingRankId          String?
+  trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
+  trainingRankId            String?
 
-  studentTrainingScore    StudentTrainingScore[]
-  studentTrainingSemester StudentTrainingSemester[]
+  studentTrainingScore      StudentTrainingScore[]
+  studentTrainingSemester   StudentTrainingSemester[]
+  studentTrainingSchoolYear StudentTrainingSchoolYear[]
+  studentTrainingCourse     StudentTrainingCourse[]
+  studentSemesterResult     StudentSemesterResult[]
+  scholarshipAwards         ScholarshipAward[]
   @@schema("ql-dao-tao")
+}
 
-	studentTrainingSchoolYear StudentTrainingSchoolYear[]
+model StudentSemesterResult extends Base {
+  student                  Student  @relation(fields: [studentId], references: [id])
+  studentId                String   // Liên kết đến sinh viên/học viên
+  semester                 Semester @relation(fields: [semesterId], references: [id])
+  semesterId               String   // Liên kết đến học kỳ
+  totalCredits             Int      // Tổng tín chỉ học kỳ
+  registeredCredits        Int      // Số tín chỉ đăng ký
+  accumulatedCredits       Int      // Tổng tín chỉ tích lũy
+  totalCreditsByCurriculum Int      // Tổng tín chỉ học kỳ theo chương trình đào tạo
+  gpa                      Float    // Điểm trung bình học kỳ (gốc)
+  foreignLangPass          Boolean  // Đạt chuẩn ngoại ngữ
+  isClassMonitor           Boolean  // Lớp trưởng
+  isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
+  entryScore               Float?   // Điểm thi đầu vào (nếu có)
 
-	studentTrainingCourse StudentTrainingCourse[]
+  calculatedGPA            Float    // GPA sau khi cộng điểm ưu tiên
+  isImproving              Boolean  // Có đang học lại hoặc cải thiện không
+
+  @@schema("ql-dao-tao")
 }
 
 enum StudentStatus {

@@ -42,6 +42,7 @@ async function main() {
                 id: '550e8402-e29b-41d4-a716-446655440000',
                 name: 'Đại học quân sự',
                 code: 'QS',
+                type: $Enums.TrainingObjectTypes.MILITARY,
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
             },
@@ -49,15 +50,9 @@ async function main() {
                 id: '550e8402-e29b-41d4-a716-446655440001',
                 name: 'Đại học dân sự',
                 code: 'DS',
+                type: $Enums.TrainingObjectTypes.CIVILIAN,
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
-            },
-            {
-                id: '550e8402-e29b-41d4-a716-446655440002',
-                name: 'Quốc tế',
-                code: 'QT',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
             },
         ],
     })
@@ -341,17 +336,6 @@ async function main() {
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
             },
-            {
-                id: '550e8406-e29b-41d4-a716-446655440002',
-                code: 'K33',
-                name: 'Khóa 33',
-                description: 'Khóa 33',
-                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
-
-                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440002',
-                createdAt: new Date('2025-04-03T12:58:42.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
-            },
         ],
     })
 
@@ -416,15 +400,6 @@ async function main() {
                 updatedAt: new Date('2025-04-03T12:58:43.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
                 managementOrganizationId: '550e8400-1234-41d4-a716-446655440002',
-            },
-            {
-                id: '550e8407-e29b-41d4-a716-446655440004',
-                name: 'CNTT',
-                code: 'CNTT_K33',
-                createdAt: new Date('2025-04-03T12:58:44.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:44.507Z'),
-                trainingCourseId: '550e8406-e29b-41d4-a716-446655440002',
-                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
         ],
     })
@@ -788,8 +763,11 @@ async function main() {
 
                     trainingObjectType: {
                         connectOrCreate: {
-                            where: { name: 'Quân sư' },
-                            create: { name: 'Quân sư' },
+                            where: { name: 'Đại học quân sự' },
+                            create: {
+                                name: 'Đại học quân sự',
+                                type: $Enums.TrainingObjectTypes.MILITARY,
+                            },
                         },
                     },
                     trainingLevel: {
