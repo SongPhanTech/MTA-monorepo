@@ -468,6 +468,10 @@ model SchoolYear {
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @updatedAt()
   name                      String
+<<<<<<< Updated upstream
+=======
+  order                     Int                         @unique()
+>>>>>>> Stashed changes
   startDate                 DateTime
   endDate                   DateTime?
   semesters                 Semester[]
@@ -554,7 +558,10 @@ model TrainingCourse {
   scoreConverts          ScoreConvert[]
   academicRankingConvert AcademicRankingConvert[]
   studentTrainingCourse  StudentTrainingCourse[]
+<<<<<<< Updated upstream
   scholarships           Scholarship[]
+=======
+>>>>>>> Stashed changes
 
   @@schema("ql-dao-tao")
 }
@@ -1204,6 +1211,7 @@ model Student {
   studentTrainingSemester   StudentTrainingSemester[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
   studentTrainingCourse     StudentTrainingCourse[]
+<<<<<<< Updated upstream
   studentSemesterResult     StudentSemesterResult[]
   scholarshipAwards         ScholarshipAward[]
 
@@ -1233,6 +1241,8 @@ model StudentSemesterResult {
   entryScore               Float?
   calculatedGPA            Float
   isImproving              Boolean
+=======
+>>>>>>> Stashed changes
 
   @@schema("ql-dao-tao")
 }
@@ -2571,6 +2581,42 @@ model ScholarshipAward {
 
   @@unique([studentId, scholarshipId, semesterId])
   @@schema("ql-dao-tao")
+}
+
+model StudentTrainingSchoolYear {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt()
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+  scoreAvg     Float               @default(0)
+  trainingType StudentTrainingType
+
+  @@schema("ql-nguoi-dung")
+}
+
+model StudentTrainingCourse {
+  id               String              @id() @default(cuid())
+  code             String?             @unique()
+  active           Boolean             @default(true)
+  description      String?             @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt()
+  student          Student             @relation(fields: [studentId], references: [id])
+  studentId        String
+  TrainingCourse   TrainingCourse      @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  scoreAvg         Float               @default(0)
+  trainingType     StudentTrainingType
+
+  @@schema("ql-nguoi-dung")
 }
 
 model TemplateFile {

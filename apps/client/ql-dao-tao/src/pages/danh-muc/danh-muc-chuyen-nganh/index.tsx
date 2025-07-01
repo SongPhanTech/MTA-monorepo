@@ -14,7 +14,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
@@ -52,8 +52,15 @@ export default function TrainingMajorPage() {
 
     const trainingMajorWhere: Prisma.TrainingMajorWhereInput = useMemo(
         () => ({
-            AND: [
-                {
+            AND: [{}],
+        }),
+        []
+    )
+
+    const { data = [], refetch } = useFindManyTrainingField({
+        where: {
+            trainingMajors: {
+                some: {
                     OR: [
                         {
                             name: {
@@ -68,28 +75,48 @@ export default function TrainingMajorPage() {
                             },
                         },
                     ],
-                },
-            ],
-            ...emptyObjectIf(
-                {
-                    trainingObjectTypes: {
-                        some: {
-                            trainingObjectTypeId: filters.trainingObjectTypeId,
+                    ...emptyObjectIf(
+                        {
+                            trainingObjectTypes: {
+                                some: {
+                                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                                },
+                            },
                         },
-                    },
+                        !!filters.trainingObjectTypeId
+                    ),
                 },
-                !!filters.trainingObjectTypeId
-            ),
-        }),
-        [filters]
-    )
-
-    const { data = [], refetch } = useFindManyTrainingField({
-        where: { trainingMajors: { some: trainingMajorWhere } },
+            },
+        },
         include: {
             _count: true,
             trainingMajors: {
-                where: trainingMajorWhere,
+                where: {
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                    ...emptyObjectIf(
+                        {
+                            trainingObjectTypes: {
+                                some: {
+                                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                                },
+                            },
+                        },
+                        !!filters.trainingObjectTypeId
+                    ),
+                },
                 include: {
                     organization: true,
                     trainingObjectTypes: {
@@ -108,7 +135,36 @@ export default function TrainingMajorPage() {
     })
 
     const { data: count } = useCountTrainingField({
-        where: { trainingMajors: { some: trainingMajorWhere } },
+        where: {
+            trainingMajors: {
+                some: {
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.searchText,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                    ...emptyObjectIf(
+                        {
+                            trainingObjectTypes: {
+                                some: {
+                                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                                },
+                            },
+                        },
+                        !!filters.trainingObjectTypeId
+                    ),
+                },
+            },
+        },
     })
 
     const debouncedRefetch = useCallback(
@@ -220,6 +276,7 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="id"
+                        className="max-h-full"
                         headerTitleKey={({ code, name, trainingMajors }) =>
                             `${code} - ${name} (${trainingMajors.length})`
                         }
@@ -235,19 +292,19 @@ export default function TrainingMajorPage() {
                                 title: 'Tên chuyên ngành',
                                 dataIndex: 'name',
                                 width: 200,
-                                align: 'left',
+                                align: 'center',
                             },
                             {
                                 title: 'Tên tiếng anh',
-                                align: 'left',
                                 dataIndex: 'englishName',
+                                align: 'center',
                                 width: 150,
                             },
                             {
                                 title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectTypes',
-                                align: 'left',
-                                width: 100,
+                                align: 'center',
+                                width: 150,
                                 render: (value) =>
                                     value?.length > 0
                                         ? value.map(
@@ -274,12 +331,6 @@ export default function TrainingMajorPage() {
                             },
 
                             {
-                                title: 'Mô tả',
-                                width: 150,
-                                align: 'center',
-                                dataIndex: 'description',
-                            },
-                            {
                                 title: 'Số TC chuyên ngành',
                                 width: 150,
                                 align: 'center',
@@ -296,6 +347,19 @@ export default function TrainingMajorPage() {
                                 width: 150,
                                 align: 'center',
                                 dataIndex: 'numberCreditsElective',
+                            },
+                            {
+                                title: 'Mô tả',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'description',
+                                render: (value: string) => {
+                                    return (
+                                        <Tooltip title={value}>
+                                            <div className="line-clamp-2">{value}</div>
+                                        </Tooltip>
+                                    )
+                                },
                             },
                             {
                                 title: 'Trạng thái',
@@ -364,5 +428,18 @@ export default function TrainingMajorPage() {
 }
 
 TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumb={[
+                {
+                    title: 'Danh mục',
+                },
+                {
+                    title: 'Danh mục chuyên ngành',
+                },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

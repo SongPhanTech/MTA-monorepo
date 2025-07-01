@@ -5,7 +5,6 @@ import { PutRoomModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db'
 import {
     useCountRoom,
     useFindManyRoom,
@@ -17,7 +16,7 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -33,35 +32,24 @@ export default function BuildingPage() {
         searchText: '',
     })
 
-    const roomWhere: Prisma.RoomWhereInput = useMemo(
-        () => ({
-            AND: [
+    const { data = [], refetch } = useFindManyRoom({
+        where: {
+            buildingId,
+            OR: [
                 {
-                    buildingId,
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
                 },
                 {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
                 },
             ],
-        }),
-        [filters, buildingId]
-    )
-
-    const { data = [], refetch } = useFindManyRoom({
-        where: roomWhere,
+        },
         orderBy: {
             createdAt: 'desc',
         },
@@ -84,7 +72,23 @@ export default function BuildingPage() {
     )
 
     const { data: count } = useCountRoom({
-        where: roomWhere,
+        where: {
+            buildingId,
+            OR: [
+                {
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+            ],
+        },
     })
 
     const debouncedRefetch = useCallback(

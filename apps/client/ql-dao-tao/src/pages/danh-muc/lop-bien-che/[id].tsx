@@ -1,4 +1,3 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -9,10 +8,8 @@ import {
     PutUploadProfileModal,
 } from '@components/modal'
 import {
-    CUSSTOM_VI_LOCALE,
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
-    GENDER_LIST,
     GENDER_MEAN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -29,9 +26,7 @@ import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Col,
-    DatePicker,
     Divider,
-    Dropdown,
     Flex,
     Form,
     Input,
@@ -39,7 +34,6 @@ import {
     message,
     Popconfirm,
     Row,
-    Select,
     Tag,
     Tooltip,
 } from 'antd'
@@ -395,7 +389,7 @@ export default function StudentFixedClassPage() {
                                         allowClear
                                     />
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     className="mb-0"
                                     name="gender"
                                     labelCol={{ span: 24 }}
@@ -435,7 +429,7 @@ export default function StudentFixedClassPage() {
                                     }}
                                     locale={CUSSTOM_VI_LOCALE}
                                     format="DD/MM/YYYY"
-                                />
+                                /> */}
                             </Flex>
                         </Col>
 
@@ -464,7 +458,7 @@ export default function StudentFixedClassPage() {
                                 <Button onClick={handleModal} type="primary">
                                     Thêm SV
                                 </Button>
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button type="primary" icon={<DownloadOutlined />}>
                                         Tải file mẫu
                                     </Button>
@@ -473,7 +467,7 @@ export default function StudentFixedClassPage() {
                                     <Button type="primary" icon={<UploadOutlined />}>
                                         Nhập file
                                     </Button>
-                                </Dropdown>
+                                </Dropdown> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -486,13 +480,6 @@ export default function StudentFixedClassPage() {
                             onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
                         }}
                         columns={[
-                            // {
-                            //     title: '',
-                            //     width: 30,
-                            //     align: 'center',
-                            //     fixed: 'left',
-                            //     render: () => <Checkbox />,
-                            // },
                             {
                                 title: 'STT',
                                 width: 60,
@@ -640,5 +627,5 @@ export default function StudentFixedClassPage() {
 }
 
 StudentFixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout headerChildren="Danh sách sinh viên lớp niên chế">{page}</DefaultLayout>
+    return <DefaultLayout>{page}</DefaultLayout>
 }
