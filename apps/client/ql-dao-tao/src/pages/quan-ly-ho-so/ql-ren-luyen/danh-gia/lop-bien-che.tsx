@@ -1,6 +1,6 @@
-import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks';
-import { Tree } from 'antd';
-import type React from 'react';
+import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
+import { Tree } from 'antd'
+import type React from 'react'
 interface Item {
     code: string | null
     name: string
@@ -31,7 +31,7 @@ interface LopBienCheItemProps {
     }>
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
-    className?: string,
+    className?: string
     objectTrainingTypeId?: string
 }
 
@@ -42,33 +42,26 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     className,
     objectTrainingTypeId,
 }) => {
-    const data: Item[] = dataTable.map(
-        (item: {
-            code: any
-            name: any
-            id: any
-        }) => ({
-            code: item.code,
-            name: item.name,
-            id: item.id,
-        })
-    )
+    const data: Item[] = dataTable.map((item: { code: any; name: any; id: any }) => ({
+        code: item.code,
+        name: item.name,
+        id: item.id,
+    }))
     const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
         useFindManyTrainingCourse({
             orderBy: { name: 'asc' },
         })
 
     // Lấy danh sách Fixed Classes
-    const { data: fixedClasses = [], isLoading: fixedClassesLoading } =
-        useFindManyFixedClass({
-            where: {
-                trainingCourseId: {
-                    in: trainingCourses.map((course) => course.id),
-                },
-                objectTrainingTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
-                name: className ? { contains: className } : undefined,
+    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
+        where: {
+            trainingCourseId: {
+                in: trainingCourses.map((course) => course.id),
             },
-        })
+            objectTrainingTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            name: className ? { contains: className } : undefined,
+        },
+    })
 
     // Tạo cấu trúc cây từ dữ liệu
     const treeData = trainingCourses.map((course) => ({
@@ -92,8 +85,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
                 borderRadius: '8px',
                 marginBottom: '4px',
                 width: '100%',
-                backgroundColor:
-                    selectedItem === item.id ? '#daf2ed' : 'transparent',
+                backgroundColor: selectedItem === item.id ? '#daf2ed' : 'transparent',
             }}
         >
             <h3>
@@ -106,10 +98,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
 
     return (
         <div style={{ width: '100%', padding: '16px', borderRadius: '8px' }}>
-            <h2
-                className="text-lg font-semibold"
-                style={{ marginBottom: '12px' }}
-            >
+            <h2 className="text-lg font-semibold" style={{ marginBottom: '12px' }}>
                 Danh sách lớp s
             </h2>
             <div style={{ maxHeight: 500, overflowY: 'auto' }}>

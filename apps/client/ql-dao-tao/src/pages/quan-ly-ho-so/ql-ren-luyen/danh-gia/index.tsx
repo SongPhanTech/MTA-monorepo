@@ -6,12 +6,15 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Semester, TrainingObjectType } from '@workspace/db'
 import {
-    useCountStudent, useFindManySemester,
-    useFindManyStudent, useFindManyFixedClass,
+    useCountStudent,
+    useFindManySemester,
+    useFindManyStudent,
+    useFindManyFixedClass,
     useFindManyTrainingObjectType,
-    useFindManyTrainingScoreSession, useCreateStudentTrainingScore,
+    useFindManyTrainingScoreSession,
+    useCreateStudentTrainingScore,
     useUpdateStudentTrainingScore,
-    useFindManyStudentTrainingScore
+    useFindManyStudentTrainingScore,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, InputNumber, Row, message, DatePicker, Input, Tag } from 'antd'
 import _ from 'lodash'
@@ -34,17 +37,13 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedFixedClass, setSelectedFixedClass] = useState<
+    const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
+    const [selectedSemester, setSelectedSemester] = useState<Semester | undefined>(undefined)
+    const [selectedTrainingScoreSessionId, setSelectedTrainingScoreSessionId] = useState<
         string | undefined
     >(undefined)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<
-        string | undefined
-    >(undefined)
-    const [selectedSemester, setSelectedSemester] = useState<
-        Semester | undefined
-    >(undefined)
-    const [selectedTrainingScoreSessionId, setSelectedTrainingScoreSessionId] = useState<string | undefined>(undefined)
-    const [scoreList, setScoreList] = useState<{ studentId: string, trainingScore: number }[]>([])
+    const [scoreList, setScoreList] = useState<{ studentId: string; trainingScore: number }[]>([])
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -72,28 +71,25 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } =
-        useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: semesterData = [], refetch: refetchSemester } =
-        useFindManySemester({
-            orderBy: {
-                startDate: 'desc',
-            },
-        })
+    const { data: semesterData = [], refetch: refetchSemester } = useFindManySemester({
+        orderBy: {
+            startDate: 'desc',
+        },
+    })
 
     // const { data: subjectClassData = [] } = useFindManyFixedClass({
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
-                    OR: [
-                        { name: { contains: filters.searchText } },
-                        { code: { contains: filters.searchText } },
-                    ],
-                }
+                      OR: [
+                          { name: { contains: filters.searchText } },
+                          { code: { contains: filters.searchText } },
+                      ],
+                  }
                 : {}),
-
         },
         orderBy: {
             name: 'desc',
@@ -119,11 +115,12 @@ export default function SubjectClassScore() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: studentTrainingScoreData = [], refetch: refetchStudentTrainingScore } = useFindManyStudentTrainingScore({
-        where: {
-            trainingScoreSessionId: selectedTrainingScoreSessionId || '',
-        },
-    })
+    const { data: studentTrainingScoreData = [], refetch: refetchStudentTrainingScore } =
+        useFindManyStudentTrainingScore({
+            where: {
+                trainingScoreSessionId: selectedTrainingScoreSessionId || '',
+            },
+        })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -145,25 +142,23 @@ export default function SubjectClassScore() {
         useFindManyTrainingScoreSession({
             where: selectedSemesterId
                 ? {
-                    semesterId: selectedSemesterId,
-                    ...(filters.trainingObjectTypeId
-                        ? { trainingObjectTypeId: filters.trainingObjectTypeId }
-                        : {}),
-                    ...(filters.timeFilter &&
-                        filters.timeFilter[0] &&
-                        filters.timeFilter[1]
-                        ? {
-                            time: {
-                                gte: new Date(filters.timeFilter[0]).toISOString(),
-                                lte: new Date(filters.timeFilter[1]).toISOString(),
-                            },
-                        }
-                        : {}),
-                }
+                      semesterId: selectedSemesterId,
+                      ...(filters.trainingObjectTypeId
+                          ? { trainingObjectTypeId: filters.trainingObjectTypeId }
+                          : {}),
+                      ...(filters.timeFilter && filters.timeFilter[0] && filters.timeFilter[1]
+                          ? {
+                                time: {
+                                    gte: new Date(filters.timeFilter[0]).toISOString(),
+                                    lte: new Date(filters.timeFilter[1]).toISOString(),
+                                },
+                            }
+                          : {}),
+                  }
                 : {
-                    // If no selectedSemesterId, return no data by using an impossible condition.
-                    id: { equals: '' },
-                },
+                      // If no selectedSemesterId, return no data by using an impossible condition.
+                      id: { equals: '' },
+                  },
             orderBy: {
                 createdAt: 'desc',
             },
@@ -174,13 +169,9 @@ export default function SubjectClassScore() {
             showSpinner()
             console.log('Selected Fixed Class ID:', id)
             if (id.includes('class-')) {
-                console.log(
-                    'Selected Fixed Class ID 1:',
-                    id.replace('class-', '')
-                )
+                console.log('Selected Fixed Class ID 1:', id.replace('class-', ''))
                 setSelectedFixedClass(id.replace('class-', ''))
-            }
-            else {
+            } else {
                 console.log('Selected Fixed Class ID 2:', id)
                 setSelectedFixedClass(id)
             }
@@ -225,7 +216,9 @@ export default function SubjectClassScore() {
             for (const score of scoreList) {
                 // Kiểm tra nếu điểm rèn luyện đã tồn tại
                 const existingScore = studentTrainingScoreData.find(
-                    (s) => s.studentId === score.studentId && s.trainingScoreSessionId === selectedTrainingScoreSessionId
+                    (s) =>
+                        s.studentId === score.studentId &&
+                        s.trainingScoreSessionId === selectedTrainingScoreSessionId
                 )
 
                 if (existingScore) {
@@ -261,16 +254,16 @@ export default function SubjectClassScore() {
         return studentTrainingScoreData.map((score) => ({
             studentId: score.studentId,
             trainingScore: score.score,
-        }));
-    }, [studentTrainingScoreData]);
+        }))
+    }, [studentTrainingScoreData])
 
     useEffect(() => {
         if (selectedTrainingScoreSessionId) {
-            setScoreList(updatedScoreList);
+            setScoreList(updatedScoreList)
         } else {
-            setScoreList([]);
+            setScoreList([])
         }
-    }, [selectedTrainingScoreSessionId, updatedScoreList]);
+    }, [selectedTrainingScoreSessionId, updatedScoreList])
 
     return (
         <div>
@@ -289,11 +282,7 @@ export default function SubjectClassScore() {
                 <Col span={20} className="flex justify-end">
                     <Row>
                         <Col span={24}>
-                            <Row
-                                gutter={[16, 16]}
-                                align="top"
-                                justify="space-between"
-                            >
+                            <Row gutter={[16, 16]} align="top" justify="space-between">
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
@@ -334,11 +323,7 @@ export default function SubjectClassScore() {
                                                 <TreeSelectSemester
                                                     style={{ height: 40 }}
                                                     placeholder="Học kỳ"
-                                                    onChange={(val) =>
-                                                        handleChangeSemester(
-                                                            val
-                                                        )
-                                                    }
+                                                    onChange={(val) => handleChangeSemester(val)}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -353,9 +338,7 @@ export default function SubjectClassScore() {
                                                 <Select
                                                     placeholder="Chọn đối tượng đào tạo"
                                                     options={trainingObjectTypeData.map(
-                                                        (
-                                                            i: TrainingObjectType
-                                                        ) => ({
+                                                        (i: TrainingObjectType) => ({
                                                             value: i.id,
                                                             label: i.name,
                                                         })
@@ -402,9 +385,7 @@ export default function SubjectClassScore() {
                                     </Flex>
                                 </Col>
 
-                                <Col span={6}>
-
-                                </Col>
+                                <Col span={6}></Col>
                             </Row>
                             <Row className="mt-4">
                                 <Col span={20} className="flex">
@@ -416,12 +397,9 @@ export default function SubjectClassScore() {
                                             label: session.name,
                                         }))}
                                         onChange={(value) => {
-                                            handleFilterChange(
-                                                'trainingScoreSessionId',
-                                                value
-                                            );
-                                            setSelectedTrainingScoreSessionId(value);
-                                            setScoreList([]); // Reset scoreList when changing session
+                                            handleFilterChange('trainingScoreSessionId', value)
+                                            setSelectedTrainingScoreSessionId(value)
+                                            setScoreList([]) // Reset scoreList when changing session
                                         }}
                                     />
                                 </Col>
@@ -430,7 +408,10 @@ export default function SubjectClassScore() {
                                         <Button
                                             type="primary"
                                             className="h-[40px]"
-                                            disabled={!selectedFixedClass || !selectedTrainingScoreSessionId}
+                                            disabled={
+                                                !selectedFixedClass ||
+                                                !selectedTrainingScoreSessionId
+                                            }
                                             onClick={handleSave}
                                         >
                                             <Save stroke="white" />
@@ -452,17 +433,13 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         fixed: 'left',
                                         render: (_, __, index) =>
-                                            index +
-                                            1 +
-                                            (currentPage - 1) *
-                                            DEFAULT_PAGINATE_SIZE,
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                     },
                                     {
                                         title: 'Mã sinh viên',
                                         align: 'center',
                                         width: 150,
-                                        render: (_, record) =>
-                                            record.code || '',
+                                        render: (_, record) => record.code || '',
                                     },
                                     {
                                         title: 'Họ và tên',
@@ -472,12 +449,11 @@ export default function SubjectClassScore() {
                                         render: (text, record) => (
                                             <>
                                                 {record.userProfile?.lastName || ''}{' '}
-                                                {record.userProfile?.firstName || ''}{' '}
-                                                <br />
+                                                {record.userProfile?.firstName || ''} <br />
                                                 {record.userProfile?.dateOfBirth
                                                     ? new Date(
-                                                        record.userProfile.dateOfBirth
-                                                    ).toLocaleDateString('vi-VN')
+                                                          record.userProfile.dateOfBirth
+                                                      ).toLocaleDateString('vi-VN')
                                                     : ''}
                                             </>
                                         ),
@@ -500,7 +476,7 @@ export default function SubjectClassScore() {
                                                     max={10}
                                                     onKeyDown={(event) => {
                                                         if (!/[0-9]/.test(event.key)) {
-                                                            event.preventDefault();
+                                                            event.preventDefault()
                                                         }
                                                     }}
                                                     // onChange={(value) => {
@@ -523,18 +499,22 @@ export default function SubjectClassScore() {
                                                     onChange={(value) => {
                                                         // Update the scoreList array for trainingScore
                                                         setScoreList((prev) => {
-                                                            const newList = [...prev];
-                                                            const index = newList.findIndex((item) => item.studentId === record.id);
+                                                            const newList = [...prev]
+                                                            const index = newList.findIndex(
+                                                                (item) =>
+                                                                    item.studentId === record.id
+                                                            )
                                                             if (index !== -1) {
-                                                                newList[index].trainingScore = value as number;
+                                                                newList[index].trainingScore =
+                                                                    value as number
                                                             } else {
                                                                 newList.push({
                                                                     studentId: record.id,
                                                                     trainingScore: value as number,
-                                                                });
+                                                                })
                                                             }
-                                                            return newList;
-                                                        });
+                                                            return newList
+                                                        })
 
                                                         // Update the studentTrainingScoreData array locally
                                                         // const existingScore = studentTrainingScoreData.find(
@@ -549,7 +529,7 @@ export default function SubjectClassScore() {
                                                     }}
                                                 />
                                             )
-                                        }
+                                        },
                                     },
                                     {
                                         title: 'Xếp loại',
@@ -560,24 +540,41 @@ export default function SubjectClassScore() {
                                             const existingScore = scoreList.find(
                                                 (s) => s.studentId === record.id
                                             )
-                                            const score = existingScore ? existingScore.trainingScore : 0;
-                                            let ranking = '';
+                                            const score = existingScore
+                                                ? existingScore.trainingScore
+                                                : 0
+                                            let ranking = ''
                                             if (score >= 9) {
-                                                ranking = 'Xuất sắc';
+                                                ranking = 'Xuất sắc'
                                             } else if (score >= 8) {
-                                                ranking = 'Tốt';
+                                                ranking = 'Tốt'
                                             } else if (score >= 7) {
-                                                ranking = 'Khá';
+                                                ranking = 'Khá'
                                             } else if (score >= 6) {
-                                                ranking = 'Trung bình';
+                                                ranking = 'Trung bình'
                                             } else if (score === 0) {
-                                                ranking = '';
+                                                ranking = ''
                                             } else {
-                                                ranking = 'Yếu';
+                                                ranking = 'Yếu'
                                             }
-                                            return <Tag color={ranking === 'Xuất sắc' ? 'green' : ranking === 'Tốt' ? 'blue' : ranking === 'Khá' ? 'orange' : ranking === 'Trung bình' ? 'yellow' : 'red'}>{ranking}</Tag>
-                                        }
-
+                                            return (
+                                                <Tag
+                                                    color={
+                                                        ranking === 'Xuất sắc'
+                                                            ? 'green'
+                                                            : ranking === 'Tốt'
+                                                              ? 'blue'
+                                                              : ranking === 'Khá'
+                                                                ? 'orange'
+                                                                : ranking === 'Trung bình'
+                                                                  ? 'yellow'
+                                                                  : 'red'
+                                                    }
+                                                >
+                                                    {ranking}
+                                                </Tag>
+                                            )
+                                        },
                                     },
                                 ]}
                                 data={dataTable}

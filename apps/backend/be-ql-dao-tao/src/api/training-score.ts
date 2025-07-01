@@ -2,12 +2,15 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 import { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { listStudentInfo, sanitizeFilename, populateExcelTemplate } from '../services/training-score'
+import {
+    listStudentInfo,
+    sanitizeFilename,
+    populateExcelTemplate,
+} from '../services/training-score'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
 import { read, utils } from 'xlsx'
 const app = new OpenAPIHono({ strict: false })
-
 
 const exportExcelListStudentFixedClassTrainingPoint = createRoute({
     operationId: 'exportStudentFixedClassExcelTrainingPoint',
@@ -27,12 +30,9 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
         200: {
             description: 'Export list of student FixedClass as .xlsx',
             content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                    {
-                        schema: z
-                            .any()
-                            .openapi({ type: 'string', format: 'binary' }),
-                    },
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
             },
         },
         400: {
@@ -103,8 +103,6 @@ const uploadExcelImportTrainingScore = createRoute({
     },
 })
 
-
-
 app.openapi(exportExcelListStudentFixedClassTrainingPoint, async (c) => {
     const { fixedClassId } = c.req.valid('query')
     const student = await listStudentInfo(fixedClassId)
@@ -112,10 +110,7 @@ app.openapi(exportExcelListStudentFixedClassTrainingPoint, async (c) => {
         where: { id: fixedClassId }, // Tìm kiếm lớp biên chế
     })
     if (!fixedClass) {
-        return c.json(
-            { message: `Không tìm thấy lớp biên chế ${fixedClassId}` },
-            404
-        )
+        return c.json({ message: `Không tìm thấy lớp biên chế ${fixedClassId}` }, 404)
     }
 
     const { date, month, year } = getCurrentDateForReport()
@@ -130,12 +125,11 @@ app.openapi(exportExcelListStudentFixedClassTrainingPoint, async (c) => {
 
     const templateBuffer = await getBufferFromUrl('TRAINING_POINT_IMPORT')
     const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
-    
+
     // Set response headers
     const sanitizedClassName = sanitizeFilename(fixedClass.name ?? 'Class')
     return c.body(excelBuffer, 200, {
-        'Content-Type':
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
     })
 })
@@ -236,7 +230,5 @@ app.openapi(uploadExcelImportTrainingScore, async (c) => {
 
     return c.json({ data: [totalInserted], count: totalInserted }, 200)
 })
-
-
 
 export default app
