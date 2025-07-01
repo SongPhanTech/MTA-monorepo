@@ -4,14 +4,14 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { ExamType, Prisma } from '@workspace/db'
+import type { ExamType } from '@workspace/db'
 import {
     useCountTrainingBlockOnCurriculumVersion,
-    useCreateCurriculumVersion,
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
     useFindManyDM_DonVi,
@@ -449,87 +449,7 @@ export default function TrainingProgramSubjects() {
 
     const treeData = buildOrgTree(manageOrgData)
 
-    const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
-
-    async function handleCloneCurriculumVersion(originalName: string) {
-        try {
-            showSpinner()
-            const originalVersion = initialValue
-
-            if (!originalVersion) {
-                throw new Error('Không tìm thấy phiên bản')
-            }
-
-            const newCode = originalVersion.code
-                ? `${originalVersion.code}-COPY-${Date.now()}`
-                : `COPY-${Date.now()}`
-
-            const cloneData: Prisma.CurriculumVersionCreateInput = {
-                name: `${originalName} (Bản sao)`,
-                code: newCode,
-                curriculum: { connect: { id: initialValue?.curriculumId } },
-                trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
-                trainingLevel: { connect: { id: originalVersion.trainingLevelId } },
-                trainingTime: { connect: { id: originalVersion.trainingTimeId } },
-                shortName: originalVersion.shortName,
-                englishName: originalVersion.englishName,
-                trainingLanguage: originalVersion.trainingLanguage,
-                numberOfSemesters: originalVersion.numberOfSemesters,
-                yearCreation: originalVersion.yearCreation,
-                yearApplication: originalVersion.yearApplication,
-                requiredCredits: originalVersion.requiredCredits,
-                electiveCredits: originalVersion.electiveCredits,
-                jobPosition: originalVersion.jobPosition,
-                objectives: originalVersion.objectives,
-                learningOutcome: originalVersion.learningOutcome,
-                inputStandard: originalVersion.inputStandard,
-                time: originalVersion.time,
-                structure: originalVersion.structure,
-                matrixLearningOutcome: originalVersion.matrixLearningOutcome,
-                summary: originalVersion.summary,
-                learningDiagram: originalVersion.learningDiagram,
-                guide: originalVersion.guide,
-                documentPaths: originalVersion.documentPaths,
-                renderPath: originalVersion.renderPath,
-                ...(originalVersion.diplomaTypeId
-                    ? {
-                          diplomaType: { connect: { id: originalVersion.diplomaTypeId } },
-                      }
-                    : {}),
-                trainingBlocks: {
-                    create:
-                        originalVersion.trainingBlocks?.map((block) => ({
-                            priority: block.priority,
-                            trainingBlock: { connect: { id: block.trainingBlockId } },
-                            subjects: {
-                                create:
-                                    block.subjects?.map((subject) => ({
-                                        semester: subject.semester,
-                                        type: subject.type,
-                                        useForFinalScore: subject.useForFinalScore,
-                                        graduation: subject.graduation,
-                                        project: subject.project,
-                                        print: subject.print,
-                                        subject: { connect: { id: subject.subjectId } },
-                                    })) || [],
-                            },
-                        })) || [],
-                },
-            }
-
-            await createCurriculumVersion({
-                data: cloneData,
-            })
-
-            message.success('Sao chép phiên bản chương trình đào tạo thành công')
-            refetch()
-        } catch (error) {
-            console.error('Lỗi khi sao chép:', error)
-            message.error('Đã xảy ra lỗi khi sao chép phiên bản')
-        } finally {
-            hideSpinner()
-        }
-    }
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({})
 
     return (
         <div>
@@ -582,10 +502,9 @@ export default function TrainingProgramSubjects() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button
-                                    onClick={() =>
-                                        handleCloneCurriculumVersion(initialValue?.name || '')
-                                    }
+                                    onClick={() => handleCloneCurriculumVersion(initialValue)}
                                     className="text-primary border-primary"
+                                    disabled={!initialValue}
                                 >
                                     <CopyPlus />
                                     Sao chép phiên bản CTĐT

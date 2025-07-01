@@ -6,12 +6,12 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma, TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
 import {
     useCountCurriculum,
-    useCreateCurriculumVersion,
     useFindManyCurriculum,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
@@ -352,95 +352,9 @@ export default function TrainingProgramCatalog() {
         }))
     }, [data])
 
-    const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
-
-    async function handleCloneCurriculumVersion(
-        versionId: string,
-        originalName: string,
-        curriculumId: string
-    ) {
-        try {
-            showSpinner()
-
-            const originalCurriculum = data.find((c) => c.id === curriculumId)
-            const originalVersion = originalCurriculum?.curriculumVersion?.find(
-                (v) => v.id === versionId
-            )
-
-            if (!originalVersion) {
-                throw new Error('Không tìm thấy phiên bản')
-            }
-
-            const newCode = originalVersion.code
-                ? `${originalVersion.code}-COPY-${Date.now()}`
-                : `COPY-${Date.now()}`
-
-            const cloneData: Prisma.CurriculumVersionCreateInput = {
-                name: `${originalName} (Bản sao)`,
-                code: newCode,
-                curriculum: { connect: { id: curriculumId } },
-                trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
-                trainingLevel: { connect: { id: originalVersion.trainingLevelId } },
-                trainingTime: { connect: { id: originalVersion.trainingTimeId } },
-                shortName: originalVersion.shortName,
-                englishName: originalVersion.englishName,
-                trainingLanguage: originalVersion.trainingLanguage,
-                numberOfSemesters: originalVersion.numberOfSemesters,
-                yearCreation: originalVersion.yearCreation,
-                yearApplication: originalVersion.yearApplication,
-                requiredCredits: originalVersion.requiredCredits,
-                electiveCredits: originalVersion.electiveCredits,
-                jobPosition: originalVersion.jobPosition,
-                objectives: originalVersion.objectives,
-                learningOutcome: originalVersion.learningOutcome,
-                inputStandard: originalVersion.inputStandard,
-                time: originalVersion.time,
-                structure: originalVersion.structure,
-                matrixLearningOutcome: originalVersion.matrixLearningOutcome,
-                summary: originalVersion.summary,
-                learningDiagram: originalVersion.learningDiagram,
-                guide: originalVersion.guide,
-                documentPaths: originalVersion.documentPaths,
-                renderPath: originalVersion.renderPath,
-                ...(originalVersion.diplomaTypeId
-                    ? {
-                          diplomaType: { connect: { id: originalVersion.diplomaTypeId } },
-                      }
-                    : {}),
-                trainingBlocks: {
-                    create:
-                        originalVersion.trainingBlocks?.map((block) => ({
-                            priority: block.priority,
-                            trainingBlock: { connect: { id: block.trainingBlockId } },
-                            subjects: {
-                                create:
-                                    block.subjects?.map((subject) => ({
-                                        semester: subject.semester,
-                                        type: subject.type,
-                                        useForFinalScore: subject.useForFinalScore,
-                                        graduation: subject.graduation,
-                                        project: subject.project,
-                                        print: subject.print,
-                                        subject: { connect: { id: subject.subjectId } },
-                                    })) || [],
-                            },
-                        })) || [],
-                },
-            }
-
-            await createCurriculumVersion({
-                data: cloneData,
-            })
-
-            message.success('Sao chép phiên bản chương trình đào tạo thành công')
-            refetch()
-        } catch (error) {
-            console.error('Lỗi khi sao chép:', error)
-            message.error('Đã xảy ra lỗi khi sao chép phiên bản')
-        } finally {
-            hideSpinner()
-        }
-    }
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({
+        refetch,
+    })
 
     return (
         <div>
@@ -655,8 +569,8 @@ export default function TrainingProgramCatalog() {
                                 width: 120,
                                 fixed: 'right',
                                 align: 'center',
-                                render: (_, { id, name, curriculumId }) => {
-                                    if (id) {
+                                render: (_, record) => {
+                                    if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <Tooltip title="Xem chi tiết" placement="top">
@@ -669,19 +583,15 @@ export default function TrainingProgramCatalog() {
                                                 <CopyPlusIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        handleCloneCurriculumVersion(
-                                                            id,
-                                                            name,
-                                                            curriculumId
-                                                        )
+                                                        handleCloneCurriculumVersion(record)
                                                     }}
                                                 />
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         onOpenCurriculumVersion({
-                                                            curriculumId: curriculumId,
-                                                            versionId: id,
+                                                            curriculumId: record?.curriculumId,
+                                                            versionId: record?.id,
                                                         })
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -689,7 +599,9 @@ export default function TrainingProgramCatalog() {
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
-                                                            handleDeleteCurriculumVersion(id),
+                                                            handleDeleteCurriculumVersion(
+                                                                record?.id
+                                                            ),
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
