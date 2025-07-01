@@ -2,11 +2,13 @@ import { Tooltip } from 'antd'
 import type { LucideProps } from 'lucide-react'
 import { Pencil } from 'lucide-react'
 
-type EditIconProps = LucideProps
+type EditIconProps = LucideProps & {
+    title?: string
+}
 
-const EditIcon = (props: EditIconProps) => {
+const EditIcon = ({ title, ...props }: EditIconProps) => {
     return (
-        <Tooltip title="Chỉnh sửa" placement="top">
+        <Tooltip title={title ? title : 'Chỉnh sửa'} placement="top">
             <Pencil
                 size={16}
                 strokeWidth={1.5}

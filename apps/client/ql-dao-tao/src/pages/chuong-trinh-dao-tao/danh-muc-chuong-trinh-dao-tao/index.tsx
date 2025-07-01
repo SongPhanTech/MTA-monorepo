@@ -1,5 +1,6 @@
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
+import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -7,9 +8,10 @@ import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
 import {
     useCountCurriculum,
+    useCreateCurriculumVersion,
     useFindManyCurriculum,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
@@ -161,14 +163,10 @@ export default function TrainingProgramCatalog() {
                 include: {
                     trainingTime: true,
                     trainingBlocks: {
-                        select: {
+                        include: {
                             subjects: {
-                                select: {
-                                    subject: {
-                                        select: {
-                                            credit: true,
-                                        },
-                                    },
+                                include: {
+                                    subject: true,
                                 },
                             },
                         },
@@ -354,6 +352,96 @@ export default function TrainingProgramCatalog() {
         }))
     }, [data])
 
+    const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
+
+    async function handleCloneCurriculumVersion(
+        versionId: string,
+        originalName: string,
+        curriculumId: string
+    ) {
+        try {
+            showSpinner()
+
+            const originalCurriculum = data.find((c) => c.id === curriculumId)
+            const originalVersion = originalCurriculum?.curriculumVersion?.find(
+                (v) => v.id === versionId
+            )
+
+            if (!originalVersion) {
+                throw new Error('Không tìm thấy phiên bản')
+            }
+
+            const newCode = originalVersion.code
+                ? `${originalVersion.code}-COPY-${Date.now()}`
+                : `COPY-${Date.now()}`
+
+            const cloneData: Prisma.CurriculumVersionCreateInput = {
+                name: `${originalName} (Bản sao)`,
+                code: newCode,
+                curriculum: { connect: { id: curriculumId } },
+                trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },
+                trainingLevel: { connect: { id: originalVersion.trainingLevelId } },
+                trainingTime: { connect: { id: originalVersion.trainingTimeId } },
+                shortName: originalVersion.shortName,
+                englishName: originalVersion.englishName,
+                trainingLanguage: originalVersion.trainingLanguage,
+                numberOfSemesters: originalVersion.numberOfSemesters,
+                yearCreation: originalVersion.yearCreation,
+                yearApplication: originalVersion.yearApplication,
+                requiredCredits: originalVersion.requiredCredits,
+                electiveCredits: originalVersion.electiveCredits,
+                jobPosition: originalVersion.jobPosition,
+                objectives: originalVersion.objectives,
+                learningOutcome: originalVersion.learningOutcome,
+                inputStandard: originalVersion.inputStandard,
+                time: originalVersion.time,
+                structure: originalVersion.structure,
+                matrixLearningOutcome: originalVersion.matrixLearningOutcome,
+                summary: originalVersion.summary,
+                learningDiagram: originalVersion.learningDiagram,
+                guide: originalVersion.guide,
+                documentPaths: originalVersion.documentPaths,
+                renderPath: originalVersion.renderPath,
+                ...(originalVersion.diplomaTypeId
+                    ? {
+                          diplomaType: { connect: { id: originalVersion.diplomaTypeId } },
+                      }
+                    : {}),
+                trainingBlocks: {
+                    create:
+                        originalVersion.trainingBlocks?.map((block) => ({
+                            priority: block.priority,
+                            trainingBlock: { connect: { id: block.trainingBlockId } },
+                            subjects: {
+                                create:
+                                    block.subjects?.map((subject) => ({
+                                        semester: subject.semester,
+                                        type: subject.type,
+                                        useForFinalScore: subject.useForFinalScore,
+                                        graduation: subject.graduation,
+                                        project: subject.project,
+                                        print: subject.print,
+                                        subject: { connect: { id: subject.subjectId } },
+                                    })) || [],
+                            },
+                        })) || [],
+                },
+            }
+
+            await createCurriculumVersion({
+                data: cloneData,
+            })
+
+            message.success('Sao chép phiên bản chương trình đào tạo thành công')
+            refetch()
+        } catch (error) {
+            console.error('Lỗi khi sao chép:', error)
+            message.error('Đã xảy ra lỗi khi sao chép phiên bản')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -505,16 +593,16 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: 'Số tín chỉ bắt buộc',
+                                title: 'Số TC bắt buộc',
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                             },
                             {
-                                title: 'Số tín chỉ tự chọn',
+                                title: 'Số TC tự chọn',
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
-                                width: 140,
+                                width: 110,
                             },
                             {
                                 title: 'Mô tả',
@@ -527,14 +615,14 @@ export default function TrainingProgramCatalog() {
                                 title: 'Năm khởi tạo',
                                 dataIndex: 'createdAt',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                                 render: (value) => dayjs(value).year(),
                             },
                             {
                                 title: 'Năm áp dụng',
                                 dataIndex: 'startDate',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                                 render: (value) => dayjs(value).year(),
                             },
                             {
@@ -564,10 +652,10 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 120,
                                 fixed: 'right',
                                 align: 'center',
-                                render: (_, { id, curriculumId }) => {
+                                render: (_, { id, name, curriculumId }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -578,6 +666,16 @@ export default function TrainingProgramCatalog() {
                                                         className="text-base cursor-pointer"
                                                     />
                                                 </Tooltip>
+                                                <CopyPlusIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handleCloneCurriculumVersion(
+                                                            id,
+                                                            name,
+                                                            curriculumId
+                                                        )
+                                                    }}
+                                                />
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
@@ -603,7 +701,7 @@ export default function TrainingProgramCatalog() {
                             },
                         ]}
                         headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[75px] items-center">
+                            <div className="flex gap-2.5 w-[85px] items-center">
                                 <CreateIcon
                                     onClick={(e) => {
                                         e.stopPropagation()

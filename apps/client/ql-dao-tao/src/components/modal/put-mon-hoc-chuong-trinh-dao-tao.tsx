@@ -9,22 +9,30 @@ import {
 } from '@workspace/db'
 import {
     useCreateTrainingBlockSubject,
+    useFindManyDM_DonVi,
     useFindManySubjectVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, InputNumber, message, Select } from 'antd'
+import { Checkbox, Col, Form, InputNumber, message, Select, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
-import { useEffect } from 'react'
+import { buildOrgTree } from '@lib/utils'
+import _ from 'lodash'
+import { useCallback, useEffect, useState } from 'react'
 export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
+    managementOrganization: string
+}
+
+interface FilterProps {
+    managementOrganizationId: string | undefined
 }
 const PutTrainingBlockSubject = () => {
     const [form] = Form.useForm<PutTrainingBlockSubject>()
@@ -34,13 +42,28 @@ const PutTrainingBlockSubject = () => {
         onClose: form.resetFields,
     })
 
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: initialValue } = useFindUniqueTrainingBlockSubject({
-        where: { id: input?.trainingBlockSubjectId },
+    const [filters, setFilters] = useState<FilterProps>({
+        managementOrganizationId: input?.managementOrganization || '',
     })
 
-    const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion()
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { data: initialValue } = useFindUniqueTrainingBlockSubject(
+        {
+            where: { id: input?.trainingBlockSubjectId },
+        },
+        { enabled: !!input?.trainingBlockSubjectId }
+    )
+
+    const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion({
+        where: {
+            ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
+                ? {
+                      managementOrganizationId: filters.managementOrganizationId,
+                  }
+                : {}),
+        },
+    })
 
     useEffect(() => {
         if (initialValue) {
@@ -87,9 +110,21 @@ const PutTrainingBlockSubject = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createTrainingBlockSubject({
-                    data: payload,
-                })
+                const ids = Array.isArray(payload.subjectId)
+                    ? payload.subjectId
+                    : [payload.subjectId]
+
+                await Promise.all(
+                    ids.map((subjectId) =>
+                        createTrainingBlockSubject({
+                            data: {
+                                ...payload,
+                                subjectId: subjectId,
+                            },
+                        })
+                    )
+                )
+
                 message.success('Thêm mới thành công')
             }
 
@@ -103,6 +138,25 @@ const PutTrainingBlockSubject = () => {
 
         hideSpinner()
     }
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+
+    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <PutFormModal
@@ -119,8 +173,26 @@ const PutTrainingBlockSubject = () => {
             className="min-w-[400px] w-[500px]"
         >
             <Col span={24}>
+                <Form.Item name="managementOrganizationId" label="Đơn vị quản lý" required>
+                    <TreeSelect
+                        placeholder="Chọn đơn vị quản lý"
+                        allowClear
+                        showSearch
+                        treeDefaultExpandAll
+                        onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                        treeData={treeData}
+                        filterTreeNode={(input, node) =>
+                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                        }
+                        defaultValue={input?.managementOrganization || ''}
+                        disabled={!!input?.trainingBlockSubjectId}
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={24}>
                 <FormItem form={form} name="subjectId" label="Môn học" required>
                     <Select
+                        mode={input?.trainingBlockSubjectId ? undefined : 'multiple'}
                         allowClear
                         showSearch
                         placeholder="Chọn môn học"
@@ -131,6 +203,7 @@ const PutTrainingBlockSubject = () => {
                                 value: item.id,
                             }
                         })}
+                        disabled={!!input?.trainingBlockSubjectId}
                     />
                 </FormItem>
             </Col>
