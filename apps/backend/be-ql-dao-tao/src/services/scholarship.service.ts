@@ -258,8 +258,10 @@ const ThongTinHocKy = async (
             kyDangHoc: 0,
             kyCuoi: false,
             TongTinChiDaTichLuy: 0,
+            TongTinChiYeuCau: 0,
         }
     }
+    const kyDangHoc = DsHocKy.length
 
     // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
     const DsCacMonDaHoc = await prisma.studentSubjectScore.findMany({
@@ -283,12 +285,66 @@ const ThongTinHocKy = async (
     }, 0)
 
     // Kiểm tra tổng số tích lũy yêu cầu đến kỳ hiện tại
-    // TODO
+    const phienBanCTDT = await prisma.student.findFirst({
+        where: {
+            id: studentId,
+        },
+        select: {
+            curriculumVersionId: true, // Lấy phiên bản chương trình đào tạo
+        },
+    })
+
+    if (!phienBanCTDT?.curriculumVersionId) {
+        console.error('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên:', studentId)
+        return {
+            kyDangHoc: DsHocKy.length,
+            kyCuoi: false,
+            TongTinChiDaTichLuy: TongTinChiDaTichLuy,
+            TongTinChiYeuCau: 0, // Không có yêu cầu nếu không tìm thấy phiên bản CTDT
+        }
+    }
+
+    const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
+        where: {
+            curriculumVersionId: phienBanCTDT.curriculumVersionId,
+            subjects: {
+                some: {
+                    semester: {
+                        lte: kyDangHoc, // Chỉ lấy các môn đến kỳ hiện tại
+                    },
+                    useForFinalScore: true, // Chỉ lấy các môn có tính điểm
+                },
+            },
+        },
+        select: {
+            subjects: {
+                // TrainingBlockSubject
+                select: {
+                    semester: true, // Kỳ dự kiến
+                    subject: {
+                        select: {
+                            credit: true, // Số tín chỉ của môn học
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const TongTinChiYeuCau = MonHocYeuCau.reduce((tong, item) => {
+        return (
+            tong +
+            item.subjects.reduce((tongMon, mon) => {
+                return tongMon + (mon.subject?.credit || 0)
+            }, 0)
+        )
+    }, 0)
 
     return {
-        kyDangHoc: DsHocKy.length,
+        kyDangHoc: kyDangHoc,
         kyCuoi: false,
         TongTinChiDaTichLuy: TongTinChiDaTichLuy,
+        TongTinChiYeuCau: TongTinChiYeuCau,
     }
 }
 
@@ -403,7 +459,7 @@ export const listStudentInfo = async (semesterId: string) => {
                 soLanViPham: 0,
                 biKyLuat: false,
                 queQuan: userProfile?.homeTown || '',
-                soTinChiYeuCau: 0,
+                soTinChiYeuCau: ThongTinHocKySinhVien?.TongTinChiYeuCau || 0,
                 trinhDoNgoaiNgu: false,
                 trinhDoTinHoc: false,
                 kyDangHoc: ThongTinHocKySinhVien.kyDangHoc || 0,
@@ -453,6 +509,7 @@ export const populateExcelTemplate = (
             { t: 'n', v: student.kyDangHoc }, // K
             { t: 's', v: student.kyCuoi ? 'Có' : 'Không' }, // L TODO: Chưa xử lý
             { t: 'n', v: student.soTinChiTichLuy || 0 }, // I
+            { t: 'n', v: student.soTinChiYeuCau || 0 }, // M
         ]
 
         cells.forEach((cell, colIndex) => {
