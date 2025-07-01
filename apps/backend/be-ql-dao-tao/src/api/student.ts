@@ -3,13 +3,21 @@ import { Gender, type Prisma } from '@workspace/db'
 import { parseSheetHeQuanSu, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
+import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
+import {
+    listStudentInfo,
+    populateExcelTemplate,
+    sanitizeFilename,
+} from '../services/scholarship.service'
+import { getBufferFromUrl } from '../services/template.service'
 import {
     buildCurriculumMapOrThrow,
     buildDistrictMapOrThrow,
     buildEthnicityMapOrThrow,
     buildNationalityMapOrThrow,
     buildProvinceMapOrThrow,
+    getCurrentDateForReport,
 } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
@@ -46,6 +54,52 @@ const importHeQuanSu = createRoute({
                     schema: z.object({
                         message: z.string(),
                         errors: z.array(zParseSheetError).optional(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const dsRaSoatHocBong = createRoute({
+    operationId: 'exportStudentScholarship',
+    path: '/export-xlsx-list-student-to-check-scholarship',
+    tags: ['Student'],
+    summary: 'Xuất file xlsx danh sách sinh viên trong rà soát học bổng',
+    description: 'xuất tất cả học viên, sinh viên để rà soát',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student scholarship as .xlsx',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid file upload',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
                     }),
                 },
             },
@@ -185,6 +239,30 @@ app.openapi(importHeQuanSu, async (c) => {
     )
 
     return c.json({ message: `Import students successfully: ${data.students.length}` }, 200)
+})
+
+app.openapi(dsRaSoatHocBong, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    const student = await listStudentInfo(semesterId)
+
+    const { date, month, year } = getCurrentDateForReport()
+
+    const templateData: StudentTemplateData = {
+        date,
+        month,
+        year,
+        student,
+    }
+
+    const templateBuffer = await getBufferFromUrl('SCHOLARSHIP_LIST')
+    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
+
+    // Set response headers
+    const sanitizedClassName = sanitizeFilename('Class')
+    return c.body(excelBuffer, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
+    })
 })
 
 export default app
