@@ -20,10 +20,12 @@ export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersion
                 throw new Error('Không tìm thấy phiên bản')
             }
 
+            const shortSuffix = new Date().toISOString().slice(11, 19).replace(/:/g, '')
+
             const cloneData: Prisma.CurriculumVersionCreateInput = {
                 name: `${originalVersion?.name} (Bản sao)`,
                 code: originalVersion.code
-                    ? `${originalVersion.code}-COPY-${Date.now()}`
+                    ? `${originalVersion.code}-COPY-${shortSuffix}`
                     : `COPY-${Date.now()}`,
                 curriculum: { connect: { id: originalVersion?.curriculumId } },
                 trainingObjectType: { connect: { id: originalVersion.trainingObjectTypeId } },

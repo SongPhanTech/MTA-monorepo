@@ -93,6 +93,9 @@ export default function TrainingProgramSubjects() {
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id as string,
+            curriculumVersion: {
+                deletedAt: null,
+            },
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
