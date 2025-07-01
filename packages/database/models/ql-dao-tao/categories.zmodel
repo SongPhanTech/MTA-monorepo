@@ -4,12 +4,12 @@ import '../ql-dao-tao/student'
 import '../ql-danh-muc/common'
 import '../ql-nguoi-dung/profile'
 import '../ql-danh-muc/core-categories'
-import '../ql-nguoi-dung/training-score'
+import 'training-score'
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
   CIVILIAN // Học viên dân sự
-  // INTERNATIONAL // Học viên quốc tế
+  INTERNATIONAL_MILITARY // Học viên quân sự quốc tế
 
   @@schema("ql-dao-tao")
 }

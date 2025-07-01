@@ -1,12 +1,12 @@
 import '../base'
 import '../ql-nguoi-dung/user'
+import '../ql-nguoi-dung/profile'
 import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
-import '../ql-dao-tao/categories'
-import '../ql-dao-tao/plan-training'
-import '../ql-nguoi-dung/profile'
-import '../ql-dao-tao/student'
+import 'categories'
+import 'plan-training'
+import 'student'
 
 // Đợt đánh giá rèn luyện, đi theo kì và đối tượng đào tạo
 model TrainingScoreSession extends Base {
@@ -20,7 +20,7 @@ model TrainingScoreSession extends Base {
   trainingObjectTypeId String?
 
   studentTrainingScore StudentTrainingScore[]
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
 
 // Điểm rèn luyện của sinh viên, được tính theo đợt đánh giá
@@ -34,7 +34,7 @@ model StudentTrainingScore extends Base {
   score                  Float                @default(0) // điểm rèn luyện
 
   @@unique([trainingScoreSessionId, studentId])
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
 
 enum StudentTrainingType {
@@ -44,7 +44,7 @@ enum StudentTrainingType {
   AVERAGE   // Trung bình
   POOR      // Yếu
   VERY_POOR // Kém
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
 
 // Phân loại rèn luyện theo kì (có thể thay đổi loại đánh giá)
@@ -58,7 +58,7 @@ model StudentTrainingSemester extends Base {
   scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
   trainingType StudentTrainingType // loại đánh giá rèn luyện
 
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
 
 // Phân loại rèn luyện theo năm học (có thể thay đổi loại đánh giá)
@@ -72,19 +72,19 @@ model StudentTrainingSchoolYear extends Base {
   scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
   trainingType StudentTrainingType // loại đánh giá rèn luyện
 
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
 
-// Phân loại rèn luyện theo khóa học (có thể thay đổi loại đánh giá)
+// Phân loại rèn luyện theo khoá học (có thể thay đổi loại đánh giá)
 model StudentTrainingCourse extends Base {
-  student      Student             @relation(fields: [studentId], references: [id])
-  studentId    String
+  student          Student             @relation(fields: [studentId], references: [id])
+  studentId        String
 
-  TrainingCourse TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  TrainingCourse   TrainingCourse      @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
-  scoreAvg     Float               @default(0) // điểm trung bình rèn luyện
-  trainingType StudentTrainingType // loại đánh giá rèn luyện
+  scoreAvg         Float               @default(0) // điểm trung bình rèn luyện
+  trainingType     StudentTrainingType // loại đánh giá rèn luyện
 
-  @@schema("ql-nguoi-dung")
+  @@schema("ql-dao-tao")
 }
