@@ -1,6 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { context, SpanKind, trace } from '@opentelemetry/api'
-import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -14,8 +13,8 @@ import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
-import UserProfileApp from './api/user-profile'
 import TrainingScoreApp from './api/training-score'
+import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -62,7 +61,7 @@ app.use('*', checkIp)
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+// app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
 setupOpenApi(app)
 

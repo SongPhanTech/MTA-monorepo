@@ -16,16 +16,20 @@
     "@opentelemetry/resources": "catalog:",
     "@opentelemetry/sdk-trace-base": "catalog:",
     "@opentelemetry/sdk-trace-web": "catalog:",
+    "@prisma/client": "5.18.0",
     "@scalar/hono-api-reference": "catalog:",
+    "@workspace/db": "workspace:*",
+    "@workspace/libs": "workspace:*",
     "axios": "catalog:",
     "docxtemplater": "catalog:",
     "hono": "catalog:",
     "pizzip": "catalog:",
+    "prisma": "5.18.0",
     "prom-client": "catalog:",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "zod": "catalog:",
-    "@workspace/libs": "workspace:*",
-    "@workspace/db": "workspace:*"
+    "xlsx-style": "^0.8.13",
+    "xlsx-template": "^1.4.4",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "catalog:",
