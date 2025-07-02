@@ -9,7 +9,8 @@ import QuaTrinhDaoTaoTab from '@components/modal/quan-ly-ho-so/tabs/tab-qua-trin
 import ThongTinCaNhanTab from '@components/modal/quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
 import TrinhDoChungChiTab from '@components/modal/quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Collapse } from 'antd'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Collapse, type UploadFile } from 'antd'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -18,7 +19,7 @@ const { Panel } = Collapse
 export default function StudentDetailPage() {
     const router = useRouter()
     const studentId = router.query.id as string
-
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
     const [activeCollapse, setActiveCollapse] = useState<string[]>(['thong-tin-chung'])
 
     const handleCollapseChange = (key: string | string[]) => {
@@ -49,7 +50,12 @@ export default function StudentDetailPage() {
                     className="border-none"
                 >
                     <div className="p-4">
-                        <ThongTinCaNhanTab type={'CIVILIAN_STUDENT'} id={studentId} />
+                        <ThongTinCaNhanTab
+                            type={'CIVILIAN_STUDENT'}
+                            id={studentId}
+                            avatar={avatar}
+                            setAvatar={setAvatar}
+                        />
                     </div>
                 </Panel>
 
@@ -160,5 +166,18 @@ export default function StudentDetailPage() {
 }
 
 StudentDetailPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục' },
+                {
+                    title: 'Quản lý hồ sơ sinh viên',
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
+                },
+                { title: 'Chi tiết sinh viên' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

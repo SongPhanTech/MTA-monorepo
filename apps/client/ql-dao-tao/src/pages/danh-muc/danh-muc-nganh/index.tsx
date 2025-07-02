@@ -14,7 +14,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -53,7 +53,7 @@ export default function TrainingFieldPage() {
     }
 
     const { data = [], refetch } = useFindManyTrainingField({
-        where,
+        where: {},
         include: {
             organization: true,
             trainingObjectTypes: {
@@ -69,9 +69,7 @@ export default function TrainingFieldPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({
-        where,
-    })
+    const { data: count } = useCountTrainingField({})
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -201,18 +199,20 @@ export default function TrainingFieldPage() {
                                 title: 'Mã ngành',
                                 dataIndex: 'code',
                                 align: 'center',
+                                fixed: 'left',
                                 width: 150,
                             },
                             {
                                 title: 'Tên ngành',
                                 dataIndex: 'name',
                                 width: 200,
-                                align: 'left',
+                                fixed: 'left',
+                                align: 'center',
                             },
                             {
                                 title: 'Tên tiếng anh',
-                                align: 'left',
                                 dataIndex: 'englishName',
+                                align: 'center',
                                 width: 150,
                             },
                             {
@@ -241,17 +241,24 @@ export default function TrainingFieldPage() {
                             },
 
                             {
-                                title: 'Mô tả',
-                                width: 150,
-                                align: 'center',
-                                dataIndex: 'description',
-                            },
-                            {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
                                 render: ({ publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Mô tả',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'description',
+                                render: (value: string) => {
+                                    return (
+                                        <Tooltip title={value}>
+                                            <div className="line-clamp-2">{value}</div>
+                                        </Tooltip>
+                                    )
+                                },
                             },
                             {
                                 title: 'Trạng thái',

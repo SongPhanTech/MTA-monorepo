@@ -23,7 +23,7 @@ type TableProps<T extends Data> = {
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
-    maxHeight?: number
+    maxHeight?: number | string
     currentPage?: number
     headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: keyof T
@@ -130,7 +130,7 @@ const TableCollapse = <T extends Data>({
                 title: 'STT',
                 align: 'center',
                 width: 60,
-                className: 'sticky left-0 z-50',
+                fixed: 'left',
                 render: (_, record) => {
                     if (record.$type !== 'child') return ''
 
