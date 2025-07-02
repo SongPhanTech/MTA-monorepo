@@ -4,7 +4,7 @@ import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
-import { getDynamicTitle } from '@lib/casl/hooks'
+import { getDynamicBreadcrum } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
@@ -16,67 +16,31 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 
 const { Header, Content } = Layout
+interface breadcrumListProps {
+    title: string
+    href?: string
+}
 
 const DefaultLayout = ({
     children,
     className,
-    breadcrumb = [],
+    breadcrumbList,
     unLayout = false,
 }: {
     children: ReactNode
     className?: string
-    breadcrumb?: { title: string; href?: string }[]
+    breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const title = getDynamicTitle('QL_DAO_TAO', currentPath)
+    const breadcrumb = getDynamicBreadcrum('QL_DAO_TAO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
-    const titleMap = {
-        DANH_MUC_LOP_BIEN_CHE_ID: [
-            {
-                title: 'Quản lý lớp niên chế',
-            },
-            {
-                title: 'Chi tiết lớp niên chế',
-            },
-        ],
-    }
-    function mapPathToBreadcrumb(
-        pathname: string,
-        rawMap: Record<string, Record<string, string>>,
-        titleMap: any
-    ): { title: string }[] {
-        for (const [groupKey, entries] of Object.entries(rawMap)) {
-            for (const [key, pathPattern] of Object.entries(entries)) {
-                const regexPattern = `^${pathPattern
-                    .replace(/\[.*?\]/g, '[^/]+') // chuyển [id] -> [^/]+ (bắt bất kỳ chuỗi nào không chứa '/')
-                    .replace(/\//g, '\\/')}$` // escape dấu /
-                const regex = new RegExp(regexPattern)
-
-                if (regex.test(pathname)) {
-                    return titleMap[key]
-                }
-            }
-        }
-
-        return [{ title: 'Không xác định' }]
-    }
-
-    const rawMap = {
-        QL_DAO_TAO: {
-            DANH_MUC_LOP_BIEN_CHE: '/danh-muc/lop-bien-che',
-            DANH_MUC_LOP_BIEN_CHE_ID: '/danh-muc/lop-bien-che/[id]',
-        },
-    }
 
     const listBreadcrumb = useMemo(() => {
-        const datatest = mapPathToBreadcrumb(router.pathname, rawMap, titleMap)
-        console.log('datatest', datatest)
-
-        return datatest?.length > 0
+        return breadcrumb?.length > 0
             ? [
                   {
                       title: (
@@ -86,7 +50,7 @@ const DefaultLayout = ({
                           </a>
                       ),
                   },
-                  ...datatest.map((i: { title: string; href?: string }) => {
+                  ...breadcrumb.map((i: { title: string; href?: string }) => {
                       if (i?.href) {
                           return {
                               title: <a href={i.href}>{i.title}</a>,
@@ -97,17 +61,38 @@ const DefaultLayout = ({
                       }
                   }),
               ]
-            : [
-                  {
-                      title: (
-                          <a href="/home">
-                              <HomeOutlined className="mr-1" />
-                              Trang chủ
-                          </a>
-                      ),
-                  },
-              ]
-    }, [mapPathToBreadcrumb, router.pathname])
+            : breadcrumbList
+              ? [
+                    {
+                        title: (
+                            <a href="/home">
+                                <HomeOutlined className="mr-1" />
+                                Trang chủ
+                            </a>
+                        ),
+                    },
+                    ...breadcrumbList.map((i: { title: string; href?: string }) => {
+                        if (i?.href) {
+                            return {
+                                title: <a href={i.href}>{i.title}</a>,
+                            }
+                        }
+                        return {
+                            title: i.title,
+                        }
+                    }),
+                ]
+              : [
+                    {
+                        title: (
+                            <a href="/home">
+                                <HomeOutlined className="mr-1" />
+                                Trang chủ
+                            </a>
+                        ),
+                    },
+                ]
+    }, [breadcrumb, breadcrumbList])
     const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({

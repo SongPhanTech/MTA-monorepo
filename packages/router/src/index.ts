@@ -115,190 +115,190 @@ const NAVIGATION: NavigationType = {
         ],
         label: 'Quản lý người dùng',
     },
-    QL_DANH_MUC: {
-        menus: [
-            // {
-            //     id: 'home',
-            //     label: 'Trang chủ',
-            //     icon: HomeOutlined,
-            //     path: ROUTER_PATH.QL_DANH_MUC.HOME,
-            //     description: 'Thông tin trang chủ',
-            // },
-            {
-                id: 'danh-muc-chung',
-                label: 'Danh mục chung',
-                icon: PieChartOutlined,
-                children: [
-                    {
-                        id: 'level',
-                        label: 'Danh mục phân cấp',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
-                    },
-                    {
-                        id: 'rank',
-                        label: 'Danh mục cấp bậc hàm',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_RANK,
-                    },
-                    {
-                        id: 'academic-degree-type',
-                        label: 'Danh mục học hàm',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_DEGREE_TYPE,
-                    },
-                    {
-                        id: 'academic-rank-type',
-                        label: 'Danh mục học vị',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_RANK_TYPE,
-                    },
-                    {
-                        id: 'position',
-                        label: 'Danh mục chức vụ',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_POSITION,
-                    },
-                    {
-                        id: 'organization-type',
-                        label: 'Danh mục loại đơn vị',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION_TYPE,
-                    },
-                    {
-                        id: 'organization',
-                        label: 'Danh mục đơn vị',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION,
-                    },
-                ],
-            },
-            {
-                id: 'danh-muc-dao-tao',
-                label: 'Danh mục đào tạo',
-                icon: PieChartOutlined,
-                children: [
-                    {
-                        id: 'training-object-type',
-                        label: 'Danh mục đối tượng đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE,
-                    },
-                    {
-                        id: 'training-type',
-                        label: 'Danh mục loại hình đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_TYPE,
-                    },
-                    {
-                        id: 'training-level',
-                        label: 'Danh mục bậc đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LEVEL,
-                    },
-                    {
-                        id: 'training-location',
-                        label: 'Danh mục địa điểm đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LOCATION,
-                    },
-                    {
-                        id: 'training-field',
-                        label: 'Danh mục ngành đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FIELD,
-                    },
-                    {
-                        id: 'training-major',
-                        label: 'Danh mục chuyên ngành đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_MAJOR,
-                    },
-                    {
-                        id: 'training-block',
-                        label: 'Danh mục khối kiến thức',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_BLOCK,
-                    },
-                    {
-                        id: 'training-time',
-                        label: 'Danh mục thời gian đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_TIME,
-                    },
-                    {
-                        id: 'training-form',
-                        label: 'Danh mục hình thức đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FORM,
-                    },
-                    {
-                        id: 'study-rank',
-                        label: 'Danh mục xếp loại học tập',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_STUDY_RANK,
-                    },
-                    {
-                        id: 'training-rank',
-                        label: 'Danh mục xếp loại rèn luyện',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_RANK,
-                    },
-                    {
-                        id: 'training-kpi',
-                        label: 'Danh mục tải đào tạo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_KPI,
-                    },
-                ],
-            },
-            {
-                id: 'danh-muc-ho-so',
-                label: 'Danh mục hồ sơ',
-                icon: PieChartOutlined,
-                children: [
-                    {
-                        id: 'priority-object',
-                        label: 'Danh mục đối tượng ưu tiên',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_PRIORITY_OBJECT,
-                    },
-                    {
-                        id: 'registration-area',
-                        label: 'Danh mục khu vực đăng ký',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_REGISTRATION_AREA,
-                    },
-                    {
-                        id: 'nationality',
-                        label: 'Danh mục quốc tịch',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_NATIONALITY,
-                    },
-                    {
-                        id: 'religion',
-                        label: 'Danh mục tôn giáo',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_RELIGION,
-                    },
-                    {
-                        id: 'ethnicity',
-                        label: 'Danh mục dân tộc',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_ETHNICITY,
-                    },
-                    {
-                        id: 'user-typ',
-                        label: 'Danh mục đối tượng',
-                        icon: PieChartOutlined,
-                        path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_USER_TYPE,
-                    },
-                ],
-            },
-        ],
+    // QL_DANH_MUC: {
+    //     menus: [
+    //         // {
+    //         //     id: 'home',
+    //         //     label: 'Trang chủ',
+    //         //     icon: HomeOutlined,
+    //         //     path: ROUTER_PATH.QL_DANH_MUC.HOME,
+    //         //     description: 'Thông tin trang chủ',
+    //         // },
+    //         {
+    //             id: 'danh-muc-chung',
+    //             label: 'Danh mục chung',
+    //             icon: PieChartOutlined,
+    //             children: [
+    //                 {
+    //                     id: 'level',
+    //                     label: 'Danh mục phân cấp',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_LEVEL,
+    //                 },
+    //                 {
+    //                     id: 'rank',
+    //                     label: 'Danh mục cấp bậc hàm',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_RANK,
+    //                 },
+    //                 {
+    //                     id: 'academic-degree-type',
+    //                     label: 'Danh mục học hàm',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_DEGREE_TYPE,
+    //                 },
+    //                 {
+    //                     id: 'academic-rank-type',
+    //                     label: 'Danh mục học vị',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ACADEMIC_RANK_TYPE,
+    //                 },
+    //                 {
+    //                     id: 'position',
+    //                     label: 'Danh mục chức vụ',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_POSITION,
+    //                 },
+    //                 {
+    //                     id: 'organization-type',
+    //                     label: 'Danh mục loại đơn vị',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION_TYPE,
+    //                 },
+    //                 {
+    //                     id: 'organization',
+    //                     label: 'Danh mục đơn vị',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_ORGANIZATION,
+    //                 },
+    //             ],
+    //         },
+    //         {
+    //             id: 'danh-muc-dao-tao',
+    //             label: 'Danh mục đào tạo',
+    //             icon: PieChartOutlined,
+    //             children: [
+    //                 {
+    //                     id: 'training-object-type',
+    //                     label: 'Danh mục đối tượng đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_OBJECT_TYPE,
+    //                 },
+    //                 {
+    //                     id: 'training-type',
+    //                     label: 'Danh mục loại hình đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_TYPE,
+    //                 },
+    //                 {
+    //                     id: 'training-level',
+    //                     label: 'Danh mục bậc đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LEVEL,
+    //                 },
+    //                 {
+    //                     id: 'training-location',
+    //                     label: 'Danh mục địa điểm đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_LOCATION,
+    //                 },
+    //                 {
+    //                     id: 'training-field',
+    //                     label: 'Danh mục ngành đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FIELD,
+    //                 },
+    //                 {
+    //                     id: 'training-major',
+    //                     label: 'Danh mục chuyên ngành đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_MAJOR,
+    //                 },
+    //                 {
+    //                     id: 'training-block',
+    //                     label: 'Danh mục khối kiến thức',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_BLOCK,
+    //                 },
+    //                 {
+    //                     id: 'training-time',
+    //                     label: 'Danh mục thời gian đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_TIME,
+    //                 },
+    //                 {
+    //                     id: 'training-form',
+    //                     label: 'Danh mục hình thức đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRANINING_FORM,
+    //                 },
+    //                 {
+    //                     id: 'study-rank',
+    //                     label: 'Danh mục xếp loại học tập',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_STUDY_RANK,
+    //                 },
+    //                 {
+    //                     id: 'training-rank',
+    //                     label: 'Danh mục xếp loại rèn luyện',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_RANK,
+    //                 },
+    //                 {
+    //                     id: 'training-kpi',
+    //                     label: 'Danh mục tải đào tạo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_DAO_TAO_TRAINING_KPI,
+    //                 },
+    //             ],
+    //         },
+    //         {
+    //             id: 'danh-muc-ho-so',
+    //             label: 'Danh mục hồ sơ',
+    //             icon: PieChartOutlined,
+    //             children: [
+    //                 {
+    //                     id: 'priority-object',
+    //                     label: 'Danh mục đối tượng ưu tiên',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_PRIORITY_OBJECT,
+    //                 },
+    //                 {
+    //                     id: 'registration-area',
+    //                     label: 'Danh mục khu vực đăng ký',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_REGISTRATION_AREA,
+    //                 },
+    //                 {
+    //                     id: 'nationality',
+    //                     label: 'Danh mục quốc tịch',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_NATIONALITY,
+    //                 },
+    //                 {
+    //                     id: 'religion',
+    //                     label: 'Danh mục tôn giáo',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_RELIGION,
+    //                 },
+    //                 {
+    //                     id: 'ethnicity',
+    //                     label: 'Danh mục dân tộc',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_ETHNICITY,
+    //                 },
+    //                 {
+    //                     id: 'user-typ',
+    //                     label: 'Danh mục đối tượng',
+    //                     icon: PieChartOutlined,
+    //                     path: ROUTER_PATH.QL_DANH_MUC.DANH_MUC_HO_SO_USER_TYPE,
+    //                 },
+    //             ],
+    //         },
+    //     ],
 
-        label: 'Quản lý danh mục',
-    },
+    //     label: 'Quản lý danh mục',
+    // },
     QL_DAO_TAO: {
         menus: [
             {
@@ -350,7 +350,7 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'quan-ly-lop-mon-hoc',
                         label: 'Quản lý lớp môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                         description: 'Quản lý lớp môn học',
                     },
                     {

@@ -18,6 +18,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Col,
@@ -899,5 +900,18 @@ export default function TrainingProgramSubjects() {
 }
 
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout headerChildren="Môn học chương trình đào tạo">{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Chương trình đào tạo' },
+                {
+                    title: 'Danh mục CTĐT',
+                    href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                },
+                { title: 'Chi tiết phiên bản CTĐT' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

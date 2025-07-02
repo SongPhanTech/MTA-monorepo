@@ -627,5 +627,18 @@ export default function StudentFixedClassPage() {
 }
 
 StudentFixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục' },
+                {
+                    title: 'Quản lý lớp niên chế',
+                    href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
+                },
+                { title: 'Chi tiết lớp niên chế' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

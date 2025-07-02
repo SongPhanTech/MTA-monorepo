@@ -11,6 +11,7 @@ import {
     useFindUniqueBuilding,
     useUpdateRoom,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -266,5 +267,18 @@ export default function BuildingPage() {
 }
 
 BuildingPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục' },
+                {
+                    title: 'Danh mục phòng học',
+                    href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
+                },
+                { title: 'Danh sách phòng học' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }
