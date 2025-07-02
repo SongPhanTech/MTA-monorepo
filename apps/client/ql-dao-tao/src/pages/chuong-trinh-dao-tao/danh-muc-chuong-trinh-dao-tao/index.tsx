@@ -598,10 +598,12 @@ export default function TrainingProgramCatalog() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
+                                                        onConfirm: (e) => {
                                                             handleDeleteCurriculumVersion(
                                                                 record?.id
-                                                            ),
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

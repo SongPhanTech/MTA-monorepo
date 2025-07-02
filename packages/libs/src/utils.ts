@@ -1,4 +1,20 @@
-import type { Prisma } from '@workspace/db'
+import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
+
+interface StudentSubjectScoreRelation extends StudentSubjectScore {
+    finalScore: number | null
+    student?: {
+        fixedClass?: {
+            trainingCourse?: {
+                scoreConverts: ScoreConvert[] | null
+            } | null
+        } | null
+    }
+}
+
+interface ScoreStats {
+    count: number
+    percentage: number
+}
 
 export function splitFullName(fullName?: string): {
     firstName: string
@@ -60,4 +76,57 @@ export const calcFinalScore = (
     )
 
     return Math.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
+}
+
+function getScoreClassification(finalScore: number, scoreConverts: ScoreConvert[]): string {
+    const match = scoreConverts.find(
+        (item) => finalScore >= item.base10Min && finalScore <= item.base10Max
+    )
+
+    const raw = match?.classification ?? 'Không xác định'
+
+    if (raw === 'Kém') return 'Kém(Không đạt)'
+    return raw
+}
+
+export function getScoreStatistics(
+    dataTable: StudentSubjectScoreRelation[]
+): Record<string, ScoreStats> {
+    const stats = new Map<string, number>()
+
+    dataTable.forEach((row) => {
+        const finalScore = row.finalScore
+        const scoreConverts = row.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+
+        let classification: string
+
+        if (finalScore == null) {
+            classification = 'Vắng'
+        } else {
+            classification = getScoreClassification(finalScore, scoreConverts)
+        }
+
+        stats.set(classification, (stats.get(classification) || 0) + 1)
+    })
+
+    const total = dataTable.length
+    const result: Record<string, ScoreStats> = {}
+    let accumulatedPercentage = 0
+
+    const entries = Array.from(stats.entries())
+
+    entries.forEach(([type, count], index) => {
+        let percentage: number
+
+        if (index === entries.length - 1) {
+            percentage = Number.parseFloat((100 - accumulatedPercentage).toFixed(2))
+        } else {
+            percentage = total > 0 ? Number.parseFloat(((count / total) * 100).toFixed(2)) : 0
+            accumulatedPercentage += percentage
+        }
+
+        result[type] = { count, percentage }
+    })
+
+    return result
 }
