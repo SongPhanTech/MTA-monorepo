@@ -4,6 +4,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -33,7 +34,7 @@ import {
     TreeSelect,
 } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, CopyPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -63,15 +64,39 @@ export default function TrainingProgramSubjects() {
         examTypes: '',
     })
 
-    const { data: initialValue } = useFindUniqueCurriculumVersion({
-        where: { id: Array.isArray(id) ? id[0] : id },
-    })
+    const { data: initialValue } = useFindUniqueCurriculumVersion(
+        {
+            where: { id: Array.isArray(id) ? id[0] : id },
+            include: {
+                curriculum: {
+                    include: {
+                        managementOrganization: true,
+                        trainingMajor: true,
+                    },
+                },
+                trainingBlocks: {
+                    include: {
+                        subjects: {
+                            include: {
+                                subject: true,
+                            },
+                        },
+                    },
+                },
+                trainingTime: true,
+            },
+        },
+        { enabled: !!id }
+    )
 
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id as string,
+            curriculumVersion: {
+                deletedAt: null,
+            },
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
@@ -225,7 +250,11 @@ export default function TrainingProgramSubjects() {
                 include: {
                     subject: {
                         include: {
-                            managementOrganization: true,
+                            managementOrganization: {
+                                include: {
+                                    trainingMajors: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -353,6 +382,7 @@ export default function TrainingProgramSubjects() {
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
+        managementOrganization: string
     }>({
         tag: PutTrainingBlockSubject.name,
     })
@@ -423,10 +453,14 @@ export default function TrainingProgramSubjects() {
 
     const treeData = buildOrgTree(manageOrgData)
 
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({})
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Phiên bản chương trình đào tạo: {initialValue?.code} - {initialValue?.name}
+                Phiên bản CTĐT: {initialValue?.code} - {initialValue?.name} -{' '}
+                {initialValue?.curriculum?.trainingMajor?.name} -{' '}
+                {initialValue?.curriculum?.managementOrganization?.sTen}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -458,25 +492,6 @@ export default function TrainingProgramSubjects() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
-                                    <Form.Item name="managementOrganizationId">
-                                        <TreeSelect
-                                            placeholder="Chọn đơn vị quản lý"
-                                            allowClear
-                                            showSearch
-                                            treeDefaultExpandAll
-                                            onChange={(val) =>
-                                                handleFilterChange('managementOrganizationId', val)
-                                            }
-                                            treeData={treeData}
-                                            filterTreeNode={(input, node) =>
-                                                (node.title as string)
-                                                    .toLowerCase()
-                                                    .includes(input.toLowerCase())
-                                            }
-                                        />
-                                    </Form.Item>
-                                </Col>
                                 {/* <Col span={6}>
                                     <Flex justify="space-between" align="center">
                                         <FilterMonHocCTDT
@@ -489,7 +504,15 @@ export default function TrainingProgramSubjects() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() => handleCloneCurriculumVersion(initialValue)}
+                                    className="text-primary border-primary"
+                                    disabled={!initialValue}
+                                >
+                                    <CopyPlus />
+                                    Sao chép phiên bản CTĐT
+                                </Button>
                                 <Button
                                     onClick={() =>
                                         onOpenTrainingBlock({
@@ -574,10 +597,10 @@ export default function TrainingProgramSubjects() {
                                         </div>
                                     </div>
                                 ),
-                                filterIcon: (filtered) => (
+                                filterIcon: () => (
                                     <FilterOutlined
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filters.subjectCode ? '#005f37' : undefined,
                                         }}
                                     />
                                 ),
@@ -601,11 +624,82 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'managementOrganization', 'sTen'],
                                 width: 200,
                                 align: 'center',
+                                filterDropdown: ({
+                                    setSelectedKeys,
+                                    selectedKeys,
+                                    confirm,
+                                    clearFilters,
+                                }) => (
+                                    <div className="p-2 flex flex-col w-60">
+                                        <TreeSelect
+                                            placeholder="Chọn đơn vị quản lý"
+                                            allowClear
+                                            showSearch
+                                            treeDefaultExpandAll
+                                            value={selectedKeys[0] as string}
+                                            onChange={(val) => {
+                                                setSelectedKeys(val ? [val] : [])
+                                            }}
+                                            treeData={treeData}
+                                            filterTreeNode={(input, node) =>
+                                                (node.title as string)
+                                                    .toLowerCase()
+                                                    .includes(input.toLowerCase())
+                                            }
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div className="flex justify-end gap-2 mt-2">
+                                            <Button
+                                                size="small"
+                                                onClick={() => {
+                                                    if (clearFilters) clearFilters()
+                                                    handleFilterChange(
+                                                        'managementOrganizationId',
+                                                        ''
+                                                    )
+                                                    confirm()
+                                                }}
+                                            >
+                                                Bỏ lọc
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                onClick={() => {
+                                                    handleFilterChange(
+                                                        'managementOrganizationId',
+                                                        selectedKeys[0]?.toString() || ''
+                                                    )
+                                                    confirm()
+                                                }}
+                                            >
+                                                Lọc
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ),
+                                filterIcon: () => (
+                                    <FilterOutlined
+                                        style={{
+                                            color: filters.managementOrganizationId
+                                                ? '#005f37'
+                                                : undefined,
+                                        }}
+                                    />
+                                ),
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: 'Chuyên ngành',
+                                width: 160,
+                                align: 'center',
+                                render: (record) =>
+                                    record?.subject?.managementOrganization?.trainingMajors?.[0]
+                                        ?.name,
+                            },
+                            {
+                                title: 'Số TC',
                                 dataIndex: ['subject', 'credit'],
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 sorter: (a, b) => {
                                     const sortA = a.subject?.credit || 0
@@ -836,6 +930,10 @@ export default function TrainingProgramSubjects() {
                                                             trainingBlockOnCurriculumVersionId:
                                                                 trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: id,
+                                                            managementOrganization:
+                                                                initialValue?.curriculum
+                                                                    ?.managementOrganizationId ??
+                                                                '',
                                                         })
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -863,6 +961,9 @@ export default function TrainingProgramSubjects() {
                                         onOpenTrainingBlockSubject({
                                             trainingBlockOnCurriculumVersionId: id,
                                             trainingBlockSubjectId: '',
+                                            managementOrganization:
+                                                initialValue?.curriculum
+                                                    ?.managementOrganizationId ?? '',
                                         })
                                     }}
                                 />

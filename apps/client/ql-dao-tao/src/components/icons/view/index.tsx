@@ -2,11 +2,13 @@ import { Tooltip } from 'antd'
 import type { LucideProps } from 'lucide-react'
 import { Eye } from 'lucide-react'
 
-type ViewIconProps = LucideProps
+type ViewIconProps = LucideProps & {
+    title?: string
+}
 
-const ViewIcon = (props: ViewIconProps) => {
+const ViewIcon = ({ title, ...props }: ViewIconProps) => {
     return (
-        <Tooltip title="Xem chi tiết" placement="top">
+        <Tooltip title={title ? title : 'Xem chi tiết'} placement="top">
             <Eye
                 size={16}
                 strokeWidth={1.5}

@@ -1,3 +1,4 @@
+import { CriteriaOperator } from '@workspace/db'
 import * as XLSX from 'xlsx'
 import { prisma } from '..'
 import type { StudentScholarship, StudentTemplateData } from '../dto/student-info.dto'
@@ -77,273 +78,281 @@ const phanLoaiDiemHe4 = (
 }
 
 const ThongTinDiem = async (studentId: string, trainingCourseId: string, semesterId: string) => {
-    const DsDiem = await prisma.studentSubjectScore.findMany({
-        where: {
-            subjectClass: {
-                semesterId,
-            },
-            studentId,
-            subjectVersion: {
-                trainingBlocks: {
-                    some: {
-                        // Chỉ lấy các môn có tính điểm
-                        print: true,
-                        useForFinalScore: true,
-                    },
+    try {
+        const DsDiem = await prisma.studentSubjectScore.findMany({
+            where: {
+                subjectClass: {
+                    semesterId,
                 },
+                studentId,
             },
-        },
-        select: {
-            id: true,
-            finalScore: true,
-            manualFinalScore: true, // Lấy điểm thủ công nếu có
-            studentId: true,
-            subjectVersion: {
-                select: {
-                    credit: true, // lấy số tín chỉ của môn học
-                    trainingBlocks: {
-                        select: {
-                            graduation: true, // Lấy thông tin in ấn của môn học
+            select: {
+                id: true,
+                finalScore: true,
+                manualFinalScore: true, // Lấy điểm thủ công nếu có
+                studentId: true,
+                subjectVersion: {
+                    select: {
+                        credit: true, // lấy số tín chỉ của môn học
+                        trainingBlocks: {
+                            select: {
+                                graduation: true, // môn tốt nghiệp
+                                useForFinalScore: true, // có tính điểm hay không
+                            },
                         },
                     },
                 },
             },
-        },
-    })
+        })
 
-    // Danh sách chuyển đổi
-    const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
-        where: {
-            trainingCourseId,
-        },
-        select: {
-            trainingCourseId: true,
-            letter: true,
-            base10Min: true,
-            base10Max: true,
-            base4: true,
-            classification: true,
-        },
-    })
+        // Danh sách chuyển đổi
+        const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
+            where: {
+                trainingCourseId,
+            },
+            select: {
+                trainingCourseId: true,
+                letter: true,
+                base10Min: true,
+                base10Max: true,
+                base4: true,
+                classification: true,
+            },
+        })
 
-    // Tính điểm trung bình của sinh viên
-    console.log('Điểm của sinh viên:', studentId, DsDiem)
+        // Tính điểm trung bình của sinh viên
+        console.log('Điểm của sinh viên:', studentId, DsDiem)
 
-    const giaTriCD = await GiaTriDiemCvaD(trainingCourseId, DsDiemChuyenDoi)
+        const giaTriCD = await GiaTriDiemCvaD(trainingCourseId, DsDiemChuyenDoi)
 
-    // Kiểm tra xem có điểm nào dưới D không
-    const hasDiemDuoiD = DsDiem.some((item) => {
-        const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
-        if (diemHe10 === null || diemHe10 === undefined) {
-            return false // Bỏ qua nếu điểm không hợp lệ
-        }
-        return diemHe10 < giaTriCD.diemD // Kiểm tra điểm dưới D
-    })
-    console.log('Có điểm dưới D:', hasDiemDuoiD)
-
-    // Kiểm tra xem có điểm nào dưới C không
-    const hasDiemDuoiC = DsDiem.some((item) => {
-        const monTotNghiep = item.subjectVersion?.trainingBlocks.some((block) => block.graduation)
-        if (monTotNghiep) {
+        // Kiểm tra xem có điểm nào dưới D không
+        const hasDiemDuoiD = DsDiem.some((item) => {
             const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
             if (diemHe10 === null || diemHe10 === undefined) {
                 return false // Bỏ qua nếu điểm không hợp lệ
             }
-            return diemHe10 < giaTriCD.diemC // Kiểm tra điểm dưới C
+            return diemHe10 < giaTriCD.diemD // Kiểm tra điểm dưới D
+        })
+        console.log('Có điểm dưới D:', hasDiemDuoiD)
+
+        // Kiểm tra xem có điểm nào dưới C không
+        const hasDiemDuoiC = DsDiem.some((item) => {
+            const monTotNghiep = item.subjectVersion?.trainingBlocks.some(
+                (block) => block.graduation
+            )
+            if (monTotNghiep) {
+                const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
+                if (diemHe10 === null || diemHe10 === undefined) {
+                    return false // Bỏ qua nếu điểm không hợp lệ
+                }
+                return diemHe10 < giaTriCD.diemC // Kiểm tra điểm dưới C
+            }
+            return false // Bỏ qua nếu không phải môn tốt nghiệp
+        })
+
+        const DsDiemHe4: number[] = []
+        let TongTinChiDangKy = 0
+        DsDiem.forEach((item) => {
+            if (item.subjectVersion?.trainingBlocks.some((block) => !block.useForFinalScore)) {
+                return // Bỏ qua nếu môn không tính điểm
+            }
+            const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
+            if (diemHe10 === null || diemHe10 === undefined) {
+                return // Bỏ qua nếu điểm không hợp lệ
+            }
+            const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
+            TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
+            const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, DsDiemChuyenDoi)
+            DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
+        })
+
+        if (TongTinChiDangKy === 0) {
+            // console.log('Không có tín chỉ nào, không thể tính điểm trung bình hệ 4')
+            throw new Error('Không có tín chỉ nào để tính điểm trung bình hệ 4')
         }
-        return false // Bỏ qua nếu không phải môn tốt nghiệp
-    })
 
-    const DsDiemHe4: number[] = []
-    let TongTinChi = 0
-    DsDiem.forEach((item) => {
-        const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
-        if (diemHe10 === null || diemHe10 === undefined) {
-            return // Bỏ qua nếu điểm không hợp lệ
-        }
-        const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
-        TongTinChi += soTinChi // Cộng dồn số tín chỉ
-        const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, DsDiemChuyenDoi)
-        DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
-    })
+        // Tính điểm trung bình hệ 4
+        const diemTrungBinh4 =
+            DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0
 
-    console.log('Điểm hệ 4 của sinh viên:', studentId, DsDiemHe4)
-
-    if (TongTinChi === 0) {
-        console.log('Không có tín chỉ nào, không thể tính điểm trung bình hệ 4')
         return {
-            diemTrungBinh4: 0,
-            xepLoaiHocTap: 'Chưa đủ dữ liệu để tính điểm trung bình',
+            diemTrungBinh4,
+            xepLoaiHocTap: phanLoaiDiemHe4(diemTrungBinh4, trainingCourseId, DsDiemChuyenDoi),
             fullDiemD: !hasDiemDuoiD,
             fullDiemC: !hasDiemDuoiC,
         }
-    }
-
-    // Tính điểm trung bình hệ 4
-    const diemTrungBinh4 = DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChi || 0
-    console.log(
-        'Điểm trung bình hệ 4 của sinh viên:',
-        studentId,
-        diemTrungBinh4,
-        'Xếp loại :',
-        phanLoaiDiemHe4(diemTrungBinh4, trainingCourseId, DsDiemChuyenDoi)
-    )
-    return {
-        diemTrungBinh4,
-        xepLoaiHocTap: phanLoaiDiemHe4(diemTrungBinh4, trainingCourseId, DsDiemChuyenDoi),
-        fullDiemD: !hasDiemDuoiD,
-        fullDiemC: !hasDiemDuoiC,
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin điểm:', error)
+        return {
+            diemTrungBinh4: 0,
+            xepLoaiHocTap: 'Lỗi khi tính điểm',
+            tongTinChiDangKy: 0,
+            fullDiemD: false,
+            fullDiemC: false,
+        }
+    } finally {
+        await prisma.$disconnect()
+        console.log('Đã hoàn thành việc lấy thông tin điểm cho sinh viên:', studentId)
     }
 }
 
 const ThongTinHocKy = async (
     studentId: string,
     trainingCourseId: string,
-    semesterStartDate: any
+    semesterStartDate: Date
 ) => {
-    // Học kỳ bắt đầu của sinh viên (căn cứ theo khóa)
-    const hocKyBatDau = await prisma.trainingCourse.findFirst({
-        where: {
-            id: trainingCourseId,
-        },
-        select: {
-            semesterStartId: true,
-        },
-    })
-
-    if (!hocKyBatDau?.semesterStartId) {
-        console.error('Không tìm thấy học kỳ bắt đầu cho khóa học:', trainingCourseId)
-        return {
-            kyDangHoc: 0,
-            kyCuoi: false,
-            TongTinChiDaTichLuy: 0,
-        }
-    }
-
-    // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
-    const startSemester = await prisma.semester.findUnique({
-        where: { id: hocKyBatDau?.semesterStartId },
-        select: { id: true, startDate: true, semesterType: true },
-    })
-
-    if (!startSemester) {
-        throw new Error('semesters not found.')
-    }
-    if (startSemester.startDate > semesterStartDate) {
-        throw new Error('Start semester is after end semester.')
-    }
-
-    const DsHocKy = await prisma.semester.findMany({
-        where: {
-            startDate: {
-                gte: startSemester.startDate,
-                lte: semesterStartDate,
+    try {
+        // Học kỳ bắt đầu của sinh viên (căn cứ theo khóa)
+        const hocKyBatDau = await prisma.trainingCourse.findFirst({
+            where: {
+                id: trainingCourseId,
             },
-            semesterType: { in: ['FIRST', 'SECOND'] },
-        },
-        select: {
-            id: true,
-            startDate: true,
-            semesterType: true,
-        },
-        orderBy: {
-            startDate: 'asc',
-        },
-    })
+            select: {
+                semesterStartId: true,
+            },
+        })
 
-    if (DsHocKy.length === 0) {
-        console.error('Không tìm thấy học kỳ nào giữa học kỳ bắt đầu và học kỳ đầu vào.')
+        if (!hocKyBatDau?.semesterStartId) {
+            console.error('Không tìm thấy học kỳ bắt đầu cho khóa học:', trainingCourseId)
+            throw new Error('Không tìm thấy học kỳ bắt đầu cho khóa học.')
+        }
+
+        // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
+        const startSemester = await prisma.semester.findUnique({
+            where: { id: hocKyBatDau?.semesterStartId },
+            select: { id: true, startDate: true, semesterType: true },
+        })
+
+        if (!startSemester) {
+            throw new Error('semesters not found.')
+        }
+        if (startSemester.startDate > semesterStartDate) {
+            throw new Error('Start semester is after end semester.')
+        }
+
+        const DsHocKy = await prisma.semester.findMany({
+            where: {
+                startDate: {
+                    gte: startSemester.startDate,
+                    lte: semesterStartDate,
+                },
+                semesterType: { in: ['FIRST', 'SECOND'] },
+            },
+            select: {
+                id: true,
+                startDate: true,
+                semesterType: true,
+            },
+            orderBy: {
+                startDate: 'asc',
+            },
+        })
+
+        if (DsHocKy.length === 0) {
+            console.error('Không tìm thấy học kỳ nào giữa học kỳ bắt đầu và học kỳ đầu vào.')
+            throw new Error('Không tìm thấy học kỳ nào giữa học kỳ bắt đầu và học kỳ đầu vào.')
+        }
+        const kyDangHoc = DsHocKy.length
+
+        // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
+        const DsCacMonDaHoc = await prisma.studentSubjectScore.findMany({
+            where: {
+                studentId,
+                status: 'Passed', // Chỉ lấy các môn đã hoàn thành
+            },
+            select: {
+                subjectVersionId: true,
+                subjectVersion: {
+                    select: {
+                        credit: true, // Số tín chỉ của môn học
+                    },
+                },
+            },
+            distinct: ['subjectVersionId'], // Tránh trùng lặp môn học
+        })
+
+        const TongTinChiDaTichLuy = DsCacMonDaHoc.reduce((tong, item) => {
+            return tong + (item.subjectVersion?.credit || 0)
+        }, 0)
+
+        // Kiểm tra tổng số tích lũy yêu cầu đến kỳ hiện tại
+        const phienBanCTDT = await prisma.student.findFirst({
+            where: {
+                id: studentId,
+            },
+            select: {
+                curriculumVersionId: true, // Lấy phiên bản chương trình đào tạo
+            },
+        })
+
+        if (!phienBanCTDT?.curriculumVersionId) {
+            console.log('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên:', studentId)
+            throw new Error('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên.')
+        }
+
+        const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
+            where: {
+                curriculumVersionId: phienBanCTDT.curriculumVersionId,
+                subjects: {
+                    some: {
+                        useForFinalScore: true, // Chỉ lấy các môn có tính điểm
+                    },
+                },
+            },
+            select: {
+                subjects: {
+                    // TrainingBlockSubject
+                    select: {
+                        semester: true, // Kỳ dự kiến
+                        subject: {
+                            select: {
+                                credit: true, // Số tín chỉ của môn học
+                            },
+                        },
+                    },
+                },
+            },
+        })
+
+        const TongTinChiYeuCau = MonHocYeuCau.reduce((tong, item) => {
+            if (
+                item.subjects
+                    .map((subject) => subject.semester)
+                    .some((semester) => (semester ?? 0) >= kyDangHoc)
+            ) {
+                return tong // Bỏ qua nếu môn học chưa đến kỳ hiện tại
+            }
+            return (
+                tong +
+                item.subjects.reduce((tongMon, mon) => {
+                    return tongMon + (mon.subject?.credit || 0)
+                }, 0)
+            )
+        }, 0)
+
+        // Kỳ lớn nhất của CTDT
+        // Tìm kỳ dự kiến lớn nhất trong CTDT
+        const maxSemester = Math.max(
+            0,
+            ...MonHocYeuCau.flatMap((item) => item.subjects.map((mon) => mon.semester ?? 0))
+        )
+        return {
+            kyDangHoc: kyDangHoc,
+            kyCuoi: kyDangHoc === maxSemester,
+            TongTinChiDaTichLuy: TongTinChiDaTichLuy,
+            TongTinChiYeuCau: TongTinChiYeuCau,
+        }
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin học kỳ:', error)
         return {
             kyDangHoc: 0,
             kyCuoi: false,
             TongTinChiDaTichLuy: 0,
             TongTinChiYeuCau: 0,
         }
-    }
-    const kyDangHoc = DsHocKy.length
-
-    // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
-    const DsCacMonDaHoc = await prisma.studentSubjectScore.findMany({
-        where: {
-            studentId,
-            status: 'Passed', // Chỉ lấy các môn đã hoàn thành
-        },
-        select: {
-            subjectVersionId: true,
-            subjectVersion: {
-                select: {
-                    credit: true, // Số tín chỉ của môn học
-                },
-            },
-        },
-        distinct: ['subjectVersionId'], // Tránh trùng lặp môn học
-    })
-
-    const TongTinChiDaTichLuy = DsCacMonDaHoc.reduce((tong, item) => {
-        return tong + (item.subjectVersion?.credit || 0)
-    }, 0)
-
-    // Kiểm tra tổng số tích lũy yêu cầu đến kỳ hiện tại
-    const phienBanCTDT = await prisma.student.findFirst({
-        where: {
-            id: studentId,
-        },
-        select: {
-            curriculumVersionId: true, // Lấy phiên bản chương trình đào tạo
-        },
-    })
-
-    if (!phienBanCTDT?.curriculumVersionId) {
-        console.log('Không tìm thấy phiên bản chương trình đào tạo cho sinh viên:', studentId)
-        return {
-            kyDangHoc: DsHocKy.length,
-            kyCuoi: false,
-            TongTinChiDaTichLuy: TongTinChiDaTichLuy,
-            TongTinChiYeuCau: 0, // Không có yêu cầu nếu không tìm thấy phiên bản CTDT
-        }
-    }
-
-    const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
-        where: {
-            curriculumVersionId: phienBanCTDT.curriculumVersionId,
-            subjects: {
-                some: {
-                    semester: {
-                        lte: kyDangHoc, // Chỉ lấy các môn đến kỳ hiện tại
-                    },
-                    useForFinalScore: true, // Chỉ lấy các môn có tính điểm
-                },
-            },
-        },
-        select: {
-            subjects: {
-                // TrainingBlockSubject
-                select: {
-                    semester: true, // Kỳ dự kiến
-                    subject: {
-                        select: {
-                            credit: true, // Số tín chỉ của môn học
-                        },
-                    },
-                },
-            },
-        },
-    })
-
-    const TongTinChiYeuCau = MonHocYeuCau.reduce((tong, item) => {
-        return (
-            tong +
-            item.subjects.reduce((tongMon, mon) => {
-                return tongMon + (mon.subject?.credit || 0)
-            }, 0)
-        )
-    }, 0)
-
-    return {
-        kyDangHoc: kyDangHoc,
-        kyCuoi: false,
-        TongTinChiDaTichLuy: TongTinChiDaTichLuy,
-        TongTinChiYeuCau: TongTinChiYeuCau,
+    } finally {
+        await prisma.$disconnect()
+        console.log('Đã hoàn thành việc lấy thông tin học kỳ cho sinh viên:', studentId)
     }
 }
 
@@ -453,6 +462,7 @@ export const listStudentInfo = async (semesterId: string) => {
                 xepLoaiHocTap: DiemSinhVien?.xepLoaiHocTap || '',
                 soTinChiTichLuy: ThongTinHocKySinhVien?.TongTinChiDaTichLuy || 0,
                 soTinChiNo: 0,
+                soTinChiDangKy: DiemSinhVien?.tongTinChiDangKy || 0,
                 xepLoaiRenLuyen: diemRenLuyen?.trainingType || '',
                 diemRenLuyen: diemRenLuyen?.scoreAvg || 0,
                 soLanViPham: 0,
@@ -468,6 +478,7 @@ export const listStudentInfo = async (semesterId: string) => {
                 duDieuKienHocBong: true, // Điều kiện học bổng
                 ghiChu: '', // Ghi chú,
                 diemThuong: 0, // Điểm thưởng
+                userProfile: userProfile, // Thông tin người dùng
             }
         })
     )
@@ -484,7 +495,10 @@ export const populateExcelTemplate = (
     templateData: StudentTemplateData
 ): Buffer => {
     // Read the template
-    const workbook = XLSX.read(templateBuffer, { type: 'buffer', cellStyles: true })
+    const workbook = XLSX.read(templateBuffer, {
+        type: 'buffer',
+        cellStyles: true,
+    })
     const worksheetName = workbook.SheetNames[0] // Use first worksheet
     if (!worksheetName) {
         throw new Error('No worksheet found in the template.')
@@ -511,9 +525,18 @@ export const populateExcelTemplate = (
             { t: 'n', v: student.diemRenLuyen }, // I
             { t: 's', v: student.xepLoaiRenLuyen || 'Chưa có dữ liệu' }, // J
             { t: 'n', v: student.kyDangHoc }, // K
-            { t: 's', v: student.kyCuoi ? 'Có' : 'Không' }, // L TODO: Chưa xử lý
-            { t: 'n', v: student.soTinChiTichLuy || 0 }, // I
-            { t: 'n', v: student.soTinChiYeuCau || 0 }, // M
+            { t: 'b', v: student.kyCuoi || false }, // L
+            { t: 'n', v: student.soTinChiTichLuy || 0 }, // M
+            { t: 'n', v: student.soTinChiYeuCau || 0 }, // N
+            { t: 'b', v: student.biKyLuat || false }, // O TODO: Chưa có dữ liệu
+            { t: 'b', v: student.trinhDoNgoaiNgu || true }, // P TODO: Chưa có dữ liệu
+            { t: 'b', v: student.fullDiemD || true }, // Q TODO: Chưa có dữ liệu
+            { t: 'b', v: student.fullDiemC || true }, // R TODO: Chưa có dữ liệu
+            { t: 's', v: student.chucVuHocVien || true }, // S TODO: Chưa có dữ liệu
+            { t: 'n', v: student.diemThuong || 0 }, // T TODO: Chưa có dữ liệu
+            { t: 'b', v: student.duDieuKienHocBong || true }, // U TODO: Chưa có dữ liệu
+            { t: 's', v: student.ghiChu || '' }, // V TODO
+            { t: 's', v: student.quocTich || 'Việt Nam' }, // W TODO: Chưa có dữ liệu
         ]
 
         cells.forEach((cell, colIndex) => {
@@ -529,5 +552,69 @@ export const populateExcelTemplate = (
     worksheet['!ref'] = XLSX.utils.encode_range(range)
 
     // Write buffer
-    return XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer', cellStyles: true })
+    return XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'buffer',
+        cellStyles: true,
+    })
+}
+
+const checkEligible = (
+    studentValue: any,
+    criteriaValue: any,
+    operator: CriteriaOperator
+): boolean => {
+    switch (operator) {
+        case CriteriaOperator.EQ:
+            return studentValue === criteriaValue
+        case CriteriaOperator.GTE:
+            return studentValue >= criteriaValue
+        case CriteriaOperator.LTE:
+            return studentValue <= criteriaValue
+        default:
+            console.warn(`Unknown operator: ${operator}`)
+            return false // Mặc định là không đủ điều kiện nếu không nhận diện được toán tử
+    }
+}
+
+// Lọc danh sách sinh viên đủ điều kiện học bổng
+export const checkScholarshipEligibility = async (
+    students: StudentScholarship[],
+    scholarshipId: string
+): Promise<StudentScholarship[]> => {
+    // Lấy thông tin tiêu chí học bổng
+    const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
+        where: { scholarshipId: scholarshipId },
+    })
+
+    return students.filter((student) => {
+        // Kiểm tra điều kiện học bổng
+        const isEligible = scholarshipCriteriaList.every((criteria) => {
+            switch (criteria.field) {
+                // case "TOTAL_CREDITS": // Tổng số tín chỉ học tập trong học kỳ
+                // 	return checkEligible(
+                // 		student.soTinChiTichLuy,
+                // 		criteria.value,
+                // 		criteria.operator,
+                // 	);
+                // case "REGISTERED_CREDITS": // Số tín chỉ đăng ký trong học kỳ
+                // 	return student.soTinChiTichLuy <= criteria.value;
+                // case "ACCUMULATED_CREDITS_PERCENT": // % tín chỉ tích lũy so với kế hoạch
+                // 	return !student.biKyLuat;
+                // case "COURSE_GRADE_MIN": // Điểm thấp nhất trong các học phần
+                // 	return student.xepLoaiRenLuyen === criteria.value;
+                // case "SEMESTER_GPA": // Điểm trung bình học ksỳ
+                // 	return student.diemRenLuyen >= criteria.value;
+                // case "ENTRY_SCORE": // Điểm thi đầu vào (cho học viên mới)
+                // 	return student.diemRenLuyen <= criteria.value;
+                // case "CONDUCT": // Mức rèn luyện
+                // 	return student.diemRenLuyen >= criteria.value;
+                // case "FOREIGN_LANGUAGE": // Đạt chuẩn đầu ra ngoại ngữ (boolean)
+                // 	return student.trinhDoNgoaiNgu;
+                default:
+                    return true // Mặc định là đủ điều kiện nếu không có tiêu chí
+            }
+        })
+        return isEligible
+    })
 }

@@ -1,10 +1,12 @@
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
+import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
@@ -161,14 +163,10 @@ export default function TrainingProgramCatalog() {
                 include: {
                     trainingTime: true,
                     trainingBlocks: {
-                        select: {
+                        include: {
                             subjects: {
-                                select: {
-                                    subject: {
-                                        select: {
-                                            credit: true,
-                                        },
-                                    },
+                                include: {
+                                    subject: true,
                                 },
                             },
                         },
@@ -354,6 +352,10 @@ export default function TrainingProgramCatalog() {
         }))
     }, [data])
 
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({
+        refetch,
+    })
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -505,16 +507,16 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: 'Số tín chỉ bắt buộc',
+                                title: 'Số TC bắt buộc',
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                             },
                             {
-                                title: 'Số tín chỉ tự chọn',
+                                title: 'Số TC tự chọn',
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
-                                width: 140,
+                                width: 110,
                             },
                             {
                                 title: 'Mô tả',
@@ -527,14 +529,14 @@ export default function TrainingProgramCatalog() {
                                 title: 'Năm khởi tạo',
                                 dataIndex: 'createdAt',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                                 render: (value) => dayjs(value).year(),
                             },
                             {
                                 title: 'Năm áp dụng',
                                 dataIndex: 'startDate',
                                 align: 'center',
-                                width: 140,
+                                width: 120,
                                 render: (value) => dayjs(value).year(),
                             },
                             {
@@ -564,11 +566,11 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 120,
                                 fixed: 'right',
                                 align: 'center',
-                                render: (_, { id, curriculumId }) => {
-                                    if (id) {
+                                render: (_, record) => {
+                                    if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <Tooltip title="Xem chi tiết" placement="top">
@@ -578,12 +580,18 @@ export default function TrainingProgramCatalog() {
                                                         className="text-base cursor-pointer"
                                                     />
                                                 </Tooltip>
+                                                <CopyPlusIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handleCloneCurriculumVersion(record)
+                                                    }}
+                                                />
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         onOpenCurriculumVersion({
-                                                            curriculumId: curriculumId,
-                                                            versionId: id,
+                                                            curriculumId: record?.curriculumId,
+                                                            versionId: record?.id,
                                                         })
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -591,7 +599,9 @@ export default function TrainingProgramCatalog() {
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
-                                                            handleDeleteCurriculumVersion(id),
+                                                            handleDeleteCurriculumVersion(
+                                                                record?.id
+                                                            ),
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
@@ -603,7 +613,7 @@ export default function TrainingProgramCatalog() {
                             },
                         ]}
                         headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[75px] items-center">
+                            <div className="flex gap-2.5 w-[85px] items-center">
                                 <CreateIcon
                                     onClick={(e) => {
                                         e.stopPropagation()

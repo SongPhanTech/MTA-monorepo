@@ -4,10 +4,11 @@ import { Trash2 } from 'lucide-react'
 
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
+    title?: string
 } & LucideProps
-const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
+const DeleteIcon = ({ title, popConfirm, ...props }: DeleteIconProps) => {
     return (
-        <Tooltip title="Xóa" placement="top">
+        <Tooltip title={title ? title : 'Xóa'} placement="top">
             <Popconfirm
                 placement="topLeft"
                 title="Xác nhận xóa dữ liệu?"

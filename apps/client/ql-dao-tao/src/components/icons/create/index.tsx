@@ -9,7 +9,7 @@ type CreateIconProps = LucideProps & {
 const CreateIcon = ({ title, ...props }: CreateIconProps) => {
     return (
         <Tooltip title={title ? title : 'Thêm mới'} placement="top">
-            <BookPlus size={18} strokeWidth={1.5} className="text-base cursor-pointer" {...props} />
+            <BookPlus size={16} strokeWidth={1.5} className="text-base cursor-pointer" {...props} />
         </Tooltip>
     )
 }

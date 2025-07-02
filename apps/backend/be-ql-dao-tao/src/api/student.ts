@@ -119,6 +119,46 @@ const dsRaSoatHocBongJson = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
             }),
+            scholarshipId: z.string().optional().openapi('scholarshipId', {
+                description:
+                    'ID của học bổng, nếu không sẽ hiển thị thông tin của tất cả sinh viên',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student scholarship as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const dsRaKyLuatHocTapJson = createRoute({
+    operationId: 'exportStudentLearningDisciplineJson',
+    path: '/export-json-list-student-to-check-learning-discipline',
+    tags: ['Student'],
+    summary: 'Danh sách sinh viên trong rà soát kỷ luật học tập',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện kỷ luật dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
         }),
     },
     responses: {
@@ -302,13 +342,25 @@ app.openapi(dsRaSoatHocBongExcel, async (c) => {
 })
 
 app.openapi(dsRaSoatHocBongJson, async (c) => {
-    const { semesterId } = c.req.valid('query')
-    const student = await listStudentInfo(semesterId)
+    const { semesterId, scholarshipId } = c.req.valid('query')
+    const students = await listStudentInfo(semesterId)
 
-    if (!student || student.length === 0) {
+    if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    return c.json(student, 200)
+
+    return c.json(students, 200)
+})
+
+app.openapi(dsRaKyLuatHocTapJson, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    const students = await listStudentInfo(semesterId)
+
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+
+    return c.json(students, 200)
 })
 
 export default app

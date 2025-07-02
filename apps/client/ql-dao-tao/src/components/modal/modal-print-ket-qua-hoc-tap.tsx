@@ -65,7 +65,7 @@ const ModalPrintToKQHT = () => {
                 },
             },
         },
-        { enabeld: input?.dataStudent?.curriculumVersionId }
+        { enabled: !!input?.dataStudent?.curriculumVersionId }
     )
 
     const { convertScore } = useScoreConverter(

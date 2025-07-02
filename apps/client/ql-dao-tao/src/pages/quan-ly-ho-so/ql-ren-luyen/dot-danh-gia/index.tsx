@@ -1,31 +1,31 @@
+import { PlusOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutOpenClassModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { CUSSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType, TrainingScoreSession } from '@workspace/db'
 import {
-    useFindManyTrainingScoreSession,
-    useFindManyTrainingObjectType,
     useCountTrainingScoreSession,
-    useFindManySemester,
     useCreateTrainingScoreSession,
-    useUpdateTrainingScoreSession,
     useDeleteTrainingScoreSession,
+    useFindManySemester,
+    useFindManyTrainingObjectType,
+    useFindManyTrainingScoreSession,
+    useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Flex, Form, Input, Row, Tag, message } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import { CUSSTOM_VI_LOCALE } from '@constants/constants'
-import { PlusOutlined } from '@ant-design/icons'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import ModalDotDanhGia from './modal-dot-danh-gia'
+
 // import LopBienCheItem from './lop-bien-che'
 // const { Option } = Select;
 interface FilterProps {
@@ -94,7 +94,7 @@ export default function SubjectClassScore() {
                   ...(filters.trainingObjectTypeId
                       ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                       : {}),
-                  ...(filters.timeFilter && filters.timeFilter[0] && filters.timeFilter[1]
+                  ...(filters.timeFilter?.[0] && filters.timeFilter[1]
                       ? {
                             time: {
                                 gte: new Date(filters.timeFilter[0]).toISOString(),

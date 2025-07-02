@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
-import { Modal, Form, Input, DatePicker, Select } from 'antd'
-import { TrainingScoreSession } from '@workspace/db'
-import { CUSSTOM_VI_LOCALE } from '@constants/constants'
-
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import { CUSSTOM_VI_LOCALE } from '@constants/constants'
+import type { TrainingScoreSession } from '@workspace/db'
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
+import { DatePicker, Form, Input, Modal, Select } from 'antd'
+import type React from 'react'
+import { useEffect } from 'react'
 
 const { TextArea } = Input
 
@@ -32,7 +32,7 @@ const ModalDotDanhGia: React.FC<ModalDotDanhGiaProps> = ({
             .then((values) => {
                 console.log('Received values:', values)
                 if (isEdit) {
-                    onEdit(data!.id, values)
+                    onEdit(data?.id, values)
                 } else {
                     onSubmit(values)
                 }
