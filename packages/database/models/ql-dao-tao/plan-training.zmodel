@@ -8,6 +8,7 @@ import './lecturer'
 import './staff'
 import 'training-score'
 import 'scholarship'
+import 'warning'
 
 enum SubjectClassStudentStatus {
   Registered
@@ -128,6 +129,7 @@ model SchoolYear extends Base {
   @@schema("ql-dao-tao")
 
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
+  studentYearResult         StudentYearResult[]
 }
 
 enum SemesterType {
@@ -153,6 +155,7 @@ model Semester extends Base {
   studentTrainingSemester StudentTrainingSemester[]
   studentSemesterResult   StudentSemesterResult[]
   scholarshipAward        ScholarshipAward[]
+  academicWarning         AcademicWarning[]
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
@@ -202,6 +205,7 @@ model TrainingCourse extends Base {
   academicRankingConvert AcademicRankingConvert[]
   studentTrainingCourse  StudentTrainingCourse[]
   scholarships           Scholarship[]
+  academicWarningRule    AcademicWarningRule[]
 
   @@schema("ql-dao-tao")
 }

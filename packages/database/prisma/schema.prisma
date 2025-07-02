@@ -209,6 +209,7 @@ enum Gender {
 }
 
 enum StudentTrainingType {
+  EXCELLENT
   GOOD
   FAIR
   MEDIUM
@@ -228,6 +229,8 @@ enum CriteriaField {
   ENTRY_SCORE
   CONDUCT
   FOREIGN_LANGUAGE
+  ACADEMIC_WARNING_LEVEL
+  DISCIPLINARY_WARNING_LEVEL
 
   @@schema("ql-dao-tao")
 }
@@ -236,6 +239,29 @@ enum CriteriaOperator {
   GTE
   LTE
   EQ
+  IN
+
+  @@schema("ql-dao-tao")
+}
+
+enum AcademicWarningRuleType {
+  GPA_SEMESTER_BELOW
+  GPA_CUMULATIVE_BELOW
+  FAILED_CREDITS_SEMESTER
+  FAILED_CREDITS_TOTAL
+  GPA_ZERO
+  NO_REGISTRATION
+
+  @@schema("ql-dao-tao")
+}
+
+enum DisciplinaryWarningReasonType {
+  DISCIPLINE_PENALTY
+  EXAM_VIOLATION
+  EXAM_PROXY_FIRST
+  EXAM_PROXY_REPEAT
+  LATE_TUITION_1
+  LATE_TUITION_2
 
   @@schema("ql-dao-tao")
 }
@@ -473,6 +499,7 @@ model SchoolYear {
   semesters                 Semester[]
   milestone                 Milestone[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
+  studentYearResult         StudentYearResult[]
 
   @@schema("ql-dao-tao")
 }
@@ -499,6 +526,7 @@ model Semester {
   studentTrainingSemester StudentTrainingSemester[]
   studentSemesterResult   StudentSemesterResult[]
   scholarshipAward        ScholarshipAward[]
+  academicWarning         AcademicWarning[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -555,6 +583,7 @@ model TrainingCourse {
   academicRankingConvert AcademicRankingConvert[]
   studentTrainingCourse  StudentTrainingCourse[]
   scholarships           Scholarship[]
+  academicWarningRule    AcademicWarningRule[]
 
   @@schema("ql-dao-tao")
 }
@@ -1205,34 +1234,82 @@ model Student {
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
   studentTrainingCourse     StudentTrainingCourse[]
   studentSemesterResult     StudentSemesterResult[]
+  studentYearResult         StudentYearResult[]
   scholarshipAwards         ScholarshipAward[]
+  academicWarning           AcademicWarning[]
 
   @@schema("ql-dao-tao")
 }
 
 model StudentSemesterResult {
-  id                       String    @id() @default(cuid())
-  code                     String?   @unique()
-  active                   Boolean   @default(true)
-  description              String?   @db.Text()
+  id                       String                  @id() @default(cuid())
+  code                     String?                 @unique()
+  active                   Boolean                 @default(true)
+  description              String?                 @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt()
-  student                  Student   @relation(fields: [studentId], references: [id])
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt()
+  student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
-  semester                 Semester  @relation(fields: [semesterId], references: [id])
+  semester                 Semester                @relation(fields: [semesterId], references: [id])
   semesterId               String
+  studyYear                Int
+  semesterIndexInCourse    Int
+  isLastSemester           Boolean
+  baseType                 AcademicRankingBaseType
+  gpaBase4                 Float
+  cumulativeGpaBase4       Float
+  gpaBase10                Float
+  cumulativeGpaBase10      Float
+  lowestFinalScore         Float
   totalCredits             Int
   registeredCredits        Int
+  retakingCredits          Int
+  passedCredits            Int
+  failedCredits            Int
   accumulatedCredits       Int
   totalCreditsByCurriculum Int
-  gpa                      Float
+  totalFailedCredits       Int
   foreignLangPass          Boolean
   isClassMonitor           Boolean
   isUnionLeader            Boolean
   entryScore               Float?
-  calculatedGPA            Float
   isImproving              Boolean
+  postponeWithReason       Boolean                 @default(false)
+  academicWarningLevel     Int                     @default(0)
+  disciplinaryWarningLevel Int                     @default(0)
+  suspended                Boolean                 @default(false)
+  expelled                 Boolean                 @default(false)
+
+  @@schema("ql-dao-tao")
+}
+
+model StudentYearResult {
+  id                       String                  @id() @default(cuid())
+  code                     String?                 @unique()
+  active                   Boolean                 @default(true)
+  description              String?                 @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt()
+  student                  Student                 @relation(fields: [studentId], references: [id])
+  studentId                String
+  schoolYear               SchoolYear              @relation(fields: [schoolYearId], references: [id])
+  schoolYearId             String
+  studyYear                Int
+  isLastStudyYear          Boolean
+  baseType                 AcademicRankingBaseType
+  gpaBase4                 Float
+  cumulativeGpaBase4       Float
+  gpaBase10                Float
+  cumulativeGpaBase10      Float
+  studentTrainingType      StudentTrainingType
+  totalCredits             Int
+  failedCredits            Int
+  academicWarningLevel     Int                     @default(0)
+  disciplinaryWarningLevel Int                     @default(0)
+  suspended                Boolean                 @default(false)
+  expelled                 Boolean                 @default(false)
 
   @@schema("ql-dao-tao")
 }
@@ -2544,8 +2621,10 @@ model ScholarshipCriteria {
   scholarshipId String
   scholarship   Scholarship      @relation(fields: [scholarshipId], references: [id])
   field         CriteriaField
+  invert        Boolean          @default(false)
   operator      CriteriaOperator
   value         Float
+  tuple         String           @default("")
   bonusValue    Float            @default(0)
 
   @@schema("ql-dao-tao")
@@ -2570,6 +2649,76 @@ model ScholarshipAward {
   priorityRank  Int
 
   @@unique([studentId, scholarshipId, semesterId])
+  @@schema("ql-dao-tao")
+}
+
+model AcademicWarningRule {
+  id                String                  @id() @default(cuid())
+  ruleType          AcademicWarningRuleType
+  threshold         Float?
+  semesterCondition Int?
+  yearCondition     Int?
+  severity          Int
+  description       String
+  trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId  String
+  academicWarning   AcademicWarning[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Cảnh cáo học tập
+model AcademicWarning {
+  id            String                @id() @default(cuid())
+  code          String?               @unique()
+  active        Boolean               @default(true)
+  description   String?               @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt()
+  student       Student               @relation(fields: [studentId], references: [id])
+  studentId     String
+  semester      Semester              @relation(fields: [semesterId], references: [id])
+  semesterId    String
+  level         Int
+  increasedFrom Int?
+  decreasedFrom Int?
+  rules         AcademicWarningRule[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Cảnh cáo học đường
+model DisciplinaryWarning {
+  id            String                      @id() @default(cuid())
+  code          String?                     @unique()
+  active        Boolean                     @default(true)
+  description   String?                     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime                    @default(now())
+  updatedAt     DateTime                    @updatedAt()
+  studentId     String
+  semesterId    String
+  level         Int
+  increasedFrom Int?
+  reasonDetails DisciplinaryWarningReason[]
+
+  @@schema("ql-dao-tao")
+}
+
+model DisciplinaryWarningReason {
+  id            String                        @id() @default(cuid())
+  code          String?                       @unique()
+  active        Boolean                       @default(true)
+  description   String?                       @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime                      @default(now())
+  updatedAt     DateTime                      @updatedAt()
+  warning       DisciplinaryWarning           @relation(fields: [warningId], references: [id])
+  warningId     String
+  reasonType    DisciplinaryWarningReasonType
+  severityLevel Int
+
   @@schema("ql-dao-tao")
 }
 

@@ -38,6 +38,7 @@ model StudentTrainingScore extends Base {
 }
 
 enum StudentTrainingType {
+  EXCELLENT // Xuất sắc - cho SV DS
   GOOD      // Tốt
   FAIR      // Khá
   MEDIUM  // Trung bình khá
