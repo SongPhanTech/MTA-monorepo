@@ -293,10 +293,7 @@ Table TrainingCourse {
   scoreConverts ScoreConvert [not null]
   academicRankingConvert AcademicRankingConvert [not null]
   studentTrainingCourse StudentTrainingCourse [not null]
-<<<<<<< Updated upstream
   scholarships Scholarship [not null]
-=======
->>>>>>> Stashed changes
 
   Note: 'Khoá học'
 }
@@ -917,11 +914,8 @@ Table Student {
   studentTrainingSemester StudentTrainingSemester [not null]
   studentTrainingSchoolYear StudentTrainingSchoolYear [not null]
   studentTrainingCourse StudentTrainingCourse [not null]
-<<<<<<< Updated upstream
   studentSemesterResult StudentSemesterResult [not null]
   scholarshipAwards ScholarshipAward [not null]
-=======
->>>>>>> Stashed changes
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
@@ -2118,7 +2112,6 @@ Table StudentTrainingCourse {
   trainingType StudentTrainingType [not null]
 }
 
-<<<<<<< Updated upstream
 Table Scholarship {
   id String [pk]
   code String [unique]
@@ -2178,8 +2171,6 @@ Table ScholarshipAward {
   }
 }
 
-=======
->>>>>>> Stashed changes
 Table TemplateFile {
   id String [pk]
   code String [unique]
@@ -2399,7 +2390,6 @@ Enum StudentTrainingType {
   AVERAGE
   POOR
   VERY_POOR
-<<<<<<< Updated upstream
 }
 
 Enum CriteriaField {
@@ -2417,8 +2407,6 @@ Enum CriteriaOperator {
   GTE
   LTE
   EQ
-=======
->>>>>>> Stashed changes
 }
 
 Enum TemplateFileType {
@@ -2699,7 +2687,6 @@ Ref: StudentTrainingSchoolYear.schoolYearId > SchoolYear.id
 
 Ref: StudentTrainingCourse.studentId > Student.id
 
-<<<<<<< Updated upstream
 Ref: StudentTrainingCourse.trainingCourseId > TrainingCourse.id
 
 Ref: Scholarship.trainingCourseId > TrainingCourse.id
@@ -2711,6 +2698,3 @@ Ref: ScholarshipAward.studentId > Student.id
 Ref: ScholarshipAward.semesterId > Semester.id
 
 Ref: ScholarshipAward.scholarshipId > Scholarship.id
-=======
-Ref: StudentTrainingCourse.trainingCourseId > TrainingCourse.id
->>>>>>> Stashed changes
