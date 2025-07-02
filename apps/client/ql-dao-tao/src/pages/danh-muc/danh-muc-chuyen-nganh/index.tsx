@@ -276,7 +276,6 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="id"
-                        className="max-h-full"
                         headerTitleKey={({ code, name, trainingMajors }) =>
                             `${code} - ${name} (${trainingMajors.length})`
                         }
@@ -287,12 +286,15 @@ export default function TrainingMajorPage() {
                                 title: 'Mã chuyên ngành',
                                 dataIndex: 'code',
                                 align: 'center',
+                                width: 150,
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên chuyên ngành',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên tiếng anh',
@@ -428,18 +430,5 @@ export default function TrainingMajorPage() {
 }
 
 TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
-    return (
-        <DefaultLayout
-            breadcrumb={[
-                {
-                    title: 'Danh mục',
-                },
-                {
-                    title: 'Danh mục chuyên ngành',
-                },
-            ]}
-        >
-            {page}
-        </DefaultLayout>
-    )
+    return <DefaultLayout>{page}</DefaultLayout>
 }
