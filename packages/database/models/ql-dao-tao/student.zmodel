@@ -8,6 +8,7 @@ import 'training-score'
 import 'categories'
 import 'plan-training'
 import 'scholarship'
+import 'warning'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
@@ -20,8 +21,11 @@ model Student extends Base {
   /// đối tượng ưu tiên
   priorityObject            PriorityObject[]
 
+  unionLeader               String?
+
   status                    StudentStatus               @default(ENROLLED)
 
+  classMonitor              FixedClass?                 @relation("ClassMonitor")
   fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
   fixedClassId              String?
   subjectClassStudent       StudentSubjectScore[]
@@ -60,27 +64,87 @@ model Student extends Base {
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
   studentTrainingCourse     StudentTrainingCourse[]
   studentSemesterResult     StudentSemesterResult[]
+  studentYearResult         StudentYearResult[]
   scholarshipAwards         ScholarshipAward[]
+  academicWarning           AcademicWarning[]
+
   @@schema("ql-dao-tao")
 }
 
 model StudentSemesterResult extends Base {
-  student                  Student  @relation(fields: [studentId], references: [id])
-  studentId                String   // Liên kết đến sinh viên/học viên
-  semester                 Semester @relation(fields: [semesterId], references: [id])
-  semesterId               String   // Liên kết đến học kỳ
-  totalCredits             Int      // Tổng tín chỉ học kỳ
+  student                  Student                 @relation(fields: [studentId], references: [id])
+  studentId                String
+  semester                 Semester                @relation(fields: [semesterId], references: [id])
+  semesterId               String
+
+  studyYear                Int   // năm học thứ mấy
+  semesterIndexInCourse    Int   // học kỳ thứ mấy trong toàn khoá học
+  isLastSemester           Boolean
+
+  baseType                 AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Float    // Tích luỹ hệ 4
+  gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Float    // Tích luỹ hệ 10
+
+  lowestFinalScore         Float    // Điểm học phần thấp nhất
+
+  totalCredits             Int      // Tổng tín chỉ mở trong học kỳ cho CTĐT
+
   registeredCredits        Int      // Số tín chỉ đăng ký
+  retakingCredits          Int      // Số tín chỉ học lại + cải thiện
+  passedCredits            Int      // Số tín đạt
+  failedCredits            Int      // số tín chỉ không đạt trong học kỳ
+
   accumulatedCredits       Int      // Tổng tín chỉ tích lũy
   totalCreditsByCurriculum Int      // Tổng tín chỉ học kỳ theo chương trình đào tạo
-  gpa                      Float    // Điểm trung bình học kỳ (gốc)
+  totalFailedCredits       Int      // tổng tín chỉ nợ từ đầu khoá đến hiện tại
+
   foreignLangPass          Boolean  // Đạt chuẩn ngoại ngữ
+
   isClassMonitor           Boolean  // Lớp trưởng
   isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
   entryScore               Float?   // Điểm thi đầu vào (nếu có)
 
-  calculatedGPA            Float    // GPA sau khi cộng điểm ưu tiên
   isImproving              Boolean  // Có đang học lại hoặc cải thiện không
+
+  postponeWithReason       Boolean                 @default(false) // tạm ngưng có lý do
+  academicWarningLevel     Int                     @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel Int                     @default(0) // mức cảnh cáo học đường
+  suspended                Boolean                 @default(false) // đình chỉ học
+  expelled                 Boolean                 @default(false) // đuổi học
+
+  @@schema("ql-dao-tao")
+}
+
+model StudentYearResult extends Base {
+  student                  Student                 @relation(fields: [studentId], references: [id])
+  studentId                String
+
+  schoolYear               SchoolYear              @relation(fields: [schoolYearId], references: [id])
+  schoolYearId             String
+
+  studyYear                Int   // năm học thứ mấy
+  isLastStudyYear          Boolean
+
+  baseType                 AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Float    // Tích luỹ hệ 4
+  gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Float    // Tích luỹ hệ 10
+
+  studentTrainingType      StudentTrainingType // xếp loại rèn luyện
+
+  totalCredits             Int      // tổng số tín chỉ tích lũy
+  failedCredits            Int      // tín chỉ nợ tích lũy
+
+  isClassMonitor           Boolean  // Lớp trưởng
+  isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
+
+  academicWarningLevel     Int                     @default(0)
+  disciplinaryWarningLevel Int                     @default(0)
+  suspended                Boolean                 @default(false)
+  expelled                 Boolean                 @default(false)
 
   @@schema("ql-dao-tao")
 }
