@@ -1,6 +1,6 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 
-interface StudentSubjectScoreRelation extends StudentSubjectScore {
+type StudentSubjectScoreRelation = StudentSubjectScore & {
     finalScore: number | null
     student?: {
         fixedClass?: {
@@ -11,10 +11,7 @@ interface StudentSubjectScoreRelation extends StudentSubjectScore {
     }
 }
 
-interface ScoreStats {
-    count: number
-    percentage: number
-}
+type ScoreStats = { count: number; percentage: number }
 
 export function splitFullName(fullName?: string): {
     firstName: string
@@ -78,54 +75,66 @@ export const calcFinalScore = (
     return Math.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
 }
 
-function getScoreClassification(finalScore: number, scoreConverts: ScoreConvert[]): string {
-    const match = scoreConverts.find(
+function getScoreClassification(finalScore: number | null, scoreConverts: ScoreConvert[]) {
+    if (!finalScore) {
+        return { classification: 'Vắng', base10Max: null }
+    }
+
+    const rank = scoreConverts.find(
         (item) => finalScore >= item.base10Min && finalScore <= item.base10Max
     )
 
-    const raw = match?.classification ?? 'Không xác định'
+    const classification = rank
+        ? `${rank.classification}${rank.pass ? '' : '(Không đạt)'}`
+        : 'Không xác định'
 
-    if (raw === 'Kém') return 'Kém(Không đạt)'
-    return raw
+    const base10Max = rank ? rank.base10Max : null
+
+    return { classification, base10Max }
 }
 
 export function getScoreStatistics(
     dataTable: StudentSubjectScoreRelation[]
 ): Record<string, ScoreStats> {
-    const stats = new Map<string, number>()
+    if (!dataTable.length) {
+        return {}
+    }
+
+    const stats = new Map<string, { count: number; base10Max: number | null }>()
 
     dataTable.forEach((row) => {
         const finalScore = row.finalScore
         const scoreConverts = row.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
 
-        let classification: string
+        const { classification, base10Max } = getScoreClassification(finalScore, scoreConverts)
 
-        if (finalScore == null) {
-            classification = 'Vắng'
+        const entry = stats.get(classification)
+        if (entry) {
+            entry.count += 1
         } else {
-            classification = getScoreClassification(finalScore, scoreConverts)
+            stats.set(classification, { count: 1, base10Max })
         }
-
-        stats.set(classification, (stats.get(classification) || 0) + 1)
     })
 
     const total = dataTable.length
     const result: Record<string, ScoreStats> = {}
     let accumulatedPercentage = 0
 
-    const entries = Array.from(stats.entries())
+    const entries = Array.from(stats.entries()).sort(
+        (a, b) => Number(a[1].base10Max) - Number(b[1].base10Max)
+    )
 
-    entries.forEach(([type, count], index) => {
+    entries.forEach(([classification, { count }], index) => {
         let percentage: number
 
         if (index === entries.length - 1) {
             percentage = Number.parseFloat((100 - accumulatedPercentage).toFixed(2))
         } else {
-            percentage = total > 0 ? Number.parseFloat(((count / total) * 100).toFixed(2)) : 0
+            percentage = Number.parseFloat(((count / total) * 100).toFixed(2))
             accumulatedPercentage += percentage
         }
 
-        result[type] = { count, percentage }
+        result[classification] = { count, percentage }
     })
 
     return result
