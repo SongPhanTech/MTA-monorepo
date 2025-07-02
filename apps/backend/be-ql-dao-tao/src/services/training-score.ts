@@ -1,6 +1,6 @@
+import * as XLSX from 'xlsx'
 import { prisma } from '..'
 import type { StudentInfo, StudentTemplateData } from '../dto/student-info.dto'
-import * as XLSX from 'xlsx'
 
 export const listStudentInfo = async (fixedClassId: string) => {
     const fixedClasses = await prisma.fixedClass.findUnique({

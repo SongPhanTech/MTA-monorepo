@@ -1,4 +1,5 @@
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { PutOpenClassModal } from '@components/modal'
 import { CUSSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -7,23 +8,23 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Semester, TrainingObjectType } from '@workspace/db'
 import {
     useCountStudent,
+    useCreateStudentTrainingScore,
+    useFindManyFixedClass,
     useFindManySemester,
     useFindManyStudent,
-    useFindManyFixedClass,
+    useFindManyStudentTrainingScore,
     useFindManyTrainingObjectType,
     useFindManyTrainingScoreSession,
-    useCreateStudentTrainingScore,
     useUpdateStudentTrainingScore,
-    useFindManyStudentTrainingScore,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Row, message, DatePicker, Input, Tag } from 'antd'
+import { Col, DatePicker, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopBienCheItem from './lop-bien-che'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+
 // const { Option } = Select;
 interface FilterProps {
     semesterId: string | null //Học kỳ
@@ -123,7 +124,7 @@ export default function SubjectClassScore() {
                       ...(filters.trainingObjectTypeId
                           ? { trainingObjectTypeId: filters.trainingObjectTypeId }
                           : {}),
-                      ...(filters.timeFilter && filters.timeFilter[0] && filters.timeFilter[1]
+                      ...(filters.timeFilter?.[0] && filters.timeFilter[1]
                           ? {
                                 time: {
                                     gte: new Date(filters.timeFilter[0]).toISOString(),
@@ -445,10 +446,9 @@ export default function SubjectClassScore() {
                                                         style={{ fontSize: '0.8em', color: 'gray' }}
                                                     >
                                                         Xuất sắc: {countByType['Xuất sắc']} | Tốt:{' '}
-                                                        {countByType['Tốt']} | Khá:{' '}
-                                                        {countByType['Khá']} | Trung bình:{' '}
-                                                        {countByType['Trung bình']} | Yếu:{' '}
-                                                        {countByType['Yếu']}
+                                                        {countByType.Tốt} | Khá: {countByType.Khá} |
+                                                        Trung bình: {countByType['Trung bình']} |
+                                                        Yếu: {countByType.Yếu}
                                                     </div>
                                                 </div>
                                             )

@@ -1,6 +1,7 @@
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { Tree } from 'antd'
 import type React from 'react'
+
 interface Item {
     code: string | null
     name: string
