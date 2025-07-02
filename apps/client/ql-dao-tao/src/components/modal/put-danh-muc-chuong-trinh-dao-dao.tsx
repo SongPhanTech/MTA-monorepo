@@ -11,7 +11,7 @@ import {
     useFindUniqueCurriculum,
     useUpdateCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Switch, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Radio, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -55,6 +55,7 @@ const PutCurriculum = () => {
                 trainingMajorId: output.trainingMajorId,
                 managementOrganizationId: output.managementOrganizationId,
                 documentPaths: output.documentPaths,
+                active: output.active,
             }
             if (id) {
                 await updateCurriculum({
@@ -87,7 +88,6 @@ const PutCurriculum = () => {
         { enabled: !!id }
     )
     const treeData = buildOrgTree(manageOrgData)
-    const [active, setActive] = useState(true)
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -96,14 +96,12 @@ const PutCurriculum = () => {
                 ...initialData,
             })
             setDocument(initialData?.documentPaths)
-            setActive(initialData?.active)
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [initialData])
-
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
-    }
 
     return (
         <PutFormModal
@@ -173,18 +171,12 @@ const PutCurriculum = () => {
                 </FormItem>
             </Col>
             {id && (
-                <Col span={12} className="flex items-center">
-                    <FormItem form={form} name="active" label="" valuePropName="checked">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                            }}
-                        >
-                            <Switch checked={active} onChange={handleChange} />
-                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                        </div>
+                <Col span={12}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
                     </FormItem>
                 </Col>
             )}

@@ -519,11 +519,16 @@ export default function TrainingProgramCatalog() {
                                 width: 110,
                             },
                             {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
+                                title: 'Số kỳ học',
+                                dataIndex: 'numberOfSemesters',
                                 align: 'center',
-                                width: 200,
-                                render: (value) => <span className="line-clamp-1">{value}</span>,
+                                width: 100,
+                            },
+                            {
+                                title: 'Thời gian đào tạo',
+                                dataIndex: ['trainingTime', 'name'],
+                                align: 'center',
+                                width: 140,
                             },
                             {
                                 title: 'Năm khởi tạo',
@@ -540,16 +545,11 @@ export default function TrainingProgramCatalog() {
                                 render: (value) => dayjs(value).year(),
                             },
                             {
-                                title: 'Số kỳ học',
-                                dataIndex: 'numberOfSemesters',
+                                title: 'Mô tả',
+                                dataIndex: 'description',
                                 align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Thời gian đào tạo',
-                                dataIndex: ['trainingTime', 'name'],
-                                align: 'center',
-                                width: 140,
+                                width: 200,
+                                render: (value) => <span className="line-clamp-1">{value}</span>,
                             },
                             {
                                 title: 'Trạng thái',

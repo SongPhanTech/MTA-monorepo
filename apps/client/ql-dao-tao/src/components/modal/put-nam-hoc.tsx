@@ -5,12 +5,11 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { SchoolYear } from '@workspace/db'
 import {
-    useCountSchoolYear,
     useCreateSchoolYear,
     useFindUniqueSchoolYear,
     useUpdateSchoolYear,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -41,7 +40,7 @@ const PutSchoolYearModal = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,
-                order: output.order,
+                active: output.active
             }
             if (id) {
                 await updateSchoolYear({
@@ -68,8 +67,6 @@ const PutSchoolYearModal = () => {
         hideSpinner()
     }
 
-    const { data: schoolYearCount = 0 } = useCountSchoolYear()
-
     const { data: level } = useFindUniqueSchoolYear(
         {
             where: { id },
@@ -83,11 +80,10 @@ const PutSchoolYearModal = () => {
                 ...level,
                 startDate: dayjs(level.startDate),
                 endDate: level.endDate ? dayjs(level.endDate) : undefined,
-                order: schoolYearCount + 1,
             })
         } else {
             form.setFieldsValue({
-                order: schoolYearCount + 1,
+                active: true,
             })
         }
     }, [level])
@@ -113,16 +109,6 @@ const PutSchoolYearModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber
-                        style={{ width: '100%' }}
-                        placeholder="Nhập thứ tự năm học"
-                        step={1}
-                        min={1}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={24}>
                 <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
@@ -137,6 +123,16 @@ const PutSchoolYearModal = () => {
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

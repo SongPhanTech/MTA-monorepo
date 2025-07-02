@@ -9,7 +9,7 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Radio, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -76,6 +76,10 @@ const PutSubjectListModal = () => {
             form.setFieldsValue({
                 ...subject,
             })
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [subject, form])
 
@@ -123,29 +127,21 @@ const PutSubjectListModal = () => {
                     />
                 </Form.Item>
             </Col>
-            {/* {id && (
-                <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name="active"
-                        label="Trạng thái"
-                    >
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
-                    </FormItem>
-                </Col>
-            )} */}
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
+            {id && (
+                <Col span={12}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

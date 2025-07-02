@@ -20,7 +20,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Row, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -132,7 +132,6 @@ const PutCurriculumVersion = () => {
         },
         { enabled: !!input?.versionId }
     )
-    const [active, setActive] = useState(true)
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -141,14 +140,12 @@ const PutCurriculumVersion = () => {
                 ...initialValue,
             })
             setDocument(initialValue?.documentPaths)
-            setActive(initialValue?.active)
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [initialValue])
-
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
-    }
 
     return (
         <PutFormModal
@@ -398,6 +395,21 @@ const PutCurriculumVersion = () => {
                                         <Input.TextArea placeholder="Nhập mô tả" />
                                     </FormItem>
                                 </Col>
+                                {input?.versionId && (
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name={'active'}
+                                            label="Trạng thái"
+                                            required
+                                        >
+                                            <Radio.Group buttonStyle="solid">
+                                                <Radio value={true}>Đang hoạt động</Radio>
+                                                <Radio value={false}>Ngừng hoạt động</Radio>
+                                            </Radio.Group>
+                                        </FormItem>
+                                    </Col>
+                                )}
                                 <Col span={24}>
                                     <FormItem
                                         form={form}
@@ -514,22 +526,6 @@ const PutCurriculumVersion = () => {
                     },
                 ]}
             />
-            {input?.versionId && (
-                <Col span={12} className="flex items-center">
-                    <FormItem form={form} name="active" label="" valuePropName="checked">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                            }}
-                        >
-                            <Switch checked={active} onChange={handleChange} />
-                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                        </div>
-                    </FormItem>
-                </Col>
-            )}
         </PutFormModal>
     )
 }

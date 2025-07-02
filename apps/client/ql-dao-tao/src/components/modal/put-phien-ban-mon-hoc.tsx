@@ -11,7 +11,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Switch, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -49,7 +49,6 @@ const PutVersionSubjectModal = () => {
         },
     })
 
-    const [active, setActive] = useState(true)
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { options } = useExamTypeOptions()
@@ -179,14 +178,12 @@ const PutVersionSubjectModal = () => {
                 ),
             })
             setDocument(subjectVersion.documentPaths)
-            setActive(subjectVersion.active)
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [subjectVersion, form])
-
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
-    }
 
     return (
         <PutFormModal
@@ -321,17 +318,11 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="active" label="Trạng thái" valuePropName="checked">
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                        }}
-                    >
-                        <Switch checked={active} onChange={handleChange} />
-                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                    </div>
+                <FormItem form={form} name={'active'} label="Trạng thái" required>
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Đang hoạt động</Radio>
+                        <Radio value={false}>Ngừng hoạt động</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
             {/*  */}
