@@ -59,6 +59,9 @@ model Student extends Base {
   trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
 
+  academicWarningLevel      Int                     @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel  Int                     @default(0) // mức cảnh cáo học đường
+
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
