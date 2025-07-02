@@ -949,7 +949,9 @@ Table StudentSemesterResult {
   cumulativeGpaBase4 Float [not null]
   gpaBase10 Float [not null]
   cumulativeGpaBase10 Float [not null]
+  studentTrainingType StudentTrainingType [not null]
   lowestFinalScore Float [not null]
+  lowestGraduationScore Float
   totalCredits Int [not null]
   registeredCredits Int [not null]
   retakingCredits Int [not null]
@@ -2547,6 +2549,7 @@ Enum CriteriaField {
   REGISTERED_CREDITS
   ACCUMULATED_CREDITS_PERCENT
   COURSE_GRADE_MIN
+  GRADUATION_GRADE_MIN
   SEMESTER_GPA
   ENTRY_SCORE
   CONDUCT

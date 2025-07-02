@@ -225,6 +225,7 @@ enum CriteriaField {
   REGISTERED_CREDITS
   ACCUMULATED_CREDITS_PERCENT
   COURSE_GRADE_MIN
+  GRADUATION_GRADE_MIN
   SEMESTER_GPA
   ENTRY_SCORE
   CONDUCT
@@ -1265,7 +1266,9 @@ model StudentSemesterResult {
   cumulativeGpaBase4       Float
   gpaBase10                Float
   cumulativeGpaBase10      Float
+  studentTrainingType      StudentTrainingType
   lowestFinalScore         Float
+  lowestGraduationScore    Float?
   totalCredits             Int
   registeredCredits        Int
   retakingCredits          Int
