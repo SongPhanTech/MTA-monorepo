@@ -313,6 +313,8 @@ Table FixedClass {
   summary String
   startYear Int
   graduated Boolean [default: false]
+  classMonitor Student
+  classMonitorId String [unique]
   trainingCourse TrainingCourse
   trainingCourseId String
   managementOrganization DM_DonVi
@@ -891,7 +893,9 @@ Table Student {
   trainingLocation TrainingLocation
   trainingLocationId String
   priorityObject PriorityObject [not null, note: 'đối tượng ưu tiên']
+  unionLeader String
   status StudentStatus [not null, default: 'ENROLLED']
+  classMonitor FixedClass
   fixedClass FixedClass
   fixedClassId String
   subjectClassStudent StudentSubjectScore [not null]
@@ -988,6 +992,8 @@ Table StudentYearResult {
   studentTrainingType StudentTrainingType [not null]
   totalCredits Int [not null]
   failedCredits Int [not null]
+  isClassMonitor Boolean [not null]
+  isUnionLeader Boolean [not null]
   academicWarningLevel Int [not null, default: 0]
   disciplinaryWarningLevel Int [not null, default: 0]
   suspended Boolean [not null, default: false]
@@ -2589,6 +2595,8 @@ Ref: TrainingCourse.semesterStartId > Semester.id
 
 Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
 
+Ref: FixedClass.classMonitorId - Student.id
+
 Ref: FixedClass.trainingCourseId > TrainingCourse.id
 
 Ref: FixedClass.managementOrganizationId > DM_DonVi.Id
@@ -2663,7 +2671,7 @@ Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 
 Ref: Student.trainingLocationId > TrainingLocation.id
 
-Ref: Student.fixedClassId > FixedClass.id
+Ref: Student.fixedClassId - FixedClass.id
 
 Ref: Student.userProfileId > UserProfile.id
 

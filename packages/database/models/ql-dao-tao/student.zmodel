@@ -21,8 +21,11 @@ model Student extends Base {
   /// đối tượng ưu tiên
   priorityObject            PriorityObject[]
 
+  unionLeader               String?
+
   status                    StudentStatus               @default(ENROLLED)
 
+  classMonitor              FixedClass?                 @relation("ClassMonitor")
   fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
   fixedClassId              String?
   subjectClassStudent       StudentSubjectScore[]
@@ -134,6 +137,9 @@ model StudentYearResult extends Base {
 
   totalCredits             Int      // tổng số tín chỉ tích lũy
   failedCredits            Int      // tín chỉ nợ tích lũy
+
+  isClassMonitor           Boolean  // Lớp trưởng
+  isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
 
   academicWarningLevel     Int                     @default(0)
   disciplinaryWarningLevel Int                     @default(0)

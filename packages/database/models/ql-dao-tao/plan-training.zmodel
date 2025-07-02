@@ -216,6 +216,9 @@ model FixedClass extends Base {
   startYear                Int?
   graduated                Boolean?           @default(false)
 
+  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?            @unique
+
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String?
 

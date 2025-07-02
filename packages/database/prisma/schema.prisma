@@ -601,6 +601,8 @@ model FixedClass {
   summary                  String?
   startYear                Int?
   graduated                Boolean?           @default(false)
+  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?            @unique()
   trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String?
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
@@ -1207,7 +1209,9 @@ model Student {
   trainingLocationId        String?
   /// đối tượng ưu tiên
   priorityObject            PriorityObject[]
+  unionLeader               String?
   status                    StudentStatus               @default(ENROLLED)
+  classMonitor              FixedClass?                 @relation("ClassMonitor")
   fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
   fixedClassId              String?
   subjectClassStudent       StudentSubjectScore[]
@@ -1306,6 +1310,8 @@ model StudentYearResult {
   studentTrainingType      StudentTrainingType
   totalCredits             Int
   failedCredits            Int
+  isClassMonitor           Boolean
+  isUnionLeader            Boolean
   academicWarningLevel     Int                     @default(0)
   disciplinaryWarningLevel Int                     @default(0)
   suspended                Boolean                 @default(false)
