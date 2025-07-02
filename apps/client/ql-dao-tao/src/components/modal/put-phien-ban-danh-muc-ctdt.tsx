@@ -108,9 +108,7 @@ const PutCurriculumVersion = () => {
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
-                    message.error(
-                        'Thiếu curriculumId, không thể tạo phiên bản chương trình đào tạo'
-                    )
+                    message.error('Thiếu curriculumId, không thể tạo phiên bản CTĐT')
                     return
                 }
                 await createCurriculumVersion({
@@ -159,11 +157,7 @@ const PutCurriculumVersion = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={
-                input?.versionId
-                    ? 'Sửa phiên bản chương trình đào tạo'
-                    : 'Thêm phiên bản chương trình đào tạo'
-            }
+            title={input?.versionId ? 'Sửa phiên bản CTĐT' : 'Thêm phiên bản CTĐT'}
             className="w-[60vw]"
             style={{ top: 20 }}
         >

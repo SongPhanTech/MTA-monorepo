@@ -9,7 +9,7 @@ import {
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message, Select } from 'antd'
+import { Col, Form, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -33,8 +33,19 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     const { data: initialValue } = useFindUniqueTrainingBlockOnCurriculumVersion(
         {
             where: { id: input?.trainingBlockOnCurriculumVersionId },
+            include: {
+                subjects: {
+                    include: {
+                        subject: {
+                            include: {
+                                managementOrganization: true,
+                            },
+                        },
+                    },
+                },
+            },
         },
-        { enabled: !!input?.curriculumVersionId }
+        { enabled: !!input?.trainingBlockOnCurriculumVersionId }
     )
 
     const { data: trainingBlockData = [], refetch } = useFindManyTrainingBlock()
@@ -59,7 +70,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             const payload = {
                 trainingBlockId: output.trainingBlockId,
                 curriculumVersionId: input?.curriculumVersionId,
-                priority: output.priority,
             }
 
             if (input?.trainingBlockOnCurriculumVersionId) {
@@ -69,12 +79,21 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createTrainingBlockOnCurriculumVersion({
-                    data: {
-                        ...payload,
-                        curriculumVersionId: payload?.curriculumVersionId || '',
-                    },
-                })
+                const ids = Array.isArray(payload.trainingBlockId)
+                    ? payload.trainingBlockId
+                    : [payload.trainingBlockId]
+
+                await Promise.all(
+                    ids.map((trainingBlockId) =>
+                        createTrainingBlockOnCurriculumVersion({
+                            data: {
+                                trainingBlockId,
+                                curriculumVersionId: payload.curriculumVersionId || '',
+                            },
+                        })
+                    )
+                )
+
                 message.success('Thêm mới thành công')
             }
 
@@ -106,6 +125,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             <Col span={24}>
                 <FormItem form={form} name="trainingBlockId" label="Khối kiến thức" required>
                     <Select
+                        mode="multiple"
                         placeholder="Chọn khối kiến thức"
                         options={trainingBlockData.map((i: TrainingBlock) => {
                             return {
@@ -113,12 +133,8 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                                 label: i.name,
                             }
                         })}
+                        disabled={!!input?.trainingBlockOnCurriculumVersionId}
                     />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="priority" label="Thứ tự" required>
-                    <InputNumber placeholder="Thứ tự" className="w-full" />
                 </FormItem>
             </Col>
             {input?.trainingBlockOnCurriculumVersionId && (
