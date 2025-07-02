@@ -1,4 +1,10 @@
-import type { Prisma, TrainingBlockOnCurriculumVersion, TrainingBlockSubject } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    DocumentFile,
+    Prisma,
+    TrainingBlockOnCurriculumVersion,
+    TrainingBlockSubject,
+} from '@workspace/db'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
 import { message } from 'antd'
 import useSpinner from './spinner'
@@ -11,7 +17,12 @@ export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersion
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleCloneCurriculumVersion = async (initialValue: any) => {
+    const handleCloneCurriculumVersion = async (
+        initialValue: CurriculumVersion & {
+            trainingBlocks: TrainingBlockOnCurriculumVersion[]
+            documentFiles: DocumentFile[]
+        }
+    ) => {
         try {
             showSpinner()
             const originalVersion = initialValue
@@ -49,7 +60,15 @@ export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersion
                 summary: originalVersion.summary,
                 learningDiagram: originalVersion.learningDiagram,
                 guide: originalVersion.guide,
-                documentPaths: originalVersion.documentPaths,
+                documentFiles: {
+                    createMany: {
+                        data: originalVersion.documentFiles.map(({ name, path, mimeType }) => ({
+                            name,
+                            path,
+                            mimeType,
+                        })),
+                    },
+                },
                 renderPath: originalVersion.renderPath,
                 ...(originalVersion.diplomaTypeId
                     ? {

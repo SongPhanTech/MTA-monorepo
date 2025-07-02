@@ -1,6 +1,7 @@
 import '../base'
 import './categories'
 import '../ql-danh-muc/common'
+import '../ql-danh-muc/document'
 import '../ql-danh-muc/core-categories'
 import '../ql-nguoi-dung/profile'
 import './student'
@@ -91,8 +92,8 @@ model ArchivedCertificate extends Base {
   name                String
   englishName         String?
   finalScore          Float                                      @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết
-  documentPaths       String[] // Đường dẫn tài liệu
 
+  documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
   @@schema("ql-dao-tao")
 }
@@ -112,7 +113,7 @@ model ArchivedAward extends Base {
   name                String
   englishName         String?
   bonusScore          Float  // điểm thưởng
-  documentPaths       String[] // Đường dẫn tài liệu
+  documentFiles       DocumentFile[]
 
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
   @@schema("ql-dao-tao")
@@ -255,9 +256,9 @@ model Curriculum extends Base {
   trainingMajorId          String
 
   information              String?   //Thông tin
-  documentPaths            String[] // Đường dẫn tài liệu
   renderPath               String? // Đường dẫn tài liệu kết xuất
 
+  documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
   @@schema("ql-dao-tao")
 }
@@ -313,9 +314,9 @@ model CurriculumVersion extends Base {
   summary               String? // VIII. Mô tả tóm tắt nội dung các học phần
   learningDiagram       String? // IX. Sơ đồ mối liên hệ, tiến trình đào tạo các học phần và mô hình đào tạo, phân phối kiến thức trong CTĐT
   guide                 String? // X. Hướng dẫn thực hiện
-  documentPaths         String[] // Đường dẫn tài liệu
   renderPath            String? // Đường dẫn tài liệu kết xuất
 
+  documentFiles         DocumentFile[]
   trainingBlocks        TrainingBlockOnCurriculumVersion[]
   fixedClasses          FixedClass[] // Lớp niên chế
   students              Student[] // Học viên
@@ -388,7 +389,6 @@ model SubjectVersion extends Base {
   materials                String? // VIII. Cơ sở vật chất, học liệu
   rules                    String? // ​IX. Quy định của học phần
 
-  documentPaths            String[] // Đường dẫn tài liệu
 
   managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
@@ -409,6 +409,7 @@ model SubjectVersion extends Base {
 
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
+  documentFiles            DocumentFile[]
 
   @@schema("ql-dao-tao")
 }

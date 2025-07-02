@@ -14,5 +14,3 @@ abstract model Base {
   @@allow('all', auth().role == 'ADMIN')
   @@allow('read', auth() != null)
 }
-
-
