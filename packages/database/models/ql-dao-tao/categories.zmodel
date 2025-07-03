@@ -106,7 +106,7 @@ model Room extends Base {
 
 /// ngành đào tạo
 model TrainingField extends Base {
-  name                String
+  name                String                              @unique
   englishName         String
   publishDate         DateTime
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
