@@ -20,7 +20,7 @@ import dayjs from 'dayjs'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import 'dayjs/locale/vi'
-import { CUSSTOM_VI_LOCALE } from '@constants/constants'
+import { CUSTOM_VI_LOCALE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 
@@ -171,7 +171,7 @@ const FilterSubjectClass = (props: Props) => {
                                                 dates ? [dateStrings[0], dateStrings[1]] : null
                                             )
                                         }}
-                                        locale={CUSSTOM_VI_LOCALE}
+                                        locale={CUSTOM_VI_LOCALE}
                                         format="DD/MM/YYYY"
                                     />
                                 </Form.Item>

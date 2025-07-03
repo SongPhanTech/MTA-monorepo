@@ -170,8 +170,8 @@ const PutOpenSubjectClassModal = () => {
         useFindManyTrainingLocation()
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
-        include: { semesters: { orderBy: { order: 'asc' } } },
-        orderBy: { order: 'asc' },
+        include: { semesters: { orderBy: { createdAt: 'asc' } } },
+        orderBy: { createdAt: 'asc' },
     })
 
     const treeData = useMemo(() => {

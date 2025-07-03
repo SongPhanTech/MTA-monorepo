@@ -1,4 +1,4 @@
-import { FilterOutlined } from '@ant-design/icons'
+import { FilterFilled } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -84,6 +84,7 @@ export default function TrainingProgramSubjects() {
                     },
                 },
                 trainingTime: true,
+                documentFiles: true,
             },
         },
         { enabled: !!id }
@@ -258,6 +259,9 @@ export default function TrainingProgramSubjects() {
                         },
                     },
                 },
+                orderBy: {
+                    semester: 'asc',
+                },
             },
             trainingBlock: true,
         },
@@ -389,7 +393,6 @@ export default function TrainingProgramSubjects() {
 
     const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
         curriculumVersionId: string
-        trainingBlockOnCurriculumVersionId?: string
     }>({
         tag: PutTrainingBlockOnCurriculumVersion.name,
     })
@@ -506,8 +509,10 @@ export default function TrainingProgramSubjects() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button
-                                    onClick={() => handleCloneCurriculumVersion(initialValue)}
-                                    className="text-primary border-primary"
+                                    onClick={() =>
+                                        initialValue && handleCloneCurriculumVersion(initialValue)
+                                    }
+                                    className="text-primary border-primary mr-2"
                                     disabled={!initialValue}
                                 >
                                     <CopyPlus />
@@ -517,13 +522,12 @@ export default function TrainingProgramSubjects() {
                                     onClick={() =>
                                         onOpenTrainingBlock({
                                             curriculumVersionId: initialValue?.id as string,
-                                            trainingBlockOnCurriculumVersionId: '',
                                         })
                                     }
                                     type="primary"
                                 >
                                     <BookPlus />
-                                    Thêm khối kiến thức
+                                    Cập nhật khối kiến thức
                                 </Button>
                             </Flex>
                         </Col>
@@ -536,7 +540,7 @@ export default function TrainingProgramSubjects() {
                         headerTitleKey="name"
                         childrenFieldName="subjects"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        // defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',
@@ -598,7 +602,7 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: () => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
                                             color: filters.subjectCode ? '#005f37' : undefined,
                                         }}
@@ -679,7 +683,7 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: () => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
                                             color: filters.managementOrganizationId
                                                 ? '#005f37'
@@ -875,9 +879,9 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: (filtered) => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filtered ? '#005f37' : undefined,
                                         }}
                                     />
                                 ),
@@ -908,9 +912,9 @@ export default function TrainingProgramSubjects() {
                                     return record.active === value
                                 },
                                 filterIcon: (filtered) => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filtered ? '#005f37' : undefined,
                                         }}
                                     />
                                 ),
@@ -953,7 +957,7 @@ export default function TrainingProgramSubjects() {
                         ]}
                         data={processedData}
                         headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[75px] items-center">
+                            <div className="flex gap-2.5 w-[80px] justify-center items-center">
                                 <CreateIcon
                                     title={'Thêm môn học'}
                                     onClick={(e) => {
@@ -967,16 +971,7 @@ export default function TrainingProgramSubjects() {
                                         })
                                     }}
                                 />
-                                <EditIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenTrainingBlock({
-                                            curriculumVersionId: initialValue?.id as string,
-                                            trainingBlockOnCurriculumVersionId: id,
-                                        })
-                                    }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
+
                                 <DeleteIcon
                                     popConfirm={{
                                         onConfirm: () =>
@@ -986,13 +981,7 @@ export default function TrainingProgramSubjects() {
                                 />
                             </div>
                         )}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

@@ -1,5 +1,5 @@
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import { CUSSTOM_VI_LOCALE } from '@constants/constants'
+import { CUSTOM_VI_LOCALE } from '@constants/constants'
 import type { TrainingScoreSession } from '@workspace/db'
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { DatePicker, Form, Input, Modal, Select } from 'antd'
@@ -30,8 +30,7 @@ const ModalDotDanhGia: React.FC<ModalDotDanhGiaProps> = ({
     const handleOk = () => {
         form.validateFields()
             .then((values) => {
-                console.log('Received values:', values)
-                if (isEdit) {
+                if (isEdit && data?.id) {
                     onEdit(data?.id, values)
                 } else {
                     onSubmit(values)
@@ -46,7 +45,6 @@ const ModalDotDanhGia: React.FC<ModalDotDanhGiaProps> = ({
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     useEffect(() => {
-        console.log('ModalDotDanhGia useEffect', isEdit, data)
         if (isEdit && data) {
             form.setFieldsValue({
                 tenDot: data.name,
@@ -104,7 +102,7 @@ const ModalDotDanhGia: React.FC<ModalDotDanhGiaProps> = ({
                 >
                     <DatePicker
                         style={{ width: '100%' }}
-                        locale={CUSSTOM_VI_LOCALE}
+                        locale={CUSTOM_VI_LOCALE}
                         format="DD/MM/YYYY"
                     />
                 </Form.Item>

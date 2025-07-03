@@ -84,7 +84,7 @@ model StudentSemesterResult extends Base {
   semesterIndexInCourse    Int   // học kỳ thứ mấy trong toàn khoá học
   isLastSemester           Boolean
 
-  baseType                 AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
   gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
   cumulativeGpaBase4       Float    // Tích luỹ hệ 4
   gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
@@ -133,7 +133,7 @@ model StudentYearResult extends Base {
   studyYear                Int   // năm học thứ mấy
   isLastStudyYear          Boolean
 
-  baseType                 AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
   gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
   cumulativeGpaBase4       Float    // Tích luỹ hệ 4
   gpaBase10                Float    // Điểm trung bình học kỳ hệ 10

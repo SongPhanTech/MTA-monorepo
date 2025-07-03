@@ -17,8 +17,9 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
+import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -395,6 +396,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Xem chi tiết" placement="top">
+                                            <Eye
+                                                size={16}
+                                                strokeWidth={1.5}
+                                                className="text-base cursor-pointer"
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()
@@ -404,7 +412,10 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: (e) => {
+                                                    handleDelete(id)
+                                                    e?.stopPropagation()
+                                                },
                                             }}
                                         />
                                     </Row>

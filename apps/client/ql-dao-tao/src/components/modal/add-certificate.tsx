@@ -91,6 +91,7 @@ const PutAddCertificateScoreModal = () => {
                     listCertificates.push({ archivedCertificate: item })
                 }
             }
+            if (!trainingCourse) return
             const finalScore = calcFinalScore(trainingCourse, {
                 ...input.subjectClassStudent,
                 certificates: listCertificates,

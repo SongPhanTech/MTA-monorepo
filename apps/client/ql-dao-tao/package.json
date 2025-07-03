@@ -41,6 +41,8 @@
 		"react": "catalog:",
 		"react-chartjs-2": "catalog:",
 		"react-day-picker": "catalog:",
+		"react-dnd": "^16.0.1",
+		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "catalog:",
 		"react-hook-disclosure-modal": "catalog:",
 		"react-icons": "catalog:",
@@ -55,6 +57,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
+		"@types/file-saver": "^2.0.7",
 		"@types/lodash": "catalog:",
 		"@types/minio": "catalog:",
 		"@types/node": "catalog:",

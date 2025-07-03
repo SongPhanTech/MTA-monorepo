@@ -119,7 +119,7 @@ const FilterMonHocCTDT = (props: Props) => {
                             >
                                 <Select
                                     placeholder="Chọn khoá đào tạo"
-                                    options={trainingCourseData.map((i: TrainingObjectType) => ({
+                                    options={trainingCourseData.map((i) => ({
                                         value: i.id,
                                         label: i.name,
                                     }))}

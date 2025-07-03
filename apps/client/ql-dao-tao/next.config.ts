@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
         '@workspace/router',
         '@workspace/ui',
     ],
-    output: 'standalone',
+    // output: 'export',
     crossOrigin: 'anonymous',
     webpack: (config) => {
         config.optimization.minimize = true

@@ -6,6 +6,7 @@ import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersion,
     DiplomaType,
+    DocumentFile,
     TrainingForm,
     TrainingObjectType,
     TrainingTime,
@@ -20,7 +21,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Row, Switch } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -29,7 +30,9 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
-export type PutCurriculumVersion = CurriculumVersion
+export type PutCurriculumVersion = CurriculumVersion & {
+    documentFiles?: DocumentFile[]
+}
 dayjs.locale('vi')
 
 type CurriculumVersionInput = {
@@ -38,7 +41,7 @@ type CurriculumVersionInput = {
 }
 
 const PutCurriculumVersion = () => {
-    const [document, setDocument] = useState<string[]>([])
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
     const { options: trainingLanguageOptions } = useTrainingLanguageOptions()
 
@@ -63,7 +66,7 @@ const PutCurriculumVersion = () => {
         if (!output) return
         try {
             showSpinner()
-            const data = {
+            const baseData = {
                 curriculumId: input?.curriculumId || '',
                 code: output.code,
                 name: output.name,
@@ -83,7 +86,6 @@ const PutCurriculumVersion = () => {
                 // scoreToTakeExam: output.scoreToTakeExam,
                 // scoreToPass: output.scoreToPass,
                 description: output.description,
-                documentPaths: output.documentPaths,
                 active: output.active,
                 electiveCredits: output.electiveCredits,
                 requiredCredits: output.requiredCredits,
@@ -99,8 +101,45 @@ const PutCurriculumVersion = () => {
                 guide: output.guide,
             }
             if (input?.versionId) {
+                const updateData = {
+                    ...baseData,
+                    documentFiles: {
+                        upsert: (output.documentFiles || [])
+                            .filter((file) => !!file.id)
+                            .map((file) => ({
+                                where: { id: file.id },
+                                create: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                    curriculumVersion: { connect: { id: input?.versionId } },
+                                },
+                                update: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                },
+                            })),
+                        create: (output.documentFiles || [])
+                            .filter((file) => !file.id)
+                            .map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        disconnect: document
+                            .filter(
+                                (existing) =>
+                                    !output.documentFiles?.some((f) => f.id === existing.id)
+                            )
+                            .map((file) => ({ id: file.id })),
+                    },
+                }
                 await updateCurriculumVersion({
-                    data: data,
+                    data: updateData,
                     where: {
                         id: input?.versionId,
                     },
@@ -112,7 +151,17 @@ const PutCurriculumVersion = () => {
                     return
                 }
                 await createCurriculumVersion({
-                    data: data,
+                    data: {
+                        ...baseData,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
@@ -129,10 +178,12 @@ const PutCurriculumVersion = () => {
     const { data: initialValue } = useFindUniqueCurriculumVersion(
         {
             where: { id: input?.versionId },
+            include: {
+                documentFiles: true,
+            },
         },
         { enabled: !!input?.versionId }
     )
-    const [active, setActive] = useState(true)
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -140,15 +191,17 @@ const PutCurriculumVersion = () => {
             form.setFieldsValue({
                 ...initialValue,
             })
-            setDocument(initialValue?.documentPaths)
-            setActive(initialValue?.active)
+            setDocument(initialValue?.documentFiles)
+        } else {
+            form.setFieldsValue({
+                active: true,
+                documentFiles: [],
+            })
+            setDocument([])
         }
     }, [initialValue])
 
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
-    }
+    console.log('123: ', initialValue?.documentFiles)
 
     return (
         <PutFormModal
@@ -398,13 +451,33 @@ const PutCurriculumVersion = () => {
                                         <Input.TextArea placeholder="Nhập mô tả" />
                                     </FormItem>
                                 </Col>
+                                {input?.versionId && (
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name={'active'}
+                                            label="Trạng thái"
+                                            required
+                                        >
+                                            <Radio.Group buttonStyle="solid">
+                                                <Radio value={true}>Đang hoạt động</Radio>
+                                                <Radio value={false}>Ngừng hoạt động</Radio>
+                                            </Radio.Group>
+                                        </FormItem>
+                                    </Col>
+                                )}
                                 <Col span={24}>
                                     <FormItem
                                         form={form}
-                                        name="documentPaths"
+                                        name="documentFiles"
                                         label="Tài liệu đính kèm"
                                     >
-                                        <DocumentPaths form={form} data={document} />
+                                        <DocumentPaths
+                                            form={form}
+                                            data={document}
+                                            relationId={input?.versionId ?? ''}
+                                            relationType="curriculumVersionId"
+                                        />
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -514,22 +587,6 @@ const PutCurriculumVersion = () => {
                     },
                 ]}
             />
-            {input?.versionId && (
-                <Col span={12} className="flex items-center">
-                    <FormItem form={form} name="active" label="" valuePropName="checked">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                            }}
-                        >
-                            <Switch checked={active} onChange={handleChange} />
-                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                        </div>
-                    </FormItem>
-                </Col>
-            )}
         </PutFormModal>
     )
 }

@@ -66,11 +66,10 @@ const audience = config.keycloak.clientId
 
 setupOpenApi(app)
 
-app.route('/api', UserProfileApp)
+app.route('/api/user-profile', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
-app.route('/api/user-profile', UserProfileApp)
 app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
 

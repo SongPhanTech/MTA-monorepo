@@ -4,12 +4,13 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { ExportTemplateExam, ModalPrintStudentSubjectScore } from '@components/modal'
+import { ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
+import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { ArchivedAward, TrainingObjectType } from '@workspace/db'
+import type { ArchivedAward, SubjectClass, TrainingObjectType } from '@workspace/db'
 import {
     useCountStudentSubjectScore,
     useFindManyStudentSubjectScore,
@@ -17,7 +18,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { calcFinalScore } from '@workspace/libs/utils'
+import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -49,7 +50,7 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
-    const [subjectClassFullData, setSubjectClassFullData] = useState<any[]>([])
+    const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
     const [_nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
@@ -201,8 +202,8 @@ export default function SubjectClassScore() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
+        // take: numberOfPages,
+        // skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
@@ -217,7 +218,11 @@ export default function SubjectClassScore() {
                         userProfile: true,
                         fixedClass: {
                             include: {
-                                trainingCourse: true,
+                                trainingCourse: {
+                                    include: {
+                                        scoreConverts: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -320,6 +325,7 @@ export default function SubjectClassScore() {
     const [scoreHoanThi, setScoreHoanThi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreDinhChi, setscoreDinhChi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreLyDo, setScoreLyDo] = useState<{ id: string; value: string }[]>([])
+    const statistics = getScoreStatistics(dataTable)
 
     const renderFinalScore = (record: any) => {
         const attendanceScore =
@@ -1268,6 +1274,16 @@ export default function SubjectClassScore() {
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
+                    {selectedFixedClass && (
+                        <div className="flex flex-row gap-2">
+                            <div className="font-bold">Tổng hợp kết quả thi:</div>
+                            {Object.entries(statistics).map(([type, { count, percentage }]) => (
+                                <p key={type}>
+                                    {type}: {count}= {percentage}%
+                                </p>
+                            ))}
+                        </div>
+                    )}
                 </Col>
             </Col>
         </div>

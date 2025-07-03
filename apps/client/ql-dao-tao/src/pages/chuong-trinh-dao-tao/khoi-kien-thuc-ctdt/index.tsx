@@ -1,4 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -7,7 +6,7 @@ import { PutTrainingBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Curriculum, TrainingObjectType } from '@workspace/db'
+import type { Curriculum, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingBlock,
     useFindManyCurriculum,
@@ -18,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -231,7 +230,7 @@ export default function TrainingBlock() {
                                         <Select
                                             placeholder="Khoá đào tạo"
                                             options={trainingCourseData.map(
-                                                (i: TrainingObjectType) => ({
+                                                (i: TrainingCourse) => ({
                                                     value: i.id,
                                                     label: i.name,
                                                 })
@@ -272,7 +271,7 @@ export default function TrainingBlock() {
                         <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
-                                    <PlusOutlined />
+                                    <BookPlus />
                                     Thêm
                                 </Button>
                             </Flex>
@@ -319,14 +318,6 @@ export default function TrainingBlock() {
                             //     dataIndex: 'specializedCredits',
                             //     width: 150,
                             // },
-                            {
-                                title: 'Thứ tự',
-                                dataIndex: 'priority',
-                                sorter: (a: { priority: number }, b: { priority: number }) =>
-                                    a.priority - b.priority,
-                                align: 'center',
-                                width: 100,
-                            },
                             {
                                 title: 'Trạng thái',
                                 dataIndex: 'active',

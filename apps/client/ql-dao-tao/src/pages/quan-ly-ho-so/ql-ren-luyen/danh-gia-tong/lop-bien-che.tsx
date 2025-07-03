@@ -48,18 +48,19 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
         name: item.name,
         id: item.id,
     }))
-    const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
-        useFindManyTrainingCourse({
-            orderBy: { name: 'asc' },
-        })
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
     // Lấy danh sách Fixed Classes
-    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
         where: {
             trainingCourseId: {
                 in: trainingCourses.map((course) => course.id),
             },
-            objectTrainingTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            curriculumVersion: {
+                trainingObjectTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            },
             name: className ? { contains: className } : undefined,
         },
     })

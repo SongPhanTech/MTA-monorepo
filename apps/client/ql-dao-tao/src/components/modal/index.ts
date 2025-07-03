@@ -1,7 +1,6 @@
 import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
-import ExportTemplateExam from './in-phieu-danh-sach-thi'
 import ModalGPASemester from './modal-diem-trung-binh-lop'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
@@ -86,5 +85,4 @@ export {
     HanNhapDiem,
     PutCloneConvertScore,
     ModalPrintStudentSubjectScore,
-    ExportTemplateExam,
 }

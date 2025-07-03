@@ -9,7 +9,14 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    DocumentFile,
+    TrainingBlockOnCurriculumVersion,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -171,6 +178,7 @@ export default function TrainingProgramCatalog() {
                             },
                         },
                     },
+                    documentFiles: true,
                 },
             },
             managementOrganization: true,
@@ -453,7 +461,7 @@ export default function TrainingProgramCatalog() {
                         headerTitleKey="name"
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        // defaultExpandAll
                         onRowClick={(record) => handleRowClick(record)}
                         columns={[
                             {
@@ -519,11 +527,16 @@ export default function TrainingProgramCatalog() {
                                 width: 110,
                             },
                             {
-                                title: 'Mô tả',
-                                dataIndex: 'description',
+                                title: 'Số kỳ học',
+                                dataIndex: 'numberOfSemesters',
                                 align: 'center',
-                                width: 200,
-                                render: (value) => <span className="line-clamp-1">{value}</span>,
+                                width: 100,
+                            },
+                            {
+                                title: 'Thời gian đào tạo',
+                                dataIndex: ['trainingTime', 'name'],
+                                align: 'center',
+                                width: 140,
                             },
                             {
                                 title: 'Năm khởi tạo',
@@ -540,16 +553,11 @@ export default function TrainingProgramCatalog() {
                                 render: (value) => dayjs(value).year(),
                             },
                             {
-                                title: 'Số kỳ học',
-                                dataIndex: 'numberOfSemesters',
+                                title: 'Mô tả',
+                                dataIndex: 'description',
                                 align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Thời gian đào tạo',
-                                dataIndex: ['trainingTime', 'name'],
-                                align: 'center',
-                                width: 140,
+                                width: 200,
+                                render: (value) => <span className="line-clamp-1">{value}</span>,
                             },
                             {
                                 title: 'Trạng thái',
@@ -583,7 +591,12 @@ export default function TrainingProgramCatalog() {
                                                 <CopyPlusIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        handleCloneCurriculumVersion(record)
+                                                        handleCloneCurriculumVersion(
+                                                            record as CurriculumVersion & {
+                                                                trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                                documentFiles: DocumentFile[]
+                                                            }
+                                                        )
                                                     }}
                                                 />
                                                 <EditIcon
@@ -598,10 +611,12 @@ export default function TrainingProgramCatalog() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
+                                                        onConfirm: (e) => {
                                                             handleDeleteCurriculumVersion(
                                                                 record?.id
-                                                            ),
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

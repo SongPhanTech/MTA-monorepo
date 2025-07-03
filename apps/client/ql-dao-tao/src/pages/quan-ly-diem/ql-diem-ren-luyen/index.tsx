@@ -323,12 +323,10 @@ export default function SubjectClassScore() {
                                             >
                                                 <Select
                                                     placeholder="Năm học"
-                                                    options={schoolYearData.map(
-                                                        (i: TrainingObjectType) => ({
-                                                            value: i.id,
-                                                            label: i.name,
-                                                        })
-                                                    )}
+                                                    options={schoolYearData.map((i) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }))}
                                                     style={{
                                                         height: 40,
                                                     }}
@@ -350,12 +348,10 @@ export default function SubjectClassScore() {
                                             >
                                                 <Select
                                                     placeholder="Học kỳ"
-                                                    options={semesterData.map(
-                                                        (i: TrainingObjectType) => ({
-                                                            value: i.id,
-                                                            label: i.name,
-                                                        })
-                                                    )}
+                                                    options={semesterData.map((i) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    }))}
                                                     style={{
                                                         height: 40,
                                                     }}

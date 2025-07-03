@@ -249,6 +249,7 @@ const PutFixedClassModal = () => {
             }
             if (id) {
                 if (
+                    oldFixedClass &&
                     output.curriculumVersionId !== oldFixedClass.curriculumVersionId &&
                     oldFixedClass._count.students > 0
                 ) {

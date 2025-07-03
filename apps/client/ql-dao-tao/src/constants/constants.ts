@@ -147,7 +147,7 @@ const SUBJECT_CLASS_SCHEDULE_TYPE = {
     EVENINGE: 'Tối',
 }
 
-const CUSSTOM_VI_LOCALE = {
+const CUSTOM_VI_LOCALE = {
     lang: {
         locale: 'vi_VN',
         placeholder: 'Chọn ngày',
@@ -202,5 +202,5 @@ export {
     SUBJECT_CLASS_SCHEDULE_TYPE,
     SUBJECT_CLASS_STUDENT_STATUS,
     SUBJECT_CLASS_STUDENT_STATUS_OPTIONS,
-    CUSSTOM_VI_LOCALE,
+    CUSTOM_VI_LOCALE,
 }

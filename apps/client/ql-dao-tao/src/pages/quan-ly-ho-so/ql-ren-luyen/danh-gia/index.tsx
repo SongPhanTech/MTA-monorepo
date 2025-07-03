@@ -2,7 +2,7 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { PutOpenClassModal } from '@components/modal'
-import { CUSSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { CUSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Semester, TrainingObjectType } from '@workspace/db'
@@ -234,7 +234,7 @@ export default function SubjectClassScore() {
                     await createStudentTrainingScore({
                         data: {
                             studentId: score.studentId,
-                            trainingScoreSessionId: selectedTrainingScoreSessionId,
+                            trainingScoreSessionId: selectedTrainingScoreSessionId ?? '',
                             score: score.trainingScore,
                         },
                     })
@@ -378,7 +378,7 @@ export default function SubjectClassScore() {
                                                                 : null,
                                                         }))
                                                     }}
-                                                    locale={CUSSTOM_VI_LOCALE}
+                                                    locale={CUSTOM_VI_LOCALE}
                                                     format="DD/MM/YYYY"
                                                 />
                                             </Form.Item>
@@ -386,7 +386,7 @@ export default function SubjectClassScore() {
                                     </Flex>
                                 </Col>
 
-                                <Col span={6}></Col>
+                                <Col span={6} />
                             </Row>
                             <Row className="mt-4">
                                 <Col span={20} className="flex">

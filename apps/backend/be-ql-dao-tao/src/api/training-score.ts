@@ -60,7 +60,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
 })
 
 const uploadExcelImportTrainingScore = createRoute({
-    operationId: 'uploadExcelImportScore',
+    operationId: 'uploadExcelImportTrainingScore',
     path: '/upload-excel-import-score',
     method: 'post',
     description:
@@ -74,7 +74,7 @@ const uploadExcelImportTrainingScore = createRoute({
                     schema: UploadExcelModel.extend({
                         fixedClassId: z.string(), // loại thông tin
                         trainingSessionId: z.string(), // loại thông tin
-                    }).openapi('uploadExcelImportScore'),
+                    }).openapi('uploadExcelImportTrainingScore'),
                 },
             },
         },

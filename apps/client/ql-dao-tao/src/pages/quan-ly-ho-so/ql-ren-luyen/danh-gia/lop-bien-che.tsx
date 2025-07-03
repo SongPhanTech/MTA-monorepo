@@ -59,7 +59,9 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             trainingCourseId: {
                 in: trainingCourses.map((course) => course.id),
             },
-            objectTrainingTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            curriculumVersion: {
+                trainingObjectTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            },
             name: className ? { contains: className } : undefined,
         },
     })

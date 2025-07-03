@@ -845,6 +845,7 @@ model TrainingObjectType {
   updatedAt            DateTime                            @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
+  baseScore            AcademicRankingBaseType
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -982,7 +983,7 @@ model TrainingField {
   deletedAt           DateTime?
   createdAt           DateTime                            @default(now())
   updatedAt           DateTime                            @updatedAt()
-  name                String
+  name                String                              @unique()
   englishName         String
   publishDate         DateTime
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
@@ -1169,7 +1170,7 @@ model AcademicRankingConvert {
   createdAt        DateTime                @default(now())
   updatedAt        DateTime                @updatedAt()
   classification   String
-  type             AcademicRankingBaseType
+  baseScore        AcademicRankingBaseType
   base10Min        Float?
   base10Max        Float?
   base4Min         Float?
@@ -1234,6 +1235,8 @@ model Student {
   studyRankId               String?
   trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
+  academicWarningLevel      Int                         @default(0)
+  disciplinaryWarningLevel  Int                         @default(0)
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
@@ -1261,7 +1264,7 @@ model StudentSemesterResult {
   studyYear                Int
   semesterIndexInCourse    Int
   isLastSemester           Boolean
-  baseType                 AcademicRankingBaseType
+  baseScore                AcademicRankingBaseType
   gpaBase4                 Float
   cumulativeGpaBase4       Float
   gpaBase10                Float
@@ -1305,7 +1308,7 @@ model StudentYearResult {
   schoolYearId             String
   studyYear                Int
   isLastStudyYear          Boolean
-  baseType                 AcademicRankingBaseType
+  baseScore                AcademicRankingBaseType
   gpaBase4                 Float
   cumulativeGpaBase4       Float
   gpaBase10                Float
@@ -1619,8 +1622,7 @@ model UserProfile {
 
 model DM_CapBac {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1633,6 +1635,7 @@ model DM_CapBac {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
@@ -1640,8 +1643,7 @@ model DM_CapBac {
 
 model DM_ChucDanh {
   Id               String             @id() @default(cuid())
-  sMa              String?
-  sTen             String?
+  sMa              String?            @unique()
   sGhiChu          String?
   iSTT             Int?               @default(0)
   bActive          Boolean?           @default(true)
@@ -1654,6 +1656,7 @@ model DM_ChucDanh {
   sNguoiSua        String?
   sThietBiTao      String?
   sThietBiSua      String?
+  sTen             String             @unique()
   iLoaiChucDanh    Int?               @default(0)
   DM_ViTriCongViec DM_ViTriCongViec[]
   userProfile      UserProfile[]
@@ -1663,8 +1666,7 @@ model DM_ChucDanh {
 
 model DM_ChucVu {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1677,6 +1679,7 @@ model DM_ChucVu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("ql-danh-muc")
@@ -1684,8 +1687,7 @@ model DM_ChucVu {
 
 model DM_HocHam {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1698,6 +1700,7 @@ model DM_HocHam {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
@@ -1705,8 +1708,7 @@ model DM_HocHam {
 
 model DM_HocVi {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1719,6 +1721,7 @@ model DM_HocVi {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("ql-danh-muc")
@@ -1726,8 +1729,7 @@ model DM_HocVi {
 
 model DM_ChungChiTinHoc {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -1740,14 +1742,14 @@ model DM_ChungChiTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
 
   @@schema("ql-danh-muc")
 }
 
 model DM_DanToc {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1760,6 +1762,7 @@ model DM_DanToc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   sTenKhac       String?
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
@@ -1769,8 +1772,7 @@ model DM_DanToc {
 
 model DM_DonVi {
   Id               String            @id() @default(cuid())
-  sMa              String?
-  sTen             String?
+  sMa              String?           @unique()
   sGhiChu          String?
   iSTT             Int?              @default(0)
   bActive          Boolean?          @default(true)
@@ -1783,7 +1785,8 @@ model DM_DonVi {
   sNguoiSua        String?
   sThietBiTao      String?
   sThietBiSua      String?
-  sCode            String?
+  sTen             String            @unique()
+  sCode            String?           @unique()
   sTenVietTat      String?
   sParentId        String?
   sTruongDonVi     String?
@@ -1810,8 +1813,7 @@ model DM_DonVi {
 
 model DM_DonViHanhChinh {
   Id             String         @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?        @unique()
   sGhiChu        String?
   iSTT           Int?           @default(0)
   bActive        Boolean?       @default(true)
@@ -1824,6 +1826,7 @@ model DM_DonViHanhChinh {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String         @unique()
   sTen_En        String?
   tinh           DM_Tinh[]
   huyen          DM_QuanHuyen[]
@@ -1834,8 +1837,7 @@ model DM_DonViHanhChinh {
 
 model DM_KhuVuc_DiaLy {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -1848,6 +1850,7 @@ model DM_KhuVuc_DiaLy {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
   sTen_En        String?
   tinh           DM_Tinh[]
   student        Student[]
@@ -1857,8 +1860,7 @@ model DM_KhuVuc_DiaLy {
 
 model DM_NgoaiNgu {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -1871,14 +1873,14 @@ model DM_NgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
 
   @@schema("ql-danh-muc")
 }
 
 model DM_TonGiao {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1891,6 +1893,7 @@ model DM_TonGiao {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("ql-danh-muc")
@@ -1898,8 +1901,7 @@ model DM_TonGiao {
 
 model DM_TrinhDoNgoaiNgu {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -1912,6 +1914,7 @@ model DM_TrinhDoNgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
   sKhung         String?
 
   @@schema("ql-danh-muc")
@@ -1919,8 +1922,7 @@ model DM_TrinhDoNgoaiNgu {
 
 model DM_TrinhDoTinHoc {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -1933,14 +1935,14 @@ model DM_TrinhDoTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
 
   @@schema("ql-danh-muc")
 }
 
 model DM_UngDung {
   Id               String    @id() @default(cuid())
-  sMa              String?
-  sTen             String?
+  sMa              String?   @unique()
   sGhiChu          String?
   iSTT             Int?      @default(0)
   bActive          Boolean?  @default(true)
@@ -1953,6 +1955,7 @@ model DM_UngDung {
   sNguoiSua        String?
   sThietBiTao      String?
   sThietBiSua      String?
+  sTen             String    @unique()
   sMoTa            String?
   sLogoUrl         String?
   sUrl             String?
@@ -1967,8 +1970,7 @@ model DM_UngDung {
 
 model DM_NhanVien {
   Id                  String               @id() @default(cuid())
-  sMa                 String?
-  sTen                String?
+  sMa                 String?              @unique()
   sGhiChu             String?
   iSTT                Int?                 @default(0)
   bActive             Boolean?             @default(true)
@@ -1981,6 +1983,7 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
+  sTen                String
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2009,8 +2012,7 @@ model DM_NhanVien {
 
 model DM_NhomNguoiDung {
   Id                 String               @id() @default(cuid())
-  sMa                String?
-  sTen               String?
+  sMa                String?              @unique()
   sGhiChu            String?
   iSTT               Int?                 @default(0)
   bActive            Boolean?             @default(true)
@@ -2023,6 +2025,7 @@ model DM_NhomNguoiDung {
   sNguoiSua          String?
   sThietBiTao        String?
   sThietBiSua        String?
+  sTen               String               @unique()
   vaiTroTrongNhom    VaiTroTrongNhom[]
   nguoiDungTrongNhom NguoiDungTrongNhom[]
 
@@ -2031,8 +2034,7 @@ model DM_NhomNguoiDung {
 
 model DM_NhomUngDung {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2045,6 +2047,7 @@ model DM_NhomUngDung {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
   sMoTa          String?
 
   @@schema("ql-danh-muc")
@@ -2052,8 +2055,7 @@ model DM_NhomUngDung {
 
 model DM_QuocGia {
   Id             String        @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2066,6 +2068,7 @@ model DM_QuocGia {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String        @unique()
   sLanguage      String?
   userProfile    UserProfile[]
   tinh           DM_Tinh[]
@@ -2075,8 +2078,7 @@ model DM_QuocGia {
 
 model DM_Tinh {
   Id                          String             @id() @default(cuid())
-  sMa                         String?
-  sTen                        String?
+  sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2089,6 +2091,7 @@ model DM_Tinh {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
+  sTen                        String             @unique()
   quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
   sDM_QuocGiaId               String?
   dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
@@ -2108,8 +2111,7 @@ model DM_Tinh {
 
 model DM_QuanHuyen {
   Id                          String             @id() @default(cuid())
-  sMa                         String?
-  sTen                        String?
+  sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2122,6 +2124,7 @@ model DM_QuanHuyen {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
+  sTen                        String
   dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
   sDM_TinhId                  String?
   sDM_Tinh_Ma                 String?
@@ -2133,14 +2136,14 @@ model DM_QuanHuyen {
   userProfilePermanentAddress UserProfile[]      @relation("DistrictPermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("DistrictCurrentAddress")
 
+  @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("ql-danh-muc")
 }
 
 model DM_XaPhuong {
   Id                          String             @id() @default(cuid())
-  sMa                         String?
-  sTen                        String?
+  sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2153,6 +2156,7 @@ model DM_XaPhuong {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
+  sTen                        String
   sDM_TinhId                  String?
   quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
   sDM_QuanHuyenId             String?
@@ -2166,13 +2170,14 @@ model DM_XaPhuong {
   userProfilePermanentAddress UserProfile[]      @relation("CommunePermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("CommuneCurrentAddress")
 
+  @@unique([sDM_QuanHuyenId, sTen])
+  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
   @@schema("ql-danh-muc")
 }
 
 model DM_VaiTro {
   Id              String            @id() @default(cuid())
-  sMa             String?
-  sTen            String?
+  sMa             String?           @unique()
   sGhiChu         String?
   iSTT            Int?              @default(0)
   bActive         Boolean?          @default(true)
@@ -2185,6 +2190,7 @@ model DM_VaiTro {
   sNguoiSua       String?
   sThietBiTao     String?
   sThietBiSua     String?
+  sTen            String            @unique()
   Quyen_VaiTro    Quyen_VaiTro[]
   VaiTroTrongNhom VaiTroTrongNhom[]
 
@@ -2193,8 +2199,7 @@ model DM_VaiTro {
 
 model DM_ViTriCongViec {
   Id              String        @id() @default(cuid())
-  sMa             String?
-  sTen            String?
+  sMa             String?       @unique()
   sGhiChu         String?
   iSTT            Int?          @default(0)
   bActive         Boolean?      @default(true)
@@ -2207,6 +2212,7 @@ model DM_ViTriCongViec {
   sNguoiSua       String?
   sThietBiTao     String?
   sThietBiSua     String?
+  sTen            String        @unique()
   sDM_ChucDanhId  String?
   sDM_NhomViTriId String
   DM_NhanVien     DM_NhanVien[]
@@ -2217,8 +2223,7 @@ model DM_ViTriCongViec {
 
 model NguoiDungTrongNhom {
   Id                  String            @id() @default(cuid())
-  sMa                 String?
-  sTen                String?
+  sMa                 String?           @unique()
   sGhiChu             String?
   iSTT                Int?              @default(0)
   bActive             Boolean?          @default(true)
@@ -2242,8 +2247,7 @@ model NguoiDungTrongNhom {
 
 model NhatKyHoatDong {
   Id             String       @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2270,8 +2274,7 @@ model NhatKyHoatDong {
 
 model Policy {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2284,6 +2287,7 @@ model Policy {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String    @unique()
   bXacThuc2YeuTo Boolean?  @default(false)
   bGioiHanTCIP   Boolean?  @default(false)
   bGioiHanTG     Boolean?  @default(false)
@@ -2294,8 +2298,7 @@ model Policy {
 
 model Quyen_VaiTro {
   Id             String       @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2308,6 +2311,7 @@ model Quyen_VaiTro {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sTen           String       @unique()
   sTenChucNang   String?      @default("N'Tên quyền'")
   sDM_NhanVienId String?
   sDM_VaiTroId   String?
@@ -2320,8 +2324,7 @@ model Quyen_VaiTro {
 
 model TaiKhoan {
   Id             String       @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2334,7 +2337,8 @@ model TaiKhoan {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sUserName      String?
+  sTen           String
+  sUserName      String?      @unique()
   sAvatar        String?
   sDM_NhanVienId String?      @unique()
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
@@ -2344,8 +2348,7 @@ model TaiKhoan {
 
 model VaiTroTrongNhom {
   Id                  String            @id() @default(cuid())
-  sMa                 String?
-  sTen                String?
+  sMa                 String?           @unique()
   sGhiChu             String?
   iSTT                Int?              @default(0)
   bActive             Boolean?          @default(true)
@@ -2663,12 +2666,17 @@ model ScholarshipAward {
 
 model AcademicWarningRule {
   id                String                  @id() @default(cuid())
+  code              String?                 @unique()
+  active            Boolean                 @default(true)
+  description       String?                 @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt()
   ruleType          AcademicWarningRuleType
   threshold         Float?
   semesterCondition Int?
   yearCondition     Int?
   severity          Int
-  description       String
   trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String
   academicWarning   AcademicWarning[]
@@ -2740,7 +2748,8 @@ model DocumentFile {
   createdAt             DateTime             @default(now())
   updatedAt             DateTime             @updatedAt()
   name                  String
-  path                  String               @unique()
+  path                  String
+  size                  BigInt
   mimeType              String?
   archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
   archivedCertificateId String?

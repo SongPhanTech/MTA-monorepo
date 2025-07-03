@@ -173,7 +173,7 @@ const PutOpenClassModal = () => {
                     maxStudent: Number(maxStudent),
                     startDate: new Date(),
                     semesterId: dataClass?.semester?.id,
-                    subjectId: subjectVersionData.id,
+                    subjectId: subjectVersionData?.id,
                     schedule: form.getFieldValue('schedule'),
                     subject: subjectVersionData,
                     examType: subjectVersionData?.examType,

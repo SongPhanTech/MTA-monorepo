@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { academicRankingConversions } from './archived/academic-ranking-convert'
+import { academicWarningRules } from './seed/academic-warning-rule'
 
 const prisma = new PrismaClient()
 
@@ -7,10 +7,10 @@ const trainingCourses = await prisma.trainingCourse.findMany()
 
 await Promise.all(
     trainingCourses.map((trainingCourse) =>
-        prisma.academicRankingConvert.createMany({
-            data: academicRankingConversions.map((conversion) => ({
+        prisma.academicWarningRule.createMany({
+            data: academicWarningRules.map((rule) => ({
                 trainingCourseId: trainingCourse.id,
-                ...conversion,
+                ...rule,
             })),
         })
     )

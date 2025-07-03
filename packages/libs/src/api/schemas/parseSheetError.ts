@@ -6,6 +6,8 @@
  */
 
 export interface ParseSheetError {
-    cellRef: string
+    sheetRef: string
+    /** @nullable */
+    cellRef: string | null
     message: string
 }

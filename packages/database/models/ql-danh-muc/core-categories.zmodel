@@ -7,8 +7,7 @@ import '../ql-dao-tao/student'
 
 abstract model CoreBase {
   Id             String    @id() @default(cuid())
-  sMa            String?
-  sTen           String?
+  sMa            String?   @unique
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -33,11 +32,13 @@ abstract model CoreBase {
 }
 
 model DM_CapBac extends CoreBase {
+  sTen     String        @unique
   profiles UserProfile[]
   @@schema("ql-danh-muc")
 }
 
 model DM_ChucDanh extends CoreBase {
+  sTen             String             @unique
   iLoaiChucDanh    Int?               @default(0)
   DM_ViTriCongViec DM_ViTriCongViec[]
   userProfile      UserProfile[]
@@ -45,25 +46,30 @@ model DM_ChucDanh extends CoreBase {
 }
 
 model DM_ChucVu extends CoreBase {
+  sTen        String        @unique
   userProfile UserProfile[]
   @@schema("ql-danh-muc")
 }
 
 model DM_HocHam extends CoreBase {
+  sTen     String        @unique
   profiles UserProfile[]
   @@schema("ql-danh-muc")
 }
 
 model DM_HocVi extends CoreBase {
+  sTen     String        @unique
   profiles UserProfile[]
   @@schema("ql-danh-muc")
 }
 
 model DM_ChungChiTinHoc extends CoreBase {
+  sTen String @unique
   @@schema("ql-danh-muc")
 }
 
 model DM_DanToc extends CoreBase {
+  sTen         String        @unique
   sTenKhac     String?
   sDiaChiCuTru String?
 
@@ -73,7 +79,8 @@ model DM_DanToc extends CoreBase {
 }
 
 model DM_DonVi extends CoreBase {
-  sCode            String?
+  sTen             String            @unique
+  sCode            String?           @unique
   sTenVietTat      String?
   sParentId        String?
   sTruongDonVi     String?
@@ -101,6 +108,7 @@ model DM_DonVi extends CoreBase {
 }
 
 model DM_DonViHanhChinh extends CoreBase {
+  sTen     String         @unique
   sTen_En  String?
 
   tinh     DM_Tinh[]
@@ -110,6 +118,7 @@ model DM_DonViHanhChinh extends CoreBase {
 }
 
 model DM_KhuVuc_DiaLy extends CoreBase {
+  sTen    String    @unique
   sTen_En String?
 
   tinh    DM_Tinh[]
@@ -118,24 +127,29 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 }
 
 model DM_NgoaiNgu extends CoreBase {
+  sTen String @unique
   @@schema("ql-danh-muc")
 }
 
 model DM_TonGiao extends CoreBase {
+  sTen        String        @unique
   userProfile UserProfile[]
   @@schema("ql-danh-muc")
 }
 
 model DM_TrinhDoNgoaiNgu extends CoreBase {
+  sTen   String  @unique
   sKhung String?
   @@schema("ql-danh-muc")
 }
 
 model DM_TrinhDoTinHoc extends CoreBase {
+  sTen String @unique
   @@schema("ql-danh-muc")
 }
 
 model DM_UngDung extends CoreBase {
+  sTen             String   @unique
   sMoTa            String?
   sLogoUrl         String?
   sUrl             String?
@@ -148,6 +162,7 @@ model DM_UngDung extends CoreBase {
 }
 
 model DM_NhanVien extends CoreBase {
+  sTen                String
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -176,17 +191,20 @@ model DM_NhanVien extends CoreBase {
 }
 
 model DM_NhomNguoiDung extends CoreBase {
+  sTen               String               @unique
   vaiTroTrongNhom    VaiTroTrongNhom[]
   nguoiDungTrongNhom NguoiDungTrongNhom[]
   @@schema("ql-danh-muc")
 }
 
 model DM_NhomUngDung extends CoreBase {
+  sTen  String  @unique
   sMoTa String?
   @@schema("ql-danh-muc")
 }
 
 model DM_QuocGia extends CoreBase {
+  sTen        String        @unique
   sLanguage   String?
 
   userProfile UserProfile[]
@@ -195,6 +213,7 @@ model DM_QuocGia extends CoreBase {
 }
 
 model DM_Tinh extends CoreBase {
+  sTen                        String             @unique
   quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
   sDM_QuocGiaId               String?
   dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
@@ -214,6 +233,7 @@ model DM_Tinh extends CoreBase {
 }
 
 model DM_QuanHuyen extends CoreBase {
+  sTen                        String
   dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
   sDM_TinhId                  String?
   sDM_Tinh_Ma                 String?
@@ -225,11 +245,14 @@ model DM_QuanHuyen extends CoreBase {
   userProfilePlaceOfBirth     UserProfile[]      @relation("DistrictPlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("DistrictPermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("DistrictCurrentAddress")
+
+  @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("ql-danh-muc")
 }
 
 model DM_XaPhuong extends CoreBase {
+  sTen                        String
   sDM_TinhId                  String?
   quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
   sDM_QuanHuyenId             String?
@@ -243,16 +266,21 @@ model DM_XaPhuong extends CoreBase {
   userProfilePlaceOfBirth     UserProfile[]      @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("CommunePermanentAddress")
   userProfileCurrentAddress   UserProfile[]      @relation("CommuneCurrentAddress")
+
+  @@unique([sDM_QuanHuyenId, sTen])
+  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
   @@schema("ql-danh-muc")
 }
 
 model DM_VaiTro extends CoreBase {
+  sTen            String            @unique
   Quyen_VaiTro    Quyen_VaiTro[]
   VaiTroTrongNhom VaiTroTrongNhom[]
   @@schema("ql-danh-muc")
 }
 
 model DM_ViTriCongViec extends CoreBase {
+  sTen            String        @unique
   sDM_ChucDanhId  String?
   sDM_NhomViTriId String
   DM_NhanVien     DM_NhanVien[]
@@ -283,6 +311,7 @@ model NhatKyHoatDong extends CoreBase {
 }
 
 model Policy extends CoreBase {
+  sTen           String   @unique
   bXacThuc2YeuTo Boolean? @default(false)
   bGioiHanTCIP   Boolean? @default(false)
   bGioiHanTG     Boolean? @default(false)
@@ -291,6 +320,7 @@ model Policy extends CoreBase {
 }
 
 model Quyen_VaiTro extends CoreBase {
+  sTen           String       @unique
   sTenChucNang   String?      @default("N'Tên quyền'")
   sDM_NhanVienId String?
   sDM_VaiTroId   String?
@@ -301,7 +331,8 @@ model Quyen_VaiTro extends CoreBase {
 }
 
 model TaiKhoan extends CoreBase {
-  sUserName      String?
+  sTen           String
+  sUserName      String?      @unique
   sAvatar        String?
   sDM_NhanVienId String?      @unique // TODO: maybe remove unique constraint
 

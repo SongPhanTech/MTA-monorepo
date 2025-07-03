@@ -1,3 +1,4 @@
+import { FilterFilled } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -8,14 +9,14 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear } from '@workspace/db'
+import type { SchoolYear, SemesterType } from '@workspace/db'
 import {
     useCountSchoolYear,
     useFindManySchoolYear,
     useUpdateSchoolYear,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Radio, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
@@ -24,6 +25,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     schoolYearId: string | undefined
+    semesterType: SemesterType | undefined
 }
 
 function YearAndSemester() {
@@ -32,8 +34,10 @@ function YearAndSemester() {
     const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState<FilterProps>({
         schoolYearId: undefined,
+        semesterType: undefined,
     })
-    const { getSemesterTypeLabel } = useSemesterTypeOptions()
+
+    const { options, getSemesterTypeLabel } = useSemesterTypeOptions()
 
     const { data = [], refetch } = useFindManySchoolYear({
         where: {
@@ -65,6 +69,13 @@ function YearAndSemester() {
                     },
                 },
             }),
+            ...(filters.semesterType !== undefined && {
+                semesters: {
+                    some: {
+                        semesterType: filters.semesterType,
+                    },
+                },
+            }),
         },
         orderBy: {
             createdAt: 'desc',
@@ -90,6 +101,9 @@ function YearAndSemester() {
                               ],
                           }
                         : {}),
+                    ...(filters.semesterType !== undefined && {
+                        semesterType: filters.semesterType,
+                    }),
                 },
             },
         },
@@ -192,7 +206,7 @@ function YearAndSemester() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
+    const handleFilterChange = (key: string, value: any) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
@@ -271,32 +285,65 @@ function YearAndSemester() {
                             dataIndex: 'code',
                             align: 'center',
                             width: 140,
+                            fixed: 'left',
                         },
                         {
                             title: 'Tên học kỳ',
                             dataIndex: 'name',
                             align: 'center',
                             width: 250,
+                            fixed: 'left',
                         },
                         {
                             title: 'Loại học kỳ',
                             dataIndex: 'semesterType',
                             align: 'center',
-                            width: 100,
+                            width: 120,
+                            filterDropdown: ({ confirm }) => (
+                                <div style={{ padding: 8 }}>
+                                    <Radio.Group
+                                        options={options}
+                                        value={filters.semesterType}
+                                        onChange={(e) => {
+                                            handleFilterChange('semesterType', e.target.value)
+                                            confirm()
+                                        }}
+                                        className="flex flex-col"
+                                    />
+                                    <div className="flex mt-2 justify-end w-full">
+                                        <Button
+                                            size="small"
+                                            onClick={() => {
+                                                handleFilterChange('semesterType', undefined)
+                                                confirm()
+                                            }}
+                                        >
+                                            Bỏ lọc
+                                        </Button>
+                                    </div>
+                                </div>
+                            ),
+                            filterIcon: () => (
+                                <FilterFilled
+                                    style={{ color: filters.semesterType ? '#005f37' : undefined }}
+                                />
+                            ),
                             render: (value) => getSemesterTypeLabel(value),
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             // dataIndex: 'startDate',
-                            width: 132,
+                            width: 140,
+                            sorter: (a, b) => dayjs(a.startDate).unix() - dayjs(b.startDate).unix(),
                             render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                         },
                         {
                             title: 'Thời gian kết thúc',
                             align: 'center',
                             // dataIndex: 'endDate',
-                            width: 132,
+                            width: 140,
+                            sorter: (a, b) => dayjs(a.endDate).unix() - dayjs(b.endDate).unix(),
                             render: ({ endDate }) =>
                                 endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                         },
@@ -371,7 +418,7 @@ function YearAndSemester() {
                     }}
                     defaultExpandAll
                     headerRight={({ id }) => (
-                        <div className="flex gap-2.5 w-[80px] items-center">
+                        <div className="flex gap-2.5 w-[88px] items-center">
                             <CreateIcon
                                 onClick={(e) => {
                                     e.stopPropagation()

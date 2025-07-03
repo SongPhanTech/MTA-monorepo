@@ -347,7 +347,7 @@ export default function ClassSubject() {
                                     >
                                         <Select
                                             placeholder="Lớp MH"
-                                            options={dataTable.map((i: TrainingObjectType) => ({
+                                            options={dataTable.map((i) => ({
                                                 value: i.id,
                                                 label: i.name,
                                             }))}
