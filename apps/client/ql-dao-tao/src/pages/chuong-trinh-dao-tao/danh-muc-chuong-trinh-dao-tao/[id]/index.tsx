@@ -1,4 +1,4 @@
-import { FilterOutlined } from '@ant-design/icons'
+import { FilterFilled } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -84,6 +84,7 @@ export default function TrainingProgramSubjects() {
                     },
                 },
                 trainingTime: true,
+                documentFiles: true,
             },
         },
         { enabled: !!id }
@@ -598,7 +599,7 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: () => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
                                             color: filters.subjectCode ? '#005f37' : undefined,
                                         }}
@@ -679,7 +680,7 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: () => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
                                             color: filters.managementOrganizationId
                                                 ? '#005f37'
@@ -875,9 +876,9 @@ export default function TrainingProgramSubjects() {
                                     </div>
                                 ),
                                 filterIcon: (filtered) => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filtered ? '#005f37' : undefined,
                                         }}
                                     />
                                 ),
@@ -908,9 +909,9 @@ export default function TrainingProgramSubjects() {
                                     return record.active === value
                                 },
                                 filterIcon: (filtered) => (
-                                    <FilterOutlined
+                                    <FilterFilled
                                         style={{
-                                            color: filtered ? '#1890ff' : undefined,
+                                            color: filtered ? '#005f37' : undefined,
                                         }}
                                     />
                                 ),

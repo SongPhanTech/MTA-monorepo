@@ -9,7 +9,7 @@ import {
     useFindUniqueTrainingBlockOnCurriculumVersion,
     useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, message, Select } from 'antd'
+import { Col, Form, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -55,6 +55,10 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             form.setFieldsValue({
                 ...initialValue,
             })
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [initialValue, form])
 
@@ -70,6 +74,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             const payload = {
                 trainingBlockId: output.trainingBlockId,
                 curriculumVersionId: input?.curriculumVersionId,
+                active: output.active,
             }
 
             if (input?.trainingBlockOnCurriculumVersionId) {
@@ -139,15 +144,11 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             </Col>
             {input?.trainingBlockOnCurriculumVersionId && (
                 <Col span={24}>
-                    <FormItem form={form} name="active" label="Trạng thái">
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
                     </FormItem>
                 </Col>
             )}
