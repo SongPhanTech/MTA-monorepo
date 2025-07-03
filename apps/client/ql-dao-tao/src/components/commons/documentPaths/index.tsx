@@ -132,7 +132,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 }))
             )
         }
-    }, [data, relationId, relationType])
+    }, [data, relationId, relationType, form.setFieldValue])
     console.log(fileList)
 
     return (

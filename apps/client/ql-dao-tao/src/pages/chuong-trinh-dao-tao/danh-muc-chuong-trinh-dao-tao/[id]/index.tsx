@@ -259,6 +259,9 @@ export default function TrainingProgramSubjects() {
                         },
                     },
                 },
+                orderBy: {
+                    semester: 'asc',
+                },
             },
             trainingBlock: true,
         },
@@ -390,7 +393,6 @@ export default function TrainingProgramSubjects() {
 
     const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
         curriculumVersionId: string
-        trainingBlockOnCurriculumVersionId?: string
     }>({
         tag: PutTrainingBlockOnCurriculumVersion.name,
     })
@@ -508,7 +510,7 @@ export default function TrainingProgramSubjects() {
                             <Flex justify="end" gap={4}>
                                 <Button
                                     onClick={() => handleCloneCurriculumVersion(initialValue)}
-                                    className="text-primary border-primary"
+                                    className="text-primary border-primary mr-2"
                                     disabled={!initialValue}
                                 >
                                     <CopyPlus />
@@ -518,13 +520,12 @@ export default function TrainingProgramSubjects() {
                                     onClick={() =>
                                         onOpenTrainingBlock({
                                             curriculumVersionId: initialValue?.id as string,
-                                            trainingBlockOnCurriculumVersionId: '',
                                         })
                                     }
                                     type="primary"
                                 >
                                     <BookPlus />
-                                    Thêm khối kiến thức
+                                    Cập nhật khối kiến thức
                                 </Button>
                             </Flex>
                         </Col>
@@ -954,7 +955,7 @@ export default function TrainingProgramSubjects() {
                         ]}
                         data={processedData}
                         headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[75px] items-center">
+                            <div className="flex gap-2.5 w-[80px] justify-center items-center">
                                 <CreateIcon
                                     title={'Thêm môn học'}
                                     onClick={(e) => {
@@ -968,16 +969,7 @@ export default function TrainingProgramSubjects() {
                                         })
                                     }}
                                 />
-                                <EditIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenTrainingBlock({
-                                            curriculumVersionId: initialValue?.id as string,
-                                            trainingBlockOnCurriculumVersionId: id,
-                                        })
-                                    }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
+
                                 <DeleteIcon
                                     popConfirm={{
                                         onConfirm: () =>
@@ -987,13 +979,7 @@ export default function TrainingProgramSubjects() {
                                 />
                             </div>
                         )}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

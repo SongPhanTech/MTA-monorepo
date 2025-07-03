@@ -139,3 +139,17 @@ export function getScoreStatistics(
 
     return result
 }
+
+export type ItemProps = {
+    value: string
+    label: string
+}
+export function diffArrays(a: ItemProps[], b: ItemProps[]) {
+    const onlyInA = a.filter((itemA) => !b.some((itemB) => itemA.value === itemB.value))
+
+    const onlyInB = b.filter((itemB) => !a.some((itemA) => itemA.value === itemB.value))
+
+    const both = a.filter((itemA) => b.some((itemB) => itemA.value === itemB.value))
+
+    return { onlyInA, onlyInB, both }
+}
