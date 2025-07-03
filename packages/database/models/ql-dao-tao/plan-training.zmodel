@@ -220,8 +220,8 @@ model FixedClass extends Base {
   classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
   classMonitorId           String?            @unique
 
-  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id]) // Khoá học
-  trainingCourseId         String?
+  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id]) // Khoá học
+  trainingCourseId         String
 
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?

@@ -604,8 +604,8 @@ model FixedClass {
   graduated                Boolean?           @default(false)
   classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
   classMonitorId           String?            @unique()
-  trainingCourse           TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId         String?
+  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId         String
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?
   lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
