@@ -315,8 +315,8 @@ Table FixedClass {
   graduated Boolean [default: false]
   classMonitor Student
   classMonitorId String [unique]
-  trainingCourse TrainingCourse
-  trainingCourseId String
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
   managementOrganization DM_DonVi
   managementOrganizationId String
   lecturerManagement Lecturer

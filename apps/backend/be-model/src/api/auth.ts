@@ -13,16 +13,21 @@ app.openapi(
         responses: {
             200: {
                 content: { 'application/json': { schema: sessionSchema } },
-                description: 'Generate presigned URL',
+                description: 'Get session successfully',
             },
             401: {
-                content: { 'application/json': { schema: z.object({ error: z.string() }) } },
+                content: {
+                    'application/json': {
+                        schema: z.object({ error: z.string() }).openapi('Unauthorized'),
+                    },
+                },
                 description: 'Unauthorized',
             },
         },
     }),
     async (c) => {
         const xToken = getCookie(c, 'x-token')
+        console.log('[get-session].xToken', xToken)
         if (!xToken) {
             return c.json({ error: 'Unauthorized' }, 401)
         }
