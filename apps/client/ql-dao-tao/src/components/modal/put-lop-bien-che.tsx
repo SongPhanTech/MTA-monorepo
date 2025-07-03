@@ -169,6 +169,7 @@ const PutFixedClassModal = () => {
                         data: { curriculumVersionId: curriculumVersionId },
                     },
                 },
+                curriculumVersionId,
                 ...rest,
             },
             where: { id },
