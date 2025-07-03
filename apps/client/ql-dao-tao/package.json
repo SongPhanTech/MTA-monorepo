@@ -55,6 +55,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
+		"@types/file-saver": "^2.0.7",
 		"@types/lodash": "catalog:",
 		"@types/minio": "catalog:",
 		"@types/node": "catalog:",

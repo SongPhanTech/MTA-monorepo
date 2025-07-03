@@ -92,6 +92,7 @@ const PutAddOlympicScoreModal = () => {
                     listAward.push({ archivedAward: item })
                 }
             }
+            if (!trainingCourse) return
             const finalScore = calcFinalScore(trainingCourse, {
                 ...input.subjectClassStudent,
                 awards: listAward,
