@@ -918,6 +918,8 @@ Table Student {
   studyRankId String
   trainingRank TrainingRank
   trainingRankId String
+  academicWarningLevel Int [not null, default: 0]
+  disciplinaryWarningLevel Int [not null, default: 0]
   studentTrainingScore StudentTrainingScore [not null]
   studentTrainingSemester StudentTrainingSemester [not null]
   studentTrainingSchoolYear StudentTrainingSchoolYear [not null]

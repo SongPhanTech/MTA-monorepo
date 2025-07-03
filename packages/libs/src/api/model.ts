@@ -57,10 +57,7 @@ export const generatePresignedUrl = async (
     return customModelFetch<generatePresignedUrlResponse>(getGeneratePresignedUrlUrl(), {
         ...options,
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            ...options?.headers,
-        },
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
         body: JSON.stringify(presignedUrlDto),
     })
 }
@@ -210,9 +207,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options?: {
@@ -228,9 +223,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
     options?: {
@@ -238,9 +231,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
     params: ListObjectsParams,
@@ -249,9 +240,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getListObjectsQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
@@ -355,9 +344,7 @@ export function usePresignedGetObject<
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function usePresignedGetObject<
     TData = Awaited<ReturnType<typeof presignedGetObject>>,
     TError = unknown,
@@ -378,9 +365,7 @@ export function usePresignedGetObject<
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function usePresignedGetObject<
     TData = Awaited<ReturnType<typeof presignedGetObject>>,
     TError = unknown,
@@ -393,9 +378,7 @@ export function usePresignedGetObject<
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function usePresignedGetObject<
     TData = Awaited<ReturnType<typeof presignedGetObject>>,
@@ -409,9 +392,7 @@ export function usePresignedGetObject<
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getPresignedGetObjectQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {

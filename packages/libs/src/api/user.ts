@@ -113,14 +113,11 @@ export const getGetSessionsByUserIdQueryOptions = <
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByUserId>>> = ({ signal }) =>
         getSessionsByUserId(id, { signal, ...requestOptions })
 
-    return {
-        queryKey,
-        queryFn,
-        enabled: !!id,
-        ...queryOptions,
-    } as UseQueryOptions<Awaited<ReturnType<typeof getSessionsByUserId>>, TError, TData> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSessionsByUserIdQueryResult = NonNullable<
@@ -148,9 +145,7 @@ export function useGetSessionsByUserId<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSessionsByUserId<
     TData = Awaited<ReturnType<typeof getSessionsByUserId>>,
     TError = GetSessionsByUserId400 | GetSessionsByUserId500,
@@ -171,9 +166,7 @@ export function useGetSessionsByUserId<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSessionsByUserId<
     TData = Awaited<ReturnType<typeof getSessionsByUserId>>,
     TError = GetSessionsByUserId400 | GetSessionsByUserId500,
@@ -186,9 +179,7 @@ export function useGetSessionsByUserId<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSessionsByUserId<
     TData = Awaited<ReturnType<typeof getSessionsByUserId>>,
@@ -202,9 +193,7 @@ export function useGetSessionsByUserId<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetSessionsByUserIdQueryOptions(id, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
@@ -601,9 +590,7 @@ export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TErr
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
     options?: {
@@ -619,9 +606,7 @@ export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TErr
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
     options?: {
@@ -629,9 +614,7 @@ export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TErr
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TError = unknown>(
     params?: ListUsersParams,
@@ -640,9 +623,7 @@ export function useListUsers<TData = Awaited<ReturnType<typeof listUsers>>, TErr
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getListUsersQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
@@ -787,14 +768,11 @@ export const getGetOneUserQueryOptions = <
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getOneUser>>> = ({ signal }) =>
         getOneUser(id, { signal, ...requestOptions })
 
-    return {
-        queryKey,
-        queryFn,
-        enabled: !!id,
-        ...queryOptions,
-    } as UseQueryOptions<Awaited<ReturnType<typeof getOneUser>>, TError, TData> & {
-        queryKey: DataTag<QueryKey, TData, TError>
-    }
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getOneUser>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetOneUserQueryResult = NonNullable<Awaited<ReturnType<typeof getOneUser>>>
@@ -815,9 +793,7 @@ export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TE
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options?: {
@@ -833,9 +809,7 @@ export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TE
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
     options?: {
@@ -843,9 +817,7 @@ export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TE
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TError = unknown>(
     id: string,
@@ -854,9 +826,7 @@ export function useGetOneUser<TData = Awaited<ReturnType<typeof getOneUser>>, TE
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetOneUserQueryOptions(id, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
@@ -1113,9 +1083,7 @@ export function useGetConfigs<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetConfigs<
     TData = Awaited<ReturnType<typeof getConfigs>>,
     TError = GetConfigs500,
@@ -1133,9 +1101,7 @@ export function useGetConfigs<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetConfigs<
     TData = Awaited<ReturnType<typeof getConfigs>>,
     TError = GetConfigs500,
@@ -1145,9 +1111,7 @@ export function useGetConfigs<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-}
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetConfigs<
     TData = Awaited<ReturnType<typeof getConfigs>>,
@@ -1158,9 +1122,7 @@ export function useGetConfigs<
         request?: SecondParameter<typeof customUserFetch>
     },
     queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-} {
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetConfigsQueryOptions(options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {

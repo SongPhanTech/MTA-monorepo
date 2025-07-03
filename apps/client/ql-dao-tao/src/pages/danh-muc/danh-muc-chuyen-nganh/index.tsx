@@ -7,7 +7,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Prisma, TrainingObjectType } from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
@@ -18,7 +18,7 @@ import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -49,13 +49,6 @@ export default function TrainingMajorPage() {
         searchText: '',
         trainingObjectTypeId: undefined,
     })
-
-    const trainingMajorWhere: Prisma.TrainingMajorWhereInput = useMemo(
-        () => ({
-            AND: [{}],
-        }),
-        []
-    )
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {

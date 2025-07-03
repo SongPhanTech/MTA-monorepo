@@ -367,7 +367,6 @@ export const listStudentInfo = async (semesterId: string) => {
             endDate: true,
         },
     })
-    // Lấy danh sách sinh viên học tại học kỳ đầu vào
 
     // lấy danh sách lớp môn học mở tại học kỳ
     const DsLopMonHoc = await prisma.subjectClass.findMany({
