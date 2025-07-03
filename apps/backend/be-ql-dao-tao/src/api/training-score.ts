@@ -74,7 +74,7 @@ const uploadExcelImportTrainingScore = createRoute({
                     schema: UploadExcelModel.extend({
                         fixedClassId: z.string(), // loại thông tin
                         trainingSessionId: z.string(), // loại thông tin
-                    }).openapi('uploadExcelImportScore'),
+                    }).openapi('uploadExcelImportTrainingScore'),
                 },
             },
         },

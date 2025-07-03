@@ -677,7 +677,7 @@ Table TrainingField {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   englishName String [not null]
   publishDate DateTime [not null]
   organization DM_DonVi [not null]
@@ -1274,8 +1274,7 @@ Table UserProfile {
 
 Table DM_CapBac {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1288,13 +1287,13 @@ Table DM_CapBac {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   profiles UserProfile [not null]
 }
 
 Table DM_ChucDanh {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1307,6 +1306,7 @@ Table DM_ChucDanh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   iLoaiChucDanh Int [default: 0]
   DM_ViTriCongViec DM_ViTriCongViec [not null]
   userProfile UserProfile [not null]
@@ -1314,8 +1314,7 @@ Table DM_ChucDanh {
 
 Table DM_ChucVu {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1328,13 +1327,13 @@ Table DM_ChucVu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   userProfile UserProfile [not null]
 }
 
 Table DM_HocHam {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1347,13 +1346,13 @@ Table DM_HocHam {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   profiles UserProfile [not null]
 }
 
 Table DM_HocVi {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1366,13 +1365,13 @@ Table DM_HocVi {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   profiles UserProfile [not null]
 }
 
 Table DM_ChungChiTinHoc {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1385,12 +1384,12 @@ Table DM_ChungChiTinHoc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
 }
 
 Table DM_DanToc {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1403,6 +1402,7 @@ Table DM_DanToc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sTenKhac String
   sDiaChiCuTru String
   userProfile UserProfile [not null]
@@ -1410,8 +1410,7 @@ Table DM_DanToc {
 
 Table DM_DonVi {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1424,7 +1423,8 @@ Table DM_DonVi {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sCode String
+  sTen String [unique, not null]
+  sCode String [unique]
   sTenVietTat String
   sParentId String
   sTruongDonVi String
@@ -1447,8 +1447,7 @@ Table DM_DonVi {
 
 Table DM_DonViHanhChinh {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1461,6 +1460,7 @@ Table DM_DonViHanhChinh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sTen_En String
   tinh DM_Tinh [not null]
   huyen DM_QuanHuyen [not null]
@@ -1469,8 +1469,7 @@ Table DM_DonViHanhChinh {
 
 Table DM_KhuVuc_DiaLy {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1483,6 +1482,7 @@ Table DM_KhuVuc_DiaLy {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sTen_En String
   tinh DM_Tinh [not null]
   student Student [not null]
@@ -1490,8 +1490,7 @@ Table DM_KhuVuc_DiaLy {
 
 Table DM_NgoaiNgu {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1504,12 +1503,12 @@ Table DM_NgoaiNgu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
 }
 
 Table DM_TonGiao {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1522,13 +1521,13 @@ Table DM_TonGiao {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   userProfile UserProfile [not null]
 }
 
 Table DM_TrinhDoNgoaiNgu {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1541,13 +1540,13 @@ Table DM_TrinhDoNgoaiNgu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sKhung String
 }
 
 Table DM_TrinhDoTinHoc {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1560,12 +1559,12 @@ Table DM_TrinhDoTinHoc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
 }
 
 Table DM_UngDung {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1578,6 +1577,7 @@ Table DM_UngDung {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sMoTa String
   sLogoUrl String
   sUrl String
@@ -1590,8 +1590,7 @@ Table DM_UngDung {
 
 Table DM_NhanVien {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1604,6 +1603,7 @@ Table DM_NhanVien {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [not null]
   sHoVaDem String
   sTenDayDu String
   dNgaySinh DateTime
@@ -1626,8 +1626,7 @@ Table DM_NhanVien {
 
 Table DM_NhomNguoiDung {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1640,14 +1639,14 @@ Table DM_NhomNguoiDung {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   vaiTroTrongNhom VaiTroTrongNhom [not null]
   nguoiDungTrongNhom NguoiDungTrongNhom [not null]
 }
 
 Table DM_NhomUngDung {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1660,13 +1659,13 @@ Table DM_NhomUngDung {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sMoTa String
 }
 
 Table DM_QuocGia {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1679,6 +1678,7 @@ Table DM_QuocGia {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sLanguage String
   userProfile UserProfile [not null]
   tinh DM_Tinh [not null]
@@ -1686,8 +1686,7 @@ Table DM_QuocGia {
 
 Table DM_Tinh {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1700,6 +1699,7 @@ Table DM_Tinh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   quocGia DM_QuocGia
   sDM_QuocGiaId String
   dM_KhuVuc_DiaLy DM_KhuVuc_DiaLy
@@ -1716,8 +1716,7 @@ Table DM_Tinh {
 
 Table DM_QuanHuyen {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1730,6 +1729,7 @@ Table DM_QuanHuyen {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [not null]
   dM_Tinh DM_Tinh
   sDM_TinhId String
   sDM_Tinh_Ma String
@@ -1740,12 +1740,15 @@ Table DM_QuanHuyen {
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
   userProfileCurrentAddress UserProfile [not null]
+
+  indexes {
+    (sDM_TinhId, sTen) [unique]
+  }
 }
 
 Table DM_XaPhuong {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1758,6 +1761,7 @@ Table DM_XaPhuong {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [not null]
   sDM_TinhId String
   quanHuyen DM_QuanHuyen
   sDM_QuanHuyenId String
@@ -1770,12 +1774,15 @@ Table DM_XaPhuong {
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
   userProfileCurrentAddress UserProfile [not null]
+
+  indexes {
+    (sDM_QuanHuyenId, sTen) [unique]
+  }
 }
 
 Table DM_VaiTro {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1788,14 +1795,14 @@ Table DM_VaiTro {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   Quyen_VaiTro Quyen_VaiTro [not null]
   VaiTroTrongNhom VaiTroTrongNhom [not null]
 }
 
 Table DM_ViTriCongViec {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1808,6 +1815,7 @@ Table DM_ViTriCongViec {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sDM_ChucDanhId String
   sDM_NhomViTriId String [not null]
   DM_NhanVien DM_NhanVien [not null]
@@ -1816,8 +1824,7 @@ Table DM_ViTriCongViec {
 
 Table NguoiDungTrongNhom {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1842,8 +1849,7 @@ Table NguoiDungTrongNhom {
 
 Table NhatKyHoatDong {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1868,8 +1874,7 @@ Table NhatKyHoatDong {
 
 Table Policy {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1882,6 +1887,7 @@ Table Policy {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   bXacThuc2YeuTo Boolean [default: false]
   bGioiHanTCIP Boolean [default: false]
   bGioiHanTG Boolean [default: false]
@@ -1890,8 +1896,7 @@ Table Policy {
 
 Table Quyen_VaiTro {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1904,6 +1909,7 @@ Table Quyen_VaiTro {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String [unique, not null]
   sTenChucNang String [default: 'N'Tên quyền'']
   sDM_NhanVienId String
   sDM_VaiTroId String
@@ -1914,8 +1920,7 @@ Table Quyen_VaiTro {
 
 Table TaiKhoan {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1928,7 +1933,8 @@ Table TaiKhoan {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sUserName String
+  sTen String [not null]
+  sUserName String [unique]
   sAvatar String
   sDM_NhanVienId String [unique]
   nhanVien DM_NhanVien
@@ -1936,8 +1942,7 @@ Table TaiKhoan {
 
 Table VaiTroTrongNhom {
   Id String [pk]
-  sMa String
-  sTen String
+  sMa String [unique]
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -2303,7 +2308,8 @@ Table DocumentFile {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  path String [unique, not null]
+  path String [not null]
+  size BigInt [not null]
   mimeType String
   archivedCertificate ArchivedCertificate
   archivedCertificateId String

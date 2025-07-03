@@ -3,7 +3,8 @@ import '../ql-dao-tao/plan-training'
 
 model DocumentFile extends Base {
   name                  String
-  path                  String               @unique
+  path                  String
+  size                  BigInt
   mimeType              String?
 
   archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
