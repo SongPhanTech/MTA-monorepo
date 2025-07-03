@@ -6,15 +6,14 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { type SchoolYear, type Semester, SemesterType } from '@workspace/db'
 import {
-    useCountSemester,
     useCreateSemester,
     useFindManySchoolYear,
     useFindUniqueSemester,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useWatch } from 'antd/es/form/Form'
@@ -28,7 +27,6 @@ type SemesterModalInput = {
 }
 const PutSemesterModal = () => {
     const [form] = Form.useForm<PutSemester>()
-    const [active, setActive] = useState(true)
     const { isOpen, onClose, input } = useDisclosure<SemesterModalInput>({
         tag: PutSemesterModal.name,
         onClose: form.resetFields,
@@ -54,7 +52,6 @@ const PutSemesterModal = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 schoolYearId,
-                order: output.order,
                 semesterType: output.semesterType,
                 active: output.active,
             }
@@ -83,13 +80,6 @@ const PutSemesterModal = () => {
         hideSpinner()
     }
     const schoolYearIdForm = useWatch('schoolYearId', form)
-    const { data: semesterCount = 0 } = useCountSemester({
-        where: schoolYearIdForm
-            ? {
-                  schoolYearId: schoolYearIdForm,
-              }
-            : {},
-    })
 
     const { data: initialData } = useFindUniqueSemester(
         {
@@ -105,14 +95,12 @@ const PutSemesterModal = () => {
                 startDate: dayjs(initialData.startDate),
                 endDate: initialData.endDate ? dayjs(initialData.endDate) : undefined,
             })
-            setActive(initialData?.active)
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [initialData])
-
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
-    }
 
     return (
         <PutFormModal
@@ -145,11 +133,6 @@ const PutSemesterModal = () => {
                                     label: i.name,
                                 }
                             })}
-                            onChange={(value) => {
-                                form.setFieldsValue({
-                                    order: semesterCount + 1,
-                                })
-                            }}
                         />
                     </FormItem>
                 </Col>
@@ -161,27 +144,17 @@ const PutSemesterModal = () => {
                         options={[
                             {
                                 value: SemesterType.FIRST,
-                                label: 'HK1',
+                                label: 'Học kỳ 1',
                             },
                             {
                                 value: SemesterType.SECOND,
-                                label: 'HK2',
+                                label: 'Học kỳ 2',
                             },
                             {
                                 value: null,
-                                label: 'HK khác',
+                                label: 'Học kỳ khác',
                             },
                         ]}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber
-                        style={{ width: '100%' }}
-                        placeholder="Nhập thứ tự năm học"
-                        step={1}
-                        min={1}
                     />
                 </FormItem>
             </Col>
@@ -201,18 +174,12 @@ const PutSemesterModal = () => {
                 </FormItem>
             </Col>
             {input?.semesterId && (
-                <Col span={12} className="flex items-center">
-                    <FormItem form={form} name="active" label="" valuePropName="checked">
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                            }}
-                        >
-                            <Switch checked={active} onChange={handleChange} />
-                            <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                        </div>
+                <Col span={12}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
                     </FormItem>
                 </Col>
             )}

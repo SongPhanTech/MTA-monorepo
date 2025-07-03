@@ -8,11 +8,11 @@ import {
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Switch } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 export type PutTrainingBlock = TrainingBlock
 dayjs.locale('vi')
 const PutTrainingBlock = () => {
@@ -27,7 +27,6 @@ const PutTrainingBlock = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const [active, setActive] = useState(true)
 
     const { data: trainingBlock } = useFindUniqueTrainingBlock({ where: { id } }, { enabled: !!id })
 
@@ -36,7 +35,10 @@ const PutTrainingBlock = () => {
             form.setFieldsValue({
                 ...trainingBlock,
             })
-            setActive(trainingBlock.active)
+        } else {
+            form.setFieldsValue({
+                active: true,
+            })
         }
     }, [trainingBlock, form])
 
@@ -50,7 +52,6 @@ const PutTrainingBlock = () => {
             const payload = {
                 code: output.code,
                 name: output.name,
-                priority: output.priority,
                 active: output.active,
             }
 
@@ -76,11 +77,6 @@ const PutTrainingBlock = () => {
         }
 
         hideSpinner()
-    }
-
-    const handleChange = (checked: boolean) => {
-        setActive(checked)
-        form.setFieldsValue({ active: checked })
     }
 
     return (
@@ -139,25 +135,16 @@ const PutTrainingBlock = () => {
                     <Input placeholder="Số tín chỉ chuyên ngành" />
                 </FormItem>
             </Col> */}
-            <Col span={24}>
-                <FormItem form={form} name="priority" label="Thứ tự" required>
-                    <InputNumber placeholder="Thứ tự" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12} className="flex items-center">
-                <FormItem form={form} name="active" label="" valuePropName="checked">
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                        }}
-                    >
-                        <Switch checked={active} onChange={handleChange} />
-                        <span>{active ? 'Đang đào tạo' : 'Ngừng đào tạo'}</span>
-                    </div>
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

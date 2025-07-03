@@ -106,9 +106,18 @@ const TableCollapse = <T extends Data>({
     }, [data, childrenFieldName])
 
     useEffect(() => {
-        if (defaultExpandAll && dataWithKey.length > 0)
+        if (defaultExpandAll && dataWithKey.length > 0) {
             setExpandedKeys(dataWithKey.map((d) => d.key as React.Key))
-    }, [defaultExpandAll, dataWithKey])
+        } else {
+            const firstWithChildren = dataWithKey.find(
+                (item) =>
+                    Array.isArray(item[childrenFieldName]) && item[childrenFieldName]?.length > 0
+            )
+            if (firstWithChildren?.key) {
+                setExpandedKeys([firstWithChildren.key])
+            }
+        }
+    }, [defaultExpandAll, dataWithKey, childrenFieldName])
 
     const allChildren = useMemo(() => {
         const children: Data[] = []

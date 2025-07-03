@@ -1,4 +1,5 @@
 import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
+import type { DocumentFile } from '@workspace/db'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
@@ -10,15 +11,31 @@ const { Link } = Typography
 
 interface DocumentPathsComponentProps {
     form: FormInstance
-    data: string[]
+    data: DocumentFile[]
+    relationId: string
+    relationType:
+        | 'archivedCertificateId'
+        | 'archivedAwardId'
+        | 'curriculumId'
+        | 'curriculumVersionId'
+        | 'subjectVersionId'
 }
 
 interface UploadedFileItem {
     file: File | null
-    fileName: string // fileName từ resPresignedUrl
+    name: string
+    path: string
+    size: bigint
+    mimeType?: string
+    [key: string]: any // For relation ID
 }
 
-const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) => {
+const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
+    form,
+    data,
+    relationId,
+    relationType,
+}) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 
     const handleRemoveFile = (index: number): void => {
@@ -26,9 +43,15 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
         newList.splice(index, 1)
         setFileList(newList)
 
-        const updatedPaths = newList.map((item) => item.fileName)
+        const updatedFiles = newList.map((item) => ({
+            name: item.name,
+            path: item.path,
+            size: item.size,
+            mimeType: item.mimeType,
+            [relationType]: relationId,
+        }))
 
-        form.setFieldValue('documentPaths', updatedPaths)
+        form.setFieldValue('documentFiles', updatedFiles)
     }
 
     const handleCustomUpload = async (file: File) => {
@@ -57,15 +80,26 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
                 },
             })
 
-            // Upload thành công: thêm file vào danh sách
             setFileList((prev: UploadedFileItem[]) => {
-                const newList = [...prev, { file, fileName: resPresignedUrl.data.fileName }]
-                const rawPaths = form.getFieldValue('documentPaths')
-                const currentPaths = Array.isArray(rawPaths) ? rawPaths : []
-                form.setFieldValue('documentPaths', [
-                    ...currentPaths,
-                    resPresignedUrl.data.fileName,
-                ])
+                const newItem: UploadedFileItem = {
+                    file,
+                    name: file.name,
+                    path: resPresignedUrl.data.fileName,
+                    size: BigInt(file.size || 0),
+                    mimeType: file.type,
+                    [relationType]: relationId,
+                }
+                const newList = [...prev, newItem]
+
+                const documentFiles = newList.map((item) => ({
+                    name: item.name,
+                    path: item.path,
+                    size: item.size,
+                    mimeType: item.mimeType,
+                    [relationType]: relationId,
+                }))
+
+                form.setFieldValue('documentFiles', documentFiles)
                 return newList
             })
         } catch (err) {
@@ -75,12 +109,31 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
     }
 
     useEffect(() => {
-        const initial = data.map((filePath) => ({
+        const initial = data.map((file) => ({
             file: null,
-            fileName: filePath,
+            name: file.name,
+            path: file.path,
+            size: file.size ? BigInt(file.size) : BigInt(0),
+            mimeType: file.mimeType || '',
+            [relationType]: relationId,
         }))
         setFileList(initial)
-    }, [data])
+
+        // Set initial value for form
+        if (data.length > 0) {
+            form.setFieldValue(
+                'documentFiles',
+                initial.map((item) => ({
+                    name: item.name,
+                    path: item.path,
+                    size: item.size,
+                    mimeType: item.mimeType,
+                    [relationType]: relationId,
+                }))
+            )
+        }
+    }, [data, relationId, relationType])
+    console.log(fileList)
 
     return (
         <>
@@ -109,19 +162,16 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
                     vào đây
                 </p>
                 <span className="text-[#4B5563] text-base font-normal">
-                    Định dạng XLSX, XLS (tối đa 5MB)
+                    Định dạng DOC, DOCX, XLSX, XLS (tối đa 5MB)
                 </span>
             </Dragger>
             <div className="flex flex-wrap gap-2 mt-2">
                 {fileList.map((item: UploadedFileItem, index: number) => {
-                    const isFromData = item.file === null
-                    const tooltipText = isFromData
-                        ? item.fileName.split('/').pop()
-                        : item?.file?.name
+                    const displayName = item.file?.name || item.name
 
                     return (
                         <div
-                            key={item.fileName}
+                            key={item.path}
                             className="flex items-center border border-solid border-[#D1D5DB] rounded p-2"
                         >
                             <PaperClipOutlined
@@ -131,7 +181,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
                                     fontSize: 16,
                                 }}
                             />
-                            <Tooltip title={tooltipText}>
+                            <Tooltip title={displayName}>
                                 <span
                                     style={{
                                         whiteSpace: 'nowrap',
@@ -140,7 +190,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({ form, data }) =>
                                         flexGrow: 1,
                                     }}
                                 >
-                                    {tooltipText}
+                                    {displayName}
                                 </span>
                             </Tooltip>
                             <CloseOutlined

@@ -305,7 +305,7 @@ export default function SubjectList() {
                         headerTitleKey="name"
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        // defaultExpandAll
                         onChange={(pagination, filters) => {
                             if (filters.examType) {
                                 handleFilterChange('examType', filters.examType as ExamType[])

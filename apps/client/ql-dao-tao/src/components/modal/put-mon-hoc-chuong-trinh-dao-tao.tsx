@@ -14,7 +14,7 @@ import {
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, InputNumber, message, Select, TreeSelect } from 'antd'
+import { Checkbox, Col, Form, InputNumber, message, Radio, Select, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -80,6 +80,7 @@ const PutTrainingBlockSubject = () => {
                 graduation: false,
                 project: false,
                 print: false,
+                active: true,
             })
         }
     }, [initialValue, form])
@@ -100,7 +101,7 @@ const PutTrainingBlockSubject = () => {
                 graduation: output?.graduation,
                 project: output?.project,
                 print: output?.print,
-                active: output.active,
+                active: output?.active,
             }
 
             if (input?.trainingBlockSubjectId) {
@@ -266,15 +267,11 @@ const PutTrainingBlockSubject = () => {
             </Col>
             {input?.trainingBlockSubjectId && (
                 <Col span={24}>
-                    <FormItem form={form} name="active" label="Trạng thái">
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            options={[
-                                { label: 'Đang hoạt động', value: true },
-                                { label: 'Ngừng đào tạo', value: false },
-                            ]}
-                            allowClear
-                        />
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
                     </FormItem>
                 </Col>
             )}
