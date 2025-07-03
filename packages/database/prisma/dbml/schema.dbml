@@ -546,6 +546,7 @@ Table TrainingObjectType {
   updatedAt DateTime [not null]
   name String [unique, not null]
   type TrainingObjectTypes [not null]
+  baseScore AcademicRankingBaseType [not null]
   trainingCourse TrainingCourse [not null]
   curriculumVersion CurriculumVersion [not null]
   trainingMajors TrainingMajorOnTrainingObjectType [not null]
@@ -855,7 +856,7 @@ Table AcademicRankingConvert {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   classification String [not null]
-  type AcademicRankingBaseType [not null]
+  baseScore AcademicRankingBaseType [not null]
   base10Min Float
   base10Max Float
   base4Min Float
@@ -944,7 +945,7 @@ Table StudentSemesterResult {
   studyYear Int [not null]
   semesterIndexInCourse Int [not null]
   isLastSemester Boolean [not null]
-  baseType AcademicRankingBaseType [not null]
+  baseScore AcademicRankingBaseType [not null]
   gpaBase4 Float [not null]
   cumulativeGpaBase4 Float [not null]
   gpaBase10 Float [not null]
@@ -986,7 +987,7 @@ Table StudentYearResult {
   schoolYearId String [not null]
   studyYear Int [not null]
   isLastStudyYear Boolean [not null]
-  baseType AcademicRankingBaseType [not null]
+  baseScore AcademicRankingBaseType [not null]
   gpaBase4 Float [not null]
   cumulativeGpaBase4 Float [not null]
   gpaBase10 Float [not null]

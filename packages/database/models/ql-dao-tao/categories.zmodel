@@ -17,6 +17,7 @@ enum TrainingObjectTypes {
 model TrainingObjectType extends Base {
   name                 String                              @unique
   type                 TrainingObjectTypes
+  baseScore            AcademicRankingBaseType
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -248,7 +249,7 @@ model AcademicRankingConvert extends Base {
   classification   String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
   // dựa vào type yêu cầu người dùng nhập hệ 10 hoặc hệ 4
   // dựa vào type để xếp loại học lực theo hệ 10 hoặc hệ 4
-  type             AcademicRankingBaseType
+  baseScore        AcademicRankingBaseType
   base10Min        Float?
   base10Max        Float?
   base4Min         Float?
@@ -258,8 +259,8 @@ model AcademicRankingConvert extends Base {
   trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
-  @@validate(!(type == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
-  @@validate(!(type == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
+  @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
+  @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
 
   @@allow('all', true)
   @@schema("ql-dao-tao")

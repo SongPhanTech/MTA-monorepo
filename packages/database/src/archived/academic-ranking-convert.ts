@@ -5,7 +5,7 @@ export const academicRankingConversions: Omit<
     'trainingCourseId'
 >[] = [
     {
-        type: 'Base10',
+        baseScore: 'Base10',
         classification: 'Xuất sắc',
         base10Min: 9.0,
         base10Max: 10,
@@ -14,7 +14,7 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        type: 'Base10',
+        baseScore: 'Base10',
 
         classification: 'Giỏi',
         base10Min: 8.0,
@@ -24,7 +24,7 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        type: 'Base10',
+        baseScore: 'Base10',
         classification: 'Khá',
         base10Min: 7.0,
         base10Max: 7.99,
@@ -33,7 +33,7 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        type: 'Base10',
+        baseScore: 'Base10',
         classification: 'Trung Bình Khá',
         base10Min: 6.5,
         base10Max: 6.99,
@@ -42,7 +42,7 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        type: 'Base10',
+        baseScore: 'Base10',
         classification: 'Trung Bình',
         base10Min: 5.5,
         base10Max: 6.49,
@@ -51,7 +51,7 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        type: 'Base10',
+        baseScore: 'Base10',
         classification: 'Yếu',
         base10Min: 0,
         base10Max: 5.49,
