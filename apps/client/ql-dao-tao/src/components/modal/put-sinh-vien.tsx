@@ -33,7 +33,7 @@ export type StudentModalProps = {
         fixedClassId?: string
         curriculumVersionId?: string
     }
-    id?: string | null
+    id: string
 }
 
 type PreFillFormFields = {
@@ -168,6 +168,7 @@ const PutStudentModal = () => {
         registrationAreaId: output.registrationAreaId,
         status: output.status,
         userProfileId: output.userProfileId,
+        curriculumVersionId: output.curriculumVersionId,
     })
 
     const buildStudentCreateData = (output: PutStudentProfile, userProfileId: string) => ({
@@ -237,7 +238,7 @@ const PutStudentModal = () => {
                     await updateStudent({
                         data: studentDataUpdate,
                         where: {
-                            userProfileId: userProfile?.id,
+                            id: id,
                         },
                     })
 

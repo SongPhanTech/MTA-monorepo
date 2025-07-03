@@ -90,7 +90,10 @@ model StudentSemesterResult extends Base {
   gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
   cumulativeGpaBase10      Float    // Tích luỹ hệ 10
 
+  studentTrainingType      StudentTrainingType // xếp loại rèn luyện
+
   lowestFinalScore         Float    // Điểm học phần thấp nhất
+  lowestGraduationScore    Float?
 
   totalCredits             Int      // Tổng tín chỉ mở trong học kỳ cho CTĐT
 

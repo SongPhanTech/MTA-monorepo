@@ -225,6 +225,7 @@ enum CriteriaField {
   REGISTERED_CREDITS
   ACCUMULATED_CREDITS_PERCENT
   COURSE_GRADE_MIN
+  GRADUATION_GRADE_MIN
   SEMESTER_GPA
   ENTRY_SCORE
   CONDUCT
@@ -444,7 +445,7 @@ model ArchivedCertificate {
   name                String
   englishName         String?
   finalScore          Float
-  documentPaths       String[]
+  documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
 
   @@schema("ql-dao-tao")
@@ -478,7 +479,7 @@ model ArchivedAward {
   name                String
   englishName         String?
   bonusScore          Float
-  documentPaths       String[]
+  documentFiles       DocumentFile[]
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
 
   @@schema("ql-dao-tao")
@@ -636,8 +637,8 @@ model Curriculum {
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId          String
   information              String?
-  documentPaths            String[]
   renderPath               String?
+  documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
 
   @@schema("ql-dao-tao")
@@ -696,8 +697,8 @@ model CurriculumVersion {
   summary               String?
   learningDiagram       String?
   guide                 String?
-  documentPaths         String[]
   renderPath            String?
+  documentFiles         DocumentFile[]
   trainingBlocks        TrainingBlockOnCurriculumVersion[]
   fixedClasses          FixedClass[]
   students              Student[]
@@ -753,7 +754,6 @@ model SubjectVersion {
   academicResults          String?
   materials                String?
   rules                    String?
-  documentPaths            String[]
   managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
@@ -767,6 +767,7 @@ model SubjectVersion {
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
+  documentFiles            DocumentFile[]
 
   @@schema("ql-dao-tao")
 }
@@ -1265,7 +1266,9 @@ model StudentSemesterResult {
   cumulativeGpaBase4       Float
   gpaBase10                Float
   cumulativeGpaBase10      Float
+  studentTrainingType      StudentTrainingType
   lowestFinalScore         Float
+  lowestGraduationScore    Float?
   totalCredits             Int
   registeredCredits        Int
   retakingCredits          Int
@@ -2726,6 +2729,31 @@ model DisciplinaryWarningReason {
   severityLevel Int
 
   @@schema("ql-dao-tao")
+}
+
+model DocumentFile {
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt()
+  name                  String
+  path                  String               @unique()
+  mimeType              String?
+  archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId String?
+  archivedAward         ArchivedAward?       @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId       String?
+  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
+  curriculumId          String?
+  curriculumVersion     CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId   String?
+  subjectVersion        SubjectVersion?      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String?
+
+  @@schema("ql-danh-muc")
 }
 
 model TemplateFile {

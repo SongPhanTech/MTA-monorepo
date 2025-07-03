@@ -10,6 +10,7 @@ import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -427,5 +428,19 @@ export default function StudentScoreClassPage() {
 }
 
 StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout headerChildren="Kết quả học tập">{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Quản lý hồ sơ' },
+                {
+                    title: 'Quản lý lớp niên chế',
+                    href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
+                },
+                { title: 'Chi tiết lớp niên chế' },
+                { title: 'Kết quả hóc tập' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

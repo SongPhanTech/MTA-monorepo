@@ -208,7 +208,7 @@ export default function TrainingCoursePage() {
                                 title: 'STT',
                                 width: 50,
                                 align: 'center',
-                                fixed: 'right',
+                                fixed: 'left',
                                 render: (_, record, index) =>
                                     index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
@@ -216,12 +216,14 @@ export default function TrainingCoursePage() {
                                 title: 'Mã khóa',
                                 dataIndex: 'code',
                                 width: 150,
+                                fixed: 'left',
                                 align: 'center',
                             },
                             {
                                 title: 'Tên khóa',
                                 dataIndex: 'name',
                                 width: 200,
+                                fixed: 'left',
                                 align: 'center',
                             },
                             {

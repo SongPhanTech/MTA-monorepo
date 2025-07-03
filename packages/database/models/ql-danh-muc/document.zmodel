@@ -1,0 +1,26 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+
+model DocumentFile extends Base {
+  name                  String
+  path                  String               @unique
+  mimeType              String?
+
+  archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId String?
+
+
+  archivedAward         ArchivedAward?       @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId       String?
+
+  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
+  curriculumId          String?
+
+  curriculumVersion     CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId   String?
+
+  subjectVersion        SubjectVersion?      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String?
+
+  @@schema("ql-danh-muc")
+}

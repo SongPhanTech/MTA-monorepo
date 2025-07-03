@@ -2,11 +2,9 @@ import { Modal } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ConfirmModal = () => {
-    const { isOpen, input } = useDisclosure<string>({
+    const { isOpen, onClose, onOk, input } = useDisclosure<string>({
         tag: ConfirmModal.name,
     })
-
-    const onLogout = (id: string) => {}
 
     return (
         <Modal
@@ -15,7 +13,8 @@ const ConfirmModal = () => {
             className="w-[30vw]"
             okText="Đồng ý"
             cancelText="Hủy"
-            onCancel={onLogout.bind(null, '1')}
+            onCancel={onClose}
+            onOk={onOk}
         >
             {input}
         </Modal>
