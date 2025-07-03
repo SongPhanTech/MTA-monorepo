@@ -1205,6 +1205,7 @@ model Student {
   deletedAt                 DateTime?
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @updatedAt()
+  entryScore                Float?
   from                      DateTime?
   to                        DateTime?
   trainingLocation          TrainingLocation?           @relation(fields: [trainingLocationId], references: [id])

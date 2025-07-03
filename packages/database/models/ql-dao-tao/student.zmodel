@@ -12,6 +12,8 @@ import 'warning'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
+  entryScore                Float?   // Điểm thi đầu vào (nếu có)
+
   from                      DateTime? // từ ngày
   to                        DateTime? // đến ngày
 
@@ -59,8 +61,8 @@ model Student extends Base {
   trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
 
-  academicWarningLevel      Int                     @default(0) // mức cảnh cáo học tập
-  disciplinaryWarningLevel  Int                     @default(0) // mức cảnh cáo học đường
+  academicWarningLevel      Int                         @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel  Int                         @default(0) // mức cảnh cáo học đường
 
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
