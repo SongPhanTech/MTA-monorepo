@@ -6,6 +6,7 @@ import { prisma } from '..'
 import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
+    checkScholarshipEligibility,
     listStudentInfo,
     populateExcelTemplate,
     sanitizeFilename,
@@ -346,12 +347,10 @@ app.openapi(importHeQuanSu, async (c) => {
                         idCardNumber: student.code,
                         code: student.code,
                         gender: student.gender === 'Nữ' ? Gender.Female : Gender.Male,
-                        ethnicityId: ethnicityMap.get(student.ethnicity || null) || null,
-                        nationalityId: nationalityMap.get(student.nationality || null) || null,
-                        provinceHometownId:
-                            provinceMap.get(student.provinceHometown || null) || null,
-                        districtHometownId:
-                            districtMap.get(student.districtHometown || null) || null,
+                        ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
+                        nationalityId: nationalityMap.get(student.nationality ?? '') || null,
+                        provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
+                        districtHometownId: districtMap.get(student.districtHometown ?? '') || null,
                     }
 
                 if (existingStudent) {
@@ -410,11 +409,23 @@ app.openapi(dsRaSoatHocBongExcel, async (c) => {
 app.openapi(dsRaSoatHocBongJson, async (c) => {
     const { semesterId, scholarshipId } = c.req.valid('query')
     const students = await listStudentInfo(semesterId)
-
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
 
+    if (scholarshipId) {
+        const scholarship = await prisma.scholarship.findUnique({
+            where: { id: scholarshipId },
+        })
+        if (!scholarship) {
+            return c.json({ message: 'Học bổng không tồn tại' }, 404)
+        }
+        console.log(`Xét học bổng: ${scholarship.name} (${scholarshipId})`)
+        // Filter students based on scholarship criteria
+        const filteredStudents = await checkScholarshipEligibility(students, scholarshipId)
+        return c.json(filteredStudents, 200)
+    }
+    // If no scholarshipId is provided, return all students
     return c.json(students, 200)
 })
 

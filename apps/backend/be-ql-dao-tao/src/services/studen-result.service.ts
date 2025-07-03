@@ -503,6 +503,7 @@ export const calculateStudentSemesterResult = async (
                         id: true,
                         name: true, // Lấy tên đối tượng đào tạo
                         code: true, // Lấy mã đối tượng đào tạo
+                        baseScore: true, // Lấy điểm chuẩn của đối tượng đào tạo
                     },
                 },
 
@@ -548,11 +549,7 @@ export const calculateStudentSemesterResult = async (
             }
 
             // Lấy thông tin điểm học viên
-            // TODO: Cần xác định baseType dựa trên gì (chưa có cấu hình rõ trong DB)
-            const baseType =
-                student.trainingObjectType?.name === 'QS'
-                    ? AcademicRankingBaseType.Base10
-                    : AcademicRankingBaseType.Base4
+            const baseType = student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là Base10 nếu không có thông tin
 
             // Lấy thông tin điểm học kỳ
             const thongTinDiemHocKy = await ThongTinDiemHocKy(
@@ -578,7 +575,8 @@ export const calculateStudentSemesterResult = async (
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-                    baseType: baseType,
+                    baseScore:
+                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base4
                     gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
                     gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
                     cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
@@ -647,7 +645,8 @@ export const calculateStudentSemesterResult = async (
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-                    baseType: baseType,
+                    baseScore:
+                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10,
                     gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
                     gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
                     cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
