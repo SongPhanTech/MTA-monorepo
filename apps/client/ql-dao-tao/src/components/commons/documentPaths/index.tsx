@@ -133,7 +133,6 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
             )
         }
     }, [data, relationId, relationType, form.setFieldValue])
-    console.log(fileList)
 
     return (
         <>

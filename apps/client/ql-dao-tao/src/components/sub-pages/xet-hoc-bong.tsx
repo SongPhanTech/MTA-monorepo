@@ -9,10 +9,11 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { Search } from 'lucide-react'
+import { queryClient } from '@api/index'
 
 dayjs.locale('vi')
 
-const XetHocBong = () => {
+const XetHocBong = (semesterId: string) => {
     const fakeData = [
         {
             id: '1',
@@ -57,6 +58,22 @@ const XetHocBong = () => {
             ],
         },
     ]
+
+    //    const { data: students } = useFixedClassBySubjectClassSemester(
+    //         {
+    //             semesterId: semesterId || '',
+    //             subjectClassId: subjectClassId || '',
+    //             search: filters.searchText || '',
+    //             page: '1',
+    //             pageSize: '10',
+    //         },
+    //         {
+    //             query: {
+    //                 enabled: !!semesterId && !!subjectClassId,
+    //             },
+    //         },
+    //         queryClient
+    //     )
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 

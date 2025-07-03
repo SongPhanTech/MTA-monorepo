@@ -1,4 +1,4 @@
-import { FilterFilled } from '@ant-design/icons'
+import { EyeOutlined, FilterFilled } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -16,10 +16,12 @@ import {
     useUpdateSchoolYear,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Radio, Row, Tag } from 'antd'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Form, Input, message, Radio, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -29,6 +31,7 @@ interface FilterProps {
 }
 
 function YearAndSemester() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState<string>('')
@@ -374,18 +377,20 @@ function YearAndSemester() {
                             fixed: 'right',
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
-                                    {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={(e: any) => {
-                                                            e.stopPropagation()
-                                                            onOpen(id)
-                                                        }}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
+                                    <Tooltip
+                                        title="Cảnh cáo học tập, Xét học bổng"
+                                        placement="top"
+                                    >
+                                        <EyeOutlined
+                                            onClick={(e: any) => {
+                                                e.stopPropagation()
+                                                router.push(
+                                                    `${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`
+                                                )
+                                            }}
+                                            className="text-sm cursor-pointer"
+                                        />
+                                    </Tooltip>
                                     <EditIcon
                                         onClick={(e) => {
                                             e.stopPropagation()

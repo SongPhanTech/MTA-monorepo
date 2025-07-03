@@ -9,7 +9,12 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { ExamType } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    DocumentFile,
+    ExamType,
+    TrainingBlockOnCurriculumVersion,
+} from '@workspace/db'
 import {
     useCountTrainingBlockOnCurriculumVersion,
     useDeleteManyTrainingBlockSubject,
@@ -510,7 +515,13 @@ export default function TrainingProgramSubjects() {
                             <Flex justify="end" gap={4}>
                                 <Button
                                     onClick={() =>
-                                        initialValue && handleCloneCurriculumVersion(initialValue)
+                                        initialValue &&
+                                        handleCloneCurriculumVersion(
+                                            initialValue as CurriculumVersion & {
+                                                trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                documentFiles: DocumentFile[]
+                                            }
+                                        )
                                     }
                                     className="text-primary border-primary mr-2"
                                     disabled={!initialValue}
@@ -540,7 +551,7 @@ export default function TrainingProgramSubjects() {
                         headerTitleKey="name"
                         childrenFieldName="subjects"
                         currentPage={currentPage}
-                        // defaultExpandAll
+                        defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',
