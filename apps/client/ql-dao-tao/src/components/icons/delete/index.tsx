@@ -5,8 +5,9 @@ import { Trash2 } from 'lucide-react'
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
     title?: string
+    disabled?: boolean
 } & LucideProps
-const DeleteIcon = ({ title, popConfirm, ...props }: DeleteIconProps) => {
+const DeleteIcon = ({ title, popConfirm, disabled, ...props }: DeleteIconProps) => {
     return (
         <Tooltip title={title ? title : 'Xóa'} placement="top">
             <Popconfirm
@@ -20,7 +21,11 @@ const DeleteIcon = ({ title, popConfirm, ...props }: DeleteIconProps) => {
                 <Trash2
                     size={16}
                     strokeWidth={1.5}
-                    className="text-sm text-red-600 cursor-pointer"
+                    className={
+                        disabled
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-sm text-red-600 cursor-pointer'
+                    }
                     onClick={(e) => e.stopPropagation()}
                     {...props}
                 />

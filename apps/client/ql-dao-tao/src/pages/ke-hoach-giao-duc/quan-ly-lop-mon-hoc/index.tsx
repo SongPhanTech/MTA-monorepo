@@ -16,12 +16,12 @@ import type {
 } from '@workspace/db'
 import {
     useCountSubjectClass,
+    useDeleteSubjectClass,
     useFindManyLecturer,
     useFindManySemester,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
-    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Input, message, Row } from 'antd'
@@ -209,16 +209,13 @@ export default function TeachingAssignment() {
         }
         hideSpinner()
     }
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateSubjectClass({
+            await deleteSubjectClass({
                 where: {
                     id,
-                },
-                data: {
-                    deletedAt: new Date(),
                 },
             })
         } catch (_error) {
@@ -678,7 +675,7 @@ export default function TeachingAssignment() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
+                                render: (record, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -702,6 +699,9 @@ export default function TeachingAssignment() {
                                                     popConfirm={{
                                                         onConfirm: () => handleDelete(id),
                                                     }}
+                                                    disabled={
+                                                        record?.subjectClassStudent?.length > 0
+                                                    }
                                                 />
                                             </Row>
                                         )
