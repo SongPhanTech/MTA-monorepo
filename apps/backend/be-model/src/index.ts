@@ -20,6 +20,7 @@ app.use(
         origin: [
             'http://localhost:3001',
             'http://localhost:3000',
+            'https://mta.swantech.vn',
             'https://user.mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
             'https://chatbot.mta.swantech.vn',
