@@ -507,7 +507,9 @@ export default function TrainingProgramSubjects() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button
-                                    onClick={() => handleCloneCurriculumVersion(initialValue)}
+                                    onClick={() =>
+                                        initialValue && handleCloneCurriculumVersion(initialValue)
+                                    }
                                     className="text-primary border-primary"
                                     disabled={!initialValue}
                                 >

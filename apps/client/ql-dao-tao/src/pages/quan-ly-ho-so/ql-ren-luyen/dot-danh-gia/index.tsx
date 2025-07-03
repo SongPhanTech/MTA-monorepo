@@ -5,7 +5,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutOpenClassModal } from '@components/modal'
-import { CUSSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { CUSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType, TrainingScoreSession } from '@workspace/db'
@@ -179,7 +179,7 @@ export default function SubjectClassScore() {
                     name: data.tenDot,
                     semesterId: data.hocKi,
                     trainingObjectTypeId: data.doituong,
-                    time: data.thoiGian ? new Date(data.thoiGian).toISOString() : null,
+                    time: data.thoiGian ? new Date(data.thoiGian).toISOString() : undefined,
                     description: data.ghiChu || '',
                 },
             })
@@ -202,7 +202,7 @@ export default function SubjectClassScore() {
                     name: data.tenDot,
                     semesterId: data.hocKi,
                     trainingObjectTypeId: data.doituong,
-                    time: data.thoiGian ? new Date(data.thoiGian).toISOString() : null,
+                    time: data.thoiGian ? new Date(data.thoiGian).toISOString() : undefined,
                     description: data.ghiChu || '',
                 },
             })
@@ -346,7 +346,7 @@ export default function SubjectClassScore() {
                                                                 : null,
                                                         }))
                                                     }}
-                                                    locale={CUSSTOM_VI_LOCALE}
+                                                    locale={CUSTOM_VI_LOCALE}
                                                     format="DD/MM/YYYY"
                                                 />
                                             </Form.Item>
