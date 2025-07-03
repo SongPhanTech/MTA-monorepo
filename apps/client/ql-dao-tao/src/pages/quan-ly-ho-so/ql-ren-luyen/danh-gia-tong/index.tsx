@@ -332,7 +332,7 @@ export default function SubjectClassScore() {
                                     </Flex>
                                 </Col>
 
-                                <Col span={6}></Col>
+                                <Col span={6} />
                             </Row>
                             {/* <Row className="mt-4">
                                 <Col span={20} className="flex">

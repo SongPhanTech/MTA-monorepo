@@ -11,7 +11,7 @@ import { ListOf } from '../zod/base'
 
 const uploadExcelCreateUserProfile = createRoute({
     operationId: 'uploadExcelCreateUserProfile',
-    path: '/UserProfile/upload-excel-create-user-profile',
+    path: '/upload-excel-create-user-profile',
     method: 'post',
     description:
         'Thêm mới danh sách học viên/sinh viên \n\n [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType',
@@ -50,7 +50,7 @@ const uploadExcelCreateUserProfile = createRoute({
 
 const uploadExcelUpdateUserProfile = createRoute({
     operationId: 'uploadExcelUpdateUserProfile',
-    path: '/UserProfile/upload-excel-update-user-profile',
+    path: '/upload-excel-update-user-profile',
     method: 'post',
     description: 'Cập nhật thông tin học viên/sinh viên',
     tags: ['UserProfile'],
