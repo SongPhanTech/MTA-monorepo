@@ -8,6 +8,7 @@ import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -49,6 +50,7 @@ setupOpenApi(app)
 // setupAuth(app)
 
 app.route('/api/minio', MinIOApp)
+app.route('/api/auth', AuthApp)
 
 app.use(
     '/api/model/*',

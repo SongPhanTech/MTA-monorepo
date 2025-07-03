@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode'
-import { type NextRequest, NextResponse } from 'next/server'
 import type { Session } from '..'
 
 const auth = async (token?: string): Promise<Session | null> => {
@@ -28,13 +27,4 @@ const auth = async (token?: string): Promise<Session | null> => {
     }
 }
 
-const GET = async (request: NextRequest) => {
-    const token = request.cookies.get('x-token')?.value
-    const session = await auth(token)
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    return NextResponse.json(session)
-}
-
-export { auth, GET }
+export { auth }

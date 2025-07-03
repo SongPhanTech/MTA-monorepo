@@ -11,10 +11,13 @@ const fetchSession = async (): Promise<{
     error: Error | null
 }> => {
     try {
-        const response = await fetch('/api/sso', {
-            method: 'GET',
-            credentials: 'include',
-        })
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session`,
+            {
+                method: 'GET',
+                credentials: 'include',
+            }
+        )
         if (!response.ok) {
             throw new Error('Failed to fetch session')
         }
