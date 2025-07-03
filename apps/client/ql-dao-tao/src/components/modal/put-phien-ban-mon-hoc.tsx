@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
+import { SubjectEquivalentType, type SubjectVersion, DocumentFile } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -19,7 +19,9 @@ import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
-export type PutSubjectVersion = SubjectVersion
+export type PutSubjectVersion = SubjectVersion & {
+    documentFiles?: DocumentFile[]
+}
 dayjs.locale('vi')
 
 type PutSubjectVersionFormValues = PutSubjectVersion & {
@@ -28,7 +30,7 @@ type PutSubjectVersionFormValues = PutSubjectVersion & {
 }
 
 const PutVersionSubjectModal = () => {
-    const [document, setDocument] = useState<string[]>([])
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutSubjectVersionFormValues>()
     const { isOpen, onClose, input } = useDisclosure<{
         subjectId: string
@@ -41,13 +43,17 @@ const PutVersionSubjectModal = () => {
     const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
 
-    const { data: subjectVersion } = useFindUniqueSubjectVersion({
-        where: { id: subjectVersionId },
-        include: {
-            prerequisiteSubject: true,
-            coRequisiteSubject: true,
+    const { data: subjectVersion } = useFindUniqueSubjectVersion(
+        {
+            where: { id: subjectVersionId },
+            include: {
+                prerequisiteSubject: true,
+                coRequisiteSubject: true,
+                documentFiles: true,
+            },
         },
-    })
+        { enabled: !!subjectVersionId }
+    )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -93,7 +99,7 @@ const PutVersionSubjectModal = () => {
             showSpinner()
             const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
-            const payload = {
+            const baseData = {
                 code: output.code,
                 name: output.name,
                 description: output.description,
@@ -117,7 +123,6 @@ const PutVersionSubjectModal = () => {
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
-                documentPaths: output.documentPaths,
                 prerequisiteSubject: subjectVersionId
                     ? {
                           set:
@@ -145,14 +150,61 @@ const PutVersionSubjectModal = () => {
             }
 
             if (subjectVersionId) {
+                const updateData = {
+                    ...baseData,
+                    documentFiles: {
+                        upsert: (output.documentFiles || [])
+                            .filter((file) => !!file.id)
+                            .map((file) => ({
+                                where: { id: file.id },
+                                create: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                    subjectVersionId: { connect: { id: subjectVersionId } },
+                                },
+                                update: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                },
+                            })),
+                        create: (output.documentFiles || [])
+                            .filter((file) => !file.id)
+                            .map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        disconnect: document
+                            .filter(
+                                (existing) =>
+                                    !output.documentFiles?.some((f) => f.id === existing.id)
+                            )
+                            .map((file) => ({ id: file.id })),
+                    },
+                }
                 await updateSubjectVersion({
-                    data: payload,
+                    data: updateData,
                     where: { id: subjectVersionId },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createSubjectVersion({
-                    data: payload,
+                    data: {
+                        ...baseData,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
@@ -177,11 +229,13 @@ const PutVersionSubjectModal = () => {
                     (item: { id: string }) => item.id
                 ),
             })
-            setDocument(subjectVersion.documentPaths)
+            setDocument(subjectVersion?.documentFiles)
         } else {
             form.setFieldsValue({
                 active: true,
+                documentFiles: [],
             })
+            setDocument([])
         }
     }, [subjectVersion, form])
 
@@ -327,8 +381,13 @@ const PutVersionSubjectModal = () => {
             </Col>
             {/*  */}
             <Col span={24}>
-                <FormItem form={form} name="documentPaths" label="Tài liệu đính kèm">
-                    <DocumentPaths form={form} data={document} />
+                <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={subjectVersionId ?? ''}
+                        relationType="subjectVersionId"
+                    />
                 </FormItem>
             </Col>
             <Tabs

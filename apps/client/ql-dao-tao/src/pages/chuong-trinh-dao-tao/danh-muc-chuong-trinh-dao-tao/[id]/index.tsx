@@ -84,6 +84,7 @@ export default function TrainingProgramSubjects() {
                     },
                 },
                 trainingTime: true,
+                documentFiles: true,
             },
         },
         { enabled: !!id }

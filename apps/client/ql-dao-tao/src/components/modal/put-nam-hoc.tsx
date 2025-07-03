@@ -40,7 +40,7 @@ const PutSchoolYearModal = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,
-                active: output.active
+                active: output.active,
             }
             if (id) {
                 await updateSchoolYear({

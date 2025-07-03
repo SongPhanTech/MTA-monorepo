@@ -9,7 +9,14 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingMajor, TrainingObjectType } from '@workspace/db'
+import type {
+    CurriculumVersion,
+    DocumentFile,
+    TrainingBlockOnCurriculumVersion,
+    TrainingCourse,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
@@ -171,6 +178,7 @@ export default function TrainingProgramCatalog() {
                             },
                         },
                     },
+                    documentFiles: true,
                 },
             },
             managementOrganization: true,
@@ -583,7 +591,12 @@ export default function TrainingProgramCatalog() {
                                                 <CopyPlusIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        handleCloneCurriculumVersion(record)
+                                                        handleCloneCurriculumVersion(
+                                                            record as CurriculumVersion & {
+                                                                trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                                documentFiles: DocumentFile[]
+                                                            }
+                                                        )
                                                     }}
                                                 />
                                                 <EditIcon

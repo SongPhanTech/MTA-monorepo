@@ -19,11 +19,14 @@ import 'dayjs/locale/vi'
 import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { buildOrgTree } from '@lib/utils'
-export type PutCurriculum = Curriculum
+import type { DocumentFile } from '@workspace/db'
+export type PutCurriculum = Curriculum & {
+    documentFiles?: DocumentFile[]
+}
 dayjs.locale('vi')
 
 const PutCurriculum = () => {
-    const [document, setDocument] = useState<string[]>([])
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculum>()
     const {
         isOpen,
@@ -47,27 +50,73 @@ const PutCurriculum = () => {
         if (!output) return
         try {
             showSpinner()
-            const data = {
+            const baseData = {
                 code: output.code,
                 name: output.name,
                 englishName: output.englishName,
                 description: output.description,
                 trainingMajorId: output.trainingMajorId,
                 managementOrganizationId: output.managementOrganizationId,
-                documentPaths: output.documentPaths,
                 active: output.active,
             }
+
             if (id) {
-                await updateCurriculum({
-                    data: data,
-                    where: {
-                        id,
+                const updateData = {
+                    ...baseData,
+                    documentFiles: {
+                        upsert: (output.documentFiles || [])
+                            .filter((file) => !!file.id)
+                            .map((file) => ({
+                                where: { id: file.id },
+                                create: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                    curriculum: { connect: { id } },
+                                },
+                                update: {
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                },
+                            })),
+                        create: (output.documentFiles || [])
+                            .filter((file) => !file.id)
+                            .map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        disconnect: document
+                            .filter(
+                                (existing) =>
+                                    !output.documentFiles?.some((f) => f.id === existing.id)
+                            )
+                            .map((file) => ({ id: file.id })),
                     },
+                }
+
+                await updateCurriculum({
+                    data: updateData,
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createCurriculum({
-                    data: data,
+                    data: {
+                        ...baseData,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
@@ -84,6 +133,9 @@ const PutCurriculum = () => {
     const { data: initialData } = useFindUniqueCurriculum(
         {
             where: { id },
+            include: {
+                documentFiles: true,
+            },
         },
         { enabled: !!id }
     )
@@ -94,12 +146,15 @@ const PutCurriculum = () => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
+                documentFiles: initialData.documentFiles,
             })
-            setDocument(initialData?.documentPaths)
+            setDocument(initialData.documentFiles)
         } else {
             form.setFieldsValue({
                 active: true,
+                documentFiles: [],
             })
+            setDocument([])
         }
     }, [initialData])
 
@@ -166,8 +221,13 @@ const PutCurriculum = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="documentPaths" label="Tài liệu đính kèm">
-                    <DocumentPaths form={form} data={document} />
+                <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={id ?? ''}
+                        relationType="curriculumId"
+                    />
                 </FormItem>
             </Col>
             {id && (

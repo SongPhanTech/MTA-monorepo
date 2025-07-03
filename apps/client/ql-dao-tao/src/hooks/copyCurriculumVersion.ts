@@ -62,11 +62,14 @@ export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersion
                 guide: originalVersion.guide,
                 documentFiles: {
                     createMany: {
-                        data: originalVersion.documentFiles.map(({ name, path, mimeType }) => ({
-                            name,
-                            path,
-                            mimeType,
-                        })),
+                        data: (originalVersion.documentFiles || []).map(
+                            ({ name, path, mimeType, size }) => ({
+                                name,
+                                path,
+                                mimeType,
+                                size,
+                            })
+                        ),
                     },
                 },
                 renderPath: originalVersion.renderPath,
