@@ -5,19 +5,19 @@ import { PutRoomModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db'
 import {
     useCountRoom,
     useFindManyRoom,
     useFindUniqueBuilding,
     useUpdateRoom,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -33,35 +33,24 @@ export default function BuildingPage() {
         searchText: '',
     })
 
-    const roomWhere: Prisma.RoomWhereInput = useMemo(
-        () => ({
-            AND: [
+    const { data = [], refetch } = useFindManyRoom({
+        where: {
+            buildingId,
+            OR: [
                 {
-                    buildingId,
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
                 },
                 {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
                 },
             ],
-        }),
-        [filters, buildingId]
-    )
-
-    const { data = [], refetch } = useFindManyRoom({
-        where: roomWhere,
+        },
         orderBy: {
             createdAt: 'desc',
         },
@@ -84,7 +73,23 @@ export default function BuildingPage() {
     )
 
     const { data: count } = useCountRoom({
-        where: roomWhere,
+        where: {
+            buildingId,
+            OR: [
+                {
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+            ],
+        },
     })
 
     const debouncedRefetch = useCallback(
@@ -262,5 +267,18 @@ export default function BuildingPage() {
 }
 
 BuildingPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Danh mục' },
+                {
+                    title: 'Danh mục phòng học',
+                    href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
+                },
+                { title: 'Danh sách phòng học' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

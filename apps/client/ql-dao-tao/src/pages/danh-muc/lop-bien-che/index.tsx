@@ -3,12 +3,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    ModalGPASemester,
-    PutFixedClassModal,
-    PutUploadDivisionModal,
-    PutUploadFixedClassModal,
-} from '@components/modal'
+import { ModalGPASemester, PutFixedClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -122,12 +117,12 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const { onOpen: onOpenGPASemester } = useDisclosure<string>({
         tag: ModalGPASemester.name,
     })
-    const { onOpen: onOpenFixedClass } = useDisclosure<string>({
-        tag: PutUploadFixedClassModal.name,
-    })
-    const { onOpen: onOpenDivision } = useDisclosure<string>({
-        tag: PutUploadDivisionModal.name,
-    })
+    // const { onOpen: onOpenFixedClass } = useDisclosure<string>({
+    //     tag: PutUploadFixedClassModal.name,
+    // })
+    // const { onOpen: onOpenDivision } = useDisclosure<string>({
+    //     tag: PutUploadDivisionModal.name,
+    // })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {

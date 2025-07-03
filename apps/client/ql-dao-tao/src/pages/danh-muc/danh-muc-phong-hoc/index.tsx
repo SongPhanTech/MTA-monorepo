@@ -6,7 +6,6 @@ import PutTrainingLocationModal from '@components/modal/put-khu-vuc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db'
 import {
     useCountTrainingLocation,
     useFindManyTrainingLocation,
@@ -19,7 +18,7 @@ import _ from 'lodash'
 import { Building2Icon, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -34,52 +33,43 @@ export default function TrainingLocationPage() {
         searchText: '',
     })
 
-    const trainingLocationWhere: Prisma.TrainingLocationWhereInput = useMemo(
-        () => ({
-            AND: [
+    const { data = [], refetch } = useFindManyTrainingLocation({
+        where: {
+            OR: [
                 {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.searchText,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            buildings: {
-                                some: {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                        {
-                                            code: {
-                                                contains: filters.searchText,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                    ],
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    buildings: {
+                        some: {
+                            OR: [
+                                {
+                                    name: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
                                 },
-                            },
+                                {
+                                    code: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                            ],
                         },
-                    ],
+                    },
                 },
             ],
-        }),
-        [filters]
-    )
-
-    const { data = [], refetch } = useFindManyTrainingLocation({
-        where: trainingLocationWhere,
+        },
         include: {
             _count: true,
             buildings: {
@@ -96,7 +86,42 @@ export default function TrainingLocationPage() {
     })
 
     const { data: count } = useCountTrainingLocation({
-        where: trainingLocationWhere,
+        where: {
+            OR: [
+                {
+                    name: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    code: {
+                        contains: filters.searchText,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    buildings: {
+                        some: {
+                            OR: [
+                                {
+                                    name: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                                {
+                                    code: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                },
+            ],
+        },
     })
 
     const debouncedRefetch = useCallback(

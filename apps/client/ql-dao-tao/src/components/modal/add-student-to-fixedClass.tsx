@@ -1,4 +1,5 @@
 import PutFormModal from '@components/commons/put-modal'
+import { ConfirmModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -6,7 +7,12 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { Student } from '@workspace/db'
-import { useCountStudent, useFindManyStudent, useUpdateManyStudent } from '@workspace/db/hooks'
+import {
+    useCountStudent,
+    useFindManyStudent,
+    useFindUniqueFixedClass,
+    useUpdateManyStudent,
+} from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -40,6 +46,13 @@ const AddStudentToFixedClassModal = () => {
     } = useDisclosure<string>({
         tag: AddStudentToFixedClassModal.name,
         onClose: form.resetFields,
+    })
+
+    const { onOpen: onOpenModalConfirm, onClose: onCloseModalConfirm } = useDisclosure<string>({
+        tag: ConfirmModal.name,
+        onOk: (value: any) => {
+            updateStudent()
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -237,6 +250,16 @@ const AddStudentToFixedClassModal = () => {
             return newFilters
         })
     }
+
+    const { data: fixedClass } = useFindUniqueFixedClass(
+        {
+            where: { id: fixedClassId },
+        },
+        {
+            enabled: !!fixedClassId,
+        }
+    )
+
     async function onOk() {
         try {
             showSpinner()
@@ -247,20 +270,42 @@ const AddStudentToFixedClassModal = () => {
         hideSpinner()
     }
 
+    const updateStudent = async () => {
+        await updateManyUserProfile({
+            where: {
+                id: {
+                    in: selectedRowKeys,
+                },
+            },
+            data: {
+                fixedClassId: fixedClassId,
+                curriculumVersionId: fixedClass?.curriculumVersionId,
+            },
+        })
+        message.success('Cập nhật thành công')
+        onCloseModalConfirm()
+    }
+
     const handleAddStudentToClass = async () => {
         try {
             showSpinner()
             if (selectedRowKeys?.length > 0) {
-                await updateManyUserProfile({
-                    where: {
-                        id: {
-                            in: selectedRowKeys,
+                if (!fixedClass?.curriculumVersionId) {
+                    await updateManyUserProfile({
+                        where: {
+                            id: {
+                                in: selectedRowKeys,
+                            },
                         },
-                    },
-                    data: {
-                        fixedClassId: fixedClassId,
-                    },
-                })
+                        data: {
+                            fixedClassId: fixedClassId,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                } else {
+                    // await updateStudent()
+                    onOpenModalConfirm('Thay đổi CTĐT cho tất cả các sinh viên này?')
+                }
             }
             setSelectedRowKeysInClass([])
         } catch (_error) {
@@ -283,6 +328,7 @@ const AddStudentToFixedClassModal = () => {
                         fixedClassId: null,
                     },
                 })
+                message.success('Cập nhật thành công')
             }
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -300,7 +346,7 @@ const AddStudentToFixedClassModal = () => {
             title={'Thêm sinh viên vào lớp'}
             className="w-[80vw]"
         >
-            <Col span={24} className="my-4">
+            <Col span={24} className="my-2">
                 <Flex>
                     <Input
                         id="search"
@@ -325,13 +371,9 @@ const AddStudentToFixedClassModal = () => {
             </Col>
             <Row gutter={[16, 16]}>
                 <Col span={11}>
-                    <Row>
-                        <Col span={24}>
-                            <Divider orientation="left" orientationMargin={0}>
-                                Danh sách sinh viên chưa có lớp
-                            </Divider>
-                        </Col>
-                    </Row>
+                    <Divider orientation="left" orientationMargin={0}>
+                        Danh sách sinh viên chưa có lớp
+                    </Divider>
                     <Table
                         rowKey="id"
                         rowSelection={{
@@ -462,13 +504,9 @@ const AddStudentToFixedClassModal = () => {
                     </Flex>
                 </Col>
                 <Col span={11}>
-                    <Row>
-                        <Col span={24}>
-                            <Divider orientation="left" orientationMargin={0}>
-                                Danh sách sinh viên trong lớp
-                            </Divider>
-                        </Col>
-                    </Row>
+                    <Divider orientation="left" orientationMargin={0}>
+                        Danh sách sinh viên trong lớp
+                    </Divider>
                     <Table
                         rowKey="id"
                         rowSelection={{
@@ -567,42 +605,6 @@ const AddStudentToFixedClassModal = () => {
                                     )
                                 },
                             },
-                            // {
-                            //     title: 'Thao tác',
-                            //     width: 100,
-                            //     align: 'center',
-                            //     fixed: 'right',
-                            //     render: (_, { id }) => (
-                            //         <Row className="justify-center gap-2">
-                            //             <Tooltip title="Kết quả học tập">
-                            //                 <BookCheckIcon
-                            //                     onClick={(e) => {
-                            //                         e.stopPropagation()
-                            //                         router.push(
-                            //                             ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
-                            //                                 '[id]',
-                            //                                 id
-                            //                             )
-                            //                         )
-                            //                     }}
-                            //                     size={16}
-                            //                 />
-                            //             </Tooltip>
-                            //             <EditIcon
-                            //                 onClick={onOpenUpdate.bind(null, {
-                            //                     id: id,
-                            //                 })}
-                            //                 className="text-sm text-blue-700 cursor-pointer"
-                            //             />
-                            //             <DeleteIcon
-                            //                 popConfirm={{
-                            //                     onConfirm: () =>
-                            //                         handleDelete(id),
-                            //                 }}
-                            //             />
-                            //         </Row>
-                            //     ),
-                            // },
                         ]}
                         data={data}
                         scroll={{ x: 'max-content' }}

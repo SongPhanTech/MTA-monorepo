@@ -6,7 +6,7 @@ import { PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
+import type { Semester, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useFindManySchoolYear,
     useFindManyTrainingCourse,
@@ -37,8 +37,8 @@ export default function SubjectOpeningPlan() {
     const [selectedSemester, setSelectedSemester] = useState({})
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
-        include: { semesters: { orderBy: { order: 'asc' } } },
-        orderBy: { order: 'asc' },
+        include: { semesters: { orderBy: { startDate: 'asc' } } },
+        orderBy: { startDate: 'asc' },
     })
     const semesterId = Form.useWatch('semesterId', form)
     //  const trainingCourseId = Form.useWatch('semesterId', form)
@@ -62,7 +62,7 @@ export default function SubjectOpeningPlan() {
             selectable: false,
             code: i?.code,
             children: i?.semesters?.length
-                ? i?.semesters.map((j: { id: string; name: string; code: string }) => ({
+                ? i?.semesters.map((j: Semester) => ({
                       title: j?.name,
                       key: j?.id,
                       value: j?.id,
@@ -234,7 +234,7 @@ export default function SubjectOpeningPlan() {
                                             <Select
                                                 placeholder="Khoá đào tạo"
                                                 options={trainingCourseData.map(
-                                                    (i: TrainingObjectType) => ({
+                                                    (i: TrainingCourse) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
