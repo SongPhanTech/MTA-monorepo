@@ -1,15 +1,8 @@
 import type { PrismaClient } from '@workspace/db'
-import type { Context, MiddlewareHandler } from 'hono'
+import type { MiddlewareHandler } from 'hono'
+import { getCookie } from 'hono/cookie'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { Session } from '..'
-
-const getJwtFromRequest = (c: Context): string | null => {
-    const authHeader = c.req.header('Authorization')
-    if (authHeader?.startsWith('Bearer ')) {
-        return authHeader.substring(7)
-    }
-    return null
-}
 
 export const jwtAuth = (
     jwksUri: string,
@@ -18,9 +11,9 @@ export const jwtAuth = (
     prisma: PrismaClient
 ): MiddlewareHandler => {
     const JWKS = createRemoteJWKSet(new URL(jwksUri))
-
     return async (c, next) => {
-        const token = getJwtFromRequest(c)
+        const token = getCookie(c, 'x-token')
+        console.log('[jwtAuth].getJwtFromRequest', token)
         if (!token) {
             return c.text('Unauthorized: No token provided', 401)
         }

@@ -43,14 +43,19 @@ const config = {
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
+console.log('[be-model] Keycloak Config:', {
+    issuer,
+    jwksUri,
+    audience,
+})
 app.use(contextStorage())
 app.use('*', checkIp)
+app.route('/api/auth', AuthApp)
+
 app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 setupOpenApi(app)
 // setupAuth(app)
-
 app.route('/api/minio', MinIOApp)
-app.route('/api/auth', AuthApp)
 
 app.use(
     '/api/model/*',
@@ -62,6 +67,7 @@ app.use(
 )
 
 app.onError((err, c) => {
+    console.log('Error:', err)
     if (err instanceof HTTPException) {
         return err.getResponse()
     }
