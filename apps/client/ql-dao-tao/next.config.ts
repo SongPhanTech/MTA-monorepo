@@ -3,8 +3,8 @@ import TerserPlugin from 'terser-webpack-plugin'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const nextConfig: NextConfig = {
-    basePath,
-    assetPrefix: `${basePath}/`,
+    basePath: '/lms',
+    assetPrefix: `${basePath}`,
     /* config options here */
     reactStrictMode: true,
     transpilePackages: [
@@ -14,7 +14,10 @@ const nextConfig: NextConfig = {
         '@workspace/router',
         '@workspace/ui',
     ],
-    // output: 'export',
+    images: {
+        unoptimized: true,
+    },
+    output: 'export',
     crossOrigin: 'anonymous',
     webpack: (config) => {
         config.optimization.minimize = true

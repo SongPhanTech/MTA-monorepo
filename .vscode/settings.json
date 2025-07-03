@@ -32,5 +32,8 @@
   },
   "[sql]": {
     "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }
