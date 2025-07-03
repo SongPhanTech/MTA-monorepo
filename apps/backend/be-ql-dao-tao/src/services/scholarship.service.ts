@@ -8,19 +8,32 @@ interface ScoreConvertResult {
     diemC: number
     diemD: number
 }
-const GiaTriDiemCvaD = async (trainingCourseId: string, scoreConvert: ScoreConvertItem[]) => {
+const GiaTriDiemCvaD = async (trainingCourseId: string) => {
+    const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
+        where: {
+            trainingCourseId,
+        },
+        select: {
+            trainingCourseId: true,
+            letter: true,
+            base10Min: true,
+            base10Max: true,
+            base4: true,
+            classification: true,
+        },
+    })
     // Lấy giá trị điểm C và D từ bảng chuyển đổi điểms
-    const diemCObj = scoreConvert.find(
+    const diemCObj = DsDiemChuyenDoi.find(
         (item: { trainingCourseId: string; letter: string }) =>
             item.trainingCourseId === trainingCourseId && item.letter === 'C'
     )
-    const diemDObj = scoreConvert.find(
+    const diemDObj = DsDiemChuyenDoi.find(
         (item: { trainingCourseId: string; letter: string }) =>
             item.trainingCourseId === trainingCourseId && item.letter === 'D'
     )
     return {
-        diemC: diemCObj ? diemCObj.base10Min : 0,
-        diemD: diemDObj ? diemDObj.base10Min : 0,
+        diemC: diemCObj ? diemCObj.base4 : 0,
+        diemD: diemDObj ? diemDObj.base4 : 0,
     }
 }
 interface ScoreConvertItem {
@@ -357,105 +370,55 @@ const ThongTinHocKy = async (
 }
 
 export const listStudentInfo = async (semesterId: string) => {
-    // Lấy thông tin học kỳ
-    const hocKy = await prisma.semester.findUnique({
-        where: { id: semesterId },
-        select: {
-            id: true,
-            name: true,
-            startDate: true,
-            endDate: true,
-        },
-    })
-
-    // lấy danh sách lớp môn học mở tại học kỳ
-    const DsLopMonHoc = await prisma.subjectClass.findMany({
+    const DsHocVien = await prisma.studentSemesterResult.findMany({
         where: {
             semesterId,
         },
-    })
-
-    // lấy danh sách học viên trong các lớp môn học
-
-    const DsHocVien = await prisma.studentSubjectScore.findMany({
-        where: {
-            subjectClassId: {
-                in: DsLopMonHoc.map((item) => item.id),
-            },
-            // studentId: 'cmc8rjif40002o00197ct07wz'
-        },
-        distinct: ['studentId'],
         include: {
             student: {
                 include: {
                     userProfile: true,
-                    trainingObjectType: true,
                     fixedClass: {
                         include: {
-                            trainingCourse: {
-                                include: {
-                                    semesterStart: true, // Lấy thông tin kỳ bắt đầu
-                                },
-                            },
+                            trainingCourse: true,
                             curriculumVersion: {
                                 include: {
                                     curriculum: {
                                         include: {
-                                            trainingMajor: true, // Lấy thông tin chuyên ngành
+                                            trainingMajor: true,
                                         },
                                     },
                                 },
                             },
                         },
                     },
+                    trainingObjectType: true,
                 },
             },
         },
     })
 
-    // Thông tin điểm rèn luyện của sinh viên
-    const DsDiemRenLuyen = await prisma.studentTrainingSemester.findMany({
-        where: {
-            semesterId,
-        },
-        select: {
-            studentId: true,
-            scoreAvg: true,
-            trainingType: true,
-        },
-    })
-
     const studentsInfo: StudentScholarship[] = await Promise.all(
-        DsHocVien.map(async ({ student }, idx) => {
-            const userProfile = student.userProfile
-            const DiemSinhVien = await ThongTinDiem(
-                student.id,
-                student.fixedClass?.trainingCourseId || '',
-                semesterId
-            )
-            const ThongTinHocKySinhVien = await ThongTinHocKy(
-                student.id,
-                student.fixedClass?.trainingCourseId || '',
-                hocKy?.startDate || new Date()
-            )
-            const diemRenLuyen = DsDiemRenLuyen.find((item) => item.studentId === student.id) || {
-                scoreAvg: 0,
-                trainingType: '',
-            }
+        DsHocVien.map(async (item) => {
+            const userProfile = item.student.userProfile
+            const trainingCourseId = item.student.fixedClass?.trainingCourse?.id || ''
+            const giaTriCD = await GiaTriDiemCvaD(trainingCourseId)
+
             return {
-                stt: idx + 1,
+                stt: 0,
                 id: userProfile?.id ?? '',
                 hoTen: `${userProfile?.lastName ?? ''} ${userProfile?.firstName ?? ''}`.trim(),
                 maSinhVien: userProfile?.code || '',
-                doiTuong: student.trainingObjectType?.name || '',
-                khoa: student.fixedClass?.trainingCourse?.name || '',
+                doiTuong: item.student.trainingObjectType?.name || '',
+                khoa: item.student.fixedClass?.trainingCourse?.name || '',
                 chuyenNganh:
-                    student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
+                    item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                    '',
                 ngaySinh: userProfile?.dateOfBirth
                     ? new Date(userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                     : '',
-                fullDiemD: DiemSinhVien?.fullDiemD || false,
-                fullDiemC: DiemSinhVien?.fullDiemC || false,
+                fullDiemD: item.lowestFinalScore >= giaTriCD.diemD,
+                fullDiemC: (item.lowestGraduationScore ?? 4) >= giaTriCD.diemC,
                 diemTrungBinh4: DiemSinhVien?.diemTrungBinh4 || 0,
                 diemTrungBinh10: 0,
                 xepLoaiHocTap: DiemSinhVien?.xepLoaiHocTap || '',
