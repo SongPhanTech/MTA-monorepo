@@ -53,7 +53,6 @@ export default function TrainingFieldPage() {
     }
 
     const { data = [], refetch } = useFindManyTrainingField({
-        where: {},
         include: {
             organization: true,
             trainingObjectTypes: {
@@ -69,7 +68,7 @@ export default function TrainingFieldPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField({})
+    const { data: count } = useCountTrainingField()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
