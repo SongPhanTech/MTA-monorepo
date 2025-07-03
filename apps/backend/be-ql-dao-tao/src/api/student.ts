@@ -10,6 +10,7 @@ import {
     populateExcelTemplate,
     sanitizeFilename,
 } from '../services/scholarship.service'
+import { calculateStudentSemesterResult } from '../services/studen-result.service'
 import { getBufferFromUrl } from '../services/template.service'
 import {
     buildCurriculumMapOrThrow,
@@ -183,6 +184,71 @@ const dsRaKyLuatHocTapJson = createRoute({
     },
 })
 
+const tongKetHocKyHVSV = createRoute({
+    operationId: 'calculateStudentSemesterResultJson',
+    path: '/calculate-student-semester-result-json',
+    tags: ['Student'],
+    summary: 'Tổng kết kết quả học kỳ của học viên, sinh viên',
+    description: 'Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student semester result as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                },
+            },
+        },
+        400: {
+            description: 'Invalid semester ID',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        500: {
+            description: 'Server error during calculation',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+app.openapi(tongKetHocKyHVSV, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    // Validate semester existence
+    const semester = await prisma.semester.findUnique({
+        where: { id: semesterId },
+    })
+    if (!semester) {
+        return c.json({ message: `Kỳ học với ID ${semesterId} không tồn tại` }, 400)
+    }
+    try {
+        const studentResults = await calculateStudentSemesterResult(semesterId)
+        return c.json(studentResults, 200)
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định'
+        console.error(
+            `Error calculating semester results for semester ${semesterId}: ${errorMessage}`
+        )
+        return c.json({ message: `Lỗi khi tính toán kết quả học kỳ: ${errorMessage}` }, 500)
+    }
+})
 app.openapi(importHeQuanSu, async (c) => {
     const { file, timeout } = c.req.valid('form')
 
