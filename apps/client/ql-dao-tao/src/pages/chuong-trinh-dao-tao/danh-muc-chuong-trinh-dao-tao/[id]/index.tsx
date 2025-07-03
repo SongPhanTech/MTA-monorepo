@@ -537,7 +537,7 @@ export default function TrainingProgramSubjects() {
                         headerTitleKey="name"
                         childrenFieldName="subjects"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        // defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',

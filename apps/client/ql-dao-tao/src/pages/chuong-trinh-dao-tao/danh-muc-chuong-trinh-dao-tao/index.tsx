@@ -461,7 +461,7 @@ export default function TrainingProgramCatalog() {
                         headerTitleKey="name"
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        // defaultExpandAll
                         onRowClick={(record) => handleRowClick(record)}
                         columns={[
                             {
@@ -611,10 +611,12 @@ export default function TrainingProgramCatalog() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
+                                                        onConfirm: (e) => {
                                                             handleDeleteCurriculumVersion(
                                                                 record?.id
-                                                            ),
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
