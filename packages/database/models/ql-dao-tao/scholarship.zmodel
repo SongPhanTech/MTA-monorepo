@@ -39,7 +39,8 @@ enum CriteriaField {
   TOTAL_CREDITS                  // Tổng số tín chỉ học tập trong học kỳ
   REGISTERED_CREDITS             // Số tín chỉ đăng ký trong học kỳ
   ACCUMULATED_CREDITS_PERCENT    // % tín chỉ tích lũy so với kế hoạch
-  COURSE_GRADE_MIN               // Điểm thấp nhất trong các học phần
+  COURSE_GRADE_MIN               // Điểm học phần tối thiểu
+  GRADUATION_GRADE_MIN           // Điểm học phần tốt nghiệp tối thiểu
   SEMESTER_GPA                   // Điểm trung bình học kỳ
   ENTRY_SCORE                    // Điểm thi đầu vào (cho học viên mới)
   CONDUCT                        // Mức rèn luyện

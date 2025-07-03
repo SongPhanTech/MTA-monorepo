@@ -1,7 +1,7 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import { ConfirmModal } from '@components/modal'
 import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersion,
@@ -25,9 +25,10 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
@@ -45,18 +46,17 @@ const PutFixedClassModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const [dataOutput, setDataOutput] = useState<PutFixedClass>()
     const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
-    const _TrainingCourseForm = Form.useWatch('trainingCourseId', form)
-
-    // const managementOrganizationForm = Form.useWatch(
-    //     'managementOrganizationId',
-    //     form
-    // )
+    const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
+        tag: ConfirmModal.name,
+        onOk: (value: any) => {
+            updateFixedClassWithStudent()
+        },
+    })
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
-
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
             where: trainingObjectTypeForm
@@ -160,6 +160,79 @@ const PutFixedClassModal = () => {
 
     const { mutateAsync: createFixedClass } = useCreateFixedClass()
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
+
+    const updateFixedClassWithStudent = async () => {
+        if (!dataOutput) return
+        const payload = {
+            code: dataOutput.code,
+            name: dataOutput.name,
+            description: dataOutput.description,
+            startYear: dataOutput.startYear,
+            graduated: dataOutput.graduated,
+            active: dataOutput.active,
+            summary: dataOutput.summary,
+            initSize: dataOutput.initSize,
+        }
+        await updateFixedClass({
+            data: {
+                ...payload,
+                students: {
+                    updateMany: {
+                        where: {
+                            fixedClassId: id,
+                        },
+                        data: {
+                            curriculumVersionId: dataOutput?.curriculumVersionId,
+                        },
+                    },
+                },
+                trainingCourse: dataOutput?.trainingCourseId
+                    ? {
+                          connect: {
+                              id: dataOutput.trainingCourseId,
+                          },
+                      }
+                    : { disconnect: true },
+                managementOrganization: dataOutput?.managementOrganizationId
+                    ? {
+                          connect: {
+                              Id: dataOutput.managementOrganizationId,
+                          },
+                      }
+                    : { disconnect: true },
+                curriculumVersion: dataOutput?.curriculumVersionId
+                    ? {
+                          connect: {
+                              id: dataOutput.curriculumVersionId,
+                          },
+                      }
+                    : { disconnect: true },
+                staffManagement: dataOutput?.staffManagementId
+                    ? {
+                          connect: {
+                              id: dataOutput.staffManagementId,
+                          },
+                      }
+                    : { disconnect: true },
+                lecturerManagement: dataOutput?.lecturerManagementId
+                    ? {
+                          connect: {
+                              id: dataOutput.lecturerManagementId,
+                          },
+                      }
+                    : { disconnect: true },
+            },
+            where: {
+                id,
+            },
+        })
+        message.success('Cập nhật thành công')
+        queryClient.invalidateQueries({
+            queryKey: ['FixedClass'],
+        })
+        onClose()
+    }
+
     async function onOk(output?: PutFixedClass) {
         if (!output) return
         try {
@@ -175,50 +248,62 @@ const PutFixedClassModal = () => {
                 initSize: output.initSize,
             }
             if (id) {
-                await updateFixedClass({
-                    data: {
-                        ...payload,
-                        trainingCourse: output.trainingCourseId
-                            ? {
-                                  connect: {
-                                      id: output.trainingCourseId,
-                                  },
-                              }
-                            : { disconnect: true },
-                        managementOrganization: output.managementOrganizationId
-                            ? {
-                                  connect: {
-                                      Id: output.managementOrganizationId,
-                                  },
-                              }
-                            : { disconnect: true },
-                        curriculumVersion: output.curriculumVersionId
-                            ? {
-                                  connect: {
-                                      id: output.curriculumVersionId,
-                                  },
-                              }
-                            : { disconnect: true },
-                        staffManagement: output.staffManagementId
-                            ? {
-                                  connect: {
-                                      id: output.staffManagementId,
-                                  },
-                              }
-                            : { disconnect: true },
-                        lecturerManagement: output.lecturerManagementId
-                            ? {
-                                  connect: {
-                                      id: output.lecturerManagementId,
-                                  },
-                              }
-                            : { disconnect: true },
-                    },
-                    where: {
-                        id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+                if (
+                    output.curriculumVersionId !== oldFixedClass.curriculumVersionId &&
+                    oldFixedClass._count.students > 0
+                ) {
+                    onOpenModalConfirm('Thay đổi CTĐT cho tất cả các sinh viên trong lớp?')
+                    setDataOutput(output)
+                } else {
+                    await updateFixedClass({
+                        data: {
+                            ...payload,
+                            trainingCourse: output.trainingCourseId
+                                ? {
+                                      connect: {
+                                          id: output.trainingCourseId,
+                                      },
+                                  }
+                                : { disconnect: true },
+                            managementOrganization: output.managementOrganizationId
+                                ? {
+                                      connect: {
+                                          Id: output.managementOrganizationId,
+                                      },
+                                  }
+                                : { disconnect: true },
+                            curriculumVersion: output.curriculumVersionId
+                                ? {
+                                      connect: {
+                                          id: output.curriculumVersionId,
+                                      },
+                                  }
+                                : { disconnect: true },
+                            staffManagement: output.staffManagementId
+                                ? {
+                                      connect: {
+                                          id: output.staffManagementId,
+                                      },
+                                  }
+                                : { disconnect: true },
+                            lecturerManagement: output.lecturerManagementId
+                                ? {
+                                      connect: {
+                                          id: output.lecturerManagementId,
+                                      },
+                                  }
+                                : { disconnect: true },
+                        },
+                        where: {
+                            id,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                    queryClient.invalidateQueries({
+                        queryKey: ['FixedClass'],
+                    })
+                    onClose()
+                }
             } else {
                 await createFixedClass({
                     data: {
@@ -261,12 +346,11 @@ const PutFixedClassModal = () => {
                     },
                 })
                 message.success('Thêm mới thành công')
+                queryClient.invalidateQueries({
+                    queryKey: ['FixedClass'],
+                })
+                onClose()
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['FixedClass'],
-            })
-            onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -311,9 +395,16 @@ const PutFixedClassModal = () => {
     })
     const treeData = buildOrgTree(manageOrgData)
 
-    const { data: level } = useFindUniqueFixedClass(
+    const { data: oldFixedClass } = useFindUniqueFixedClass(
         {
             where: { id },
+            include: {
+                _count: {
+                    select: {
+                        students: true,
+                    },
+                },
+            },
         },
         {
             enabled: !!id,
@@ -334,15 +425,15 @@ const PutFixedClassModal = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (level) {
-            form.setFieldsValue({ ...level })
+        if (oldFixedClass) {
+            form.setFieldsValue({ ...oldFixedClass })
         } else {
             form.setFieldsValue({
                 graduated: false,
                 active: true,
             })
         }
-    }, [level])
+    }, [oldFixedClass])
 
     return (
         <PutFormModal
@@ -355,12 +446,7 @@ const PutFixedClassModal = () => {
             className="w-[45vw]"
         >
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="curriculumVersionId"
-                    label="Chương trình đào tạo"
-                    required
-                >
+                <FormItem form={form} name="curriculumVersionId" label="Chương trình đào tạo">
                     <TreeSelect
                         allowClear
                         showSearch

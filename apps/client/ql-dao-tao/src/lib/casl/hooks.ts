@@ -31,4 +31,29 @@ function getDynamicTitle(navKey: keyof typeof NAVIGATION, pathname: string): str
     return NAVIGATION[navKey]?.label || 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO'
 }
 
-export { useAbility, getDynamicTitle }
+function getDynamicBreadcrum(
+    navKey: keyof typeof NAVIGATION,
+    pathname: string
+): { title: string; href?: string }[] | [] {
+    const menus = NAVIGATION[navKey]?.menus || []
+    for (const menu of menus) {
+        // Không có children
+        if (!menu?.children && pathname === menu?.path) {
+            return [{ title: menu?.label as string }]
+        }
+
+        // Có children
+        if (menu?.children) {
+            const child = menu?.children?.find((child) => child?.path === pathname)
+            if (child) {
+                // return `${menu?.label} / ${child?.label}`
+                return [{ title: menu?.label as string }, { title: child?.label as string }]
+            }
+        }
+    }
+
+    // Fallback
+    return []
+}
+
+export { useAbility, getDynamicTitle, getDynamicBreadcrum }

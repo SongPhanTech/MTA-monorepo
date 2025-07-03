@@ -1,38 +1,98 @@
+import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/logo_mta.png'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
-import { getDynamicTitle } from '@lib/casl/hooks'
+import { getDynamicBreadcrum } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { SearchSystem } from '@workspace/ui'
-import { Layout, theme } from 'antd'
+import { Breadcrumb, Layout, theme } from 'antd'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 
 const { Header, Content } = Layout
+interface breadcrumListProps {
+    title: string
+    href?: string
+}
 
 const DefaultLayout = ({
     children,
     className,
-    headerChildren,
+    breadcrumbList,
     unLayout = false,
 }: {
     children: ReactNode
     className?: string
-    headerChildren?: string
+    breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const title = getDynamicTitle('QL_DAO_TAO', currentPath)
+    const breadcrumb = getDynamicBreadcrum('QL_DAO_TAO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
+
+    const listBreadcrumb = useMemo(() => {
+        return breadcrumb?.length > 0
+            ? [
+                  {
+                      title: (
+                          <a href="/home">
+                              <HomeOutlined className="mr-1" />
+                              Trang chủ
+                          </a>
+                      ),
+                  },
+                  ...breadcrumb.map((i: { title: string; href?: string }) => {
+                      if (i?.href) {
+                          return {
+                              title: <a href={i.href}>{i.title}</a>,
+                          }
+                      }
+                      return {
+                          title: i.title,
+                      }
+                  }),
+              ]
+            : breadcrumbList
+              ? [
+                    {
+                        title: (
+                            <a href="/home">
+                                <HomeOutlined className="mr-1" />
+                                Trang chủ
+                            </a>
+                        ),
+                    },
+                    ...breadcrumbList.map((i: { title: string; href?: string }) => {
+                        if (i?.href) {
+                            return {
+                                title: <a href={i.href}>{i.title}</a>,
+                            }
+                        }
+                        return {
+                            title: i.title,
+                        }
+                    }),
+                ]
+              : [
+                    {
+                        title: (
+                            <a href="/home">
+                                <HomeOutlined className="mr-1" />
+                                Trang chủ
+                            </a>
+                        ),
+                    },
+                ]
+    }, [breadcrumb, breadcrumbList])
     const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
@@ -85,9 +145,11 @@ const DefaultLayout = ({
                     }}
                 >
                     <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
-                        <span className="text-lg font-bold text-primary">
+                        {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
-                        </span>
+                        </span> */}
+                        <div>{<Breadcrumb items={listBreadcrumb} />}</div>
+
                         <div className="flex gap-2 items-center">
                             <SearchSystem />
                             <AvatarDropdown />
