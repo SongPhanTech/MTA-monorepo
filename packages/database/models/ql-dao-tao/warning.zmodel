@@ -6,14 +6,12 @@ import 'categories'
 import 'plan-training'
 import 'scholarship'
 
-model AcademicWarningRule {
-  id                String                  @id @default(cuid())
+model AcademicWarningRule extends Base {
   ruleType          AcademicWarningRuleType
   threshold         Float?    // Ngưỡng giới hạn (nếu có)
   semesterCondition Int?      // Áp dụng cho học kỳ thứ mấy, null nếu áp dụng mọi học kỳ
   yearCondition     Int?      // Áp dụng cho năm học thứ mấy, null nếu áp dụng mọi năm
   severity          Int      // 1 hoặc 2 mức tăng
-  description       String
 
   trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String

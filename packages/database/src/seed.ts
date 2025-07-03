@@ -1,7 +1,7 @@
 import { $Enums, PrismaClient } from '@prisma/client'
-import { academicRankingConversions } from './archived/academic-ranking-convert'
-import { scoreConversions } from './archived/score-convert'
-import { trainingData } from './archived/trainingData'
+import { academicRankingConversions } from './seed/academic-ranking-convert'
+import { scoreConversions } from './seed/score-convert'
+import { trainingData } from './seed/trainingData'
 
 const prisma = new PrismaClient()
 

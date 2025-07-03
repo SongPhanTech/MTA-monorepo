@@ -2664,12 +2664,17 @@ model ScholarshipAward {
 
 model AcademicWarningRule {
   id                String                  @id() @default(cuid())
+  code              String?                 @unique()
+  active            Boolean                 @default(true)
+  description       String?                 @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt()
   ruleType          AcademicWarningRuleType
   threshold         Float?
   semesterCondition Int?
   yearCondition     Int?
   severity          Int
-  description       String
   trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String
   academicWarning   AcademicWarning[]

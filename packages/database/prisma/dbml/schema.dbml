@@ -2238,12 +2238,17 @@ Table ScholarshipAward {
 
 Table AcademicWarningRule {
   id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   ruleType AcademicWarningRuleType [not null]
   threshold Float
   semesterCondition Int
   yearCondition Int
   severity Int [not null]
-  description String [not null]
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]
   academicWarning AcademicWarning [not null]
