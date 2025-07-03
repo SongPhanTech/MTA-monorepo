@@ -1235,6 +1235,8 @@ model Student {
   studyRankId               String?
   trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
+  academicWarningLevel      Int                         @default(0)
+  disciplinaryWarningLevel  Int                         @default(0)
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
