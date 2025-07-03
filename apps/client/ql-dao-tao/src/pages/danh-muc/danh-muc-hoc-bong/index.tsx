@@ -42,7 +42,7 @@ interface DataType {
     children?: DataType[]
 }
 
-export default function TrainingMajorPage() {
+export default function Scholarship() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -422,6 +422,6 @@ export default function TrainingMajorPage() {
     )
 }
 
-TrainingMajorPage.getLayout = function getLayout(page: React.ReactElement) {
+Scholarship.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
