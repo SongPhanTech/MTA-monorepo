@@ -60,7 +60,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
 })
 
 const uploadExcelImportTrainingScore = createRoute({
-    operationId: 'uploadExcelImportScore',
+    operationId: 'uploadExcelImportTrainingScore',
     path: '/upload-excel-import-score',
     method: 'post',
     description:

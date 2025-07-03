@@ -845,6 +845,7 @@ model TrainingObjectType {
   updatedAt            DateTime                            @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
+  baseScore            AcademicRankingBaseType
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -1169,7 +1170,7 @@ model AcademicRankingConvert {
   createdAt        DateTime                @default(now())
   updatedAt        DateTime                @updatedAt()
   classification   String
-  type             AcademicRankingBaseType
+  baseScore        AcademicRankingBaseType
   base10Min        Float?
   base10Max        Float?
   base4Min         Float?
@@ -1261,7 +1262,7 @@ model StudentSemesterResult {
   studyYear                Int
   semesterIndexInCourse    Int
   isLastSemester           Boolean
-  baseType                 AcademicRankingBaseType
+  baseScore                AcademicRankingBaseType
   gpaBase4                 Float
   cumulativeGpaBase4       Float
   gpaBase10                Float
@@ -1305,7 +1306,7 @@ model StudentYearResult {
   schoolYearId             String
   studyYear                Int
   isLastStudyYear          Boolean
-  baseType                 AcademicRankingBaseType
+  baseScore                AcademicRankingBaseType
   gpaBase4                 Float
   cumulativeGpaBase4       Float
   gpaBase10                Float
