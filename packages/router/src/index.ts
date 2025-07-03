@@ -308,9 +308,8 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.HOME,
                 description: 'Thông tin trang chủ',
             },
-
             {
-                id: 'chuong-trinh-dao-tao-123',
+                id: 'chuong-trinh-dao-tao',
                 label: 'Chương trình đào tạo',
                 icon: BookCheckIcon,
                 children: [
@@ -335,7 +334,6 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-
             {
                 id: 'ke-hoach-giao-duc',
                 label: 'Kế hoạch đào tạo',
@@ -459,6 +457,13 @@ const NAVIGATION: NavigationType = {
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                         description: 'Quản lý lớp niên chế',
+                    },
+                    {
+                        id: 'hoc-bong',
+                        label: 'Danh mục học bổng',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_HOC_BONG,
+                        description: 'Danh mục học bổng',
                     },
                 ],
             },

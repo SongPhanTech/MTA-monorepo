@@ -377,10 +377,7 @@ function YearAndSemester() {
                             fixed: 'right',
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
-                                    <Tooltip
-                                        title="Cảnh cáo học tập, Xét học bổng"
-                                        placement="top"
-                                    >
+                                    <Tooltip title="Cảnh cáo học tập, Xét học bổng" placement="top">
                                         <EyeOutlined
                                             onClick={(e: any) => {
                                                 e.stopPropagation()

@@ -1,6 +1,7 @@
 import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import type { TrainingCourse, TrainingField, TrainingObjectType } from '@workspace/db'
 import {
@@ -8,12 +9,16 @@ import {
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
+import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
 import { Search } from 'lucide-react'
-import { queryClient } from '@api/index'
 
 dayjs.locale('vi')
 
-const XetHocBong = (semesterId: string) => {
+interface XetHocBongProps {
+    semesterId: string
+}
+
+const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const fakeData = [
         {
             id: '1',
@@ -59,21 +64,19 @@ const XetHocBong = (semesterId: string) => {
         },
     ]
 
-    //    const { data: students } = useFixedClassBySubjectClassSemester(
-    //         {
-    //             semesterId: semesterId || '',
-    //             subjectClassId: subjectClassId || '',
-    //             search: filters.searchText || '',
-    //             page: '1',
-    //             pageSize: '10',
-    //         },
-    //         {
-    //             query: {
-    //                 enabled: !!semesterId && !!subjectClassId,
-    //             },
-    //         },
-    //         queryClient
-    //     )
+    const { data: students } = useExportStudentScholarshipJson(
+        {
+            semesterId: semesterId || '',
+        },
+        {
+            query: {
+                enabled: !!semesterId,
+            },
+        },
+        queryClient
+    )
+
+    console.log(students)
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 

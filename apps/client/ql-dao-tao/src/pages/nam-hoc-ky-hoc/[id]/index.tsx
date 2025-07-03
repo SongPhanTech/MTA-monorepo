@@ -23,15 +23,15 @@ interface FilterProps {
 
 export default function CanhCaoHocBong() {
     const router = useRouter()
-    const { id } = router.query
+    const semesterId = router.query.id as string
     const { data: initialValue } = useFindUniqueSemester(
         {
-            where: { id: id as string },
+            where: { id: semesterId },
             include: {
                 schoolYear: true,
             },
         },
-        { enabled: !!id }
+        { enabled: !!semesterId }
     )
 
     console.log(initialValue)
@@ -46,12 +46,12 @@ export default function CanhCaoHocBong() {
                     {
                         key: '1',
                         label: 'Điểm trung bình kỳ học',
-                        children: <DiemTrungBinhKyHoc />,
+                        children: <DiemTrungBinhKyHoc semesterId={semesterId} />,
                     },
                     {
                         key: '2',
                         label: 'Xét học bổng',
-                        children: <XetHocBong semesterId={id as string}/>,
+                        children: <XetHocBong semesterId={semesterId} />,
                     },
                     {
                         key: '3',

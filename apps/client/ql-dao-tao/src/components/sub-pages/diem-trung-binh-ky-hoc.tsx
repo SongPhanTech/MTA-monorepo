@@ -4,13 +4,33 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
+import { queryClient } from '@api/index'
+import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
 
 dayjs.locale('vi')
 
-const DiemTrungBinhKyHoc = () => {
+interface DiemTrungBinhKyHocProps {
+    semesterId: string
+}
+
+const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     async function _onOk(output?: any) {
         if (!output) return
     }
+
+    const { data: students } = useCalculateStudentSemesterResultJson(
+        {
+            semesterId: semesterId || '',
+        },
+        {
+            query: {
+                enabled: !!semesterId,
+            },
+        },
+        queryClient
+    )
+
+    console.log(students)
 
     const fakeData = [
         {
