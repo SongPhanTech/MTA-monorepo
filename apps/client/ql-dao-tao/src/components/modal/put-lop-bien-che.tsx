@@ -475,7 +475,7 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingCourseId" label="Khóa">
+                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
                     <Select
                         placeholder="Chọn khóa"
                         options={trainingCourseData.map((i: TrainingCourse) => {
