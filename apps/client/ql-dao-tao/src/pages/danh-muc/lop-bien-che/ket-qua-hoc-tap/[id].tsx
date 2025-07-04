@@ -437,7 +437,7 @@ StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
                     href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                 },
                 { title: 'Chi tiết lớp niên chế' },
-                { title: 'Kết quả hóc tập' },
+                { title: 'Kết quả học tập' },
             ]}
         >
             {page}

@@ -461,7 +461,7 @@ export default function TrainingProgramCatalog() {
                         headerTitleKey="name"
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
-                        // defaultExpandAll
+                        defaultExpandAll
                         onRowClick={(record) => handleRowClick(record)}
                         columns={[
                             {

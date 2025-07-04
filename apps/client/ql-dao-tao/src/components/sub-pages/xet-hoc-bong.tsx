@@ -1,6 +1,7 @@
 import { Col, Flex, Form, Input, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import type { TrainingCourse, TrainingField, TrainingObjectType } from '@workspace/db'
 import {
@@ -8,11 +9,16 @@ import {
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
+import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
 import { Search } from 'lucide-react'
 
 dayjs.locale('vi')
 
-const XetHocBong = () => {
+interface XetHocBongProps {
+    semesterId: string
+}
+
+const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const fakeData = [
         {
             id: '1',
@@ -57,6 +63,20 @@ const XetHocBong = () => {
             ],
         },
     ]
+
+    const { data: students } = useExportStudentScholarshipJson(
+        {
+            semesterId: semesterId || '',
+        },
+        {
+            query: {
+                enabled: !!semesterId,
+            },
+        },
+        queryClient
+    )
+
+    console.log(students)
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 

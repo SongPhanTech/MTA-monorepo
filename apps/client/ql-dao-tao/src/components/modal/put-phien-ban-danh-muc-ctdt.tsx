@@ -201,8 +201,6 @@ const PutCurriculumVersion = () => {
         }
     }, [initialValue])
 
-    console.log('123: ', initialValue?.documentFiles)
-
     return (
         <PutFormModal
             open={isOpen}

@@ -562,11 +562,11 @@ const ModalPrintToKQHT = () => {
                                     if (Number.isInteger(num)) {
                                         return num.toFixed(1)
                                     }
-                                    const decimalPart = (num.toString().split('.')[1] || '').length
+                                    const decimalPart = (num?.toString().split('.')[1] || '').length
                                     if (decimalPart === 1) {
                                         return num.toFixed(2) || ''
                                     }
-                                    return num ? num.toString() : ''
+                                    return num ? num?.toString() : ''
                                 }
 
                                 const range = `${formatNumber(item.base4Min)}-${formatNumber(item.base4Max)}`
