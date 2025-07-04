@@ -2637,7 +2637,7 @@ model ScholarshipCriteria {
   invert        Boolean          @default(false)
   operator      CriteriaOperator
   value         Float
-  tuple         String           @default("")
+  tuple         String[]         @default([])
   bonusValue    Float            @default(0)
 
   @@schema("ql-dao-tao")

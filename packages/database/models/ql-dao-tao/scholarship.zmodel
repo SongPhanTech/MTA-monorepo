@@ -28,7 +28,7 @@ model ScholarshipCriteria extends Base {
   invert        Boolean          @default(false) // đảo ngược operator
   operator      CriteriaOperator // So sánh (>=, <=, =)
   value         Float // Giá trị ngưỡng để so sánh
-  tuple         String           @default("") // giá trị sử dụng cho operator IN
+  tuple         String[]         @default([]) // giá trị sử dụng cho operator IN
 
   bonusValue    Float            @default(0) // cộng thêm điểm nếu đúng tiêu chí (ví dụ cộng 0.1 TBHK) e.g. on TOTAL_CREDITS +5 if accumulatedCredits > totalCreditsByCurriculum
 

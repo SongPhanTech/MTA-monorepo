@@ -2212,7 +2212,7 @@ Table ScholarshipCriteria {
   invert Boolean [not null, default: false]
   operator CriteriaOperator [not null]
   value Float [not null]
-  tuple String [not null, default: '']
+  tuple String[] [not null]
   bonusValue Float [not null, default: 0]
 }
 
