@@ -47,27 +47,26 @@ const PutFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [dataOutput, setDataOutput] = useState<PutFixedClass>()
-    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
         tag: ConfirmModal.name,
-        onOk: (value: any) => {
+        onOk: () => {
             updateFixedClassWithStudent()
         },
     })
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            where: trainingObjectTypeForm
-                ? {
-                      trainingObjectTypeId: trainingObjectTypeForm || '',
-                  }
-                : {},
-            orderBy: { name: 'asc' },
-        })
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        where: trainingObjectTypeForm
+            ? {
+                  trainingObjectTypeId: trainingObjectTypeForm || '',
+              }
+            : {},
+        orderBy: { name: 'asc' },
+    })
     // const trainingMajorForm = Form.useWatch('trainingMajorId', form)
-    const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
+    const { data: curriculumData = [] } = useFindManyCurriculum({
         where: {},
         include: {
             curriculumVersion: {
@@ -89,7 +88,7 @@ const PutFixedClassModal = () => {
         },
         orderBy: { name: 'asc' },
     })
-    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
+    const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
             userProfile: true,
         },
@@ -100,7 +99,7 @@ const PutFixedClassModal = () => {
         },
     })
 
-    const { data: staffData = [], refetch: refetchStaff } = useFindManyStaff({
+    const { data: staffData = [] } = useFindManyStaff({
         include: {
             userProfile: true,
         },
@@ -111,36 +110,34 @@ const PutFixedClassModal = () => {
         },
     })
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType({
-            where: {
-                curriculumVersion: curriculumVersionIdForm
-                    ? {
-                          some: {
-                              id: curriculumVersionIdForm ?? undefined,
-                          },
-                      }
-                    : {},
-            },
-        })
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        where: {
+            curriculumVersion: curriculumVersionIdForm
+                ? {
+                      some: {
+                          id: curriculumVersionIdForm ?? undefined,
+                      },
+                  }
+                : {},
+        },
+    })
 
-    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor({
-            where: {
-                curriculum: {
-                    some: {
-                        curriculumVersion: {
-                            some: {
-                                id: curriculumVersionIdForm ?? undefined,
-                            },
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: {
+            curriculum: {
+                some: {
+                    curriculumVersion: {
+                        some: {
+                            id: curriculumVersionIdForm ?? undefined,
                         },
                     },
                 },
             },
-            orderBy: {
-                name: 'asc',
-            },
-        })
+        },
+        orderBy: {
+            name: 'asc',
+        },
+    })
     const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
         {
             where: { id: curriculumVersionIdForm ?? undefined },
@@ -163,68 +160,19 @@ const PutFixedClassModal = () => {
 
     const updateFixedClassWithStudent = async () => {
         if (!dataOutput) return
-        const payload = {
-            code: dataOutput.code,
-            name: dataOutput.name,
-            description: dataOutput.description,
-            startYear: dataOutput.startYear,
-            graduated: dataOutput.graduated,
-            active: dataOutput.active,
-            summary: dataOutput.summary,
-            initSize: dataOutput.initSize,
-        }
+        const { curriculumVersionId, ...rest } = dataOutput
         await updateFixedClass({
             data: {
-                ...payload,
                 students: {
                     updateMany: {
-                        where: {
-                            fixedClassId: id,
-                        },
-                        data: {
-                            curriculumVersionId: dataOutput?.curriculumVersionId,
-                        },
+                        where: { fixedClassId: id },
+                        data: { curriculumVersionId: curriculumVersionId },
                     },
                 },
-                trainingCourse: dataOutput?.trainingCourseId
-                    ? {
-                          connect: {
-                              id: dataOutput.trainingCourseId,
-                          },
-                      }
-                    : { disconnect: true },
-                managementOrganization: dataOutput?.managementOrganizationId
-                    ? {
-                          connect: {
-                              Id: dataOutput.managementOrganizationId,
-                          },
-                      }
-                    : { disconnect: true },
-                curriculumVersion: dataOutput?.curriculumVersionId
-                    ? {
-                          connect: {
-                              id: dataOutput.curriculumVersionId,
-                          },
-                      }
-                    : { disconnect: true },
-                staffManagement: dataOutput?.staffManagementId
-                    ? {
-                          connect: {
-                              id: dataOutput.staffManagementId,
-                          },
-                      }
-                    : { disconnect: true },
-                lecturerManagement: dataOutput?.lecturerManagementId
-                    ? {
-                          connect: {
-                              id: dataOutput.lecturerManagementId,
-                          },
-                      }
-                    : { disconnect: true },
+                curriculumVersionId,
+                ...rest,
             },
-            where: {
-                id,
-            },
+            where: { id },
         })
         message.success('Cập nhật thành công')
         queryClient.invalidateQueries({
@@ -237,16 +185,6 @@ const PutFixedClassModal = () => {
         if (!output) return
         try {
             showSpinner()
-            const payload = {
-                code: output.code,
-                name: output.name,
-                description: output.description,
-                startYear: output.startYear,
-                graduated: output.graduated,
-                active: output.active,
-                summary: output.summary,
-                initSize: output.initSize,
-            }
             if (id) {
                 if (
                     oldFixedClass &&
@@ -257,47 +195,8 @@ const PutFixedClassModal = () => {
                     setDataOutput(output)
                 } else {
                     await updateFixedClass({
-                        data: {
-                            ...payload,
-                            trainingCourse: output.trainingCourseId
-                                ? {
-                                      connect: {
-                                          id: output.trainingCourseId,
-                                      },
-                                  }
-                                : { disconnect: true },
-                            managementOrganization: output.managementOrganizationId
-                                ? {
-                                      connect: {
-                                          Id: output.managementOrganizationId,
-                                      },
-                                  }
-                                : { disconnect: true },
-                            curriculumVersion: output.curriculumVersionId
-                                ? {
-                                      connect: {
-                                          id: output.curriculumVersionId,
-                                      },
-                                  }
-                                : { disconnect: true },
-                            staffManagement: output.staffManagementId
-                                ? {
-                                      connect: {
-                                          id: output.staffManagementId,
-                                      },
-                                  }
-                                : { disconnect: true },
-                            lecturerManagement: output.lecturerManagementId
-                                ? {
-                                      connect: {
-                                          id: output.lecturerManagementId,
-                                      },
-                                  }
-                                : { disconnect: true },
-                        },
-                        where: {
-                            id,
-                        },
+                        data: output,
+                        where: { id },
                     })
                     message.success('Cập nhật thành công')
                     queryClient.invalidateQueries({
@@ -307,44 +206,7 @@ const PutFixedClassModal = () => {
                 }
             } else {
                 await createFixedClass({
-                    data: {
-                        ...payload,
-                        trainingCourse: output.trainingCourseId
-                            ? {
-                                  connect: {
-                                      id: output.trainingCourseId,
-                                  },
-                              }
-                            : undefined,
-                        managementOrganization: output.managementOrganizationId
-                            ? {
-                                  connect: {
-                                      Id: output.managementOrganizationId,
-                                  },
-                              }
-                            : undefined,
-                        curriculumVersion: output.curriculumVersionId
-                            ? {
-                                  connect: {
-                                      id: output.curriculumVersionId,
-                                  },
-                              }
-                            : undefined,
-                        staffManagement: output.staffManagementId
-                            ? {
-                                  connect: {
-                                      id: output.staffManagementId,
-                                  },
-                              }
-                            : undefined,
-                        lecturerManagement: output.lecturerManagementId
-                            ? {
-                                  connect: {
-                                      id: output.lecturerManagementId,
-                                  },
-                              }
-                            : undefined,
-                    },
+                    data: output,
                 })
                 message.success('Thêm mới thành công')
                 queryClient.invalidateQueries({
