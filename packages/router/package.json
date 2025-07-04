@@ -4,7 +4,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "generate:router": "node ./scripts/gen-router-path.mjs"
+        "generate": "node ./scripts/gen-router-path.mjs"
     },
     "exports": {
         ".": "./src/index.ts"

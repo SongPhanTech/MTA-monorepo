@@ -9,6 +9,46 @@ import type * as Fetcher from "./commonFetcher";
 import { commonFetch } from "./commonFetcher";
 import type * as Schemas from "./commonSchemas";
 
+export type GetSessionError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Schemas.Unauthorized;
+}>;
+
+export type GetSessionVariables = CommonContext["fetcherOptions"];
+
+export const fetchGetSession = (
+  variables: GetSessionVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<Schemas.Session, GetSessionError, undefined, {}, {}, {}>({
+    url: "/api/auth/get-session",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useGetSession = <TData = Schemas.Session,>(
+  variables: GetSessionVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.Session, GetSessionError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
+  return reactQuery.useQuery<Schemas.Session, GetSessionError, TData>({
+    queryKey: queryKeyFn({
+      path: "/api/auth/get-session",
+      operationId: "getSession",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSession({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type GeneratePresignedUrlError = Fetcher.ErrorWrapper<undefined>;
 
 export type GeneratePresignedUrlVariables = {
@@ -150,6 +190,11 @@ export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
 };
 
 export type QueryOperation =
+  | {
+      path: "/api/auth/get-session";
+      operationId: "getSession";
+      variables: GetSessionVariables;
+    }
   | {
       path: "/api/minio";
       operationId: "listObjects";

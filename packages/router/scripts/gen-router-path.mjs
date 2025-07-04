@@ -36,7 +36,6 @@ const subsystems = await glob(`${basePath}/*`, {
 // TODO: add system prefix
 const systemPrefix = {
     KHAO_THI: '',
-    QL_DANH_MUC: '/',
     QL_DAO_TAO: '/lms',
     QL_NGUOI_DUNG: '/users',
     TRO_LY_AO: '',

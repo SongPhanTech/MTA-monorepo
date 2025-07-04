@@ -22,7 +22,7 @@ import type {
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { customTrainingFetch } from './custom-instance'
 import type {
-    CalculateStudentSemesterResultJson200Item,
+    CalculateStudentSemesterResultJson200,
     CalculateStudentSemesterResultJson400,
     CalculateStudentSemesterResultJson500,
     CalculateStudentSemesterResultJsonParams,
@@ -2070,7 +2070,7 @@ export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TC
  * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
  */
 export type calculateStudentSemesterResultJsonResponse200 = {
-    data: CalculateStudentSemesterResultJson200Item[]
+    data: CalculateStudentSemesterResultJson200
     status: 200
 }
 

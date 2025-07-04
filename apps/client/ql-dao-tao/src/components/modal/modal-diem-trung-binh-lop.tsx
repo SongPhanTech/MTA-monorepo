@@ -3,10 +3,8 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Tabs from '@components/commons/tabar'
-import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
 import XetCanhCaoHocDuong from '@components/sub-pages/xet-canh-cao-hoc-duong'
 import XetCanhCaoHocTap from '@components/sub-pages/xet-canh-cao-hoc-tap'
-import XetHocBong from '@components/sub-pages/xet-hoc-bong'
 import XetLuuBan from '@components/sub-pages/xet-luu-ban'
 import XetThoiHoc from '@components/sub-pages/xet-thoi-hoc'
 
@@ -28,16 +26,6 @@ const ModalGPASemester = () => {
         >
             <Tabs
                 items={[
-                    {
-                        key: '1',
-                        label: 'Điểm trung bình kỳ học',
-                        children: <DiemTrungBinhKyHoc />,
-                    },
-                    {
-                        key: '2',
-                        label: 'Xét học bổng',
-                        children: <XetHocBong />,
-                    },
                     {
                         key: '3',
                         label: 'Xét cảnh cáo học đường',

@@ -26,6 +26,8 @@ import type {
     ListObjectsParams,
     PresignedGetObjectParams,
     PresignedUrlDto,
+    Session,
+    Unauthorized,
     UrlDto,
 } from './schemas'
 
@@ -34,6 +36,129 @@ type AwaitedInput<T> = PromiseLike<T> | T
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+export type getSessionResponse200 = {
+    data: Session
+    status: 200
+}
+
+export type getSessionResponse401 = {
+    data: Unauthorized
+    status: 401
+}
+
+export type getSessionResponseComposite = getSessionResponse200 | getSessionResponse401
+
+export type getSessionResponse = getSessionResponseComposite & {
+    headers: Headers
+}
+
+export const getGetSessionUrl = () => {
+    return '/api/auth/get-session'
+}
+
+export const getSession = async (options?: RequestInit): Promise<getSessionResponse> => {
+    return customModelFetch<getSessionResponse>(getGetSessionUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetSessionQueryKey = () => {
+    return ['/api/auth/get-session'] as const
+}
+
+export const getGetSessionQueryOptions = <
+    TData = Awaited<ReturnType<typeof getSession>>,
+    TError = Unauthorized,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
+        getSession({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type GetSessionQueryError = Unauthorized
+
+export function useGetSession<
+    TData = Awaited<ReturnType<typeof getSession>>,
+    TError = Unauthorized,
+>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSession>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSession>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<
+    TData = Awaited<ReturnType<typeof getSession>>,
+    TError = Unauthorized,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSession>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSession>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<
+    TData = Awaited<ReturnType<typeof getSession>>,
+    TError = Unauthorized,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetSession<
+    TData = Awaited<ReturnType<typeof getSession>>,
+    TError = Unauthorized,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetSessionQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
 
 export type generatePresignedUrlResponse200 = {
     data: UrlDto

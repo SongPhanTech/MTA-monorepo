@@ -2,9 +2,9 @@ import DeleteIcon from '@components/icons/delete'
 import { Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
-import { queryClient } from '@api/index'
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
 
 dayjs.locale('vi')
