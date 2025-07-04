@@ -17,7 +17,7 @@ model Document extends Base {
   type         DocumentType
   reason       String?
   uploadedBy   User           @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default(auth().id)
+  uploadedById String         @default(auth().Id)
   approvedBy   User?          @relation("DocumentApproved", fields: [approvedById], references: [id])
   approvedById String?
   @@schema("tro-ly-ao")
@@ -30,7 +30,7 @@ model FAQ  extends Base {
   type         DocumentType
   reason       String?
   uploadedBy   User           @relation("FAQUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default(auth().id)
+  uploadedById String         @default(auth().Id)
   approvedBy   User?          @relation("FAQApproved", fields: [approvedById], references: [id])
   approvedById String?
   @@schema("tro-ly-ao")

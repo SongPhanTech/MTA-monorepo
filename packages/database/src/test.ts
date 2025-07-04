@@ -1,17 +1,24 @@
 import { PrismaClient } from '@prisma/client'
-import { academicWarningRules } from './seed/academic-warning-rule'
 
 const prisma = new PrismaClient()
 
-const trainingCourses = await prisma.trainingCourse.findMany()
+await prisma.dM_NhanVien.create({
+    data: {
+        sTen: 'Nguyễn Văn A',
+        sDM_DonViId: '550e8400-1234-41d4-a716-446655440000',
+    },
+})
 
-await Promise.all(
-    trainingCourses.map((trainingCourse) =>
-        prisma.academicWarningRule.createMany({
-            data: academicWarningRules.map((rule) => ({
-                trainingCourseId: trainingCourse.id,
-                ...rule,
-            })),
-        })
-    )
-)
+// import { academicWarningRules } from './seed/academic-warning-rule'
+// const trainingCourses = await prisma.trainingCourse.findMany()
+
+// await Promise.all(
+//     trainingCourses.map((trainingCourse) =>
+//         prisma.academicWarningRule.createMany({
+//             data: academicWarningRules.map((rule) => ({
+//                 trainingCourseId: trainingCourse.id,
+//                 ...rule,
+//             })),
+//         })
+//     )
+// )

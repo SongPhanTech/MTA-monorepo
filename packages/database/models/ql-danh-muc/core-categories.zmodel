@@ -27,7 +27,7 @@ abstract model CoreBase {
 
   @@deny('read', bDeleted == true)
   /// TODO: allow all for now, will be restricted later
-  @@allow('all', auth().role == 'ADMIN')
+  // @@allow('all', auth().role == 'ADMIN')
   @@allow('read', auth() != null)
 }
 
@@ -187,6 +187,8 @@ model DM_NhanVien extends CoreBase {
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+
+  @@auth()
   @@schema("ql-danh-muc")
 }
 

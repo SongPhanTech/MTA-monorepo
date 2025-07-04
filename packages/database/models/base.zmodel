@@ -11,6 +11,6 @@ abstract model Base {
 
   @@deny('read', deletedAt != null)
   /// TODO: allow all for now, will be restricted later
-  @@allow('all', auth().role == 'ADMIN')
+  // @@allow('all', auth().role == 'ADMIN')
   @@allow('read', auth() != null)
 }

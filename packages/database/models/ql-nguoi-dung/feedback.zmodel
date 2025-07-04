@@ -9,8 +9,8 @@ model Feedback extends Base {
   userId       String
 
   @@allow('create', auth() != null)
-  @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)
-  @@allow('delete', auth().role == 'ADMIN' || auth() == user)
+  // @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)
+  // @@allow('delete', auth().role == 'ADMIN' || auth() == user)
   @@schema("ql-nguoi-dung")
 }
 
