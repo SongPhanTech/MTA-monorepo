@@ -33,6 +33,15 @@ const subsystems = await glob(`${basePath}/*`, {
     posix: true,
 })
 
+// TODO: add system prefix
+const systemPrefix = {
+    KHAO_THI: '',
+    QL_DANH_MUC: '/',
+    QL_DAO_TAO: '/lms',
+    QL_NGUOI_DUNG: '/users',
+    TRO_LY_AO: '',
+}
+
 for (const subsystem of subsystems.sort()) {
     const subsystemKey = subsystem
         .replace(`${basePath}/`, '')
@@ -48,9 +57,12 @@ for (const subsystem of subsystems.sort()) {
     for (const page of pages.sort()) {
         if (ignorePages.some((ignorePage) => page.includes(ignorePage))) continue
         const key = page.replace(`${subsystem}/src/pages`, '')
-        routerPath[subsystemKey][cleanPath(key)] = cleanRouter(key)
 
-        console.log('Processing:', subsystemKey, cleanPath(key), '=>', cleanRouter(key))
+        const path = systemPrefix[subsystemKey] + cleanRouter(key)
+
+        routerPath[subsystemKey][cleanPath(key)] = path
+
+        console.log('Processing:', subsystemKey, cleanPath(key), '=>', path)
     }
 }
 
