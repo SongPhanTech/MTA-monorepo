@@ -3,8 +3,8 @@ import TerserPlugin from 'terser-webpack-plugin'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const nextConfig: NextConfig = {
-    basePath: '/lms',
-    assetPrefix: `${basePath}`,
+    basePath,
+    assetPrefix: 'https://mta.swantech.vn/lms/cdn',
     /* config options here */
     reactStrictMode: true,
     transpilePackages: [
