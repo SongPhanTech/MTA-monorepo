@@ -465,6 +465,20 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_HOC_BONG,
                         description: 'Danh mục học bổng',
                     },
+                    {
+                        id: 'thoi-gian-dao-tao',
+                        label: 'Danh mục thời gian đào tạo',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_THOI_GIAN_DAO_TAO,
+                        description: 'Danh mục thời gian đào tạo',
+                    },
+                    {
+                        id: 'hinh-thuc-huan-luyen',
+                        label: 'Danh mục hình thức huấn luyện',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
+                        description: 'Danh mục hình thức huấn luyện',
+                    },
                 ],
             },
             {

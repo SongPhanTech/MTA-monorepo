@@ -37,6 +37,8 @@ import PutRoomModal from './put-phong'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
+import PutTrainingFormModal from './put-training-form'
+import PutTrainingTimeModal from './put-training-time'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAddOlympicScoreModal from './them-diem-cong'
@@ -85,4 +87,6 @@ export {
     HanNhapDiem,
     PutCloneConvertScore,
     ModalPrintStudentSubjectScore,
+    PutTrainingTimeModal,
+    PutTrainingFormModal,
 }
