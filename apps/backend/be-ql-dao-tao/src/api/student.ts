@@ -204,7 +204,7 @@ const tongKetHocKyHVSV = createRoute({
             description: 'Export list of student semester result as JSON',
             content: {
                 'application/json': {
-                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                    schema: z.any(),
                 },
             },
         },

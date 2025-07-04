@@ -462,9 +462,7 @@ const ThongTinDiemHocKy = async (
 }
 
 // Main function
-export const calculateStudentSemesterResult = async (
-    semesterId: string
-): Promise<StudentSemesterResult[]> => {
+export const calculateStudentSemesterResult = async (semesterId: string): Promise<string> => {
     const results: StudentSemesterResult[] = []
 
     try {
@@ -490,6 +488,7 @@ export const calculateStudentSemesterResult = async (
                         },
                     },
                 },
+                // id: "cmc8rjif40002o00197ct07wy"
             },
             include: {
                 fixedClass: {
@@ -597,7 +596,7 @@ export const calculateStudentSemesterResult = async (
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-                    studentTrainingType: StudentTrainingType.AVERAGE,
+                    studentTrainingType: StudentTrainingType.GOOD,
                     //TODO: Chưa có thông tin này
                     foreignLangPass: true, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: false, // Chức vụ học viên (hiện tại chưa có thông tin này)
@@ -689,17 +688,17 @@ export const calculateStudentSemesterResult = async (
                 results.push(updatedResult)
                 console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
                 console.log('Kết quả:', updatedResult)
-                // await prisma.studentSemesterResult.update({
-                //     where: {
-                //         id: existingResult.id,
-                //     },
-                //     data: updatedResult,
-                // })
+                await prisma.studentSemesterResult.update({
+                    where: {
+                        id: existingResult.id,
+                    },
+                    data: updatedResult,
+                })
             }
         })
         console.log('Tính toán kết quả học kỳ cho tất cả sinh viên đã hoàn thành.')
 
-        return results
+        return 'Successfully calculated semester results for all students.'
     } catch (error) {
         console.error('Lỗi khi tính toán kết quả học kỳ:', error)
         throw error // Ném lỗi để xử lý ở nơi gọi hàm

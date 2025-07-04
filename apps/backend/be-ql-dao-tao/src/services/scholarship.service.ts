@@ -94,6 +94,7 @@ const phanLoaiDiemHe4 = async (diemHe4: number, trainingCourseId: string): Promi
         await prisma.$disconnect()
     }
 }
+
 const phanLoaiDiemHe10 = async (diemHe10: number, trainingCourseId: string): Promise<string> => {
     try {
         const scoreConvert = await prisma.scoreConvert.findMany({
@@ -121,7 +122,6 @@ const phanLoaiDiemHe10 = async (diemHe10: number, trainingCourseId: string): Pro
                 diemHe10 >= item.base10Min &&
                 diemHe10 <= item.base10Max
         )
-
         return phanLoai ? phanLoai.classification : ''
     } catch (error) {
         console.error('Error in phanLoaiDiemHe10:', error)
@@ -137,6 +137,7 @@ export const listStudentInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
+                // studentId: "cmc8rjif40002o00197ct07wy"
             },
             include: {
                 student: {
@@ -287,7 +288,6 @@ export const populateExcelTemplate = (
             { t: 's', v: student.ghiChu || '' }, // V TODO
             { t: 's', v: student.quocTich || 'Việt Nam' }, // W TODO: Chưa có dữ liệu
         ]
-
         cells.forEach((cell, colIndex) => {
             const cellRef = XLSX.utils.encode_cell({ r: row - 1, c: colIndex })
             worksheet[cellRef] = cell
@@ -341,42 +341,101 @@ export const checkScholarshipEligibility = async (
         const isEligible = scholarshipCriteriaList.every((criteria) => {
             switch (criteria.field) {
                 case CriteriaField.TOTAL_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
+                    console.log(
+                        'Total Credits: ',
+                        student.soTinChiDangKy,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
                 case CriteriaField.REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
+                    console.log(
+                        'Registered Credits: ',
+                        student.soTinChiDangKy,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
                 case CriteriaField.ACCUMULATED_CREDITS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
+                    console.log(
+                        'Accumulated Credits Percent: ',
+                        student.soTinChiTichLuy,
+                        student.soTinChiYeuCau,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(
                         student.soTinChiTichLuy / student.soTinChiYeuCau,
                         criteria.value,
                         criteria.operator
                     )
                 case CriteriaField.COURSE_GRADE_MIN: // Điểm thấp nhất trong các học phần bình thường
+                    console.log(
+                        'Course Grade Min: ',
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator
                     )
-                case CriteriaField.GRADUATION_GRADE_MIN: // Điểm thấp nhất trong các học phần bình thường
+                case CriteriaField.GRADUATION_GRADE_MIN: // Điểm thấp nhất trong các học phần tốt nghiệp
+                    console.log(
+                        'Graduation Grade Min: ',
+                        student.diemMonTotNghiepNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    if (student.diemMonTotNghiepNhoNhat === undefined) {
+                        return true
+                    }
+
                     return checkEligible(
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator
                     )
                 case CriteriaField.SEMESTER_GPA: // Điểm trung bình học ksỳ
+                    console.log(
+                        'Semester GPA: ',
+                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.value,
                         criteria.operator
                     )
                 case CriteriaField.ENTRY_SCORE: // Điểm thi đầu vào (cho học viên mới)
+                    console.log(
+                        'Entry Score: ',
+                        student.diemDauVao,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator
                     )
                 case CriteriaField.CONDUCT: // Mức rèn luyện
+                    console.log(
+                        'Conduct: ',
+                        student.xepLoaiRenLuyen,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(student.xepLoaiRenLuyen, criteria.value, criteria.operator)
                 case CriteriaField.FOREIGN_LANGUAGE: // Đạt chuẩn đầu ra ngoại ngữ (boolean)
+                    console.log(
+                        'Foreign Language: ',
+                        student.trinhDoNgoaiNgu,
+                        criteria.value,
+                        criteria.operator
+                    )
                     return checkEligible(student.trinhDoNgoaiNgu, criteria.value, criteria.operator)
                 default:
                     return true // Mặc định là đủ điều kiện nếu không có tiêu chí
