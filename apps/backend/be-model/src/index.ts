@@ -50,11 +50,15 @@ console.log('[be-model] Keycloak Config:', {
 })
 app.use(contextStorage())
 app.use('*', checkIp)
+
+// public route
+setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 
 app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
-setupOpenApi(app)
 // setupAuth(app)
+
+// private route
 app.route('/api/minio', MinIOApp)
 
 app.use(
@@ -67,7 +71,6 @@ app.use(
 )
 
 app.onError((err, c) => {
-    console.log('Error:', err)
     if (err instanceof HTTPException) {
         return err.getResponse()
     }
@@ -78,12 +81,14 @@ app.onError((err, c) => {
         if (err.code === 'P2003') status = 400
 
         if (status === 500) {
+            console.log(err)
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
         return c.json({ message: err.meta?.cause }, status)
     }
 
+    console.log(err)
     return c.json({ message: err.message }, 500)
 })
 

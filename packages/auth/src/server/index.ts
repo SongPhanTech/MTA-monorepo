@@ -10,11 +10,11 @@ const auth = async (token?: string): Promise<Session | null> => {
         throw new Error('AUTH_ISSUER environment variable is not set')
     }
     const response = await fetch(`${issuer}/authsso/me`, {
-        headers: {
-            cookie: `x-token=${token}`,
-        },
+        headers: { Cookie: `x-token=${token}` },
     })
+
     if (!response.ok) {
+        console.log('[auth] response', response)
         return null
     }
     const isAuthenticated = await response.json()
