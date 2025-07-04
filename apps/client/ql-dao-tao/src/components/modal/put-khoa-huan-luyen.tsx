@@ -8,17 +8,19 @@ import {
     useCreateTrainingCourse,
     useFindManySchoolYear,
     useFindManySemester,
+    useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
+    trainingCourseClone: string | null
 }
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
@@ -32,6 +34,9 @@ const PutTrainingCourseModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
+    const [selectedId, setSelectedId] = useState<string | undefined>(undefined)
+
+    const { data: trainingCourse = [] } = useFindManyTrainingCourse()
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -94,6 +99,23 @@ const PutTrainingCourseModal = () => {
         }
     )
 
+    const { data: selectedTraniningCourse } = useFindUniqueTrainingCourse(
+        {
+            where: {
+                id: selectedId,
+            },
+        },
+        {
+            enabled: !!selectedId,
+        }
+    )
+
+    console.log(selectedTraniningCourse)
+
+    const handleSelectChange = async (value: string) => {
+        setSelectedId(value)
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
@@ -116,7 +138,7 @@ const PutTrainingCourseModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
-            className="w-[35vw]"
+            className="w-[60vw]"
         >
             <Col span={12}>
                 <FormItem
@@ -162,6 +184,20 @@ const PutTrainingCourseModal = () => {
                                 label: i.name,
                             }
                         })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
+                    <Select
+                        placeholder="Chọn khóa để sao chép"
+                        options={trainingCourse.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                        onChange={handleSelectChange}
                     />
                 </FormItem>
             </Col>

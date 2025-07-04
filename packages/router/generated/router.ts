@@ -42,6 +42,7 @@ export default {
     "DANH_MUC_LOP_BIEN_CHE": "/lms/danh-muc/lop-bien-che",
     "DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID": "/lms/danh-muc/lop-bien-che/ket-qua-hoc-tap/[id]",
     "DANH_MUC_THOI_GIAN_DAO_TAO": "/lms/danh-muc/thoi-gian-dao-tao",
+    "DANH_MUC_XEP_LOAI_HOC_LUC": "/lms/danh-muc/xep-loai-hoc-luc",
     "HOME": "/lms/home",
     "INDEX": "/lms/",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_DANG_KY_HOC_CHO_LOP_QUAN_LY": "/lms/ke-hoach-giao-duc/dang-ky-hoc/components/dang-ky-hoc-cho-lop-quan-ly",
