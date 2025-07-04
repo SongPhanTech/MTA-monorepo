@@ -3,6 +3,7 @@ import {
     SemesterType,
     type StudentSemesterResult,
     StudentStatus,
+    StudentTrainingType,
     SubjectClassStudentStatus,
 } from '@workspace/db'
 import { prisma } from '..'
@@ -154,10 +155,14 @@ const ThongTinTichLuy = async (
 
         // GPA hệ 4
         const diemTrungBinh4 =
-            DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0
-        // GPA hệ 10
+            Math.round(
+                (DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
+            ) / 100
+        // Tính điểm trung bình hệ 10 trong kỳ
         const diemTrungBinh10 =
-            DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0
+            Math.round(
+                (DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
+            ) / 100
 
         // Số tín chỉ nợ tích lũy
         const TongTinChiNoTichLuy = DsCacMonDaHocRaw.reduce((tong, item) => {
@@ -416,10 +421,14 @@ const ThongTinDiemHocKy = async (
 
         // Tính điểm trung bình hệ 4 trong kỳ
         const diemTrungBinh4 =
-            DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0
+            Math.round(
+                (DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
+            ) / 100
         // Tính điểm trung bình hệ 10 trong kỳ
         const diemTrungBinh10 =
-            DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0
+            Math.round(
+                (DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
+            ) / 100
 
         // Điểm thấp nhất
         let diemThapNhat = Math.min(...DsDiemHe4) || 0
@@ -453,9 +462,7 @@ const ThongTinDiemHocKy = async (
 }
 
 // Main function
-export const calculateStudentSemesterResult = async (
-    semesterId: string
-): Promise<StudentSemesterResult[]> => {
+export const calculateStudentSemesterResult = async (semesterId: string): Promise<string> => {
     const results: StudentSemesterResult[] = []
 
     try {
@@ -481,6 +488,7 @@ export const calculateStudentSemesterResult = async (
                         },
                     },
                 },
+                // id: "cmc8rjif40002o00197ct07wy"
             },
             include: {
                 fixedClass: {
@@ -494,6 +502,7 @@ export const calculateStudentSemesterResult = async (
                         id: true,
                         name: true, // Lấy tên đối tượng đào tạo
                         code: true, // Lấy mã đối tượng đào tạo
+                        baseScore: true, // Lấy điểm chuẩn của đối tượng đào tạo
                     },
                 },
 
@@ -539,11 +548,7 @@ export const calculateStudentSemesterResult = async (
             }
 
             // Lấy thông tin điểm học viên
-            // TODO: Cần xác định baseType dựa trên gì (chưa có cấu hình rõ trong DB)
-            const baseType =
-                student.trainingObjectType?.code === 'QS'
-                    ? AcademicRankingBaseType.Base10
-                    : AcademicRankingBaseType.Base4
+            const baseType = student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là Base10 nếu không có thông tin
 
             // Lấy thông tin điểm học kỳ
             const thongTinDiemHocKy = await ThongTinDiemHocKy(
@@ -560,7 +565,7 @@ export const calculateStudentSemesterResult = async (
             if (!exists) {
                 // Nếu không có kết quả, tạo mới
                 const newResult: StudentSemesterResult = {
-                    id: '', // sẽ được tự động tạo
+                    id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
                     studentId: student.id,
                     semesterId,
                     createdAt: new Date(),
@@ -569,13 +574,16 @@ export const calculateStudentSemesterResult = async (
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-                    baseType: baseType,
+                    baseScore:
+                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base4
                     gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
                     gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
                     cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
                     cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
+                    //TODO: Chưa cập nhật
+                    lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
@@ -588,9 +596,9 @@ export const calculateStudentSemesterResult = async (
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-
+                    studentTrainingType: StudentTrainingType.GOOD,
                     //TODO: Chưa có thông tin này
-                    foreignLangPass: true, // Đạt trình độ ngoại ngữ theo quy định
+                    foreignLangPass: true, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: false, // Chức vụ học viên (hiện tại chưa có thông tin này)
                     isUnionLeader: false, // Chức vụ đoàn viên (hiện tại chưa có thông tin này)
                     entryScore: null, // Điểm đầu vào (hiện tại chưa có thông tin này)
@@ -636,16 +644,20 @@ export const calculateStudentSemesterResult = async (
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-                    baseType: baseType,
+                    baseScore:
+                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10,
                     gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
                     gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
                     cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
                     cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
+                    //TODO: Chưa cập nhật
+                    lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
+                    studentTrainingType: StudentTrainingType.AVERAGE, // xếp loại rèn luyện
 
                     //TODO: Chưa biết xác định thi lại ntn
                     retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
@@ -676,17 +688,17 @@ export const calculateStudentSemesterResult = async (
                 results.push(updatedResult)
                 console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
                 console.log('Kết quả:', updatedResult)
-                // await prisma.studentSemesterResult.update({
-                //     where: {
-                //         id: existingResult.id,
-                //     },
-                //     data: updatedResult,
-                // })
+                await prisma.studentSemesterResult.update({
+                    where: {
+                        id: existingResult.id,
+                    },
+                    data: updatedResult,
+                })
             }
         })
         console.log('Tính toán kết quả học kỳ cho tất cả sinh viên đã hoàn thành.')
 
-        return results
+        return 'Successfully calculated semester results for all students.'
     } catch (error) {
         console.error('Lỗi khi tính toán kết quả học kỳ:', error)
         throw error // Ném lỗi để xử lý ở nơi gọi hàm
