@@ -165,17 +165,15 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã TGĐT',
+                                title: 'Mã thời gian đào tạo',
                                 align: 'center',
                                 width: 150,
-                                fixed: 'left',
                                 dataIndex: 'code',
                             },
                             {
                                 title: 'Tên thời gian đào tạo',
                                 align: 'center',
                                 width: 200,
-                                fixed: 'left',
                                 dataIndex: 'name',
                             },
                         ]}
