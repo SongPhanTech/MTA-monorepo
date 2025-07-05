@@ -1607,7 +1607,6 @@ Table DM_NhanVien {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [not null]
   sHoVaDem String
   sTenDayDu String
   dNgaySinh DateTime
@@ -2187,10 +2186,9 @@ Table Scholarship {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  bonusGrade Float [not null, default: 0]
   baseAmount Decimal [not null]
   multiplier Float [not null, default: 1]
-  effectiveFrom DateTime [not null]
+  effectiveFrom DateTime
   effectiveTo DateTime
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]

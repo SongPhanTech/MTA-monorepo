@@ -55,7 +55,8 @@ app.use('*', checkIp)
 setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+// TODO!: remove `/check`
+app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
 
 // private route

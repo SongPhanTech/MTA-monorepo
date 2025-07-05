@@ -1984,7 +1984,6 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
-  sTen                String
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2610,10 +2609,9 @@ model Scholarship {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt()
   name             String
-  bonusGrade       Float                 @default(0)
   baseAmount       Decimal
   multiplier       Float                 @default(1)
-  effectiveFrom    DateTime
+  effectiveFrom    DateTime?
   effectiveTo      DateTime?
   trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
