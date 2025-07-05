@@ -1,7 +1,6 @@
 import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
-import ModalGPASemester from './modal-diem-trung-binh-lop'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
@@ -15,6 +14,7 @@ import PutOlympicScoreModal from './put-diem-cong'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutUserProfileLectureModal from './put-giang-vien'
+import PutHocBong from './put-hoc-bong'
 import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
@@ -78,7 +78,6 @@ export {
     PutRoomModal,
     ModalPrintToKQHT,
     PutOneSubjectClassModal,
-    ModalGPASemester,
     AddStudentToFixedClassModal,
     PutOlympicScoreModal,
     PutCertificateScoreModal,
@@ -89,4 +88,5 @@ export {
     ModalPrintStudentSubjectScore,
     PutTrainingTimeModal,
     PutTrainingFormModal,
+    PutHocBong,
 }

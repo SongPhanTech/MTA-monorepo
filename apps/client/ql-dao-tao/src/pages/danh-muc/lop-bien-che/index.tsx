@@ -3,7 +3,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalGPASemester, PutFixedClassModal } from '@components/modal'
+import { PutFixedClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -114,9 +114,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const { onOpen } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-    const { onOpen: onOpenGPASemester } = useDisclosure<string>({
-        tag: ModalGPASemester.name,
-    })
     // const { onOpen: onOpenFixedClass } = useDisclosure<string>({
     //     tag: PutUploadFixedClassModal.name,
     // })
@@ -127,10 +124,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
 
     const handleModal = () => {
         onOpen()
-    }
-
-    const handleOpenGPASemester = () => {
-        onOpenGPASemester()
     }
 
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -233,9 +226,9 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                         </Col>
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                <Button onClick={handleOpenGPASemester} type="primary">
+                                {/* <Button onClick={handleOpenGPASemester} type="primary">
                                     GPA kỳ học
-                                </Button>
+                                </Button> */}
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
@@ -269,7 +262,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             router.push(
                                 ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
                                     '[id]',
-                                    record.id
+                                    String(record.id)
                                 )
                             )
                         }}
