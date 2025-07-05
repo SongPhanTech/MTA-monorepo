@@ -45,7 +45,6 @@ const PutHocBong = () => {
             const data = {
                 code: output?.code,
                 name: output?.name,
-                bonusGrade: output?.bonusGrade,
                 baseAmount: output?.baseAmount,
                 multiplier: output?.multiplier,
                 effectiveFrom: output?.effectiveFrom,
@@ -94,6 +93,8 @@ const PutHocBong = () => {
             })
         } else {
             form.setFieldsValue({
+                multiplier: 1,
+                effectiveFrom: dayjs(),
                 active: true,
             })
         }
@@ -108,16 +109,6 @@ const PutHocBong = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa học bổng' : 'Thêm mới học bổng'}
         >
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã học bổng" required>
-                    <Input placeholder="Nhập mã học bổng" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="name" label="Tên học bổng" required>
-                    <Input placeholder="Nhập tên học bổng" />
-                </FormItem>
-            </Col>
             <Col span={12}>
                 <FormItem form={form} name="trainingObjectTypeIds" label="Khóa học" required>
                     <Select
@@ -134,14 +125,13 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="bonusGrade" label="Điểm cộng" required>
-                    <InputNumber
-                        placeholder="Nhập điểm cộng"
-                        className="w-full"
-                        min={0}
-                        max={10}
-                        step={0.1}
-                    />
+                <FormItem form={form} name="code" label="Mã học bổng" required>
+                    <Input placeholder="Nhập mã học bổng" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="name" label="Tên học bổng" required>
+                    <Input placeholder="Nhập tên học bổng" />
                 </FormItem>
             </Col>
             <Col span={12}>

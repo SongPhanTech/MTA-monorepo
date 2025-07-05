@@ -1,24 +1,24 @@
 import Loading from '@components/commons/loading'
 import { useMenuList } from '@hooks/menu-list'
-import { signIn, useSession } from '@workspace/auth/react'
+import { useSession } from '@workspace/auth/react'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
-    const { status, goToLastPage } = useSession()
+    const { status } = useSession()
+    const router = useRouter()
 
     useEffect(() => {
-        if (status === 'unauthenticated') {
-            signIn()
-        } else if (status === 'authenticated') {
-            if (goToLastPage()) return
+        if (status === 'authenticated') {
+            // if (goToLastPage()) return
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
-                window.location.href = firstMenu[0].path
+                router.push(firstMenu[0].path)
             }
         }
-    }, [status, menus, goToLastPage])
+    }, [status, menus])
     return <Loading />
 }
 export default IndexPage

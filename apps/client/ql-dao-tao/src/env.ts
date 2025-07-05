@@ -8,7 +8,6 @@ export const env = createEnv({
      */
     server: {
         ENVIRONMENT: z.enum(['develop', 'test', 'product']).default('develop'),
-        AUTH_ISSUER: z.string().url(),
     },
 
     /**
@@ -35,7 +34,6 @@ export const env = createEnv({
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
         NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,
-        AUTH_ISSUER: process.env.AUTH_ISSUER,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

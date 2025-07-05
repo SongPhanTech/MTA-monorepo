@@ -11,6 +11,7 @@ import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { SearchSystem } from '@workspace/ui'
 import { Breadcrumb, Layout, theme } from 'antd'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
@@ -44,10 +45,10 @@ const DefaultLayout = ({
             ? [
                   {
                       title: (
-                          <a href="/home">
+                          <Link href="/home">
                               <HomeOutlined className="mr-1" />
                               Trang chủ
-                          </a>
+                          </Link>
                       ),
                   },
                   ...breadcrumb.map((i: { title: string; href?: string }) => {
@@ -65,10 +66,10 @@ const DefaultLayout = ({
               ? [
                     {
                         title: (
-                            <a href="/home">
+                            <Link href="/home">
                                 <HomeOutlined className="mr-1" />
                                 Trang chủ
-                            </a>
+                            </Link>
                         ),
                     },
                     ...breadcrumbList.map((i: { title: string; href?: string }) => {
@@ -85,10 +86,10 @@ const DefaultLayout = ({
               : [
                     {
                         title: (
-                            <a href="/home">
+                            <Link href="/home">
                                 <HomeOutlined className="mr-1" />
                                 Trang chủ
-                            </a>
+                            </Link>
                         ),
                     },
                 ]
