@@ -18,7 +18,7 @@ const IndexPage: NextPage = () => {
                 router.push(firstMenu[0].path)
             }
         }
-    }, [status, menus, router])
+    }, [status, menus])
     return <Loading />
 }
 export default IndexPage
