@@ -8,6 +8,7 @@
     "lint": "biome lint --fix",
     "generate": "turbo run generate",
     "generate:sql": "turbo run generate:sql",
+    "generate:router": "turbo run generate:router",
     "format": "biome format --write --verbose",
     "check": "biome check --write --unsafe --files-ignore-unknown=true --no-errors-on-unmatched --colors=off",
     "prepare": "husky",

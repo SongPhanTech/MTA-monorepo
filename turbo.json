@@ -23,6 +23,9 @@
         "generate:sql": {
             "cache": false
         },
+        "generate:router": {
+            "cache": false
+        },
         "db:push": {
             "cache": false
         }
