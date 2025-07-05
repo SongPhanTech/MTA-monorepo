@@ -10,7 +10,6 @@ export const useSession = () => {
         if (!status) {
             setStatus('loading')
             fetchSession().then((result) => {
-                console.log('result', result)
                 setSessionState(result.data)
                 setStatus(result.status)
             })
