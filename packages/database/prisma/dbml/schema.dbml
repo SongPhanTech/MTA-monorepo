@@ -850,33 +850,6 @@ Table ScoreConvert {
   Note: 'Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc'
 }
 
-Table AcademicRankingConvert {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  classification String [not null]
-  context RankingContext [not null]
-  rankOrder Int [not null]
-  baseScore AcademicRankingBaseType [not null]
-  base10Min Float
-  base10Max Float
-  base4Min Float
-  base4Max Float
-  graduated Boolean [not null]
-  trainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-
-  indexes {
-    (trainingCourseId, context, rankOrder) [unique]
-  }
-
-  Note: 'Xếp loại học lực'
-}
-
 Table TrainingKPI {
   id String [pk]
   code String [unique]
@@ -2430,6 +2403,66 @@ Table DocumentFile {
   studentAcademicDecisionId String
 }
 
+Table AcademicRankingConvert {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  classification String [not null]
+  context RankingContext [not null]
+  rankOrder Int [not null]
+  baseScore AcademicRankingBaseType [not null]
+  base10Min Float
+  base10Max Float
+  base4Min Float
+  base4Max Float
+  graduated Boolean [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  downgradeRules GraduationRankDowngradeRule [not null]
+
+  indexes {
+    (trainingCourseId, context, rankOrder) [unique]
+  }
+
+  Note: 'Xếp loại học lực'
+}
+
+Table GraduationRankDowngradeRule {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  initialRank AcademicRankingConvert [not null]
+  initialRankId String [unique, not null]
+  conditions GraduationRankDowngradeCondition [not null]
+
+  Note: 'Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp'
+}
+
+Table GraduationRankDowngradeCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  downgradeRule GraduationRankDowngradeRule [not null]
+  downgradeRuleId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  value Float [not null]
+
+  Note: 'Một điều kiện cụ thể trong bộ quy tắc hạ bậc'
+}
+
 Table TemplateFile {
   id String [pk]
   code String [unique]
@@ -2558,11 +2591,6 @@ Enum TrainingObjectTypes {
 Enum AcademicRankingBaseType {
   Base10
   Base4
-}
-
-Enum RankingContext {
-  STUDYING
-  GRADUATION
 }
 
 Enum StudentStatus {
@@ -2719,6 +2747,11 @@ Enum DecisionStatus {
   APPEALED
 }
 
+Enum RankingContext {
+  STUDYING
+  GRADUATION
+}
+
 Enum TemplateFileType {
   UPLOAD
   DOWNLOAD
@@ -2828,8 +2861,6 @@ Ref: TrainingBlockOnCurriculumVersion.trainingBlockId > TrainingBlock.id
 Ref: TrainingBlockOnCurriculumVersion.curriculumVersionId > CurriculumVersion.id
 
 Ref: ScoreConvert.trainingCourseId > TrainingCourse.id
-
-Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 
 Ref: Student.trainingLocationId > TrainingLocation.id
 
@@ -3048,3 +3079,9 @@ Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
 Ref: DocumentFile.subjectVersionId > SubjectVersion.id
 
 Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
+
+Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
+
+Ref: GraduationRankDowngradeRule.initialRankId > AcademicRankingConvert.id
+
+Ref: GraduationRankDowngradeCondition.downgradeRuleId > GraduationRankDowngradeRule.id
