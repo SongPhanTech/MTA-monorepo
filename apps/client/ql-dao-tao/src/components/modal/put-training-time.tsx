@@ -14,14 +14,15 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutRoom = TrainingTime
 const PutTrainingTimeModal = () => {
     const [form] = Form.useForm<PutRoom>()
-    const { isOpen, onClose, input } = useDisclosure<{
-        id?: string
-    }>({
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
         tag: PutTrainingTimeModal.name,
         onClose: form.resetFields,
     })
 
-    const id = input?.id
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: create } = useCreateTrainingTime()
@@ -46,10 +47,7 @@ const PutTrainingTimeModal = () => {
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
-                queryKey: ['Room'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['Building'],
+                queryKey: ['TrainingTime'],
             })
             onClose()
         } catch (_error) {
@@ -88,12 +86,12 @@ const PutTrainingTimeModal = () => {
             title={id ? 'Chỉnh sửa thời gian đào tạo' : 'Thêm mới thời gian đào tạog'}
             className="w-[45vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="code" label="Mã thời gian đào tạo" required>
                     <Input placeholder="Nhập mã thời gian đào tạo" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên thời gian đào tạo" required>
                     <Input placeholder="Nhập tên thời gian đào tạo" />
                 </FormItem>
