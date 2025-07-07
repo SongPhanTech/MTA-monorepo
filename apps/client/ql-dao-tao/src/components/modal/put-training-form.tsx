@@ -14,14 +14,15 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutRoom = TrainingForm
 const PutTrainingFormModal = () => {
     const [form] = Form.useForm<PutRoom>()
-    const { isOpen, onClose, input } = useDisclosure<{
-        id?: string
-    }>({
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
         tag: PutTrainingFormModal.name,
         onClose: form.resetFields,
     })
 
-    const id = input?.id
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: create } = useCreateTrainingForm()
@@ -46,11 +47,9 @@ const PutTrainingFormModal = () => {
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
-                queryKey: ['Room'],
+                queryKey: ['TrainingForm'],
             })
-            queryClient.invalidateQueries({
-                queryKey: ['Building'],
-            })
+
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -88,12 +87,12 @@ const PutTrainingFormModal = () => {
             title={id ? 'Chỉnh sửa hình thức huấn luyên' : 'Thêm mới thời gian đào tạog'}
             className="w-[45vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="code" label="Mã hình thức huấn luyên" required>
                     <Input placeholder="Nhập mã hình thức huấn luyên" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên hình thức huấn luyên" required>
                     <Input placeholder="Nhập tên hình thức huấn luyên" />
                 </FormItem>
