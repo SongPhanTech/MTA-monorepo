@@ -22,29 +22,31 @@ export const jwtAuth = (
                 issuer,
                 audience,
             })
+            console.log('[jwtAuth].payload', payload)
+
             // Attach user info to context
             c.set('user', {
                 userName: payload.preferred_username || payload.name,
                 fullName: payload.name,
                 sessionId: payload.sid,
                 ssoId: payload.sub,
-                id: payload.sDM_NhanVienId,
+                Id: payload.sDM_NhanVienId,
                 organizationUnitId: payload.sDM_DonViId,
             })
-            const existedUser = await prisma.user.findFirst({
+            const existedUser = await prisma.dM_NhanVien.findFirst({
                 where: {
-                    id: payload.sDM_NhanVienId,
+                    Id: payload.sDM_NhanVienId,
                 },
             })
             if (!existedUser) {
                 // Create user if not exists
-                await prisma.user.create({
+                await prisma.dM_NhanVien.create({
                     data: {
-                        id: payload.sDM_NhanVienId,
-                        userName: payload.preferred_username || payload.name,
-                        email: payload.email,
-                        name: payload.name,
-                        ssoId: payload.sub,
+                        Id: payload.sDM_NhanVienId,
+                        // userName: payload.preferred_username || payload.name,
+                        sTenDayDu: payload.email,
+                        sHoVaDem: payload.name,
+                        // ssoId: payload.sub,
                     },
                 })
             }

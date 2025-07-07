@@ -28,7 +28,7 @@ const fetchSession = async (): Promise<{
             error: null,
         }
     } catch (error) {
-        signIn()
+        // signIn()
         return {
             status: 'unauthenticated',
             data: null,
