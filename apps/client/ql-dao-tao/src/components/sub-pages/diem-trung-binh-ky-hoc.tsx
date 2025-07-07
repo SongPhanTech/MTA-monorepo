@@ -33,6 +33,23 @@ interface DiemTrungBinhKyHocProps {
     semesterId: string
 }
 
+const getWarningLevelColor = (level: number) => {
+    switch (level) {
+        case 0:
+            return 'green' // Không cảnh cáo
+        case 1:
+            return 'lime' // Mức nhẹ
+        case 2:
+            return 'orange' // Mức trung bình
+        case 3:
+            return 'volcano' // Mức nặng
+        case 4:
+            return 'red' // Mức nguy hiểm
+        default:
+            return 'default'
+    }
+}
+
 const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -610,6 +627,9 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 dataIndex: ['studentSemesterResult', '0', 'academicWarningLevel'],
                                 width: 100,
                                 align: 'center',
+                                render: (value: number) => (
+                                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                                ),
                             },
                             {
                                 title: 'Mức cảnh cáo học đường',
@@ -620,6 +640,9 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 ],
                                 width: 120,
                                 align: 'center',
+                                render: (value: number) => (
+                                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                                ),
                             },
                             {
                                 title: 'Đình chỉ học',
